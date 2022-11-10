@@ -1,5 +1,11 @@
-<app-sidnav></app-sidnav>
+<app-sidnav (onToggleSideNav)="onToggleSideNav($any($event))"></app-sidnav>
 
-<router-outlet>
-  <h1>gfkl</h1>
-</router-outlet>
+<div class="body">
+<app-body 
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+></app-body>
+</div>
+<div class="footer">
+<app-footer></app-footer>
+</div>

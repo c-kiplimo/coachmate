@@ -48,6 +48,7 @@ export class SidnavComponent implements OnInit {
   screenWidth = 0;
   navData = navbarData;
 
+  @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screenWidth = window.innerWidth;
     if(this.screenWidth <= 768 ) {
