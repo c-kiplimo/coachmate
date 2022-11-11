@@ -8,6 +8,7 @@ import { SidnavComponent } from './sidnav/sidnav.component';
 import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BodyComponent } from './body/body.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { BodyComponent } from './body/body.component';
     SidnavComponent,
     FooterComponent,
     DashboardComponent,
-    BodyComponent
+    BodyComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
