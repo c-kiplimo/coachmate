@@ -16,7 +16,7 @@ import { AddClientPageComponent } from './add-client-page/add-client-page.compon
 import { AddCoachPageComponent } from './add-coach-page/add-coach-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { FooterComponent } from './footer/footer.component';
+
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { FooterComponent } from './footer/footer.component';
     DashboardComponent,
     BodyComponent,
     UserComponent,
-    ClientsComponent
+    ClientsComponent,
 
     AddClientPageComponent,
     AddCoachPageComponent,
