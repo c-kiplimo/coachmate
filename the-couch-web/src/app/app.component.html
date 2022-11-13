@@ -1,9 +1,10 @@
-<app-sidnav></app-sidnav>
-<app-footer></app-footer>
-<app-add-client-page></app-add-client-page>
-<app-add-coach-page></app-add-coach-page>
-<app-sign-up></app-sign-up>
-<app-sign-in></app-sign-in>
 
-<router-outlet>
-</router-outlet>
+<app-sidnav (onToggleSideNav)="onToggleSideNav($any($event))"></app-sidnav>
+
+
+<app-body 
+    [collapsed]="isSideNavCollapsed"
+    [screenWidth]="screenWidth"
+></app-body>
+
+<app-footer></app-footer>
