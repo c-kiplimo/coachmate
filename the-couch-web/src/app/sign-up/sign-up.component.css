@@ -1,0 +1,67 @@
+body {
+    width: 400px;
+    height: 450px;
+    margin: 50px auto;
+    background-color: #f4f5fa;
+    color: #252733;
+    font-family: Tahoma;
+    font-size: 16px;
+    align-content: center;
+    border-radius: 10px;
+    padding-bottom: 20px;
+  }
+  
+  h1{
+    text-align: center;
+  }
+  
+  form {
+    width: 400px;
+    max-width: 500px;
+    min-width: 100px;
+    padding-bottom: 2em;
+    align-content: center;
+  }
+  
+  fieldset {
+    border: none;
+  }
+  
+  fieldset:last-of-type {
+    border-bottom: none;
+  }
+  
+  label {
+    display: block;
+    margin: 0.5rem 0;
+  }
+  
+  input,
+  select {
+    margin: 10px 0 0 0;
+    width: 95%;
+    min-height: 2em;
+    
+  }
+  
+  input{
+    background-color: #DFE0EB;
+    border: 1px solid #0a0a23;
+    color: #0c0c0c;
+    border-radius: 10px;
+  }
+  input[type="submit"] {
+    display: block;
+    width: 95%;
+    margin: 1em auto;
+    height: 2em;
+    font-size: 1.1rem;
+    background-color: #55C254;
+    border-color: white;
+    min-width: 100px;
+  }
+  .checkbox{
+    width: unset;
+    margin: 0 0.5em 0 0;
+    vertical-align: middle;
+  }
