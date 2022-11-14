@@ -8,17 +8,15 @@
     align-items: center;
     
 }
-.container h5 {
 
-}
 footer{
     background: #1B3A27;
     color: white;
     height: 76;
-    width: 1650px;
+    width: 100%;
     position: absolute;
     bottom: 0;
-    width: 100%;
+   
 }
 p{
     text-align: center;
