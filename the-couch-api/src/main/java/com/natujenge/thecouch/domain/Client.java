@@ -39,6 +39,18 @@ public class Client {
     private ClientStatus status;
     private String reason;
 
+    //Management details
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private String createdBy;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdatedAt;
+    private String lastUpdatedBy;
+    
 
 
 }
