@@ -6,9 +6,9 @@ server:
 
 spring:
   datasource:
-    password: natujenge
-    url: jdbc:mysql://157.230.13.246:3315/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    username: root
+    password: david123
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/thecoach
+    username: david
   jpa:
     hibernate:
       ddl-auto: update
