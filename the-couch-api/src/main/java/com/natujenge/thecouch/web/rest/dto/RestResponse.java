@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

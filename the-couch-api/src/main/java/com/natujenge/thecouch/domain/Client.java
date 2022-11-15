@@ -50,7 +50,5 @@ public class Client {
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-    
-
 
 }
