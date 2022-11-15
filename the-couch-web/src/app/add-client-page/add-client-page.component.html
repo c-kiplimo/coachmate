@@ -6,27 +6,47 @@
       <app-user></app-user>
   </div>
 </div>
-<body>
-  <div class="container">
-    <h1>ADD CLIENT</h1>
-    <form method="post" action=''>
-      <fieldset>
-        <label for="first-name">Enter First Name: <br><input id="first-name" name="first-name" type="text" required /></label>
-        <label for="last-name">Enter Last Name: <br><input id="last-name" name="last-name" type="text" required /></label>
-        <label for="email">Enter Email: <br><input id="email" name="email" type="email" required /></label>
-        <label for="email">Enter Phone No: <br><input id="phone" name="phone" type="text" required /></label>
-      </fieldset>
-      <fieldset>
-        <label for="referrer">Select type of client <br>
-          <select id="clientType" name="clientType">
-            <option value="">(select one)</option>
+<div class="row">
+  <div class="col-4"></div>
+  <div class="col-6">
+    
+    <form >
+    
+        <div class="form-group col-md-6">
+          <label for="firstname">First Name</label>
+          <input type="text" class="form-control" id="first-name" placeholder="Enter First Name" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputlastname">Last Name:</label>
+          <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Last Name" required>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Email</label>
+          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" required>
+        </div>
+
+        
+        <div class="form-group col-md-6">
+          <label for="phone">Phone</label>
+          <input type="number" class="form-control" id="phone" placeholder="phone" required>
+        </div>
+    
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="clientType">Client Type</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01">
+            <option selected>Select Client type</option>
             <option value="1">Individual</option>
             <option value="2">Corporate</option>
             <option value="3">Group</option>
           </select>
-        </label>
-      </fieldset>
-      <input type="submit" value="ADD" />
+        </div>
+     
+      <button type="submit" class="btn btn-success">ADD</button>
     </form>
     </div>
-  </body>
+    <div class="col-2"></div>
+  </div>
+  

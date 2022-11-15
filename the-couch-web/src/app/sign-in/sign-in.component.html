@@ -1,15 +1,29 @@
-<body>
-    <h1>Log into the CMS</h1>
-    <form method="post" action=''>
-      <fieldset>
-        <label for="email">Enter your Email: <br><input id="email" name="email" type="email" required /></label>
-        <label for="password">Enter your password: <br><input id="password" name="password" type="password" required /></label>
-      </fieldset>
-      <fieldset>
-        <label for="show password">Show password <input class="checkbox" type="checkbox" name="show password" id="show password"></label>
-        <label for="Remember password?">Remember password<input class="checkbox" type="checkbox" name="remember password" id="remember password"></label>
-    </fieldset>
-      <input type="submit" value="LOG IN" />
+
+<div class="row">
+  <div class="col-3"></div>
+  
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-header">
+        <h3>Login</h3>
+      </div>
+      <div class="card-body">
+    <form>
+     
+      <div class="form-group input-div">
+        <label for="inputEmail">Email</label>
+        <input type="email" class="form-control" id="inputEmail" placeholder="Email" required>
+      </div>
+
+      <div class="form-group input-div">
+        <label for="inputpassword">Password</label>
+        <input type="password" class="form-control" id="inputpassword" placeholder="Password" required>
+      </div>
+
+      <button type="submit" class="btn btn-success input-div" >Login</button>
       <p>forgot password?</p>
     </form>
-  </body>
+    </div>
+  </div>
+  </div>
+  </div>
