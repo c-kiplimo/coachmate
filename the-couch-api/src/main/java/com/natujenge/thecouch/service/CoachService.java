@@ -4,8 +4,10 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.repository.CoachRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service
@@ -14,7 +16,7 @@ public class CoachService {
 
     private final CoachRepository coachRepository;
 
-    // constructor
+//     constructor
     public CoachService(CoachRepository coachRepository) {
         this.coachRepository = coachRepository;
     }
@@ -22,13 +24,13 @@ public class CoachService {
 
 
     // add new coach
-    public void addNewCoach(Coach coach) {
+    public Coach addNewCoach(Coach coach) {
         if (coach.getId() == null) {
             coach.setStatus(CoachStatus.NEW);
             coach.setCreatedAt(LocalDateTime.now());
             coach.setCreatedBy(coach.getFullName());
             coach.setReason("DEFAULT");
         }
-        coachRepository.save(coach);
+        return coachRepository.save(coach);
     }
 }
