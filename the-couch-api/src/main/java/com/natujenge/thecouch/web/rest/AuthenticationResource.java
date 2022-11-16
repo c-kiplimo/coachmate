@@ -2,7 +2,7 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.UserSession;
-import com.natujenge.thecouch.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.repository.UserSessionRepository;
 import com.natujenge.thecouch.security.JwtTokenUtil;
 import com.natujenge.thecouch.service.UserService;
