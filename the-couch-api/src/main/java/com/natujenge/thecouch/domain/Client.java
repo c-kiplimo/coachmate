@@ -2,12 +2,9 @@ package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
-import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.domain.enums.PaymentMode;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +25,8 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private ClientType type;
     private  String msisdn;
+
+    @Column(name="email_address", unique = true)
     private String email_address;
     private  String physical_address;
     private  String profession;
