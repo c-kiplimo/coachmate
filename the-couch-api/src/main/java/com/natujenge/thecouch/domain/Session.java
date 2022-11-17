@@ -28,7 +28,7 @@ public class Session {
 
     private String details;
     private String notes;
-    private Integer amount_paid;
+    private String amount_paid;
     private String session_date;
     private String delivery_date;
     private String delivered_at;
