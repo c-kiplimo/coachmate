@@ -23,6 +23,12 @@ public class ClientService {
 
     //CREATE
     public Client createClient(Client client) {
+        // TODO: Link this to user obext, and assign a default password, set status to new, have satus change to ACTIVE
+        //  after client activates account.
+
+        // TODO: Have contracts generated and assigned to client
+        //  Client to review contract and update accordingly as defined in sessions repo
+
         try{
             clientRepository.save(client);
             return client;
@@ -34,6 +40,8 @@ public class ClientService {
 
     //UPDATE
     public Client updateClient(Client client) {
+        // TODO: To update client, Get client from dB, then update the details from request
+        //  and then save. @Transactional
         try {
             log.info("Received an update request for {}", client.getName());
             clientRepository.save(client);
@@ -45,6 +53,7 @@ public class ClientService {
     }
     //INDEX - all clients
     public List<Client> viewClients() {
+        // TODO: Return a pageable object
         return clientRepository.findAll();
     }
 
