@@ -25,6 +25,7 @@ public class SessionService {
 
     //CREATE
     public Session createSession(Session session) {
+        // TODO: Exception handling
         try{
             sessionRepository.save(session);
             return session;
@@ -36,6 +37,7 @@ public class SessionService {
 
     //UPDATE
     public Session updateSession(Session session) {
+        // TODO: Update details rather than save new Entry
         try {
             log.info("Received an update request for {}", session.getName());
             sessionRepository.save(session);
@@ -47,6 +49,7 @@ public class SessionService {
     }
     //INDEX - all session
     public List<Session> viewSessions() {
+        //TODO: return pageable, sessionDto
         return sessionRepository.findAll();
     }
 

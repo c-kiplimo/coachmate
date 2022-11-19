@@ -35,54 +35,58 @@ public class ClientResource {
 
     //GET: /clients
     @GetMapping
-    public ResponseEntity<List<Client>> getClients(){
+    public ResponseEntity<?> getClients(){
         try{
             List<Client> clientList = clientService.viewClients();
 
-            return new ResponseEntity(clientList, HttpStatus.OK);
+            return new ResponseEntity<>(clientList, HttpStatus.OK);
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //GET: /api/clients/:id
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClientById (@PathVariable("id") Long id) {
+    public ResponseEntity<?> getClientById (@PathVariable("id") Long id) {
+        // TODO: Use Excepption handling to return custom error if action is not completed.
         Client client = clientService.findClientById(id);
-        return new ResponseEntity(client, HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     //POST: /api/clients
     @PostMapping
-    public ResponseEntity<Client> createClient(@RequestBody Client client){
+    public ResponseEntity<?> createClient(@RequestBody Client client){
         try{
-            log.info("Client request received {)", client);
+            log.info("Client request received {}", client);
 
             Client clientResponse = clientService.createClient(client);
-            return new ResponseEntity(clientResponse, HttpStatus.CREATED);
+            return new ResponseEntity<>(clientResponse, HttpStatus.CREATED);
 
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //PUT: /api/clients
     @PutMapping
-    public ResponseEntity<Client> updateClient(@RequestBody Client client){
+    public ResponseEntity<?> updateClient(@RequestBody Client client){
+        // TODO: Have the updateClientById in PATCH request used here but moved to service.
+
         try{
-            log.info("Client request received {)", client);
+            log.info("Client request received {}", client);
             Client clientResponse = clientService.updateClient(client);
-            return new ResponseEntity(clientResponse, HttpStatus.OK);
+            return new ResponseEntity<>(clientResponse, HttpStatus.OK);
 
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //PATCH: /api/clients/:id
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateClientById(@RequestBody ClientDto clientDto, @PathVariable("id") Long id) {
+        // TODO: Have this logic moved to clientService.
         Client client = clientRepository.findClientById(id).orElseThrow(() -> new UserNotFoundException("Client by id " + id + " not found"));
 
         boolean needUpdate = false;
@@ -115,12 +119,14 @@ public class ClientResource {
         if (needUpdate) {
             clientRepository.save(client);
         }
-        return new ResponseEntity(client, HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     //DELETE:/api/clients/:id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable("id") Long id) {
+        // TODO: Have custom responses if action is completed successfully!
+        //  Provide logs
         clientService.deleteClient(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

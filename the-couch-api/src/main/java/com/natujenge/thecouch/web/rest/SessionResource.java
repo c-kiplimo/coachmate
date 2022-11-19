@@ -28,49 +28,51 @@ public class SessionResource {
 
     //GET: /sessions
     @GetMapping
-    public ResponseEntity<List<Session>> getSessions(){
+    public ResponseEntity<?> getSessions(){
+        //TODO:  Exception Handling here. Custom messages, and Logging for all actions
+        //
         try{
             List<Session> sessionList = sessionService.viewSessions();
 
-            return new ResponseEntity(sessionList, HttpStatus.OK);
+            return new ResponseEntity<>(sessionList, HttpStatus.OK);
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     //GET: /api/sessions/:id
     @GetMapping("/{id}")
-    public ResponseEntity<Session> getSessionById (@PathVariable("id") Long id) {
+    public ResponseEntity<?> getSessionById (@PathVariable("id") Long id) {
         Session session = sessionService.findSessionById(id);
-        return new ResponseEntity(session, HttpStatus.OK);
+        return new ResponseEntity<>(session, HttpStatus.OK);
     }
 
     //POST: /api/sessions
     @PostMapping
-    public ResponseEntity<Session> createClient(@RequestBody Session session){
+    public ResponseEntity<?> createClient(@RequestBody Session session){
         try{
-            log.info("Session request received {)", session);
+            log.info("Session request received {}", session);
 
             Session sessionResponse = sessionService.createSession(session);
-            return new ResponseEntity(sessionResponse, HttpStatus.CREATED);
+            return new ResponseEntity<>(sessionResponse, HttpStatus.CREATED);
 
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //PUT: /api/sessions
     @PutMapping
-    public ResponseEntity<Session> updateSession(@RequestBody Session session){
+    public ResponseEntity<?> updateSession(@RequestBody Session session){
         try{
-            log.info("Session request received {)", session);
+            log.info("Session request received {}", session);
             Session sessionResponse = sessionService.updateSession(session);
-            return new ResponseEntity(sessionResponse, HttpStatus.OK);
+            return new ResponseEntity<>(sessionResponse, HttpStatus.OK);
 
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //PATCH: /api/sessions/:id
