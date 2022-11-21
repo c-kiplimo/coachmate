@@ -23,6 +23,8 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { ClientService } from './services/ClientService';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -53,9 +55,10 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     AppRoutingModule,
     FormsModule,
     FlatpickrModule,
+    HttpClientModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [],
+  providers: [ClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
