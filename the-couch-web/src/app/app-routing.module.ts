@@ -8,6 +8,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SessionsComponent } from './sessions/sessions.component';
 import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
+import { ContractComponent } from './contract/contract.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,14 @@ const routes: Routes = [
   {
     path: 'schedules',
     component: SchedulesComponent
+  },
+  {
+    path: 'notifications',
+    component: ContractComponent
+  },
+  {
+    path: 'contract',
+    component: ContractComponent
   }
 
   
