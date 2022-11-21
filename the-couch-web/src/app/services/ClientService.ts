@@ -22,7 +22,7 @@ export class ClientService {
     
   
     getClients(): Observable<any> {
-        return this.http.get(this.baseURL)
+        return this.http.get(`${this.baseURL}clients`)
     }
     
     //client status
