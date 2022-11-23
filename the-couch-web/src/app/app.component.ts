@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {LocationStrategy} from '@angular/common';
+import { Router } from '@angular/router';
 
 
 interface SideNavToggle {
@@ -18,13 +19,20 @@ export class AppComponent {
   notlogged = false;
   
 
-  constructor(private url:LocationStrategy) { }
+  constructor(private url:LocationStrategy, private router: Router) { }
+
+  User: any
 
   ngOnInit(): void {
     console.log(this.url.path());
     if(this.url.path()==='/signin'){
 
      this.notlogged=true; 
+     }
+
+     this.User = JSON.parse(sessionStorage.getItem('userDetails') as any);
+     if(!this.User) {
+      this.router.navigate(['/signin']);
      }
   }
   

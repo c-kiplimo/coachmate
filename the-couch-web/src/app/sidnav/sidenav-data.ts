@@ -5,9 +5,9 @@ export const navbarData = [
         label: 'Dashboard'
     },
     {
-        routeLink: 'sessions',
+        routeLink: 'contracts',
         icon: 'fal fa-presentation',
-        label: 'Sessions'
+        label: 'Contracts'
     },
     {
         routeLink: 'clients',

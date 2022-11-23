@@ -32,7 +32,7 @@ const routes: Routes = [
     component: SignUpComponent
   },
   {
-    path: 'sessions',
+    path: 'contracts',
     component: SessionsComponent
   },
   {
