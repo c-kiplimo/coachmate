@@ -43,10 +43,30 @@ export class ClientService {
             reason: client.reason,
             createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
             lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        },{
-            headers: {
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
-              }
         })
     } 
+
+
+
+    getSessions(): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions`)
+    }
+    
+    addSession(session: any): Observable<any> {
+        console.log(session)
+        return this.http.post(`${this.baseURL}sessions`, {
+            goals:session.goals,
+            session_date:session.session_date,
+            session_venue:session.session_venue,
+            sessionType:session.sessionType,
+            reason: session.reason,
+            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
+            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
+        })
+    }
 }
+// {
+//     headers: {
+//         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
+//       }
+// })

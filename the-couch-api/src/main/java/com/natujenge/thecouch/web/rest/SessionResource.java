@@ -18,7 +18,7 @@ import static org.springframework.util.StringUtils.hasLength;
 
 @RestController
 @Slf4j
-@RequestMapping(name = "/api/sessions")
+@RequestMapping(path = "/api/sessions")
 public class SessionResource {
 
     @Autowired
@@ -50,7 +50,7 @@ public class SessionResource {
 
     //POST: /api/sessions
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Session session){
+    public ResponseEntity<?> createSession(@RequestBody Session session){
         try{
             log.info("Session request received {}", session);
 

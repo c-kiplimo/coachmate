@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import {SessionsService }  from '../services/SessionsService';
+import { Router } from '@angular/router';
+import { ClientService } from '../services/ClientService';
 @Component({
   selector: 'app-add-session',
   templateUrl: './add-session.component.html',
@@ -8,14 +10,23 @@ import { Component, OnInit } from '@angular/core';
 export class AddSessionComponent implements OnInit {
 
 
-  constructor() { }
+  constructor(private sessionService: ClientService,  private router: Router) { }
 
   ngOnInit(): void {
   }
 
   AddSession (sessionForm: any) {
-
-    console.log(sessionForm.value)
+    this.sessionService.addSession(sessionForm.value).subscribe({
+      next: (response: any) => {
+        console.log("no error")
+        this.router.navigate(['/sessions']);
+      }, 
+      error: (error: any) => {
+        console.log("error")
+      }
+    }
+      
+    )
     
   }
 
