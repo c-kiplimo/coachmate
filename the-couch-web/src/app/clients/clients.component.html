@@ -19,19 +19,27 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Client Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
             <th scope="col">Group/Individual</th>
             <th scope="col">Added On</th>
+            <th scope="col">Profession</th>
             <th scope="col">Status</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Amos s</td>
-            <td>Individual</td>
-            <td>11-11-2022</td>
-            <td>Active</td>
+          <tr *ngFor="let client of Clients">
+            <th scope="row">{{client.id}}</th>
+            <td>{{client.name}}</td>
+            <td>{{client.email_address}}</td>
+            <td>{{client.msisdn}}</td>
+            <td>{{client.type}}</td>
+            <td>{{client.createdAt}}</td>
+            <td>{{client.profession}}</td>
+            
+            <td>{{client.status}}</td>
+            
             <td class="actions">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 <i class="fa-solid fa-pen-to-square"></i>

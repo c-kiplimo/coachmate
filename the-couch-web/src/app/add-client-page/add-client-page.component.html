@@ -10,43 +10,65 @@
   <div class="col-4"></div>
   <div class="col-6">
     
-    <form >
+    <form #AddClientForm="ngForm" (ngSubmit)="AddClient(AddClientForm)">
     
         <div class="form-group col-md-6">
-          <label for="firstname">First Name</label>
-          <input type="text" class="form-control" id="first-name" placeholder="Enter First Name" required>
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter Client Name" name="name" ngModel required>
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputlastname">Last Name:</label>
-          <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Last Name" required>
-        </div>
+
 
         <div class="form-group col-md-6">
           <label for="inputEmail4">Email</label>
-          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" required>
+          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" name="email" ngModel required>
         </div>
 
         
         <div class="form-group col-md-6">
           <label for="phone">Phone</label>
-          <input type="number" class="form-control" id="phone" placeholder="phone" required>
+          <input type="number" class="form-control" id="phone" placeholder="phone" name="phone" ngModel required>
         </div>
     
+        <div class="form-group col-md-6">
+          <label for="address">Address</label>
+          <input type="text" class="form-control" id="address" placeholder="Enter Client Address" name="address" ngModel>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="profession">Profession</label>
+          <input type="text" class="form-control" id="profession" placeholder="Enter Client Profession" name="profession" ngModel>
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01" name="PaymentMode" ngModel>
+            <option selected>Select Payment Mode</option>
+            <option value="PREPAY">PREPAY</option>
+            <option value="POSTPAY">POSTPAY</option>
+          </select>
+        </div>
+        
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="clientType">Client Type</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01">
+          <select class="custom-select" id="inputGroupSelect01" name="clientType" ngModel>
             <option selected>Select Client type</option>
-            <option value="1">Individual</option>
-            <option value="2">Corporate</option>
-            <option value="3">Group</option>
+            <option value="INDIVIDUAL">INDIVIDUAL</option>
+            <option value="CORPORATE">CORPORATE</option>
+            <option value="GROUP">GROUP</option>
           </select>
         </div>
+
+        <div class="form-group col-md-6">
+          <label for="reason">Reason</label>
+          <input type="text" class="form-control" placeholder="Reason" name="reason" ngModel>
+        </div>
      
-      <button type="submit" class="btn btn-success">ADD</button>
+      <button type="submit" class="btn btn-success">ADD Client</button>
     </form>
     </div>
     <div class="col-2"></div>
   </div>
-  

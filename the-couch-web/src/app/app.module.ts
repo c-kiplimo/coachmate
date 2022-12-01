@@ -24,6 +24,14 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 
+import { ClientService } from './services/ClientService';
+import { SessionsService } from './services/SessionsService';
+import { HttpClientModule } from '@angular/common/http';
+
+import { ContractComponent } from './contract/contract.component';
+import { AddObjectiveComponent } from './add-objective/add-objective.component';
+
+
 
 
 @NgModule({
@@ -44,6 +52,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     SessionsComponent,
     AddSessionComponent,
     SchedulesComponent,
+    ContractComponent,
+    AddObjectiveComponent,
 
 
   ],
@@ -53,9 +63,10 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     AppRoutingModule,
     FormsModule,
     FlatpickrModule,
+    HttpClientModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [],
+  providers: [ClientService,SessionsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

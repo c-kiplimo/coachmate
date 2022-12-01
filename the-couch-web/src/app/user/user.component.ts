@@ -9,7 +9,13 @@ export class UserComponent implements OnInit {
 
   constructor() { }
 
+  User: any
   ngOnInit(): void {
+ 
+    this.User = JSON.parse(sessionStorage.getItem('userDetails') as any);
+      
+    console.log(this.User.user.fullName)
   }
+   
 
 }
