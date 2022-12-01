@@ -19,9 +19,10 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">session Name</th>
-            <th scope="col">Group/Individual</th>
-            <th scope="col">Added On</th>
-            <th scope="col">Status</th>
+            <th scope="col">session Date</th>
+            <th scope="col">Session Venue</th>
+            <th scope="col">Session Type</th>
+            <th scope="col">Goals</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -29,10 +30,10 @@
           <tr *ngFor="let session of Sessions">
             <th scope="row">{{session.id}}</th>
             <td>{{session.name}}</td>
-            <td>{{session.type}}</td>
             <td>{{session.session_date}}</td>
             <td>{{session.session_venue}}</td>
-            <td>{{session.status}}</td>
+            <td>{{session.type}}</td>
+            <td>{{session.goals}}</td>
             <td class="actions">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 <i class="fa-solid fa-pen-to-square"></i>
