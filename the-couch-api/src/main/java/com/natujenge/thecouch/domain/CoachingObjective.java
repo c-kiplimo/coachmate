@@ -1,6 +1,6 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.CoachStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,34 +8,45 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@Table(name = "tbl_coaches")
 @Entity
-public class Coach implements Serializable {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "tbl_coaching_objectives")
+
+public class CoachingObjective {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String objective;
 
-    private String businessName;
-    private String fullName;
-    private String msisdn;
-    private String emailAddress;
-    @Enumerated(EnumType.STRING)
-    private CoachStatus status;
-    private String reason;
 
-    // management Details
+    //Management details
     @CreationTimestamp
     private LocalDateTime createdAt;
+
     @Column(nullable = false)
     private String createdBy;
+
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
+    // Relations
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
+
+    @ManyToOne
+    @JoinColumn(name="contract_id")
+    Contract contract;
+
+    @ManyToOne
+    @JoinColumn(name="coach_id")
+    Coach coach;
+
 }
