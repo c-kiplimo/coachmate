@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-clients',
@@ -8,7 +9,7 @@ import { ClientService } from '../services/ClientService';
 })
 export class ClientsComponent implements OnInit {
 
-  constructor(private ClientService: ClientService) { }
+  constructor(private ClientService: ClientService, private router: Router) { }
   
   Clients: any;
   ngOnInit(): void {
@@ -22,4 +23,10 @@ export class ClientsComponent implements OnInit {
     )
   }
 
+  navigateToClientView(id: any) {
+    console.log(id)
+    this.router.navigate(['clientView', id]);
+
+
+  }
 }
