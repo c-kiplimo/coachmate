@@ -57,11 +57,11 @@ export class ClientService {
     addSession(session: any): Observable<any> {
         console.log(session)
         return this.http.post(`${this.baseURL}sessions`, {
-            goals:session.goals,
+            name:session.name,
+            type:session.type,
             session_date:session.session_date,
             session_venue:session.session_venue,
-            sessionType:session.sessionType,
-            reason: session.reason,
+            goals:session.goals,
             createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
             lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
         })
