@@ -18,7 +18,7 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Client Name</th>
+            <th scope="col">session Name</th>
             <th scope="col">Group/Individual</th>
             <th scope="col">Added On</th>
             <th scope="col">Status</th>
@@ -26,19 +26,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Amos s</td>
-            <td>Individual</td>
-            <td>11-11-2022</td>
-            <td>Active</td>
+          <tr *ngFor="let session of Sessions">
+            <th scope="row">{{session.id}}</th>
+            <td>{{session.name}}</td>
+            <td>{{session.type}}</td>
+            <td>{{session.session_date}}</td>
+            <td>{{session.session_venue}}</td>
+            <td>{{session.status}}</td>
             <td class="actions">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 <i class="fa-solid fa-pen-to-square"></i>
                 <i class="fa-solid fa-trash-can"></i>
             </td>
           </tr>
-         
         </tbody>
       </table>
 </div>

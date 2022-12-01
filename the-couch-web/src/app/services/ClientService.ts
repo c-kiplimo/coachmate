@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
- 
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
@@ -45,6 +44,9 @@ export class ClientService {
             lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
         })
     } 
+    deleteClient() {
+        return this.http.delete(`${this.baseURL}clients`)
+    }
 
 
 

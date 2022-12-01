@@ -11,6 +11,9 @@ import { environment } from 'src/environments/environment';
 
 
 export class SessionsService {
+    getSessions() {
+      throw new Error('Method not implemented.');
+    }
 
     baseURL: string = environment.apiURL;
     
