@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.CoachingPayment;
+import com.natujenge.thecouch.domain.enums.CoachingVenue;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "tbl_coaching_schedules")
 public class CoachingSchedule {
 
@@ -25,7 +25,7 @@ public class CoachingSchedule {
     // includes date and time
     private LocalDateTime date;
     @Enumerated(EnumType.STRING)
-    private CoachingSchedule coachingSchedule;
+    private CoachingVenue coachingVenue;
     private String coachingDuration;
     @Enumerated(EnumType.STRING)
     private CoachingPayment coachingPayment;
