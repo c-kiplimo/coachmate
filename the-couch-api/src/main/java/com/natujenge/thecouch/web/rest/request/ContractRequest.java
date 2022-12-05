@@ -16,7 +16,7 @@ public class ContractRequest {
     public int noOfSessions;
 
     public List<String> objectives;
-    public List<ScheduleRequest> schedules;
+    public List<SessionRequest> sessions;
 
 
 }
