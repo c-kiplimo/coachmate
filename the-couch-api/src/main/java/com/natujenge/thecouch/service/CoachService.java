@@ -54,7 +54,7 @@ public class CoachService {
     }
 
     //SHOW - one coach
-    public Client findCoachById(long id) {
+    public Coach findCoachById(long id) {
         return coachRepository.findCoachById(id)
                 .orElseThrow(() -> new UserNotFoundException("Coach by id " + id + " not found"));
     }

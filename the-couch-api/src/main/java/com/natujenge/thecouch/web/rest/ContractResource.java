@@ -65,7 +65,7 @@ public class ContractResource {
             log.info("Request to add new Contract by Coach of id {}",coachId);
 
             // Later return contract DTO
-            Contract contract = contractService.createContract(contractRequest);
+            Contract contract = contractService.createContract(coachId,contractRequest);
             return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {

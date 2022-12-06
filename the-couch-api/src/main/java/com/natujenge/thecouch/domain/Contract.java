@@ -31,7 +31,7 @@ public class Contract {
     // relations
     @ManyToOne
     @JoinColumn(name="client_id")
-   Client client;
+    Client client;
 
     @ManyToOne
     @JoinColumn(name="coach_id")

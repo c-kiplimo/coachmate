@@ -25,14 +25,13 @@ public class Session {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    private Integer sessionNo;
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private SessionType type;
+    private SessionType sessionType;
 
     @Enumerated(EnumType.STRING)
-    private SessionStatus status;
+    private SessionStatus sessionStatus;
 
     private String attachments;
     // session responses

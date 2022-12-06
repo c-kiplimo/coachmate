@@ -14,6 +14,7 @@ public class ContractRequest {
     public float individualFeesPerSession;
     public float groupFeesPerSession;
     public int noOfSessions;
+    public long clientId;
 
     public List<String> objectives;
     public List<SessionRequest> sessions;

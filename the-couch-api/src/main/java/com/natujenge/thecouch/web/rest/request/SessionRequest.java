@@ -11,7 +11,8 @@ import java.time.LocalDate;
 public class SessionRequest {
     public String sessionDuration;
     public String name;
-    public SessionType type;
+    public SessionType sessionType;
+    public String notes;
     public LocalDate sessionDate;
     public SessionVenue sessionVenue;
     public PaymentCurrency paymentCurrency;
