@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private CoachingCategory coachingCategory;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -31,7 +31,7 @@ public class Contract {
     // relations
     @ManyToOne
     @JoinColumn(name="client_id")
-   Client client;
+    Client client;
 
     @ManyToOne
     @JoinColumn(name="coach_id")
