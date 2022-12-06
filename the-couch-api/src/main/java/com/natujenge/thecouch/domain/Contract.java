@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private CoachingCategory coachingCategory;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

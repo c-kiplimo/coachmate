@@ -17,12 +17,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
 @AllArgsConstructor
-@RequestMapping(name = "api/contract")
+@RequestMapping(path = "api/contract")
 public class ContractResource {
     @Autowired
     ContractService contractService;
@@ -74,21 +73,21 @@ public class ContractResource {
     }
 
     // Update a contract
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateContract(@PathVariable("id") Long contractId,
-                                            @RequestBody ContractRequest contractRequest,
-                                            @AuthenticationPrincipal User userDetails) {
-        try{
-            Long coachId = userDetails.getCoach().getId();
-            contractService.updateContract(coachId,contractId,contractRequest);
-            return new ResponseEntity<>(new RestResponse(false,
-                    "Contract Updated Successfully"), HttpStatus.OK);
-
-        }catch (Exception e){
-            return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //    @PutMapping("/{id}")
+    //    public ResponseEntity<?> updateContract(@PathVariable("id") Long contractId,
+    //                                            @RequestBody ContractRequest contractRequest,
+    //                                            @AuthenticationPrincipal User userDetails) {
+    //        try{
+    //            Long coachId = userDetails.getCoach().getId();
+    //            contractService.updateContract(coachId,contractId,contractRequest);
+    //            return new ResponseEntity<>(new RestResponse(false,
+    //                    "Contract Updated Successfully"), HttpStatus.OK);
+    //
+    //        }catch (Exception e){
+    //            return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
+    //                    HttpStatus.INTERNAL_SERVER_ERROR);
+    //        }
+    //    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContract(@PathVariable("id") Long contractId,

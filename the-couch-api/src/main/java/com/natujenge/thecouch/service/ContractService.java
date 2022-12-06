@@ -39,7 +39,9 @@ public class ContractService {
 
     public Contract getSingleContract(Long coachId, Long contractId) {
 
-        Optional<Contract> optionalContract = contractRepository.getContractByIdANDCoachId(contractId,coachId);
+        // Verify Coach
+
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
 
         if (optionalContract.isEmpty()){
             throw new IllegalArgumentException("Contract with Id "+contractId+" does not exist!");
