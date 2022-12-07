@@ -25,7 +25,7 @@ export class ClientsComponent implements OnInit {
 
   navigateToClientView(id: any) {
     console.log(id)
-    this.router.navigate(['clientView', id]);
+    this.router.navigate(['/clientView', id]);
 
 
   }

@@ -31,6 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ContractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
+import { FeebackFormComponent } from './feeback-form/feeback-form.component';
 
 
 
@@ -56,6 +57,7 @@ import { ClientViewComponent } from './client-view/client-view.component';
     ContractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
+    FeebackFormComponent,
 
 
   ],
