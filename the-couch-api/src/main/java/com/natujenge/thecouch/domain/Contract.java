@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "tbl_contracts")
 public class Contract {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private CoachingCategory coachingCategory;
+    private String coachingTopic;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
@@ -36,5 +38,4 @@ public class Contract {
     @ManyToOne
     @JoinColumn(name="coach_id")
     Coach coach;
-
 }
