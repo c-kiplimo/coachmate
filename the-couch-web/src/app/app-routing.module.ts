@@ -44,10 +44,6 @@ const routes: Routes = [
     component: SchedulesComponent
   },
   {
-    path: 'notifications',
-    component: ContractComponent
-  },
-  {
     path: 'contract',
     component: ContractComponent
   }
