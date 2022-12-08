@@ -29,4 +29,7 @@ export class ClientsComponent implements OnInit {
 
 
   }
+  deleteClient(id:any){
+    this.deleteClient;
+  }
 }
