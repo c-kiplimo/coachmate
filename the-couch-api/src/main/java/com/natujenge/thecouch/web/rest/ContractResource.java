@@ -21,14 +21,14 @@ import java.util.List;
 @RestController
 @Slf4j
 @AllArgsConstructor
-@RequestMapping(path = "api/contract")
+@RequestMapping(path = "api/contracts")
 public class ContractResource {
     @Autowired
     ContractService contractService;
 
     // Get All Contracts
-    @GetMapping()
-    public ResponseEntity<?> getSessionById(@AuthenticationPrincipal User userDetails) {
+    @GetMapping
+    public ResponseEntity<?> getContracts(@AuthenticationPrincipal User userDetails) {
         try{
             Long coachId = userDetails.getCoach().getId();
             List<Contract> contracts = contractService.getContracts(coachId);

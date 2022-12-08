@@ -11,6 +11,7 @@ import { SchedulesComponent } from './schedules/schedules.component';
 import { ContractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
+import { ContractViewComponent } from './contract-view/contract-view.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,10 @@ const routes: Routes = [
   {
     path: 'clientView/:id',
     component: ClientViewComponent
+  },
+  {
+    path: 'notifications',
+    component: ContractViewComponent
   }
   
 ];

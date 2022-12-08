@@ -7,12 +7,12 @@ import { ClientService } from '../services/ClientService';
   styleUrls: ['./sessions.component.css']
 })
 export class SessionsComponent implements OnInit {
-  constructor(private SessionService:ClientService) { }
+  constructor(private restApiService:ClientService) { }
   
   Sessions: any;
 
   ngOnInit(): void {
-    this.SessionService.getSessions().subscribe(
+    this.restApiService.getSessions().subscribe(
       (response: any) => {
         console.log(response)
         this.Sessions = response

@@ -41,6 +41,9 @@ public class Session {
     // includes date and time
     private LocalDate sessionDate;
     private String sessionDuration;
+    private LocalDateTime sessionStartTime;
+    private LocalDateTime sessionEndTime;
+
 
     @Enumerated(EnumType.STRING)
     private SessionVenue sessionVenue;

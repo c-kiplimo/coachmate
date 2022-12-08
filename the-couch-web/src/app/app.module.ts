@@ -31,6 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ContractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
+import { ContractViewComponent } from './contract-view/contract-view.component';
+import { ApiService } from './services/ApiService';
 
 
 
@@ -56,6 +58,7 @@ import { ClientViewComponent } from './client-view/client-view.component';
     ContractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
+    ContractViewComponent,
 
 
   ],
@@ -68,7 +71,7 @@ import { ClientViewComponent } from './client-view/client-view.component';
     HttpClientModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [ClientService,SessionsService],
+  providers: [ClientService,SessionsService,ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

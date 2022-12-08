@@ -20,7 +20,7 @@ export class ClientService {
 
     
   
-    getClients(): Observable<any> {
+    getClient(): Observable<any> {
         return this.http.get(`${this.baseURL}clients`)
     }
     
@@ -48,7 +48,10 @@ export class ClientService {
         return this.http.delete(`${this.baseURL}clients`)
     }
 
-
+    // Get Contracts
+    getContracts() : Observable<any> {
+        return this.http.get(`${this.baseURL}contracts`)
+    }
 
     getSessions(): Observable<any> {
         return this.http.get(`${this.baseURL}sessions`)
@@ -66,6 +69,8 @@ export class ClientService {
             lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
         })
     }
+
+     
 }
 // {
 //     headers: {
