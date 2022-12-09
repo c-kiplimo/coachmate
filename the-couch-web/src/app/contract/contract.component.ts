@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-add-objective',
-  templateUrl: './Contract.component.html',
-  styleUrls: ['./Contract.component.css']
+  templateUrl: './contract.component.html',
+  styleUrls: ['./contract.component.css']
 })
 export class contractComponent implements OnInit {
 
