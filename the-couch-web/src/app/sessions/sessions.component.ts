@@ -9,13 +9,13 @@ import { ClientService } from '../services/ClientService';
 export class SessionsComponent implements OnInit {
   constructor(private restApiService:ClientService) { }
   
-  Sessions: any;
+  sessions: any;
 
   ngOnInit(): void {
     this.restApiService.getSessions().subscribe(
       (response: any) => {
         console.log(response)
-        this.Sessions = response
+        this.sessions = response
       }, (error: any) => {
         console.log(error)
       }

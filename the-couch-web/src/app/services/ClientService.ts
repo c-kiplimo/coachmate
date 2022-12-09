@@ -30,19 +30,7 @@ export class ClientService {
     // CLOSED
     addClient(client: any): Observable<any> {
         console.log(client)
-        return this.http.post(`${this.baseURL}clients`, {
-            name: client.name,
-            type: client.clientType,
-            msisdn: client.phone,
-            email_address: client.email,
-            physical_address: client.address,
-            profession: client.profession,
-            payment_mode: client.PaymentMode,
-            status: "NEW",
-            reason: client.reason,
-            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
-            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        })
+        return this.http.post(`${this.baseURL}clients`, client)
     } 
     deleteClient() {
         return this.http.delete(`${this.baseURL}clients`)
@@ -59,15 +47,9 @@ export class ClientService {
     
     addSession(session: any): Observable<any> {
         console.log(session)
-        return this.http.post(`${this.baseURL}sessions`, {
-            name:session.name,
-            type:session.type,
-            session_date:session.session_date,
-            session_venue:session.session_venue,
-            goals:session.goals,
-            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
-            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        })
+        return this.http.post(`${this.baseURL}sessions`,session
+            
+        )
     }
 
      

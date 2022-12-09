@@ -8,18 +8,23 @@ import { ClientService } from '../services/ClientService';
   styleUrls: ['./add-session.component.css']
 })
 export class AddSessionComponent implements OnInit {
-
+addSessionForm:any={
+sessionType:"INDIVIDUAL",
+sessionVenue:"VIRTUAL"
+};
 
   constructor(private sessionService: ClientService,  private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  AddSession (sessionForm: any) {
-    this.sessionService.addSession(sessionForm.value).subscribe({
+  addSession () {
+    this.sessionService.addSession(this.addSessionForm).subscribe({
+      
       next: (response: any) => {
         console.log("no error")
         this.router.navigate(['/sessions']);
+        console.log(this.addSessionForm);
       }, 
       error: (error: any) => {
         console.log("error")

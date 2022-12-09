@@ -21,7 +21,7 @@ export const navbarData = [
     },
     {
         routeLink: 'notifications',
-        icon: 'fal fa-bell',
+        icon: 'fa-solid fa-file-contract',
         label: 'Contracts'
     },
     {
