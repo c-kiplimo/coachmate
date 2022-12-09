@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   title: 'Development Environment',
-  apiURL: 'http://localhost:10290/api/'
+  apiURL: window.location.origin,
 };
 
 /*

@@ -33,9 +33,8 @@ import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
 import { ContractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
-
-
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 
 @NgModule({
   declarations: [
@@ -58,8 +57,6 @@ import { ApiService } from './services/ApiService';
     AddObjectiveComponent,
     ClientViewComponent,
     ContractViewComponent,
-
-
   ],
   imports: [
     BrowserModule,
@@ -68,9 +65,17 @@ import { ApiService } from './services/ApiService';
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ],
-  providers: [ClientService,SessionsService,ApiService],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
+    ClientService,
+    SessionsService,
+    ApiService,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

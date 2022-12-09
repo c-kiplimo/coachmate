@@ -15,7 +15,7 @@ export class SessionsService {
       throw new Error('Method not implemented.');
     }
 
-    baseURL: string = environment.apiURL;
+    baseURL: string =environment.apiURL + '/api/';
     
     constructor(private http: HttpClient) {
 

@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 
 export class ClientService {
 
-    baseURL: string = environment.apiURL;
+    baseURL: string = environment.apiURL + '/api/';
     
     constructor(private http: HttpClient) {
 
