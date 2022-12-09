@@ -28,6 +28,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     };
 
     const token = sessionStorage.getItem('token');
+    console.log(token);
 
     const request = req.clone({
       setHeaders: {
