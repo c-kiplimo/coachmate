@@ -47,7 +47,6 @@ import { ApiService } from './services/ApiService';
     BodyComponent,
     UserComponent,
     ClientsComponent,
-
     AddClientPageComponent,
     AddCoachPageComponent,
     SignUpComponent,

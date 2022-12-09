@@ -14,7 +14,7 @@ export class UserComponent implements OnInit {
  
     this.User = JSON.parse(sessionStorage.getItem('userDetails') as any);
       
-    console.log(this.User.user.fullName)
+    console.log(this.User.user.fullName) 
   }
    
 
