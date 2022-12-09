@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientsComponent } from './clients/clients.component';
@@ -8,10 +8,10 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SessionsComponent } from './sessions/sessions.component';
 import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
-import { ContractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
 import { ContractViewComponent } from './contract-view/contract-view.component';
+import { contractComponent } from './contract/contract.component';
 
 const routes: Routes = [
   {
@@ -35,21 +35,12 @@ const routes: Routes = [
     component: SignUpComponent
   },
   {
-    path: 'contracts',
-    component: SessionsComponent
-  },
-  {
     path: 'addSession',
     component: AddSessionComponent
   },
   {
     path: 'schedules',
     component: SchedulesComponent
-  },
- 
-  {
-    path: 'contract',
-    component: ContractComponent
   },
   {
     path: 'addObjective',
@@ -66,6 +57,14 @@ const routes: Routes = [
   {
     path: 'notifications',
     component: ContractViewComponent
+  },
+  {
+    path:'contracts',
+    component:SessionsComponent
+  },
+  {
+     path:'contract',
+     component:contractComponent
   }
   
 ];

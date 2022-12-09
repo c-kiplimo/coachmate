@@ -9,17 +9,19 @@ import { ClientService } from '../services/ClientService';
 })
 export class ContractViewComponent implements OnInit {
   contracts:any;
-  constructor(private restApiService:ClientService) { }
+  constructor(private clientService:ClientService) { }
 
   ngOnInit(): void {
-    this.restApiService.getContracts().subscribe(
-      (response: any) => {
-        console.log(response)
-        this.contracts = response
-      }, (error: any) => {
-        console.log(error)
-      }
-    )
+    this.getAllContracts();
   }
-
+getAllContracts(){
+  this.clientService.getContracts().subscribe(
+    (response: any) => {
+      console.log(response)
+      this.contracts = response
+    }, (error: any) => {
+      console.log(error)
+    }
+  )
+}
 }

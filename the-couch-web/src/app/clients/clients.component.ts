@@ -13,6 +13,10 @@ export class ClientsComponent implements OnInit {
   
   Clients: any;
   ngOnInit(): void {
+    this.getClients();
+    
+  }
+  getClients(){
     this.ClientService.getClient().subscribe(
       (response) => {
         console.log(response)
@@ -21,6 +25,7 @@ export class ClientsComponent implements OnInit {
         console.log(error)
       }
     )
+
   }
 
   navigateToClientView(id: any) {

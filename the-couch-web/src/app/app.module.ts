@@ -28,7 +28,7 @@ import { ClientService } from './services/ClientService';
 import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
 
-import { ContractComponent } from './contract/contract.component';
+import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
 import { ContractViewComponent } from './contract-view/contract-view.component';
@@ -55,7 +55,7 @@ import { ApiService } from './services/ApiService';
     SessionsComponent,
     AddSessionComponent,
     SchedulesComponent,
-    ContractComponent,
+    contractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
     ContractViewComponent,
