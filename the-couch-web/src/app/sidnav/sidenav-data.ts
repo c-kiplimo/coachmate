@@ -5,9 +5,9 @@ export const navbarData = [
         label: 'Dashboard'
     },
     {
-        routeLink: 'contracts',
+        routeLink: 'sessions',
         icon: 'fal fa-presentation',
-        label: 'Contracts'
+        label: 'Sessions'
     },
     {
         routeLink: 'clients',
@@ -22,7 +22,7 @@ export const navbarData = [
     {
         routeLink: 'notifications',
         icon: 'fal fa-bell',
-        label: 'Notifications'
+        label: 'Contracts'
     },
     {
         routeLink: 'settings',
