@@ -12,6 +12,7 @@ import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
 import { ContractViewComponent } from './contract-view/contract-view.component';
 import { contractComponent } from './contract/contract.component';
+import { sessionViewComponent } from './session-view/session-view.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'addclient',
     component: AddClientPageComponent
+  },
+  {
+    path:'sessionView/:id',
+    component:sessionViewComponent
   },
   {
     path: 'signin',
@@ -55,7 +60,7 @@ const routes: Routes = [
     component: ClientViewComponent
   },
   {
-    path: 'notifications',
+    path: 'contracts',
     component: ContractViewComponent
   },
   {

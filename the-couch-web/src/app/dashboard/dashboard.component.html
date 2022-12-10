@@ -11,7 +11,7 @@
     <div class="col-3 card text-center top-cards">
         <div class="card-body">
           <h5 class="card-title">Upcoming Sessions</h5>
-          <h3 class="card-text">45</h3>
+          <h3 class="card-text">{{numberOfSessions}}</h3>
           
         </div>
     </div>
@@ -32,7 +32,7 @@
     <div class="col-3 card text-center top-cards">
         <div class="card-body">
           <h5 class="card-title">Contracts</h5>
-          <h3 class="card-text">11</h3>
+          <h3 class="card-text">{{numberOfContracts}}</h3>
           
         </div>
     </div>
@@ -46,7 +46,7 @@
               
               <div class="row">
               <div class="col-3">
-              <button type="button" class="btn btn-warning" routerLink="/addSession">SCHEDULE SESSION</button>
+              <button type="button" class="btn btn-warning" routerLink="/sessionView">SCHEDULE SESSION</button>
                 </div>
                 <div class="col-3">
               <button type="button" routerLink="addclient" class="btn btn-success">ADD CLIENT</button>
@@ -70,8 +70,8 @@
               <h5 class="card-title">Upcoming Sessions</h5>
               <p class="card-text">View All</p>
             </div>
-            <div *ngFor="let session of sessions"
-            class="d-flex justify-content-between mb-1">
+            <div *ngFor="let session of sessions" 
+            class="d-flex justify-content-between mb-1 listing-item">
             <div>
               <h6>{{ session.name | titlecase }}</h6>
               <p class="mb-1">
@@ -108,17 +108,42 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Contracts</h5>
-              <p class="card-text">View All</p>
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-            </ul>
-           
+      <div class="card">
+        <div class="card-body d-flex justify-content-between listing-item">
+          <h5 class="card-title">Contracts</h5>
+          <p class="card-text">View All</p>
         </div>
+        <div *ngFor="let contract of contracts" 
+        class="d-flex justify-content-between mb-1 listi">
+        <div>
+          <h6>{{ contract.name | titlecase }}</h6>
+          <p class="mb-1">
+            <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+            Start date:
+            {{contract.startDate| date:"MMM d y"}}
+          </p>
+        </div>
+        <span>
+          <!-- <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon> -->
+          <p class="mb-1">
+            <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
+            coaching: {{ contract.contractType| titlecase}}
+          </p>
+          <p
+            class="mb-1"
+            
+          >
+              End Date: {{ contract.endDate | date: " h:mm a" }}
+          </p>
+        </span>
+      </div>
+        <!-- <ul class="list-group list-group-flush">
+          <li class="list-group-item">.</li>
+          <li class="list-group-item">.</li>
+          <li class="list-group-item">.</li>
+        </ul> -->
+       
     </div>
+</div>  
 </div>
+

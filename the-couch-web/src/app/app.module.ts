@@ -23,11 +23,12 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { ClientService } from './services/ClientService';
 import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
@@ -35,13 +36,14 @@ import { ContractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
+import { sessionViewComponent } from './session-view/session-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidnavComponent,
     FooterComponent,
-
+    sessionViewComponent,
     DashboardComponent,
     BodyComponent,
     UserComponent,
@@ -60,6 +62,8 @@ import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,

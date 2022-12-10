@@ -20,7 +20,7 @@ export const navbarData = [
         label: 'Schedules'
     },
     {
-        routeLink: 'notifications',
+        routeLink: 'contracts',
         icon: 'fa-solid fa-file-contract',
         label: 'Contracts'
     },
