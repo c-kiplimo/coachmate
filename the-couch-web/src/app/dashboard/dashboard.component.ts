@@ -10,8 +10,10 @@ export class DashboardComponent implements OnInit {
   // ClientService: any;
   clients: any;
   sessions:any;
+  contracts:any;
   numberOfClients!: number;
   numberOfSessions!:number;
+  numberOfContracts!:number;
 rightIcon: any;
 
   constructor(private clientService : ClientService) { }
@@ -19,6 +21,7 @@ rightIcon: any;
   ngOnInit(): void {
     this.getClients();
     this.getNoOfSessions();
+    this.getNoOfContracts();
   }
   getClients(){
     this.clientService.getClient().subscribe(
@@ -41,6 +44,20 @@ rightIcon: any;
         this.sessions = response
         this.numberOfSessions = this.sessions.length;
         console.log(this.numberOfSessions)
+        
+      },
+      (error: any) => {
+        console.log(error)
+      }
+    )
+  }
+  getNoOfContracts(){
+    this.clientService.getContracts().subscribe(
+      (response:any) =>{
+        console.log(response)
+        this.contracts = response
+        this.numberOfContracts = this.contracts.length;
+        console.log(this.numberOfContracts)
         
       },
       (error: any) => {

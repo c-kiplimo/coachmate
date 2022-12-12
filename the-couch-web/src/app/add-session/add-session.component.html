@@ -11,19 +11,17 @@
     <div class="col-6">
       
       
-      <form #AddSessionForm="ngForm" (ngSubmit)="AddSession(AddSessionForm)">
+      <form (ngSubmit)="addSession()">
       
           <div class="form-group col-md-6">
             <label for="sessionname">Session Name</label>
-            <input type="text" class="form-control" id="sessionname" placeholder="Enter Session Name" name="name" ngModel >
+            <input type="text" class="form-control" id="sessionname" placeholder="Enter Session Name" name="name" [(ngModel)]="addSessionForm.name">
           </div>
-
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Session Type</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="type" ngModel>
-              <option selected value="">Select Session type</option>
+            <select class="custom-select" id="inputGroupSelect01" name="type" [(ngModel)]="addSessionForm.sessionType"> 
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="GROUP">GROUP</option>
               <option value="OTHER">OTHER</option>
@@ -32,23 +30,23 @@
 
           <div class="form-group col-md-6">
             <label for="inputlastname">Session Details</label>
-            <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Session Description" name="details" ngModel >
+            <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Session Description" name="details" [(ngModel)]="addSessionForm.sessionDetails" >
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputEmail4">Session Date</label>
-            <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date" name="session_date" ngModel >
+            <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date" name="session_date" [(ngModel)]="addSessionForm.sessionDate" >
             
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputEmail4">From</label>
-            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_from" ngModel >
+            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_from" [(ngModel)]="addSessionForm.sessionStartTime" >
             
           </div>
           <div class="form-group col-md-6">
             <label for="inputEmail4">To</label>
-            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_to" ngModel >
+            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_to" [(ngModel)]="addSessionForm.sessionEndTime" >
             
           </div>
 
@@ -56,8 +54,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Session Venue</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="session_venue" ngModel>
-              <option selected>Select Session Venue</option>
+            <select class="custom-select" id="inputGroupSelect01" name="session_venue" [(ngModel)]="addSessionForm.sessionVenue">
               <option value="VIRTUAL">VIRTUAL</option>
               <option value="PHYSICAL">PHYSICAL</option>
               
@@ -66,7 +63,7 @@
   
           <div class="form-group col-md-6">
             <label for="inputEmail4">Session Goals</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Goals" name="goals" ngModel >
+            <input type="email" class="form-control" id="inputEmail4" placeholder="Goals" name="goals" [(ngModel)]="addSessionForm.goals">
           </div>
   
          

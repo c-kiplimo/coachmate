@@ -28,7 +28,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     };
 
     const token = sessionStorage.getItem('token');
-    console.log(token);
+    // console.log(token);
 
     const request = req.clone({
       setHeaders: {
@@ -40,7 +40,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       catchError((err) => {
         if (err.status === 401 || err.status === 403) {
           sessionStorage.removeItem('token');
-          this.router.navigate(['/login']);
+          this.router.navigate(['/signin']);
         }
         // const error = err.error.message || err.statusText;
         return throwError(err.error);
