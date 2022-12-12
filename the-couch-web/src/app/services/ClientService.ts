@@ -24,6 +24,11 @@ export class ClientService {
     getClient(): Observable<any> {
         return this.http.get(`${this.baseURL}clients`)
     }
+    getOneClient(id: number): Observable<any> {
+        return this.http.get<any>(this.baseURL + '/order/find/' + id, {
+          observe: 'response',
+        });
+      } 
     
     //client status
     // ACTIVE,

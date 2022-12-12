@@ -8,7 +8,6 @@
 </div>
   <body>
       <div class="container">
-      
         <div class="mb-3">
           <h1 id="title" class="text-center">Coaching Agreement</h1>
           <form [formGroup]="contractForm" >
@@ -64,7 +63,6 @@
         class="form-control" 
         id="number" placeholder="Enter the fee to be paid in USD" 
         formControlName="groupFeesPerSession">
-
         <label for="number" class="form-label">No. of Sessions:</label>
         <input 
         type="number" 
@@ -82,10 +80,8 @@ contract (engaging in other Client-related services outside of coaching hours to
 read reports, etc.). Time outside the agreed bracket as outlined will be at the rate of USD 50
 for every 30-minute time block. 
       </p>
-      
         <div class="input-group mb-3">
           <h3>Terms & Conditions</h3><br>
-          <h3>LOGISTICS</h3>
           <ol>
             <li>Coaching fees are payable in full before each coaching session.
 
@@ -156,25 +152,29 @@ my decisions and my actions regarding them are my sole responsibility.
                 Agree to honor my scheduled session times [see Schedule].
             </li>
           </ol>
-
-          <!--DOM Manipulation-->
-        <!-- <h3>Coaching Objectives</h3>
+          <section>
+        <h3>Coaching Goals </h3>
         <div class="row mb-3">
           <div class="col-10">
           </div>
           <div class="col-2">
               <button type="button" routerLink="/addObjective" class="btn btn-success"><i class="fa-solid fa-user-plus"></i>Add objective</button>
            </div>
-        </div> -->
-        <!-- <div class="mb-3">
-          <ol>
-            <li>Objective 1</li>
-            <li>Objective 2</li>
-            <li>Objective 3</li>
-          </ol>
-        </div> -->
-      
-        <h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
+        </div>
+        <div class="row">
+          <div class="col-10">
+            <div class="mb-3">
+              <ol>
+                <li>Objective 1</li>
+                <li>Objective 2</li>
+                <li>Objective 3</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+          </section>
+          <section>
+<h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
           <div class="row">
             <div class="col-10">
                 <h3>Sessions</h3>
@@ -230,5 +230,3 @@ my decisions and my actions regarding them are my sole responsibility.
           <button type="button" (click)="addContract()" class="btn btn-success col-2">submit</button>
         </div>
       </div>
-    </div>
-    </form>

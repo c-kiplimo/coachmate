@@ -32,7 +32,7 @@
                     class="dropdown-item"
                     data-bs-toggle="modal"
                     data-bs-target="#deliveredOrderModal"
-                    >Delivered</a
+                    >conducted</a
                   >
                 </li>
                 <li>
@@ -43,14 +43,14 @@
                     >Cancel</a
                   >
                 </li>
-                <!-- <li>
+                <li>
                   <a
                     class="dropdown-item"
                     data-bs-toggle="modal"
                     data-bs-target="#deleteOrderModal"
-                    >Delete</a
+                    >Reschedule</a
                   >
-                </li> -->
+                </li>
               </ul>
             </div>
           </div>
@@ -70,23 +70,23 @@
               <span class="value">{{ sessions[sessionId].sessionDate }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Customer name</span>
+              <span class="title">Client name</span>
               <span class="value">{{
                 order.customer.firstName + " " + order.customer.lastName
                   | titlecase
               }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Order type</span>
-              <span class="value">{{ order.orderType }}</span>
+              <span class="title">Session type</span>
+              <span class="value">{{ sessions[sessionId].sessionType}}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Ordered on</span>
-              <span class="value">{{ order.orderedOn | date: "MMM d, y " }}</span>
+              <span class="title">Start Time</span>
+              <span class="value">{{ sessions[sessionId].sessionStartTime | date: " h:mm a"}}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Delivery date</span>
-              <span class="value">{{ order.dueDate | date: "MMM d, y " }}</span>
+              <span class="title">End Time</span>
+              <span class="value">{{ sessions[sessionId].sessionEndTime | date: " h:mm a"}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Status</span>
@@ -94,37 +94,30 @@
                 <span
                   class="badge"
                   [ngClass]="{
-                    'badge-warning': order.orderStatus === 'DELIVERED',
-                    'badge-success': order.orderStatus === 'CONFIRMED',
-                    'badge-danger': order.orderStatus === 'CANCELLED',
-                    'badge-primary': order.orderStatus === 'NEW'
+                    'badge-warning': sessions[sessionId].sessionStatus === 'DELIVERED',
+                    'badge-success': sessions[sessionId].sessionStatus=== 'CONFIRMED',
+                    'badge-danger': sessions[sessionId].sessionStatus=== 'CANCELLED',
+                    'badge-primary': sessions[sessionId].sessionStatus=== 'NEW'
                   }"
-                  >{{ order.orderStatus }}</span
+                  >{{ sessions[sessionId].sessionStatus }}</span
                 >
               </span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Order amount</span>
-              <span class="value">{{ order.orderAmount }}</span>
+              <span class="title">Session Duration</span>
+              <span class="value">{{ sessions[sessionId].sessionDuration }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>
               <span class="value">{{ order.amountPaid }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Details</span>
-              <span class="value">{{ order.details }}</span>
+              <span class="title">Attachments</span>
+              <span class="value">{{ sessions[sessionId].attachments }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Delivery address</span>
-              <span class="value">{{ order.deliveryAddress }}</span>
-            </div>
-  
-            <div class="d-flex justify-content-between">
-              <span class="title">Delivered on</span>
-              <span class="value">{{
-                order.deliveredOn | date: "MMM d, y "
-              }}</span>
+              <span class="title">Session Venue</span>
+              <span class="value">{{sessions[sessionId].sessionVenue}}</span>
             </div>
           </div>
         </div>
