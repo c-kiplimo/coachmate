@@ -55,6 +55,7 @@ export class sessionViewComponent implements OnInit {
   deliveredTime = '';
   service: any;
   sessions:any;
+  session:any;
 
 
 

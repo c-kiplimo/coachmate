@@ -70,8 +70,9 @@
               <h5 class="card-title">Upcoming Sessions</h5>
               <p class="card-text">View All</p>
             </div>
+
             <div *ngFor="let session of sessions" 
-            class="d-flex justify-content-between mb-1 listing-item">
+            class="d-flex justify-content-between mb-1 listing-item ">
             <div>
               <h6>{{ session.name | titlecase }}</h6>
               <p class="mb-1">
@@ -80,6 +81,7 @@
                 {{session.sessionDate| date:"MMM d y"}}
               </p>
               <p class="mb-1">Start Time:{{ session.sessionStartTime| date: " h:mm a" }}</p>
+              <p class="mb-1">End Time: {{ session.sessionEndTime | date: " h:mm a" }}</p>
             </div>
             <span>
               <span>
@@ -91,20 +93,8 @@
                 <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
                 Session Type: {{ session.sessionType| titlecase}}
               </p>
-              <p
-                class="mb-1"
-                
-              >
-                  End Time: {{ session.sessionEndTime | date: " h:mm a" }}
-              </p>
             </span>
           </div>
-            <!-- <ul class="list-group list-group-flush">
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-            </ul> -->
-           
         </div>
     </div>
     <div class="col-6">
@@ -114,13 +104,19 @@
           <p class="card-text">View All</p>
         </div>
         <div *ngFor="let contract of contracts" 
-        class="d-flex justify-content-between mb-1 listi">
+        class="d-flex justify-content-between mb-1 listing-item">
         <div>
           <h6>{{ contract.name | titlecase }}</h6>
           <p class="mb-1">
             <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
             Start date:
             {{contract.startDate| date:"MMM d y"}}
+          </p>
+          <p
+            class="mb-1"
+            
+          >
+              End Date: {{ contract.endDate | date: "MMM d y" }}
           </p>
         </div>
         <span>
@@ -129,12 +125,7 @@
             <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
             coaching: {{ contract.contractType| titlecase}}
           </p>
-          <p
-            class="mb-1"
-            
-          >
-              End Date: {{ contract.endDate | date: " h:mm a" }}
-          </p>
+          
         </span>
       </div>
         <!-- <ul class="list-group list-group-flush">

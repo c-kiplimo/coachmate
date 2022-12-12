@@ -92,7 +92,7 @@ export class SchedulesComponent implements OnInit {
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
-      title: 'Session 1 with sam',
+      title: '',
       color: { ...colors['red'] },
       actions: this.actions,
       allDay: true,
@@ -104,14 +104,14 @@ export class SchedulesComponent implements OnInit {
     },
     {
       start: startOfDay(new Date()),
-      title: 'An event with no end date',
+      title: '',
       color: { ...colors['red'] },
       actions: this.actions,
     },
     {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
+      title: '',
       color: { ...colors['blue'] },
       allDay: true,
     },
