@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./contract.component.css']
 })
 export class contractComponent implements OnInit{
-  contractForm!:FormGroup;
+  contractForm!: FormGroup;
   // ClientService: any; 
  
   clients: any;

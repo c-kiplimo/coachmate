@@ -9,50 +9,75 @@
 <br>
 <div class="row">
     <div class="col-5">
-        <h6>Client Name: Ninja</h6>
-        <h6>Client Email: gilbertkiteteu1@gmail.com</h6>
-        <h6>Client Phone Number: 0712345678</h6>
-        <h6>Client Profession: Software Developer</h6>
+        <h6>Client Name:{{clients[clientid].name}}</h6>
+        <h6>Client Email: {{clients.email_address}}</h6>
+        <h6>Client Phone Number: {{clients.msisdn}}</h6>
+        <h6>Client Profession: {{clients.profession}}</h6>
         
     </div>
     <div class="col-5">
-        <h6>Client Group/Individual: Individual</h6>
-        <h6>Client Added On: 2020-05-01</h6>
-        <h6>Client Status: Active</h6>
+        <h6>Client Group/Individual: {{clients.type}}</h6>
+        <h6>Client Added On: {{clients.id}}</h6>
+        <h6>Client Status:{{clients.status}}</h6>
 </div>
-
 <div class="row">
-    <div class="col-10">
-        <h3>Client Contracts</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Contract Name</th>
-                    <th scope="col">Contract Date</th>
-                    <th scope="col">Contract Time</th>
-                    <th scope="col">Contract Duration</th>
-                    <th scope="col">Contract Status</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-        </table>
+    <h3>Client Contracts</h3>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Coaching Category</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">No Of Sessions</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contract of contracts">
+            <th scope="row">{{contract.id}}</th>
+            <td>{{contract.coachingCategory}}</td>
+            <td>{{contract.startDate | date: "MMM d, y" }}</td>
+            <td>{{contract.endDate | date: "MMM d, y" }}</td>
+            <td>{{contract.noOfSessions }}</td>
+            <td class="actions">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-trash-can"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 </div>
-
 <div class="row">
-    <div class="col-10">
-        <h3>Client Sessions</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Session Name</th>
-                    <th scope="col">Session Date</th>
-                    <th scope="col">Session Time</th>
-                    <th scope="col">Session Duration</th>
-                    <th scope="col">Session Status</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-        </table>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">session Name</th>
+            <th scope="col">session Date</th>
+            <th scope="col">Session Venue</th>
+            <th scope="col">Session Type</th>
+            <th scope="col">Starts at</th>
+            <th scope="col">Ends at</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let session of sessions">
+            <th scope="row">{{session.id}}</th>
+            <td>{{session.name}}</td>
+            <td>{{session.sessionDate}}</td>
+            <td>{{session.sessionVenue}}</td>
+            <td>{{session.sessionType}}</td>
+            <td>{{session.sessionStartTime | date: "hh:mm a"}}</td>
+            <td>{{session.sessionEndTime | date: "hh:mm a"}}</td>
+            <td class="actions">
+                <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-trash-can"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 </div>
