@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String fullName;
     private String firstName;
     private String lastName;
+    private String msisdn;
     private String email;
 
     // username and password are same
@@ -62,10 +63,14 @@ public class User implements UserDetails {
     private Boolean enabled = false;
 
     // User Registration Constructor
-    public User(String fullName, String email, String password, UserRole userRole, Coach coach) {
-        this.fullName = fullName;
+    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
+                Coach coach) {
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = email;
+        this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
         this.coach = coach;

@@ -51,7 +51,9 @@ public class RegistrationService {
         // CREATE Coach
         Coach coach = new Coach();
         coach.setBusinessName(registrationRequest.getBusinessName());
-        coach.setFullName( registrationRequest.getFullName());
+        coach.setFirstName(registrationRequest.getFirstName());
+        coach.setLastName(registrationRequest.getLastName());
+        coach.setFullName( registrationRequest.getFirstName()+" "+registrationRequest.getLastName() );
         coach.setMsisdn(registrationRequest.getMsisdn());
         coach.setEmailAddress(registrationRequest.getEmail());
 
@@ -61,8 +63,10 @@ public class RegistrationService {
         log.info("Coach registered");
         List<Object> response =  userService.signupUser(
                 new User(
-                        registrationRequest.getFullName(),
+                        registrationRequest.getFirstName(),
+                        registrationRequest.getLastName(),
                         registrationRequest.getEmail(),
+                        registrationRequest.getMsisdn(),
                         registrationRequest.getPassword(),
                         UserRole.COACH,
                         coach
