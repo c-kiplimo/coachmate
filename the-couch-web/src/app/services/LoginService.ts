@@ -20,22 +20,18 @@ export class LoginService {
 
 
     // login service
-    login(user: any): Observable<any> {
-        return this.http.post(`${this.baseURL}token`, {
-            username: user.email,
-            password: user.password
-        })
-    }
+    login(user: any) {
+        return this.http.post<any>(this.baseURL + '/token', user);
+      }
+
 
     // signUp service
-    signUp(user: any): Observable<any> {
-        return this.http.post<any>(`${this.baseURL}registration`, {
-            fullName: user.fullName,
-            businessName: user.businessName,
-            msisdn: user.msisdn,
-            email: user.email,
-            password: user.password,
-        })
-    }
+    signUp(signupObject: any): Observable<any> {
+        return this.http.post<any>(
+          this.baseURL+ 'registration',
+          signupObject,
+          { observe: 'response' }
+        );
+      }
 }
 

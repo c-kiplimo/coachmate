@@ -37,6 +37,8 @@ import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 import { sessionViewComponent } from './session-view/session-view.component';
+import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
+import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { sessionViewComponent } from './session-view/session-view.component';
     AddObjectiveComponent,
     ClientViewComponent,
     ContractViewComponent,
+    ForgotPaswordComponent,
+    ConfirmedViewComponent,
   ],
   imports: [
     BrowserModule,

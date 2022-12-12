@@ -18,7 +18,11 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url.includes('token') || req.url.includes('registration')) {
+    if (
+      req.url.includes('token') ||
+      req.url.includes('registration') ||
+      req.url.includes('registration/contact')
+    ) {
       return next.handle(req);
     }
     const headersConfig = {

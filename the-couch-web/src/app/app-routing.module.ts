@@ -13,12 +13,16 @@ import { ClientViewComponent } from './client-view/client-view.component';
 import { ContractViewComponent } from './contract-view/contract-view.component';
 import { contractComponent } from './contract/contract.component';
 import { sessionViewComponent } from './session-view/session-view.component';
+import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
+import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dashboard',
     component: DashboardComponent
   },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent
@@ -70,7 +74,10 @@ const routes: Routes = [
   {
      path:'contract',
      component:contractComponent
-  }
+  },
+  { path: 'reset/request', component: ForgotPaswordComponent },
+  
+  { path: 'registration/confirm', component: ConfirmedViewComponent },
   
 ];
 

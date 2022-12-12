@@ -1,0 +1,161 @@
+<div class="container mt-5 mb-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+      <div class="card card-table">
+        <div>
+          <div class="p-4">
+            <h1 class="text-center mb-5">Reset Password</h1>
+
+            <!--Get Code View-->
+            <p *ngIf="getCodeView">
+              Enter the phone number used to register your account.
+            </p>
+          </div>
+          <!--Get Code View-->
+          <div class="alert alert-danger" *ngIf="getCodeErrorMessage">
+            {{ getCodeErrorMessage }}
+          </div>
+          <!--RESET CODE VIEW ERRor-->
+          <div class="alert alert-danger" *ngIf="passwordResetSuccessMessage">
+            {{ passwordResetSuccessMessage }}
+          </div>
+
+          <!--RESET CODE VIEW Success-->
+          <div class="alert alert-success" *ngIf="errorMessage">
+            {{ errorMessage }} <br />Use the code to reset your password.
+          </div>
+          <div class="alert alert-success" *ngIf="passwordResetSuccess">
+            {{ errorResetMessage }} <br />You can proceed to login.
+          </div>
+
+          <form #restForm="ngForm">
+            <div class="mb-3" *ngIf="getCodeView">
+              <label for="phone">Phone No:</label>
+              <input
+                [(ngModel)]="formData.msisdn"
+                (ngModelChange)="getCodeErrorMessage = ''"
+                name="username"
+                type="text"
+                class="form-control"
+                id="msisdn"
+                aria-describedby="emailHelp"
+                placeholder=""
+                required
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+              />
+              <button
+                type="submit"
+                class="btn btn-signup mt-2 mb-5"
+                (click)="getCode()"
+              >
+                Get Code
+              </button>
+            </div>
+            <div *ngIf="resetCodeDefault">
+              <div class="mb-5">
+                <label for="password">Enter Code:</label>
+                <div class="d-flex">
+                  <input
+                    [(ngModel)]="formData.otp"
+                    name="code"
+                    type="text"
+                    class="form-control code-input"
+                    id="code"
+                    placeholder=""
+                    required
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                  />
+                </div>
+              </div>
+              <div class="mb-5">
+                <label for="password">New Password</label>
+                <div class="input-group">
+                  <input
+                    [(ngModel)]="formData.password"
+                    name="password"
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    class="form-control"
+                    id="password"
+                    placeholder="Password"
+                    required
+                  />
+                  <span class="input-group-append">
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="!fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeSlashIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div class="mb-5">
+                <label for="password"
+                  >Confirm Password
+                  <small class="redText ms-2" *ngIf="passwordInvalid">
+                    Passwords don't match</small
+                  >
+                </label>
+                <div class="input-group">
+                  <input
+                    [(ngModel)]="formData.confirmPassword"
+                    (ngModelChange)="passwordInvalid = false"
+                    name="password"
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    class="form-control"
+                    id="confirmpassword"
+                    placeholder="Password"
+                    required
+                  />
+                  <span class="input-group-append">
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="!fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeSlashIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-signup mt-2 mb-5"
+                (click)="validatePassword()"
+              >
+                Reset Password <fa-icon></fa-icon>
+              </button>
+            </div>
+          </form>
+          <p *ngIf="passwordResetSuccess">
+            Proceed to<a routerLink="/signin"> login</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
