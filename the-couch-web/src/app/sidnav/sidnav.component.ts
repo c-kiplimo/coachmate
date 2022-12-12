@@ -1,6 +1,6 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
-
+import { Router, ActivatedRoute } from '@angular/router';
 import { navbarData } from './sidenav-data';
 
 interface SideNavToggle {
@@ -60,6 +60,7 @@ export class SidnavComponent implements OnInit {
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
   }
+  constructor(public router: Router) {}
 
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;

@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card card-table text-center">
+          <div class="my-auto">
+            <h1 class="text-center mb-3">Registration Confirmation</h1>
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+            <div class="alert alert-success" *ngIf="confirmationSuccess">
+              <p>Account successfully confirmed, You can now proceed to login.</p>
+            </div>
+            <p class="mb-3" *ngIf="!confirmationSuccess">
+              An OTP has been sent to the phone number used to register,enter it
+              below to confirm<br />
+            </p>
+            <div class="text-center otp-input">
+              <label for="otp"> Confirm account: </label>
+              <input
+                [(ngModel)]="token"
+                class="form-control mb-5"
+                name="otp "
+                id="otp"
+                required
+                type="number"
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-signup mt-2 mb-5"
+              (click)="confirmMobileNumber()"
+            >
+              Confirm
+            </button>
+            <button type="submit" class="btn btn-resend-otp mt-2 mb-3">
+              Resend OTP
+            </button>
+            <p *ngIf="confirmationSuccess">
+              Proceed To <a [routerLink]="'/signin'">Login</a>
+            </p>
+  
+            <p *ngIf="errorMessage">
+              Proceed To <a [routerLink]="'/signin'"> Login </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

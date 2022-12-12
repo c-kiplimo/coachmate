@@ -1,52 +1,65 @@
 <div class="row">
-    <div class="col-10">
-        <h3>Clients</h3>
-    </div>
-    <div class="col-2">
-        <app-user></app-user>
-    </div>
+  <div class="col-10">
+    <h3>Clients</h3>
+  </div>
+  <div class="col-2">
+    <app-user></app-user>
+  </div>
 </div>
 <div class="row">
-    <div class="col-10">
-    </div>
-    <div class="col-2">
-        <button type="button" routerLink="/addclient" class="btn btn-success"><i class="fa-solid fa-user-plus"></i> ADD CLIENT</button>
-    </div>
+  <div class="col-10"></div>
+  <div class="col-2">
+    <button type="button" routerLink="/addclient" class="btn btn-success">
+      <i class="fa-solid fa-user-plus"></i> ADD CLIENT
+    </button>
+  </div>
 </div>
 <div class="row">
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Client Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone Number</th>
-            <th scope="col">Group/Individual</th>
-            <th scope="col">Added On</th>
-            <th scope="col">Profession</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let client of Clients">
-            <th scope="row">{{client.id}}</th>
-            <td>{{client.name}}</td>
-            <td>{{client.email_address}}</td>
-            <td>{{client.msisdn}}</td>
-            <td>{{client.type}}</td>
-            <td>{{client.createdAt}}</td>
-            <td>{{client.profession}}</td>
-            
-            <td>{{client.status}}</td>
-            
-            <td class="actions">
-                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToClientView(client.id)"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-trash-can" (click) = "deleteClient(client.id)"></i>
-            </td>
-          </tr>
-         
-        </tbody>
-      </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Client Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Group/Individual</th>
+        <th scope="col">Added On</th>
+        <th scope="col">Profession</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let client of Clients">
+        <th scope="row">{{ client.id }}</th>
+        <td>{{ client.name }}</td>
+        <td>{{ client.email_address }}</td>
+        <td>{{ client.msisdn }}</td>
+        <td>{{ client.type }}</td>
+        <td>{{ client.createdAt }}</td>
+        <td>{{ client.profession }}</td>
+
+        <td>{{ client.status }}</td>
+
+        <td class="actions">
+          <i
+            class="fa-solid fa-arrow-up-right-from-square"
+            (click)="navigateToClientView(client.id)"
+          ></i>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <i
+            class="fa-solid fa-trash-can"
+            (click)="deleteClient(client.id)"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+    <div class="donut multi"></div>
+  </div>
+  <p class="text-muted mt-5" *ngIf="!loading && !Clients.length">
+    No clients Found.
+  </p>
 </div>
