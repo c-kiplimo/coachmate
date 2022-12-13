@@ -7,6 +7,7 @@ import { ApiService } from '../services/ApiService';
   styleUrls: ['./confirmed-view.component.css']
 })
 export class ConfirmedViewComponent implements OnInit {
+
   token = '';
   errorMessage = '';
   confirmationSuccess = false;
@@ -36,4 +37,7 @@ export class ConfirmedViewComponent implements OnInit {
       }
     );
   }
+  resendOtp() {
+    throw new Error('Method not implemented.');
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientService } from '../services/ClientService';
-
 
 @Component({
   selector: 'app-add-client-page',
@@ -9,23 +9,32 @@ import { ClientService } from '../services/ClientService';
   styleUrls: ['./add-client-page.component.css']
 })
 export class AddClientPageComponent implements OnInit {
-
-  constructor(private ClientService: ClientService,  private router: Router ) { }
+addClient!: FormGroup;
+firstName: any;
+lastName: any;
+  constructor(private ClientService: ClientService,  private router: Router,
+    private formbuilder: FormBuilder, ) { }
 
   ngOnInit(): void {
+    this.addClient= this.formbuilder.group({
+      firstName: '',
+      lastName: '',
+      msisdn: '',
+      email: '',
+      physicalAddress: '',
+    });
+    this.newClient();
   }
 
   Client = {}
-  AddClient(AddClientForm: any) {
-    console.log(AddClientForm.value);
-    this.ClientService.addClient(AddClientForm.value).subscribe(
-      (response) => {
-        console.log(response)
+  newClient() {
+    console.log(this.addClient.value);
+    this.addClient;
+      (this.addClient.value)
+      .subscribe((response: any) => {
+        console.log(response);
         this.router.navigate(['/clients']);
-      }, (error) => {
-        console.log(error)
-      }
-    )
+      });
   }
 
 }
