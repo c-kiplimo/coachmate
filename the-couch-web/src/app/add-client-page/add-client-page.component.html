@@ -71,7 +71,7 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
-            formControlName="physicalAddress"
+            formControlName="physical_address"
             name="address"
             type="text"
             class="form-control"
@@ -146,9 +146,9 @@
         data-bs-dismiss="modal"
         (click)="newClient()"
         [disabled]="
-        !addClient.value.firstName||
+        !addClient.value.name||
         !addClient.value.msisdn||
-        !addClient.value.physicalAddress
+        !addClient.value.physical_address
       ">ADD
       </button>
     </div>
