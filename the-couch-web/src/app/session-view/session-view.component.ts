@@ -65,7 +65,7 @@ export class sessionViewComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private formbuilder: FormBuilder,
-    private sessionService:SessionsService
+    private sessionService:SessionsService,
     // private toastrService: ToastrService
 
   ) {}
