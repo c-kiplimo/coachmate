@@ -32,15 +32,11 @@
             >
               Confirm
             </button>
-            <button type="submit" class="btn btn-resend-otp mt-2 mb-3">
+            <button type="submit" class="btn btn-resend-otp mt-2 mb-3" (click)="resendOtp()">
               Resend OTP
             </button>
             <p *ngIf="confirmationSuccess">
               Proceed To <a [routerLink]="'/signin'">Login</a>
-            </p>
-  
-            <p *ngIf="errorMessage">
-              Proceed To <a [routerLink]="'/signin'"> Login </a>
             </p>
           </div>
         </div>

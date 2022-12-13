@@ -9,6 +9,7 @@ export class DashboardComponent implements OnInit {
 
   // ClientService: any;
   clients: any;
+  User:any;
   sessions:any;
   contracts:any;
   numberOfClients!: number;
@@ -20,6 +21,7 @@ rightIcon: any;
 
   ngOnInit(): void {
     this.getClients();
+    this.getUser();
     this.getNoOfSessions();
     this.getNoOfContracts();
   }
@@ -65,6 +67,12 @@ rightIcon: any;
       }
     )
   }
-
+  getUser ()
+  {
+ 
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      
+    console.log(this.User.coach.businessName) 
+  }
 
 }
