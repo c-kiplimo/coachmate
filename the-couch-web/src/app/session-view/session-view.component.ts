@@ -50,7 +50,7 @@ export class sessionViewComponent implements OnInit {
   response_data!: any;
   searching = false;
   currentTab = 'payments';
-  loadingOrder = false;
+  loading = false;
   deliveredDate = '';
   deliveredTime = '';
   service: any;
@@ -115,11 +115,11 @@ export class sessionViewComponent implements OnInit {
 
 
   getSession() {
-    this.loadingOrder = true;
+    this.loading = true;
 
     this.sessionService.getOneSession(this.sessionId).subscribe((res: any) => {
       // console.log('order', res.body);
-      this.loadingOrder = false;
+      this.loading = false;
       this.order = res.body;
       this.customerId = this.order.customer.id;
       // console.log(this.customerId);
