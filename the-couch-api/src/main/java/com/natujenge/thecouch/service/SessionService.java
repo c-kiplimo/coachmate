@@ -64,5 +64,8 @@ public class SessionService {
         sessionRepository.deleteSessionById(id);
     }
 
-
+    // Session Stats
+    public void getSessionStats(Long coachId) {
+        sessionRepository.findSessionByCoachId(coachId);
+    }
 }

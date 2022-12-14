@@ -11,4 +11,6 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
     List<Session> findAll();
     void deleteSessionById(long id);
     Optional<Session> findSessionById(Long id);
+
+    void findSessionByCoachId(Long coachId);
 }
