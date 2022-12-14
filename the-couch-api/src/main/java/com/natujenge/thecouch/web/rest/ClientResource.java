@@ -2,21 +2,29 @@ package com.natujenge.thecouch.web.rest;
 
 import antlr.StringUtils;
 import com.natujenge.thecouch.domain.Client;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
+import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
+import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -28,106 +36,204 @@ import static org.springframework.util.StringUtils.hasLength;
 public class ClientResource {
 
     @Autowired
-    ClientService clientService;
+    private ModelMapper modelMapper;
+    private final ClientService clientService;
 
-    @Autowired
-    ClientRepository clientRepository;
+    public ClientResource(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
-    //GET: /clients
+    //api to get all the clients
     @GetMapping
-    public ResponseEntity<?> getClients(){
-        try{
-            List<Client> clientList = clientService.viewClients();
-
-            return new ResponseEntity<>(clientList, HttpStatus.OK);
-        } catch(Exception e) {
-            log.error(".....", e);
-            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<?> getAll(@RequestParam("per_page") int perPage,
+                             @RequestParam("page") int page,
+                             @RequestParam(name = "status", required = false) ClientStatus clientStatus,
+                             @RequestParam(name="search",required = false) String search,
+                             @AuthenticationPrincipal User userDetails) {
+        try {
+            Long coachId = userDetails.getCoach().getId();
+            log.info("Request to get all clients of Coach with Id {}",coachId);
+            ListResponse listResponse = clientService.getAllClients(
+                    page, perPage, search,clientStatus, coachId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //GET: /api/clients/:id
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getClientById (@PathVariable("id") Long id) {
-        // TODO: Use Excepption handling to return custom error if action is not completed.
-        Client client = clientService.findClientById(id);
-        return new ResponseEntity<>(client, HttpStatus.OK);
-    }
-
-    //POST: /api/clients
+    //api to create a client
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Client client){
+    ResponseEntity<?> addNewClient(@RequestBody ClientRequest clientRequest,
+                                     @AuthenticationPrincipal User userDetails) {
+        log.info("request to add new client");
+        try {
+            Client newClient = clientService.addNewClient(userDetails.getCoach().getId(),
+                    clientRequest);
+            if (newClient != null) {
+                ClientRequest response = modelMapper.map(newClient, ClientRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not created"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true,
+                    "Client not created, contact admin"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //api to find one Client by id
+    @GetMapping(path = "{id}")
+    ResponseEntity<?> findById(@PathVariable("id") Long id,
+                               @AuthenticationPrincipal User userDetails) {
         try{
-            log.info("Client request received {}", client);
-
-            Client clientResponse = clientService.createClient(client);
-            return new ResponseEntity<>(clientResponse, HttpStatus.CREATED);
-
-        } catch(Exception e) {
-            log.error(".....", e);
-            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            Optional<ClientDto> clientOptional = clientService.findById(id,userDetails.getCoach().getId());
+            if (clientOptional.isPresent()) {
+                return new ResponseEntity<>(clientOptional.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true, "Client not found"),
+                        HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true,
+                    "Client could not be fetched, contact admin"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //PUT: /api/clients
-    @PutMapping
-    public ResponseEntity<?> updateClient(@RequestBody Client client){
-        // TODO: Have the updateClientById in PATCH request used here but moved to service.
 
+    //api to update client
+    @PutMapping(path = "/{id}")
+    ResponseEntity<?> updateClient(@RequestBody ClientRequest clientRequest,
+                                     @PathVariable Long id,
+                                     @AuthenticationPrincipal User userDetails){
         try{
-            log.info("Client request received {}", client);
-            Client clientResponse = clientService.updateClient(client);
-            return new ResponseEntity<>(clientResponse, HttpStatus.OK);
+            log.info("request to update client with id : {} by client of id {}", id,userDetails.getCoach().getId());
 
-        } catch(Exception e) {
-            log.error(".....", e);
-            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            Optional<Client> updatedClient;
+            updatedClient = clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
+
+            return new ResponseEntity<>(new RestResponse(false, "Client updated successfully"),
+                    HttpStatus.NOT_FOUND);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //PATCH: /api/clients/:id
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateClientById(@RequestBody ClientDto clientDto, @PathVariable("id") Long id) {
-        // TODO: Have this logic moved to clientService.
-        Client client = clientRepository.findClientById(id).orElseThrow(() -> new UserNotFoundException("Client by id " + id + " not found"));
 
-        boolean needUpdate = false;
+    @PutMapping(path = "/change-status/{id}") // change status active or suspend
+    ResponseEntity<?> updateClient(@RequestBody ChangeStatusRequest statusRequest,
+                                     @RequestParam("status") String clientStatus,
+                                     @PathVariable Long id,
+                                     @AuthenticationPrincipal User userDetails) {
+        try{
+            log.info("request to change client status with id : {} to status {} by coach with id {}", id, clientStatus,
+                    userDetails.getCoach().getId());
+            clientService.updateClientStatus(id,userDetails.getCoach().getId(), clientStatus,statusRequest);
 
-        if (hasLength(clientDto.getName())){
-            client.setName(clientDto.getName());
-            needUpdate = true;
+            return new ResponseEntity<>(new RestResponse(false, "Client status updated successfully"),
+                    HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        if (hasLength(clientDto.getEmail_address())){
-            client.setEmail_address(clientDto.getEmail_address());
-            needUpdate = true;
-        }
-
-        if (hasLength(clientDto.getProfession())){
-            client.setProfession(clientDto.getProfession());
-            needUpdate = true;
-        }
-
-        if (hasLength(clientDto.getMsisdn())){
-            client.setMsisdn(clientDto.getMsisdn());
-            needUpdate = true;
-        }
-
-        if (hasLength(clientDto.getStatus())){
-            client.setStatus(ClientStatus.valueOf(clientDto.getStatus()));
-            needUpdate = true;
-        }
-
-        if (needUpdate) {
-            clientRepository.save(client);
-        }
-        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
-    //DELETE:/api/clients/:id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteClient(@PathVariable("id") Long id) {
-        // TODO: Have custom responses if action is completed successfully!
-        //  Provide logs
-        clientService.deleteClient(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping(path = "/close-client/{id}") // change status active or suspend
+    ResponseEntity<?> closeClient(@RequestBody ChangeStatusRequest statusRequest,
+                                    @PathVariable Long id,
+                                    @AuthenticationPrincipal User userDetails) {
+        try{
+            log.info("request to close client with id : {} by coach with id {} ", id,userDetails.getCoach().getId());
+
+            clientService.closeClient(id,userDetails.getCoach().getId(),statusRequest);
+            return ResponseEntity.ok().body(new RestResponse(false,
+                    "Client closed successfully"));
+
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/filter-by-client-name")
+    public ResponseEntity<?> filterByClientNameAndCoachId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails, //later we will use security credential
+            @RequestParam(name = "name",required = false) String name
+    ) {
+        try {
+            log.debug(
+                    "REST request to filter clients given, coach id : {}, client name  : {}",
+                    userDetails.getCoach().getId(),
+                    name
+            );
+
+            ListResponse client = clientService.filterByNameAndCoachId(
+                    page,
+                    perPage,
+                    userDetails.getCoach().getId(),
+                    name
+            );
+
+            //LATER add HTTP headers
+            return ResponseEntity.ok().body(client);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/filter-by-client-id")
+    public ResponseEntity<?> filterByClientIdAndCoachId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails, //later we will use security credential
+            @RequestParam(name = "id",required = false) Long id
+    ) {
+        try {
+            log.debug(
+                    "REST request to filter clients given, coach id : {}, client id  : {}",
+                    userDetails.getCoach().getId(),
+                    id
+            );
+
+            ListResponse client = clientService.filterByIdAndCoachId(
+                    page,
+                    perPage,
+                    userDetails.getCoach().getId(),
+                    id
+            );
+            //LATER add HTTP headers
+            return ResponseEntity.ok().body(client);
+        } catch (Exception e){
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    //api to delete client
+    @DeleteMapping(path = "{id}")
+    ResponseEntity<?> deleteClient(@RequestBody ChangeStatusRequest statusRequest,
+                                     @PathVariable("id") Long id,
+                                     @AuthenticationPrincipal User userDetails) {
+        try{
+            clientService.deleteClient(id,userDetails.getCoach().getId());
+            return new ResponseEntity<>(new RestResponse(false, "Client Deleted Successfully"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e){
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

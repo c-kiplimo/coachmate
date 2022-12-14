@@ -2,6 +2,8 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
+import com.natujenge.thecouch.exception.UserNotFoundException;
+import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ContractObjectiveRepository;
 import com.natujenge.thecouch.repository.ContractRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
@@ -29,6 +31,9 @@ public class ContractService {
     ClientService clientService;
 
     @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
     CoachService coachService;
     @Autowired
     ContractObjectiveRepository contractObjectiveRepository;
@@ -52,7 +57,9 @@ public class ContractService {
     public Contract createContract(Long coachId,ContractRequest contractRequest) {
 
         // Get Client
-        Client client = clientService.findClientById(contractRequest.getClientId());
+        Client client = clientRepository.findByIdAndCoachId(contractRequest.getClientId(),
+                coachId).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
+                + " not found"));
 
         // Get Coach
         Coach coach = coachService.findCoachById(coachId);
