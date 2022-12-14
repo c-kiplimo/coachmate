@@ -80,8 +80,7 @@ public class ClientResource {
             }
         } catch (Exception e) {
             log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true,
-                    "Client not created, contact admin"),
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -135,7 +134,7 @@ public class ClientResource {
                     userDetails.getCoach().getId());
             clientService.updateClientStatus(id,userDetails.getCoach().getId(), clientStatus,statusRequest);
 
-            return new ResponseEntity<>(new RestResponse(false, "Client status updated successfully"),
+            return new ResponseEntity<>(new RestResponse(false, "Client status set to "+ clientStatus),
                     HttpStatus.OK);
         } catch (Exception e){
             log.error("Error occurred ", e);
@@ -224,8 +223,7 @@ public class ClientResource {
 
     //api to delete client
     @DeleteMapping(path = "{id}")
-    ResponseEntity<?> deleteClient(@RequestBody ChangeStatusRequest statusRequest,
-                                     @PathVariable("id") Long id,
+    ResponseEntity<?> deleteClient(@PathVariable("id") Long id,
                                      @AuthenticationPrincipal User userDetails) {
         try{
             clientService.deleteClient(id,userDetails.getCoach().getId());

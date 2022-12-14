@@ -15,6 +15,5 @@ public class ClientRequest {
     private String physicalAddress;
     private String profession;
     private PaymentMode paymentMode;
-    private ClientStatus clientStatus;
     private String reason;
 }

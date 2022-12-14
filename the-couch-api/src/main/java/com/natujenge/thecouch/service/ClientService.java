@@ -65,6 +65,7 @@ public class ClientService {
         client.setEmail(clientRequest.getEmail());
         client.setPhysicalAddress(clientRequest.getPhysicalAddress());
         client.setStatus(ClientStatus.ACTIVE);
+        client.setReason(clientRequest.getReason());
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
         client.setCreatedBy(optionalCoach.get().getFullName());
@@ -294,11 +295,6 @@ public class ClientService {
 
         if (hasLength(clientRequest.getMsisdn())){
             client.setMsisdn(clientRequest.getMsisdn());
-            needUpdate = true;
-        }
-
-        if (hasLength(clientRequest.getClientStatus().toString())){
-            client.setStatus(clientRequest.getClientStatus());
             needUpdate = true;
         }
 
