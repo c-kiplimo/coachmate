@@ -68,6 +68,8 @@ export class SignInComponent implements OnInit {
             'You are loggged in',
             'Login successfull!'
           );
+          console.log('here')
+
         }
       },
       error: (error: any): any => {

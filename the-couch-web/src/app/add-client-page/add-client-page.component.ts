@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ClientService } from '../services/ClientService';
 import { ToastrService } from 'ngx-toastr';
 
-
 @Component({
   selector: 'app-add-client-page',
   templateUrl: './add-client-page.component.html',
@@ -19,26 +18,25 @@ export class AddClientPageComponent implements OnInit {
     private router: Router,
     private formbuilder: FormBuilder,
     private toastrService: ToastrService
-
   ) {}
 
   ngOnInit(): void {
     this.addClient = this.formbuilder.group({
-      firstName:' ',
-      lastName:' ',
-      clientType:' ',
-      msisdn:' ',
-      email:' ',
+      firstName: ' ',
+      lastName: ' ',
+      clientType: ' ',
+      msisdn: ' ',
+      email: ' ',
       physicalAddress: ' ',
-      profession:' ',
-      paymentMode:' ',
-      reason:'',
+      profession: ' ',
+      paymentMode: ' ',
+      reason: '',
     });
   }
 
   // Client = {};
   newClient() {
-    console.log("add client form=>", this.addClient.value);
+    console.log('add client form=>', this.addClient.value);
     this.ClientService.addClient(this.addClient.value).subscribe(
       (response: any) => {
         console.log(response);
