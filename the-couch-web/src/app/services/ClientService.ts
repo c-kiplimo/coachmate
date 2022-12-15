@@ -19,10 +19,12 @@ export class ClientService {
 
     }
 
-    
-  
-    getClient(): Observable<any> {
-        return this.http.get(`${this.baseURL}clients`)
+    getClient(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}clients`,
+        {
+            params: options,
+            observe: 'response',
+        })
     }
     getOneClient(id: number): Observable<any> {
         return this.http.get<any>(this.baseURL + '/order/find/' + id, {

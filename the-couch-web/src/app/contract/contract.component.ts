@@ -20,6 +20,11 @@ export class contractComponent implements OnInit{
   rightIcon: any;
   ApiService: any;
   objectives:any;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
 
   constructor(private clientService : ClientService,
     private formBuilder:FormBuilder, private router:Router) { }
@@ -43,7 +48,13 @@ export class contractComponent implements OnInit{
     this.addContract();
   }
   getClients(){
-    this.clientService.getClient().subscribe(
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getClient(options).subscribe(
       (response: any) => {
         console.log(response)
         this.clients = response

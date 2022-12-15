@@ -24,7 +24,7 @@
         <th scope="col">Phone Number</th>
         <th scope="col">Group/Individual</th>
         <th scope="col">Added On</th>
-        <th scope="col">Profession</th>
+        <th scope="col">Reason</th>
         <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
@@ -33,13 +33,12 @@
     <tbody>
       <tr *ngFor="let client of Clients">
         <th scope="row">{{ client.id }}</th>
-        <td>{{ client.name }}</td>
-        <td>{{ client.email_address }}</td>
+        <td>{{ client.firstName + client.lastName | titlecase }}</td>
+        <td>{{ client.email }}</td>
         <td>{{ client.msisdn }}</td>
-        <td>{{ client.type }}</td>
-        <td>{{ client.createdAt }}</td>
-        <td>{{ client.profession }}</td>
-
+        <td> INDIVIDUAL</td>
+        <td> 15 Dec 20222</td>
+        <td>{{ client.reason }}</td>
         <td>{{ client.status }}</td>
 
         <td class="actions">

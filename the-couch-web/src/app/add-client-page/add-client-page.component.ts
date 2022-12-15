@@ -24,17 +24,15 @@ export class AddClientPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.addClient = this.formbuilder.group({
-      name: ' ',
-      type: ' ',
-      msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
-      profession: ' ',
-      payment_mode: ' ',
-      status: 'ACTIVE',
-      reason: '',
-      createdBy: ' Amos',
-      lastUpdatedBy: ' Amos',
+      firstName:' ',
+      lastName:' ',
+      clientType:' ',
+      msisdn:' ',
+      email:' ',
+      physicalAddress: ' ',
+      profession:' ',
+      paymentMode:' ',
+      reason:'',
     });
   }
 

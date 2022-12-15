@@ -14,9 +14,14 @@ export class DashboardComponent implements OnInit {
   numberOfClients!: number;
   numberOfSessions!: number;
   numberOfContracts!: number;
-  numberOfHours:any;
-  numberOfMinutes:any;
+  numberOfHours: any;
+  numberOfMinutes: any;
   rightIcon: any;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
 
   constructor(private clientService: ClientService) {}
 
@@ -27,10 +32,16 @@ export class DashboardComponent implements OnInit {
     this.getNoOfContracts();
   }
   getClients() {
-    this.clientService.getClient().subscribe(
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getClient(options).subscribe(
       (response: any) => {
-        console.log( response);
-        this.clients = response;
+        console.log('here clients=>', response.body.data);
+        this.clients = response.body.data;
 
         this.numberOfClients = this.clients.length;
         console.log(this.numberOfClients);
@@ -43,15 +54,15 @@ export class DashboardComponent implements OnInit {
   getNoOfSessions() {
     this.clientService.getSessions().subscribe(
       (response: any) => {
-        console.log('here=>',response);
+        console.log('here=>', response);
         this.sessions = response;
         this.numberOfSessions = this.sessions.length;
-        let totalMinutes=0;
-        for(let i = 0; i<this.sessions.length; i++){
-        totalMinutes += Number(this.sessions[i].sessionDuration); 
+        let totalMinutes = 0;
+        for (let i = 0; i < this.sessions.length; i++) {
+          totalMinutes += Number(this.sessions[i].sessionDuration);
 
-        this.numberOfHours =Math.floor(totalMinutes/60);
-        this.numberOfMinutes = totalMinutes -(this.numberOfHours*60);
+          this.numberOfHours = Math.floor(totalMinutes / 60);
+          this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
         }
       },
       (error: any) => {
@@ -77,5 +88,4 @@ export class DashboardComponent implements OnInit {
 
     console.log(this.User.coach.businessName);
   }
-
 }
