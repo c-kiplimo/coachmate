@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientService } from '../services/ClientService';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-add-client-page',
@@ -15,7 +17,9 @@ export class AddClientPageComponent implements OnInit {
   constructor(
     private ClientService: ClientService,
     private router: Router,
-    private formbuilder: FormBuilder
+    private formbuilder: FormBuilder,
+    private toastrService: ToastrService
+
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +44,7 @@ export class AddClientPageComponent implements OnInit {
     this.ClientService.addClient(this.addClient.value).subscribe(
       (response: any) => {
         console.log(response);
+        this.toastrService.success('Client added!', 'Success!');
         this.router.navigate(['/clients']);
       }
     );

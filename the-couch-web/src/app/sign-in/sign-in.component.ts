@@ -10,7 +10,7 @@ import {
   faEyeSlash,
   faSign,
 } from '@fortawesome/free-solid-svg-icons';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 // import { faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
@@ -34,7 +34,11 @@ export class SignInComponent implements OnInit {
   backIcon = faChevronLeft;
   token!: string;
   businessName!: string;
-  constructor(private LoginService: LoginService, private router: Router) {}
+  constructor(
+    private LoginService: LoginService, 
+    private router: Router,
+    private toastrService: ToastrService
+    ) {}
 
   ngOnInit(): void {}
 
@@ -56,13 +60,14 @@ export class SignInComponent implements OnInit {
           sessionStorage.setItem('businessName', this.businessName);
           sessionStorage.setItem('user', JSON.stringify(data.user));
           this.router.navigate(['dashboard']);
+
           // setTimeout(() => {
           //   location.reload();
           // }, 4);
-          // this.toastrService.success(
-          //   'You are loggged in',
-          //   'Login successfull!'
-          // );
+          this.toastrService.success(
+            'You are loggged in',
+            'Login successfull!'
+          );
         }
       },
       error: (error: any): any => {

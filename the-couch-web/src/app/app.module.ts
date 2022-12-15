@@ -39,6 +39,8 @@ import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -76,6 +78,12 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
+    }),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      timeOut: 5000, // 5 seconds
+      closeButton: false,
+      progressBar: false,
     }),
   ],
   providers: [

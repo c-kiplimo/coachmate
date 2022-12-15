@@ -19,6 +19,7 @@ export class contractComponent implements OnInit{
   numberOfContracts!:number;
   rightIcon: any;
   ApiService: any;
+  objectives:any;
 
   constructor(private clientService : ClientService,
     private formBuilder:FormBuilder, private router:Router) { }
@@ -94,6 +95,10 @@ export class contractComponent implements OnInit{
     //     console.log(error)
     //   }
     // )
+  }
+  addObjective(){
+    this.objectives =[];
+    this.objectives.push();
   }
 
 }
