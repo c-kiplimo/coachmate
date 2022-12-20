@@ -78,11 +78,11 @@
       <div class="card card-table">
         <h5 class="section-title">Create order</h5>
     
-        <form [formGroup]="orderForm">
+        <form [formGroup]="addsessionForm">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Attach customer</label>
+                <label for="exampleInputEmail1">Attach client</label>
                 <input
                   #yourElement
                   type="text"
@@ -100,36 +100,36 @@
                   <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
                     <div class="donut multi"></div>
                   </div>
-                  <div *ngIf="customers?.length">
+                  <div *ngIf="client?.length">
                     <div
                       class="search-item"
-                      *ngFor="let customer of customers; index as i"
-                      (click)="selectCustomer(customer)"
+                      *ngFor="let Client of client; index as i"
+                      (click)="selectclient(client)"
                     >
                       <span class="name">{{
-                        customer.firstName + " " + customer.lastName
+                        Client .firstName + " " + client.lastName
                       }}</span>
-                      <small class="number">{{ customer.msisdn }}</small>
+                      <small class="number">{{ client.msisdn }}</small>
                     </div>
                     <button
                       class="btn btn-add"
                       type="button"
                       data-bs-toggle="modal"
-                      data-bs-target="#addCustomerModal"
+                      data-bs-target="#addClient Modal"
                     >
-                      Create customer
+                      Create client
                     </button>
                   </div>
-                  <div *ngIf="!customers?.length && !searching" [@fadeIn]>
-                    <p>Customer doesn't exist</p>
+                  <div *ngIf="!client?.length && !searching" [@fadeIn]>
+                    <p>Client doesn't exist</p>
                     <button
                       class="btn btn-add"
                       type="button"
                       data-bs-toggle="modal"
-                      data-bs-target="#addCustomerModal"
-                      (click)="customerTyped()"
+                      data-bs-target="#addClient Modal"
+                      (click)="clientTyped()"
                     >
-                      Create customer
+                      Create client
                     </button>
                   </div>
                 </div>
@@ -152,14 +152,14 @@
             </div> -->
             <div class="col-md-6">
               <div class="form-group">
-                <label for="orderTypeDropdown">Event Type</label>
+                <label for="sessionTypeDropdown">Session Type</label>
                 <select
-                  formControlName="orderType"
+                  formControlName="sessionType"
                   class="form-select"
-                  id="orderTypeDropdown"
+                  id="sessionTypeDropdown"
                   [(ngModel)]="eventType"
                 >
-                  <option *ngFor="let type of orderType" [value]="type">
+                  <option *ngFor="let type of sessionType" [value]="type">
                     {{ type | titlecase }}
                   </option>
                 </select>
@@ -170,7 +170,7 @@
                 <label for="exampleInputEmail1">Order Amount</label>
                 <input
                   formControlName="orderAmount"
-                  [(ngModel)]="orderAmount"
+                  [(ngModel)]="sessionDuration"
                   name="orderAmount"
                   type="number"
                   class="form-control"
@@ -228,7 +228,7 @@
     
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Delivery Address</label>
+                <label for="exampleInputEmail1">Session Venue</label>
                 <input
                   formControlName="deliveryAddress"
                   name="deliveryAddress"
@@ -246,7 +246,7 @@
                 <select
                   formControlName="cakeSize"
                   class="form-select"
-                  id="orderTypeDropdown"
+                  id="sessionTypeDropdown"
                 >
                   <option *ngFor="let size of cakeSize" [value]="size">
                     {{ size | titlecase }}
@@ -256,7 +256,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="exampleInputEmail1">Cake Description </label>
+                <label for="exampleInputEmail1">Session Description </label>
                 <input
                   formControlName="details"
                   name="flavor"
@@ -282,20 +282,6 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Message On Cake</label>
-                <input
-                  formControlName="messageOnCake"
-                  name="cakeMessage"
-                  type="text"
-                  class="form-control"
-                  id="cakeMessage"
-                  aria-describedby="emailHelp"
-                  placeholder="happy birthday"
-                />
-              </div>
-            </div>
             <div class="col mb-3">
               <div class="form-group">
                 <label for="exampleInputEmail1">Additional Notes</label>
@@ -314,7 +300,7 @@
           </div>
     
           <div class="mb-3 d-flex align-items-center">
-            <label class="me-3">Notify the Customer </label>
+            <label class="me-3">Notify the Client </label>
             <input
               class="ms-3"
               type="checkbox"
@@ -325,7 +311,7 @@
           </div>
         </form>
         <div *ngIf="!showHideMessage" [@fadeIn]>
-          <p class="lead">The customer will not be notified</p>
+          <p class="lead">The Client will not be notified</p>
         </div>
         <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
           <div class="">
@@ -362,7 +348,7 @@
             type="button"
             class="btn btn-cancel"
             data-bs-dismiss="modal"
-            (click)="addSession.reset()"
+            (click)="addSession()"
           >
             Cancel
           </button>
@@ -370,13 +356,8 @@
             type="button"
             class="btn btn-submit"
             data-bs-dismiss="modal"
-            (click)="newOrder(addSession)"
-            [disabled]="
-            !addSession.value.sessionType ||
-            !addSession.value.sessionDate ||
-            !addSession.value.sessionDuration ||
-            !addSession.value.amountPaid
-          "
+            (click)="newSession(addSession)"
+            
           >
             Create Order
           </button>
@@ -387,7 +368,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Add New Customer
+            Add New Client 
           </h1>
     
           <button

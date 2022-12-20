@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
     <div class="col-10">
         <h3>Client View</h3>
     </div>
@@ -80,4 +80,1039 @@
           </tr>
         </tbody>
       </table>
+</div> -->
+<div class="container-fluid customer mb-5" [@fadeIn]>
+  <div class="container">
+    <div class="card details-card">
+      <div class="d-flex justify-content-between mb-3" [@fadeIn]>
+        <div>
+          <h5 class="section-title">Customer view</h5>
+        </div>
+
+        <div>
+          <div class="dropdown">
+            <a
+              class="btn btn-refresh dropdown-toggle"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Actions
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#suspendCustomerModal"
+                  >Suspend</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#closeCustomerModal"
+                  >Close</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#activateCustomerModal"
+                  >Activate</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+
+      <div
+        class="customer-details"
+        *ngIf="!loadingCustomer && customer"
+        [@fadeIn]
+      >
+        <div class="d-flex justify-content-between">
+          <span class="title">Customer name</span>
+          <span class="value">{{
+            customer.firstName + " " + customer.lastName
+          }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <span class="title">Mobile No</span>
+          <span class="value">{{ customer.msisdn }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <span class="title">Email adddress</span>
+          <span class="value">{{ customer.email }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <span class="title">Status</span>
+          <span class="value">
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-success': customer.status === 'ACTIVE',
+                'badge-danger': customer.status !== 'ACTIVE'
+              }"
+              >{{ customer.status }}</span
+            >
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <span class="title">Address</span>
+          <span class="value">{{ customer.physicalAddress }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-table">
+      <div class="tabs-section">
+        <button
+          class="btn btn-tabs"
+          (click)="toggleTab('orders')"
+          [ngClass]="{ 'active-tab': currentTab === 'orders' }"
+        >
+          Orders
+        </button>
+        <button
+          class="btn btn-tabs"
+          (click)="toggleTab('payments')"
+          [ngClass]="{ 'active-tab': currentTab === 'payments' }"
+        >
+          Payments
+        </button>
+        <button
+          class="btn btn-tabs"
+          (click)="toggleTab('notifications')"
+          [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
+        >
+          Notifications
+        </button>
+      </div>
+
+      <div class="d-none d-md-block">
+        <div class="text-end mt-2" *ngIf="currentTab === 'orders'" [@fadeIn]>
+          <button
+            class="btn btn-add"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addOrderModal"
+          >
+            <fa-icon [icon]="addIcon"></fa-icon>
+            Add Order
+          </button>
+
+          <button class="btn btn-refresh" (click)="getOrders(1)">
+           
+            Refresh
+          </button>
+        </div>
+
+        <!-- <table class="table" *ngIf="currentTab === 'orders'" [@fadeIn]>
+          <thead>
+            <th colspan="1">Order Title</th>
+            <th colspan="1">Order Amount</th>
+            <th colspan="1">Due date</th>
+            <th colspan="1">Status</th>
+            <th colspan="1">Actions</th>
+          </thead>
+          <tbody *ngIf="orders?.length" [@fadeIn]>
+            <tr *ngFor="let order of orders">
+              <td>{{ order.name }}</td>
+              <td>{{ order.orderAmount }}</td>
+              <td>{{ order.dueDate | date: "MMM d, y hh:mm a" }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'badge-success': customer.status === 'ACTIVE',
+                    'badge-danger': customer.status !== 'ACTIVE'
+                  }"
+                  >{{ customer.status }}</span
+                >
+              </td>
+
+              <td>
+                <button
+                  class="btn btn-view"
+                  [routerLink]="['/order', order.id]"
+                >
+                  View
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table> -->
+
+        <div *ngIf="currentTab === 'orders'" [@fadeIn]>
+          <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <table class="table">
+            <thead>
+              <th colspan="1">Order #</th>
+              <th colspan="1">Product</th>
+              <th colspan="1">Time</th>
+              <th colspan="1">Due date</th>
+              <th colspan="1">Client</th>
+              <th colspan="1">Status</th>
+              <th colspan="1">Amount</th>
+              <th colspan="1">Balance</th>
+              <th colspan="1">Actions</th>
+            </thead>
+            <tbody *ngIf="orders?.length" [@fadeIn]>
+              <tr
+                *ngFor="
+                  let order of orders
+                    | paginate
+                      : {
+                          itemsPerPage: itemsPerPage,
+                          currentPage: page,
+                          totalItems: totalLength
+                        }
+                "
+              >
+                <td>
+                  <span
+                    class="redirect-link"
+                    [routerLink]="['/order', order.id]"
+                    >{{ order.orderNumber }}</span
+                  >
+                </td>
+                <td>{{ order.details }}</td>
+                <td>{{ order.dueDate | date: " h:mm a" }}</td>
+                <td>{{ order.dueDate }}</td>
+                <td>{{ order.customer.firstName + " " + order.customer.lastName | titlecase }}</td>
+                <td>{{ order.orderStatus }}</td>
+                <td>{{ order.orderAmount }}</td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'badge-danger': order.orderBalance > '0',
+                      'badge-primary': order.orderBalance < '0',
+                      'badge-success': order.orderBalance === 0
+                    }"
+                  >
+                    <span *ngIf="order.orderBalance < '0'">Overpaid </span>
+                    <span *ngIf="order.orderBalance === 0"> Fully Paid </span>
+                    <span *ngIf="order.orderBalance > '0'">
+                      {{ order.orderBalance }}
+                    </span>
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    class="btn btn-view"
+                    [routerLink]="['/order', order.id]"
+                  >
+                    view
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
+            No Orders Found.
+          </p>
+          <div
+            align="center"
+            *ngIf="totalLength > 20 && orders.length && !loadingCustomer"
+            [@fadeIn]
+          >
+          </div>
+        </div>
+      </div>
+
+      <div class="show-ms" *ngIf="currentTab === 'orders'" [@fadeIn]>
+        <div class="d-flex justify-content-between mt-1">
+          <p></p>
+          <button
+            class="btn btn-add"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addOrderModal"
+          >
+            <fa-icon [icon]="addIcon"></fa-icon> Add order
+          </button>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
+          No Orders Found.
+        </p>
+
+        <div
+          *ngFor="let order of orders"
+          class="listing-item"
+          [routerLink]="['/order', order.id]"
+        >
+          <div class="d-flex justify-content-between mb-1">
+            <div>
+              <h6>{{ order.details | titlecase }}</h6>
+              <p class="mb-1">
+                <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+                Cust: {{ order.customer.firstName + " " + order.customer.lastName | titlecase}}
+              </p>
+              <p class="mb-1">Status:{{ order.orderStatus }}</p>
+            </div>
+
+            <span>
+              <span>
+                <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
+                {{ order.dueDate }}
+              </span>
+              <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
+              <p class="mb-1">
+                <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
+                Due: {{ order.dueDate | date: " h:mm a" }}
+              </p>
+              <p
+                class="mb-1"
+                class="badge"
+                [ngClass]="{
+                  'badge-danger': order.orderBalance > '0'
+                }"
+              >
+                <span *ngIf="order.orderBalance > '0'">
+                  Bal: {{ order.orderBalance }}
+                </span>
+              </p>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-none d-md-block">
+        <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
+          <button class="btn btn-refresh" (click)="getPayments()">
+            Refresh
+          </button>
+        </div>
+        <div *ngIf="currentTab === 'payments'" [@fadeIn]>
+          <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+
+          <table class="table">
+            <thead>
+              <th colspan="1">Order Amount</th>
+              <th colspan="1">Amount Paid</th>
+              <th colspan="1">Balance</th>
+              <th colspan="1">Paid at</th>
+              <th colspan="1">Payment ref</th>
+              <th colspan="1">Narration</th>
+              <th colspan="1">Actions</th>
+            </thead>
+
+            <tbody *ngIf="payments?.length" [@fadeIn]>
+              <tr *ngFor="let payment of payments">
+                <td>{{ payment.order.orderAmount }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.balanceAfter }}</td>
+                <td>{{ payment.paidAt | date: "MMM d, y hh:mm a" }}</td>
+                <td>{{ payment.extPaymentRef }}</td>
+                <td>{{ payment.narration }}</td>
+                <td>
+                  <button
+                    class="btn btn-view"
+                    data-bs-toggle="modal"
+                    data-bs-target="#payementModal"
+                    (click)="viewPayment(payment)"
+                  >
+                    view
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
+            No Payments Found.
+          </p>
+        </div>
+
+        <!-- 
+        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div> -->
+      </div>
+
+      <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
+        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+
+        <div
+          data-bs-toggle="modal"
+          data-bs-target="#payementModal"
+          (click)="viewPayment(payment)"
+          *ngFor="let payment of payments"
+          class="listing-item"
+        >
+          <div class="d-flex justify-content-between mb-1">
+            <div>
+              <h6>{{ payment.narration | titlecase }}</h6>
+              <p class="mb-1">
+                <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+                Amount: {{ payment.order.orderAmount }}
+              </p>
+              <p class="mb-1">Paid:{{ payment.amount }}</p>
+            </div>
+
+            <div>
+              <span>
+                <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
+                {{ payment.paidAt }}
+              </span>
+              <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
+              <p></p>
+              <p
+                class="mb-1"
+                class="badge"
+                [ngClass]="{
+                  'badge-danger': payment.balanceAfter > '0'
+                }"
+              >
+                <span *ngIf="payment.balanceAfter > '0'">
+                  Bal: {{ payment.balanceAfter }}
+                </span>
+              </p>
+            </div>
+          </div>
+          <!-- <div class="d-flex justify-content-between mb-3">
+            <h4>{{ payment.order.name }}</h4>
+            <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
+            
+          </div>
+
+          <span>{{ payment.narration }}</span>
+          <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6> -->
+        </div>
+        <p class="text-muted mt-5" *ngIf="!payments?.length">
+          No payments found.
+        </p>
+      </div>
+
+      <div
+        class="d-none d-md-block"
+        *ngIf="currentTab === 'notifications'"
+        [@fadeIn]
+      >
+        <table class="table">
+          <thead>
+            <th coslpan="1">Notification Reason</th>
+            <th coslpan="1">Notification Date</th>
+            <th coslpan="1">Notification Mode</th>
+          </thead>
+          <tbody *ngIf="notifications.length">
+            <tr *ngFor="let notification of notifications">
+              <td>{{ notification.subject }}</td>
+              <td>{{ notification.sentAt }}</td>
+              <td>{{ notification.notificationMode }}</td>
+              <td>
+                <button
+                  class="btn btn-view"
+                  data-bs-toggle="modal"
+                  data-bs-target="#notificationModal"
+                  (click)="viewNotification(notification)"
+                >
+                  view
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="text-muted mt-5" *ngIf="!notifications?.length">
+          No notifications found.
+        </p>
+      </div>
+      <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
+        <div
+          data-bs-toggle="modal"
+          data-bs-target="#notificationModal"
+          (click)="viewNotification(notification)"
+          *ngFor="let notification of notifications"
+          class="listing-item"
+        >
+          <div class="d-flex justify-content-between mb-1">
+            <div>
+              <p class="mb-1">{{ notification.subject }}</p>
+              <p class="mb-1">{{ notification.notificationMode }}</p>
+            </div>
+            <span
+              >{{ notification.sentAt }}
+              <fa-icon [icon]="rightIcon"> </fa-icon>
+            </span>
+          </div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!notifications?.length">
+          No notifications found.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add order modal -->
+<div
+  class="modal fade"
+  id="addOrderModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Create Order</h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="orderForm">
+          <div class="row">
+            <!-- <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Order Title</label>
+                <input
+                  formControlName="name"
+                  name="name"
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  aria-describedby="emailHelp"
+                  placeholder="order title"
+                />
+              </div>
+            </div> -->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="orderTypeDropdown">Event Type</label>
+                <select
+                  formControlName="orderType"
+                  class="form-select"
+                  [(ngModel)]="eventType"
+                  id="orderTypeDropdown"
+                >
+                  <option *ngFor="let type of orderType" [value]="type">
+                    {{ type | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Order Amount</label>
+                <input
+                  formControlName="orderAmount"
+                  name="orderAmount"
+                  type="number"
+                  [(ngModel)]="orderAmount"
+                  class="form-control"
+                  id="orderAmount"
+                  aria-describedby="emailHelp"
+                  placeholder="eg. 3000"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputPassword1">Cake Size</label>
+                <select
+                  formControlName="cakeSize"
+                  class="form-select"
+                  id="orderTypeDropdown"
+                >
+                  <option *ngFor="let size of cakeSize" [value]="size">
+                    {{ size | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Amount Paid</label>
+                <input
+                  formControlName="amountPaid"
+                  name="amountPaid"
+                  type="number"
+                  class="form-control"
+                  id="amountPaid"
+                  aria-describedby="emailHelp"
+                  placeholder="eg. 1000"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Due date</label>
+                <input
+                  formControlName="dueDate"
+                  [(ngModel)]="orderDueDate"
+                  name="dueDate"
+                  type="date"
+                  class="form-control"
+                  id="dueDate"
+                  aria-describedby="emailHelp"
+                  placeholder="date to deliver"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Due time</label>
+                <input
+                  formControlName="dueDate"
+                  [(ngModel)]="orderDueTime"
+                  name="duetime"
+                  type="time"
+                  class="form-control"
+                  id="dueTime"
+                  aria-describedby="emailHelp"
+                  placeholder="time to deliver"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Delivery Address</label>
+                <input
+                  formControlName="deliveryAddress"
+                  name="deliveryAddress"
+                  type="text"
+                  class="form-control"
+                  id="deliveryAddress"
+                  aria-describedby="emailHelp"
+                  placeholder="eg. Ngong"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Cake Description </label>
+                <input
+                  formControlName="details"
+                  name="flavor"
+                  type="text"
+                  class="form-control"
+                  id="flavor"
+                  aria-describedby="emailHelp"
+                  placeholder="eg. Vanilla,Blackforest,miiror glaze, royal icing, chocolate"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Order to be</label>
+                <select
+                  formControlName="deliveryOption"
+                  class="form-select"
+                  id="deliveryOption"
+                >
+                  <option
+                    *ngFor="let option of deliveryOption"
+                    [value]="option"
+                  >
+                    {{ option | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Message On Cake</label>
+                <input
+                  formControlName="messageOnCake"
+                  name="cakeMessage"
+                  type="text"
+                  class="form-control"
+                  id="cakeMessage"
+                  aria-describedby="emailHelp"
+                  placeholder="happy birthday"
+                />
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Additional Notes</label>
+                <textarea
+                  formControlName="notes"
+                  name="notes"
+                  class="form-control"
+                  id="notes"
+                  rows="4"
+                  aria-describedby="notes"
+                  placeholder="Additional notes"
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex input-group mb-3 mt-3">
+            <label for="notification">Notify the Customer</label>
+            <div class="d-flex-column justify-content-between ms-3">
+              <label class="">
+                <input
+                  type="checkbox"
+                  checked
+                  name="notification"
+                  [(ngModel)]="showHideMessage"
+                  formControlName="sendNotification"
+                />
+                <span class=""></span>
+              </label>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="!showHideMessage" [@fadeIn]>
+          <p>The customer will not be notified</p>
+        </div>
+        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
+          <div class="">
+            <label for="message">Message to be sent</label>
+            <p class="lead">
+              "Dear {{ customer?.firstName | titlecase }}. Your
+              {{ eventType }} order of amount {{ orderAmount }} has been
+              recorded. I am working to promptly have your order delivered by
+              {{ orderDueDate | date }}. Thank you. "
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-submit"
+          data-bs-dismiss="modal"
+          (click)="newOrder()"
+          [disabled]="
+            !orderForm.value.orderType ||
+            !orderForm.value.dueDate ||
+            !orderForm.value.orderAmount ||
+            !orderForm.value.amountPaid
+          "
+        >
+          Create Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- suspend Customer modal -->
+<div
+  class="modal fade bd-example-modal-lg"
+  id="suspendCustomerModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Suspend Customer
+        </h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="customer">
+        <div class="d-flex justify-content-between">
+          <p>Customer Name:</p>
+          <span>{{
+            customer.firstName + " " + customer.lastName | titlecase
+          }}</span>
+        </div>
+        <form [formGroup]="suspendCustomerForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1">narration</label>
+            <textarea
+              formControlName="narration"
+              name="narration"
+              class="form-control"
+              id="narration"
+              aria-describedby="narration"
+              placeholder="narration for suspending the customer"
+            >
+            </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-add"
+          data-bs-dismiss="modal"
+          (click)="suspendCustomer()"
+        >
+          Submit
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Close Customer modal -->
+<div
+  class="modal fade bd-example-modal-lg"
+  id="closeCustomerModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Close Customer</h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="customer">
+        <div class="d-flex justify-content-between">
+          <p>Customer Name:</p>
+          <span>{{
+            customer.firstName + " " + customer.lastName | titlecase
+          }}</span>
+        </div>
+        <form [formGroup]="closeCustomerForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1">narration</label>
+            <textarea
+              formControlName="narration"
+              name="narration"
+              class="form-control"
+              id="narration"
+              aria-describedby="narration"
+              placeholder="narration for closing the customer"
+            >
+            </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-add"
+          data-bs-dismiss="modal"
+          (click)="closeCustomer()"
+        >
+          Submit
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activate Customer modal -->
+<div
+  class="modal fade bd-example-modal-lg"
+  id="activateCustomerModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Activate Customer
+        </h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="customer">
+        <div class="d-flex justify-content-between">
+          <p>Customer Name:</p>
+          <span>{{
+            customer.firstName + " " + customer.lastName | titlecase
+          }}</span>
+        </div>
+        <form [formGroup]="activateCustomerForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1">narration</label>
+            <textarea
+              formControlName="narration"
+              name="narration"
+              class="form-control"
+              id="narration"
+              aria-describedby="narration"
+              placeholder="narration for activating the customer"
+            >
+            </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-add"
+          data-bs-dismiss="modal"
+          (click)="activateCustomer()"
+        >
+          Submit
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment View modal -->
+<div
+  class="modal fade"
+  id="payementModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Details</h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="payment">
+        <div class="d-flex justify-content-between">
+          <p>Ext Payment Ref:</p>
+          <span>{{ payment.extPaymentRef }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Mode:</p>
+          <span>Manual</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Amount:</p>
+          <span>{{ payment.amount }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Balance After:</p>
+          <span>{{ payment.balanceAfter }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <p>Narration:</p>
+          <span>{{ payment.narration }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Payment Date:</p>
+          <span>{{ payment.paidAt }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Over Payment:</p>
+          <span>{{ payment.overPayment }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification details modal -->
+<div
+  class="modal fade"
+  id="notificationModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Notification Details
+        </h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" *ngIf="notification">
+        <div class="d-flex justify-content-between">
+          <p>Notification Subject:</p>
+          <span>{{ notification.subject }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Reason</p>
+          <span>{{ notification.sendReason }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <p>Source Address</p>
+          <span>{{ notification.srcAddress }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Sent at:</p>
+          <span>{{ notification.sentAt  }}</span>
+        </div>
+        <div class="d-flex-column">
+          <p>Content:</p>
+          <span>{{ notification.content }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

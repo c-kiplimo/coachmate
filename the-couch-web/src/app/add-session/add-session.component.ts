@@ -153,10 +153,10 @@ export class AddSessionComponent implements OnInit {
 
     this.addSessionForm.patchValue({
       name: names[0] + " " + this.addSessionForm.value.orderType ,
-      dueDate: this.orderDueDate + 'T' + this.orderDueTime,
+      dueDate: this.sessionDate + 'T' + this.sessionStartTime,
       sendNotification: this.showHideMessage
     });
-    console.log('time is', this.orderDueTime);
+    console.log('time is', this.sessionStartTime);
 
     this.service
       .addSession(this.addSessionForm.value)
