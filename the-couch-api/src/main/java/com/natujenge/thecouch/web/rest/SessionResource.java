@@ -6,6 +6,7 @@ import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
+import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import static org.springframework.util.StringUtils.hasLength;
 
 @RestController
 @Slf4j
-@RequestMapping(name = "/api/sessions")
+@RequestMapping(path = "/api/sessions")
 public class SessionResource {
 
     @Autowired
@@ -50,7 +51,7 @@ public class SessionResource {
 
     //POST: /api/sessions
     @PostMapping
-    public ResponseEntity<?> createClient(@RequestBody Session session){
+    public ResponseEntity<?> createSession(@RequestBody Session session){
         try{
             log.info("Session request received {}", session);
 
@@ -77,41 +78,32 @@ public class SessionResource {
     }
     //PATCH: /api/sessions/:id
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateSessionById(@RequestBody SessionDto sessionDto, @PathVariable("id") Long id) {
-        Session session = sessionRepository.findSessionById(id).orElseThrow(() -> new UserNotFoundException("Session by id " + id + " not found"));
+    public ResponseEntity<?> updateSessionById(@RequestBody SessionRequest sessionRequest,
+                                               @PathVariable("id") Long id) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()
+                -> new UserNotFoundException("Session by id " + id + " not found"));
 
         boolean needUpdate = false;
 
-        if (hasLength(sessionDto.getName())){
-            session.setName(sessionDto.getName());
+        if (hasLength(sessionRequest.getName())){
+            session.setName(sessionRequest.getName());
             needUpdate = true;
         }
 
-        if (hasLength(sessionDto.getDetails())){
-            session.setDetails(sessionDto.getDetails());
+        if (hasLength(sessionRequest.getSessionDuration())){
+            session.setSessionDuration(sessionRequest.getSessionDuration());
             needUpdate = true;
         }
 
-        if (hasLength(sessionDto.getAmount_paid())){
-            session.setAmount_paid(sessionDto.getAmount_paid());
+        if (hasLength(sessionRequest.getAmountPaid())){
+            session.setAmountPaid(sessionRequest.getAmountPaid());
             needUpdate = true;
         }
 
-        if (hasLength(sessionDto.getStatus())){
-            session.setStatus(SessionStatus.valueOf(sessionDto.getStatus()));
+        if (hasLength(sessionRequest.getSessionDuration())){
+            session.setSessionDuration(sessionRequest.getSessionDuration());
             needUpdate = true;
         }
-
-        if (hasLength(sessionDto.getSession_venue())){
-            session.setSession_venue(sessionDto.getSession_venue());
-            needUpdate = true;
-        }
-
-        if (hasLength(sessionDto.getAttachments())){
-            session.setAttachments(sessionDto.getAttachments());
-            needUpdate = true;
-        }
-
 
         if (needUpdate) {
             sessionRepository.save(session);

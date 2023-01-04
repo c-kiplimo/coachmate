@@ -25,9 +25,14 @@ import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 
 import { ClientService } from './services/ClientService';
+import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ContractComponent } from './contract/contract.component';
+import { AddObjectiveComponent } from './add-objective/add-objective.component';
+import { ClientViewComponent } from './client-view/client-view.component';
+import { ContractViewComponent } from './contract-view/contract-view.component';
+import { ApiService } from './services/ApiService';
 
 
 
@@ -51,6 +56,9 @@ import { ContractComponent } from './contract/contract.component';
     AddSessionComponent,
     SchedulesComponent,
     ContractComponent,
+    AddObjectiveComponent,
+    ClientViewComponent,
+    ContractViewComponent,
 
 
   ],
@@ -63,7 +71,7 @@ import { ContractComponent } from './contract/contract.component';
     HttpClientModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [ClientService],
+  providers: [ClientService,SessionsService,ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

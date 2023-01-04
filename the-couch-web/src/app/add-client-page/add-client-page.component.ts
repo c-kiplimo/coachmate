@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ClientService } from '../services/ClientService';
 
 
@@ -9,7 +10,7 @@ import { ClientService } from '../services/ClientService';
 })
 export class AddClientPageComponent implements OnInit {
 
-  constructor(private ClientService: ClientService) { }
+  constructor(private ClientService: ClientService,  private router: Router ) { }
 
   ngOnInit(): void {
   }
@@ -20,6 +21,7 @@ export class AddClientPageComponent implements OnInit {
     this.ClientService.addClient(AddClientForm.value).subscribe(
       (response) => {
         console.log(response)
+        this.router.navigate(['/clients']);
       }, (error) => {
         console.log(error)
       }
@@ -27,3 +29,5 @@ export class AddClientPageComponent implements OnInit {
   }
 
 }
+
+

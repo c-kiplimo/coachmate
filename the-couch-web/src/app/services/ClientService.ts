@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
- 
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
@@ -21,7 +20,7 @@ export class ClientService {
 
     
   
-    getClients(): Observable<any> {
+    getClient(): Observable<any> {
         return this.http.get(`${this.baseURL}clients`)
     }
     
@@ -43,10 +42,38 @@ export class ClientService {
             reason: client.reason,
             createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
             lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        },{
-            headers: {
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
-              }
         })
     } 
+    deleteClient() {
+        return this.http.delete(`${this.baseURL}clients`)
+    }
+
+    // Get Contracts
+    getContracts() : Observable<any> {
+        return this.http.get(`${this.baseURL}contracts`)
+    }
+
+    getSessions(): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions`)
+    }
+    
+    addSession(session: any): Observable<any> {
+        console.log(session)
+        return this.http.post(`${this.baseURL}sessions`, {
+            name:session.name,
+            type:session.type,
+            session_date:session.session_date,
+            session_venue:session.session_venue,
+            goals:session.goals,
+            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
+            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
+        })
+    }
+
+     
 }
+// {
+//     headers: {
+//         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
+//       }
+// })

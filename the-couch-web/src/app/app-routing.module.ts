@@ -9,6 +9,9 @@ import { SessionsComponent } from './sessions/sessions.component';
 import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { ContractComponent } from './contract/contract.component';
+import { AddObjectiveComponent } from './add-objective/add-objective.component';
+import { ClientViewComponent } from './client-view/client-view.component';
+import { ContractViewComponent } from './contract-view/contract-view.component';
 
 const routes: Routes = [
   {
@@ -43,11 +46,15 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
+ 
+  {
+    path: 'notifications',
+    component: ContractComponent
+  },
   {
     path: 'contract',
     component: ContractComponent
   }
-
   
 ];
 

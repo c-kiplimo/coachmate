@@ -15,14 +15,14 @@
       
           <div class="form-group col-md-6">
             <label for="sessionname">Session Name</label>
-            <input type="text" class="form-control" id="sessionname" placeholder="Enter Session Name" name="sessionname" ngModel required>
+            <input type="text" class="form-control" id="sessionname" placeholder="Enter Session Name" name="name" ngModel >
           </div>
 
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Session Type</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="sessionType" ngModel>
+            <select class="custom-select" id="inputGroupSelect01" name="type" ngModel>
               <option selected value="">Select Session type</option>
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="GROUP">GROUP</option>
@@ -32,23 +32,23 @@
 
           <div class="form-group col-md-6">
             <label for="inputlastname">Session Details</label>
-            <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Session Description" name="details" ngModel required>
+            <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Session Description" name="details" ngModel >
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputEmail4">Session Date</label>
-            <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date" name="session_date" ngModel required>
+            <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date" name="session_date" ngModel >
             
           </div>
 
           <div class="form-group col-md-6">
             <label for="inputEmail4">From</label>
-            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_from" ngModel required>
+            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_from" ngModel >
             
           </div>
           <div class="form-group col-md-6">
             <label for="inputEmail4">To</label>
-            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_to" ngModel required>
+            <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_to" ngModel >
             
           </div>
 
@@ -56,7 +56,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Session Venue</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="session_venue" required>
+            <select class="custom-select" id="inputGroupSelect01" name="session_venue" ngModel>
               <option selected>Select Session Venue</option>
               <option value="VIRTUAL">VIRTUAL</option>
               <option value="PHYSICAL">PHYSICAL</option>
@@ -66,7 +66,7 @@
   
           <div class="form-group col-md-6">
             <label for="inputEmail4">Session Goals</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Goals" name="goals" ngModel required>
+            <input type="email" class="form-control" id="inputEmail4" placeholder="Goals" name="goals" ngModel >
           </div>
   
          
