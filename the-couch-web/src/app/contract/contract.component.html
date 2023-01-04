@@ -1,53 +1,75 @@
 <div class="row">
-  <div class="col-10">
-      <h3>Create Contracts</h3>
-  </div>
-  <div class="col-2">
-      <app-user></app-user>
-  </div>
-<body>
-    <div class="container">
-    
-      <div class="mb-3">
-        <h1 id="title" class="text-center">Coaching Agreement</h1>
-        <div class="mb-3 mt-3 description">
-          <label for="number" class="form-label">Coaching Topic</label>
-          <input type="text" class="form-control" id="number" placeholder="Enter the coaching topic" name="number">
-        </div>
-        
-        <div class="input-group-prepend">
-          <select class="custom-select" id="inputGroupSelect01">
-            <label class="input-group-text" for="clientType">Client Type</label>
-            <option selected>Select Client type</option>
-            <option value="1">INDIVIDUAL</option>
-            <option value="2">CORPORATE</option>
-          </select>
-        </div>
-        <h3>Schedule & Fees</h3>
-        <form>
-          <div class="row">
-            <div class="col">
-              <label for="number" class="form-label">Start Time</label>
-               <input type="date" class="form-control" placeholder="date" name="date">
-            </div>
-            <div class="col">
-              <label for="number" class="form-label">End Time</label>
-              <input type="date" class="form-control" placeholder="date" name="date">
-            </div>
+    <div class="col-10">
+        <h3>Create Contracts</h3>
+    </div>
+    <div class="col-2">
+        <app-user></app-user>
+    </div>
+</div>
+  <body>
+      <div class="container">
+        <div class="mb-3">
+          <h1 id="title" class="text-center">Coaching Agreement</h1>
+          <form [formGroup]="contractForm" >
+          <div class="mb-3 mt-3 description">
+            <label for="coachingTopic" class="form-label">Coaching Topic</label>
+            <input 
+            type="text" 
+            class="form-control" 
+            id="number" 
+            placeholder="Enter the coaching topic"
+            formControlName="coachingTopic"
+          >
           </div>
-      </form>
-        
-      </div>
+          <div class="input-group-prepend">
+            <select class="custom-select" id="inputGroupSelect01" formControlName="coachingCategory">
+              <label class="input-group-text" for="clientType">Client Category</label>
+              <option selected>Select Client type</option>
+              <option value="1">INDIVIDUAL</option>
+              <option value="2">CORPORATE</option>
+            </select>
+          </div>
+          <h3>Schedule & Fees</h3>
+            <div class="row">
+              <div class="col">
+                <label for="number" class="form-label">Start Date</label>
+                 <input 
+                 type="date" 
+                 class="form-control" 
+                 placeholder="date" 
+                 formControlName="startDate"
+                 >
+              </div>
+              <div class="col">
+                <label for="number" class="form-label">End Date</label>
+                <input 
+                type="date" 
+                class="form-control" 
+                placeholder="date" 
+                formControlName="endDate">
+              </div>
+            </div>
       <div class="mb-3 mt-3">
         <label for="number" class="form-label">Individual Fees Per Session</label>
-        <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD" name="number">
-
+        <input 
+        type="number" 
+        class="form-control" 
+        id="number" 
+        placeholder="Enter the fee to be paid in USD" 
+        formControlName="individualFeesPerSession">
         <label for="number" class="form-label">Group Fees Per Session</label>
-        <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD" name="number">
-
+        <input 
+        type="number" 
+        class="form-control" 
+        id="number" placeholder="Enter the fee to be paid in USD" 
+        formControlName="groupFeesPerSession">
         <label for="number" class="form-label">No. of Sessions:</label>
-        <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions" name="number">
-
+        <input 
+        type="number" 
+        class="form-control" 
+        id="number" 
+        placeholder="Enter number of Sessions" 
+        formControlName="noOfSessions">
       </div>
       <h3>Services</h3>
       <p>
@@ -58,10 +80,8 @@ contract (engaging in other Client-related services outside of coaching hours to
 read reports, etc.). Time outside the agreed bracket as outlined will be at the rate of USD 50
 for every 30-minute time block. 
       </p>
-      
         <div class="input-group mb-3">
           <h3>Terms & Conditions</h3><br>
-          <h3>LOGISTICS</h3>
           <ol>
             <li>Coaching fees are payable in full before each coaching session.
 
@@ -132,25 +152,29 @@ my decisions and my actions regarding them are my sole responsibility.
                 Agree to honor my scheduled session times [see Schedule].
             </li>
           </ol>
-
-          <!--DOM Manipulation-->
-        <!-- <h3>Coaching Objectives</h3>
+          <section>
+        <h3>Coaching Goals </h3>
         <div class="row mb-3">
           <div class="col-10">
           </div>
           <div class="col-2">
               <button type="button" routerLink="/addObjective" class="btn btn-success"><i class="fa-solid fa-user-plus"></i>Add objective</button>
            </div>
-        </div> -->
-        <!-- <div class="mb-3">
-          <ol>
-            <li>Objective 1</li>
-            <li>Objective 2</li>
-            <li>Objective 3</li>
-          </ol>
-        </div> -->
-      
-        <h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
+        </div>
+        <div class="row">
+          <div class="col-10">
+            <div class="mb-3">
+              <ol>
+                <li>Objective 1</li>
+                <li>Objective 2</li>
+                <li>Objective 3</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+          </section>
+          <section>
+<h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
           <div class="row">
             <div class="col-10">
                 <h3>Sessions</h3>
@@ -166,34 +190,43 @@ my decisions and my actions regarding them are my sole responsibility.
             </div>
         </div>
         <div class="row table-responsive">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Session</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Venue</th>
-                    <th scope="col">Duration</th>
-                    <th scope="col">Payment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Introduction</td>
-                    <td>11-11-2022</td>
-                    <td>Zoom</td>
-                    <td>90mins</td>
-                    <td>TBD</td>
-                  </tr>
-                 </tbody>
-              </table>
-              <div class="form-check mb-3">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember"> I have read and agree to the above Terms & Conditions. 
-                </label>
-              </div>
-              <button type="submit" class="btn btn-success col-2">submit</button>
+            <div class="row">
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">session Name</th>
+                      <th scope="col">session Date</th>
+                      <th scope="col">Session Venue</th>
+                      <th scope="col">Session Type</th>
+                      <th scope="col">Starts at</th>
+                      <th scope="col">Ends at</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let session of sessions">
+                      <th scope="row">{{session.id}}</th>
+                      <td>{{session.name}}</td>
+                      <td>{{session.sessionDate}}</td>
+                      <td>{{session.sessionVenue}}</td>
+                      <td>{{session.sessionType}}</td>
+                      <td>{{session.sessionStartTime | date: "hh:mm a"}}</td>
+                      <td>{{session.sessionEndTime | date: "hh:mm a"}}</td>
+                      <td class="actions">
+                          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                          <i class="fa-solid fa-pen-to-square"></i>
+                          <i class="fa-solid fa-trash-can"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+          <div class="form-check mb-3">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" name="remember" />
+              I have read and agree to the above Terms & Conditions.
+            </label>
+          </div>
+          <button type="button" (click)="addContract()" class="btn btn-success col-2">submit</button>
         </div>
-
-
+      </div>

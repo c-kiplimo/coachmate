@@ -6,3 +6,29 @@
     margin: 10px;
     width: 300px;
 }
+.listing-item {
+    padding: 10px 0;
+    border-bottom: 3px solid #f1f1f1;
+}
+
+/* .listing-item { & :last-child {
+      border-bottom: none;
+    }
+} */
+
+   .listing-item h6 {
+      color: #003d4c;
+      font-weight: 600;
+    }
+
+   .listing-item span {
+      font-size: 0.9rem;
+      color: #80868b;
+    }
+.title{
+    color: #003d4c;
+    font-weight: 1000;
+}
+.p-3{
+    font-size: larger;
+}

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientsComponent } from '../clients/clients.component';
 import { ClientService } from '../services/ClientService';
 @Component({
   selector: 'app-dashboard',
@@ -8,14 +7,72 @@ import { ClientService } from '../services/ClientService';
 })
 export class DashboardComponent implements OnInit {
 
-  ClientService: any;
+  // ClientService: any;
   clients: any;
+  User:any;
+  sessions:any;
+  contracts:any;
+  numberOfClients!: number;
+  numberOfSessions!:number;
+  numberOfContracts!:number;
+rightIcon: any;
 
-  constructor(private clientservice : ClientService) { }
+  constructor(private clientService : ClientService) { }
 
   ngOnInit(): void {
-    this.clients=this.ClientService.getClients();
+    this.getClients();
+    this.getUser();
+    this.getNoOfSessions();
+    this.getNoOfContracts();
   }
+  getClients(){
+    this.clientService.getClient().subscribe(
+      (response: any) => {
+        console.log(response)
+        this.clients = response
+        this.numberOfClients = this.clients.length;
+        console.log(this.numberOfClients)
+      }, (error: any) => {
+        console.log(error)
+      }
+    )
   
+
+  }
+  getNoOfSessions(){
+    this.clientService.getSessions().subscribe(
+      (response:any) =>{
+        console.log(response)
+        this.sessions = response
+        this.numberOfSessions = this.sessions.length;
+        console.log(this.numberOfSessions)
+        
+      },
+      (error: any) => {
+        console.log(error)
+      }
+    )
+  }
+  getNoOfContracts(){
+    this.clientService.getContracts().subscribe(
+      (response:any) =>{
+        console.log(response)
+        this.contracts = response
+        this.numberOfContracts = this.contracts.length;
+        console.log(this.numberOfContracts)
+        
+      },
+      (error: any) => {
+        console.log(error)
+      }
+    )
+  }
+  getUser ()
+  {
+ 
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      
+    console.log(this.User.coach.businessName) 
+  }
 
 }

@@ -13,29 +13,25 @@ import { environment } from 'src/environments/environment';
 
 export class LoginService {
 
-    baseURL: string = environment.apiURL;
+    baseURL: string = environment.apiURL + '/api/';
     constructor(private http: HttpClient) {
 
     }
 
 
     // login service
-    login(user: any): Observable<any> {
-        return this.http.post(`${this.baseURL}token`, {
-            username: user.email,
-            password: user.password
-        })
-    }
+    login(user: any) {
+        return this.http.post<any>(this.baseURL + '/token', user);
+      }
+
 
     // signUp service
-    signUp(user: any): Observable<any> {
-        return this.http.post<any>(`${this.baseURL}registration`, {
-            fullName: user.fullName,
-            businessName: user.businessName,
-            msisdn: user.msisdn,
-            email: user.email,
-            password: user.password,
-        })
-    }
+    signUp(signupObject: any): Observable<any> {
+        return this.http.post<any>(
+          this.baseURL+ 'registration',
+          signupObject,
+          { observe: 'response' }
+        );
+      }
 }
 
