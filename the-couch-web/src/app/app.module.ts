@@ -32,7 +32,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
-import { ContractViewComponent } from './contract-view/contract-view.component';
+ import { contractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
@@ -47,6 +47,7 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     SidnavComponent,
     FooterComponent,
+    contractViewComponent,
     sessionViewComponent,
     DashboardComponent,
     BodyComponent,
@@ -62,7 +63,6 @@ import { ToastrModule } from 'ngx-toastr';
     contractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
-    ContractViewComponent,
     ForgotPaswordComponent,
     ConfirmedViewComponent,
   ],
