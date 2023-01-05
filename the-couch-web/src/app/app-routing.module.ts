@@ -10,7 +10,7 @@ import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
-import { ContractViewComponent } from './contract-view/contract-view.component';
+import { contractViewComponent } from './contract-view/contract-view.component';
 import { contractComponent } from './contract/contract.component';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
@@ -57,9 +57,17 @@ const routes: Routes = [
     component: ContractComponent
   },
   {
-    path: 'contract',
-    component: ContractComponent
-  }
+    path: 'sessions',
+    component: SessionsComponent
+  },
+  {
+    path: 'clientView/:id',
+    component: ClientViewComponent
+  },
+  {
+    path: 'contracts',
+    component: contractViewComponent
+
   },
   {
     path:'contracts',

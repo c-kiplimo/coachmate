@@ -32,19 +32,22 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
-import { ContractViewComponent } from './contract-view/contract-view.component';
+ import { contractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     SidnavComponent,
     FooterComponent,
+    contractViewComponent,
     sessionViewComponent,
     DashboardComponent,
     BodyComponent,
@@ -60,7 +63,6 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
     contractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
-    ContractViewComponent,
     ForgotPaswordComponent,
     ConfirmedViewComponent,
   ],
@@ -76,6 +78,12 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
+    }),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      timeOut: 5000, // 5 seconds
+      closeButton: false,
+      progressBar: false,
     }),
   ],
   providers: [

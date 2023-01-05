@@ -21,7 +21,7 @@ export class LoginService {
 
     // login service
     login(user: any) {
-        return this.http.post<any>(this.baseURL + '/token', user);
+        return this.http.post<any>(this.baseURL + 'token', user);
       }
 
 

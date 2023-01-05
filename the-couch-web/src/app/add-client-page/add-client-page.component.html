@@ -15,9 +15,9 @@
     <div class="modal-body">
       <form [formGroup]="addClient" ngNativeValidate>
         <div class="mb-3 form-group">
-          <label for="exampleInputEmail1">Name *</label>
+          <label for="exampleInputEmail1">First Name *</label>
           <input
-            formControlName="name"
+            formControlName="firstName"
             name="firstname"
             [(ngModel)]="firstName"
             type="firstname"
@@ -25,6 +25,20 @@
             id="firstname"
             aria-describedby="emailHelp"
             placeholder="First Name"
+            required
+          />
+        </div>
+        <div class="mb-3 form-group">
+          <label for="exampleInputEmail1">Last Name *</label>
+          <input
+            formControlName="lastName"
+            name="lastname"
+            [(ngModel)]="lastName"
+            type="firstname"
+            class="form-control"
+            id="lastname"
+            aria-describedby="emailHelp"
+            placeholder="Last Name"
             required
           />
         </div>
@@ -60,7 +74,7 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Email</label>
           <input
-            formControlName="email_address"
+            formControlName="email"
             name="email"
             type="email"
             class="form-control"
@@ -71,7 +85,7 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
-            formControlName="physical_address"
+            formControlName="physicalAddress"
             name="address"
             type="text"
             class="form-control"
@@ -90,7 +104,7 @@
           formControlName="profession" 
           >
         </div>
-        <div class="form-group ">
+        <!-- <div class="form-group ">
           <label for="profession">added by </label>
           <input 
           type="text" 
@@ -98,7 +112,7 @@
           id="" placeholder="Enter created by" 
           formControlName="createdBy"
           >
-        </div>
+        </div> -->
         <div class="form-group mb-3">
           <label for="reason">Reason</label>
           <input 
@@ -113,7 +127,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="PaymentMode">Payment Mode</label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01" formControlName="payment_mode">
+              <select class="custom-select" id="inputGroupSelect01" formControlName="paymentMode">
                 <option selected>Select Payment Mode</option>
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
@@ -125,7 +139,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="clientType">Client Type</label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01" formControlName="type" >
+              <select class="custom-select" id="inputGroupSelect01" formControlName="clientType" >
                 <option selected>Select Client type</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="CORPORATE">CORPORATE</option>
@@ -146,9 +160,9 @@
         data-bs-dismiss="modal"
         (click)="newClient()"
         [disabled]="
-        !addClient.value.name||
+        !addClient.value.firstName||
         !addClient.value.msisdn||
-        !addClient.value.physical_address
+        !addClient.value.physicalAddress
       ">ADD
       </button>
     </div>
