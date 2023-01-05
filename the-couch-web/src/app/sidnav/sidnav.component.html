@@ -28,7 +28,7 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <i class="sidenav-link-icon" [class]="data.icon"></i>
+        <i class="sidenav-link-icon" [class]="data.icon" title="{{ data.label }}"></i>
         <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
           {{ data.label }}
         </span>

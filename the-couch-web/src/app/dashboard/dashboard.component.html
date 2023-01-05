@@ -1,23 +1,29 @@
-
-<div class="row title">
-  <div class="col-4"></div>
-    <div class="col-4">
-        <h2>Dashboard</h2>
-    </div>
-    <div class="col-4">
-        <app-user></app-user>
-    </div>
-</div>
-<div class="d-flex justify-content-between align-items-center p-3">
-  <div>
-    <h2  class="page-title">
-      Hello {{User.coach.businessName| lowercase }}!
-    </h2>
-    <h2  class="page-title">
-      Welcome,
-    </h2>
-    <p class="p-3" >Here's how things currently look like.</p>
+<div class="row">
+  <div class="col-10">
+        <h3>Dashboard</h3>
   </div>
+  <div class="col-2">
+        <app-user></app-user>
+  </div>
+</div>
+
+<div class="row dashboard-banner d-flex justify-content-between align-items-center p-3">
+  <div class="col-10 text-center p-3 mb-10">
+    <h2  class="fw-bold">
+      Hello {{User.coach.businessName| lowercase }},
+      <span class="fw-light">
+        Welcome back!
+      </span>
+    </h2>
+    
+  </div>
+</div>
+  <div class="row">
+    <div class="col-10">
+    <p class="p-3 desc" >Here's how things currently look like...</p>
+    </div>
+  </div>
+ 
   <!-- <button
     class="btn btn-add"
     [routerLink]="'/add/order'"
@@ -25,49 +31,52 @@
   >
     <fa-icon [icon]="addIcon"> </fa-icon> Add order
   </button> -->
-</div>
+
 <div class="row row-height">
-    <div class="col-3 card text-center top-cards">
+    <!-- <div class="col-3 card text-center top-cards">
         <div class="card-body">
-          <h5 class="card-title">Upcoming Sessions</h5>
-          <h3 class="card-text">{{numberOfSessions}}</h3>
+          <h6 class="card-title">Upcoming Sessions</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
           
         </div>
-    </div>
+    </div> -->
     <div class="col-3 card text-center top-cards">
       <div class="card-body">
-        <h5 class="card-title">Log hours</h5>
-        <h3 class="card-text">{{numberOfHours}} hr(s) {{numberOfMinutes}} mins</h3>
+        <h6 class="card-title">Log hours</h6>
+        <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
         
       </div>
   </div>
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
-          <h5 class="card-title">Sessions Created</h5>
-          <h3 class="card-text">{{numberOfSessions}}</h3>
+          <h6 class="card-title">Sessions Created</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
           
         </div>
     </div>
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
-          <h5 class="card-title">Number of Clients</h5>
-          <h3 class="card-text">{{numberOfClients}}</h3>
+          <h6 class="card-title">Number of Clients</h6>
+          <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
          
         </div>
     </div>
     <div class="col-3 card text-center top-cards">
         <div class="card-body">
-          <h5 class="card-title">Contracts</h5>
-          <h3 class="card-text">{{numberOfContracts}}</h3>
+          <h6 class="card-title">Contracts</h6>
+          <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
           
         </div>
     </div>
 </div>
-
+<!-- 
 <div class="row row-height">
     <div class="col-12">
         <div class="card ">
-            <div class="card-header">Quick Link</div>
+            <div class="card-header">Quick Links</div>
             <div class="card-body">
               
               <div class="row">
@@ -81,7 +90,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <div class="row">
     <div class="col-6">
         <div class="card">
