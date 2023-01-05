@@ -51,9 +51,10 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
+ 
   {
-    path: 'addObjective',
-    component: AddObjectiveComponent
+    path: 'notifications',
+    component: ContractComponent
   },
   {
     path: 'sessions',
@@ -66,6 +67,7 @@ const routes: Routes = [
   {
     path: 'contracts',
     component: contractViewComponent
+
   },
   {
     path:'contracts',
