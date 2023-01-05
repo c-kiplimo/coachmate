@@ -57,14 +57,6 @@ const routes: Routes = [
     component: contractComponent
   },
   {
-<<<<<<< HEAD
-    path: 'contract',
-    component: contractComponent
-||||||| 41fe3dd
-    path: 'contract',
-    component: ContractComponent
-  }
-=======
     path: 'sessions',
     component: SessionsComponent
   },
@@ -76,7 +68,6 @@ const routes: Routes = [
     path: 'contracts',
     component: contractViewComponent
 
->>>>>>> e4b5cc3e3662ca790b9cdbd5379e6a0583b3c97a
   },
   {
     path:'contracts',
