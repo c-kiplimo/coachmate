@@ -54,24 +54,21 @@ const routes: Routes = [
  
   {
     path: 'notifications',
-    component: ContractComponent
+    component: contractComponent
   },
   {
     path: 'contract',
-    component: ContractComponent
-  }
+    component: contractComponent
   },
   {
     path:'contracts',
     component:SessionsComponent
   },
-  {
-     path:'contract',
-     component:contractComponent
-  },
-  { path: 'reset/request', component: ForgotPaswordComponent },
+  { path: 'reset/request', 
+    component: ForgotPaswordComponent },
   
-  { path: 'registration/confirm', component: ConfirmedViewComponent },
+  { path: 'registration/confirm', 
+    component: ConfirmedViewComponent },
   
 ];
 
