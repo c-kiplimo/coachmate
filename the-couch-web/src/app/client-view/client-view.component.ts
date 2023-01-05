@@ -28,6 +28,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     ]),
   ],
 })
+
 export class ClientViewComponent implements OnInit {
 contracts:any;
 sessions:any;
@@ -96,248 +97,248 @@ clientid:any;
   loadingCustomer = false;
   totalLength: any;
 
-  page: number = 1;
-  itemsPerPage = 20;
-  ApiService: any;
+  // page: number = 1;
+  // itemsPerPage = 20;
+  // ApiService: any;
 
-  constructor(
-    private http: HttpClient,
-    private formbuilder: FormBuilder,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService,
-    private clientService:ClientService,private restApiService:ApiService
-  ) {}
+  // constructor(
+  //   private http: HttpClient,
+  //   private formbuilder: FormBuilder,
+  //   private router: Router,
+  //   private activatedRoute: ActivatedRoute,
+  //   private toastrService: ToastrService,
+  //   private clientService:ClientService,private restApiService:ApiService
+  // ) {}
 
 
   ngOnInit(): void {
-    this.customerId = this.activatedRoute.snapshot.params['id'];
-    this.getCustomer();
+    // this.customerId = this.activatedRoute.snapshot.params['id'];
+    // this.getCustomer();
 
     // this.getNotifications();
 
-    this.orderForm = this.formbuilder.group({
-      name: '',
-      sessionType: '',
-      orderAmount: '',
-      amountPaid: '0',
-      details: '',
-      notes: '',
-      deliveryAddress: '',
-      dueDate: '',
-      customerId: this.customerId,
-      sendNotification: true,
-      attachment: '',
-      deliveryOption: '',
-      cakeSize: '',
-      messageOnCake: '',
-    });
+    // this.orderForm = this.formbuilder.group({
+    //   name: '',
+    //   sessionType: '',
+    //   orderAmount: '',
+    //   amountPaid: '0',
+    //   details: '',
+    //   notes: '',
+    //   deliveryAddress: '',
+    //   dueDate: '',
+    //   customerId: this.customerId,
+    //   sendNotification: true,
+    //   attachment: '',
+    //   deliveryOption: '',
+    //   cakeSize: '',
+    //   messageOnCake: '',
+    // });
 
-    this.suspendCustomerForm = this.formbuilder.group({
-      narration: '',
-    });
+    // this.suspendCustomerForm = this.formbuilder.group({
+    //   narration: '',
+    // });
 
-    this.closeCustomerForm = this.formbuilder.group({
-      id: this.customerId,
-      narration: '',
-    });
+    // this.closeCustomerForm = this.formbuilder.group({
+    //   id: this.customerId,
+    //   narration: '',
+    // });
 
-    this.activateCustomerForm = this.formbuilder.group({
-      narration: '',
-    });
+    // this.activateCustomerForm = this.formbuilder.group({
+    //   narration: '',
+    // });
   }
 
 
-}
-getClients(){
-  const options = {
-    page: 1,
-    per_page: this.itemsPerPage,
-    status: this.filters.status,
-    search: this.filters.searchItem,
-  };
-  this.clientService.getClient(options).subscribe(
-    (response) => {
-      console.log(response)
-      this.clients = response
-    }, (error) => {
-      console.log(error)
-    }
-  )
-}
-  toggleTab(tab: string): void {
-    this.currentTab = tab;
+// }
+// getClients(){
+//   const options = {
+//     page: 1,
+//     per_page: this.itemsPerPage,
+//     status: this.filters.status,
+//     search: this.filters.searchItem,
+//   };
+//   this.clientService.getClient(options).subscribe(
+//     (response) => {
+//       console.log(response)
+//       this.clients = response
+//     }, (error) => {
+//       console.log(error)
+//     }
+//   )
+// }
+//   toggleTab(tab: string): void {
+//     this.currentTab = tab;
  
 
-  getCustomer(): void {
-    this.loadingCustomer = true;
+  // getCustomer(): void {
+  //   this.loadingCustomer = true;
 
-    this.ApiService.getOneCustomer(this.customerId).subscribe(
-      (res: any) => {
-        console.log('customer data', res.body);
-        this.customer = res.body;
-        this.getOrders(1);
-        this.getPayments();
-        this.loadingCustomer = false;
-      },
-      (error: any) => {
-        this.loadingCustomer = false;
-      }
-    );
-  }
+  //   this.ApiService.getOneCustomer(this.customerId).subscribe(
+  //     (res: any) => {
+  //       console.log('customer data', res.body);
+  //       this.customer = res.body;
+  //       this.getOrders(1);
+  //       this.getPayments();
+  //       this.loadingCustomer = false;
+  //     },
+  //     (error: any) => {
+  //       this.loadingCustomer = false;
+  //     }
+  //   );
+  // }
 
   // get orders for specific customer
-  getOrders(page: number, navigate?: boolean): void {
-    this.searching = true;
-    this.orders = [];
-    const options = {
-      page: page,
-      per_page: 10,
-      customer_id: this.customerId,
-    };
-    // console.log(this.customerId);
-    this.ApiService.filterOrdersByCustomerId(options).subscribe((res: any) => {
-      // console.log('orders->',res.body.data);
-      this.orders = res.body.data;
-      this.totalLength = Number(res.body.totalElements);
-      this.searching = false;
-      this.getNotifications();
-    });
-  }
+  // getOrders(page: number, navigate?: boolean): void {
+  //   this.searching = true;
+  //   this.orders = [];
+  //   const options = {
+  //     page: page,
+  //     per_page: 10,
+  //     customer_id: this.customerId,
+  //   };
+  //   // console.log(this.customerId);
+  //   this.ApiService.filterOrdersByCustomerId(options).subscribe((res: any) => {
+  //     // console.log('orders->',res.body.data);
+  //     this.orders = res.body.data;
+  //     this.totalLength = Number(res.body.totalElements);
+  //     this.searching = false;
+  //     this.getNotifications();
+  //   });
+  // }
 
   // get payments for specific customer
-  getPayments(navigate?: boolean): void {
-    this.searching = true;
-    this.payments = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-      customer_id: this.customerId,
-    };
+  // getPayments(navigate?: boolean): void {
+  //   this.searching = true;
+  //   this.payments = [];
+  //   const options = {
+  //     page: 1,
+  //     per_page: 10,
+  //     customer_id: this.customerId,
+  //   };
 
-    this.ApiService.filterPaymentsByCustomerId(options).subscribe((res: any) => {
-      // console.log('payments here=>', res.body.data);
-      this.payments = res.body.data;
-      this.searching = false;
-    });
-  }
+  //   this.ApiService.filterPaymentsByCustomerId(options).subscribe((res: any) => {
+  //     // console.log('payments here=>', res.body.data);
+  //     this.payments = res.body.data;
+  //     this.searching = false;
+  //   });
+  // }
 
   // Get Notification for specific customer
-  getNotifications(navigate?: boolean): void {
-    this.searching = true;
-    this.notifications = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-      customer_id: this.customerId,
-    };
+  // getNotifications(navigate?: boolean): void {
+  //   this.searching = true;
+  //   this.notifications = [];
+  //   const options = {
+  //     page: 1,
+  //     per_page: 10,
+  //     customer_id: this.customerId,
+  //   };
 
-    this.ApiService.getNotificationsbyCustomerId(options).subscribe((res: any) => {
-      // console.log(res.body);
-      this.notifications = res.body.data;
-      this.searching = false;
-    });
-  }
+  //   this.ApiService.getNotificationsbyCustomerId(options).subscribe((res: any) => {
+  //     // console.log(res.body);
+  //     this.notifications = res.body.data;
+  //     this.searching = false;
+  //   });
+  // }
 
-  newOrder() {
-    const names = this.searchTerm.split(' ');
+  // newOrder() {
+  //   const names = this.searchTerm.split(' ');
 
-    // console.log(this.orderForm.value);
-    this.orderForm.patchValue({
-      name: this.customer.firstName + " " + this.orderForm.value.orderType ,
-      dueDate: this.orderDueDate + 'T' + this.orderDueTime,
-    })
-    this.ApiService
-      .addNewOrder(this.orderForm.value)
-      .subscribe({
-        next:(response: any) => {
-          this.orderForm.reset();
-          this.toastrService.success('Order created!', 'Success!');
-          setTimeout(() => {
-            location.reload();
-          }, 5);},
-        error: (err: any) => {
-          console.log(err);
-          this.toastrService.error(
-            'Order not created, try again!',
-            'Failed!'
-          );
-        },
-      });
-  }
-  viewPayment(payment: any): void {
-    this.payment = payment;
-    this.orders.forEach((order: any) => {
-      if (this.payment.order.id === order.id) {
-        // console.log(order.id);
-        this.payment.balance = order.orderAmount - this.payment.amount;
-      }
-    });
-  }
-  viewNotification(notification: any): void {
-    this.notification = notification;
-  }
+  //   // console.log(this.orderForm.value);
+  //   this.orderForm.patchValue({
+  //     name: this.customer.firstName + " " + this.orderForm.value.orderType ,
+  //     dueDate: this.orderDueDate + 'T' + this.orderDueTime,
+  //   })
+  //   this.ApiService
+  //     .addNewOrder(this.orderForm.value)
+  //     .subscribe({
+  //       next:(response: any) => {
+  //         this.orderForm.reset();
+  //         this.toastrService.success('Order created!', 'Success!');
+  //         setTimeout(() => {
+  //           location.reload();
+  //         }, 5);},
+  //       error: (err: any) => {
+  //         console.log(err);
+  //         this.toastrService.error(
+  //           'Order not created, try again!',
+  //           'Failed!'
+  //         );
+  //       },
+  //     });
+  // }
+  // viewPayment(payment: any): void {
+  //   this.payment = payment;
+  //   this.orders.forEach((order: any) => {
+  //     if (this.payment.order.id === order.id) {
+  //       // console.log(order.id);
+  //       this.payment.balance = order.orderAmount - this.payment.amount;
+  //     }
+  //   });
+  // }
+  // viewNotification(notification: any): void {
+  //   this.notification = notification;
+  // }
   //Customer Actions functions
-  suspendCustomer() {
-    const options = {
-      status: 'SUSPENDED',
-    };
-    // console.log('details to suspend', this.suspendCustomerForm.value);
-    this.ApiService
-      .customerAction(this.customerId, this.suspendCustomerForm.value, options)
-      .subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this.toastrService.info('Customer suspended!', 'Info!');
-          this.suspendCustomerForm.reset();
-          setTimeout(() => {
-            location.reload();
-          }, 5);
-        },
-        error: (err: any) => {
-          console.log(err);
-          this.toastrService.error(
-            'Customer not suspended, try again!',
-            'Failed!'
-          );
-        },
-      });
-  }
-  closeCustomer() {
-    this.ApiService.closeCustomer(this.customerId).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Customer closed!', 'Info!');
-        this.closeCustomerForm.reset();
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.toastrService.error('Customer not closed, try again!', 'Failed!');
-      },
-    });
-  }
-  activateCustomer() {
-    const options = {
-      status: 'ACTIVATE',
-    };
-    this.ApiService
-      .customerAction(this.customerId, this.activateCustomerForm.value, options)
-      .subscribe({
-        next: (res: any) => {
-          // console.log(res);
-          this.toastrService.success('Customer activated!', 'Success!');
-          this.activateCustomerForm.reset();
-          setTimeout(() => {
-            location.reload();
-          }, 5);
-        },
-        error: (err: any) => {
-          console.log(err);
-          this.toastrService.error(
-            'Customer not activated, try again!',
-            'Failed!'
-          );
-        },
-      });
-  }
+  // suspendCustomer() {
+  //   const options = {
+  //     status: 'SUSPENDED',
+  //   };
+  //   // console.log('details to suspend', this.suspendCustomerForm.value);
+  //   this.ApiService
+  //     .customerAction(this.customerId, this.suspendCustomerForm.value, options)
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         console.log(res);
+  //         this.toastrService.info('Customer suspended!', 'Info!');
+  //         this.suspendCustomerForm.reset();
+  //         setTimeout(() => {
+  //           location.reload();
+  //         }, 5);
+  //       },
+  //       error: (err: any) => {
+  //         console.log(err);
+  //         this.toastrService.error(
+  //           'Customer not suspended, try again!',
+  //           'Failed!'
+  //         );
+  //       },
+  //     });
+  // }
+  // closeCustomer() {
+  //   this.ApiService.closeCustomer(this.customerId).subscribe({
+  //     next: (res: any) => {
+  //       console.log(res);
+  //       this.toastrService.info('Customer closed!', 'Info!');
+  //       this.closeCustomerForm.reset();
+  //     },
+  //     error: (err: any) => {
+  //       console.log(err);
+  //       this.toastrService.error('Customer not closed, try again!', 'Failed!');
+  //     },
+  //   });
+  // }
+  // activateCustomer() {
+  //   const options = {
+  //     status: 'ACTIVATE',
+  //   };
+  //   this.ApiService
+  //     .customerAction(this.customerId, this.activateCustomerForm.value, options)
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         // console.log(res);
+  //         this.toastrService.success('Customer activated!', 'Success!');
+  //         this.activateCustomerForm.reset();
+  //         setTimeout(() => {
+  //           location.reload();
+  //         }, 5);
+  //       },
+  //       error: (err: any) => {
+  //         console.log(err);
+  //         this.toastrService.error(
+  //           'Customer not activated, try again!',
+  //           'Failed!'
+  //         );
+  //       },
+  //     });
+  // }
 }

@@ -180,21 +180,21 @@
       <div class="tabs-section">
         <button
           class="btn btn-tabs"
-          (click)="toggleTab('orders')"
+          
           [ngClass]="{ 'active-tab': currentTab === 'orders' }"
         >
           Orders
         </button>
         <button
           class="btn btn-tabs"
-          (click)="toggleTab('payments')"
+          
           [ngClass]="{ 'active-tab': currentTab === 'payments' }"
         >
           Payments
         </button>
         <button
           class="btn btn-tabs"
-          (click)="toggleTab('notifications')"
+          
           [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
         >
           Notifications
@@ -213,7 +213,7 @@
             Add Order
           </button>
 
-          <button class="btn btn-refresh" (click)="getOrders(1)">
+          <button class="btn btn-refresh" >
            
             Refresh
           </button>
@@ -259,72 +259,7 @@
           <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <table class="table">
-            <thead>
-              <th colspan="1">Order #</th>
-              <th colspan="1">Product</th>
-              <th colspan="1">Time</th>
-              <th colspan="1">Due date</th>
-              <th colspan="1">Client</th>
-              <th colspan="1">Status</th>
-              <th colspan="1">Amount</th>
-              <th colspan="1">Balance</th>
-              <th colspan="1">Actions</th>
-            </thead>
-            <tbody *ngIf="orders?.length" [@fadeIn]>
-              <tr
-                *ngFor="
-                  let order of orders
-                    | paginate
-                      : {
-                          itemsPerPage: itemsPerPage,
-                          currentPage: page,
-                          totalItems: totalLength
-                        }
-                "
-              >
-                <td>
-                  <span
-                    class="redirect-link"
-                    [routerLink]="['/order', order.id]"
-                    >{{ order.orderNumber }}</span
-                  >
-                </td>
-                <td>{{ order.details }}</td>
-                <td>{{ order.dueDate | date: " h:mm a" }}</td>
-                <td>{{ order.dueDate }}</td>
-                <td>{{ order.customer.firstName + " " + order.customer.lastName | titlecase }}</td>
-                <td>{{ order.orderStatus }}</td>
-                <td>{{ order.orderAmount }}</td>
-
-                <td>
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'badge-danger': order.orderBalance > '0',
-                      'badge-primary': order.orderBalance < '0',
-                      'badge-success': order.orderBalance === 0
-                    }"
-                  >
-                    <span *ngIf="order.orderBalance < '0'">Overpaid </span>
-                    <span *ngIf="order.orderBalance === 0"> Fully Paid </span>
-                    <span *ngIf="order.orderBalance > '0'">
-                      {{ order.orderBalance }}
-                    </span>
-                  </span>
-                </td>
-
-                <td>
-                  <button
-                    class="btn btn-view"
-                    [routerLink]="['/order', order.id]"
-                  >
-                    view
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        
           <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
             No Orders Found.
           </p>
@@ -396,7 +331,7 @@
 
       <div class="d-none d-md-block">
         <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
-          <button class="btn btn-refresh" (click)="getPayments()">
+          <button class="btn btn-refresh">
             Refresh
           </button>
         </div>
@@ -429,7 +364,7 @@
                     class="btn btn-view"
                     data-bs-toggle="modal"
                     data-bs-target="#payementModal"
-                    (click)="viewPayment(payment)"
+                   
                   >
                     view
                   </button>
@@ -456,7 +391,7 @@
         <div
           data-bs-toggle="modal"
           data-bs-target="#payementModal"
-          (click)="viewPayment(payment)"
+        
           *ngFor="let payment of payments"
           class="listing-item"
         >
@@ -525,7 +460,7 @@
                   class="btn btn-view"
                   data-bs-toggle="modal"
                   data-bs-target="#notificationModal"
-                  (click)="viewNotification(notification)"
+                  
                 >
                   view
                 </button>
@@ -542,7 +477,7 @@
         <div
           data-bs-toggle="modal"
           data-bs-target="#notificationModal"
-          (click)="viewNotification(notification)"
+          
           *ngFor="let notification of notifications"
           class="listing-item"
         >
@@ -807,7 +742,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="newOrder()"
+          
           [disabled]="
             !orderForm.value.orderType ||
             !orderForm.value.dueDate ||
@@ -871,7 +806,7 @@
           type="button"
           class="btn btn-add"
           data-bs-dismiss="modal"
-          (click)="suspendCustomer()"
+         
         >
           Submit
         </button>
@@ -930,7 +865,7 @@
           type="button"
           class="btn btn-add"
           data-bs-dismiss="modal"
-          (click)="closeCustomer()"
+        
         >
           Submit
         </button>
@@ -991,7 +926,7 @@
           type="button"
           class="btn btn-add"
           data-bs-dismiss="modal"
-          (click)="activateCustomer()"
+         
         >
           Submit
         </button>

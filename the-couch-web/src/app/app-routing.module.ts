@@ -52,10 +52,10 @@ const routes: Routes = [
     component: SchedulesComponent
   },
  
-  {
-    path: 'notifications',
-    component: ContractComponent
-  },
+  // {
+  //   path: 'notifications',
+  //   component: ContractComponent
+  // },
   {
     path: 'sessions',
     component: SessionsComponent
