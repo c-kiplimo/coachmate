@@ -17,7 +17,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
     ]),
   ],
 })
-export class ContractViewComponent implements OnInit {
+export class contractViewComponent implements OnInit {
   loading = false;
   contracts: any;
   constructor(private clientService: ClientService) {}

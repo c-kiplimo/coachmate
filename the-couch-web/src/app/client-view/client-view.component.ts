@@ -29,6 +29,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientViewComponent implements OnInit {
+contracts:any;
+sessions:any;
+clients:any;
+clientid:any;
+  console: any;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
+  constructor(private clientService:ClientService,private restApiService:ApiService,private router:Router) { }
+
   orderForm!: FormGroup;
   suspendCustomerForm!: FormGroup;
   closeCustomerForm!: FormGroup;
@@ -98,8 +110,6 @@ export class ClientViewComponent implements OnInit {
   ) {}
 
 
-  
-
   ngOnInit(): void {
     this.customerId = this.activatedRoute.snapshot.params['id'];
     this.getCustomer();
@@ -137,9 +147,27 @@ export class ClientViewComponent implements OnInit {
     });
   }
 
+
+}
+getClients(){
+  const options = {
+    page: 1,
+    per_page: this.itemsPerPage,
+    status: this.filters.status,
+    search: this.filters.searchItem,
+  };
+  this.clientService.getClient(options).subscribe(
+    (response) => {
+      console.log(response)
+      this.clients = response
+    }, (error) => {
+      console.log(error)
+    }
+  )
+}
   toggleTab(tab: string): void {
     this.currentTab = tab;
-  }
+ 
 
   getCustomer(): void {
     this.loadingCustomer = true;
