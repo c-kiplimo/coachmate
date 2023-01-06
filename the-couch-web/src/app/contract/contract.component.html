@@ -240,7 +240,7 @@
               
                 <div class="row">
                 <div class="col-6">
-                  <input
+                  <input [(ngModel)]="Objectives.objective"
                   type="text"
                   class="form-control"
                   placeholder="Add Objective"
@@ -263,9 +263,7 @@
               <div class="col-10">
                 <div class="mb-3">
                   <ol>
-                    <li>Objective 1</li>
-                    <li>Objective 2</li>
-                    <li>Objective 3</li>
+                    <li *ngFor="let obj of objectives">{{ obj }}</li>
                   </ol>
                 </div>
               </div>
