@@ -1,4 +1,4 @@
-<!-- <div class="row">
+<div class="row">
     <div class="col-10">
         <h3>Add Session</h3>
     </div>
@@ -6,518 +6,78 @@
         <app-user></app-user>
     </div>
   </div>
+ 
   <div class="row">
     <div class="col-4"></div>
     <div class="col-6">
       
       
       <form (ngSubmit)="addSession()">
-      
-          <div class="form-group col-md-6">
+          <!-- <h1>Add Session</h1> -->
+          <div class="form-group col-md-8">
             <label for="sessionname">Session Name</label>
             <input type="text" class="form-control" id="sessionname" placeholder="Enter Session Name" name="name" [(ngModel)]="addSessionForm.name">
           </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="clientType">Session Type</label>
+          <br>
+          <div class="form-group col-md-8">
+            <div class="form-group-prepend">
+              <label class="form-group-text" for="clientType">Session Type</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="type" [(ngModel)]="addSessionForm.sessionType"> 
+            <select class="form-select" id="inputGroupSelect01" name="type" [(ngModel)]="addSessionForm.sessionType"> 
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="GROUP">GROUP</option>
               <option value="OTHER">OTHER</option>
             </select>
           </div>
-
-          <div class="form-group col-md-6">
+          <br>
+          <div class="form-group col-md-8">
             <label for="inputlastname">Session Details</label>
             <input type="text" class="form-control" id="inputEmail4" placeholder="Enter Session Description" name="details" [(ngModel)]="addSessionForm.sessionDetails" >
           </div>
-
-          <div class="form-group col-md-6">
+          <br>
+          <div class="form-group col-md-8">
             <label for="inputEmail4">Session Date</label>
             <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date" name="session_date" [(ngModel)]="addSessionForm.sessionDate" >
             
           </div>
-
-          <div class="form-group col-md-6">
+          <br>
+          <div class="form-group col-md-8">
             <label for="inputEmail4">From</label>
             <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_from" [(ngModel)]="addSessionForm.sessionStartTime" >
             
           </div>
-          <div class="form-group col-md-6">
+          <br>
+          <div class="form-group col-md-8">
             <label for="inputEmail4">To</label>
             <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="session_time_to" [(ngModel)]="addSessionForm.sessionEndTime" >
             
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="clientType">Session Venue</label>
+          </div>  
+          <br>
+          <div class="form-group col-md-8">
+            <div class="form-group-prepend">
+              <label class="form-group-text" for="clientType">Session Venue</label>
             </div>
-            <select class="custom-select" id="inputGroupSelect01" name="session_venue" [(ngModel)]="addSessionForm.sessionVenue">
+            <select class="form-select" id="inputGroupSelect01" name="session_venue" [(ngModel)]="addSessionForm.sessionVenue">
               <option value="VIRTUAL">VIRTUAL</option>
               <option value="PHYSICAL">PHYSICAL</option>
               
             </select>
           </div>
-  
-          <div class="form-group col-md-6">
+          <br>
+          <div class="form-group col-md-8">
             <label for="inputEmail4">Session Goals</label>
             <input type="email" class="form-control" id="inputEmail4" placeholder="Goals" name="goals" [(ngModel)]="addSessionForm.goals">
           </div>
   
-         
+         <br>
        
         <button type="submit" class="btn btn-success">Create Session</button>
       </form>
       </div>
       <div class="col-2"></div>
     </div>
-     -->
-     <div class="container mt-5 mb-5">
-      <div class="card card-table">
-        <h5 class="section-title">Create order</h5>
-    
-        <form [formGroup]="addsessionForm">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Attach client</label>
-                <input
-                  #yourElement
-                  type="text"
-                  id="open"
-                  name="name"
-                  class="form-control"
-                  autocomplete="off"
-                  [(ngModel)]="searchTerm"
-                  (keyup.enter)="getSearchItem()"
-                  [placeholder]=""
-                  [ngModelOptions]="{ standalone: true }"
-                />
-    
-                <div class="search-res-listing" *ngIf="open && searchTerm">
-                  <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-                    <div class="donut multi"></div>
-                  </div>
-                  <div *ngIf="client?.length">
-                    <div
-                      class="search-item"
-                      *ngFor="let Client of client; index as i"
-                      (click)="selectclient(client)"
-                    >
-                      <span class="name">{{
-                        Client .firstName + " " + client.lastName
-                      }}</span>
-                      <small class="number">{{ client.msisdn }}</small>
-                    </div>
-                    <button
-                      class="btn btn-add"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#addClient Modal"
-                    >
-                      Create client
-                    </button>
-                  </div>
-                  <div *ngIf="!client?.length && !searching" [@fadeIn]>
-                    <p>Client doesn't exist</p>
-                    <button
-                      class="btn btn-add"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#addClient Modal"
-                      (click)="clientTyped()"
-                    >
-                      Create client
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-    
-            <!-- <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Order Title</label>
-                <input
-                  formControlName="name"
-                  name="name"
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  aria-describedby="emailHelp"
-                  placeholder="order title"
-                />
-              </div>
-            </div> -->
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="sessionTypeDropdown">Session Type</label>
-                <select
-                  formControlName="sessionType"
-                  class="form-select"
-                  id="sessionTypeDropdown"
-                  [(ngModel)]="eventType"
-                >
-                  <option *ngFor="let type of sessionType" [value]="type">
-                    {{ type | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Order Amount</label>
-                <input
-                  formControlName="orderAmount"
-                  [(ngModel)]="sessionDuration"
-                  name="orderAmount"
-                  type="number"
-                  class="form-control"
-                  id="orderAmount"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. 3000"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Amount Paid</label>
-                <input
-                  formControlName="amountPaid"
-                  name="amountPaid"
-                  type="number"
-                  class="form-control"
-                  id="amountPaid"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. 1000"
-                />
-              </div>
-            </div>
-    
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Due date</label>
-                <input
-                  formControlName="dueDate"
-                  [(ngModel)]="sessionDate"
-                  name="dueDate"
-                  type="date"
-                  class="form-control"
-                  id="dueDate"
-                  aria-describedby="emailHelp"
-                  placeholder="date to deliver"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Due time</label>
-                <input
-                  formControlName="dueDate"
-                  [(ngModel)]="sessionStartTime"
-                  name="duetime"
-                  type="time"
-                  class="form-control"
-                  id="dueTime"
-                  aria-describedby="emailHelp"
-                  placeholder="time to deliver"
-                />
-              </div>
-            </div>
-    
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Session Venue</label>
-                <input
-                  formControlName="deliveryAddress"
-                  name="deliveryAddress"
-                  type="text"
-                  class="form-control"
-                  id="deliveryAddress"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. Ngong"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputPassword1">Cake Size</label>
-                <select
-                  formControlName="cakeSize"
-                  class="form-select"
-                  id="sessionTypeDropdown"
-                >
-                  <option *ngFor="let size of cakeSize" [value]="size">
-                    {{ size | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Session Description </label>
-                <input
-                  formControlName="details"
-                  name="flavor"
-                  type="text"
-                  class="form-control"
-                  id="flavor"
-                  aria-describedby="emailHelp"
-                  placeholder="eg.Blackforest"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Order to be</label>
-                <select
-                  formControlName="deliveryOption"
-                  class="form-select"
-                  id="deliveryOption"
-                >
-                  <option *ngFor="let option of deliveryOption" [value]="option">
-                    {{ option | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col mb-3">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Additional Notes</label>
-                <textarea
-                  formControlName="notes"
-                  name="notes"
-                  class="form-control"
-                  id="notes"
-                  rows="4"
-                  aria-describedby="notes"
-                  placeholder="Additional notes"
-                >
-                </textarea>
-              </div>
-            </div>
-          </div>
-    
-          <div class="mb-3 d-flex align-items-center">
-            <label class="me-3">Notify the Client </label>
-            <input
-              class="ms-3"
-              type="checkbox"
-              [checked]="showHideMessage"
-              name="notification"
-              (click)="toggleNotifMessage()"
-            />
-          </div>
-        </form>
-        <div *ngIf="!showHideMessage" [@fadeIn]>
-          <p class="lead">The Client will not be notified</p>
-        </div>
-        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
-          <div class="">
-            <label for="message">Message to be sent</label>
-            <p class="lead">"Dear {{ searchTerm | titlecase }}. Your  {{
-              eventType
-            }} order of amount {{
-              sessionDuration
-            }} has been recorded. I am working to promptly have your order delivered by {{
-              sessionDate | date
-            }}. Thank you. "
-            </p>
-            <!-- <textarea
-              readonly
-              formControlName="notificationMessage"
-              name="notificationMesage"
-              class="form-control"
-              id="message"
-              rows="4"
-              aria-describedby="notes"
-              value="Dear {{ searchTerm | titlecase }}. Your  {{
-                eventType
-              }} order of amount {{
-                orderAmount
-              }} has been recorded. I am working to promptly have your order delivered by {{
-                orderDueDate | date
-              }}. Thank you. "
-            >
-            </textarea> -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-cancel"
-            data-bs-dismiss="modal"
-            (click)="addSession()"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="btn btn-submit"
-            data-bs-dismiss="modal"
-            (click)="newSession(addSession)"
+  
+      
             
-          >
-            Create Order
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            Add New Client 
-          </h1>
-    
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="addClient" ngNativeValidate>
-            <div class="mb-3 form-group">
-              <label for="exampleInputEmail1">Name *</label>
-              <input
-                formControlName="name"
-                name="firstname"
-                [(ngModel)]="firstName"
-                type="firstname"
-                class="form-control"
-                id="firstname"
-                aria-describedby="emailHelp"
-                placeholder="First Name"
-                required
-              />
-            </div>
-            <!-- <div class="mb-3 form-group">
-              <label for="exampleInputEmail1">Last name</label>
-              <input
-                required
-                formControlName="lastName"
-                name="lastname"
-                [(ngModel)]="lastName"
-                type="lastname"
-                class="form-control"
-                id="lastname"
-                aria-describedby="emailHelp"
-                placeholder="Last Name"
-                required
-              />
-            </div> -->
-            <div class="form-group">
-              <label for="exampleInputPassword1">Mobile no *</label>
-              <input
-                required
-                formControlName="msisdn"
-                name="msisdn"
-                type="number"
-                class="form-control"
-                id="contact"
-                placeholder="Contact"
-                required
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-              />
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Email</label>
-              <input
-                formControlName="email_address"
-                name="email"
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="Email"
-              />
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Address *</label>
-              <input
-                formControlName="physical_address"
-                name="address"
-                type="text"
-                class="form-control"
-                id="adress"
-                placeholder="Address"
-                required
-              />
-            </div>
-            <div class="form-group ">
-              <label for="profession">Profession</label>
-              <input 
-              type="text" 
-              class="form-control" 
-              id="profession" 
-              placeholder="Enter Client Profession" 
-              formControlName="profession" 
-              >
-            </div>
-            <div class="form-group ">
-              <label for="profession">added by </label>
-              <input 
-              type="text" 
-              class="form-control" 
-              id="" placeholder="Enter created by" 
-              formControlName="createdBy"
-              >
-            </div>
-            <div class="form-group mb-3">
-              <label for="reason">Reason</label>
-              <input 
-              type="text" 
-              class="form-control" 
-              placeholder="Reason" 
-              formControlName="reason" >
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="PaymentMode">Payment Mode</label>
-                  </div>
-                  <select class="custom-select" id="inputGroupSelect01" formControlName="payment_mode">
-                    <option selected>Select Payment Mode</option>
-                    <option value="PREPAY">PREPAY</option>
-                    <option value="POSTPAY">POSTPAY</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="clientType">Client Type</label>
-                  </div>
-                  <select class="custom-select" id="inputGroupSelect01" formControlName="type" >
-                    <option selected>Select Client type</option>
-                    <option value="INDIVIDUAL">INDIVIDUAL</option>
-                    <option value="CORPORATE">CORPORATE</option>
-                    <option value="GROUP">GROUP</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
-          <button
-            type="submit"
-            class="btn btn-add"
-            data-bs-dismiss="modal"
-            (click)="newClient()"
-            [disabled]="
-            !addClient.value.name||
-            !addClient.value.msisdn||
-            !addClient.value.physical_address
-          ">ADD
-          </button>
-        </div>
-      </div>
-    </div>
+        
     
