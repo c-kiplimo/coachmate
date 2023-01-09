@@ -1,13 +1,21 @@
-<!-- <div class="row">
+<div class="row">
     <div class="col-10">
-        <h3>Client View</h3>
+        <h3></h3>
     </div>
     <div class="col-2">
         <app-user></app-user>
     </div>
 </div>
+
 <br>
 <div class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
+
+<div class="card details-card">
+  <div class="d-flex justify-content-between mb-3 flex-wrap" [@fadeIn]>
+    <div>
+      <h5 class="section-title">Client View</h5>
     <div class="col-5">
         <h6>Client Name:{{clients.name}}</h6>
         <h6>Client Email: {{clients.email_address}}</h6>
@@ -175,330 +183,18 @@
         </div>
       </div>
     </div>
-
-    <div class="card card-table">
-      <div class="tabs-section">
-        <button
-          class="btn btn-tabs"
-          
-          [ngClass]="{ 'active-tab': currentTab === 'orders' }"
-        >
-          Sessions
-        </button>
-        <button
-          class="btn btn-tabs"
-          
-          [ngClass]="{ 'active-tab': currentTab === 'payments' }"
-        >
-          Payments
-        </button>
-        <button
-          class="btn btn-tabs"
-          
-          [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
-        >
-          Notifications
-        </button>
-      </div>
-
-      <div class="d-none d-md-block">
-        <div class="text-end mt-2" *ngIf="currentTab === 'orders'" [@fadeIn]>
-          <button
-            class="btn btn-add"
-            type="button"
-            data-bs-toggle="modal"
-            data-bs-target="#addOrderModal"
-          >
-            <fa-icon [icon]="addIcon"></fa-icon>
-            Add Session
-          </button>
-
-          <button class="btn btn-refresh" >
-           
-            Refresh
-          </button>
-        </div>
-
-        <!-- <table class="table" *ngIf="currentTab === 'orders'" [@fadeIn]>
-          <thead>
-            <th colspan="1">Order Title</th>
-            <th colspan="1">Order Amount</th>
-            <th colspan="1">Due date</th>
-            <th colspan="1">Status</th>
-            <th colspan="1">Actions</th>
-          </thead>
-          <tbody *ngIf="orders?.length" [@fadeIn]>
-            <tr *ngFor="let order of orders">
-              <td>{{ order.name }}</td>
-              <td>{{ order.orderAmount }}</td>
-              <td>{{ order.dueDate | date: "MMM d, y hh:mm a" }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'badge-success':clients.status === 'ACTIVE',
-                    'badge-danger':clients.status !== 'ACTIVE'
-                  }"
-                  >{{clients.status }}</span
-                >
-              </td>
-
-              <td>
-                <button
-                  class="btn btn-view"
-                  [routerLink]="['/order', order.id]"
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
-
-        <div *ngIf="currentTab === 'orders'" [@fadeIn]>
-          <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
-            <div class="donut multi"></div>
-          </div>
-        
-          <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
-            No Orders Found.
-          </p>
-          <div
-            align="center"
-            *ngIf="totalLength > 20 && orders.length && !loadingCustomer"
-            [@fadeIn]
-          >
-          </div>
-        </div>
-      </div>
-
-      <div class="show-ms" *ngIf="currentTab === 'orders'" [@fadeIn]>
-        <div class="d-flex justify-content-between mt-1">
-          <p></p>
-          <button
-            class="btn btn-add"
-            type="button"
-            data-bs-toggle="modal"
-            data-bs-target="#addOrderModal"
-          >
-            <fa-icon [icon]="addIcon"></fa-icon> Add order
-          </button>
-        </div>
-        <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
-          No Orders Found.
-        </p>
-
-        <div
-          *ngFor="let order of orders"
-          class="listing-item"
-          [routerLink]="['/order', order.id]"
-        >
-          <div class="d-flex justify-content-between mb-1">
-            <div>
-              <h6>{{ order.details | titlecase }}</h6>
-              <p class="mb-1">
-                <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
-                Cust: {{ order.customer.firstName + " " + order.customer.lastName | titlecase}}
-              </p>
-              <p class="mb-1">Status:{{ order.orderStatus }}</p>
-            </div>
-
-            <span>
-              <span>
-                <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
-                {{ order.dueDate }}
-              </span>
-              <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-              <p class="mb-1">
-                <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
-                Due: {{ order.dueDate | date: " h:mm a" }}
-              </p>
-              <p
-                class="mb-1"
-                class="badge"
-                [ngClass]="{
-                  'badge-danger': order.orderBalance > '0'
-                }"
-              >
-                <span *ngIf="order.orderBalance > '0'">
-                  Bal: {{ order.orderBalance }}
-                </span>
-              </p>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-none d-md-block">
-        <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
-          <button class="btn btn-refresh">
-            Refresh
-          </button>
-        </div>
-        <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-          <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
-            <div class="donut multi"></div>
-          </div>
-
-          <table class="table">
-            <thead>
-              <th colspan="1">Order Amount</th>
-              <th colspan="1">Amount Paid</th>
-              <th colspan="1">Balance</th>
-              <th colspan="1">Paid at</th>
-              <th colspan="1">Payment ref</th>
-              <th colspan="1">Narration</th>
-              <th colspan="1">Actions</th>
-            </thead>
-
-            <tbody *ngIf="payments?.length" [@fadeIn]>
-              <tr *ngFor="let payment of payments">
-                <td>{{ payment.order.orderAmount }}</td>
-                <td>{{ payment.amount }}</td>
-                <td>{{ payment.balanceAfter }}</td>
-                <td>{{ payment.paidAt | date: "MMM d, y hh:mm a" }}</td>
-                <td>{{ payment.extPaymentRef }}</td>
-                <td>{{ payment.narration }}</td>
-                <td>
-                  <button
-                    class="btn btn-view"
-                    data-bs-toggle="modal"
-                    data-bs-target="#payementModal"
-                   
-                  >
-                    view
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
-            No Payments Found.
-          </p>
-        </div>
-
-        <!-- 
-        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-          <div class="donut multi"></div>
-        </div> -->
-      </div>
-
-      <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
-        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-          <div class="donut multi"></div>
-        </div>
-
-        <div
-          data-bs-toggle="modal"
-          data-bs-target="#payementModal"
-        
-          *ngFor="let payment of payments"
-          class="listing-item"
-        >
-          <div class="d-flex justify-content-between mb-1">
-            <div>
-              <h6>{{ payment.narration | titlecase }}</h6>
-              <p class="mb-1">
-                <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
-                Amount: {{ payment.order.orderAmount }}
-              </p>
-              <p class="mb-1">Paid:{{ payment.amount }}</p>
-            </div>
-
-            <div>
-              <span>
-                <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
-                {{ payment.paidAt }}
-              </span>
-              <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-              <p></p>
-              <p
-                class="mb-1"
-                class="badge"
-                [ngClass]="{
-                  'badge-danger': payment.balanceAfter > '0'
-                }"
-              >
-                <span *ngIf="payment.balanceAfter > '0'">
-                  Bal: {{ payment.balanceAfter }}
-                </span>
-              </p>
-            </div>
-          </div>
-          <!-- <div class="d-flex justify-content-between mb-3">
-            <h4>{{ payment.order.name }}</h4>
-            <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
-            
-          </div>
-
-          <span>{{ payment.narration }}</span>
-          <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6> -->
-        </div>
-        <p class="text-muted mt-5" *ngIf="!payments?.length">
-          No payments found.
-        </p>
-      </div>
-
-      <div
-        class="d-none d-md-block"
-        *ngIf="currentTab === 'notifications'"
-        [@fadeIn]
-      >
-        <table class="table">
-          <thead>
-            <th coslpan="1">Notification Reason</th>
-            <th coslpan="1">Notification Date</th>
-            <th coslpan="1">Notification Mode</th>
-          </thead>
-          <tbody *ngIf="notifications.length">
-            <tr *ngFor="let notification of notifications">
-              <td>{{ notification.subject }}</td>
-              <td>{{ notification.sentAt }}</td>
-              <td>{{ notification.notificationMode }}</td>
-              <td>
-                <button
-                  class="btn btn-view"
-                  data-bs-toggle="modal"
-                  data-bs-target="#notificationModal"
-                  
-                >
-                  view
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="text-muted mt-5" *ngIf="!notifications?.length">
-          No notifications found.
-        </p>
-      </div>
-      <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-        <div
-          data-bs-toggle="modal"
-          data-bs-target="#notificationModal"
-          
-          *ngFor="let notification of notifications"
-          class="listing-item"
-        >
-          <div class="d-flex justify-content-between mb-1">
-            <div>
-              <p class="mb-1">{{ notification.subject }}</p>
-              <p class="mb-1">{{ notification.notificationMode }}</p>
-            </div>
-            <span
-              >{{ notification.sentAt }}
-              <fa-icon [icon]="rightIcon"> </fa-icon>
-            </span>
-          </div>
-        </div>
-        <p class="text-muted mt-5" *ngIf="!notifications?.length">
-          No notifications found.
-        </p>
-      </div>
+    <div class="d-flex">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal">
+        <i class="fas fa-edit"></i>
+        Edit
+      </button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteClientModal">
+          <i class="fas fa-trash"></i>
+          Delete
+      </button>
+     
     </div>
   </div>
-</div>
 
 <!-- add order modal -->
 <div
@@ -704,7 +400,7 @@
           </div>
 
           <div class="d-flex input-group mb-3 mt-3">
-            <label for="notification">Notify theclients</label>
+            <label for="notification">Notify the Customer</label>
             <div class="d-flex-column justify-content-between ms-3">
               <label class="">
                 <input
@@ -720,13 +416,13 @@
           </div>
         </form>
         <div *ngIf="!showHideMessage" [@fadeIn]>
-          <p>Theclients will not be notified</p>
+          <p>The customer will not be notified</p>
         </div>
         <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
           <div class="">
             <label for="message">Message to be sent</label>
             <p class="lead">
-              "Dear {{clients?.firstName | titlecase }}. Your
+              "Dear {{ customer?.firstName | titlecase }}. Your
               {{ eventType }} order of amount {{ orderAmount }} has been
               recorded. I am working to promptly have your order delivered by
               {{ orderDueDate | date }}. Thank you. "
@@ -757,7 +453,7 @@
   </div>
 </div>
 
-<!-- suspendclients modal -->
+<!-- suspend Customer modal -->
 <div
   class="modal fade bd-example-modal-lg"
   id="suspendCustomerModal"
@@ -769,7 +465,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Suspendclients
+          Suspend Customer
         </h1>
 
         <button
@@ -783,7 +479,7 @@
         <div class="d-flex justify-content-between">
           <p>Customer Name:</p>
           <span>{{
-           clients.firstName + " " +clients.lastName | titlecase
+            customer.firstName + " " + customer.lastName | titlecase
           }}</span>
         </div>
         <form [formGroup]="suspendCustomerForm">
@@ -795,7 +491,7 @@
               class="form-control"
               id="narration"
               aria-describedby="narration"
-              placeholder="narration for suspending theclients"
+              placeholder="narration for suspending the customer"
             >
             </textarea>
           </div>
@@ -818,7 +514,7 @@
   </div>
 </div>
 
-<!-- Closeclients modal -->
+<!-- Close Customer modal -->
 <div
   class="modal fade bd-example-modal-lg"
   id="closeCustomerModal"
@@ -829,7 +525,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Closeclients</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Close Customer</h1>
 
         <button
           type="button"
@@ -842,7 +538,7 @@
         <div class="d-flex justify-content-between">
           <p>Customer Name:</p>
           <span>{{
-           clients.firstName + " " +clients.lastName | titlecase
+            customer.firstName + " " + customer.lastName | titlecase
           }}</span>
         </div>
         <form [formGroup]="closeCustomerForm">
@@ -859,19 +555,13 @@
             </textarea>
           </div>
         </form>
+        <div class="d-flex justify-content-between onedetail">
+          <span class="title">Client Name</span>
+          <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
       </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-add"
-          data-bs-dismiss="modal"
-        
-        >
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client email</span>
+        <span class="value">{{clients.email}}</span>
       </div>
     </div>
   </div>
@@ -898,41 +588,17 @@
           data-bs-dismiss="modal"
           aria-label="Close"
         ></button>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client Phone</span>
+        <span class="value">{{clients.msisdn}}</span>
       </div>
-      <div class="modal-body" *ngIf="customer">
-        <div class="d-flex justify-content-between">
-          <p>Customer Name:</p>
-          <span>{{
-           clients.firstName + " " +clients.lastName | titlecase
-          }}</span>
-        </div>
-        <form [formGroup]="activateCustomerForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="narration for activating theclients"
-            >
-            </textarea>
-          </div>
-        </form>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client Address</span>
+        <span class="value">{{clients.physicalAddress}}</span>
       </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-add"
-          data-bs-dismiss="modal"
-         
-        >
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Reason</span>
+        <span class="value">{{clients.reason}}</span>
       </div>
     </div>
   </div>
@@ -994,60 +660,8 @@
           Close
         </button>
       </div>
-    </div>
   </div>
+
 </div>
-
-<!-- Notification details modal -->
-<div
-  class="modal fade"
-  id="notificationModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Notification Details
-        </h1>
-
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" *ngIf="notification">
-        <div class="d-flex justify-content-between">
-          <p>Notification Subject:</p>
-          <span>{{ notification.subject }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Reason</p>
-          <span>{{ notification.sendReason }}</span>
-        </div>
-
-        <div class="d-flex justify-content-between">
-          <p>Source Address</p>
-          <span>{{ notification.srcAddress }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Sent at:</p>
-          <span>{{ notification.sentAt  }}</span>
-        </div>
-        <div class="d-flex-column">
-          <p>Content:</p>
-          <span>{{ notification.content }}</span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
+<div class="col-2"></div>
 </div>

@@ -51,7 +51,7 @@
         <div class="card-body">
           <h6 class="card-title">Sessions Created</h6>
           <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
-          <button type="button" routerLink="/addclient" class="btn addbtn"><i class="fa fa-plus"></i> Add Session</button>
+          <button type="button" routerLink="/addSession" class="btn addbtn"><i class="fa fa-plus"></i> Add Session</button>
           
         </div>
     </div>
@@ -67,7 +67,7 @@
         <div class="card-body">
           <h6 class="card-title">Contracts</h6>
           <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-          <button type="button" routerLink="/addclient" class="btn addbtn"><i class="fa fa-plus"></i> Create Contract</button>
+          <button type="button" routerLink="/contract" class="btn addbtn"><i class="fa fa-plus"></i> Create Contract</button>
           
         </div>
     </div>
@@ -119,8 +119,8 @@
                     <td>{{ session.sessionEndTime | date: " h:mm a" }}</td>
                     <td>{{ session.sessionVenue | titlecase }}</td>
                     <td>
-                      <!-- <span class="value">
-                      <span
+                      <span class="value">
+                      <!-- <span
                       class="badge"
                       [ngClass]="{
                         'badge-warning': session.sessionStatus === 'DELIVERED',
@@ -128,8 +128,9 @@
                         'badge-danger': session.sessionStatus === 'CANCELLED',
                         'badge-primary': session.sessionStatus === 'NEW'
                       }"
-                      >{{ session.sessionStatus }}</span>
-                    </span> -->
+                      >{{ session.sessionStatus }}</span> -->
+                      
+                    </span>
                     {{ session.sessionStatus }}</td>
                     <td class="text-center">
                       <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{session.id}}">View</button>
