@@ -23,6 +23,7 @@ export class LoginService {
     login(user: any) {
         return this.http.post<any>(this.baseURL + 'token', user);
       }
+      
 
 
     // signUp service

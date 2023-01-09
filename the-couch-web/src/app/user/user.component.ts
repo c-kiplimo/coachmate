@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  faRightFromBracket,
+ 
   faSign,
   faUser,
   faUsers,
@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  logoutIcon = faRightFromBracket;
+  logoutIcon = faSign;
   loginIcon = faSign;
   userIcon = faUser;
   customersIcon = faUsers;
