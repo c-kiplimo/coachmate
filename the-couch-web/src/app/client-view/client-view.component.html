@@ -81,12 +81,12 @@
         </tbody>
       </table>
 </div> -->
-<div class="container-fluid customer mb-5" [@fadeIn]>
+<div class="container-fluidclients mb-5" [@fadeIn]>
   <div class="container">
     <div class="card details-card">
       <div class="d-flex justify-content-between mb-3" [@fadeIn]>
         <div>
-          <h5 class="section-title">Customer view</h5>
+          <h5 class="section-title">Client view</h5>
         </div>
 
         <div>
@@ -135,24 +135,24 @@
 
       <div
         class="customer-details"
-        *ngIf="!loadingCustomer && customer"
+        *ngIf="!loadingCustomer &&clients"
         [@fadeIn]
       >
         <div class="d-flex justify-content-between">
-          <span class="title">Customer name</span>
+          <span class="title">Client name</span>
           <span class="value">{{
-            customer.firstName + " " + customer.lastName
+           clients.firstName + " " +clients.lastName
           }}</span>
         </div>
 
         <div class="d-flex justify-content-between">
           <span class="title">Mobile No</span>
-          <span class="value">{{ customer.msisdn }}</span>
+          <span class="value">{{clients.msisdn }}</span>
         </div>
 
         <div class="d-flex justify-content-between">
           <span class="title">Email adddress</span>
-          <span class="value">{{ customer.email }}</span>
+          <span class="value">{{clients.email }}</span>
         </div>
 
         <div class="d-flex justify-content-between">
@@ -161,17 +161,17 @@
             <span
               class="badge"
               [ngClass]="{
-                'badge-success': customer.status === 'ACTIVE',
-                'badge-danger': customer.status !== 'ACTIVE'
+                'badge-success':clients.status === 'ACTIVE',
+                'badge-danger':clients.status !== 'ACTIVE'
               }"
-              >{{ customer.status }}</span
+              >{{clients.status }}</span
             >
           </span>
         </div>
 
         <div class="d-flex justify-content-between">
           <span class="title">Address</span>
-          <span class="value">{{ customer.physicalAddress }}</span>
+          <span class="value">{{clients.physicalAddress }}</span>
         </div>
       </div>
     </div>
@@ -183,7 +183,7 @@
           
           [ngClass]="{ 'active-tab': currentTab === 'orders' }"
         >
-          Orders
+          Sessions
         </button>
         <button
           class="btn btn-tabs"
@@ -210,7 +210,7 @@
             data-bs-target="#addOrderModal"
           >
             <fa-icon [icon]="addIcon"></fa-icon>
-            Add Order
+            Add Session
           </button>
 
           <button class="btn btn-refresh" >
@@ -236,10 +236,10 @@
                 <span
                   class="badge"
                   [ngClass]="{
-                    'badge-success': customer.status === 'ACTIVE',
-                    'badge-danger': customer.status !== 'ACTIVE'
+                    'badge-success':clients.status === 'ACTIVE',
+                    'badge-danger':clients.status !== 'ACTIVE'
                   }"
-                  >{{ customer.status }}</span
+                  >{{clients.status }}</span
                 >
               </td>
 
@@ -704,7 +704,7 @@
           </div>
 
           <div class="d-flex input-group mb-3 mt-3">
-            <label for="notification">Notify the Customer</label>
+            <label for="notification">Notify theclients</label>
             <div class="d-flex-column justify-content-between ms-3">
               <label class="">
                 <input
@@ -720,13 +720,13 @@
           </div>
         </form>
         <div *ngIf="!showHideMessage" [@fadeIn]>
-          <p>The customer will not be notified</p>
+          <p>Theclients will not be notified</p>
         </div>
         <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
           <div class="">
             <label for="message">Message to be sent</label>
             <p class="lead">
-              "Dear {{ customer?.firstName | titlecase }}. Your
+              "Dear {{clients?.firstName | titlecase }}. Your
               {{ eventType }} order of amount {{ orderAmount }} has been
               recorded. I am working to promptly have your order delivered by
               {{ orderDueDate | date }}. Thank you. "
@@ -757,7 +757,7 @@
   </div>
 </div>
 
-<!-- suspend Customer modal -->
+<!-- suspendclients modal -->
 <div
   class="modal fade bd-example-modal-lg"
   id="suspendCustomerModal"
@@ -769,7 +769,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Suspend Customer
+          Suspendclients
         </h1>
 
         <button
@@ -783,7 +783,7 @@
         <div class="d-flex justify-content-between">
           <p>Customer Name:</p>
           <span>{{
-            customer.firstName + " " + customer.lastName | titlecase
+           clients.firstName + " " +clients.lastName | titlecase
           }}</span>
         </div>
         <form [formGroup]="suspendCustomerForm">
@@ -795,7 +795,7 @@
               class="form-control"
               id="narration"
               aria-describedby="narration"
-              placeholder="narration for suspending the customer"
+              placeholder="narration for suspending theclients"
             >
             </textarea>
           </div>
@@ -818,7 +818,7 @@
   </div>
 </div>
 
-<!-- Close Customer modal -->
+<!-- Closeclients modal -->
 <div
   class="modal fade bd-example-modal-lg"
   id="closeCustomerModal"
@@ -829,7 +829,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Close Customer</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Closeclients</h1>
 
         <button
           type="button"
@@ -842,7 +842,7 @@
         <div class="d-flex justify-content-between">
           <p>Customer Name:</p>
           <span>{{
-            customer.firstName + " " + customer.lastName | titlecase
+           clients.firstName + " " +clients.lastName | titlecase
           }}</span>
         </div>
         <form [formGroup]="closeCustomerForm">
@@ -854,7 +854,7 @@
               class="form-control"
               id="narration"
               aria-describedby="narration"
-              placeholder="narration for closing the customer"
+              placeholder="narration for closing theclients"
             >
             </textarea>
           </div>
@@ -877,7 +877,7 @@
   </div>
 </div>
 
-<!-- Activate Customer modal -->
+<!-- Activateclients modal -->
 <div
   class="modal fade bd-example-modal-lg"
   id="activateCustomerModal"
@@ -889,7 +889,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Activate Customer
+          Activateclients
         </h1>
 
         <button
@@ -903,7 +903,7 @@
         <div class="d-flex justify-content-between">
           <p>Customer Name:</p>
           <span>{{
-            customer.firstName + " " + customer.lastName | titlecase
+           clients.firstName + " " +clients.lastName | titlecase
           }}</span>
         </div>
         <form [formGroup]="activateCustomerForm">
@@ -915,7 +915,7 @@
               class="form-control"
               id="narration"
               aria-describedby="narration"
-              placeholder="narration for activating the customer"
+              placeholder="narration for activating theclients"
             >
             </textarea>
           </div>
