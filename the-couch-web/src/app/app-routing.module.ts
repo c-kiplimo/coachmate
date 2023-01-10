@@ -15,6 +15,8 @@ import { contractComponent } from './contract/contract.component';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
+import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
 
 
 const routes: Routes = [
@@ -52,10 +54,10 @@ const routes: Routes = [
     component: SchedulesComponent
   },
  
-  // {
-  //   path: 'notifications',
-  //   component: ContractComponent
-  // },
+  {
+    path: 'settings',
+    component:TrainingsListComponent
+  },
   {
     path: 'sessions',
     component: SessionsComponent
@@ -70,12 +72,16 @@ const routes: Routes = [
 
   },
   {
-    path:'contracts',
-    component:SessionsComponent
-  },
-  {
      path:'contract',
      component:contractComponent
+  },
+  {
+    path: 'support',
+    component: AddTrainingComponent
+  }, 
+  {
+    path: 'AddTraining',
+    component: AddTrainingComponent
   },
   { path: 'reset/request', component: ForgotPaswordComponent },
   
