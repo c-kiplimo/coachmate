@@ -32,7 +32,7 @@
 
     <tbody>
       <tr *ngFor="let client of Clients">
-        <th scope="row">{{ client.id }}</th>
+        <th>{{ client.id }}</th>
         <td>{{ client.firstName + client.lastName | titlecase }}</td>
         <td>{{ client.email }}</td>
         <td>{{ client.msisdn }}</td>

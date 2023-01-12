@@ -13,6 +13,8 @@ export class AddClientPageComponent implements OnInit {
   addClient!: FormGroup;
   firstName: any;
   lastName: any;
+  coachData: any;
+  couchSessionData: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,
@@ -21,6 +23,9 @@ export class AddClientPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+     this.couchSessionData = sessionStorage.getItem('user');
+     this.coachData = JSON.parse(this.couchSessionData)
+    console.log(this.coachData);
     this.addClient = this.formbuilder.group({
       firstName: ' ',
       lastName: ' ',
@@ -31,11 +36,17 @@ export class AddClientPageComponent implements OnInit {
       profession: ' ',
       paymentMode: ' ',
       reason: '',
+
     });
   }
 
   // Client = {};
   newClient() {
+    var details = this.addClient.value;
+    details.created_by = this.coachData.fullName;
+    details.coach_id = this.coachData.id;
+    console.log(details);
+
     console.log('add client form=>', this.addClient.value);
     this.ClientService.addClient(this.addClient.value).subscribe(
       (response: any) => {

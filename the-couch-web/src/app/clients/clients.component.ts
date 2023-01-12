@@ -42,9 +42,11 @@ export class ClientsComponent implements OnInit {
     this.loading = true;
     this.ClientService.getClient(options).subscribe(
       (response) => {
-        this.Clients = response.body.data;
-        console.log('clients',this.Clients)
         this.loading = false;
+        this.Clients = response.body;
+        console.log(response.body)
+        console.log('clients',this.Clients)
+        
       }, (error) => {
         console.log(error)
       }
