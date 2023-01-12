@@ -43,7 +43,7 @@ export class AddClientPageComponent implements OnInit {
   // Client = {};
   newClient() {
     var details = this.addClient.value;
-    details.created_by = this.coachData.fullName;
+    details.createdBy = this.coachData.fullName;
     details.coach_id = this.coachData.id;
     console.log(details);
 
