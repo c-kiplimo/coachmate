@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -40,6 +40,8 @@ import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CoachEducationModule } from './coach-education/coach-education.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 
 
@@ -52,7 +54,6 @@ import { ToastrModule } from 'ngx-toastr';
     sessionViewComponent,
     DashboardComponent,
     BodyComponent,
-    UserComponent,
     ClientsComponent,
     AddClientPageComponent,
     AddCoachPageComponent,
@@ -69,6 +70,7 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   imports: [
     BrowserModule,
+    CoachEducationModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
@@ -76,6 +78,7 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
+    SharedModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -87,6 +90,7 @@ import { ToastrModule } from 'ngx-toastr';
       progressBar: false,
     }),
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
     ClientService,

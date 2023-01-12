@@ -55,7 +55,7 @@ const routes: Routes = [
   },
  
   {
-    path: 'settings',
+    path: 'education',
     component:TrainingsListComponent
   },
   {
@@ -75,10 +75,6 @@ const routes: Routes = [
      path:'contract',
      component:contractComponent
   },
-  {
-    path: 'support',
-    component: AddTrainingComponent
-  }, 
   {
     path: 'AddTraining',
     component: AddTrainingComponent

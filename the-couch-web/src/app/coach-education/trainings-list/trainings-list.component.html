@@ -1,6 +1,5 @@
 <div class="row">
   <div class="col-10">
-    <h3>Clients</h3>
   </div>
   <div class="col-2">
     <app-user></app-user>
@@ -8,7 +7,7 @@
 </div>
 <div class="row">
 <div class="col-8">
-        <h3>Continuous Coach Education</h3>
+        <h3><i class="fa-solid fa-graduation-cap"></i>Coach Education</h3>
     </div>
     <div class="col-4">
         <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3" >
@@ -51,7 +50,7 @@
             class="fa-solid fa-arrow-up-right-from-square"
           ></i>
           <i class="fa-solid fa-pen-to-square"></i>
-          <i class="fa-solid fa-trash-can"></i>
+          <i (click)="deleteItem(items)"class="fa-solid fa-trash-can"></i>
         </td>
       </tr>
       <tr >
@@ -71,11 +70,11 @@
       </tr>
     </tbody>
   </table>
-  <div class="donut-wrapper" [@fadeIn]>
+  <!-- <div class="donut-wrapper" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
   <p class="text-muted mt-5" >
     No sessions Found.
   </p>
-</div>
+</div> -->
 

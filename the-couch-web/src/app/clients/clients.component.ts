@@ -58,7 +58,13 @@ export class ClientsComponent implements OnInit {
 
 
   }
-  deleteClient(id:any){
-    this.deleteClient;
-  }
+  deleteClient(client: any) {
+    this.ClientService.deleteClient().subscribe(() => {
+        // update the list of items
+        this.ClientService.getClient(client).subscribe(clients => {
+            this.Clients = clients;
+        });
+    });
+}
+
 }

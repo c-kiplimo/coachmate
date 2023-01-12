@@ -108,7 +108,7 @@
             </div>
 
             
-            <div class="upcomingsessionsTable">
+            <div class="upcomingsessions list-container container">
               <table class="table" >
                 <thead>
                   <th colspan="1">Name</th>
@@ -119,7 +119,7 @@
                   <th colspan="1">Status</th>
                   <th colspan="1" class="text-center" width="100px">Actions</th>
                 </thead>
-                <tbody>
+                <tbody class="list-container">
                   <tr *ngFor="let session of sessions">
                     <td>{{ session.name }}</td>
                     <td>{{ session.sessionDate | date: "MMM d y" }}</td>
@@ -159,7 +159,7 @@
           <h5 class="card-title fw-bold">Contracts</h5>
           <button type="button" routerLink="#" class="btn">View All</button>
         </div>
-        <div class="upcomingsessionsTable">
+        <div class="upcomingsessionsTable list-container container ">
           <table class="table">
             <thead>
               <th colspan="1">Name</th>
