@@ -29,12 +29,12 @@ export class AddClientPageComponent implements OnInit {
     this.addClient = this.formbuilder.group({
       firstName: ' ',
       lastName: ' ',
-      clientType: ' ',
+      type: ' ',
       msisdn: ' ',
-      email: ' ',
-      physicalAddress: ' ',
+      email_address: ' ',
+      physical_address: ' ',
       profession: ' ',
-      paymentMode: ' ',
+      payment_mode: ' ',
       reason: '',
 
     });
@@ -45,10 +45,12 @@ export class AddClientPageComponent implements OnInit {
     var details = this.addClient.value;
     details.createdBy = this.coachData.fullName;
     details.coach_id = this.coachData.id;
+    details.status = 'NEW';
+    
     console.log(details);
 
-    console.log('add client form=>', this.addClient.value);
-    this.ClientService.addClient(this.addClient.value).subscribe(
+    console.log('add client form=>', details);
+    this.ClientService.addClient(details).subscribe(
       (response: any) => {
         console.log(response);
         this.toastrService.success('Client added!', 'Success!');
