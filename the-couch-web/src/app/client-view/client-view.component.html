@@ -44,11 +44,11 @@
         </div>
         <div class="d-flex justify-content-between onedetail">
           <span class="title">Client Name</span>
-          <span class="value">{{clients.name | titlecase}}</span>
+          <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
       </div>
       <div class="d-flex justify-content-between onedetail">
         <span class="title">Client email</span>
-        <span class="value">{{clients.email}}</span>
+        <span class="value">{{clients.email_address}}</span>
       </div>
       <div class="d-flex justify-content-between onedetail">
         <span class="title">Client Phone</span>
@@ -56,7 +56,7 @@
       </div>
       <div class="d-flex justify-content-between onedetail">
         <span class="title">Client Address</span>
-        <span class="value">{{clients.physicalAddress}}</span>
+        <span class="value">{{clients.physical_address}}</span>
       </div>
       <div class="d-flex justify-content-between onedetail">
         <span class="title">Reason</span>
