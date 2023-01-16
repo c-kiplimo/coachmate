@@ -53,7 +53,7 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
- 
+
   {
     path: 'education',
     component:TrainingsListComponent
@@ -81,7 +81,8 @@ const routes: Routes = [
   },
   { path: 'reset/request', component: ForgotPaswordComponent },
   
-  { path: 'registration/confirm', component: ConfirmedViewComponent },
+  { path: 'registration/confirm', 
+    component: ConfirmedViewComponent },
   
 ];
 

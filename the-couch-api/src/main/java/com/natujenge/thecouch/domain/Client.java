@@ -23,7 +23,9 @@ public class Client {
 
     @Id
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
+
 
     @Enumerated(EnumType.STRING)
     private ClientType type;
@@ -53,4 +55,6 @@ public class Client {
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
+    public void setName(String name) {
+    }
 }

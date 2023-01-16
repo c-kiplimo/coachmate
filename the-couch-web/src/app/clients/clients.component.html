@@ -32,12 +32,12 @@
 
     <tbody>
       <tr *ngFor="let client of Clients">
-        <th scope="row">{{ client.id }}</th>
-        <td>{{ client.firstName + client.lastName | titlecase }}</td>
-        <td>{{ client.email }}</td>
+        <th>{{ client.id }}</th>
+        <td>{{ client.firstName + " " + client.lastName | titlecase }}</td>
+        <td>{{ client.email_address }}</td>
         <td>{{ client.msisdn }}</td>
-        <td> INDIVIDUAL</td>
-        <td> 15 Dec 20222</td>
+        <td>{{ client.type }}</td>
+        <td>{{ client.createdAt }}</td>
         <td>{{ client.reason }}</td>
         <td>{{ client.status }}</td>
 
@@ -46,11 +46,13 @@
             class="fa-solid fa-arrow-up-right-from-square"
             (click)="navigateToClientView(client.id)"
           ></i>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <i
+          <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal"
+          data-bs-target="#editClientModal"
+          (click)="editClient(client)"></i>
+          <!-- <i
             class="fa-solid fa-trash-can"
-            (click)="deleteClient(client.id)"
-          ></i>
+            (click)="suspendClient(client)"
+          ></i> -->
         </td>
       </tr>
     </tbody>
@@ -61,4 +63,27 @@
   <p class="text-muted mt-5" *ngIf="!loading && !Clients.length">
     No clients Found.
   </p>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="editClientModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>

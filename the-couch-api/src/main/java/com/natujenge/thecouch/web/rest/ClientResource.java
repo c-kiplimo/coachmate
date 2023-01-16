@@ -130,4 +130,6 @@ public class ClientResource {
         clientService.deleteClient(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

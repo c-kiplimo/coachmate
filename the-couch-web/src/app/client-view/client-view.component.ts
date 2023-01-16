@@ -4,14 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import {
-  faCaretDown,
-  faChevronRight,
-  faPlus,
-  // faRefresh,
-} from '@fortawesome/free-solid-svg-icons';
+
+
 import { style, animate, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { id } from 'date-fns/locale';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-client-view',
@@ -62,20 +59,20 @@ clientId:any;
   ngOnInit(): void {
     this.clientId = this.activatedRoute.snapshot.params['id'];
    
-    this.getClient();
+    this.getClientData(this.clientId);
 
   }
 
-  getClient() {
+  getClientData(id: any) {
     console.log("Get Client");
     this.loadingClient = true;
     
-    this.clientService.getOneClient(this.clientId).subscribe((data) => {
+    this.clientService.getOneClient(id).subscribe((data) => {
       this.loadingClient = false;
       this.clients = data.body;
       console.log(this.clients);
     });
   }
 
-
+}
 }

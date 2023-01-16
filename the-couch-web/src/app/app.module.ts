@@ -32,6 +32,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
+
+import { FeebackFormComponent } from './feeback-form/feeback-form.component';
+
+
+
  import { contractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -42,6 +47,7 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
 import { ToastrModule } from 'ngx-toastr';
 import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
+
 
 
 
@@ -65,8 +71,14 @@ import { SharedModule } from 'src/shared/shared.module';
     contractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
+
+    FeebackFormComponent,
+
+
+
     ForgotPaswordComponent,
     ConfirmedViewComponent,
+
   ],
   imports: [
     BrowserModule,
