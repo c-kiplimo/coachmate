@@ -1,0 +1,17 @@
+.details-card {
+    padding: 10px;
+    box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+}
+.title {
+    margin-left: 10px;
+    font-weight: bold;
+}
+.value {
+    margin-left: 10px;
+}
+.onedetail {
+    padding: 5px;
+}

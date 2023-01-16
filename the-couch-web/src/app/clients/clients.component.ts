@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
 import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-clients',
@@ -25,6 +26,8 @@ export class ClientsComponent implements OnInit {
     searchItem: '',
   };
 
+  updateClient!: FormGroup;
+
   constructor(private ClientService: ClientService, private router: Router) { }
   
   Clients: any;
@@ -42,9 +45,11 @@ export class ClientsComponent implements OnInit {
     this.loading = true;
     this.ClientService.getClient(options).subscribe(
       (response) => {
-        this.Clients = response.body.data;
-        console.log('clients',this.Clients)
         this.loading = false;
+        this.Clients = response.body;
+        console.log(response.body)
+        console.log('clients',this.Clients)
+        
       }, (error) => {
         console.log(error)
       }
@@ -58,7 +63,27 @@ export class ClientsComponent implements OnInit {
 
 
   }
-  deleteClient(id:any){
-    this.deleteClient;
+  editClient(client:any){
+    this.ClientService.editClient(client).subscribe(
+      (response) => {
+        this.getClients();
+        this.loading = false;
+
+      }, (error) => {
+        console.log(error)
+      }
+    );
+  }
+
+  suspendClient(client:any){
+    this.ClientService.suspendClient(client).subscribe(
+      (response) => {
+        this.getClients();
+        this.loading = false;
+
+      }, (error) => {
+        console.log(error)
+      }
+    );
   }
 }

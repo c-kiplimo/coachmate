@@ -1,8 +1,18 @@
+<div class="row">
+
+  <div class="col-10">
+      <h3>Add Client</h3>
+  </div>
+  <div class="col-2">
+      <app-user></app-user>
+  </div>
+
+</div>
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title fs-5" id="exampleModalLabel">
-        Add New Customer
+        Add New Client
       </h1>
 
       <button
@@ -18,13 +28,13 @@
           <label for="exampleInputEmail1">First Name *</label>
           <input
             formControlName="firstName"
-            name="firstname"
+            name="firstName"
             [(ngModel)]="firstName"
-            type="firstname"
+            type="firstNname"
             class="form-control"
             id="firstname"
             aria-describedby="emailHelp"
-            placeholder="First Name"
+            placeholder="First name"
             required
           />
         </div>
@@ -32,31 +42,17 @@
           <label for="exampleInputEmail1">Last Name *</label>
           <input
             formControlName="lastName"
-            name="lastname"
+            name="lastName"
             [(ngModel)]="lastName"
-            type="firstname"
+            type="lastNname"
             class="form-control"
-            id="lastname"
+            id="lastName"
             aria-describedby="emailHelp"
-            placeholder="Last Name"
+            placeholder="First name"
             required
           />
         </div>
-        <!-- <div class="mb-3 form-group">
-          <label for="exampleInputEmail1">Last name</label>
-          <input
-            required
-            formControlName="lastName"
-            name="lastname"
-            [(ngModel)]="lastName"
-            type="lastname"
-            class="form-control"
-            id="lastname"
-            aria-describedby="emailHelp"
-            placeholder="Last Name"
-            required
-          />
-        </div> -->
+   
         <div class="form-group">
           <label for="exampleInputPassword1">Mobile no *</label>
           <input
@@ -72,10 +68,10 @@
           />
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Email</label>
+          <label for="exampleInputPassword1">Email *</label>
           <input
-            formControlName="email"
-            name="email"
+            formControlName="email_address"
+            name="email_address"
             type="email"
             class="form-control"
             id="email"
@@ -85,7 +81,7 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
-            formControlName="physicalAddress"
+            formControlName="physical_address"
             name="address"
             type="text"
             class="form-control"
@@ -127,7 +123,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="PaymentMode">Payment Mode</label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01" formControlName="paymentMode">
+              <select class="form-select" id="inputGroupSelect01" formControlName="payment_mode">
                 <option selected>Select Payment Mode</option>
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
@@ -139,7 +135,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="clientType">Client Type</label>
               </div>
-              <select class="custom-select" id="inputGroupSelect01" formControlName="clientType" >
+              <select class="form-select" id="inputGroupSelect01" formControlName="type" >
                 <option selected>Select Client type</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="CORPORATE">CORPORATE</option>
@@ -151,19 +147,21 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+      <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
         Close
-      </button>
+      </button> -->
       <button
         type="submit"
-        class="btn btn-add"
+        class="btn btn-success"
         data-bs-dismiss="modal"
         (click)="newClient()"
         [disabled]="
         !addClient.value.firstName||
+        !addClient.value.lastName||
+        !addClient.value.email_address||
         !addClient.value.msisdn||
-        !addClient.value.physicalAddress
-      ">ADD
+        !addClient.value.physical_address
+      ">ADD CLIENT
       </button>
     </div>
   </div>
