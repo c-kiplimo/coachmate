@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-10">
+  </div>
+  <div class="col-2">
+    <app-user></app-user>
+  </div>
+</div>
+<div class="row">
+<div class="col-8">
+        <h3><i class="fa-solid fa-graduation-cap"></i>Coach Education</h3>
+    </div>
+    <div class="col-4">
+        <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3" >
+            <div class="card-body">
+              <h6 class="card-title">Coach Education</h6>
+              <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
+              <button type="button" routerLink="/AddTraining" class="btn btn-success">
+                <i class="fa-solid fa-user-plus"></i>Add Training
+              </button>
+              
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Course Name</th>
+        <th scope="col">Provider</th>
+        <th scope="col">Issue Date</th>
+        <th scope="col">Valid until</th>
+        <th scope="col">Education Hours</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr >
+        <th scope="row">1.</th>
+        <td>Mental health awareness</td>
+        <td>ICF</td>
+        <td>23/3/2023</td>
+        <td>23/5/2025</td>
+        <td>120hrs</td>
+        <td class="actions">
+          <i
+            class="fa-solid fa-arrow-up-right-from-square"
+          ></i>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <i (click)="deleteItem(items)"class="fa-solid fa-trash-can"></i>
+        </td>
+      </tr>
+      <tr >
+        <th scope="row">2.</th>
+        <td>Peer counseling</td>
+        <td>KCF</td>
+        <td>23/3/2022</td>
+        <td>23/5/2024</td>
+        <td>100hrs</td>
+        <td class="actions">
+          <i
+            class="fa-solid fa-arrow-up-right-from-square"
+          ></i>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-trash-can"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <div class="donut-wrapper" [@fadeIn]>
+    <div class="donut multi"></div>
+  </div>
+  <p class="text-muted mt-5" >
+    No sessions Found.
+  </p>
+</div> -->
+

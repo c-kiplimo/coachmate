@@ -25,9 +25,9 @@ export const navbarData = [
         label: 'Contracts'
     },
     {
-        routeLink: 'settings',
-        icon: 'fal fa-cog',
-        label: 'Settings'
+        routeLink: 'education',
+        icon: 'fa-solid fa-graduation-cap',
+        label: 'Education'
     },
     {
         routeLink: 'support',
