@@ -1,4 +1,4 @@
-<!-- <!-- <div class="row">
+ <div class="row">
     <div class="col-10">
         <h3>Client View</h3>
     </div>
@@ -21,33 +21,21 @@
         <h6>Client Status:{{clients.status}}</h6>
 </div>
 <div class="row">
-    <h3>Client Contracts</h3>
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Coaching Category</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">No Of Sessions</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let contract of contracts">
-            <th scope="row">{{contract.id}}</th>
-            <td>{{contract.coachingCategory}}</td>
-            <td>{{contract.startDate | date: "MMM d, y" }}</td>
-            <td>{{contract.endDate | date: "MMM d, y" }}</td>
-            <td>{{contract.noOfSessions }}</td>
-            <td class="actions">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-trash-can"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-10">
+        <h3> Contracts</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Contract Name</th>
+                    <th scope="col">Contract Date</th>
+                    <th scope="col">Contract Time</th>
+                    <th scope="col">Contract Duration</th>
+                    <th scope="col">Contract Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+        </table>
 </div>
 <div class="row">
     <table class="table">
@@ -83,39 +71,4 @@
 </div> -->
 
 
-        <!-- <table class="table" *ngIf="currentTab === 'orders'" [@fadeIn]>
-          <thead>
-            <th colspan="1">Order Title</th>
-            <th colspan="1">Order Amount</th>
-            <th colspan="1">Due date</th>
-            <th colspan="1">Status</th>
-            <th colspan="1">Actions</th>
-          </thead>
-          <tbody *ngIf="orders?.length" [@fadeIn]>
-            <tr *ngFor="let order of orders">
-              <td>{{ order.name }}</td>
-              <td>{{ order.orderAmount }}</td>
-              <td>{{ order.dueDate | date: "MMM d, y hh:mm a" }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'badge-success': customer.status === 'ACTIVE',
-                    'badge-danger': customer.status !== 'ACTIVE'
-                  }"
-                  >{{ customer.status }}</span
-                >
-              </td>
-
-              <td>
-                <button
-                  class="btn btn-view"
-                  [routerLink]="['/order', order.id]"
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
-
+      
