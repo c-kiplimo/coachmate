@@ -51,11 +51,10 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
- 
-  // {
-  //   path: 'notifications',
-  //   component: ContractComponent
-  // },
+  {
+    path: 'notifications',
+    component: contractComponent
+  },
   {
     path: 'sessions',
     component: SessionsComponent
@@ -73,13 +72,11 @@ const routes: Routes = [
     path:'contracts',
     component:SessionsComponent
   },
-  {
-     path:'contract',
-     component:contractComponent
-  },
-  { path: 'reset/request', component: ForgotPaswordComponent },
+  { path: 'reset/request', 
+    component: ForgotPaswordComponent },
   
-  { path: 'registration/confirm', component: ConfirmedViewComponent },
+  { path: 'registration/confirm', 
+    component: ConfirmedViewComponent },
   
 ];
 
