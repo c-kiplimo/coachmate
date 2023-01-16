@@ -3,7 +3,7 @@ import { ClientService } from '../services/ClientService';
 import { SessionsService } from '../services/SessionsService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import {
   faCaretDown,
   faChevronRight,
@@ -65,9 +65,7 @@ export class sessionViewComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private formbuilder: FormBuilder,
-    private sessionService:SessionsService,
-    // private toastrService: ToastrService
-
+    private sessionService:SessionsService 
   ) {}
 
   ngOnInit(): void {
@@ -113,8 +111,6 @@ export class sessionViewComponent implements OnInit {
       }
     )
   }
-
-
   getSession() {
     this.loading = true;
 
