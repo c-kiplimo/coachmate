@@ -1,188 +1,292 @@
 <div class="row">
   <div class="col-10">
-      <h3>Create Contracts</h3>
+    <h3>Create Contracts</h3>
   </div>
   <div class="col-2">
-      <app-user></app-user>
+    <app-user></app-user>
   </div>
+</div>
 <body>
-    <div class="container">
-      <header class="header">
-        <h1 id="title" class="text-center">Coaching Agreement</h1>
+  <div class="container">
+    <div class="mb-3">
+      <h1 id="title" class="text-center">Coaching Agreement</h1>
+      <form [formGroup]="contractForm">
         <div class="mb-3 mt-3 description">
-          <label for="number" class="form-label">Coaching Topic</label>
-          <input type="text" class="form-control" id="number" placeholder="Enter the coaching topic" name="number">
+          <label for="coachingTopic" class="form-label">Coaching Topic</label>
+          <input
+            type="text"
+            class="form-control"
+            id="number"
+            placeholder="Enter the coaching topic"
+            formControlName="coachingTopic"
+          />
+        </div>
+        <div class="input-group-prepend">
+          <select
+            class="custom-select"
+            id="inputGroupSelect01"
+            formControlName="coachingCategory"
+          >
+            <label class="input-group-text" for="clientType"
+              >Client Category</label
+            >
+            <option selected>Select Client type</option>
+            <option value="1">INDIVIDUAL</option>
+            <option value="2">CORPORATE</option>
+          </select>
+        </div>
+        <h3>Schedule & Fees</h3>
+        <div class="row">
+          <div class="col">
+            <label for="number" class="form-label">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              placeholder="date"
+              formControlName="startDate"
+            />
+          </div>
+          <div class="col">
+            <label for="number" class="form-label">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              placeholder="date"
+              formControlName="endDate"
+            />
+          </div>
         </div>
         <div class="mb-3 mt-3">
-          <label for="text" class="form-label">Name of client:</label>
-          <input type="text" class="form-control" id="number" placeholder="Input the name of the client" name="number">
+          <label for="number" class="form-label"
+            >Individual Fees Per Session</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter the fee to be paid in USD"
+            formControlName="individualFeesPerSession"
+          />
+          <label for="number" class="form-label">Group Fees Per Session</label>
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter the fee to be paid in USD"
+            formControlName="groupFeesPerSession"
+          />
+          <label for="number" class="form-label">No. of Sessions:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter number of Sessions"
+            formControlName="noOfSessions"
+          />
         </div>
-      </header>
-      <h3>Services</h3>
-      <p>
-        The Coach and Client agree to engage in a coaching engagement through in-person, email
-or virtual meetings as agreed by both parties. The Coach will be available to the Client by email, Zoom or phone in between scheduled meetings as defined by the Coach. The Coach
-may also be available for additional time, on the Client’s request during the term of this
-contract (engaging in other Client-related services outside of coaching hours to review goals,
-read reports, etc.). Time outside the agreed bracket as outlined will be at the rate of USD 50
-for every 30-minute time block. 
+        <h3>Services</h3>
+        <p>
+          The Coach and Client agree to engage in a coaching engagement through
+          in-person, email or virtual meetings as agreed by both parties. The
+          Coach will be available to the Client by email, Zoom or phone in
+          between scheduled meetings as defined by the Coach. The Coach may also
+          be available for additional time, on the Client’s request during the
+          term of this contract (engaging in other Client-related services
+          outside of coaching hours to review goals, read reports, etc.). Time
+          outside the agreed bracket as outlined will be at the rate of USD 50
+          for every 30-minute time block.
         </p>
-        <h3>Coaching Objectives</h3>
-        <div class="row">
-          <div class="col-10">
-          </div>
-          <div class="col-2">
-              <button type="button" routerLink="/addObjective" class="btn btn-success"><i class="fa-solid fa-user-plus"></i>Add objective</button>
-           </div>
-      </div>
-        <ol>
-            <li>Objective 1</li>
-            <li>Objective 2</li>
-            <li>Objective 3</li>
-        </ol>
-        <h3>Schedule & Fees</h3>
-        <form>
-            <div class="row">
-              <div class="col">
-                 <input type="date" class="form-control" placeholder="date" name="date">
-              </div>
-              <div class="col">
-                <input type="date" class="form-control" placeholder="date" name="date">
-              </div>
-            </div>
-        </form>
         <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="clientType">Client Type</label>
-            </div>
-            <select class="custom-select" id="inputGroupSelect01">
-              <option selected>Select Client type</option>
-              <option value="1">Individual</option>
-              <option value="2">Corporate</option>
-              <option value="3">Group</option>
-            </select>
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="number" class="form-label">Enter the fees:</label>
-            <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD" name="number">
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="number" class="form-label">No. of Sessions:</label>
-            <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions" name="number">
-          </div>
           <h3>Terms & Conditions</h3>
-          <h3>LOGISTICS</h3>
-          <ol>
-            <li>Coaching fees are payable in full before each coaching session.
-
-            </li>
-            <li>That both the Coach and the Client strictly adhere to the agreed schedule (unless
-                otherwise by mutual agreement or due to acceptable unforeseen emergencies).</li>
-            <li>The coaching sessions will take place in a predetermined location agreeable to both
-                parties
-            </li>
-            <li>The Client bears the cost for any calls lasting more than 10 minutes if the Client so
-                prefers telephone communication. Otherwise, the Coach uses internet-based voice
-                communication such as Zoom or Skype.
-            </li>
-          </ol>
-          <h3>PRACTICE</h3>
-          <p>I, the Client:</p>
+          <br />
           <ol>
             <li>
-                Fully understand and agree that I am fully responsible for my physical, mental and
-emotional well-being during my coaching sessions, including my choices and decisions. I
-am aware that I can choose to discontinue coaching by giving a 14 days’ notice.
+              Coaching fees are payable in full before each coaching session.
             </li>
             <li>
-                Understand that Coaching is partnership (defined as an alliance, not a legal business
-partnership) between the Coach and the Client. That it is a thought-provoking and
-creative process that inspires the Client to maximize personal and professional potential.
+              That both the Coach and the Client strictly adhere to the agreed
+              schedule (unless otherwise by mutual agreement or due to
+              acceptable unforeseen emergencies).
             </li>
             <li>
-                Understand that Coaching is a Professional–Client relationship I have with my Coach
-that is designed to facilitate the creation/development of personal, professional or
-business goals and to develop and carry out a strategy/plan for achieving those goals.
+              The coaching sessions will take place in a predetermined location
+              agreeable to both parties
             </li>
             <li>
-                Understand that coaching is a comprehensive process that may involve all areas of my
-life, including work, finances, health, relationships, education and recreation. I
-acknowledge that deciding how to handle these issues, incorporate coaching into those
-areas, and implement my choices is exclusively my responsibility. 
-            </li>
-            <li>
-                Understand that coaching does not involve the diagnosis or treatment of mental
-disorders. I understand that coaching is not a substitute for counselling, psychotherapy,
-psychoanalysis, mental health care or substance abuse treatment and I will not use it in
-place of any form of diagnosis, treatment or therapy.
-            </li>
-            <li>
-                Understand that information will be held in confidence — unless I expressly state
-otherwise in writing — except as required by law. 
-            </li>
-            <li>
-                Understand that certain topics may be anonymously and hypothetically shared with other
-coaching professionals purely for training purposes, improvement of coaching practice/
-methodology or advancement of the coaching industry
-            </li>
-            <li>
-                Understand that coaching is not to be used as a substitute for professional advice by
-legal, medical, financial, business, spiritual or other qualified professionals. I will seek
-independent professional guidance for legal, medical, financial, business, spiritual or
-other matters. 
-            </li>
-            <li>
-                Understand that all decisions in these areas are exclusively mine and I acknowledge that
-my decisions and my actions regarding them are my sole responsibility. 
-            </li>
-            <li>
-                Agree to honor my scheduled session times [see Schedule].
+              The Client bears the cost for any calls lasting more than 10
+              minutes if the Client so prefers telephone communication.
+              Otherwise, the Coach uses internet-based voice communication such
+              as Zoom or Skype.
             </li>
           </ol>
-          <h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
-          <div class="row">
-            <div class="col-10">
-                <h3>Sessions</h3>
-            </div>
-            <div class="col-2">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-10">
-            </div>
-            <div class="col-2">
-                <button type="button" routerLink="/addSession" class="btn btn-success"><i class="fa-solid fa-user-plus"></i>Add Session</button>
-            </div>
-        </div>
-        <div class="row table-responsive">
-            <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Session</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Venue</th>
-                    <th scope="col">Duration</th>
-                    <th scope="col">Payment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Introduction</td>
-                    <td>11-11-2022</td>
-                    <td>Zoom</td>
-                    <td>90mins</td>
-                    <td>TBD</td>
-                  </tr>
-                 </tbody>
-              </table>
-              <div class="form-check mb-3">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember"> I have read and agree to the above Terms & Conditions. 
-                </label>
+          <div class="mb-3">
+            <h3>PRACTICE</h3>
+            <br />
+            <p>I, the Client:</p>
+          </div>
+          <ol>
+            <li>
+              Fully understand and agree that I am fully responsible for my
+              physical, mental and emotional well-being during my coaching
+              sessions, including my choices and decisions. I am aware that I
+              can choose to discontinue coaching by giving a 14 days’ notice.
+            </li>
+            <li>
+              Understand that Coaching is partnership (defined as an alliance,
+              not a legal business partnership) between the Coach and the
+              Client. That it is a thought-provoking and creative process that
+              inspires the Client to maximize personal and professional
+              potential.
+            </li>
+            <li>
+              Understand that Coaching is a Professional–Client relationship I
+              have with my Coach that is designed to facilitate the
+              creation/development of personal, professional or business goals
+              and to develop and carry out a strategy/plan for achieving those
+              goals.
+            </li>
+            <li>
+              Understand that coaching is a comprehensive process that may
+              involve all areas of my life, including work, finances, health,
+              relationships, education and recreation. I acknowledge that
+              deciding how to handle these issues, incorporate coaching into
+              those areas, and implement my choices is exclusively my
+              responsibility.
+            </li>
+            <li>
+              Understand that coaching does not involve the diagnosis or
+              treatment of mental disorders. I understand that coaching is not a
+              substitute for counselling, psychotherapy, psychoanalysis, mental
+              health care or substance abuse treatment and I will not use it in
+              place of any form of diagnosis, treatment or therapy.
+            </li>
+            <li>
+              Understand that information will be held in confidence — unless I
+              expressly state otherwise in writing — except as required by law.
+            </li>
+            <li>
+              Understand that certain topics may be anonymously and
+              hypothetically shared with other coaching professionals purely for
+              training purposes, improvement of coaching practice/ methodology
+              or advancement of the coaching industry
+            </li>
+            <li>
+              Understand that coaching is not to be used as a substitute for
+              professional advice by legal, medical, financial, business,
+              spiritual or other qualified professionals. I will seek
+              independent professional guidance for legal, medical, financial,
+              business, spiritual or other matters.
+            </li>
+            <li>
+              Understand that all decisions in these areas are exclusively mine
+              and I acknowledge that my decisions and my actions regarding them
+              are my sole responsibility.
+            </li>
+            <li>Agree to honor my scheduled session times [see Schedule].</li>
+          </ol>
+          <section>
+            <h3>Coaching Goals</h3>
+            <div class="row mb-3">
+              <div class="col-10"></div>
+              <div class="col-2">
+                <div class="d-flex justify-content-between">
+                  <input type="text" />
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="addObjective()"
+                  >
+                    <i class="fa-solid fa-user-plus"></i>Add objective
+                  </button>
+                </div>
               </div>
-              <button type="submit" class="btn btn-success col-2">submit</button>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <div class="mb-3">
+                  <ol>
+                    <li>Objective 1</li>
+                    <li>Objective 2</li>
+                    <li>Objective 3</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h3>SCHEDULE: COACHING SCHEDULE & PAYMENT PLAN</h3>
+            <div class="row">
+              <div class="col-10">
+                <h3>Sessions</h3>
+              </div>
+              <div class="col-2"></div>
+            </div>
+            <div class="row">
+              <div class="col-10"></div>
+              <div class="col-2">
+                <button
+                  type="button"
+                  routerLink="/addSession"
+                  class="btn btn-success"
+                >
+                  <i class="fa-solid fa-user-plus"></i>Add Session
+                </button>
+              </div>
+            </div>
+            <div class="row table-responsive">
+              <div class="row">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">session Name</th>
+                      <th scope="col">session Date</th>
+                      <th scope="col">Session Venue</th>
+                      <th scope="col">Session Type</th>
+                      <th scope="col">Starts at</th>
+                      <th scope="col">Ends at</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let session of sessions">
+                      <th scope="row">{{ session.id }}</th>
+                      <td>{{ session.name }}</td>
+                      <td>{{ session.sessionDate }}</td>
+                      <td>{{ session.sessionVenue }}</td>
+                      <td>{{ session.sessionType }}</td>
+                      <td>{{ session.sessionStartTime | date : "hh:mm a" }}</td>
+                      <td>{{ session.sessionEndTime | date : "hh:mm a" }}</td>
+                      <td class="actions">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i class="fa-solid fa-trash-can"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="form-check mb-3">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      name="remember"
+                    />
+                    I have read and agree to the above Terms & Conditions.
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  (click)="addContract()"
+                  class="btn btn-success col-2"
+                >
+                  submit
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
-
-
+      </form>
+    </div>
+  </div>
+</body>

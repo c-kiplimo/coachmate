@@ -1,21 +1,21 @@
-.container {
+.footer {
     
     width:100%;
     color: white;
     background:#1B3A27;
-    
+    height: 50px;
     align-items: center;
     
-}
+    
+} 
 
 footer{
     background: #1B3A27;
     color: white;
-    height: 100px;
-    width: 100%;
+
    
 }
 p, h5{
     text-align: center;
-    margin-top: 20px;
-}
+    margin: 0;
+} 

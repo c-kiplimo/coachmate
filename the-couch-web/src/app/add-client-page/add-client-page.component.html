@@ -1,6 +1,176 @@
-<div class="row">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">
+        Add New Customer
+      </h1>
+
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="addClient" ngNativeValidate>
+        <div class="mb-3 form-group">
+          <label for="exampleInputEmail1">First Name *</label>
+          <input
+            formControlName="firstName"
+            name="firstname"
+            [(ngModel)]="firstName"
+            type="firstname"
+            class="form-control"
+            id="firstname"
+            aria-describedby="emailHelp"
+            placeholder="First Name"
+            required
+          />
+        </div>
+        <div class="mb-3 form-group">
+          <label for="exampleInputEmail1">Last Name *</label>
+          <input
+            formControlName="lastName"
+            name="lastname"
+            [(ngModel)]="lastName"
+            type="firstname"
+            class="form-control"
+            id="lastname"
+            aria-describedby="emailHelp"
+            placeholder="Last Name"
+            required
+          />
+        </div>
+        <!-- <div class="mb-3 form-group">
+          <label for="exampleInputEmail1">Last name</label>
+          <input
+            required
+            formControlName="lastName"
+            name="lastname"
+            [(ngModel)]="lastName"
+            type="lastname"
+            class="form-control"
+            id="lastname"
+            aria-describedby="emailHelp"
+            placeholder="Last Name"
+            required
+          />
+        </div> -->
+        <div class="form-group">
+          <label for="exampleInputPassword1">Mobile no *</label>
+          <input
+            required
+            formControlName="msisdn"
+            name="msisdn"
+            type="number"
+            class="form-control"
+            id="contact"
+            placeholder="Contact"
+            required
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Email</label>
+          <input
+            formControlName="email"
+            name="email"
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Address *</label>
+          <input
+            formControlName="physicalAddress"
+            name="address"
+            type="text"
+            class="form-control"
+            id="adress"
+            placeholder="Address"
+            required
+          />
+        </div>
+        <div class="form-group ">
+          <label for="profession">Profession</label>
+          <input 
+          type="text" 
+          class="form-control" 
+          id="profession" 
+          placeholder="Enter Client Profession" 
+          formControlName="profession" 
+          >
+        </div>
+        <!-- <div class="form-group ">
+          <label for="profession">added by </label>
+          <input 
+          type="text" 
+          class="form-control" 
+          id="" placeholder="Enter created by" 
+          formControlName="createdBy"
+          >
+        </div> -->
+        <div class="form-group mb-3">
+          <label for="reason">Reason</label>
+          <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Reason" 
+          formControlName="reason" >
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01" formControlName="paymentMode">
+                <option selected>Select Payment Mode</option>
+                <option value="PREPAY">PREPAY</option>
+                <option value="POSTPAY">POSTPAY</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="clientType">Client Type</label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01" formControlName="clientType" >
+                <option selected>Select Client type</option>
+                <option value="INDIVIDUAL">INDIVIDUAL</option>
+                <option value="CORPORATE">CORPORATE</option>
+                <option value="GROUP">GROUP</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Close
+      </button>
+      <button
+        type="submit"
+        class="btn btn-add"
+        data-bs-dismiss="modal"
+        (click)="newClient()"
+        [disabled]="
+        !addClient.value.firstName||
+        !addClient.value.msisdn||
+        !addClient.value.physicalAddress
+      ">ADD
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <div class="row">
   <div class="col-10">
-      <h3>Add Clients</h3>
+     
   </div>
   <div class="col-2">
       <app-user></app-user>
@@ -9,7 +179,7 @@
 <div class="row">
   <div class="col-4"></div>
   <div class="col-6">
-    
+    <h3>Add Client</h3>
     <form #AddClientForm="ngForm" (ngSubmit)="AddClient(AddClientForm)">
     
         <div class="form-group col-md-6">
@@ -20,30 +190,35 @@
 
         <div class="form-group col-md-6">
           <label for="inputEmail4">Email</label>
-          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" name="email" ngModel required>
+          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" name="email_address" ngModel required>
         </div>
 
         
         <div class="form-group col-md-6">
           <label for="phone">Phone</label>
-          <input type="number" class="form-control" id="phone" placeholder="phone" name="phone" ngModel required>
+          <input type="text" class="form-control" id="phone" placeholder="phone" name="msisdn" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+          ngModel required>
         </div>
     
         <div class="form-group col-md-6">
           <label for="address">Address</label>
-          <input type="text" class="form-control" id="address" placeholder="Enter Client Address" name="address" ngModel>
+          <input type="text" class="form-control" id="address" placeholder="Enter Client Address" name="physical_address" ngModel>
         </div>
 
         <div class="form-group col-md-6">
           <label for="profession">Profession</label>
           <input type="text" class="form-control" id="profession" placeholder="Enter Client Profession" name="profession" ngModel>
         </div>
+        <div class="form-group col-md-6">
+          <label for="profession">added by </label>
+          <input type="text" class="form-control" id="" placeholder="Enter created by" name="createdBy" ngModel>
+        </div>
 
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01" name="PaymentMode" ngModel>
+          <select class="custom-select" id="inputGroupSelect01" name="payment_mode" ngModel>
             <option selected>Select Payment Mode</option>
             <option value="PREPAY">PREPAY</option>
             <option value="POSTPAY">POSTPAY</option>
@@ -54,7 +229,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="clientType">Client Type</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01" name="clientType" ngModel>
+          <select class="custom-select" id="inputGroupSelect01" name="type" ngModel>
             <option selected>Select Client type</option>
             <option value="INDIVIDUAL">INDIVIDUAL</option>
             <option value="CORPORATE">CORPORATE</option>
@@ -71,4 +246,4 @@
     </form>
     </div>
     <div class="col-2"></div>
-  </div>
+  </div> -->

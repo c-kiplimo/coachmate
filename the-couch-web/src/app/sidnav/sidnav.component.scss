@@ -96,7 +96,7 @@
   .sidenav-nav-item:hover {
       .sidenav-nav-link {
           background-color: #fff;
-          color: #1B3A27;
+          color: c;
       }
   }
 }
@@ -109,3 +109,9 @@
       color: #1B3A27;
   }
 }
+// .sidenav-link-icon [title]:hover::after {
+//     color: rgb(211, 0, 0);
+//     font-size: 20px;
+//     font-weight: 700;
+//     margin-bottom: 1.5rem;
+// }

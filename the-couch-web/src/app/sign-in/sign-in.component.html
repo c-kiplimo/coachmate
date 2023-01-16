@@ -1,37 +1,91 @@
-<div class="row">
-  <div class="col-3"></div>
-  
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-header">
-        <h3>Login</h3>
-      </div>
-      <div class="card-body">
-
-    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-     
-      <div class="form-group input-div">
-        <label for="inputEmail">Email</label>
-        <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" ngModel required>
-      </div>
-
-      <div class="form-group input-div">
-        <label for="inputpassword">Password</label>
-        <input type="password" class="form-control" id="inputpassword" placeholder="Password" name="password" ngModel required>
-      </div>
-
-      <button type="submit" class="btn btn-success in put-div" >Login</button>
-      <div>
-        <span>Don't have an account?
-          <a routerLink="/signup" href="">Register</a> 
-        </span>
-      </div>
+<div class="container mt-5 mb-5">
+  <div class="row d-flex justify-content-center">
+    <!-- <div class="col-md-6">
+      <div class="half-side">
+      <p></p>
       
-      
-    </form>
+      </div>
+    </div> -->
+    <div class="col-md-6">
+      <p class="p-3 back-link" routerLink="/home">
+        <fa-icon [icon]="backIcon"></fa-icon> Back to website
+      </p>
+      <div class="card card-table">
+        <div>
+          <h1 class="text-center mb-5">Login</h1>
+          <!-- <button type="button" class="btn btn-primary mb-3">
+            <fa-icon [icon]="googleIcon"></fa-icon> With Google
+          </button> -->
+          <!-- <h5 class="text-center">Or</h5>
+          <hr /> -->
+          <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
+           -->
+          <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+          <form #loginForm="ngForm" (ngSubmit)="userLogin()">
+            <div class="mb-3">
+              <label for="email">E-Mail</label>
+              <input
+                [(ngModel)]="formData.username"
+                name="username"
+                type="text"
+                class="form-control"
+                id="email"
+                aria-describedby="emailHelp"
+                placeholder="eg user@gmail.com"
+                required
+               
+              />
+            </div>
+            <div class="form-group mb-3">
+              <label for="password">Password</label>
+              <div class="input-group">
+                <input
+                  [(ngModel)]="formData.password"
+                  [type]="fieldTextType ? 'text' : 'password'"
+                  name="password"
+                  type="password"
+                  class="form-control border-end-0 border"
+                  id="exampleInputPassword1"
+                  placeholder="Password"
+                  required
+                />
+                <span class="input-group-append ">
+                  <span
+                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                    *ngIf="fieldTextType"
+                  >
+                    <fa-icon
+                      [icon]="eyeIcon"
+                      (click)="toggleFieldTextType()"
+                    ></fa-icon>
+                  </span>
+                  <span
+                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                    *ngIf="!fieldTextType"
+                  >
+                    <fa-icon
+                    
+                      [icon]="eyeSlashIcon"
+                      (click)="toggleFieldTextType()"
+                    ></fa-icon>
+                  </span>
+                </span>
+              </div>
+            </div>
 
-
+            <button type="submit" class="btn btn-signup mt-2 mb-5" 
+            [disabled]="
+            !formData.username ||
+            !formData.password" >
+              Login 
+            </button>
+          </form>
+          <p><a routerLink="/reset/request">Forgot Password?</a></p>
+          <p>Don't have an account?<a routerLink="/signup"> Register</a></p>
+        </div>
+      </div>
     </div>
   </div>
-  </div>
-  </div>
+</div>

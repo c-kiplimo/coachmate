@@ -1,8 +1,50 @@
 .row-height {
-    height: 150px;
+    /* height: 150px; */
     margin: 10px;
 }
 .top-cards {
     margin: 10px;
     width: 300px;
+}
+.listing-item {
+    padding: 10px 0;
+    border-bottom: 3px solid #f1f1f1;
+}
+
+/* .listing-item { & :last-child {
+      border-bottom: none;
+    }
+} */
+
+   .listing-item h6 {
+      color: #003d4c;
+      font-weight: 600;
+    }
+
+   .listing-item span {
+      font-size: 0.9rem;
+      color: #80868b;
+    }
+.title{
+    color: #003d4c;
+    font-weight: 1000;
+}
+.p-3{
+    font-size: larger;
+}
+.dashboard-banner {
+    background-color: #5fc686;
+    color: white;
+    margin: 10px;
+    border-radius: 10px;
+    height: 200px;
+
+}
+.top-cards {
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+    border: none;
+}
+.desc {
+    font-size: 1rem;
+    color: #80868b;
 }

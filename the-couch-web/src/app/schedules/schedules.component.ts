@@ -1,8 +1,21 @@
-import { Component, OnInit,
-ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth,
-isSameDay, isSameMonth, addHours } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours,
+} from 'date-fns';
 import { Subject } from 'rxjs';
 // import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -12,6 +25,7 @@ import {
   CalendarView,
 } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
+import { ClientService } from '../services/ClientService';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -28,45 +42,48 @@ const colors: Record<string, EventColor> = {
   },
 };
 
-
 @Component({
   selector: 'app-schedules',
   templateUrl: './schedules.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./schedules.component.css']
+  styleUrls: ['./schedules.component.css'],
 })
-
 export class SchedulesComponent implements OnInit {
+  sessions!: any;
 
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
-  
+  @ViewChild('modalContent', { static: true }) modalContent:
+    | TemplateRef<any>
+    | undefined;
+
   view: CalendarView = CalendarView.Month;
 
   CalendarView = CalendarView;
 
   viewDate: Date = new Date();
 
-  modalData: {
-    action: String;
-    event: CalendarEvent;
-  } | undefined
+  modalData:
+    | {
+        action: String;
+        event: CalendarEvent;
+      }
+    | undefined;
 
   actions: CalendarEventAction[] = [
-      {
+    {
       label: '<i class="fas fa-fw fa-pencil-alt" style="color:black"></i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       },
     },
-      {
-        label: '<i class="fas fa-fw fa-trash-alt"  style="color:black"></i>',
-        a11yLabel: 'Delete',
-        onClick: ({ event }: { event: CalendarEvent }): void => {
-          this.events = this.events.filter((iEvent) => iEvent !== event);
-          this.handleEvent('Deleted', event);
-        },
+    {
+      label: '<i class="fas fa-fw fa-trash-alt"  style="color:black"></i>',
+      a11yLabel: 'Delete',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter((iEvent) => iEvent !== event);
+        this.handleEvent('Deleted', event);
       },
+    },
   ];
 
   refresh = new Subject<void>();
@@ -75,7 +92,7 @@ export class SchedulesComponent implements OnInit {
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
-      title: 'Session 1 with sam',
+      title: '',
       color: { ...colors['red'] },
       actions: this.actions,
       allDay: true,
@@ -87,14 +104,14 @@ export class SchedulesComponent implements OnInit {
     },
     {
       start: startOfDay(new Date()),
-      title: 'An event with no end date',
+      title: '',
       color: { ...colors['red'] },
       actions: this.actions,
     },
     {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
+      title: '',
       color: { ...colors['blue'] },
       allDay: true,
     },
@@ -114,24 +131,28 @@ export class SchedulesComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
   modal: any;
-  
-  
-  constructor() { }
 
-  dayClicked({ date, events } : { date: Date; events: CalendarEvent[] }): void {
+  constructor(private restApiService: ClientService) {}
+
+  ngOnInit(): void {
+    this.getSessions();
+  }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) || events.length === 0
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
       ) {
         this.activeDayIsOpen = false;
       } else {
-        this.activeDayIsOpen = true
+        this.activeDayIsOpen = true;
       }
       this.viewDate = date;
     }
   }
 
-  eventTimesChanged ({
+  eventTimesChanged({
     event,
     newStart,
     newEnd,
@@ -183,9 +204,38 @@ export class SchedulesComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  
-
-  ngOnInit(): void {
+  getSessions() {
+    this.restApiService.getSessions().subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        this.setCalendarEvents();
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
-
+  setCalendarEvents() {
+    console.log('here');
+    this.events = [];
+    this.sessions.forEach((session: any) => {
+      const event = {
+        start: startOfDay(new Date(session.sessionStartTime)),
+        title: session.name,
+        color: { ...colors['red'] },
+        actions: this.actions,
+        allDay: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+        // draggable: true,
+      };
+      this.events.push(event);
+      this.view = CalendarView.Month;
+      this.refresh.next();
+    });
+    console.log(this.events);
+  }
 }

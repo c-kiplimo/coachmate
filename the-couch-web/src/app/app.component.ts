@@ -30,7 +30,7 @@ export class AppComponent {
      this.notlogged=true; 
      }
 
-     this.User = JSON.parse(sessionStorage.getItem('userDetails') as any);
+     this.User = JSON.parse(sessionStorage.getItem('user') as any);
      if(!this.User) {
       this.router.navigate(['/signin']);
      }

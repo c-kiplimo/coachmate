@@ -1,43 +1,78 @@
-
 <div class="row">
-    <div class="col-10">
+  <div class="col-10">
         <h3>Dashboard</h3>
-    </div>
-    <div class="col-2">
+  </div>
+  <div class="col-2">
         <app-user></app-user>
-    </div>
+  </div>
 </div>
+
+<div class="row dashboard-banner d-flex justify-content-between align-items-center p-3">
+  <div class="col-10 text-center p-3 mb-10">
+    <h2  class="fw-bold">
+      Hello {{User.coach.businessName| lowercase }},
+      <span class="fw-light">
+        Welcome back!
+      </span>
+    </h2>
+    
+  </div>
+</div>
+  <div class="row">
+    <div class="col-10">
+    <p class="p-3 desc" >Here's how things currently look like...</p>
+    </div>
+  </div>
+ 
+  <!-- <button
+    class="btn btn-add"
+    [routerLink]="'/add/order'"
+    *ngIf="!salesData"
+  >
+    <fa-icon [icon]="addIcon"> </fa-icon> Add order
+  </button> -->
+
 <div class="row row-height">
+    <!-- <div class="col-3 card text-center top-cards">
+        <div class="card-body">
+          <h6 class="card-title">Upcoming Sessions</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+          
+        </div>
+    </div> -->
     <div class="col-3 card text-center top-cards">
+      <div class="card-body">
+        <h6 class="card-title">Log hours</h6>
+        <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
+        
+      </div>
+  </div>
+    <div class="col-3 card text-center top-cards" >
         <div class="card-body">
-          <h5 class="card-title">Upcoming Sessions</h5>
-          <h3 class="card-text">45</h3>
+          <h6 class="card-title">Sessions Created</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
           
         </div>
     </div>
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
-          <h5 class="card-title">Completed Sessions</h5>
-          <h3 class="card-text">20</h3>
-          
-        </div>
-    </div>
-    <div class="col-3 card text-center top-cards" >
-        <div class="card-body">
-          <h5 class="card-title">Number of Clients</h5>
-          <h3 class="card-text">{{clients.length}}</h3>
+          <h6 class="card-title">Number of Clients</h6>
+          <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
          
         </div>
     </div>
     <div class="col-3 card text-center top-cards">
         <div class="card-body">
-          <h5 class="card-title">Contracts</h5>
-          <h3 class="card-text">11</h3>
+          <h6 class="card-title">Contracts</h6>
+          <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
+          <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
           
         </div>
     </div>
 </div>
-
+<!-- 
 <div class="row row-height">
     <div class="col-12">
         <div class="card ">
@@ -45,51 +80,89 @@
             <div class="card-body">
               
               <div class="row">
-              <div class="col-3">
-              <button type="button" class="btn btn-warning" routerLink="/addSession">SCHEDULE SESSION</button>
-                </div>
-                <div class="col-3">
-              <button type="button" routerLink="addclient" class="btn btn-success">ADD CLIENT</button>
+                <div class="col-4"></div>
+                <div class="col-4">
+              <button type="button" routerLink="/addclient" class="btn btn-success">ADD CLIENT</button>
             </div>
-              <div class="col-3">
-              <button type="button" routerLink="contract" class="btn btn-light">ADD CONTRACT</button>
-            </div>
-            <div class="col-3">
-               
-              </div>
+            <div class="col-4"></div>
         </div>
 
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <div class="row">
     <div class="col-6">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body d-flex justify-content-between">
               <h5 class="card-title">Upcoming Sessions</h5>
               <p class="card-text">View All</p>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-            </ul>
-           
+
+            <div *ngFor="let session of sessions" 
+            class="d-flex justify-content-between mb-1 listing-item ">
+            <div>
+              <h6>{{ session.name | titlecase }}</h6>
+              <p class="mb-1">
+                <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+                date:
+                {{session.sessionDate| date:"MMM d y"}}
+              </p>
+              <p class="mb-1">Start Time:{{ session.sessionStartTime| date: " h:mm a" }}</p>
+              <p class="mb-1">End Time: {{ session.sessionEndTime | date: " h:mm a" }}</p>
+            </div>
+            <span>
+              <span>
+                <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
+                {{ session.sessionVenue | titlecase }}
+              </span>
+              <!-- <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon> -->
+              <p class="mb-1">
+                <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
+                Session Type: {{ session.sessionType| titlecase}}
+              </p>
+            </span>
+          </div>
         </div>
     </div>
     <div class="col-6">
-        <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Contracts</h5>
-              <p class="card-text">View All</p>
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-              <li class="list-group-item">.</li>
-            </ul>
-           
+      <div class="card">
+        <div class="card-body d-flex justify-content-between listing-item">
+          <h5 class="card-title">Contracts</h5>
+          <p class="card-text">View All</p>
         </div>
+        <div *ngFor="let contract of contracts" 
+        class="d-flex justify-content-between mb-1 listing-item">
+        <div>
+          <h6>{{ contract.name | titlecase }}</h6>
+          <p class="mb-1">
+            <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+            Start date:
+            {{contract.startDate| date:"MMM d y"}}
+          </p>
+          <p
+            class="mb-1"
+            
+          >
+              End Date: {{ contract.endDate | date: "MMM d y" }}
+          </p>
+        </div>
+        <span>
+          <!-- <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon> -->
+          <p class="mb-1">
+            <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
+            coaching: {{ contract.contractType| titlecase}}
+          </p>
+          
+        </span>
+      </div>
+        <!-- <ul class="list-group list-group-flush">
+          <li class="list-group-item">.</li>
+          <li class="list-group-item">.</li>
+          <li class="list-group-item">.</li>
+        </ul> -->
+       
     </div>
+</div>  
 </div>
+
