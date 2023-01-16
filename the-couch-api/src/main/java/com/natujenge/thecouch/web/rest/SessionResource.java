@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest;
 
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
@@ -18,6 +19,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -83,18 +86,27 @@ public class SessionResource {
         }
     }
     //PUT: /api/sessions
+    // UPDATE SESSION DETAILS
     @PutMapping
-    public ResponseEntity<?> updateSession(@RequestBody Session session){
+    public ResponseEntity<?> updateSession(@RequestBody Session session,
+                                           @PathVariable("id") Long id,
+                                           @AuthenticationPrincipal User userDetails){
+        Coach coach = userDetails.getCoach();
         try{
-            log.info("Session request received {}", session);
-            Session sessionResponse = sessionService.updateSession(session);
-            return new ResponseEntity<>(sessionResponse, HttpStatus.OK);
+            log.info("Update Session request received");
+            Optional<Session> updatedSession = sessionService.updateSession(id,coach.getId(),session);
+            if (updatedSession.isEmpty()){
+                throw new NoSuchElementException();
+            }
+            return new ResponseEntity<>(updatedSession.get(), HttpStatus.OK);
 
         } catch(Exception e) {
             log.error(".....", e);
-            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     //PATCH: /api/sessions/:id
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateSessionById(@RequestBody SessionRequest sessionRequest,
@@ -132,8 +144,9 @@ public class SessionResource {
 
     //DELETE:/api/sessions/:id
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteClient(@PathVariable("id") Long id) {
-        sessionService.deleteSession(id);
+    public ResponseEntity<?> deleteClient(@PathVariable("id") Long id,
+                                          @AuthenticationPrincipal User userDetails) {
+        sessionService.deleteSession(id,userDetails.getCoach().getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

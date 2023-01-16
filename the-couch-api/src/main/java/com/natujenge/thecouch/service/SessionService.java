@@ -19,7 +19,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -115,27 +117,68 @@ public class SessionService {
     }
 
 
-    //UPDATE CONTRACT
-    public Session updateSession(Session session) {
-        // TODO: Update details rather than save new Entry
-        try {
-            log.info("Received an update request for {}", session.getName());
+    //UPDATE SESSION
+    public Optional<Session> updateSession(Long sessionId, Long coachId,Session sessionRequest){
+
+        Optional<Session> sessionOptional = sessionRepository.findSessionByIdAndCoachId(sessionId,coachId);
+
+        if (sessionOptional.isPresent()) {
+            log.info("Session with id {} found", sessionId);
+            Session session = sessionOptional.get();
+
+            if (sessionRequest.getName() != null && sessionRequest.getName().length() > 0) {
+                session.setName(sessionRequest.getName());
+            }
+
+            if (sessionRequest.getSessionType() != null) {
+                session.setSessionType(sessionRequest.getSessionType());
+            }
+
+            if (sessionRequest.getSessionStatus() != null) {
+                session.setSessionStatus(sessionRequest.getSessionStatus());
+            }
+
+            if (sessionRequest.getNotes() != null && session.getNotes().length() > 0) {
+                session.setNotes(sessionRequest.getNotes());
+            }
+
+            if (sessionRequest.getSessionDate() != null) {
+                session.setSessionDate(sessionRequest.getSessionDate());
+            }
+            if (sessionRequest.getSessionDuration() != null && session.getSessionDuration().length() > 0) {
+                session.setSessionDuration(sessionRequest.getSessionDuration());
+            }
+            if (sessionRequest.getSessionStartTime() != null) {
+                session.setSessionStartTime(sessionRequest.getSessionStartTime());
+            }
+            if (sessionRequest.getSessionEndTime() != null) {
+                session.setSessionEndTime(sessionRequest.getSessionEndTime());
+            }
+            if (sessionRequest.getSessionVenue() != null) {
+                session.setSessionVenue(sessionRequest.getSessionVenue());
+            }
+            if (sessionRequest.getPaymentCurrency() != null) {
+                session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
+            }
+            if (sessionRequest.getAmountPaid() != null && sessionRequest.getAmountPaid().length() > 0) {
+                session.setAmountPaid(sessionRequest.getAmountPaid());
+            }
             sessionRepository.save(session);
-            return session;
-        } catch (Exception e) {
-            log.error("Error occurred", e);
-            return null;
+            return Optional.of(session);
+
         }
-    }
-    //INDEX - all session
-    public List<Session> viewSessions() {
-        //TODO: return pageable, sessionDto
-        return sessionRepository.findAll();
+        return sessionOptional;
     }
 
-    //DELETE a session
-    public void deleteSession(Long id){
-        sessionRepository.deleteSessionById(id);
-    }
+    // Delete session by ID
+    public void deleteSession(Long id,Long coachId) {
+        log.debug("Request to delete session : {}", id);
 
+        boolean exist = sessionRepository.existsByIdAndCoachId(id,coachId);
+        if (!exist) {
+            throw new IllegalStateException("session doesn't exist");
+
+        }
+        coachRepository.deleteById(id);
+    }
 }
