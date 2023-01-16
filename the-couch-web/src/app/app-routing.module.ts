@@ -51,7 +51,6 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
- 
   {
     path: 'notifications',
     component: contractComponent
