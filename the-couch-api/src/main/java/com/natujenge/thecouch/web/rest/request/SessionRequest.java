@@ -17,4 +17,5 @@ public class SessionRequest {
     public SessionVenue sessionVenue;
     public PaymentCurrency paymentCurrency;
     public String amountPaid;
+    public Long clientId;
 }

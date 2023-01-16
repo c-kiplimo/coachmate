@@ -1,11 +1,14 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.QSession;
-import com.natujenge.thecouch.domain.Session;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.exception.UserNotFoundException;
+import com.natujenge.thecouch.repository.ClientRepository;
+import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.ContractRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
+import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +33,13 @@ public class SessionService {
 
     @Autowired
     SessionRepository sessionRepository;
+    @Autowired
+    ClientRepository clientRepository;
+    @Autowired
+    ContractRepository contractRepository;
+
+    @Autowired
+    CoachRepository coachRepository;
 
     // GetAllSessions
     public ListResponse getAllSessions(int page, int perPage, String search, Long id) {
@@ -68,19 +78,44 @@ public class SessionService {
     }
 
 
-    //CREATE
-    public Session createSession(Session session) {
-        // TODO: Exception handling
+    //CREATE NEW CONTRACT
+    public Session createSession(Long coachId,Long clientId,Long contractId, Session sessionRequest) {
+        log.info("Creating new session");
+        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+
+        if(optionalClient.isEmpty()){
+            log.warn("Client with id {} not found", clientId);
+            throw new IllegalArgumentException("Client not found!");
+        }
+
+        if(optionalContract.isEmpty()){
+            log.warn("Contract with id {} not found", contractId);
+            throw new IllegalArgumentException("Contract not found!");
+        }
+        // Client
+        Client client = optionalClient.get();
+        // Coach
+        Coach coach = client.getCoach();
+        // Contract
+        Contract contract = optionalContract.get();
+
+        sessionRequest.setCoach(coach);
+        sessionRequest.setClient(client);
+        sessionRequest.setContract(contract);
+        sessionRequest.setCreatedBy(coach.getFullName());
+        sessionRequest.setLastUpdatedBy(coach.getFullName());
+
         try{
-            sessionRepository.save(session);
-            return session;
+            return sessionRepository.save(sessionRequest);
         } catch (Exception e) {
             log.error("Error occurred ", e);
-            return null;
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    //UPDATE
+
+    //UPDATE CONTRACT
     public Session updateSession(Session session) {
         // TODO: Update details rather than save new Entry
         try {

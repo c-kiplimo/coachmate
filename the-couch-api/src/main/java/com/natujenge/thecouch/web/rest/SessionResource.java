@@ -68,16 +68,18 @@ public class SessionResource {
 
     //POST: /api/sessions
     @PostMapping
-    public ResponseEntity<?> createSession(@RequestBody Session session){
+    public ResponseEntity<?> createSession(@RequestBody Session session,
+                                           @RequestParam("contractId") Long contractId,
+                                           @RequestParam("clientId") Long clientId,
+                                           @AuthenticationPrincipal User userDetails){
+        log.info("Request to create session");
         try{
-            log.info("Session request received {}", session);
-
-            Session sessionResponse = sessionService.createSession(session);
-            return new ResponseEntity<>(sessionResponse, HttpStatus.CREATED);
+            Session sessionResponse = sessionService.createSession(userDetails.getCoach().getId(),clientId,contractId,session);
+            return new ResponseEntity<>(new RestResponse(false,"Session Created Successfully"), HttpStatus.CREATED);
 
         } catch(Exception e) {
-            log.error(".....", e);
-            return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Error", e);
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     //PUT: /api/sessions
