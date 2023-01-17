@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     ConfirmationTokenService confirmationTokenService;
 
-    public String signupUser(User user) {
+    public List<Object> signupUser(User user) {
         log.info("Signing up User");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
                 .isPresent();
@@ -56,11 +57,13 @@ public class UserService implements UserDetailsService {
 
 
         // save the User in the database
-        userRepository.save(user);
+        User user1 = userRepository.save(user);
         log.info("User saved");
 
-        // generate confirmation token and save it to dB
-        String token = UUID.randomUUID().toString();
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
@@ -71,8 +74,11 @@ public class UserService implements UserDetailsService {
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         log.info("Confirmation token generated");
 
-        // TODO : SEND EMAIL with verification Link
-        return Constants.API_ENDPOINT + "/api/registration/confirm?token="+token;
+        List<Object> response = new ArrayList<>();
+        response.add(user1);
+        response.add(token);
+
+        return response;
 
     }
 
@@ -103,5 +109,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
 
+    }
+
+    public Optional<User> findByMsisdn(String msisdn) {
+        log.info("Request to find user with phone : {}", msisdn);
+
+        return userRepository.findByMsisdn(msisdn);
     }
 }

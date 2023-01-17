@@ -177,6 +177,7 @@ public class SessionService {
     public void deleteSession(Long id,Long coachId) {
         log.debug("Request to delete session : {}", id);
 
+
         boolean exist = sessionRepository.existsByIdAndCoachId(id,coachId);
         if (!exist) {
             throw new IllegalStateException("session doesn't exist");

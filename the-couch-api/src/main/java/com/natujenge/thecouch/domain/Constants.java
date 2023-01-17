@@ -7,5 +7,12 @@ public class Constants {
     public static final String TOKEN_PREFIX                  = "Bearer ";
     public static final String HEADER_STRING                 = "Authorization";
 
-    public static final String API_ENDPOINT                 = "http://IP_ADDRESS:9090";
+    // Portal URL
+    public static final String API_ENDPOINT                 = "http://51.15.243.105:4200";
+
+    public static final String NOTIFICATION_URL = "http://51.15.233.87:15432/message/queue";
+    public static final String DEFAULT_EMAIL_SOURCE_ADDRESS = "alerts@meliora.tech";
+    public static final String DEFAULT_SMS_SOURCE_ADDRESS = "SMSAfrica";
+
+
 }
