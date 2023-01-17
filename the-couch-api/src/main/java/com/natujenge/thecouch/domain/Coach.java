@@ -38,4 +38,5 @@ public class Coach implements Serializable {
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
 }
