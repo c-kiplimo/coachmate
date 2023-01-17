@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Id;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -39,17 +41,48 @@ public class ClientService {
     }
 
     //UPDATE
-    public Client updateClient(Client client) {
+    public Optional<Client> updateClient(Client client) {
         // TODO: To update client, Get client from dB, then update the details from request
         //  and then save. @Transactional
-        try {
-            log.info("Received an update request for {}");
-            clientRepository.save(client);
-            return client;
-        } catch (Exception e) {
-            log.error("Error occurred", e);
-            return null;
+        Optional<Client> clientOptional = clientRepository.findClientById(client.getId());
+
+        log.info("Client found with id {}", client.getId());
+
+        if(clientOptional.isPresent()) {
+            Client client1 = clientOptional.get();
+
+            client1.setFirstName(client.getFirstName());
+            client1.setLastName(client.getLastName());
+            client1.setEmail_address(client.getEmail_address());
+            client1.setMsisdn(client.getMsisdn());
+            client1.setPhysical_address(client.getPhysical_address());
+            client1.setProfession(client.getProfession());
+            client1.setPayment_mode(client.getPayment_mode());
+            client1.setReason(client.getReason());
+            client1.setType(client.getType());
+
+            client1 = clientRepository.save(client1);
+            log.info("Updated Client with Id :", client1.getId());
+            return Optional.of(client1);
+
         }
+        return clientOptional;
+    }
+    //Update Client Status
+    public Optional<Client> updateClientStatus(Client client) {
+        Optional<Client> clientOptional = clientRepository.findClientById(client.getId());
+        log.info("Client found with id {}", client.getId());
+
+        if(clientOptional.isPresent()){
+            Client client1 = clientOptional.get();
+
+            client1.setStatus(client.getStatus());
+
+            client1 = clientRepository.save(client1);
+            log.info("Updated Client Status:", client1.getStatus());
+            return Optional.of(client1);
+        }
+        return clientOptional;
     }
     //INDEX - all clients
     public List<Client> viewClients() {
@@ -67,4 +100,6 @@ public class ClientService {
     public void deleteClient(Long id){
         clientRepository.deleteClientById(id);
     }
+
+
 }
