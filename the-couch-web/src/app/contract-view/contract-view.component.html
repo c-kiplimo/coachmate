@@ -1,43 +1,50 @@
 <div class="row">
-    <div class="col-10">
-        <h3>Contracts</h3>
-    </div>
-    <div class="col-2">
-        <app-user></app-user>
-    </div>
+  <div class="col-10">
+    <h3>Contracts</h3>
+  </div>
+  <div class="col-2">
+    <app-user></app-user>
+  </div>
 </div>
 <div class="row">
-    <div class="col-10">
-    </div>
-    <div class="col-2">
-        <button type="button" routerLink="/contract" class="btn btn-success"><i class="fa-solid fa-user-plus"></i>Add Contract</button>
-    </div>
+  <div class="col-10"></div>
+  <div class="col-2">
+    <button type="button" routerLink="/contract" class="btn btn-success">
+      <i class="fa-solid fa-user-plus"></i>Add Contract
+    </button>
+  </div>
 </div>
 <div class="row">
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Coaching Category</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">No Of Sessions</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let contract of contracts">
-            <th scope="row">{{contract.id}}</th>
-            <td>{{contract.coachingCategory}}</td>
-            <td>{{contract.startDate | date: "MMM d, y" }}</td>
-            <td>{{contract.endDate | date: "MMM d, y" }}</td>
-            <td>{{contract.noOfSessions }}</td>
-            <td class="actions">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-trash-can"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Coaching Category</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">No Of Sessions</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contract of contracts">
+        <th scope="row">{{ contract.id}}</th>
+        <td>{{ contract.coachingCategory }}</td>
+        <td>{{ contract.startDate | date : "MMM d, y" }}</td>
+        <td>{{ contract.endDate | date : "MMM d, y" }}</td>
+        <td>{{ contract.noOfSessions }}</td>
+        <td class="actions">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-trash-can"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+    <div class="donut multi"></div>
+  </div>
+  <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
+    No contracts Found.
+  </p>
 </div>

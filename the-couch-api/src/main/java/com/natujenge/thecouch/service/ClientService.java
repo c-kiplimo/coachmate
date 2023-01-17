@@ -22,12 +22,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import static org.springframework.util.StringUtils.hasLength;
+import javax.persistence.Id;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -232,7 +236,6 @@ public class ClientService {
             client1.setLastUpdatedBy( client1.getCoach().getFullName());
         }
         log.info("Client with id {} changed status",id);
-
     }
 
     @Transactional
@@ -302,4 +305,6 @@ public class ClientService {
             clientRepository.save(client);
         }
     }
+
+
 }

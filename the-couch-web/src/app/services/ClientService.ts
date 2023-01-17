@@ -11,18 +11,27 @@ import { environment } from 'src/environments/environment';
 
 
 export class ClientService {
+    
 
     baseURL: string = environment.apiURL + '/api/';
+  deleteClient: any;
     
     constructor(private http: HttpClient) {
 
     }
 
-    
-  
-    getClient(): Observable<any> {
-        return this.http.get(`${this.baseURL}clients`)
+    getClient(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}clients`,
+        {
+            params: options,
+            observe: 'response',
+        })
     }
+    getOneClient(id: number): Observable<any> {
+        return this.http.get<any>(this.baseURL + '/clients/' + id, {
+          observe: 'response',
+        });
+      } 
     
     //client status
     // ACTIVE,
@@ -30,22 +39,10 @@ export class ClientService {
     // CLOSED
     addClient(client: any): Observable<any> {
         console.log(client)
-        return this.http.post(`${this.baseURL}clients`, {
-            name: client.name,
-            type: client.clientType,
-            msisdn: client.phone,
-            email_address: client.email,
-            physical_address: client.address,
-            profession: client.profession,
-            payment_mode: client.PaymentMode,
-            status: "NEW",
-            reason: client.reason,
-            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
-            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        })
+        return this.http.post(`${this.baseURL}clients`, client)
     } 
-    deleteClient() {
-        return this.http.delete(`${this.baseURL}clients`)
+    suspendClient(clientData: any): Observable<any> {
+        return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
     // Get Contracts
@@ -59,15 +56,21 @@ export class ClientService {
     
     addSession(session: any): Observable<any> {
         console.log(session)
-        return this.http.post(`${this.baseURL}sessions`, {
-            name:session.name,
-            type:session.type,
-            session_date:session.session_date,
-            session_venue:session.session_venue,
-            goals:session.goals,
-            createdBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.id,
-            lastUpdatedBy: JSON.parse(sessionStorage.getItem('userDetails') as any).user.fullName
-        })
+        return this.http.post(`${this.baseURL}sessions`,session
+            
+        )
+    }
+    editClient(id: any, client: any): Observable<any> {
+        client.id = id;
+        return this.http.put(`${this.baseURL}clients/updateClient`, client)
+    }
+    changeClientStatus(clientId: any, status: any): Observable<any> {
+        var client = {
+            id: clientId,
+            status: status
+        }
+    
+        return this.http.put(`${this.baseURL}clients/changeStatus`, client)
     }
 
      

@@ -1,19 +1,19 @@
 package com.natujenge.thecouch.web.rest;
 
-import antlr.StringUtils;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.service.ClientService;
-import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
+
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.Cleanup;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +122,11 @@ public class ClientResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //PUT: /api/clients
+    @PutMapping(path = "/updateClient")
+    public ResponseEntity<?> updateClient(@RequestBody Client client){
+        // TODO: Have the updateClientById in PATCH request used here but moved to service.
+
 
     @PutMapping(path = "/change-status/{id}") // change status active or suspend
     ResponseEntity<?> updateClient(@RequestBody ChangeStatusRequest statusRequest,
@@ -142,6 +146,7 @@ public class ClientResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping(path = "/close-client/{id}") // change status active or suspend
     ResponseEntity<?> closeClient(@RequestBody ChangeStatusRequest statusRequest,
@@ -234,4 +239,6 @@ public class ClientResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }

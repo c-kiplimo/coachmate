@@ -1,3 +1,6 @@
+
+@import 'ngx-toastr/toastr';
+
 /* You can add global styles to this file, and also import other style files */
 /* You can add global styles to this file, and also import other style files */
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap'); */
@@ -31,3 +34,49 @@ body {
 .card-body {
     padding: 1rem 1.5rem; 
 } */
+
+.card-table {
+  padding: 20px 30px;
+  border-radius: 8px!important;
+  border: 1px solid #f1f1f1!important;
+  margin-bottom: 30px;
+  min-height: 320px;
+}
+.card-table .title {
+    font-weight: 600;
+    color: #5f6063;
+}
+
+/* // ************************
+// GLOBAL SPINNER STYLING
+// ************************ */
+
+.donut-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut {
+  width: 3rem;
+  height: 3rem;
+  margin: 2rem;
+  border-radius: 50%;
+  border: 0.3rem solid #1B3A2744;
+  border-top-color:  #1B3A27;;
+  animation: 1.5s spin infinite linear;
+}
+.donut.multi {
+    border-bottom-color: #1B3A27;;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.modal-backdrop{
+  display: none;    
+}

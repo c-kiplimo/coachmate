@@ -1,0 +1,30 @@
+.btn-signup{
+    background-color: #1B3A27;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-radius: 4px ;
+    width: 100%;
+    height: 50px;
+}
+.card {
+    
+        color: #1B3A27;
+        text-decoration: none;
+    }
+.input-error{
+    border: 1px solid red!important;
+}
+.back-link{
+    cursor: pointer;
+}
+    :hover {
+    color: #0d7d9a;
+}
+fa-icon{
+    font-size:larger;
+   
+}
+fa-icon {
+    cursor: pointer;
+}

@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-Coach-page',
-  templateUrl: './add-Coach-page.component.html',
-  styleUrls: ['./add-Coach-page.component.css']
+  templateUrl: './add-coach-page.component.html',
+  styleUrls: ['./add-coach-page.component.css']
 })
 export class AddCoachPageComponent implements OnInit {
 

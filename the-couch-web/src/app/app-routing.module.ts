@@ -10,14 +10,21 @@ import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
-import { ContractViewComponent } from './contract-view/contract-view.component';
+import { contractViewComponent } from './contract-view/contract-view.component';
 import { contractComponent } from './contract/contract.component';
+import { sessionViewComponent } from './session-view/session-view.component';
+import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
+import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
+import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
+
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dashboard',
     component: DashboardComponent
   },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent
@@ -25,6 +32,10 @@ const routes: Routes = [
   {
     path: 'addclient',
     component: AddClientPageComponent
+  },
+  {
+    path:'sessionView/:id',
+    component:sessionViewComponent
   },
   {
     path: 'signin',
@@ -42,9 +53,10 @@ const routes: Routes = [
     path: 'schedules',
     component: SchedulesComponent
   },
+
   {
-    path: 'addObjective',
-    component: AddObjectiveComponent
+    path: 'education',
+    component:TrainingsListComponent
   },
   {
     path: 'sessions',
@@ -55,17 +67,22 @@ const routes: Routes = [
     component: ClientViewComponent
   },
   {
-    path: 'notifications',
-    component: ContractViewComponent
-  },
-  {
-    path:'contracts',
-    component:SessionsComponent
+    path: 'contracts',
+    component: contractViewComponent
+
   },
   {
      path:'contract',
      component:contractComponent
-  }
+  },
+  {
+    path: 'AddTraining',
+    component: AddTrainingComponent
+  },
+  { path: 'reset/request', component: ForgotPaswordComponent },
+  
+  { path: 'registration/confirm', 
+    component: ConfirmedViewComponent },
   
 ];
 

@@ -1,0 +1,87 @@
+<div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card card-table d-flex justify-content-center align-items-center">
+          <div class="">
+            <h1 class="text-center mb-3">Add training</h1>
+          </div>
+          <form>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="courseName">Course Name *</label>
+                <input
+                  name="courseName"
+                  type="text"
+                  class="form-control"
+                  id="courseName"
+                  required
+                />
+              </div>
+              <div class="mb-3  col">
+                <label for="providerName">Provider *</label>
+                <input
+                  name="providerName"
+                  type="text"
+                  class="form-control"
+                  id="providerName"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                    <label for="dateIssued">Date Issued*</label>
+                    <input
+                      name="dateIssued"
+                      type="date"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+              <div class="mb-3 col-md-6">
+                <label for="expiryDate">Valid till*</label>
+                <input
+                  name="expiryDate"
+                  type="date"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+            </div>
+            <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                    <label for="hours" class="form-label">Training Hours *</label>
+                    <input
+                      name="hours"
+                      type="number"
+                      class="form-control"
+                      required
+                      placeholder="eg 45hrs"
+                    />
+                  </div>
+                <div class="mb-3 col-md-6 form-group">
+                    <label for="certficate" class="form-label">certficate</label>
+                    <input 
+                    type="file"
+                    class="form-control"
+                    name="certificate"
+                    placeholder="upload your certificate"
+                    >
+                </div>
+
+            </div>
+            <div class="text-center">
+            <button
+              type="submit"
+              class="btn btn-signup mb-3 mt-2 p-2 text-center"
+            >
+              ADD
+            </button>
+        </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

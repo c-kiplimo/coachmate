@@ -18,7 +18,11 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url.includes('token') || req.url.includes('registration')) {
+    if (
+      req.url.includes('token') ||
+      req.url.includes('registration') ||
+      req.url.includes('registration/contact')
+    ) {
       return next.handle(req);
     }
     const headersConfig = {
@@ -28,7 +32,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     };
 
     const token = sessionStorage.getItem('token');
-    console.log(token);
+    // console.log(token);
 
     const request = req.clone({
       setHeaders: {
@@ -40,7 +44,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       catchError((err) => {
         if (err.status === 401 || err.status === 403) {
           sessionStorage.removeItem('token');
-          this.router.navigate(['/login']);
+          this.router.navigate(['/signin']);
         }
         // const error = err.error.message || err.statusText;
         return throwError(err.error);

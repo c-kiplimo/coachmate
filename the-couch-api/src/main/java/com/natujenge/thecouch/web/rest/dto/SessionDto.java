@@ -1,27 +1,44 @@
 package com.natujenge.thecouch.web.rest.dto;
 
+import com.natujenge.thecouch.domain.enums.*;
 import lombok.Data;
 import org.hibernate.type.StringNVarcharType;
 import org.springframework.boot.context.event.SpringApplicationEvent;
 
-@Data
-public class SessionDto {
-    private Long id;
-    private Integer session_no;
-    private String name;
-    private String type;
-    private String details;
-    private String notes;
-    private String amount_paid;
-    private String session_date;
-    private String delivery_date;
-    private String delivered_at;
-    private String status;
-    private String session_venue;
-    private String attachments;
-    private Long client_id;
-    private Long coach_id;
-    private String goals;
-    private String feedback;
-    private String createdBy;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+public interface SessionDto {
+    Long getId();
+    String getName();
+    SessionType getSessionType();
+    SessionStatus getSessionStatus();
+    String getNotes();
+    String getFeedback();
+    LocalDate getSessionDate();
+    LocalDateTime getSessionStartTime();
+    LocalDateTime getSessionEndTime();
+    SessionVenue getSessionVenue();
+    PaymentCurrency getPaymentCurrency();
+    String getAmountPaid();
+
+    ClientView getClient();
+
+    ContractView getContract();
+
+    interface ClientView{
+        Long getId();
+
+        String getName();
+
+        ClientType getType();
+
+        String getMsisdn() ;
+    }
+
+    interface ContractView{
+        Long getId();
+
+        CoachingCategory getCoachingCategory();
+        String getCoachingTopic();
+    }
 }
