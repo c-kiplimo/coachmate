@@ -24,6 +24,8 @@ public class Coach implements Serializable {
 
     private String businessName;
     private String fullName;
+    private String firstName;
+    private String lastName;
     private String msisdn;
     private String emailAddress;
     @Enumerated(EnumType.STRING)
@@ -38,4 +40,5 @@ public class Coach implements Serializable {
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
 }

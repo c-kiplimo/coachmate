@@ -14,6 +14,7 @@ export class ClientService {
     
 
     baseURL: string = environment.apiURL + '/api/';
+  deleteClient: any;
     
     constructor(private http: HttpClient) {
 
@@ -40,8 +41,8 @@ export class ClientService {
         console.log(client)
         return this.http.post(`${this.baseURL}clients`, client)
     } 
-    deleteClient() {
-        return this.http.delete(`${this.baseURL}clients`)
+    suspendClient(clientData: any): Observable<any> {
+        return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
     // Get Contracts
@@ -58,6 +59,18 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`,session
             
         )
+    }
+    editClient(id: any, client: any): Observable<any> {
+        client.id = id;
+        return this.http.put(`${this.baseURL}clients/updateClient`, client)
+    }
+    changeClientStatus(clientId: any, status: any): Observable<any> {
+        var client = {
+            id: clientId,
+            status: status
+        }
+    
+        return this.http.put(`${this.baseURL}clients/changeStatus`, client)
     }
 
      

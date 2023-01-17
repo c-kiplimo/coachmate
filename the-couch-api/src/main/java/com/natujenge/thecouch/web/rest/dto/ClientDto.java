@@ -1,17 +1,23 @@
 package com.natujenge.thecouch.web.rest.dto;
-import lombok.*;
-@Data
 
-public class ClientDto {
-    private String id;
-    private String name;
-    private String type;
-    private String msisdn;
-    private String email_address;
-    private String physical_address;
-    private String profession;
-    private String payment_mode;
-    private String status;
-    private String reason;
-    private String createdBy;
+import com.natujenge.thecouch.domain.enums.ClientStatus;
+
+import java.time.LocalDateTime;
+
+public interface ClientDto {
+    Long getId();
+    String getFirstName();
+    String getLastName();
+    String getMsisdn();
+    String getEmail();
+    String getReason();
+    ClientStatus getStatus();
+    CoachView getCoach();
+
+    String getPhysicalAddress();
+
+    public interface  CoachView {
+        Long getId();
+        String getBusinessName();
+    }
 }
