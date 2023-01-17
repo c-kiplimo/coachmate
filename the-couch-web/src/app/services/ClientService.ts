@@ -27,7 +27,7 @@ export class ClientService {
         })
     }
     getOneClient(id: number): Observable<any> {
-        return this.http.get<any>(this.baseURL + '/order/find/' + id, {
+        return this.http.get<any>(this.baseURL + '/clients/' + id, {
           observe: 'response',
         });
       } 
@@ -40,8 +40,8 @@ export class ClientService {
         console.log(client)
         return this.http.post(`${this.baseURL}clients`, client)
     } 
-    deleteClient() {
-        return this.http.delete(`${this.baseURL}clients`)
+    suspendClient(clientData: any): Observable<any> {
+        return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
     // Get Contracts
@@ -58,6 +58,9 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`,session
             
         )
+    }
+    editClient(client: any): Observable<any> {
+        return this.http.put(`${this.baseURL}clients`, client)
     }
 
      

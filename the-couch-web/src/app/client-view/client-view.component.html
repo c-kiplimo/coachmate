@@ -1,13 +1,77 @@
-<!-- <!-- <div class="row">
+<div class="row">
     <div class="col-10">
-        <h3>Client View</h3>
+        <h3></h3>
     </div>
     <div class="col-2">
         <app-user></app-user>
     </div>
 </div>
+
 <br>
 <div class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
+
+<div class="card details-card">
+  <div class="d-flex justify-content-between mb-3 flex-wrap" [@fadeIn]>
+    <div>
+      <h5 class="section-title">Client View</h5>
+    </div>
+    <div class="d-flex">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal">
+        <i class="fas fa-edit"></i>
+        Edit
+      </button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteClientModal">
+          <i class="fas fa-trash"></i>
+          Delete
+      </button>
+     
+    </div>
+  </div>
+
+  <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+    <div class="donut multi">
+      
+    </div>
+  </div>
+
+    <div class="client-details" *ngIf="clients">
+      <div class="client-details" *ngIf="!loadingClient $$ clients" [@fadeIn]>
+        <div class="d-flex justify-content-between onedetail">
+          <span class="title">Client Id</span>
+          <span class="value">{{clients.id}}</span>
+        </div>
+        <div class="d-flex justify-content-between onedetail">
+          <span class="title">Client Name</span>
+          <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
+      </div>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client email</span>
+        <span class="value">{{clients.email_address}}</span>
+      </div>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client Phone</span>
+        <span class="value">{{clients.msisdn}}</span>
+      </div>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Client Address</span>
+        <span class="value">{{clients.physical_address}}</span>
+      </div>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Reason</span>
+        <span class="value">{{clients.reason}}</span>
+      </div>
+      <div class="d-flex justify-content-between onedetail">
+        <span class="title">Status</span>
+        <span class="value">{{clients.status}}</span>
+      </div>
+  </div>
+
+</div>
+<div class="col-2"></div>
+</div>
+
     <div class="col-5">
         <h6>Client Name:{{clients.name}}</h6>
         <h6>Client Email: {{clients.email_address}}</h6>
@@ -21,33 +85,21 @@
         <h6>Client Status:{{clients.status}}</h6>
 </div>
 <div class="row">
-    <h3>Client Contracts</h3>
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Coaching Category</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">No Of Sessions</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let contract of contracts">
-            <th scope="row">{{contract.id}}</th>
-            <td>{{contract.coachingCategory}}</td>
-            <td>{{contract.startDate | date: "MMM d, y" }}</td>
-            <td>{{contract.endDate | date: "MMM d, y" }}</td>
-            <td>{{contract.noOfSessions }}</td>
-            <td class="actions">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-trash-can"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-10">
+        <h3> Contracts</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Contract Name</th>
+                    <th scope="col">Contract Date</th>
+                    <th scope="col">Contract Time</th>
+                    <th scope="col">Contract Duration</th>
+                    <th scope="col">Contract Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+        </table>
 </div>
 <div class="row">
     <table class="table">
@@ -73,7 +125,7 @@
             <td>{{session.sessionStartTime | date: "hh:mm a"}}</td>
             <td>{{session.sessionEndTime | date: "hh:mm a"}}</td>
             <td class="actions">
-                <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 <i class="fa-solid fa-pen-to-square"></i>
                 <i class="fa-solid fa-trash-can"></i>
             </td>
@@ -83,39 +135,5 @@
 </div> -->
 
 
-        <!-- <table class="table" *ngIf="currentTab === 'orders'" [@fadeIn]>
-          <thead>
-            <th colspan="1">Order Title</th>
-            <th colspan="1">Order Amount</th>
-            <th colspan="1">Due date</th>
-            <th colspan="1">Status</th>
-            <th colspan="1">Actions</th>
-          </thead>
-          <tbody *ngIf="orders?.length" [@fadeIn]>
-            <tr *ngFor="let order of orders">
-              <td>{{ order.name }}</td>
-              <td>{{ order.orderAmount }}</td>
-              <td>{{ order.dueDate | date: "MMM d, y hh:mm a" }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'badge-success': customer.status === 'ACTIVE',
-                    'badge-danger': customer.status !== 'ACTIVE'
-                  }"
-                  >{{ customer.status }}</span
-                >
-              </td>
-
-              <td>
-                <button
-                  class="btn btn-view"
-                  [routerLink]="['/order', order.id]"
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
+      
 

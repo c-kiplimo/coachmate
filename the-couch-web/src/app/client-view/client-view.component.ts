@@ -4,14 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import {
-  faCaretDown,
-  faChevronRight,
-  faPlus,
-  // faRefresh,
-} from '@fortawesome/free-solid-svg-icons';
+
+
 import { style, animate, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { id } from 'date-fns/locale';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-client-view',
@@ -28,28 +25,53 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     ]),
   ],
 })
+
 export class ClientViewComponent implements OnInit {
 contracts:any;
 sessions:any;
 clients:any;
-clientid:any;
+clientId:any;
   console: any;
   itemsPerPage = 20;
   filters: any = {
     status: '',
     searchItem: '',
   };
-  
 
 
+  constructor(
+    private clientService:ClientService,
+    private restApiService:ApiService,
+    private router:Router,
+    private activatedRoute: ActivatedRoute)
+   { }
 
-  page: number = 1;
+  notificationOptions = [false, true];
+  notificationType = ['sms', 'email'];
+  loadingClient = false;
+  totalLength: any;
+
+  // page: number = 1;
   // itemsPerPage = 20;
-  ApiService: any;
+  // ApiService: any;
 
-  constructor() {}
 
   ngOnInit(): void {
-  
-}
+    this.clientId = this.activatedRoute.snapshot.params['id'];
+   
+    this.getClientData(this.clientId);
+
+  }
+
+  getClientData(id: any) {
+    console.log("Get Client");
+    this.loadingClient = true;
+    
+    this.clientService.getOneClient(id).subscribe((data) => {
+      this.loadingClient = false;
+      this.clients = data.body;
+      console.log(this.clients);
+    });
+  }
+
 }

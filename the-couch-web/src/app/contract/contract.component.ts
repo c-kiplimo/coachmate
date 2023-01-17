@@ -19,11 +19,16 @@ export class contractComponent implements OnInit{
   numberOfContracts!:number;
   rightIcon: any;
   ApiService: any;
-  objectives:any;
+  objectives: string[] = [];
   itemsPerPage = 20;
   filters: any = {
     status: '',
     searchItem: '',
+  };
+
+  //Add Objective Form
+  Objectives = {
+    objective: ''
   };
 
   constructor(private clientService : ClientService,
@@ -108,8 +113,10 @@ export class contractComponent implements OnInit{
     // )
   }
   addObjective(){
-    this.objectives =[];
-    this.objectives.push();
+    
+    console.log(this.Objectives);
+    this.objectives.push(this.Objectives.objective);
+    console.log(this.objectives);
   }
 
 }

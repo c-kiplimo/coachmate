@@ -23,7 +23,9 @@ public class Client {
 
     @Id
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
+
 
     @Enumerated(EnumType.STRING)
     private ClientType type;
@@ -52,7 +54,6 @@ public class Client {
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-
 
     // Relations
     @ManyToOne

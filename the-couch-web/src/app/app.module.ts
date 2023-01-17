@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,6 +32,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
 import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
+
+import { FeebackFormComponent } from './feeback-form/feeback-form.component';
+
+
+
  import { contractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -40,6 +45,10 @@ import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CoachEducationModule } from './coach-education/coach-education.module';
+import { SharedModule } from 'src/shared/shared.module';
+
+
 
 
 @NgModule({
@@ -51,7 +60,6 @@ import { ToastrModule } from 'ngx-toastr';
     sessionViewComponent,
     DashboardComponent,
     BodyComponent,
-    UserComponent,
     ClientsComponent,
     AddClientPageComponent,
     AddCoachPageComponent,
@@ -63,11 +71,18 @@ import { ToastrModule } from 'ngx-toastr';
     contractComponent,
     AddObjectiveComponent,
     ClientViewComponent,
+
+    FeebackFormComponent,
+
+
+
     ForgotPaswordComponent,
     ConfirmedViewComponent,
+
   ],
   imports: [
     BrowserModule,
+    CoachEducationModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
@@ -75,6 +90,7 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
+    SharedModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -86,6 +102,7 @@ import { ToastrModule } from 'ngx-toastr';
       progressBar: false,
     }),
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
     ClientService,

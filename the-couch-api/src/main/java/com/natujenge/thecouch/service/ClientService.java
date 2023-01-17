@@ -43,7 +43,7 @@ public class ClientService {
         // TODO: To update client, Get client from dB, then update the details from request
         //  and then save. @Transactional
         try {
-            log.info("Received an update request for {}", client.getName());
+            log.info("Received an update request for {}");
             clientRepository.save(client);
             return client;
         } catch (Exception e) {
