@@ -107,6 +107,7 @@ clientId:any;
   }
 
 
+
   updateClientDetails(){
   
     console.log(this.updateClient.value)
@@ -171,6 +172,5 @@ clientId:any;
       );
     }
   }
-
 
 }
