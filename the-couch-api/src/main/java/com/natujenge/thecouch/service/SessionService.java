@@ -53,7 +53,7 @@ public class SessionService {
         Page<SessionDto> sessionPage;
         if (search != null && !search.isEmpty()) {
             QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.coach.id.eq(id).
+            sessionPage = sessionRepository.findBy(qSession.coach_id.eq(String.valueOf(id)).
                             andAnyOf(qSession.name.containsIgnoreCase(search).
                                     or(qSession.notes.containsIgnoreCase(search))),
                     q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
@@ -66,7 +66,7 @@ public class SessionService {
 
     }
 
-    // Get Individual Sessions by Id
+    // Get Individual Sessions by id
     public SessionDto findSessionByIdAndCoachId(Long id, Long coachId) {
         log.debug("Request to get session : {} and coachId : {}", id,coachId);
 

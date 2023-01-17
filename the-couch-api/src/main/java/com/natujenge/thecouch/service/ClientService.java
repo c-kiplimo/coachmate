@@ -33,6 +33,7 @@ public class ClientService {
 
         try{
             clientRepository.save(client);
+
             return client;
         } catch (Exception e) {
             log.error("Error occurred ", e);

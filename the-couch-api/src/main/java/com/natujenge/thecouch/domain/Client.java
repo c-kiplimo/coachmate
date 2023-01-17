@@ -61,4 +61,6 @@ public class Client {
     private Coach coach;
 
 
+    public void setName(String name) {
+    }
 }
