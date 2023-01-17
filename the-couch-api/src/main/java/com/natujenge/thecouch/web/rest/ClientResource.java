@@ -1,22 +1,19 @@
 package com.natujenge.thecouch.web.rest;
 
-import antlr.StringUtils;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.service.ClientService;
-import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -69,13 +66,13 @@ public class ClientResource {
         }
     }
     //PUT: /api/clients
-    @PutMapping
+    @PutMapping(path = "/updateClient")
     public ResponseEntity<?> updateClient(@RequestBody Client client){
         // TODO: Have the updateClientById in PATCH request used here but moved to service.
 
         try{
             log.info("Client request received {}", client);
-            Client clientResponse = clientService.updateClient(client);
+            Optional<Client> clientResponse = clientService.updateClient(client);
             return new ResponseEntity<>(clientResponse, HttpStatus.OK);
 
         } catch(Exception e) {
@@ -83,6 +80,20 @@ public class ClientResource {
             return new ResponseEntity<>( "Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //PUT: Change Client Status /api/clients/changeStatus
+    @PutMapping(path = "/changeStatus")
+    public ResponseEntity<?> updateClientStatus(@RequestBody Client client){
+        try{
+            log.info("Change Client Status Request REceived :", client);
+            Optional<Client> clientResponse = clientService.updateClientStatus(client);
+            return new ResponseEntity<>(clientResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("..........................", e);
+            return new ResponseEntity<>("Error occurred while updating client Status", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     //PATCH: /api/clients/:id
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateClientById(@RequestBody ClientDto clientDto, @PathVariable("id") Long id) {

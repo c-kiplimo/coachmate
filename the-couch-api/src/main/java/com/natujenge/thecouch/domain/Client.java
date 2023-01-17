@@ -55,6 +55,10 @@ public class Client {
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
-    public void setName(String name) {
-    }
+    // Relations
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+
+
 }
