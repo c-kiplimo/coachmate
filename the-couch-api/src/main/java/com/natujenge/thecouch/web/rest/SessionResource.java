@@ -87,7 +87,7 @@ public class SessionResource {
     }
     //PUT: /api/sessions
     // UPDATE SESSION DETAILS
-    @PutMapping
+    @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateSession(@RequestBody Session session,
                                            @PathVariable("id") Long id,
                                            @AuthenticationPrincipal User userDetails){
@@ -108,39 +108,39 @@ public class SessionResource {
 
 
     //PATCH: /api/sessions/:id
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateSessionById(@RequestBody SessionRequest sessionRequest,
-                                               @PathVariable("id") Long id) {
-        Session session = sessionRepository.findSessionById(id).orElseThrow(()
-                -> new UserNotFoundException("Session by id " + id + " not found"));
-
-        boolean needUpdate = false;
-
-        if (hasLength(sessionRequest.getName())){
-            session.setName(sessionRequest.getName());
-            needUpdate = true;
-        }
-
-        if (hasLength(sessionRequest.getSessionDuration())){
-            session.setSessionDuration(sessionRequest.getSessionDuration());
-            needUpdate = true;
-        }
-
-        if (hasLength(sessionRequest.getAmountPaid())){
-            session.setAmountPaid(sessionRequest.getAmountPaid());
-            needUpdate = true;
-        }
-
-        if (hasLength(sessionRequest.getSessionDuration())){
-            session.setSessionDuration(sessionRequest.getSessionDuration());
-            needUpdate = true;
-        }
-
-        if (needUpdate) {
-            sessionRepository.save(session);
-        }
-        return new ResponseEntity(session, HttpStatus.OK);
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<?> updateSessionById(@RequestBody SessionRequest sessionRequest,
+//                                               @PathVariable("id") Long id) {
+//        Session session = sessionRepository.findSessionById(id).orElseThrow(()
+//                -> new UserNotFoundException("Session by id " + id + " not found"));
+//
+//        boolean needUpdate = false;
+//
+//        if (hasLength(sessionRequest.getName())){
+//            session.setName(sessionRequest.getName());
+//            needUpdate = true;
+//        }
+//
+//        if (hasLength(sessionRequest.getSessionDuration())){
+//            session.setSessionDuration(sessionRequest.getSessionDuration());
+//            needUpdate = true;
+//        }
+//
+//        if (hasLength(sessionRequest.getAmountPaid())){
+//            session.setAmountPaid(sessionRequest.getAmountPaid());
+//            needUpdate = true;
+//        }
+//
+//        if (hasLength(sessionRequest.getSessionDuration())){
+//            session.setSessionDuration(sessionRequest.getSessionDuration());
+//            needUpdate = true;
+//        }
+//
+//        if (needUpdate) {
+//            sessionRepository.save(session);
+//        }
+//        return new ResponseEntity(session, HttpStatus.OK);
+//    }
 
     //DELETE:/api/sessions/:id
     @DeleteMapping("/{id}")

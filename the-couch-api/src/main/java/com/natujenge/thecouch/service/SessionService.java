@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
@@ -102,6 +103,8 @@ public class SessionService {
         // Contract
         Contract contract = optionalContract.get();
 
+        // New Sessions enter the confirmed state
+        sessionRequest.setSessionStatus(SessionStatus.CONFIRMED);
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
