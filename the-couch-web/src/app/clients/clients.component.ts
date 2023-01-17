@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
 import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-clients',
@@ -25,14 +25,33 @@ export class ClientsComponent implements OnInit {
     status: '',
     searchItem: '',
   };
+  
 
   updateClient!: FormGroup;
 
-  constructor(private ClientService: ClientService, private router: Router) { }
+  constructor(private ClientService: ClientService, 
+    private router: Router,
+    private formbuilder: FormBuilder,) { }
   
-  Clients: any;
+  Clients!: any;
+
+  clientToBeUpdated!: any;
   ngOnInit(): void {
     this.getClients();
+
+    this.updateClient = this.formbuilder.group({
+     
+    firstName: ' ',
+    lastName: ' ',
+    type: ' ',
+    msisdn: ' ',
+    email_address: ' ',
+    physical_address: ' ',
+    profession: ' ',
+    payment_mode: ' ',
+    reason: '',
+
+    });
     
   }
   getClients(){
@@ -64,7 +83,30 @@ export class ClientsComponent implements OnInit {
 
   }
   editClient(client:any){
-    this.ClientService.editClient(client).subscribe(
+    this.clientToBeUpdated = client;
+
+    this.updateClient = this.formbuilder.group({
+      firstName: this.clientToBeUpdated.firstName,
+      lastName: this.clientToBeUpdated.lastName,
+      type: this.clientToBeUpdated.type,
+      msisdn: this.clientToBeUpdated.msisdn,
+      email_address: this.clientToBeUpdated.email_address,
+      physical_address: this.clientToBeUpdated.physical_address,
+      profession: this.clientToBeUpdated.profession,
+      payment_mode: this.clientToBeUpdated.payment_mode,
+      reason: this.clientToBeUpdated.reason,
+    });
+  
+  }
+
+  updateClientDetails(id:any){
+  
+    console.log(this.updateClient.value)
+    console.log(this.clientToBeUpdated)
+    
+    console.log(id)
+   
+    this.ClientService.editClient(id, this.updateClient.value).subscribe(
       (response) => {
         this.getClients();
         this.loading = false;
