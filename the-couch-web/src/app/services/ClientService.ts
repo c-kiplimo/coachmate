@@ -14,6 +14,7 @@ export class ClientService {
     
 
     baseURL: string = environment.apiURL + '/api/';
+  deleteClient: any;
     
     constructor(private http: HttpClient) {
 
