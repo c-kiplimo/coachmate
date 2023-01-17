@@ -18,6 +18,10 @@ import { style, animate, transition, trigger } from '@angular/animations';
   ],
 })
 export class ClientsComponent implements OnInit {
+salesData: any;
+getAllCustomers(arg0: number) {
+throw new Error('Method not implemented.');
+}
   loading = false;
   itemsPerPage = 20;
   filters: any = {
