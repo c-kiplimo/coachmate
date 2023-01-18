@@ -23,38 +23,39 @@ public class Client {
 
     @Id
     private Long id;
+    private String fullName;
     private String firstName;
     private String lastName;
 
-
     @Enumerated(EnumType.STRING)
-    private ClientType type;
+    private ClientType clientType;
     private  String msisdn;
 
     @Column(name="email_address", unique = true)
-    private String email_address;
-    private  String physical_address;
+    private String email;
+    private  String physicalAddress;
     private  String profession;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMode payment_mode;
+    private PaymentMode paymentMode;
 
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
     private String reason;
 
     //Management details
-
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @Column(nullable = false)
     private String createdBy;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
-    public void setName(String name) {
-    }
+
+    // Relations
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+
 }

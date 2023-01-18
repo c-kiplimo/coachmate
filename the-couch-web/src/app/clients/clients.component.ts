@@ -19,6 +19,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientsComponent implements OnInit {
+salesData: any;
+getAllCustomers(arg0: number) {
+throw new Error('Method not implemented.');
+}
   loading = false;
   itemsPerPage = 20;
   filters: any = {
@@ -82,6 +86,14 @@ export class ClientsComponent implements OnInit {
 
 
   }
+  deleteClient(client: any) {
+    this.ClientService.deleteClient().subscribe(() => {
+        // update the list of items
+        this.ClientService.getClient(client).subscribe(clients => {
+            this.Clients = clients;
+        });
+    });
+}
   editClient(client:any){
     this.clientToBeUpdated = client;
 
