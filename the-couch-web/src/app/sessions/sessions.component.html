@@ -1,23 +1,50 @@
 <div class="row">
-
-    <div class="col-10">
+<div class="col-10">
         <h3>Sessions</h3>
     </div>
     <div class="col-2">
         <app-user></app-user>
     </div>
-
 </div>
 <div class="row">
-  <div class="col-10"></div>
-  <div class="col-2">
-    <button type="button" routerLink="/addSession" class="btn btn-success">
-      <i class="fa-solid fa-user-plus"></i>Add Session
-    </button>
+  <div class="d-none d-md-block"class="col-4">
+    <div class="filters-section">
+      <div class="wrap">
+        <select
+          class="form-control"
+          name="codes"
+        >
+          <option value="">Filtering options</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="SUSPENDED">SUSPENDED</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+      </div>
   </div>
+<div class="wrap" class="col-3">
+        <input
+          type="text"
+          class="form-control search-bar"
+          name="customer"
+          placeholder="Name, Phone or Email"
+          autocomplete="off"
+        />
+      </div>
+<div class="col-3">
+<button class="btn button-filter" >
+        <i class="fa fa-search" aria-hidden="true"></i>
+        Search
+      </button>
 </div>
-<div class="row">
-  <table class="table">
+<div class="col-2">
+  <button type="button" routerLink="/addSession" class="btn btn-success">
+    <i class="fa-solid fa-user-plus"></i>Add Session
+  </button>
+</div>
+</div>
+<div class="row list-container " >
+  <table class="table" class="list-container" >
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -31,7 +58,7 @@
       </tr>
     </thead>
 
-    <tbody>
+    <tbody  class="list-container">
       <tr *ngFor="let session of sessions">
         <th scope="row">{{ session.id }}</th>
         <td>{{ session.name }}</td>

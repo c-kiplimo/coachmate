@@ -17,6 +17,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
   ],
 })
 export class SessionsComponent implements OnInit {
+
   loading = true;
 
   constructor(private restApiService: ClientService, private router: Router) {}
