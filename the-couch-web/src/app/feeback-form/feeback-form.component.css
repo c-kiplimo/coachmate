@@ -3,7 +3,7 @@
     width: 80%;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #40f79b;
   }
 
   /* Form Group */
@@ -32,7 +32,7 @@
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid rgb(160, 209, 172);
     border-radius: 4px;
     resize: none;
   }
@@ -51,7 +51,7 @@
 
   /* Disable Submit Button */
   button[type="submit"][disabled] {
-    background-color: #ccc;
+    background-color: rgb(116, 168, 138);
     cursor: not-allowed;
   }
 

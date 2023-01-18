@@ -17,6 +17,7 @@ import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.componen
 import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
+import { FeebackFormComponent } from './feeback-form/feeback-form.component';
 
 
 const routes: Routes = [
@@ -75,6 +76,10 @@ const routes: Routes = [
      path:'contract',
      component:contractComponent
   },
+  {
+    path:'support',
+    component:FeebackFormComponent
+ },
   {
     path: 'AddTraining',
     component: AddTrainingComponent
