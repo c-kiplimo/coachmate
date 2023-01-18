@@ -52,3 +52,19 @@
   background-color: #003d4c;
   color: white;
 }
+.list-container {
+  overflow-y: scroll;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.container {
+  overflow: auto;
+}
+.container {
+  max-height: 500px;
+  overflow-y: scroll;
+}
