@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.QClient;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
-import com.natujenge.thecouch.domain.enums.ClientType;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
@@ -28,11 +27,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import static org.springframework.util.StringUtils.hasLength;
-import javax.persistence.Id;
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class ClientService {
@@ -91,9 +85,9 @@ public class ClientService {
         // search by name or email or phone containing search param
         if (clientName != null && !clientName.isEmpty()) {
             clientPage = clientRepository.findBy(qClient.coach.id.eq(coachId).
-                            andAnyOf(qClient.fullName.containsIgnoreCase(clientName).
+                            andAnyOf(qClient.name.containsIgnoreCase(clientName).
                                     or(qClient.msisdn.containsIgnoreCase(clientName).
-                                            or(qClient.email.containsIgnoreCase(clientName)))),
+                                            or(qClient.email_address.containsIgnoreCase(clientName)))),
                     q -> q.sortBy(sort).as(ClientDto.class).page(pageable));
 
             // Status Only
@@ -107,9 +101,9 @@ public class ClientService {
         } else if (clientStatus != null) {
             clientPage = clientRepository.findBy(qClient.coach.id.eq(coachId).
                             and(qClient.status.eq(clientStatus).andAnyOf(
-                                    qClient.fullName.containsIgnoreCase(clientName).
+                                    qClient.name.containsIgnoreCase(clientName).
                                             or(qClient.msisdn.containsIgnoreCase(clientName).
-                                                    or(qClient.email.containsIgnoreCase(clientName)))
+                                                    or(qClient.email_address.containsIgnoreCase(clientName)))
                             )),
                     q -> q.sortBy(sort).as(ClientDto.class).page(pageable));
 
