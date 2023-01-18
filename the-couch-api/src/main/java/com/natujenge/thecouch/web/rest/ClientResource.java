@@ -122,14 +122,9 @@ public class ClientResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //PUT: /api/clients
-    @PutMapping(path = "/updateClient")
-    public ResponseEntity<?> updateClient(@RequestBody Client client){
-        // TODO: Have the updateClientById in PATCH request used here but moved to service.
-
 
     @PutMapping(path = "/change-status/{id}") // change status active or suspend
-    ResponseEntity<?> updateClient(@RequestBody ChangeStatusRequest statusRequest,
+    ResponseEntity<?> updateClientStatus(@RequestBody ChangeStatusRequest statusRequest,
                                      @RequestParam("status") String clientStatus,
                                      @PathVariable Long id,
                                      @AuthenticationPrincipal User userDetails) {
