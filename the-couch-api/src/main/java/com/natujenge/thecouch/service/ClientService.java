@@ -85,9 +85,9 @@ public class ClientService {
         // search by name or email or phone containing search param
         if (clientName != null && !clientName.isEmpty()) {
             clientPage = clientRepository.findBy(qClient.coach.id.eq(coachId).
-                            andAnyOf(qClient.name.containsIgnoreCase(clientName).
+                            andAnyOf(qClient.fullName.containsIgnoreCase(clientName).
                                     or(qClient.msisdn.containsIgnoreCase(clientName).
-                                            or(qClient.email_address.containsIgnoreCase(clientName)))),
+                                            or(qClient.email.containsIgnoreCase(clientName)))),
                     q -> q.sortBy(sort).as(ClientDto.class).page(pageable));
 
             // Status Only
@@ -101,9 +101,9 @@ public class ClientService {
         } else if (clientStatus != null) {
             clientPage = clientRepository.findBy(qClient.coach.id.eq(coachId).
                             and(qClient.status.eq(clientStatus).andAnyOf(
-                                    qClient.name.containsIgnoreCase(clientName).
+                                    qClient.fullName.containsIgnoreCase(clientName).
                                             or(qClient.msisdn.containsIgnoreCase(clientName).
-                                                    or(qClient.email_address.containsIgnoreCase(clientName)))
+                                                    or(qClient.email.containsIgnoreCase(clientName)))
                             )),
                     q -> q.sortBy(sort).as(ClientDto.class).page(pageable));
 

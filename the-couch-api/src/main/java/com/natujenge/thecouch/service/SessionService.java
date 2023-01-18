@@ -163,7 +163,7 @@ public class SessionService {
             if (sessionRequest.getPaymentCurrency() != null) {
                 session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
             }
-            if (sessionRequest.getAmountPaid() != null && sessionRequest.getAmountPaid().length() > 0) {
+            if (sessionRequest.getAmountPaid() != null) {
                 session.setAmountPaid(sessionRequest.getAmountPaid());
             }
             sessionRepository.save(session);

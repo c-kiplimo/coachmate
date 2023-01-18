@@ -24,4 +24,7 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
     Optional<ClientDto> findByCoachIdAndId(Long coachId, Long id);
     Optional<Client> findByIdAndCoachId(Long id, Long coachId);
     boolean existsByIdAndCoachId(Long id,Long coachId);
+
+    Optional<Client> findClientByIdAndCoachId(Long clientId, Long coachId);
+
 }

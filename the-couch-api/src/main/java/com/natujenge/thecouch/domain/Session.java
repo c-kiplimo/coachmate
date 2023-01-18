@@ -49,7 +49,9 @@ public class Session {
     private SessionVenue sessionVenue;
     @Enumerated(EnumType.STRING)
     private PaymentCurrency paymentCurrency;
-    private String amountPaid;
+    private Float amountPaid;
+    private Float sessionAmount;
+    private Float sessionBalance;
 
     //Management details
     @CreationTimestamp
