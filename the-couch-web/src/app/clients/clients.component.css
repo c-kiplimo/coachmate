@@ -2,3 +2,53 @@
     margin-left: 20px;
     cursor: pointer;
 }
+.btn-view-order{
+    background-color: #363F4E;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-radius: 4px ;
+    
+  }
+
+
+ .search-bar{
+    width: 250px !important;
+    border-radius: 4px;
+    margin: 0 5px !important;
+  }
+
+
+  .active>.page-link{
+    background-color: #003d4c;
+    border-color: #003d4c;
+    color:#fff;
+  }
+  .page-link{
+    color:#212529;
+  }
+  nav{
+    margin: 30px;
+  }
+  table{
+    width: 100%;
+  }
+  .add-cust-btn{
+    position: relative;
+    top:-40px;
+    left: 290px;
+  }
+
+.btn-add {
+    background-color: #008A7C!important;
+    color: white;
+  }
+
+.modal-header {
+  background-color: #003d4c;
+}
+
+.modal-title {
+  background-color: #003d4c;
+  color: white;
+}

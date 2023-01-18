@@ -7,13 +7,44 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-10"></div>
+        <div class="d-none d-md-block"class="col-4">
+          <div class="filters-section">
+            <div class="wrap">
+              <select
+                class="form-control"
+                name="codes"
+                [(ngModel)]="filters.status"
+              >
+                <option value="">Filtering options</option>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="SUSPENDED">SUSPENDED</option>
+                <option value="CLOSED">CLOSED</option>
+              </select>
+            </div>
+            </div>
+        </div>
+    <div class="wrap" class="col-3">
+              <input
+                type="text"
+                class="form-control search-bar"
+                name="customer"
+                [(ngModel)]="filters.searchItem"
+                placeholder="Name, Phone or Email"
+                autocomplete="off"
+              />
+            </div>
+<div class="col-3">
+    <button class="btn button-filter" (click)="getAllCustomers(1)">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              Search
+            </button>
+</div>
   <div class="col-2">
     <button type="button" routerLink="/addclient" class="btn btn-success">
       <i class="fa-solid fa-user-plus"></i> ADD CLIENT
     </button>
   </div>
-</div>
+  </div>
 <div class="row">
   <table class="table">
     <thead>
