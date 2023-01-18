@@ -14,11 +14,6 @@ public class TheCouchApplication {
 		return new ModelMapper();
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(TheCouchApplication.class, args);
 	}

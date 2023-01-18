@@ -72,19 +72,19 @@ public class SessionResource {
     }
 
     //Get Session Stats
-    @GetMapping("stats")
-    public ResponseEntity<?> getSessionStats (@AuthenticationPrincipal User userDetails) {
-        try{
-            Long coachId = userDetails.getCoach().getId();
-            sessionService.getSessionStats(coachId);
-            return new ResponseEntity<>("Not Implemented", HttpStatus.OK);
-
-        }catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping("stats")
+//    public ResponseEntity<?> getSessionStats (@AuthenticationPrincipal User userDetails) {
+//        try{
+//            Long coachId = userDetails.getCoach().getId();
+//            sessionService.getSessionStats(coachId);
+//            return new ResponseEntity<>("Not Implemented", HttpStatus.OK);
+//
+//        }catch (Exception e) {
+//            log.error("Error ", e);
+//            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+//                    HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     //POST: /api/sessions
     @PostMapping
@@ -102,7 +102,7 @@ public class SessionResource {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //PUT: /api/sessions
+
     // UPDATE SESSION DETAILS
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateSession(@RequestBody Session session,

@@ -27,4 +27,6 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
 
     boolean existsByIdAndCoachId(Long id, Long coachId);
 
+    Optional<Session> getSessionByIdAndCoachId(Long sessionId, Long coachId);
+
 }
