@@ -23,7 +23,7 @@ public class CoachEducationService {
     CoachEducationRepository coachEducationRepository;
 
     //CREATE
-    public CoachEducation createCoacuEducation(CoachEducation coachEducation) {
+    public CoachEducation createCoachEducation(CoachEducation coachEducation) {
 
         try{
             coachEducationRepository.save(coachEducation);
@@ -38,8 +38,8 @@ public class CoachEducationService {
     }
 
     //GET ALL
-    public List<CoachEducation> getAllCoachEducation() {
-        return coachEducationRepository.findAll();
+    public List<CoachEducation> getAllCoachEducation(CoachEducation coachEducation) {
+        return coachEducationRepository.findAllByCoachId(coachEducation.getCoachId());
     }
 
     //Get ONE CoachEducation
@@ -63,6 +63,13 @@ public Optional<CoachEducation> updateCoachEducation(CoachEducation coachEducati
         if (coachEducationOptional.isPresent()) {
             CoachEducation coachEducation1 = coachEducationOptional.get();
 
+            coachEducation1.setCourseName(coachEducation.getCourseName());
+            coachEducation1.setCertificateUrl(coachEducation.getCertificateUrl());
+            coachEducation1.setProvider(coachEducation.getProvider());
+            coachEducation1.setDateIssued(coachEducation.getDateIssued());
+            coachEducation1.setTrainingHours(coachEducation.getTrainingHours());
+            coachEducation1.setValidTill(coachEducation.getValidTill());
+            coachEducation1.setLastUpdatedBy(coachEducation.getLastUpdatedBy());
 
             coachEducation1 = coachEducationRepository.save(coachEducation1);
             log.info("Updated CoachEducation with id: ", coachEducation1.getId());

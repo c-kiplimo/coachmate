@@ -1,25 +1,30 @@
 <div class="row">
   <div class="col-10">
+    <h3><i class="fa-solid fa-graduation-cap"></i>Coach Education</h3>
   </div>
   <div class="col-2">
     <app-user></app-user>
   </div>
 </div>
 <div class="row">
-<div class="col-8">
-        <h3><i class="fa-solid fa-graduation-cap"></i>Coach Education</h3>
-    </div>
-    <div class="col-4">
+
+    <div class="col-12">
+     
         <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3" >
             <div class="card-body">
-              <h6 class="card-title">Coach Education</h6>
-              <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
+              <div class="row">
+                <div class="col">
+              <h5 class="card-title">Coach Education</h5>
+              <h2 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h2>
+            </div>
+            <div class="col">
               <button type="button" routerLink="/AddTraining" class="btn btn-success">
                 <i class="fa-solid fa-user-plus"></i>Add Training
               </button>
-              
+            </div>
             </div>
         </div>
+      </div>
     </div>
 
 </div>
@@ -38,36 +43,24 @@
     </thead>
 
     <tbody>
-      <tr >
-        <th scope="row">1.</th>
-        <td>Mental health awareness</td>
-        <td>ICF</td>
-        <td>23/3/2023</td>
-        <td>23/5/2025</td>
-        <td>120hrs</td>
+      <tr *ngFor="let coachEducation of coachEducationData">
+        <td scope="row">{{coachEducation.id}}</td>
+        <td scope="row">{{coachEducation.courseName}}</td>
+        <td scope="row">{{coachEducation.provider}}</td>
+        <td scope="row">{{coachEducation.dateIssued}}</td>
+        <td scope="row">{{coachEducation.validTill}}</td>
+        <td scope="row">{{coachEducation.trainingHours}}</td>
         <td class="actions">
-          <i
-            class="fa-solid fa-arrow-up-right-from-square"
+          <i 
+            class="fa-solid fa-arrow-up-right-from-square p-1"
           ></i>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <i (click)="deleteItem(items)"class="fa-solid fa-trash-can"></i>
+          <i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
+          (click)="setCurrectCoachEducation(coachEducation)"></i>
+          <i data-bs-toggle="modal" data-bs-target="#confirmDelete"
+          (click)="deleteItem(coachEducation)"class="fa-solid fa-trash-can p-1"></i>
         </td>
       </tr>
-      <tr >
-        <th scope="row">2.</th>
-        <td>Peer counseling</td>
-        <td>KCF</td>
-        <td>23/3/2022</td>
-        <td>23/5/2024</td>
-        <td>100hrs</td>
-        <td class="actions">
-          <i
-            class="fa-solid fa-arrow-up-right-from-square"
-          ></i>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <i class="fa-solid fa-trash-can"></i>
-        </td>
-      </tr>
+     
     </tbody>
   </table>
   <!-- <div class="donut-wrapper" [@fadeIn]>
@@ -77,4 +70,182 @@
     No sessions Found.
   </p>
 </div> -->
+
+
+<div
+    class="modal fade bd-example-modal-lg"
+    id="confirmDelete"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
+
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between">
+            <h6>Confirm you want to Delete</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            data-bs-dismiss="modal"
+            (click)="deleteCoachEducation()"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div
+    class="modal fade bd-example-modal-lg"
+    id="editModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Coach Education</h1>
+
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between">
+            <div class="card card-table d-flex justify-content-center align-items-center">
+             
+              <form  [formGroup]="editCoachEducationForm">
+                <div class="row p-2">
+                  <div class=" mb-3 col-md-6 ">
+                    <label for="courseName">Course Name *</label>
+                    <input
+                    formControlName="courseName"
+                    value="{{currentCoachEducation?.courseName}}"
+                      name="courseName"
+                      type="text"
+                      class="form-control"
+                      id="courseName"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3  col">
+                    <label for="provider">Provider *</label>
+                    <input
+                      formControlName="provider"
+                      value="{{currentCoachEducation?.provider}}"
+                      name="provider"
+                      type="text"
+                      class="form-control"
+                      id="provider"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="row p-2">
+                    <div class="mb-3 col-md-6">
+                        <label for="dateIssued">Date Issued*</label>
+                        <input
+                        formControlName="dateIssued"
+                        value="{{currentCoachEducation?.dateIssued}}"
+                          name="dateIssued"
+                          type="date"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="validTill">Valid till*</label>
+                    <input
+                    formControlName="validTill"
+                    value="{{currentCoachEducation?.validTill}}"
+                      name="validTill"
+                      type="date"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+    
+                </div>
+                <div class="row p-2">
+                    <div class="mb-3 col-md-6">
+                        <label for="trainingHours" class="form-label">Training Hours *</label>
+                        <input
+                        formControlName="trainingHours"
+                        value="{{currentCoachEducation?.trainingHours}}"
+                          name="trainingHours"
+                          type="number"
+                          class="form-control"
+                          required
+                          placeholder="eg 45hrs"
+                        />
+                      </div>
+                      <div class="mb-3  col">
+                        <label for="provider">Certficate Url</label>
+                        <input
+                          formControlName="certificateUrl"
+                          value="{{currentCoachEducation?.certificateUrl}}"
+                          name="certificateUrl"
+                          type="text"
+                          class="form-control"
+                          id="certificateUrl"
+                          required
+                        />
+                      </div>
+                    <div class="mb-3 col-md-6 form-group">
+                        <label for="certficate" class="form-label">certficate</label>
+                        <input 
+                        type="file"
+                        value="{{currentCoachEducation?.certificate}}"
+                        class="form-control"
+                        name="certificate"
+                        placeholder="upload your certificate"
+                        >
+                    </div>
+    
+                </div>
+              
+              </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            data-bs-dismiss="modal"
+            (click)="editCoachEducation()"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
 

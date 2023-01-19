@@ -4,11 +4,9 @@ package com.natujenge.thecouch.web.rest.request;
 import com.natujenge.thecouch.domain.CoachEducation;
 import com.natujenge.thecouch.repository.CoachEducationRepository;
 import com.natujenge.thecouch.service.CoachEducationService;
-import io.swagger.models.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping(path = "/api/coachEducation")
 
-public class CoachEducationResourse {
+public class CoachEducationResource {
 
     @Autowired
     CoachEducationService coachEducationService;
@@ -28,10 +26,10 @@ public class CoachEducationResourse {
     CoachEducationRepository coachEducationRepository;
 
     //GET: All  /api/coachEducation
-    @GetMapping
-    public ResponseEntity<?> getAllCoachEducation() {
+    @PostMapping("/getCoachEducation")
+    public ResponseEntity<?> getAllCoachEducation(@RequestBody CoachEducation coachEducation) {
         try{
-            List<CoachEducation> coachEducationList = coachEducationService.getAllCoachEducation();
+            List<CoachEducation> coachEducationList = coachEducationService.getAllCoachEducation(coachEducation);
 
             return new ResponseEntity<>(coachEducationList, HttpStatus.OK);
         } catch (Exception e) {
@@ -41,7 +39,7 @@ public class CoachEducationResourse {
     }
 
 
-    //GET by Id  /api/coachEducation/:id
+    //GET by id  /api/coachEducation/:id
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCoachEducationById (@PathVariable("id") Long id){
@@ -56,7 +54,7 @@ public class CoachEducationResourse {
         try{
             log.info("Coach Creation request Received: ", coachEducation);
 
-            CoachEducation coachEducationResponse = coachEducationService.createCoacuEducation(coachEducation);
+            CoachEducation coachEducationResponse = coachEducationService.createCoachEducation(coachEducation);
             return new ResponseEntity<>(coachEducationResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             log.error(">........................", e);
