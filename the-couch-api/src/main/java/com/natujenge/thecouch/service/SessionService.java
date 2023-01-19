@@ -163,7 +163,7 @@ public class SessionService {
             if (sessionRequest.getPaymentCurrency() != null) {
                 session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
             }
-            if (sessionRequest.getAmountPaid() != null && sessionRequest.getAmountPaid().length() > 0) {
+            if (sessionRequest.getAmountPaid() != null) {
                 session.setAmountPaid(sessionRequest.getAmountPaid());
             }
             sessionRepository.save(session);
@@ -176,6 +176,7 @@ public class SessionService {
     // Delete session by ID
     public void deleteSession(Long id,Long coachId) {
         log.debug("Request to delete session : {}", id);
+
 
         boolean exist = sessionRepository.existsByIdAndCoachId(id,coachId);
         if (!exist) {

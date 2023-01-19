@@ -25,6 +25,8 @@
     "angularx-flatpickr": "^7.0.0",
     "date-fns": "^2.29.1",
     "flatpickr": "^4.6.13",
+    "ng-slim-scroll": "^0.2.2",
+    "ngx-perfect-scrollbar": "^10.1.1",
     "ngx-toastr": "^15.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

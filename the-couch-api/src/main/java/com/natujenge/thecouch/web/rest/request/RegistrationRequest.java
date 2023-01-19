@@ -6,6 +6,8 @@ import lombok.Data;
 public class RegistrationRequest {
     private Long id;
     private final String fullName;
+    private String firstName;
+    private String lastName;
     private String businessName;
     private String msisdn;
     private final String email;

@@ -8,6 +8,7 @@ import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
+
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,6 +71,21 @@ public class SessionResource {
         }
     }
 
+    //Get Session Stats
+//    @GetMapping("stats")
+//    public ResponseEntity<?> getSessionStats (@AuthenticationPrincipal User userDetails) {
+//        try{
+//            Long coachId = userDetails.getCoach().getId();
+//            sessionService.getSessionStats(coachId);
+//            return new ResponseEntity<>("Not Implemented", HttpStatus.OK);
+//
+//        }catch (Exception e) {
+//            log.error("Error ", e);
+//            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+//                    HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     //POST: /api/sessions
     @PostMapping
     public ResponseEntity<?> createSession(@RequestBody Session session,
@@ -85,7 +102,7 @@ public class SessionResource {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //PUT: /api/sessions
+
     // UPDATE SESSION DETAILS
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateSession(@RequestBody Session session,

@@ -16,6 +16,6 @@ public class SessionRequest {
     public LocalDate sessionDate;
     public SessionVenue sessionVenue;
     public PaymentCurrency paymentCurrency;
-    public String amountPaid;
+    public Float amountPaid;
     public Long clientId;
 }

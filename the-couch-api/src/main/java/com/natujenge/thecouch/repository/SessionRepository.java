@@ -18,6 +18,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     void deleteSessionById(long id);
     Optional<Session> findSessionById(Long id);
 
+
     Page<SessionDto> findAllByCoach_id(Long id, Pageable pageable);
 
     Optional<SessionDto> findByIdAndCoachId(Long id, Long coachId);
@@ -25,5 +26,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     Optional<Session> findSessionByIdAndCoachId(Long sessionId, Long coachId);
 
     boolean existsByIdAndCoachId(Long id, Long coachId);
+
+    Optional<Session> getSessionByIdAndCoachId(Long sessionId, Long coachId);
 
 }

@@ -1,0 +1,69 @@
+  /* Form Container */
+  .form-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #40f79b;
+  }
+
+  /* Form Group */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  /* Form Group Rating */
+  .form-group__rating {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Form Group Rating Label */
+  .form-group__rating label {
+    margin-right: 10px;
+  }
+
+  /* Form Group Rating Input */
+  .form-group__rating input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  /* Form Group Textarea */
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid rgb(160, 209, 172);
+    border-radius: 4px;
+    resize: none;
+  }
+
+  /* Submit Button */
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  /* Disable Submit Button */
+  button[type="submit"][disabled] {
+    background-color: rgb(116, 168, 138);
+    cursor: not-allowed;
+  }
+
+  /* Media Queries */
+  @media only screen and (max-width: 600px) {
+    /* Form Container */
+    .form-container {
+      width: 90%;
+    }
+
+    /* Form Group Textarea */
+    .form-group textarea {
+      height: 100px;
+    }
+  }
