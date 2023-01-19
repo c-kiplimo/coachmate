@@ -29,12 +29,12 @@ export class AddClientPageComponent implements OnInit {
     this.addClient = this.formbuilder.group({
       firstName: ' ',
       lastName: ' ',
-      type: ' ',
+      clientType: ' ',
       msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
+      email: ' ',
+      physicalAddress: ' ',
       profession: ' ',
-      payment_mode: ' ',
+      paymentMode: ' ',
       reason: '',
 
     });
