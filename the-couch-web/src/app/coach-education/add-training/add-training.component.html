@@ -5,11 +5,12 @@
           <div class="">
             <h1 class="text-center mb-3">Add training</h1>
           </div>
-          <form>
+          <form [formGroup]="addTrainingForm">
             <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
                 <label for="courseName">Course Name *</label>
                 <input
+                formControlName="courseName"
                   name="courseName"
                   type="text"
                   class="form-control"
@@ -18,12 +19,13 @@
                 />
               </div>
               <div class="mb-3  col">
-                <label for="providerName">Provider *</label>
+                <label for="provider">Provider *</label>
                 <input
-                  name="providerName"
+                  formControlName="provider"
+                  name="provider"
                   type="text"
                   class="form-control"
-                  id="providerName"
+                  id="provider"
                   required
                 />
               </div>
@@ -32,6 +34,7 @@
                 <div class="mb-3 col-md-6">
                     <label for="dateIssued">Date Issued*</label>
                     <input
+                    formControlName="dateIssued"
                       name="dateIssued"
                       type="date"
                       class="form-control"
@@ -39,9 +42,10 @@
                     />
                   </div>
               <div class="mb-3 col-md-6">
-                <label for="expiryDate">Valid till*</label>
+                <label for="validTill">Valid till*</label>
                 <input
-                  name="expiryDate"
+                formControlName="validTill"
+                  name="validTill"
                   type="date"
                   class="form-control"
                   required
@@ -51,13 +55,25 @@
             </div>
             <div class="row p-2">
                 <div class="mb-3 col-md-6">
-                    <label for="hours" class="form-label">Training Hours *</label>
+                    <label for="trainingHours" class="form-label">Training Hours *</label>
                     <input
-                      name="hours"
+                    formControlName="trainingHours"
+                      name="trainingHours"
                       type="number"
                       class="form-control"
                       required
                       placeholder="eg 45hrs"
+                    />
+                  </div>
+                  <div class="mb-3  col">
+                    <label for="provider">Certficate Url</label>
+                    <input
+                      formControlName="certificateUrl"
+                      name="certificateUrl"
+                      type="text"
+                      class="form-control"
+                      id="certificateUrl"
+                      required
                     />
                   </div>
                 <div class="mb-3 col-md-6 form-group">
@@ -75,6 +91,7 @@
             <button
               type="submit"
               class="btn btn-signup mb-3 mt-2 p-2 text-center"
+              (click)="addTraining()"
             >
               ADD
             </button>

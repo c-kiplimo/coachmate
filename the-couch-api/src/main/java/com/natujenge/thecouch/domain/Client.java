@@ -58,4 +58,9 @@ public class Client {
     @JoinColumn(name = "coach_id")
     private Coach coach;
 
+
+
+    public void setName(String name) {
+    }
+
 }

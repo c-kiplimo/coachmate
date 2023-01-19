@@ -42,6 +42,15 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
+
+        try{
+            clientRepository.save(client);
+
+            return client;
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return null;
+
     // create client
     public Client addNewClient(Long coachId, ClientRequest clientRequest) {
         log.info("add a new client to database");
@@ -51,6 +60,7 @@ public class ClientService {
         if (optionalCoach.isEmpty()) {
             log.warn("Coach with id {} not found", coachId);
             throw new IllegalArgumentException("Coach not found");
+
         }
 
         Client client = new Client();

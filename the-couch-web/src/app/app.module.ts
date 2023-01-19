@@ -48,6 +48,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
 
+import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
+import { CoachEducationService } from './services/CoachEducationService';
+
 
 
 
@@ -74,7 +77,7 @@ import { SharedModule } from 'src/shared/shared.module';
 
     FeebackFormComponent,
 
-
+    AddTrainingComponent,
 
     ForgotPaswordComponent,
     ConfirmedViewComponent,
@@ -108,6 +111,7 @@ import { SharedModule } from 'src/shared/shared.module';
     ClientService,
     SessionsService,
     ApiService,
+    CoachEducationService,
   ],
   bootstrap: [AppComponent],
 })

@@ -4,8 +4,7 @@ import { TrainingsListComponent } from './trainings-list/trainings-list.componen
 import { AddTrainingComponent } from './add-training/add-training.component';
 import { SharedModule } from 'src/shared/shared.module';
 import { RouterModule } from '@angular/router';
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,11 +12,13 @@ import { RouterModule } from '@angular/router';
 @NgModule({
     declarations: [
         TrainingsListComponent,
-        AddTrainingComponent, 
+  
     
     ],
     imports: [
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forChild([
             { path: 'trainings', component: TrainingsListComponent },
             { path: 'AddTraining', component: AddTrainingComponent },

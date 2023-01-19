@@ -66,7 +66,7 @@ public class SessionService {
 
     }
 
-    // Get Individual Sessions by Id
+    // Get Individual Sessions by id
     public SessionDto findSessionByIdAndCoachId(Long id, Long coachId) {
         log.debug("Request to get session : {} and coachId : {}", id,coachId);
 
