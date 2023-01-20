@@ -3,10 +3,12 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.QClient;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +37,17 @@ public class ClientService {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
     CoachRepository coachRepository;
 
     private final ClientRepository clientRepository;
-
-    public ClientService(ClientRepository clientRepository) {
+    private final RegistrationService registrationService;
+    private final UserRepository userRepository;
+    public ClientService(ClientRepository clientRepository, RegistrationService registrationService, UserRepository userRepository) {
         this.clientRepository = clientRepository;
+        this.registrationService = registrationService;
+        this.userRepository = userRepository;
     }
 
 
@@ -70,8 +78,13 @@ public class ClientService {
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
         client.setCreatedBy(optionalCoach.get().getFullName());
+        //client.setProfession(optionalCoach.getProfession());
 
-        return clientRepository.save(client);
+
+        Object saveClient = clientRepository.save(client);
+
+        registrationService.registerClientAsUser((Client) saveClient);
+        return (Client) saveClient;
     }
 
     // Get all clients
@@ -304,4 +317,27 @@ public class ClientService {
     }
 
 
+    public Optional<User> confirmClientTokenAndUpdatePassword(ClientRequest clientRequest) {
+
+        Optional<User> userOptional = userRepository.findByEmail(clientRequest.getEmail());
+        if (userOptional.isEmpty()) {
+            throw new IllegalStateException("Client User Not Found!!");
+        }
+
+        String TokenConfirm = registrationService.confirmToken(clientRequest.getToken());
+        if (!TokenConfirm.isEmpty()) {
+            User user = userOptional.get();
+
+            //Encode Password
+            String encodedPassword = passwordEncoder.encode(clientRequest.getPassword());
+            user.setPassword(encodedPassword);
+
+            user = userRepository.save(user);
+
+            log.info("Password Updated Successfully");
+            return Optional.of(user);
+        }
+//        return "Token Not Confirmed";
+        return userOptional;
+    }
 }

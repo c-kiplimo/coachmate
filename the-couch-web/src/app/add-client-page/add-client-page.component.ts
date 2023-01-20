@@ -46,6 +46,7 @@ export class AddClientPageComponent implements OnInit {
     details.createdBy = this.coachData.fullName;
     details.coach_id = this.coachData.id;
     details.status = 'NEW';
+    details.password = '12345678';
     
     console.log(details);
 

@@ -50,6 +50,7 @@ import { SharedModule } from 'src/shared/shared.module';
 
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { CoachEducationService } from './services/CoachEducationService';
+import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 
 
 
@@ -81,6 +82,7 @@ import { CoachEducationService } from './services/CoachEducationService';
 
     ForgotPaswordComponent,
     ConfirmedViewComponent,
+    ClientConfirmComponent,
 
   ],
   imports: [

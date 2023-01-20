@@ -18,6 +18,7 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
 import { FeebackFormComponent } from './feeback-form/feeback-form.component';
+import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 
 
 const routes: Routes = [
@@ -88,6 +89,10 @@ const routes: Routes = [
   
   { path: 'registration/confirm', 
     component: ConfirmedViewComponent },
+  {
+      path: 'confirmclient/:id/:token',
+      component: ClientConfirmComponent
+  },
   
 ];
 

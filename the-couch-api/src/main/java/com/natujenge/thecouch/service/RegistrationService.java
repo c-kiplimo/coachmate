@@ -1,10 +1,12 @@
 package com.natujenge.thecouch.service;
 
+import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.ConfirmationToken;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
@@ -78,6 +80,38 @@ public class RegistrationService {
         NotificationHelper.sendConfirmationToken(token,"CONFIRM",(User) response.get(0));
     }
 
+    //Register Client as user
+    public void registerClientAsUser(Client clientRequest) {
+        log.info("Registering a Client as User");
+        boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
+
+        if(!isValidEmail) {
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, clientRequest.getEmail()));
+        }
+
+        //Create Client User
+        List<Object> response = userService.signupClientAsUser(
+                new User(
+                        clientRequest.getFirstName(),
+                        clientRequest.getLastName(),
+                        clientRequest.getEmail(),
+                        clientRequest.getMsisdn(),
+                        clientRequest.getPassword(),
+                        UserRole.CLIENT
+                )
+        );
+
+        //SEnding Confirmation token
+        String token = (String) response.get(1);
+        //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+
+        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
+        String subject = "Your TheCoach Account Has Been Created.";
+        String content = "Hey, use this link to confirm your account and set your password," +
+                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
+        notificationServiceHTTPClient.sendEmail(clientRequest.getEmail(),subject, content, false);
+
+    }
     // Confirm token
     @Transactional
     public String confirmToken(String token){
