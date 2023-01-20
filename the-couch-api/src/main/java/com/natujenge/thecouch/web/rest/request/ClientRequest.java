@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.web.rest.request;
 
-import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
 import com.natujenge.thecouch.domain.enums.PaymentMode;
 import lombok.Data;
@@ -16,4 +15,8 @@ public class ClientRequest {
     private String profession;
     private PaymentMode paymentMode;
     private String reason;
+    private String password;
+    private String token;
+
+
 }

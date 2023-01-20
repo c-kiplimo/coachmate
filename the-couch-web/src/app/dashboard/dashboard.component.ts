@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
+import { CoachEducationService } from '../services/CoachEducationService';
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,14 +25,26 @@ export class DashboardComponent implements OnInit {
     status: '',
     searchItem: '',
   };
+  coachEducationData: any;
+  numberOfHoursCoachEducation: any;
+  coachSessionData: any;
+  coachData: any;
 
-  constructor(private clientService: ClientService) {}
+  constructor(
+    private clientService: ClientService,
+    private CoachEducationService: CoachEducationService,
+    ) {}
 
   ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+
     this.getClients();
     this.getUser();
     this.getNoOfSessions();
     this.getNoOfContracts();
+    this.getCoachEducation(this.coachData.id);
   }
   getClients() {
     const options = {
@@ -87,5 +102,33 @@ export class DashboardComponent implements OnInit {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
 
     console.log(this.User.coach.businessName);
+  }
+
+
+  getCoachEducation(id: any) {
+    const options = {
+      coachId: id,
+    }
+
+    this.CoachEducationService.getCoachEducation(options).subscribe(
+      (response: any) => {
+       
+        console.log(response);
+        this.coachEducationData = response;
+        this.calculateNumberOfHours(this.coachEducationData);
+      }, (error: any) => {
+        console.log(error);
+      }
+    )
+
+  }
+
+  calculateNumberOfHours(data: any) {
+    //calculate total number of hours
+    let totalHours = 0;
+    data.forEach((element: any) => {
+      totalHours += parseInt(element.trainingHours);
+    });
+    this.numberOfHoursCoachEducation = Math.floor(totalHours);
   }
 }

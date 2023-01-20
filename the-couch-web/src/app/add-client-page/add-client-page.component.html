@@ -70,8 +70,8 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Email *</label>
           <input
-            formControlName="email_address"
-            name="email_address"
+            formControlName="email"
+            name="email"
             type="email"
             class="form-control"
             id="email"
@@ -81,7 +81,7 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
-            formControlName="physical_address"
+            formControlName="physicalAddress"
             name="address"
             type="text"
             class="form-control"
@@ -123,7 +123,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="PaymentMode">Payment Mode</label>
               </div>
-              <select class="form-select" id="inputGroupSelect01" formControlName="payment_mode">
+              <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode">
                 <option selected>Select Payment Mode</option>
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
@@ -135,7 +135,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="clientType">Client Type</label>
               </div>
-              <select class="form-select" id="inputGroupSelect01" formControlName="type" >
+              <select class="form-select" id="inputGroupSelect01" formControlName="clientType" >
                 <option selected>Select Client type</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="CORPORATE">CORPORATE</option>
@@ -158,9 +158,9 @@
         [disabled]="
         !addClient.value.firstName||
         !addClient.value.lastName||
-        !addClient.value.email_address||
+        !addClient.value.email||
         !addClient.value.msisdn||
-        !addClient.value.physical_address
+        !addClient.value.physicalAddress
       ">ADD CLIENT
       </button>
     </div>

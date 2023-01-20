@@ -3,7 +3,6 @@ package com.natujenge.thecouch.domain;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
 import com.natujenge.thecouch.domain.enums.PaymentMode;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +26,7 @@ public class Client {
     private String firstName;
     private String lastName;
 
+    private String password;
     @Enumerated(EnumType.STRING)
     private ClientType clientType;
     private  String msisdn;
@@ -42,6 +42,7 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
     private String reason;
+
 
     //Management details
     @CreationTimestamp
@@ -62,5 +63,6 @@ public class Client {
 
     public void setName(String name) {
     }
+
 
 }

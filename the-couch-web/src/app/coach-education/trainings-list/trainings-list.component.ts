@@ -19,6 +19,7 @@ export class TrainingsListComponent implements OnInit {
 editCoachEducationForm!: FormGroup;
 
 numberOfHours: any;
+
 numberOfMinutes: any;
   http: any;
   items: any;
@@ -64,11 +65,21 @@ numberOfMinutes: any;
         this.loading = false;
         console.log(response);
         this.coachEducationData = response;
+        this.calculateNumberOfHours(this.coachEducationData);
       }, (error: any) => {
         console.log(error);
       }
     )
 
+  }
+
+  calculateNumberOfHours(data: any) {
+    //calculate total number of hours
+    let totalHours = 0;
+    data.forEach((element: any) => {
+      totalHours += parseInt(element.trainingHours);
+    });
+    this.numberOfHours = Math.floor(totalHours);
   }
 
 deleteItem(coachEducation: any) {

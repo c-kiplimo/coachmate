@@ -25,7 +25,8 @@
         <br>
         <div class="row">
         <div class="col-6 input-group-prepend">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example"
+          formControlName="contractType">
             <option selected>Contract Type</option>
             <option value="1">Individual</option>
             <option value="2">Corporate</option>
@@ -33,11 +34,12 @@
           </select>
         </div>
         <div class="col-6 input-group-prepend">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example"
+          formControlName="clientId">
             <option selected>Select Client you want to make contract with</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+           
+           <!--Loop through clients and form options-->
+            <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
           </select>
         </div>
       </div>

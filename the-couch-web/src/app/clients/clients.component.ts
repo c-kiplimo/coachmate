@@ -58,6 +58,7 @@ throw new Error('Method not implemented.');
     });
     
   }
+  
   getClients(){
     const options = {
       page: 1,
@@ -69,7 +70,7 @@ throw new Error('Method not implemented.');
     this.ClientService.getClient(options).subscribe(
       (response) => {
         this.loading = false;
-        this.Clients = response.body;
+        this.Clients = response.body.data;
         console.log(response.body)
         console.log('clients',this.Clients)
         
@@ -77,7 +78,6 @@ throw new Error('Method not implemented.');
         console.log(error)
       }
     )
-
   }
 
   navigateToClientView(id: any) {
@@ -100,7 +100,7 @@ throw new Error('Method not implemented.');
     this.updateClient = this.formbuilder.group({
       firstName: this.clientToBeUpdated.firstName,
       lastName: this.clientToBeUpdated.lastName,
-      type: this.clientToBeUpdated.type,
+      clientType: this.clientToBeUpdated.type,
       msisdn: this.clientToBeUpdated.msisdn,
       email_address: this.clientToBeUpdated.email_address,
       physical_address: this.clientToBeUpdated.physical_address,

@@ -82,6 +82,52 @@ public class UserService implements UserDetailsService {
 
     }
 
+    //Client as User
+    public List<Object> signupClientAsUser(User user) {
+        log.info("Signing up User");
+        boolean userEmailExists = userRepository.findByEmail(user.getEmail())
+                .isPresent();
+
+        if (userEmailExists) {
+            throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
+        }
+
+        // Encode Password > from spring boot
+        //String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        // Set details
+        user.setPassword(user.getPassword());
+        user.setContentStatus(ContentStatus.ACTIVE);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedBy(UserRole.CLIENT);
+
+
+        // save the User in the database
+        User user1 = userRepository.save(user);
+        log.info("Client User saved");
+
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        log.info("Confirmation token generated");
+
+        List<Object> response = new ArrayList<>();
+        response.add(user1.getId());
+        response.add(token);
+
+        return response;
+
+    }
+
     public void enableAppUser(String email) {
 
         // Request UserDto rather than all details

@@ -29,12 +29,12 @@ export class AddClientPageComponent implements OnInit {
     this.addClient = this.formbuilder.group({
       firstName: ' ',
       lastName: ' ',
-      type: ' ',
+      clientType: ' ',
       msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
+      email: ' ',
+      physicalAddress: ' ',
       profession: ' ',
-      payment_mode: ' ',
+      paymentMode: ' ',
       reason: '',
 
     });
@@ -46,6 +46,7 @@ export class AddClientPageComponent implements OnInit {
     details.createdBy = this.coachData.fullName;
     details.coach_id = this.coachData.id;
     details.status = 'NEW';
+    details.password = '12345678';
     
     console.log(details);
 

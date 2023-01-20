@@ -3,8 +3,6 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
-import com.natujenge.thecouch.exception.UserNotFoundException;
-import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 
@@ -12,7 +10,6 @@ import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
-import lombok.Cleanup;
 
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasLength;
@@ -220,6 +216,22 @@ public class ClientResource {
         }
 
     }
+
+    //api to confirm client and update password
+    @PostMapping(path = "/confirmClientToken")
+    ResponseEntity<?> updateAndConfirmClientToken(@RequestBody ClientRequest clientRequest){
+        log.info("Request to confirm client token and update password");
+        try {
+            Optional<User> updateClient;
+            updateClient = clientService.confirmClientTokenAndUpdatePassword(clientRequest);
+
+            return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("Error while Confirming Client and Updating Client password", e);
+            return new ResponseEntity<>(new RestResponse(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     //api to delete client
     @DeleteMapping(path = "{id}")

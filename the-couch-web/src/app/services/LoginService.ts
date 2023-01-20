@@ -34,5 +34,14 @@ export class LoginService {
           { observe: 'response' }
         );
       }
+
+      //Update Password and complete client registration
+      confirmAndUpdateClientPassword(signupObject: any): Observable<any> {
+        return this.http.post<any>(
+          this.baseURL+ 'confirmAndUpdateClientPassword',
+          signupObject,
+          { observe: 'response' }
+        );
+      }
 }
 
