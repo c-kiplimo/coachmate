@@ -45,5 +45,9 @@ public class Feedback {
     @JoinColumn(name="client_id")
     Client client;
 
+    @OneToOne
+    @JoinColumn(name="coach_id")
+    Coach coach;
+
 
 }
