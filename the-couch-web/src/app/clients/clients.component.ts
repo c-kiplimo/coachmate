@@ -58,6 +58,7 @@ throw new Error('Method not implemented.');
     });
     
   }
+  
   getClients(){
     const options = {
       page: 1,
@@ -77,7 +78,6 @@ throw new Error('Method not implemented.');
         console.log(error)
       }
     )
-
   }
 
   navigateToClientView(id: any) {

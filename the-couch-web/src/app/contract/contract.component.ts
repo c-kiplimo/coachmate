@@ -25,6 +25,8 @@ export class contractComponent implements OnInit{
     status: '',
     searchItem: '',
   };
+  coachSessionData: any;
+  coachData: any;
 
   //Add Objective Form
   Objectives = {
@@ -35,15 +37,22 @@ export class contractComponent implements OnInit{
     private formBuilder:FormBuilder, private router:Router) { }
 
   ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+
+
     this.contractForm = this.formBuilder.group(
       {
         coachingCategory:'',
         coachingTopic:'',
+        contractType:'',
+        clientId:'',
         startDate:'',
         endDate:'',
         feesPerPerson:'',
-        groupFeesPerson:'',
-        individualFeesPerPerson:'',
+        groupFeesPerSession:'',
+        individualFeesPerSession:'',
         noOfSessions:'',
       }
     );
@@ -61,17 +70,16 @@ export class contractComponent implements OnInit{
     };
     this.clientService.getClient(options).subscribe(
       (response: any) => {
-        console.log(response)
-        this.clients = response
+        console.log(response.body.data)
+        this.clients = response.body.data;
         this.numberOfClients = this.clients.length;
         console.log(this.numberOfClients)
       }, (error: any) => {
         console.log(error)
       }
     )
-  
-
   }
+
   getNoOfSessions(){
     this.clientService.getSessions().subscribe(
       (response:any) =>{
@@ -103,20 +111,25 @@ export class contractComponent implements OnInit{
   addContract(){
     console.log('here');
     console.log(this.contractForm.value);
-    // this.ApiService.addNewContract(this.contractForm.value).subscribe(
-    //   (response: any) => {
+    var data = this.contractForm.value;
+    data.coachId = this.coachData.id;
+    data.objectives = this.objectives;
+    console.log(data);
+    this.ApiService.addNewContract(data).subscribe(
+      (response: any) => {
         
-    //     this.router.navigate(['/contracts']);
-    //   }, (error: any) => {
-    //     console.log(error)
-    //   }
-    // )
+        this.router.navigate(['/contracts']);
+      }, (error: any) => {
+        console.log(error)
+      }
+    )
   }
   addObjective(){
     
     console.log(this.Objectives);
     this.objectives.push(this.Objectives.objective);
     console.log(this.objectives);
+    this.Objectives.objective = '';
   }
 
 }
