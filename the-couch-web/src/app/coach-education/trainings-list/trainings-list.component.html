@@ -14,8 +14,8 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-              <h5 class="card-title">Coach Education</h5>
-              <h2 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h2>
+              <h5 class="card-title">Continues Coaching Education Hours</h5>
+              <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
             </div>
             <div class="col">
               <button type="button" routerLink="/AddTraining" class="btn btn-success">
@@ -47,8 +47,8 @@
         <td scope="row">{{coachEducation.id}}</td>
         <td scope="row">{{coachEducation.courseName}}</td>
         <td scope="row">{{coachEducation.provider}}</td>
-        <td scope="row">{{coachEducation.dateIssued}}</td>
-        <td scope="row">{{coachEducation.validTill}}</td>
+        <td scope="row">{{coachEducation.dateIssued | date : "yyyy-MM-dd" }}</td>
+        <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
         <td scope="row">{{coachEducation.trainingHours}}</td>
         <td class="actions">
           <i 
