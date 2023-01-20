@@ -20,19 +20,19 @@ public interface PaymentDto {
 
     CoachView getCoach();
 
-    // order details to send to client
+    // session details to send to client
     public interface SessionView {
         Long getId();
         String getName();
     }
 
-    // customer details to send to client
+    // client details to send to coach
     public interface ClientView {
         Long getId();
         String getFirstName();
         String getMsisdn();
     }
-    // baker details to send client
+    // coach details to send
     public interface CoachView {
         Long getId();
 
