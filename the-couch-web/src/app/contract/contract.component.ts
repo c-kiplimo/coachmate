@@ -132,4 +132,8 @@ export class contractComponent implements OnInit{
     this.Objectives.objective = '';
   }
 
+  removeObjective(index: number){
+    this.objectives.splice(index, 1);
+  }
+
 }
