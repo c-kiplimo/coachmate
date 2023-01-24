@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,13 +23,14 @@ public class Contract {
     private Long id;
     private CoachingCategory coachingCategory;
     private String coachingTopic;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    private float feesPerPerson;
+
     private float individualFeesPerSession;
     private float groupFeesPerSession;
     private int noOfSessions;
+
 
     // relations
     @ManyToOne
@@ -38,4 +40,5 @@ public class Contract {
     @ManyToOne
     @JoinColumn(name="coach_id")
     Coach coach;
+
 }

@@ -66,10 +66,11 @@ public class ContractService {
         // Save Contract
         Contract contract = new Contract();
 
+        contract.setCoachingTopic(contractRequest.getCoachingTopic());
         contract.setCoachingCategory(contractRequest.getCoachingCategory());
         contract.setStartDate(contractRequest.getStartDate());
         contract.setEndDate((contractRequest.getEndDate()));
-        contract.setFeesPerPerson(contractRequest.getFeesPerPerson());
+        //contract.setFeesPerPerson(contractRequest.getFeesPerPerson());
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
@@ -98,34 +99,34 @@ public class ContractService {
         contractObjectiveRepository.saveAll(coachingObjectives);
 
         // Save Sessions
-        List<SessionRequest> sessionRequests = contractRequest.getSessions();
+       // List<SessionRequest> sessionRequests = contractRequest.getSessions();
 
         // save Objectives
-        List<Session> coachingSessions = new ArrayList<>();
+        //List<Session> coachingSessions = new ArrayList<>();
 
-        for (SessionRequest sessionRequest:
-                sessionRequests) {
-            Session session = new Session();
-            session.setName(sessionRequest.getName());
-            session.setSessionType(sessionRequest.getSessionType());
-            session.setSessionStatus(SessionStatus.CONFIRMED);
-            session.setNotes(sessionRequest.getNotes());
-            session.setSessionDate(sessionRequest.getSessionDate());
-            session.setSessionDuration(sessionRequest.getSessionDuration());
-            session.setSessionVenue(sessionRequest.getSessionVenue());
-            session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
-            session.setAmountPaid(sessionRequest.getAmountPaid());
-            session.setCreatedBy(coach.getFullName());
-            session.setLastUpdatedBy(coach.getFullName());
+//        for (SessionRequest sessionRequest:
+//                sessionRequests) {
+//            Session session = new Session();
+//            session.setName(sessionRequest.getName());
+//            session.setSessionType(sessionRequest.getSessionType());
+//            session.setSessionStatus(SessionStatus.CONFIRMED);
+//            session.setNotes(sessionRequest.getNotes());
+//            session.setSessionDate(sessionRequest.getSessionDate());
+//            session.setSessionDuration(sessionRequest.getSessionDuration());
+//            session.setSessionVenue(sessionRequest.getSessionVenue());
+//            session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
+//            session.setAmountPaid(sessionRequest.getAmountPaid());
+//            session.setCreatedBy(coach.getFullName());
+//            session.setLastUpdatedBy(coach.getFullName());
 
             // Relations
-            session.setClient(client);
-            session.setContract(contract1);
-            session.setCoach(coach);
+//            session.setClient(client);
+//            session.setContract(contract1);
+//            session.setCoach(coach);
 
-            coachingSessions.add(session);
-        }
-        sessionRepository.saveAll(coachingSessions);
+//            coachingSessions.add(session);
+//        }
+//        sessionRepository.saveAll(coachingSessions);
 
         return contract1;
     }
