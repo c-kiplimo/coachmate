@@ -20,8 +20,8 @@
 
 
   .active>.page-link{
-    background-color: #003d4c;
-    border-color: #003d4c;
+    background-color: #1B3A27;
+    border-color: #1B3A27;
     color:#fff;
   }
   .page-link{
@@ -40,16 +40,16 @@
   }
 
 .btn-add {
-    background-color: #008A7C!important;
+    background-color: #15522c!important;
     color: white;
   }
 
 .modal-header {
-  background-color: #003d4c;
+  background-color: #1B3A27;
 }
 
 .modal-title {
-  background-color: #003d4c;
+  background-color: #1B3A27;
   color: white;
 }
 .list-container {
@@ -67,4 +67,13 @@
 .container {
   max-height: 500px;
   overflow-y: scroll;
+}
+.badge-warning {
+  background-color: yellow !important;
+}
+.badge-success {
+  background-color: green !important;
+}
+.badge-danger {
+  background-color: red !important;
 }

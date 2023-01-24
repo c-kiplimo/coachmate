@@ -6,6 +6,7 @@
     <app-user></app-user>
   </div>
 </div>
+<br>
 <div class="row">
         <div class="d-none d-md-block"class="col-4">
           <div class="filters-section">
@@ -26,7 +27,7 @@
     <div class="wrap" class="col-3">
               <input
                 type="text"
-                class="form-control search-bar"
+                class="form-control search-bar text-muted mt-3"
                 name="customer"
                 [(ngModel)]="filters.searchItem"
                 placeholder="Name, Phone or Email"
@@ -34,7 +35,7 @@
               />
             </div>
 <div class="col-3">
-    <button class="btn button-filter" (click)="getAllCustomers(1)">
+    <button class="btn button-filter  search-bar" (click)="getAllCustomers(1)">
               <i class="fa fa-search" aria-hidden="true"></i>
               Search
             </button>
@@ -72,7 +73,12 @@
         <td>{{ client.physicalAddress }}</td>
         <td>{{ client.createdAt }}</td>
         <td>{{ client.reason }}</td>
-        <td>{{ client.status }}</td>
+        <td>
+          <span class="badge"[ngClass]="getClass(client)"
+          > {{ client.status }}</span>
+          
+        </td>
+        
 
         <td class="actions">
           <i
@@ -170,7 +176,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary"
+        <button type="button" class="btn btn-success"
         (click)="updateClientDetails(clientToBeUpdated.id)"
         >Save changes</button>
       </div>
