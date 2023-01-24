@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ClientService } from '../services/ClientService';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/ApiService';
+
 @Component({
   selector: 'app-add-objective',
   templateUrl: './contract.component.html',
@@ -18,7 +20,6 @@ export class contractComponent implements OnInit{
   numberOfSessions!:number;
   numberOfContracts!:number;
   rightIcon: any;
-  ApiService: any;
   objectives: string[] = [];
   itemsPerPage = 20;
   filters: any = {
@@ -34,6 +35,7 @@ export class contractComponent implements OnInit{
   };
 
   constructor(private clientService : ClientService,
+    private apiService:ApiService,
     private formBuilder:FormBuilder, private router:Router) { }
 
   ngOnInit(): void {
@@ -46,14 +48,13 @@ export class contractComponent implements OnInit{
       {
         coachingCategory:'',
         coachingTopic:'',
-        contractType:'',
         clientId:'',
         startDate:'',
         endDate:'',
-        feesPerPerson:'',
         groupFeesPerSession:'',
         individualFeesPerSession:'',
         noOfSessions:'',
+        objectives:'',
       }
     );
     this.getClients();
@@ -115,7 +116,7 @@ export class contractComponent implements OnInit{
     data.coachId = this.coachData.id;
     data.objectives = this.objectives;
     console.log(data);
-    this.ApiService.addNewContract(data).subscribe(
+    this.apiService.addNewContract(data).subscribe(
       (response: any) => {
         
         this.router.navigate(['/contracts']);

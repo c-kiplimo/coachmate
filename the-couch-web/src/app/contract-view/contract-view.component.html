@@ -19,6 +19,7 @@
     <thead>
       <tr>
         <th scope="col">#</th>
+        <th scope="col">Title</th>
         <th scope="col">Coaching Category</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
@@ -29,6 +30,7 @@
     <tbody>
       <tr *ngFor="let contract of contracts">
         <th scope="row">{{ contract.id}}</th>
+        <td>{{ contract.coachingTopic }}</td>
         <td>{{ contract.coachingCategory }}</td>
         <td>{{ contract.startDate | date : "MMM d, y" }}</td>
         <td>{{ contract.endDate | date : "MMM d, y" }}</td>
