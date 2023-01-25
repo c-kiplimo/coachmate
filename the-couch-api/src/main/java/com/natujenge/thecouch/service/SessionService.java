@@ -82,7 +82,7 @@ public class SessionService {
 
 
     //CREATE NEW CONTRACT
-    public Session createSession(Long coachId,Long clientId,Long contractId, Session sessionRequest) {
+    public Session createSession(Long coachId,Long clientId,Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
         Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
         Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);

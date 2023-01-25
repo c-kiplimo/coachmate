@@ -21,6 +21,7 @@
         <th scope="col">#</th>
         <th scope="col">Title</th>
         <th scope="col">Coaching Category</th>
+        <th scope="col">Client</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
         <th scope="col">No Of Sessions</th>
@@ -32,6 +33,7 @@
         <th scope="row">{{ contract.id}}</th>
         <td>{{ contract.coachingTopic }}</td>
         <td>{{ contract.coachingCategory }}</td>
+        <td>{{ contract.client.fullName }}</td>
         <td>{{ contract.startDate | date : "MMM d, y" }}</td>
         <td>{{ contract.endDate | date : "MMM d, y" }}</td>
         <td>{{ contract.noOfSessions }}</td>

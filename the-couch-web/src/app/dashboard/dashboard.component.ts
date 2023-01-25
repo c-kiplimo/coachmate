@@ -67,7 +67,13 @@ export class DashboardComponent implements OnInit {
     );
   }
   getNoOfSessions() {
-    this.clientService.getSessions().subscribe(
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getSessions(options).subscribe(
       (response: any) => {
         console.log('here=>', response);
         this.sessions = response;

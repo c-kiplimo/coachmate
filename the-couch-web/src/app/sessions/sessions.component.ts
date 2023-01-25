@@ -19,6 +19,11 @@ import { style, animate, transition, trigger } from '@angular/animations';
 export class SessionsComponent implements OnInit {
 
   loading = true;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
 
   constructor(private restApiService: ClientService, private router: Router) {}
 
@@ -29,10 +34,16 @@ export class SessionsComponent implements OnInit {
   }
   getAllSessions() {
     this.loading = true;
-    this.restApiService.getSessions().subscribe(
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.restApiService.getSessions(options).subscribe(
       (response: any) => {
-        console.log(response);
-        this.sessions = response;
+        console.log(response.body.data);
+        this.sessions = response.body.data;
         this.loading = false;
       },
       (error: any) => {
