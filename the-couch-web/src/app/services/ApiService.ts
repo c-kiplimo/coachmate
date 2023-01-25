@@ -65,6 +65,7 @@ export class ApiService {
   addNewContract(newContract: any): Observable<any> {
     return this.http.post<any>(this.baseURL + 'contracts', newContract, {
       observe: 'response',
+      
     });
   }
 
