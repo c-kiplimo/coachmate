@@ -21,7 +21,7 @@ export class SessionsService {
 
     }
     getOneSession(id: number): Observable<any> {
-      return this.http.get<any>(this.baseURL + '/order/find/' + id, {
+      return this.http.get<any>(this.baseURL + '/sessions/' + id, {
         observe: 'response',
       });
     } 

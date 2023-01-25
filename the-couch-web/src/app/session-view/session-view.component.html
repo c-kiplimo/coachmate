@@ -1,12 +1,30 @@
+<div class="row">
+  <div class="col-10">
+      <h3></h3>
+  </div>
+  <div class="col-2">
+      <app-user></app-user>
+  </div>
+</div>
+
+<br>
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
 <div class="container-fluid customer mb-5">
     <div class="container">
       <div class="card details-card">
-        <div class="d-flex justify-content-between mb-3" [@fadeIn]>
+        <div class="d-flex justify-content-between mb-3 flex-wrap" [@fadeIn]>
           <div>
             <h5 class="section-title">Session view</h5>
           </div>
   
-          <div>
+          <div class="d-flex">
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
+      >
+        <i class="fas fa-edit"></i>
+        Edit
+      </button>
             <div class="dropdown">
               <a
                 class="btn btn-refresh dropdown-toggle"
@@ -55,19 +73,16 @@
             </div>
           </div>
         </div>
-<!--   
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
-        </div> -->
-        <div class="customer-details" >
+
+        <div class="session-details" [@fadeIn] >
           <div class="d-flex justify-content-between main-detail">
             <span class="title">Session for:</span>
-            <span class="value">{{ sessions[sessionId].name }}</span>
+            <span class="value">{{ sessions.name }}</span>
           </div>
-          <div class="customer-details" [@fadeIn]>
+          <div class="customer-details" >
             <div class="d-flex justify-content-between">
               <span class="title">Session Date</span>
-              <span class="value">{{ sessions[sessionId].sessionDate }}</span>
+              <span class="value">{{ sessions.sessionDate }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Client name</span>
@@ -78,15 +93,15 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Session type</span>
-              <span class="value">{{ sessions[sessionId].sessionType}}</span>
+              <span class="value">{{ sessions.sessionType}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Start Time</span>
-              <span class="value">{{ sessions[sessionId].sessionStartTime | date: " h:mm a"}}</span>
+              <span class="value">{{ sessions.sessionStartTime | date: " h:mm a"}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">End Time</span>
-              <span class="value">{{ sessions[sessionId].sessionEndTime | date: " h:mm a"}}</span>
+              <span class="value">{{ sessions.sessionEndTime | date: " h:mm a"}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Status</span>
@@ -94,10 +109,10 @@
                 <span
                   class="badge"
                   [ngClass]="{
-                    'badge-warning': sessions[sessionId].sessionStatus === 'DELIVERED',
-                    'badge-success': sessions[sessionId].sessionStatus=== 'CONFIRMED',
-                    'badge-danger': sessions[sessionId].sessionStatus=== 'CANCELLED',
-                    'badge-primary': sessions[sessionId].sessionStatus=== 'NEW'
+                    'badge-warning': sessions.sessionStatus === 'DELIVERED',
+                    'badge-success': sessions.sessionStatus=== 'CONFIRMED',
+                    'badge-danger': sessions.sessionStatus=== 'CANCELLED',
+                    'badge-primary': sessions.sessionStatus=== 'NEW'
                   }"
                   >{{ sessions[sessionId].sessionStatus }}</span
                 >
@@ -105,7 +120,7 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Session Duration</span>
-              <span class="value">{{ sessions[sessionId].sessionDuration }}</span>
+              <span class="value">{{ sessions.sessionDuration }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>
@@ -113,806 +128,19 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Attachments</span>
-              <span class="value">{{ sessions[sessionId].attachments }}</span>
+              <span class="value">{{ sessions.attachments }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Session Venue</span>
-              <span class="value">{{sessions[sessionId].sessionVenue}}</span>
+              <span class="value">{{sessions.sessionVenue}}</span>
             </div>
           </div>
         </div>
-        <div class="card card-table">
-          <div class="tabs-section">
-            <button
-              class="btn btn-tabs"
-              (click)="toggleTab('payments')"
-              [ngClass]="{ 'active-tab': currentTab === 'payments' }"
-            >
-              Payments
-            </button>
+
   
-            <button
-              class="btn btn-tabs"
-              (click)="toggleTab('notifications')"
-              [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
-            >
-              Notifications
-            </button>
-            <!-- <button
-              class="btn btn-tabs"
-              (click)="toggleTab('attachments')"
-              [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
-            >
-              Attachments
-            </button> -->
-          </div>
-  
-          <div class="d-none d-md-block">
-            <div
-              class="text-end mt-2"
-              *ngIf="currentTab === 'payments'"
-              [@fadeIn]
-            >
-              <button
-                class="btn btn-add"
-                data-bs-toggle="modal"
-                data-bs-target="#payementFormModal"
-              >
-                <fa-icon [icon]="addIcon"></fa-icon>
-                Record payment
-              </button>
-              <!-- <button class="btn btn-refresh" (click)="getPayments()">
-                <fa-icon [icon]="refreshIcon"></fa-icon>
-                Refresh
-              </button> -->
-            </div>
-  
-            <table class="table" *ngIf="currentTab === 'payments'" [@fadeIn]>
-              <thead>
-                <th colspan="1">Order Amount</th>
-                <th colspan="1">Payment</th>
-                <th colspan="1">Balance</th>
-                <th colspan="1">Paid On</th>
-                <th colspan="1">Narration</th>
-                <th colspan="1">Actions</th>
-              </thead>
-              <tbody *ngIf="payments?.length" [@fadeIn]>
-                <tr *ngFor="let payment of payments">
-                  <td>{{ payment.order.orderAmount }}</td>
-                  <td>{{ payment.amount }}</td>
-                  <td>{{ payment.balanceAfter }}</td>
-                  <td>{{ payment.paidAt | date: "MMM d, y hh:mm a " }}</td>
-                  <td>{{ payment.narration }}</td>
-                  <td>
-                    <button
-                      class="btn btn-view"
-                      data-bs-toggle="modal"
-                      data-bs-target="#payementModal"
-                      (click)="viewPayment(payment)"
-                    >
-                      view
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-  
-            <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-              <p class="text-muted mt-5" *ngIf="!payments?.length">
-                No payments found.
-              </p>
-            </div>
-  
-            <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-              <div class="donut multi"></div>
-            </div>
-          </div>
-  
-          <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
-            <div class="d-flex justify-content-between mt-1">
-              <p></p>
-              <button
-                class="btn btn-add"
-                type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#payementFormModal"
-              >
-                <fa-icon [icon]="addIcon"></fa-icon> Add payment
-              </button>
-            </div>
-            <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-              <div class="donut multi"></div>
-            </div>
-            <div *ngIf="payments?.length">
-              <div
-                data-bs-toggle="modal"
-                data-bs-target="#payementModal"
-                (click)="viewPayment(payment)"
-                *ngFor="let payment of payments"
-                class="listing-item"
-              >
-                <div class="d-flex justify-content-between mb-1">
-                  <div>
-                    <h6>{{ payment.narration | titlecase }}</h6>
-                    <p class="mb-1">
-                      <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
-                      Amount: {{ payment.order.orderAmount }}
-                    </p>
-                    <p class="mb-1">Paid:{{ payment.amount }}</p>
-                  </div>
-  
-                  <div>
-                    <span>
-                      <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
-                      {{ payment.paidAt | date: "MMM d y" }}
-                    </span>
-                    <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-                    <p></p>
-                    <p
-                      class="mb-1"
-                      class="badge"
-                      [ngClass]="{
-                        'badge-danger': payment.balanceAfter > '0'
-                      }"
-                    >
-                      <span *ngIf="payment.balanceAfter > '0'">
-                        Bal: {{ payment.balanceAfter }}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <p class="text-muted mt-5" *ngIf="!payments?.length">
-              No payments found.
-            </p>
-          </div>
-  
-          <div
-            class="d-none d-md-block"
-            *ngIf="currentTab === 'notifications'"
-            [@fadeIn]
-          >
-            <table class="table">
-              <thead>
-                <th coslpan="1">Notification Reason</th>
-                <th coslpan="1">Notification Date</th>
-                <th coslpan="1">Notification Mode</th>
-              </thead>
-              <tbody *ngIf="notifications.length">
-                <tr *ngFor="let notification of notifications">
-                  <td>{{ notification.subject }}</td>
-                  <td>{{ notification.sentAt | date: "MMM d, y " }}</td>
-                  <td>{{ notification.notificationMode }}</td>
-                  <td>
-                    <button
-                      class="btn btn-view"
-                      data-bs-toggle="modal"
-                      data-bs-target="#notificationModal"
-                      (click)="viewNotification(notification)"
-                    >
-                      view
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-  
-            <p class="text-muted text-center" *ngIf="!notifications?.length">
-              no notifications found
-            </p>
-          </div>
-  
-          <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-            <p class="text-muted mt-5" *ngIf="!notifications?.length">
-              No notifications found.
-            </p>
-            <div *ngIf="notifications?.length">
-              <div
-                data-bs-toggle="modal"
-                data-bs-target="#notificationModal"
-                (click)="viewNotification(notification)"
-                *ngFor="let notification of notifications"
-                class="listing-item"
-              >
-                <div class="d-flex justify-content-between mb-1">
-                  <div>
-                    <p class="mb-1">{{ notification.subject }}</p>
-                    <p class="mb-1">{{ notification.notificationMode }}</p>
-                  </div>
-                  <span
-                    >{{ notification.sentAt | date: "MMM d, y " }}
-                    <fa-icon [icon]="rightIcon"> </fa-icon>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- <div class="d-none d-md-block">
-            <table class="table" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-              <thead>
-                <th coslpan="1">Attachment No</th>
-                <th coslpan="1">Attachment date</th>
-                <th coslpan="1">Details</th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let attachment of attachments">
-                  <td>{{ attachment.refNo }}</td>
-                  <td>{{ attachment.amount }}</td>
-                  <td>{{ attachment.date }}</td>
-                  <td>
-                    <button
-                      class="btn btn-view-order"
-                      data-bs-toggle="modal"
-                      data-bs-target="#payementModal"
-                    >
-                      View
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-  
-          <!-- <div class="show-ms" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-            <div *ngFor="let attachment of attachments" class="listing-item">
-              <div class="d-flex justify-content-between mb-3">
-                <h4>{{ attachment.order.name }}</h4>
-                <span>{{ attachment.amount }}</span>
-              </div>
-              <span>{{ attachment.narration }}</span>
-              <h6>{{ attachment.paidAt | date: "MMM d, y " }}</h6>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
-  
-    <!-- Record payment details form modal -->
-    <div
-      class="modal fade bd-example-modal-lg"
-      id="payementFormModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Record Payment
-            </h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form [formGroup]="paymentForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1">extPaymentRef</label>
-                <input
-                  formControlName="extPaymentRef"
-                  name="extpaymentRef"
-                  type="text"
-                  class="form-control"
-                  id="extPaymentRef"
-                  aria-describedby="payment refrence number"
-                  placeholder="payment refrence number"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1">amount</label>
-                <input
-                  formControlName="amount"
-                  name="amount"
-                  type="number"
-                  class="form-control"
-                  id="amount"
-                  aria-describedby="amount paid"
-                  placeholder="amount paid"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1">narration</label>
-                <textarea
-                  formControlName="narration"
-                  name="narration"
-                  class="form-control"
-                  id="narration"
-                  aria-describedby="narration"
-                  placeholder="payment narration"
-                >
-                </textarea>
-              </div>
-              <div class="d-flex justify-content-between mb-3">
-                <label for="exampleInputEmail1">notify the customer</label>
-                <div class="toggle">
-                  <label class="switch">
-                    <input type="checkbox" name="cancelOrder" checked />
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-            <!-- <button
-              type="button"
-              class="btn btn-submit"
-              data-bs-dismiss="modal"
-              (click)="newPayment()"
-            >
-              Create Payment
-            </button> -->
-          </div>
-        </div>
-      </div>
     </div>
-  
-    <!-- Payment details modal -->
-    <div
-      class="modal fade"
-      id="payementModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Payment Details
-            </h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="payment">
-            <div class="d-flex justify-content-between">
-              <p>Ext Payment Ref</p>
-              <span>{{ payment.extPaymentRef }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Mode</p>
-              <span>Manual</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Amount</p>
-              <span>{{ payment.amount }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Balance After:</p>
-              <span>{{ payment.balanceAfter }}</span>
-            </div>
-  
-            <div class="d-flex justify-content-between">
-              <p>Narration</p>
-              <span>{{ payment.narration }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Payment Date</p>
-              <span>{{ payment.paidAt | date: "MMM d, y hh:mm a" }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Over Payment:</p>
-              <span>{{ payment.overPayment }}</span>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Notification details modal -->
-    <div
-      class="modal fade"
-      id="notificationModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Notification Details
-            </h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="notification">
-            <div class="d-flex justify-content-between">
-              <p>Notification Subject:</p>
-              <span>{{ notification.subject }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Reason</p>
-              <span>{{ notification.sendReason }}</span>
-            </div>
-  
-            <div class="d-flex justify-content-between">
-              <p>Source Address</p>
-              <span>{{ notification.srcAddress }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Sent at:</p>
-              <span>{{ notification.sentAt | date: "MMM d, y " }}</span>
-            </div>
-            <div class="d-flex-column">
-              <p>Content:</p>
-              <span>{{ notification.content }}</span>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Confirm Order modal -->
-    <div
-      class="modal fade bd-example-modal-lg"
-      id="confirmOrderModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Order</h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="order">
-            <div class="d-flex justify-content-between">
-              <p>Customer Name</p>
-              <span>{{ order.customer.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Name</p>
-              <span>{{ order.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Type</p>
-              <span>{{ order.orderType }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount</p>
-              <span>{{ order.orderAmount }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount Paid</p>
-              <span>{{ order.amountPaid }}</span>
-            </div>
-  
-            <form [formGroup]="confirmOrderForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1">narration</label>
-                <textarea
-                  formControlName="narration"
-                  name="narration"
-                  class="form-control"
-                  id="narration"
-                  aria-describedby="narration"
-                  placeholder="narration for confirming the order"
-                >
-                </textarea>
-              </div>
-              <div class="d-flex justify-content-between mb-3">
-                <label for="exampleInputEmail1">notify the customer</label>
-                <div class="toggle">
-                  <label class="switch">
-                    <input type="checkbox" name="cancelOrder" checked />
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-submit"
-              data-bs-dismiss="modal"
-              (click)="confirmOrder()"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Delivered Order modal -->
-    <div
-      class="modal fade bd-example-modal-lg"
-      id="deliveredOrderModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Delivered Order
-            </h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="order">
-            <div class="d-flex justify-content-between">
-              <p>Customer Name</p>
-              <span>{{ order.customer.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Name</p>
-              <span>{{ order.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Type</p>
-              <span>{{ order.orderType }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount</p>
-              <span>{{ order.orderAmount }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount Paid</p>
-              <span>{{ order.amountPaid }}</span>
-            </div>
-            <form [formGroup]="deliveredOrderForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1">Delivered On</label>
-                <input
-                  formControlName="deliveredOn"
-                  [(ngModel)]="deliveredDate"
-                  name="deliveredOn"
-                  type="date"
-                  class="form-control"
-                  id="deliveredOn"
-                  aria-describedby="emailHelp"
-                  placeholder="Delivered On Date"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1">Time</label>
-                <input
-                  formControlName="deliveredOn"
-                  [(ngModel)]="deliveredTime"
-                  name="deliveredtime"
-                  type="time"
-                  class="form-control"
-                  id="deliveredtime"
-                  aria-describedby="emailHelp"
-                  placeholder="Delivery time"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1">narration</label>
-                <textarea
-                  formControlName="narration"
-                  name="narration"
-                  class="form-control"
-                  id="narration"
-                  aria-describedby="narration"
-                  placeholder="narration for delivering the order"
-                >
-                </textarea>
-              </div>
-              <div class="d-flex justify-content-between mb-3">
-                <label for="exampleInputEmail1">Notify the customer</label>
-                <div class="toggle">
-                  <label class="switch">
-                    <input type="checkbox" name="cancelOrder" checked />
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-            <!-- <button
-              type="button"
-              class="btn btn-submit"
-              data-bs-dismiss="modal"
-              (click)="deliveredOrder()"
-            > -->
-              Submit
-            <!-- </button> -->
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Cancel Order modal -->
-    <div
-      class="modal fade bd-example-modal-lg"
-      id="cancelOrderModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Order</h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="order">
-            <div class="d-flex justify-content-between">
-              <p>Customer Name</p>
-              <span>{{ order.customer.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Name</p>
-              <span>{{ order.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Type</p>
-              <span>{{ order.orderType }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount</p>
-              <span>{{ order.orderAmount }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount Paid</p>
-              <span>{{ order.amountPaid }}</span>
-            </div>
-            <form [formGroup]="cancelOrderForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1">narration</label>
-                <textarea
-                  formControlName="narration"
-                  name="narration"
-                  class="form-control"
-                  id="narration"
-                  aria-describedby="narration"
-                  placeholder="narration for cancelling the order"
-                >
-                </textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-submit"
-              data-bs-dismiss="modal"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Delete Order modal -->
-    <div
-      class="modal fade bd-example-modal-lg"
-      id="deleteOrderModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Order</h1>
-  
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body" *ngIf="order">
-            <div class="d-flex justify-content-between">
-              <p>Customer Name</p>
-              <span>{{ order.customer.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Name</p>
-              <span>{{ order.name }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Type</p>
-              <span>{{ order.orderType }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount</p>
-              <span>{{ order.orderAmount }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <p>Order Amount Paid</p>
-              <span>{{ order.amountPaid }}</span>
-            </div>
-            <form [formGroup]="deleteOrderForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1">narration</label>
-                <textarea
-                  formControlName="narration"
-                  name="narration"
-                  class="form-control"
-                  id="narration"
-                  aria-describedby="narration"
-                  placeholder="narration for deleting the order"
-                >
-                </textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-submit"
-              data-bs-dismiss="modal"
-            
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="col-2"></div>
   </div>
-  

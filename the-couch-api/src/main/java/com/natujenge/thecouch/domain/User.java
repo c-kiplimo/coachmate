@@ -36,6 +36,9 @@ public class User implements UserDetails {
     private String username;
     private String password;
 
+    @ManyToOne
+    private Organization orgId;
+
     // management fields
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -26,6 +26,9 @@ public class Client {
     private String firstName;
     private String lastName;
 
+    @ManyToOne
+    private Organization orgId;
+
     private String password;
     @Enumerated(EnumType.STRING)
     private ClientType clientType;
