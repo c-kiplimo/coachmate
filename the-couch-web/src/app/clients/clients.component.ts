@@ -58,6 +58,16 @@ throw new Error('Method not implemented.');
     });
     
   }
+  getClass(client: any) {
+    if (client.status === 'SUSPENDED') {
+        return 'badge-warning';
+    } else if (client.status === 'ACTIVE') {
+        return 'badge-success';
+    } else {
+        return 'badge-danger';
+    }
+}
+
   
   getClients(){
     const options = {
