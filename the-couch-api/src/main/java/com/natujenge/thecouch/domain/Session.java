@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -41,8 +42,8 @@ public class Session {
     // includes date and time
     private LocalDate sessionDate;
     private String sessionDuration;
-    private LocalDateTime sessionStartTime;
-    private LocalDateTime sessionEndTime;
+    private String sessionStartTime;
+    private String sessionEndTime;
 
 
     @Enumerated(EnumType.STRING)

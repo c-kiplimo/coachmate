@@ -57,6 +57,12 @@ export class sessionViewComponent implements OnInit {
   sessions:any;
   session:any;
 
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
+
 
 
   constructor(
@@ -102,7 +108,14 @@ export class sessionViewComponent implements OnInit {
     this.currentTab = tab;
   }
   getAllSessions(){
-    this.restApiService.getSessions().subscribe(
+
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.restApiService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response)
         this.sessions = response

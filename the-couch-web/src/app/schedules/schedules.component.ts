@@ -50,6 +50,11 @@ const colors: Record<string, EventColor> = {
 })
 export class SchedulesComponent implements OnInit {
   sessions!: any;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
 
   @ViewChild('modalContent', { static: true }) modalContent:
     | TemplateRef<any>
@@ -205,7 +210,13 @@ export class SchedulesComponent implements OnInit {
   }
 
   getSessions() {
-    this.restApiService.getSessions().subscribe(
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.restApiService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response;

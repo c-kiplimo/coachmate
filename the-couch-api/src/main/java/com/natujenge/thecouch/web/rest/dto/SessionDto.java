@@ -15,8 +15,8 @@ public interface SessionDto {
     String getNotes();
     String getFeedback();
     LocalDate getSessionDate();
-    LocalDateTime getSessionStartTime();
-    LocalDateTime getSessionEndTime();
+    String getSessionStartTime();
+    String getSessionEndTime();
     SessionVenue getSessionVenue();
     PaymentCurrency getPaymentCurrency();
     String getAmountPaid();
@@ -28,9 +28,8 @@ public interface SessionDto {
     interface ClientView{
         Long getId();
 
-        String getName();
-
-        ClientType getType();
+        String getFullName();
+        ClientType getClientType();
 
         String getMsisdn() ;
     }

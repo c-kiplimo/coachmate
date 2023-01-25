@@ -54,17 +54,12 @@ export class AddSessionComponent implements OnInit {
   sessionType = [
     
   ];
-  cakeSize = [
-    'ONE_KG',
-    'ONE_HALF_KG',
-    'TWO_KG',
-    'TWO_HALF_KG',
-    'THREE_KG',
-    'THREE_HALF_KG',
-    'FOUR_KG',
-    'FOUR_HALF_KG',
-    'FIVE_KG',
-  ];
+
+  contracts: any;
+  createSessionClientId: any;
+  selectedContract: any;
+
+
   deliveryOption = ['DELIVERED', 'PICKUP'];
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
@@ -91,160 +86,52 @@ export class AddSessionComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    this.newOrderMessage = this.user.bakerNotificationSettings.newOrderTemplate;
-    console.log(this.newOrderMessage);
+    
+    this.getContracts();
 
-    this.addClient = this.formbuilder.group({
-      name: ' ',
-      type: ' ',
-      msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
-      profession: ' ',
-      payment_mode: ' ',
-      status: 'ACTIVE',
-      reason: '',
-      createdBy: ' Amos',
-      lastUpdatedBy: ' Amos',
-    });
-      this.addsessionForm = this.formbuilder.group({
-      name: '',
-      sessionType: '',
-      orderAmount: '',
-      amountPaid: '0',
-      details: '',
-      notes: '',
-      deliveryAddress: '',
-      dueDate: '',
-      clientId: '',
-      sendNotification:'',
-      attachment: '',
-      deliveryOption: '',
-      cakeSize: '',
-      messageOnCake: '',
+    this.addsessionForm = this.formbuilder.group({
+   
     });
   }
  
-  ngAfterViewInit(): void {
-    fromEvent(this.yourElement.nativeElement, 'input')
-      .pipe(map((event: any) => (event.target as HTMLInputElement).value))
-      .pipe(debounceTime(1000))
-      .pipe(distinctUntilChanged())
-      .subscribe((data) => this.getSearchItem());
+  onContractChange(event: any) {
+    console.log(event.target.value);
+    this.createSessionClientId = event.target.value;
+
+    //get client details from contract id
+    this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
+    console.log(this.selectedContract);
+
   }
+
   addSession () {
-    this.sessionService.addSession(this.addSessionForm).subscribe({
-      
-      next: (response: any) => {
-        console.log("no error")
-        this.router.navigate(['/sessions']);
-        console.log(this.addSessionForm);
-      }, 
-      error: (error: any) => {
-        console.log("error")
-      }
-    }
-      
-    )
     
-  }
-  newSession(addSessionForm: any) {
-    const names = this.searchTerm.split(' ');
+   this.addSessionForm.clientId = this.selectedContract.client.id;
+   console.log(this.addSessionForm);
+   const params = {
+      clientId: this.selectedContract.client.id,
+      
+      contractId: this.addSessionForm.contractId
+   };
 
-    this.addSessionForm.patchValue({
-      name: names[0] + " " + this.addSessionForm.value.orderType ,
-      dueDate: this.sessionDate + 'T' + this.sessionStartTime,
-      sendNotification: this.showHideMessage
-    });
-    console.log('time is', this.sessionStartTime);
-
-    this.service
-      .addSession(this.addSessionForm.value)
-      .subscribe({
-        next:(response: any) => {
-          this.addSessionForm.reset();
-          // this.toastrService.success('Order created!', 'Success!');
-          this.router.navigate(['/orders']);
-          ;},
-        error: (err: any) => {
-          console.log(err);
-          // this.toastrService.error(
-          //   'Order not created, try again!',
-          //   'Failed!'
-          // );
-        },
-      });
-  }
-  getSearchItem(): void {
-    this.searching = true;
-    console.log('searching');
-    const options = {
-      page: 1,
-      per_page: 10,
-      name: this.searchTerm,
-    };
-    this.service.getClients().subscribe((res: any) => {
-      // console.log('clients ni', res.body.data);
-      this.client = [];
-      this.client = res.body.data;
-      this.searching = false;
-      console.log('here are client', this.client);
+   console.log(params);
+ 
+    this.sessionService.addSession(this.addSessionForm, params).subscribe((res:any) => {
+      console.log(res);
+      this.router.navigate(['/sessions']);
     });
   }
 
-  //add new client
-  newclient() {
-    console.log(this.addClient.value);
-    // this.addclientForm.patchValue({
-    //   firstName: this.firstName,
-    //   lastName: this.lastName,
-    // });
-    // console.log(this.firstName, this.lastName);
-    this.addClient
-      this.addNewClient(this.addClient.value)
-      .subscribe((response: any) => {
-        this.createdclient = response.body;
-        this.searchTerm = this.createdclient.firstName + " " + this.createdclient.lastName;
-        // this.toastrService.success('client created!', 'Success!');
-        this.addSessionForm.patchValue({
-          name: this.createdclient.firstName,
-          clientId: this.createdclient.id,
-        });
-        this.clientId = response.id;
-        // alert('client created succesfully');
-        this.getSearchItem();
-      });
+  getContracts() {
+    this.sessionService.getContracts().subscribe((res:any) => {
+      console.log(res);
+      this.contracts = res;    });
   }
-  selectclient(client: any): void {
-    // this.client = client.firstName;
-    console.log("clicked client", this.client)
-    this.addSessionForm.patchValue({
-      clientId: client.id,
-    });
-    this.client = client;
-    this.searchTerm = client.firstName + " " + client.lastName;
-  }
-  displayOrderMessage(client: any) {
-    console.log(client);
-  }
-  clientTyped() {
-    const names = this.searchTerm.split(' ');
-    this.addClient.patchValue({
-      firstName: names[0],
-      lastName: names[names.length - 1],
-    });
-  }
-  toggleNotifMessage():void{
-    this.showHideMessage = !this.showHideMessage;
-  }
-  newClient() {
-    console.log("add client form=>", this.addClient.value);
-    this.ClientService.addClient(this.addClient.value).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.router.navigate(['/clients']);
-      }
-    );
-  }
+
+
+
+
+
+
 }
 

@@ -6,8 +6,11 @@ server:
 
 spring:
   datasource:
-    password: natujenge
-    url: jdbc:mysql://164.92.70.172:3315/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+#    password: natujenge
+#    url: jdbc:mysql://164.92.70.172:3315/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+#    username: root
+    password: ninja
+    url: jdbc:mysql://localhost:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
     username: root
   jpa:
     hibernate:
