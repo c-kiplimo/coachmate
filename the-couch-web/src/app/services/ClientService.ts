@@ -45,21 +45,6 @@ export class ClientService {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
-    // Get Contracts
-    getContracts() : Observable<any> {
-        return this.http.get(`${this.baseURL}contracts`)
-    }
-
-    getSessions(): Observable<any> {
-        return this.http.get(`${this.baseURL}sessions`)
-    }
-    
-    addSession(session: any): Observable<any> {
-        console.log(session)
-        return this.http.post(`${this.baseURL}sessions`,session
-            
-        )
-    }
     editClient(id: any, client: any): Observable<any> {
         client.id = id;
         return this.http.put(`${this.baseURL}clients/updateClient`, client)
@@ -74,9 +59,31 @@ export class ClientService {
     }
 
      
+    // Get Contracts
+    getContracts() : Observable<any> {
+        return this.http.get(`${this.baseURL}contracts`)
+    }
+
+    getSessions(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions`,
+        {
+            params: options,
+            observe: 'response',
+        })
+    }
+    
+    addSession(session: any, params: any): Observable<any> {
+        console.log(session)
+     
+        return this.http.post(`${this.baseURL}sessions`, session, {params: params})
+            
+    }
+
+
 }
 // {
 //     headers: {
 //         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
 //       }
 // })
+
