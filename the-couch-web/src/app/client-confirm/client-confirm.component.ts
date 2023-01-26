@@ -70,13 +70,13 @@ export class ClientConfirmComponent implements OnInit {
     this.LoginService.confirmAndUpdateClientPassword(this.formData).subscribe({
       next: (response) => {
         console.log(response);
-        console.log('here');
-        if (response.body.error) {
-          this.errorMessage = response.body.error;
-        } else {
+     
+        // if (response.error) {
+        //   this.errorMessage = response.message;
+        // } else {
          
-          this.router.navigate(['/login']);
-        }
+          this.router.navigate(['/signin']);
+  
       },
       error: (error) => {
         console.log(error);

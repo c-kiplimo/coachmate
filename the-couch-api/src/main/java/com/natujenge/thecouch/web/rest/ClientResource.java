@@ -225,10 +225,10 @@ public class ClientResource {
             Optional<User> updateClient;
             updateClient = clientService.confirmClientTokenAndUpdatePassword(clientRequest);
 
-            return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error while Confirming Client and Updating Client password", e);
-            return new ResponseEntity<>(new RestResponse(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
