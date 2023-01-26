@@ -52,6 +52,7 @@ import { AddTrainingComponent } from './coach-education/add-training/add-trainin
 import { CoachEducationService } from './services/CoachEducationService';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { PipesPipe } from './pipes.pipe';
+import { RegistrationComponent } from './coach-aggregator/registration/registration.component';
 
 
 
@@ -85,6 +86,7 @@ import { PipesPipe } from './pipes.pipe';
     ConfirmedViewComponent,
     ClientConfirmComponent,
     PipesPipe,
+    RegistrationComponent,
 
   ],
   imports: [

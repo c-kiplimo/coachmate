@@ -157,9 +157,15 @@ clientId:any;
 
     });
   }
-
-
-
+  getClass(Clients: any) {
+    if (Clients.status === 'SUSPENDED') {
+        return 'badge-warning';
+    } else if (Clients.status === 'ACTIVE') {
+        return 'badge-success';
+    } else {
+        return 'badge-danger';
+    }
+}
   updateClientDetails(){
   
     console.log(this.updateClient.value)
