@@ -90,7 +90,7 @@ const routes: Routes = [
   { path: 'registration/confirm', 
     component: ConfirmedViewComponent },
   {
-      path: 'confirmclient',
+      path: 'confirmclient/:id/:token',
       component: ClientConfirmComponent
   },
   

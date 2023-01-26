@@ -18,6 +18,8 @@ export class ClientConfirmComponent implements OnInit {
   formData = {
     password: '',
     passwordConfirm: '',
+    id: '',
+    token: '',
   };
 
   passwordInvalid = false;
@@ -60,6 +62,10 @@ export class ClientConfirmComponent implements OnInit {
   confirmAndUpdatePassword() {
     this.errorMessage = '';
     console.log(this.formData)
+    const data = this.formData;
+    data.id = this.id;
+    data.token = this.token;
+
     this.passwordInvalid = false;
     this.LoginService.confirmAndUpdateClientPassword(this.formData).subscribe({
       next: (response) => {

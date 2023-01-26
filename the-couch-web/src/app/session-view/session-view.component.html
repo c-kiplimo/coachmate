@@ -86,10 +86,7 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Client name</span>
-              <span class="value">{{
-                order.customer.firstName + " " + order.customer.lastName
-                  | titlecase
-              }}</span>
+              <span class="value">{{ sessions.client.fullName }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Session type</span>
@@ -97,39 +94,22 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Start Time</span>
-              <span class="value">{{ sessions.sessionStartTime | date: " h:mm a"}}</span>
+              <span class="value">{{ sessions.sessionStartTime}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">End Time</span>
-              <span class="value">{{ sessions.sessionEndTime | date: " h:mm a"}}</span>
+              <span class="value">{{ sessions.sessionEndTime }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Status</span>
-              <span class="value">
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'badge-warning': sessions.sessionStatus === 'DELIVERED',
-                    'badge-success': sessions.sessionStatus=== 'CONFIRMED',
-                    'badge-danger': sessions.sessionStatus=== 'CANCELLED',
-                    'badge-primary': sessions.sessionStatus=== 'NEW'
-                  }"
-                  >{{ sessions[sessionId].sessionStatus }}</span
-                >
-              </span>
+              <span class="value">{{ sessions.sessionStatus }}</span>
             </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Session Duration</span>
-              <span class="value">{{ sessions.sessionDuration }}</span>
-            </div>
+  
             <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>
-              <span class="value">{{ order.amountPaid }}</span>
+              <span class="value">{{ sessions.amountPaid }}</span>
             </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Attachments</span>
-              <span class="value">{{ sessions.attachments }}</span>
-            </div>
+        
             <div class="d-flex justify-content-between">
               <span class="title">Session Venue</span>
               <span class="value">{{sessions.sessionVenue}}</span>

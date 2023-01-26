@@ -94,6 +94,7 @@
             <button
               type="submit"
               (click)="validatePassword()"
+              [disabled]="!formData.password || !formData.passwordConfirm"
               class="btn btn-success mb-3 mt-2 p-2 text-center">
               Submit
             </button>
