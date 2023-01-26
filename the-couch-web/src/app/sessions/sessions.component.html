@@ -49,9 +49,11 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">session Name</th>
-        <th scope="col">session Date</th>
+        <th scope="col">Contract</th>
         <th scope="col">Session Venue</th>
+        <th scope="col">Client</th>
         <th scope="col">Session Type</th>
+        <th scope="col">session Date</th>
         <th scope="col">Starts at</th>
         <th scope="col">Ends at</th>
         <th scope="col">Actions</th>
@@ -62,18 +64,20 @@
       <tr *ngFor="let session of sessions">
         <th scope="row">{{ session.id }}</th>
         <td>{{ session.name }}</td>
-        <td>{{ session.sessionDate }}</td>
+        <td>{{ session.contract.coachingTopic }}</td>
         <td>{{ session.sessionVenue }}</td>
+        <td>{{ session.client.fullName }}</td>
         <td>{{ session.sessionType }}</td>
-        <td>{{ session.sessionStartTime | date : "hh:mm a" }}</td>
-        <td>{{ session.sessionEndTime | date : "hh:mm a" }}</td>
+        <td>{{ session.sessionDate }}</td>
+        <td>{{ session.sessionStartTime }}</td>
+        <td>{{ session.sessionEndTime }}</td>
         <td class="actions">
           <i
             (click)="navigateToSessionView(session.id)"
             class="fa-solid fa-arrow-up-right-from-square"
           ></i>
-          <i class="fa-solid fa-pen-to-square"></i>
-          <i class="fa-solid fa-trash-can"></i>
+          <!-- <i class="fa-solid fa-pen-to-square"></i>
+          <i class="fa-solid fa-trash-can"></i> -->
         </td>
       </tr>
     </tbody>
