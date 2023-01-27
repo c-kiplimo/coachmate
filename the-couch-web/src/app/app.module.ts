@@ -53,6 +53,7 @@ import { CoachEducationService } from './services/CoachEducationService';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { PipesPipe } from './pipes.pipe';
 import { RegistrationComponent } from './coach-aggregator/registration/registration.component';
+import { ContractDetailsComponent } from './contract-details/contract-details.component';
 
 
 
@@ -87,6 +88,7 @@ import { RegistrationComponent } from './coach-aggregator/registration/registrat
     ClientConfirmComponent,
     PipesPipe,
     RegistrationComponent,
+    ContractDetailsComponent,
 
   ],
   imports: [
