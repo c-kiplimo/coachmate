@@ -8,18 +8,7 @@
             </div>
             <form>
               <div class="row p-2">
-                <div class="mb-3 col-md-6">
-                <label for="clientId" class="form-label">Select Client</label>
-                <select class="form-select" aria-label="Default select example"
-                formControlName="clientId">
-                  <option selected>Select Client you want to create a session for</option>
-                 
-                 <!--Loop through clients and form options-->
-                  <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
-                </select>
-                
-                </div>
-                <div class="mb-3 col-md-6">
+                <div class=" mb-3 col-md-12 ">
                   <label for="sessionname">Select Contract</label>
                   <select 
                   class="form-select" 
@@ -28,7 +17,30 @@
                   (change)="onContractChange($event)"
                   [(ngModel)]="addSessionForm.contractId"> 
                   <option *ngFor="let contract of contracts" value="{{contract.id}}">{{contract.coachingTopic}}</option>
+                  
                 </select>
+               
+                </div>
+                <div class=" mb-3 col-md-6 ">
+                  <label for="inputlastname">Client Name</label>
+                  <input type="text" 
+                  class="form-control" 
+                  id="inputEmail4" 
+                  placeholder="Enter Session Description" 
+                  name="details" 
+                  [(ngModel)]="addSessionForm.sessionDetails" >
+                
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">Select Contract</label>
+                  <input type="date" 
+                  variant="success" 
+                  class="form-control" 
+                  id="inputEmail4" 
+                  placeholder="Date" 
+                  name="session_date" 
+                  [(ngModel)]="addSessionForm.sessionDate" >
+                  
                 </div>
               </div>
               <div class="row p-2">
