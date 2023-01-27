@@ -29,6 +29,8 @@ export class DashboardComponent implements OnInit {
   numberOfHoursCoachEducation: any;
   coachSessionData: any;
   coachData: any;
+  userRole: any;
+  
 
   constructor(
     private clientService: ClientService,
@@ -39,12 +41,20 @@ export class DashboardComponent implements OnInit {
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
 
+    if(this.userRole == 'COACH'){
     this.getClients();
     this.getUser();
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+    } else {
+      console.log('not coach');
+      this.getUser();
+    }
+
   }
   getClients() {
     const options = {
@@ -76,8 +86,8 @@ export class DashboardComponent implements OnInit {
     this.clientService.getSessions(options).subscribe(
       (response: any) => {
         console.log('here=>', response);
-        this.sessions = response;
-        this.numberOfSessions = this.sessions.length;
+        this.sessions = response.body.data;
+        this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
         for (let i = 0; i < this.sessions.length; i++) {
           totalMinutes += Number(this.sessions[i].sessionDuration);
@@ -94,8 +104,9 @@ export class DashboardComponent implements OnInit {
   getNoOfContracts() {
     this.clientService.getContracts().subscribe(
       (response: any) => {
-        console.log(response);
+        
         this.contracts = response;
+        console.log(this.contracts);
         this.numberOfContracts = this.contracts.length;
         console.log(this.numberOfContracts);
       },
@@ -106,8 +117,7 @@ export class DashboardComponent implements OnInit {
   }
   getUser() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
-
-    console.log(this.User.coach.businessName);
+    console.log(this.User);
   }
 
 
