@@ -81,6 +81,14 @@ export class ClientService {
             
     }
 
+    getClientSessions(clientId: any): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions/clientSessions/${clientId}`)
+    }
+
+    getClientByEmail(email: any): Observable<any> {
+        return this.http.post(`${this.baseURL}clients/getClientByEmail`, email);
+    }
+
 
 }
 // {

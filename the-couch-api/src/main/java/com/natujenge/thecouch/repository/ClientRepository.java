@@ -5,7 +5,6 @@ import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -27,4 +26,5 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
 
     Optional<Client> findClientByIdAndCoachId(Long clientId, Long coachId);
 
+    List<Client> findByEmail(String email);
 }

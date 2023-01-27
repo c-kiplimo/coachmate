@@ -319,7 +319,7 @@ public class ClientService {
 
     public Optional<User> confirmClientTokenAndUpdatePassword(ClientRequest clientRequest) {
 
-        Optional<User> userOptional = userRepository.findByEmail(clientRequest.getEmail());
+        Optional<User> userOptional = userRepository.findById(clientRequest.getId());
         if (userOptional.isEmpty()) {
             throw new IllegalStateException("Client User Not Found!!");
         }
@@ -339,5 +339,9 @@ public class ClientService {
         }
 //        return "Token Not Confirmed";
         return userOptional;
+    }
+
+    public List<Client> findByEmail(String email) {
+        return clientRepository.findByEmail(email);
     }
 }

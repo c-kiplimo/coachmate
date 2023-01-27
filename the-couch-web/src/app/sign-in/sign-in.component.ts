@@ -55,7 +55,13 @@ export class SignInComponent implements OnInit {
           const data = response;
           this.token = data.token;
           console.log(this.token);
-          this.businessName = data.user.coach.businessName;
+          if (data.user.coach === null) {
+            this.businessName = data.user.fullName;
+          } else{
+            this.businessName = data.user.coach.businessName;
+          }
+          console.log(this.businessName);
+
           sessionStorage.setItem('token', this.token);
           sessionStorage.setItem('businessName', this.businessName);
           sessionStorage.setItem('user', JSON.stringify(data.user));

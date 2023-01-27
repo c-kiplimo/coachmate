@@ -17,6 +17,6 @@ public class ClientRequest {
     private String reason;
     private String password;
     private String token;
-
+    private Long id;
 
 }
