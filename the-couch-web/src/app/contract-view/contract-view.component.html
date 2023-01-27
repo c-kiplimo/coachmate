@@ -38,7 +38,7 @@
         <td>{{ contract.endDate | date : "MMM d, y" }}</td>
         <td>{{ contract.noOfSessions }}</td>
         <td class="actions">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <i class="fa-solid fa-arrow-up-right-from-square"  (click)="navigateToContractDetail(contract.id)"></i>
           <i class="fa-solid fa-pen-to-square"></i>
           <i class="fa-solid fa-trash-can"></i>
         </td>

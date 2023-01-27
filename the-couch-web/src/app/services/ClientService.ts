@@ -10,8 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 
 
-export class ClientService {
-    
+export class ClientService { 
 
     baseURL: string = environment.apiURL + '/api/';
   deleteClient: any;
@@ -19,6 +18,9 @@ export class ClientService {
     constructor(private http: HttpClient) {
 
     }
+    getContract(id: any):Observable<any> {
+        return this.http.get<any>(this.baseURL + 'contracts/' + id,{observe:'response'});
+      }
 
     getClient(options: any): Observable<any> {
         return this.http.get(`${this.baseURL}clients`,

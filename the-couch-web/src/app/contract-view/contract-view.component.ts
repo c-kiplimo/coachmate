@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/ApiService';
 import { ClientService } from '../services/ClientService';
 import { style, animate, transition, trigger } from '@angular/animations';
-
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-contract-view',
   templateUrl: './contract-view.component.html',
@@ -20,10 +21,21 @@ import { style, animate, transition, trigger } from '@angular/animations';
 export class contractViewComponent implements OnInit {
   loading = false;
   contracts: any;
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.getAllContracts();
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      // Retrieve the contract from the database using the id
+      this.contracts = this.clientService.getContract(id);
+    });
+  }
+  navigateToContractDetail(id: any) {
+    console.log(id)
+    this.router.navigate(['/contractDetail', id]);
+
+
   }
   getAllContracts() {
     this.loading = true;
