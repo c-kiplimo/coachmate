@@ -340,4 +340,8 @@ public class ClientService {
 //        return "Token Not Confirmed";
         return userOptional;
     }
+
+    public List<Client> findByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
 }

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasLength;
@@ -246,6 +247,21 @@ public class ClientResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path = "/getClientByEmail")
+    ResponseEntity<?> getClientByEmail(@RequestBody ClientRequest clientRequest,
+                                       @AuthenticationPrincipal User userDetails) {
+        log.info("Request to get client by email");
+        try {
+           List<Client> client = clientService.findByEmail(clientRequest.getEmail());
+           return ResponseEntity.ok().body(client);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true,
+                    "Client could not be fetched"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        }
+
 
 
 }

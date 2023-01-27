@@ -29,4 +29,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
 
     Optional<Session> getSessionByIdAndCoachId(Long sessionId, Long coachId);
 
+    List<SessionDto> findByClientId(Long clientId);
+
+
 }

@@ -3,21 +3,17 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.domain.enums.SessionStatus;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
-import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -166,4 +162,18 @@ public class SessionResource {
         sessionService.deleteSession(id,userDetails.getCoach().getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    //GET: Get client sessions by client_id
+    @GetMapping("/clientSessions/{clientId}")
+        public ResponseEntity<?> getClientSessions (@PathVariable("clientId") Long clientId,
+                                                    @AuthenticationPrincipal User userDetails) {
+        try {
+            List<SessionDto> session = sessionService.findSessionByClientId(clientId);
+            return new ResponseEntity<>(session, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        }
 }

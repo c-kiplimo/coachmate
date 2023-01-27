@@ -53,6 +53,8 @@ export class DashboardComponent implements OnInit {
     } else {
       console.log('not coach');
       this.getUser();
+     
+      this.getClientByEmail();
     }
 
   }
@@ -146,5 +148,37 @@ export class DashboardComponent implements OnInit {
       totalHours += parseInt(element.trainingHours);
     });
     this.numberOfHoursCoachEducation = Math.floor(totalHours);
+  }
+
+  getClientSessions(id: any) {
+
+    this.clientService.getClientSessions(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        console.log(this.sessions);
+        this.numberOfSessions = this.sessions.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getClientByEmail() {
+    const email = {
+      email: this.User.email
+    }
+    this.clientService.getClientByEmail(email).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.clients = response;
+        this.numberOfClients = this.clients.length;
+        this.getClientSessions(response[0].id);
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 }
