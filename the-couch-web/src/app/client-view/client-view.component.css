@@ -19,7 +19,7 @@
     width: 100%;
     padding: 50px 80px;
     border-radius: 8px;
-    border: 1px solid #f1f1f1;
+    border: 1px solid #3a3737;
     margin-bottom: 30px;
 }
     .client-details{
@@ -46,7 +46,7 @@
   .client-orders-card{
     padding: 30px;
     border-radius: 8px;
-    border: 1px solid #f1f1f1;
+    border: 1px solid #0a0a0a;
   }
     .active-tab {
         background-color: #e1e1e1!important;
@@ -119,3 +119,13 @@
     transform: scale(1.5);
     zoom: 1.5;
   }
+  .badge-warning {
+    background-color: yellow !important;
+  }
+  .badge-success {
+    background-color: green !important;
+  }
+  .badge-danger {
+    background-color: red !important;
+  }
+  

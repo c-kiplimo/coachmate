@@ -63,6 +63,12 @@ export class AddSessionComponent implements OnInit {
   deliveryOption = ['DELIVERED', 'PICKUP'];
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
+  itemsPerPage: any;
+  filters: any;
+  clients: any;
+  numberOfClients!: number; 
+  coachSessionData: any;
+  coachData: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
 
@@ -75,9 +81,9 @@ export class AddSessionComponent implements OnInit {
     }
   }
     constructor(
-    private service: ApiService  ,
+    private apiService:ApiService,
     private http: HttpClient,
-    private ClientService: ClientService,
+    private clientService : ClientService,
     private formbuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -86,6 +92,10 @@ export class AddSessionComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
+    this.getClients();
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
     
     this.getContracts();
 
@@ -102,6 +112,25 @@ export class AddSessionComponent implements OnInit {
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
     console.log(this.selectedContract);
 
+  }
+  getClients(){
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getClient(options).subscribe(
+      (response: any) => {
+        console.log(response.body.data);
+        console.log("here");
+        this.clients = response.body.data;
+        this.numberOfClients = this.clients.length;
+        console.log(this.numberOfClients)
+      }, (error: any) => {
+        console.log(error)
+      }
+    )
   }
 
   addSession () {

@@ -275,82 +275,10 @@
           </div>
           </div>
           </div>
-      
-          <section>
-        
-            <br>
-            <div class="row">
-              <div class="col-10">
-                <h3>Sessions</h3>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row">
-              <div class="col-10"></div>
-              <div class="col-2">
-                <button
-                  type="button"
-                  routerLink="/addSession"
-                  class="btn btn-success"
-                >
-                  <i class="fa-solid fa-user-plus"></i>Add Session
-                </button>
-              </div>
-            </div>
-            <div class="row table-responsive">
-              <div class="row">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">session Name</th>
-                      <th scope="col">session Date</th>
-                      <th scope="col">Session Venue</th>
-                      <th scope="col">Session Type</th>
-                      <th scope="col">Starts at</th>
-                      <th scope="col">Ends at</th>
-                      <th scope="col">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let session of sessions">
-                      <th scope="row">{{ session.id }}</th>
-                      <td>{{ session.name }}</td>
-                      <td>{{ session.sessionDate }}</td>
-                      <td>{{ session.sessionVenue }}</td>
-                      <td>{{ session.sessionType }}</td>
-                      <td>{{ session.sessionStartTime | date : "hh:mm a" }}</td>
-                      <td>{{ session.sessionEndTime | date : "hh:mm a" }}</td>
-                      <td class="actions">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                        <i class="fa-solid fa-trash-can"></i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div class="form-check mb-3">
-                  <label class="form-check-label">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      name="remember"
-                    />
-                    I have read and agree to the above Terms & Conditions.
-                  </label>
-                </div>
-                <button
-                  type="button"
-                  (click)="addContract()"
-                  class="btn btn-success col-2"
+          <button
+          type="button"
+          (click)="addContract()"
+          class="btn btn-success col-2"
                 >
                   submit
                 </button>
-              </div>
-            </div>
-          </section>
-        </div>
-      </form>
-    </div>
-  </div>
-</body>

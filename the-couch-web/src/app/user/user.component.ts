@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class UserComponent implements OnInit {
   logoutIcon = faSign;
+  showDropdown = false;
   loginIcon = faSign;
   userIcon = faUser;
   customersIcon = faUsers;
