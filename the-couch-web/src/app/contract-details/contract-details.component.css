@@ -1,0 +1,30 @@
+
+  :root {
+    --primary-color: #1B3A27; /* Green color */
+  }
+
+  /* Update the background and text color of the "Coaching Contract" card */
+  .card-header {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  /* Update the background color of the "Add/Edit Session" button */
+  .btn-add-session {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  /* Update the background color of the "Save" button in the modal */
+  .btn-save {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  /* Update the background color of the active pagination button */
+  .active>.page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+  }
+
