@@ -17,7 +17,6 @@
       </button>
     </div>
     <div class="d-flex">
-
       <div class="dropdown">
         <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
           data-bs-toggle="dropdown" aria-expanded="false">
@@ -95,10 +94,10 @@
   <div class="tabs-section">
     <button
       class="btn btn-tabs"
-      (click)="toggleTab('orders')"
-      [ngClass]="{ 'active-tab': currentTab === 'orders' }"
+      (click)="toggleTab('sessions')"
+      [ngClass]="{ 'active-tab': currentTab === 'sessions' }"
     >
-      Orders
+      sessions
     </button>
     <button
       class="btn btn-tabs"
@@ -117,113 +116,112 @@
   </div>
 
   <div class="d-none d-md-block">
-    <div class="text-end mt-2" *ngIf="currentTab === 'orders'" [@fadeIn]>
+    <div class="text-end mt-2" *ngIf="currentTab === 'sessions'" [@fadeIn]>
       <button
         class="btn btn-add"
         type="button"
         data-bs-toggle="modal"
-        data-bs-target="#addOrderModal"
+        data-bs-target="#addsessionModal"
       >
         <fa-icon [icon]="addIcon"></fa-icon>
-        Add Order
+        Add Session
       </button>
 
-      <!-- <button class="btn btn-refresh" (click)="getOrders(1)">
-        <!-- <fa-icon [icon]="refreshIcon"></fa-icon>
+      <button class="btn btn-refresh" (click)="getsessions(1)">
+        <fa-icon [icon]="refreshIcon"></fa-icon>
         Refresh
-      </button> --> 
+      </button> 
     </div>
-
-    <!-- <table class="table" *ngIf="currentTab === 'orders'" [@fadeIn]>
+    <table class="table" *ngIf="currentTab === 'sessions'" [@fadeIn]>
       <thead>
-        <th colspan="1">Order Title</th>
-        <th colspan="1">Order Amount</th>
+        <th colspan="1">session Title</th>
+        <th colspan="1">session Amount</th>
         <th colspan="1">Due date</th>
         <th colspan="1">Status</th>
         <th colspan="1">Actions</th>
       </thead>
-      <tbody *ngIf="orders?.length" [@fadeIn]>
-        <tr *ngFor="let order of orders">
-          <td>{{ order.name }}</td>
-          <td>{{ order.orderAmount }}</td>
-          <td>{{ order.dueDate | date: "MMM d, y hh:mm a" }}</td>
+      <tbody *ngIf="sessions?.length" [@fadeIn]>
+        <tr *ngFor="let session of sessions">
+          <td>{{ session.name }}</td>
+          <td>{{ session.sessionAmount }}</td>
+          <td>{{ session.dueDate | date: "MMM d, y hh:mm a" }}</td>
           <td>
             <span
               class="badge"
               [ngClass]="{
-                'badge-success': customer.status === 'ACTIVE',
-                'badge-danger': customer.status !== 'ACTIVE'
+                'badge-success': client.status === 'ACTIVE',
+                'badge-danger': client.status !== 'ACTIVE'
               }"
-              >{{ customer.status }}</span
+              >{{ client.status }}</span
             >
           </td>
 
           <td>
             <button
               class="btn btn-view"
-              [routerLink]="['/order', order.id]"
+              [routerLink]="['/session', session.id]"
             >
               View
             </button>
           </td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
 
-    <div *ngIf="currentTab === 'orders'" [@fadeIn]>
-      <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
+    <div *ngIf="currentTab === 'sessions'" [@fadeIn]>
+      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
         <div class="donut multi"></div>
       </div>
       <table class="table">
         <thead>
-          <th colspan="1">Order #</th>
+          <th colspan="1">Session #</th>
           <th colspan="1">Product</th>
           <th colspan="1">Time</th>
-          <th colspan="1">Due date</th>
+          <th colspan="1">Session date</th>
           <th colspan="1">Client</th>
           <th colspan="1">Status</th>
-          <th colspan="1">Amount</th>
+          <th colspan="1">Session Duration</th>
           <th colspan="1">Balance</th>
           <th colspan="1">Actions</th>
         </thead>
-        <tbody *ngIf="orders?.length" [@fadeIn]>
+        <tbody *ngIf="sessions?.length" [@fadeIn]>
           <tr
             *ngFor="
-              let order of orders
+              let session of sessions
             "
           >
             <td>
               <span
                 class="redirect-link"
-                [routerLink]="['/order', order.id]"
-                >{{ order.orderNumber }}</span
+                [routerLink]="['/session', session.id]"
+                >{{ session.sessionNumber }}</span
               >
             </td>
-            <td>{{ order.details }}</td>
-            <td>{{ order.dueDate | date : " h:mm a" }}</td>
-            <td>{{ order.dueDate }}</td>
+            <td>{{ session.details }}</td>
+            <td>{{ session.dueDate | date : " h:mm a" }}</td>
+            <td>{{ session.dueDate }}</td>
             <td>
               {{
-                order.customer.firstName + " " + order.customer.lastName
+                session.client.firstName + " " + session.client.lastName
                   | titlecase
               }}
             </td>
-            <td>{{ order.orderStatus }}</td>
-            <td>{{ order.orderAmount }}</td>
+            <td>{{ session.sessionStatus }}</td>
+            <td>{{ session.sessionAmount }}</td>
 
             <td>
               <span
                 class="badge"
                 [ngClass]="{
-                  'badge-danger': order.orderBalance > '0',
-                  'badge-primary': order.orderBalance < '0',
-                  'badge-success': order.orderBalance === 0
+                  'badge-danger': session.sessionBalance > '0',
+                  'badge-primary': session.sessionBalance < '0',
+                  'badge-success': session.sessionBalance === 0
                 }"
               >
-                <span *ngIf="order.orderBalance < '0'">Overpaid </span>
-                <span *ngIf="order.orderBalance === 0"> Fully Paid </span>
-                <span *ngIf="order.orderBalance > '0'">
-                  {{ order.orderBalance }}
+                <span *ngIf="session.sessionBalance < '0'">Overpaid </span>
+                <span *ngIf="session.sessionBalance === 0"> Fully Paid </span>
+                <span *ngIf="session.sessionBalance > '0'">
+                  {{ session.sessionBalance }}
                 </span>
               </span>
             </td>
@@ -231,7 +229,7 @@
             <td>
               <button
                 class="btn btn-view"
-                [routerLink]="['/order', order.id]"
+                [routerLink]="['/session', session.id]"
               >
                 view
               </button>
@@ -239,16 +237,16 @@
           </tr>
         </tbody>
       </table>
-      <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
-        No Orders Found.
+      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
+        No sessions Found.
       </p>
       <div
         align="center"
-        *ngIf="totalLength > 20 && orders.length && !loadingCustomer"
+        *ngIf="totalLength > 20 && sessions.length && !loadingClient"
         [@fadeIn]
       >
-        <!-- <pagination-controls
-          (pageChange)="getOrders((page = $event), true)"
+        <pagination-controls
+          (pageChange)="getsession()"
           [maxSize]="7"
           previousLabel=""
           nextLabel=""
@@ -257,60 +255,60 @@
     </div>
   </div>
 
-  <div class="show-ms" *ngIf="currentTab === 'orders'" [@fadeIn]>
+  <div class="show-ms" *ngIf="currentTab === 'sessions'" [@fadeIn]>
     <div class="d-flex justify-content-between mt-1">
       <p></p>
       <button
         class="btn btn-add"
         type="button"
         data-bs-toggle="modal"
-        data-bs-target="#addOrderModal"
+        data-bs-target="#addsessionModal"
       >
-        <fa-icon [icon]="addIcon"></fa-icon> Add order
+        <fa-icon [icon]="addIcon"></fa-icon> Add Session
       </button>
     </div>
-    <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
-      No Orders Found.
+    <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
+      No Sessions Found.
     </p>
 
     <div
-      *ngFor="let order of orders"
+      *ngFor="let session of sessions"
       class="listing-item"
-      [routerLink]="['/order', order.id]"
+      [routerLink]="['/session', session.id]"
     >
       <div class="d-flex justify-content-between mb-1">
         <div>
-          <h6>{{ order.details | titlecase }}</h6>
+          <h6>{{ session.details | titlecase }}</h6>
           <p class="mb-1">
-            <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
+            <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
             Cust:
             {{
-              order.customer.firstName + " " + order.customer.lastName
+              session.client.firstName + " " + session.client.lastName
                 | titlecase
             }}
           </p>
-          <p class="mb-1">Status:{{ order.orderStatus }}</p>
+          <p class="mb-1">Status:{{ session.sessionStatus }}</p>
         </div>
 
         <span>
           <span>
-            <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
-            {{ order.dueDate }}
+            <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
+            {{ session.dueDate }}
           </span>
           <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
           <p class="mb-1">
-            <!-- <fa-icon class="me-2" [icon]="clockIcon"></fa-icon> -->
-            Due: {{ order.dueDate | date : " h:mm a" }}
+            <fa-icon class="me-2" [icon]="clockIcon"></fa-icon>
+            Due: {{ session.dueDate | date : " h:mm a" }}
           </p>
           <p
             class="mb-1"
             class="badge"
             [ngClass]="{
-              'badge-danger': order.orderBalance > '0'
+              'badge-danger': session.sessionBalance > '0'
             }"
           >
-            <span *ngIf="order.orderBalance > '0'">
-              Bal: {{ order.orderBalance }}
+            <span *ngIf="session.sessionBalance > '0'">
+              Bal: {{ session.sessionBalance }}
             </span>
           </p>
         </span>
@@ -320,19 +318,19 @@
 
   <div class="d-none d-md-block">
     <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <!-- <button class="btn btn-refresh" (click)="getPayments()">
+      <button class="btn btn-refresh" (click)="getPayments()">
         <fa-icon [icon]="refreshIcon"></fa-icon>
         Refresh
-      </button> -->
+      </button>
     </div>
     <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <div class="donut-wrapper" *ngIf="loadingCustomer" [@fadeIn]>
+      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
         <div class="donut multi"></div>
       </div>
 
       <table class="table">
         <thead>
-          <th colspan="1">Order Amount</th>
+          <th colspan="1">session Duration/th>
           <th colspan="1">Amount Paid</th>
           <th colspan="1">Balance</th>
           <th colspan="1">Paid at</th>
@@ -343,7 +341,7 @@
 
         <tbody *ngIf="payments?.length" [@fadeIn]>
           <tr *ngFor="let payment of payments">
-            <td>{{ payment.order.orderAmount }}</td>
+            <td>{{ payment.session.sessionAmount }}</td>
             <td>{{ payment.amount }}</td>
             <td>{{ payment.balanceAfter }}</td>
             <td>{{ payment.paidAt | date : "MMM d, y hh:mm a" }}</td>
@@ -357,7 +355,7 @@
                 >
                   view
                 </button>
-                <!-- <button
+                <button
               class="btn btn-view"
               data-bs-toggle="modal"
               data-bs-target="#editPaymentModal"
@@ -366,13 +364,13 @@
             >
             <fa-icon [icon]="editIcon"></fa-icon>
               edit
-            </button> -->
+            </button>
               </span>
             </td>
           </tr>
         </tbody>
       </table>
-      <p class="text-muted mt-5" *ngIf="!loadingCustomer && !orders.length">
+      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
         No Payments Found.
       </p>
     </div>
@@ -395,15 +393,15 @@
         <div>
           <h6>{{ payment.narration | titlecase }}</h6>
           <p class="mb-1">
-            <!-- <fa-icon class="me-2" [icon]="userIcon"></fa-icon> -->
-            Amount: {{ payment.order.orderAmount }}
+            <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
+            Amount: {{ payment.session.sessionAmount }}
           </p>
           <p class="mb-1">Paid:{{ payment.amount }}</p>
         </div>
 
         <div>
           <span>
-            <!-- <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>-->
+            <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
             {{ payment.paidAt}}
           </span>
           <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
@@ -421,14 +419,14 @@
           </p>
         </div>
       </div>
-      <!-- <div class="d-flex justify-content-between mb-3">
-        <h4>{{ payment.order.name }}</h4>
+      <div class="d-flex justify-content-between mb-3">
+        <h4>{{ payment.session.name }}</h4>
         <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
         
       </div>
 
       <span>{{ payment.narration }}</span>
-      <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6> -->
+      <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6>
     </div>
     <p class="text-muted mt-5" *ngIf="!payments?.length">
       No payments found.
@@ -493,11 +491,11 @@
     </p>
   </div>
 </div>
-<!-- add order modal -->
+<!-- add session modal -->
 <div>
 <div
 class="modal fade"
-id="addOrderModal"
+id="addsessionModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -505,7 +503,7 @@ aria-hidden="true"
 <div class="modal-dialog modal-xl">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Order</h1>
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
 
     <button
       type="button"
@@ -514,230 +512,142 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body">
-    <form [formGroup]="orderForm">
-      <div class="row">
-        <!-- <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Order Title</label>
-            <input
-              formControlName="name"
-              name="name"
-              type="text"
-              class="form-control"
-              id="name"
-              aria-describedby="emailHelp"
-              placeholder="order title"
-            />
+
+  <div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card card-table d-flex justify-content-center align-items-center">
+          <div class="">
+            <h1 class="text-center mb-3">Add session</h1>
           </div>
-        </div> -->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="orderTypeDropdown">Event Type</label>
-            <select
-              formControlName="orderType"
-              class="form-select"
-              [(ngModel)]="eventType"
-              id="orderTypeDropdown"
-            >
+          <form [formGroup]="addSessionForm" >
+            <div class="row p-2">
+              <div class="mb-3 col-md-6">
+              <label for="clientId" class="form-label">Select Client</label>
+              <select class="form-select" aria-label="Default select example"
+              formControlName="clientId">
+                <option selected>Select Client you want to create a session for</option>
+               
+               <!--Loop through clients and form options-->
+                <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+              </select>
               
-            </select>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Order Amount</label>
-            <input
-              formControlName="orderAmount"
-              name="orderAmount"
-              type="number"
-              [(ngModel)]="orderAmount"
-              class="form-control"
-              id="orderAmount"
-              aria-describedby="emailHelp"
-              placeholder="eg. 3000"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Amount Paid</label>
-            <input
-              formControlName="amountPaid"
-              name="amountPaid"
-              type="number"
-              class="form-control"
-              id="amountPaid"
-              aria-describedby="emailHelp"
-              placeholder="eg. 1000"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Due date</label>
-            <input
-              formControlName="dueDate"
-              [(ngModel)]="orderDueDate"
-              name="dueDate"
-              type="date"
-              class="form-control"
-              id="dueDate"
-              aria-describedby="emailHelp"
-              placeholder="date to deliver"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Due time</label>
-            <input
-              formControlName="dueDate"
-              [(ngModel)]="orderDueTime"
-              name="duetime"
-              type="time"
-              class="form-control"
-              id="dueTime"
-              aria-describedby="emailHelp"
-              placeholder="time to deliver"
-            />
-          </div>
-        </div>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="sessionname">Select Contract</label>
+                <select 
+                class="form-select" 
+                id="inputGroupSelect01" 
+                name="type" 
+                (change)="onContractChange($event)"
+                [(ngModel)]="addSessionForm.contractId"> 
+                <option *ngFor="let contract of contracts" value="{{contract.id}}">{{contract.coachingTopic}}</option>
+              </select>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="sessionname">Session Name</label>
+                <input 
+                type="text" 
+                class="form-control" 
+                id="sessionname" 
+                placeholder="Enter Session Name" 
+                name="name" 
+                [(ngModel)]="addSessionForm.name">
+             
+              </div>
+              <div class="mb-3 col-md-6" >
+                <div class="form-group-prepend">
+                  <label class="form-group-text" for="clientType">Session Type</label>
+                </div>
+                <select 
+                  class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="type" 
+                  [(ngModel)]="addSessionForm.sessionType"> 
+                  <option value="INDIVIDUAL">INDIVIDUAL</option>
+                  <option value="GROUP">GROUP</option>
+                  <option value="OTHER">OTHER</option>
+                </select>
+              </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="inputlastname">Session Details</label>
+                <input type="text" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Enter Session Description" 
+                name="details" 
+                [(ngModel)]="addSessionForm.sessionDetails" >
+              
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">Session Date</label>
+                <input type="date" 
+                variant="success" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Date" 
+                name="session_date" 
+                [(ngModel)]="addSessionForm.sessionDate" >
+                
+              </div>
+            </div>
+            <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">From</label>
+                  <input type="time" 
+                  class="form-control" 
+                  id="inputEmail4" 
+                  placeholder="Time" 
+                  name="session_time_from" 
+                  [(ngModel)]="addSessionForm.sessionStartTime" >
+                  
+                  </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">To</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="session_time_to" 
+                [(ngModel)]="addSessionForm.sessionEndTime" >
+                
+              </div>
 
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Delivery Address</label>
-            <input
-              formControlName="deliveryAddress"
-              name="deliveryAddress"
-              type="text"
-              class="form-control"
-              id="deliveryAddress"
-              aria-describedby="emailHelp"
-              placeholder="eg. Ngong"
-            />
-          </div>
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                  <label class="form-group-text" for="clientType">Session Venue</label>
+              <select class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="session_venue" 
+                  [(ngModel)]="addSessionForm.sessionVenue">
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PHYSICAL">PHYSICAL</option>
+                </select>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="inputEmail4">Session Goals</label>
+                    <input 
+                    type="email" class="form-control" 
+                    id="inputEmail4" placeholder="Goals" 
+                    name="goals" [(ngModel)]="addSessionForm.goals">
+                  </div>
+                  <div class="text-center">
+              <button 
+              type="submit" (click)="addSession()"
+              class="btn btn-signup mb-3 mt-2 p-2 text-center"
+              >Create Session</button>
         </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Cake Description </label>
-            <input
-              formControlName="details"
-              name="flavor"
-              type="text"
-              class="form-control"
-              id="flavor"
-              aria-describedby="emailHelp"
-              placeholder="eg. Vanilla,Blackforest,miiror glaze, royal icing, chocolate"
-            />
-          </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Order to be</label>
-            <select
-              formControlName="deliveryOption"
-              class="form-select"
-              id="deliveryOption"
-            >
-              <option
-                *ngFor="let option of deliveryOption"
-                [value]="option"
-              >
-                {{ option | titlecase }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Message On Cake</label>
-            <input
-              formControlName="messageOnCake"
-              name="cakeMessage"
-              type="text"
-              class="form-control"
-              id="cakeMessage"
-              aria-describedby="emailHelp"
-              placeholder="happy birthday"
-            />
-          </div>
-        </div>
-        <div class="col">
-          <div class="form-group">
-            <label for="exampleInputEmail1">Additional Notes</label>
-            <textarea
-              formControlName="notes"
-              name="notes"
-              class="form-control"
-              id="notes"
-              rows="4"
-              aria-describedby="notes"
-              placeholder="Additional notes"
-            >
-            </textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex input-group mb-3 mt-3">
-        <label for="notification">Notify the Customer</label>
-        <div class="d-flex-column justify-content-between ms-3">
-          <label class="">
-            <input
-              type="checkbox"
-              checked
-              name="notification"
-              [(ngModel)]="showHideMessage"
-              formControlName="sendNotification"
-            />
-            <span class=""></span>
-          </label>
-        </div>
-      </div>
-    </form>
-    <div *ngIf="!showHideMessage" [@fadeIn]>
-      <p>The customer will not be notified</p>
-    </div>
-    <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
-      <div class="">
-        <label for="message">Message to be sent</label>
-        <p class="lead">
-          "Dear {{ customer?.firstName | titlecase }}. Your
-          {{ eventType }} order of amount {{ orderAmount }} has been
-          recorded. I am working to promptly have your order delivered by
-          {{ orderDueDate | date }}. Thank you. "
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-      Close
-    </button>
-    <button
-      type="button"
-      class="btn btn-submit"
-      data-bs-dismiss="modal"
-      [disabled]="
-        !orderForm.value.orderType ||
-        !orderForm.value.dueDate ||
-        !orderForm.value.orderAmount ||
-        !orderForm.value.amountPaid
-      "
-    >
-      Create Order
-    </button>
-  </div>
-</div>
-</div>
 </div>
 
-<!--edit customer modal-->
+<!--edit client modal-->
 <div
 class="modal fade"
-id="editCustomerModal"
+id="editclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -746,7 +656,7 @@ aria-hidden="true"
 <div class="modal-content">
   <div class="modal-header">
     <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Edit customer details
+      Edit client details
     </h1>
 
     <button
@@ -757,13 +667,13 @@ aria-hidden="true"
     ></button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="editCustomerForm" ngNativeValidate>
+    <form [formGroup]="editClientForm" ngNativeValidate>
       <div class="mb-3 form-group">
         <label for="exampleInputEmail1">First name *</label>
         <input
           formControlName="firstName"
           name="firstname"
-          value="{{ customer?.firstName | titlecase }}"
+          value="{{ client?.firstName | titlecase }}"
           type="firstname"
           class="form-control"
           id="firstname"
@@ -778,7 +688,7 @@ aria-hidden="true"
           required
           formControlName="lastName"
           name="lastname"
-          value="{{ customer?.lastName | titlecase }}"
+          value="{{ client?.lastName | titlecase }}"
           type="lastname"
           class="form-control"
           id="lastname"
@@ -791,7 +701,7 @@ aria-hidden="true"
         <label for="exampleInputPassword1">Mobile no *:</label>
         <input
           required
-          value="{{ customer?.msisdn }}"
+          value="{{ client?.msisdn }}"
           formControlName="msisdn"
           name="msisdn"
           type="number"
@@ -806,7 +716,7 @@ aria-hidden="true"
         <label for="exampleInputPassword1">Email</label>
         <input
           formControlName="email"
-          value="{{ customer?.email | titlecase }}"
+          value="{{ client?.email | titlecase }}"
           name="email"
           type="email"
           class="form-control"
@@ -819,7 +729,7 @@ aria-hidden="true"
         <input
           formControlName="physicalAddress"
           name="address"
-          value="{{ customer?.physicalAddress | titlecase }}"
+          value="{{ client?.physicalAddress | titlecase }}"
           type="text"
           class="form-control"
           id="adress"
@@ -838,7 +748,7 @@ aria-hidden="true"
       class="btn btn-add"
 
       [disabled]="
-        !editCustomerForm.value.firstName || !editCustomerForm.value.msisdn
+        !editClientForm.value.firstName || !editClientForm.value.msisdn
       "
     >
       Update
@@ -848,10 +758,10 @@ aria-hidden="true"
 </div>
 </div>
 
-<!-- suspend Customer modal -->
+<!-- suspend client modal -->
 <div
 class="modal fade bd-example-modal-lg"
-id="suspendCustomerModal"
+id="suspendclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -860,7 +770,7 @@ aria-hidden="true"
 <div class="modal-content">
   <div class="modal-header">
     <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Suspend Customer
+      Suspend client
     </h1>
 
     <button
@@ -870,14 +780,14 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngIf="customer">
+  <div class="modal-body" *ngIf="client">
     <div class="d-flex justify-content-between">
-      <p>Customer Name:</p>
+      <p>client Name:</p>
       <span>{{
-        customer.firstName + " " + customer.lastName | titlecase
+        client.firstName + " " + client.lastName | titlecase
       }}</span>
     </div>
-    <form [formGroup]="suspendCustomerForm">
+    <form [formGroup]="suspendClientForm">
       <div class="mb-3">
         <label for="exampleInputEmail1">narration</label>
         <textarea
@@ -886,7 +796,7 @@ aria-hidden="true"
           class="form-control"
           id="narration"
           aria-describedby="narration"
-          placeholder="narration for suspending the customer"
+          placeholder="narration for suspending the client"
         >
         </textarea>
       </div>
@@ -907,10 +817,10 @@ aria-hidden="true"
 </div>
 </div>
 
-<!-- Close Customer modal -->
+<!-- Close client modal -->
 <div
 class="modal fade bd-example-modal-lg"
-id="closeCustomerModal"
+id="closeclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -918,7 +828,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Close Customer</h1>
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Close client</h1>
 
     <button
       type="button"
@@ -927,14 +837,14 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngIf="customer">
+  <div class="modal-body" *ngIf="client">
     <div class="d-flex justify-content-between">
-      <p>Customer Name:</p>
+      <p>client Name:</p>
       <span>{{
-        customer.firstName + " " + customer.lastName | titlecase
+        client.firstName + " " + client.lastName | titlecase
       }}</span>
     </div>
-    <form [formGroup]="closeCustomerForm">
+    <form [formGroup]="closeClientForm">
       <div class="mb-3">
         <label for="exampleInputEmail1">narration</label>
         <textarea
@@ -943,7 +853,7 @@ aria-hidden="true"
           class="form-control"
           id="narration"
           aria-describedby="narration"
-          placeholder="narration for closing the customer"
+          placeholder="narration for closing the client"
         >
         </textarea>
       </div>
@@ -964,10 +874,10 @@ aria-hidden="true"
 </div>
 </div>
 
-<!-- Activate Customer modal -->
+<!-- Activate client modal -->
 <div
 class="modal fade bd-example-modal-lg"
-id="activateCustomerModal"
+id="activateclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -976,7 +886,7 @@ aria-hidden="true"
 <div class="modal-content">
   <div class="modal-header">
     <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Activate Customer
+      Activate client
     </h1>
 
     <button
@@ -986,14 +896,14 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngIf="customer">
+  <div class="modal-body" *ngIf="client">
     <div class="d-flex justify-content-between">
-      <p>Customer Name:</p>
+      <p>client Name:</p>
       <span>{{
-        customer.firstName + " " + customer.lastName | titlecase
+        client.firstName + " " + client.lastName | titlecase
       }}</span>
     </div>
-    <form [formGroup]="activateCustomerForm">
+    <form [formGroup]="activateClientForm">
       <div class="mb-3">
         <label for="exampleInputEmail1">narration</label>
         <textarea
@@ -1002,7 +912,7 @@ aria-hidden="true"
           class="form-control"
           id="narration"
           aria-describedby="narration"
-          placeholder="narration for activating the customer"
+          placeholder="narration for activating the client"
         >
         </textarea>
       </div>

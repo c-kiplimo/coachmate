@@ -1,4 +1,8 @@
-
+.card-header{
+  text-align: center;
+  text-decoration: #1B3A27;
+  text-transform: uppercase;
+}
   :root {
     --primary-color: #1B3A27; /* Green color */
   }
