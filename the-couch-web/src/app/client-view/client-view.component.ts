@@ -10,6 +10,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
 import { id } from 'date-fns/locale';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { faCaretDown, faChevronLeft, faChevronRight, faPlus,faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-client-view',
@@ -28,12 +29,39 @@ import { faCaretDown, faChevronLeft, faChevronRight, faPlus,faPenSquare } from '
 })
 
 export class ClientViewComponent implements OnInit {
+customer: any;
+goToItem(arg0: string,_t227: any) {
+throw new Error('Method not implemented.');
+}
+viewPayment(_t227: any) {
+throw new Error('Method not implemented.');
+}
+getPayments() {
+throw new Error('Method not implemented.');
+}
+userIcon!: IconProp;
+calendarIcon: IconProp = "function";
+clockIcon: IconProp = "function";
+getsession() {
+throw new Error('Method not implemented.');
+}
+  refreshIcon!: IconProp;
+getsessions(arg0: number) {
+throw new Error('Method not implemented.');
+}
+client: any;
+onContractChange($event: Event) {
+throw new Error('Method not implemented.');
+}
+addSession() {
+throw new Error('Method not implemented.');
+}
 contracts:any;
 orderForm!: FormGroup;
-editCustomerForm!: FormGroup;
-suspendCustomerForm!: FormGroup;
-closeCustomerForm!: FormGroup;
-activateCustomerForm!: FormGroup;
+editClientForm!: FormGroup;
+suspendClientForm!: FormGroup;
+closeClientForm!: FormGroup;
+activateClientForm!: FormGroup;
 editPaymentForm!: FormGroup;
 caretDown = faCaretDown;
 addIcon = faPlus;
@@ -41,7 +69,7 @@ editIcon = faPenSquare;
 rightIcon = faChevronRight;
 // refreshIcon = faRefresh;
 backIcon = faChevronLeft;
-customerId: any;
+lientId: any;
 orderId: any;
 paymentId: any;
 searchTerm = '';
@@ -49,7 +77,7 @@ orderAmount = '';
 eventType = '';
 orderDueDate = '';
 orderDueTime = '';
-customer: any;
+lient: any;
 orders!: any;
 showHideMessage = true;
 payments!: any;
@@ -63,7 +91,7 @@ actions = ['Activate', 'Close', 'Suspend'];
 
 notificationOptions = [false, true];
 notificationType = ['sms', 'email'];
-loadingCustomer = false;
+loadingClient = false;
 totalLength: any;
 page: number = 1;
 itemsPerPage = 20;
@@ -78,7 +106,12 @@ clientId:any;
   };
   status: any;
 
-  updateClient!: FormGroup;
+updateClient!: FormGroup;
+session: any;
+sessionDueDate: any;
+sessionStartTime: any;
+sessionDuration: any;
+addSessionForm: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
   
@@ -99,7 +132,7 @@ clientId:any;
     private activatedRoute: ActivatedRoute)
    { }
 
-  loadingClient = false;
+  // loadingClient = false;
  
 
   
@@ -238,49 +271,49 @@ clientId:any;
 //   const Option = {
 //     page: page,
 //     per_page: 10,
-//     customer_id: this.customerId,
+//     Client_id: this.lientId,
 //   };
-//   // console.log(this.customerId);
-//   this.service.filterOrdersByCustomerId(Option).subscribe((res: any) => {
+//   // console.log(this.ClientId);
+//   this.service.filterOrdersBy ClientId(Option).subscribe((res: any) => {
 //     // console.log('orders->',res.body.data);
 //     this.orders = res.body.data;
-//     console.log("here are this customers orders=>",this.orders)
+//     console.log("here are this  Clients orders=>",this.orders)
 //     this.totalLength = Number(res.body.totalElements);
 //     this.searching = false;
 //     this.getNotifications();
 //   });
 // }
 
-// // get payments for specific customer
+// // get payments for specific  Client
 // getPayments(navigator?: boolean): void {
 //   this.searching = true;
 //   this.payments = [];
 //   const Option = {
 //     page: 1,
 //     per_page: 10,
-//     customer_id: this.customerId,
+//     Client_id: this.lientId,
 //   };
 
-//   this.service.filterPaymentsByCustomerId(Option).subscribe((res: any) => {
+//   this.service.filterPaymentsBy ClientId(Option).subscribe((res: any) => {
 //     // console.log('payments here=>', res.body.data);
 //     this.payments = res.body.data;
-//     console.log("payments for this customer=>",this.payments)
+//     console.log("payments for this  Client=>",this.payments)
   
 //     this.searching = false;
 //   });
 // }
 
-// // Get Notification for specific customer
+// // Get Notification for specific  Client
 // getNotifications(navigator?: boolean): void {
 //   this.searching = true;
 //   this.notifications = [];
 //   const Option = {
 //     page: 1,
 //     per_page: 10,
-//     customer_id: this.customerId,
+//     Client_id: this.lientId,
 //   };
 
-//   this.service.getNotificationsbyCustomerId(options).subscribe((res: any) => {
+//   this.service.getNotificationsby ClientId(options).subscribe((res: any) => {
 //     // console.log(res.body);
 //     this.notifications = res.body.data;
 //     this.searching = false;
@@ -292,7 +325,7 @@ clientId:any;
 
 //   // console.log(this.orderForm.value);
 //   this.orderForm.patchValue({
-//     name: this.customer.firstName + ' ' + this.orderForm.value.orderType,
+//     name: this. Client.firstName + ' ' + this.orderForm.value.orderType,
 //     sendNotification: this.showHideMessage,
 //     dueDate: this.orderDueDate + 'T' + this.orderDueTime,
 //   });
@@ -325,19 +358,19 @@ clientId:any;
 //   this.notification = notification;
 // }
 
-//edit customer details
-// editedCustomerDetails() {
+//edit Client details
+// editedClientDetails() {
 //   console.log(
-//     'these are edited customer details=>',
-//     this.customerId,
-//     this.editCustomerForm.value
+//     'these are edited Client details=>',
+//     this. ClientId,
+//     this.edit ClientForm.value
 //   );
 //   this.service
-//     .editCustomer(this.customerId, this.editCustomerForm.value)
+//     .edit Client(this. ClientId, this.editClientForm.value)
 //     .subscribe({
 //       next:(response: any) => {
 //       console.log(response);
-//       this.toastrService.success('Customers details updated!', 'Success!');
+//       this.toastrService.success('Clients details updated!', 'Success!');
 //       setTimeout(() => {
 //         location.reload();
 //       }, 2);
@@ -345,7 +378,7 @@ clientId:any;
 //     error: (err) => {
 //       console.log(err);
 //       this.toastrService.error(
-//         'Customer not updated, try again!',
+//         ' Client not updated, try again!',
 //         'Failed!'
 //       );
 //     },
@@ -366,19 +399,19 @@ clientId:any;
 //     },
 //   });
 // }
-//Customer Actions functions
-// suspendCustomer() {
+// Client Actions functions
+// suspend Client() {
 //   const options = {
 //     status: 'SUSPENDED',
 //   };
-//   // console.log('details to suspend', this.suspendCustomerForm.value);
+//   // console.log('details to suspend', this.suspend ClientForm.value);
 //   this.service
-//     .customerAction(this.customerId, this.suspendCustomerForm.value, options)
+//     . ClientAction(this. ClientId, this.suspend ClientForm.value, options)
 //     .subscribe({
 //       next: (res: any) => {
 //         console.log(res);
-//         this.toastrService.info('Customer suspended!', 'Info!');
-//         this.suspendCustomerForm.reset();
+//         this.toastrService.info(' Client suspended!', 'Info!');
+//         this.suspendClientForm.reset();
 //         setTimeout(() => {
 //           location.reload();
 //         }, 5);
@@ -386,36 +419,36 @@ clientId:any;
 //       error: (err) => {
 //         console.log(err);
 //         this.toastrService.error(
-//           'Customer not suspended, try again!',
+//           ' Client not suspended, try again!',
 //           'Failed!'
 //         );
 //       },
 //     });
 // }
-// closeCustomer() {
-//   this.service.closeCustomer(this.customerId).subscribe({
+// closeclient() {
+//   this.service.closeClient(this.lientId).subscribe({
 //     next: (res: any) => {
 //       console.log(res);
-//       this.toastrService.info('Customer closed!', 'Info!');
-//       this.closeCustomerForm.reset();
+//       this.toastrService.info(' Client closed!', 'Info!');
+//       this.closeClientForm.reset();
 //     },
 //     error: (err) => {
 //       console.log(err);
-//       this.toastrService.error('Customer not closed, try again!', 'Failed!');
+//       this.toastrService.error('Client not closed, try again!', 'Failed!');
 //     },
 //   });
 // }
-// activateCustomer() {
+// activateClient() {
 //   const options = {
 //     status: 'ACTIVATE',
 //   };
 //   this.service
-//     .customerAction(this.customerId, this.activateCustomerForm.value, options)
+//     . ClientAction(this. ClientId, this.activateClientForm.value, options)
 //     .subscribe({
 //       next: (res: any) => {
 //         // console.log(res);
-//         this.toastrService.success('Customer activated!', 'Success!');
-//         this.activateCustomerForm.reset();
+//         this.toastrService.success('Client activated!', 'Success!');
+//         this.activate ClientForm.reset();
 //         setTimeout(() => {
 //           location.reload();
 //         }, 5);
@@ -423,7 +456,7 @@ clientId:any;
 //       error: (err) => {
 //         console.log(err);
 //         this.toastrService.error(
-//           'Customer not activated, try again!',
+//           ' Client not activated, try again!',
 //           'Failed!'
 //         );
 //       },
@@ -455,7 +488,7 @@ function viewPayment(payment: any, any: any) {
   throw new Error('Function not implemented.');
 }
 
-function editedCustomerDetails() {
+function editedClientDetails() {
   throw new Error('Function not implemented.');
 }
 
@@ -463,15 +496,15 @@ function updatePaymentDetails() {
   throw new Error('Function not implemented.');
 }
 
-function suspendCustomer() {
+function suspendClient() {
   throw new Error('Function not implemented.');
 }
 
-function closeCustomer() {
+function closeClient() {
   throw new Error('Function not implemented.');
 }
 
-function activateCustomer() {
+function activateClient() {
   throw new Error('Function not implemented.');
 }
 
