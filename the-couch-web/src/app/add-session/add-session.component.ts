@@ -59,8 +59,6 @@ export class AddSessionComponent implements OnInit {
   createSessionClientId: any;
   selectedContract: any;
 
-
-  deliveryOption = ['DELIVERED', 'PICKUP'];
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
   itemsPerPage: any;
@@ -91,6 +89,16 @@ export class AddSessionComponent implements OnInit {
     // private toastrService: ToastrService
   ) {}
   ngOnInit(): void {
+    this.clientService.getContracts().subscribe(
+      data => {
+        this.contracts = data;
+        console.log("here")
+        console.log(data)
+      },
+      error => {
+        console.log(error);
+      }
+    );
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 
@@ -100,6 +108,15 @@ export class AddSessionComponent implements OnInit {
     this.getContracts();
 
     this.addsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      goals:''
    
     });
   }
@@ -154,7 +171,7 @@ export class AddSessionComponent implements OnInit {
   getContracts() {
     this.sessionService.getContracts().subscribe((res:any) => {
       console.log(res);
-      this.contracts = res;    });
+      this.contracts = res; });
   }
 
 
