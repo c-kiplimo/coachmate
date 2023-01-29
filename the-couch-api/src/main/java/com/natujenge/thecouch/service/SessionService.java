@@ -2,14 +2,12 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.ContractRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
-import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,9 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -184,5 +180,10 @@ public class SessionService {
 
         }
         coachRepository.deleteById(id);
+    }
+
+    public List<SessionDto> findSessionByClientId(Long clientId) {
+        log.debug("Request to get sessions : {} by clientId : {}", clientId);
+        return sessionRepository.findByClientId(clientId);
     }
 }

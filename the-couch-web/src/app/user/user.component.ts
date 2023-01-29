@@ -25,9 +25,15 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
  
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
-      
-    console.log(this.User.coach.businessName) 
+  
+    if(this.User.userRole == 'COACH'){
+   
+      this.businessName = this.User.coach.businessName;
+  } else {
+    this.businessName = this.User.fullName.substring(0, 8);
+  };
   }
+
   logOut() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('businessName');

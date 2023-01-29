@@ -1,28 +1,19 @@
 <div class="row">
-    <div class="col-4">
-
-    </div>
-    <div class="col-3">
-        <div class="user-icon">
-            <i class="fa fa-user" (click)="showDropdown = !showDropdown"></i> 
-            <span>{{User.coach.businessName}}</span>
-            <div class="dropdown" *ngIf="showDropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-user"></i> 
-                <span>{{User.coach.businessName}}</span>
-              </a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" aria-hidden="true"  routerLink="/signin" (click)="logOut()">Log Out</a>
-                <a class="dropdown-item" routerLink="/settings">Settings</a>
-              </div>
-            </div>
-          </div>
-    </div>
     <div class="col-2">
-
-    </div>
-    <div class="col-3">
         <i class="fa-solid fa-bell"></i>
+        
     </div>
+    <div class="col-5">
+        <h6>{{businessName}}  <span class="profile-img">
+        <i class="fa-solid fa-user"></i>
+         </span>
+        </h6>
+        
+    </div>
+
+    <div class="col-5">
+        <i class="fa fa-sign-out" aria-hidden="true"  routerLink="/signin" (click)="logOut()"></i>Logout
+      </div>    
 </div>
+
     

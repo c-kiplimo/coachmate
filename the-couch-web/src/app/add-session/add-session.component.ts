@@ -140,7 +140,7 @@ export class AddSessionComponent implements OnInit {
    const params = {
       clientId: this.selectedContract.client.id,
       
-      contractId: this.addSessionForm.contractId
+      contractId: this.createSessionClientId
    };
 
    console.log(params);
