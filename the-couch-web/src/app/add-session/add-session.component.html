@@ -10,39 +10,15 @@
               <div class="row p-2">
                 <div class=" mb-3 col-md-12 ">
                   <label for="sessionname">Select Contract</label>
-                  <select 
+                  <select [(ngModel)]="selectedContract"
                   class="form-select" 
                   id="inputGroupSelect01" 
-                  name="type" 
-                  (change)="onContractChange($event)"
-                  [(ngModel)]="addSessionForm.contractId"> 
-                  <option *ngFor="let contract of contracts" value="{{contract.id}}">{{contract.coachingTopic}}</option>
-                  
-                </select>
+                  name="type" >
+                    <option *ngFor="let contract of contracts" [value]="contract.id">{{contract.coachingTopic}}-{{contract.client.fullName}}</option>
+                  </select>                  
                
                 </div>
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Client Name</label>
-                  <input type="text" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="details" 
-                  [(ngModel)]="addSessionForm.sessionDetails" >
-                
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Select Contract</label>
-                  <input type="date" 
-                  variant="success" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Date" 
-                  name="session_date" 
-                  [(ngModel)]="addSessionForm.sessionDate" >
-                  
-                </div>
-              </div>
+               </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
                   <label for="sessionname">Session Name</label>
