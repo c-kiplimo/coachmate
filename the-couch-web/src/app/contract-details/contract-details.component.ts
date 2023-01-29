@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClientService } from '../services/ClientService';
@@ -62,7 +62,6 @@ export class ContractDetailsComponent implements OnInit {
   selectedContract: any;
 
 
-  deliveryOption = ['DELIVERED', 'PICKUP'];
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
   itemsPerPage: any;
@@ -72,8 +71,10 @@ export class ContractDetailsComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
 loading: any;
+  sessionToBeUpdated: any;
+  updateSession: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
-    // console.log(event.target.attributes.id.nodeValue);
+  console.log(event.target.attributes.id.nodeValue);
 
     if (event.target.attributes && event.target.attributes.id) {
       if (event.target.attributes.id.nodeValue === 'open') {
@@ -91,7 +92,7 @@ loading: any;
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: ClientService,
-    // private toastrService: ToastrService
+    private toastrService: ToastrService
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params: { [x: string]: any; }) => {
@@ -112,6 +113,24 @@ loading: any;
 
     this.addsessionForm = this.formbuilder.group({
    
+    });
+    this.getClients();
+
+    this.updateSession = this.formbuilder.group({
+     
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      name:'',
+      sessionType:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      sessionVenue:'',
+      goals:'',
+      addSessionForm: {
+        sessionType: "INDIVIDUAL",
+        sessionVenue: "VIRTUAL",
+      } 
     });
   }
  
@@ -168,16 +187,34 @@ loading: any;
       this.contracts = res;    });
   }
 
-  navigateToSessionView(arg0: any) {
-    throw new Error('Method not implemented.');
+    navigateToSessionView(id: any) {
+      console.log(id);
+      this.router.navigate(['sessionView', id]);
     }
     sessions: any;
-    editSession(_t44: any) {
-    throw new Error('Method not implemented.');
+  
+    editSession(client:any){
+      this.sessionToBeUpdated = client;
+  
+      this.updateSession = this.formbuilder.group({
+        sessionDate:this.sessionToBeUpdated.sessionDate,
+        sessionStartTime: this.sessionToBeUpdated.sessionStartTime,
+        sessionDuration: this.sessionToBeUpdated.sessionDuration,
+        name:this.sessionToBeUpdated.name,
+        sessionType:this.sessionToBeUpdated.sessionType,
+        sessionDetails:this.sessionToBeUpdated.sessionDetails,
+        sessionEndTime:this.sessionToBeUpdated.sessionEndTime,
+        sessionVenue:this.sessionToBeUpdated.sessionVenue,
+        goals:this.sessionToBeUpdated.goals,
+      });
+    
     }
-    deleteSession(_t44: any) {
-    throw new Error('Method not implemented.');
-    }
+  deleteSession(id: number, userDetails: any) {
+    this.clientService.deleteSession(id, userDetails).subscribe(response => {
+      console.log(response);
+    });
+  }
+   
     modalTitle: any;
     sessionTime: any;
     sessionGoals: any;

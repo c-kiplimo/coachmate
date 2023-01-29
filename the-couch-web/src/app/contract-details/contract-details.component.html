@@ -34,7 +34,7 @@
               </button>
             </div>
             <div class="row list-container container mt-2 " >
-              <table class="table" >
+              <table class="table table-striped"  >
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -67,7 +67,7 @@
                         class="fa-solid fa-arrow-up-right-from-square"
                       ></i>
                       <i class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
-                      <i class="fa-solid fa-trash-can" (click)="deleteSession(session)"></i>
+                      <i class="fa-solid fa-trash-can" (click)="deleteSession(session,user)"></i>
                     </td>
                   </tr>
                 </tbody>
