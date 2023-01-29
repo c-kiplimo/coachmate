@@ -114,60 +114,6 @@
       Notifications
     </button>
   </div>
-
-  <div class="d-none d-md-block">
-    <div class="text-end mt-2" *ngIf="currentTab === 'sessions'" [@fadeIn]>
-      <button
-        class="btn btn-add"
-        type="button"
-        data-bs-toggle="modal"
-        data-bs-target="#addsessionModal"
-      >
-        <fa-icon [icon]="addIcon"></fa-icon>
-        Add Session
-      </button>
-
-      <button class="btn btn-refresh" (click)="getsessions(1)">
-        <fa-icon [icon]="refreshIcon"></fa-icon>
-        Refresh
-      </button> 
-    </div>
-    <table class="table" *ngIf="currentTab === 'sessions'" [@fadeIn]>
-      <thead>
-        <th colspan="1">session Title</th>
-        <th colspan="1">session Amount</th>
-        <th colspan="1">Due date</th>
-        <th colspan="1">Status</th>
-        <th colspan="1">Actions</th>
-      </thead>
-      <tbody *ngIf="sessions?.length" [@fadeIn]>
-        <tr *ngFor="let session of sessions">
-          <td>{{ session.name }}</td>
-          <td>{{ session.sessionAmount }}</td>
-          <td>{{ session.dueDate | date: "MMM d, y hh:mm a" }}</td>
-          <td>
-            <span
-              class="badge"
-              [ngClass]="{
-                'badge-success': client.status === 'ACTIVE',
-                'badge-danger': client.status !== 'ACTIVE'
-              }"
-              >{{ client.status }}</span
-            >
-          </td>
-
-          <td>
-            <button
-              class="btn btn-view"
-              [routerLink]="['/session', session.id]"
-            >
-              View
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
     <div *ngIf="currentTab === 'sessions'" [@fadeIn]>
       <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
         <div class="donut multi"></div>
@@ -175,14 +121,13 @@
       <table class="table">
         <thead>
           <th colspan="1">Session #</th>
-          <th colspan="1">Product</th>
-          <th colspan="1">Time</th>
           <th colspan="1">Session date</th>
-          <th colspan="1">Client</th>
-          <th colspan="1">Status</th>
+          <th colspan="1">session time from</th>
+          <th colspan="1">session time to</th>
           <th colspan="1">Session Duration</th>
-          <th colspan="1">Balance</th>
+          <th colspan="1">Status</th>
           <th colspan="1">Actions</th>
+          <th colspan="1">payment</th>
         </thead>
         <tbody *ngIf="sessions?.length" [@fadeIn]>
           <tr
@@ -197,17 +142,12 @@
                 >{{ session.sessionNumber }}</span
               >
             </td>
-            <td>{{ session.details }}</td>
-            <td>{{ session.dueDate | date : " h:mm a" }}</td>
-            <td>{{ session.dueDate }}</td>
-            <td>
-              {{
-                session.client.firstName + " " + session.client.lastName
-                  | titlecase
-              }}
-            </td>
+            <td>{{ session.sessionDate }}</td>
+            <td>{{ session.startTime | date : " h:mm a" }}</td>
+            <td>{{ session.endTime }}</td>
+            <td>{{ session.sessionDuration }}</td>
             <td>{{ session.sessionStatus }}</td>
-            <td>{{ session.sessionAmount }}</td>
+          
 
             <td>
               <span
@@ -254,23 +194,6 @@
       </div>
     </div>
   </div>
-
-  <div class="show-ms" *ngIf="currentTab === 'sessions'" [@fadeIn]>
-    <div class="d-flex justify-content-between mt-1">
-      <p></p>
-      <button
-        class="btn btn-add"
-        type="button"
-        data-bs-toggle="modal"
-        data-bs-target="#addsessionModal"
-      >
-        <fa-icon [icon]="addIcon"></fa-icon> Add Session
-      </button>
-    </div>
-    <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
-      No Sessions Found.
-    </p>
-
     <div
       *ngFor="let session of sessions"
       class="listing-item"
@@ -314,8 +237,6 @@
         </span>
       </div>
     </div>
-  </div>
-
   <div class="d-none d-md-block">
     <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
       <button class="btn btn-refresh" (click)="getPayments()">
@@ -330,7 +251,7 @@
 
       <table class="table">
         <thead>
-          <th colspan="1">session Duration/th>
+          <th colspan="1">session Duration</th>
           <th colspan="1">Amount Paid</th>
           <th colspan="1">Balance</th>
           <th colspan="1">Paid at</th>
@@ -490,7 +411,6 @@
       No notifications found.
     </p>
   </div>
-</div>
 <!-- add session modal -->
 <div>
 <div

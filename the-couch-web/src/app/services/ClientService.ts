@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 
 
-export class ClientService { 
+export class ClientService {
 
     baseURL: string = environment.apiURL + '/api/';
   deleteClient: any;
@@ -80,6 +80,11 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
             
     }
+    deleteSession(id: number, userDetails: any): Observable<any> {
+        return this.http.delete(this.baseURL + `/sessions/` + id, {params: userDetails });
+      }
+    
+    
 
     getClientSessions(clientId: any): Observable<any> {
         return this.http.get(`${this.baseURL}sessions/clientSessions/${clientId}`)
@@ -88,6 +93,7 @@ export class ClientService {
     getClientByEmail(email: any): Observable<any> {
         return this.http.post(`${this.baseURL}clients/getClientByEmail`, email);
     }
+
 
 
 }

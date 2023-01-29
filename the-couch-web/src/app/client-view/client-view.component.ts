@@ -29,6 +29,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 })
 
 export class ClientViewComponent implements OnInit {
+customer: any;
 goToItem(arg0: string,_t227: any) {
 throw new Error('Method not implemented.');
 }
