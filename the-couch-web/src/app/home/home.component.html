@@ -1,0 +1,277 @@
+<div class="container-fluid home-page mb-5" id="section">
+    <div class="container">
+      <section class="hero-section" id="home">
+        <div class="row flex-lg-row-reverse align-items-center g-5 pb-5">
+          <div class="col-10 col-sm-8 hero-img">
+            <img
+              src="../../../assets/images/homebaker.jpg"
+              class="img-fluid"
+              alt="Baker"
+            />
+          </div>
+          <div class="col-lg-6 hero-text">
+            <h2 class="display-6 fw-bold lh-1 mb-3">
+              A software management system for coaches
+            </h2>
+            <p class="lead">
+              The Coach is a software for coaches all over the world to help
+              manage<br />
+              the admin side of your coaching business.
+            </p>
+            <div class="gap-2 d-lg-flex justify-content-md-start">
+              <button type="button" class="btn btn-add ms-1" routerLink="/login">
+                Login
+              </button>
+  
+              <button type="button" class="btn btn-add ms-1" routerLink="/signup">
+                Register
+              </button>
+            </div>
+            <p class="mt-3 info">
+              * 3 months free trial for all new users.<br />
+  
+              <!-- ** Subscription cost after trial is 0.00 pm / 00.00 pa<br /> -->
+            </p>
+          </div>
+        </div>
+      </section>
+      <hr class="half-width" />
+  
+      <section class="abt-section pb-3 mt-5 mb-5" id="about">
+        <div
+          class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center"
+        >
+          <div class="abt-section-img me-3">
+            <img
+              src="../../../assets/images/dashboard.png"
+              class="img-fluid"
+              alt="Baker"
+              loading="lazy"
+            />
+          </div>
+          <div class="abt-section-text">
+            <h4 class="display-6 mb-3"> THE COACH?</h4>
+            <p class="lead">
+                Introducing a revolutionary coaching management system designed to streamline the coaching process for both coaches and clients.
+                 Say goodbye to missed meetings and missed payments with automatic alerts and reminders.
+                  Keep track of your schedule and client feedback with ease, all from one platform. 
+                  Our system also allows for secure and efficient contract signing, 
+                  eliminating the need for physical signatures and making the process faster and more convenient. 
+                  With this innovative solution, you can focus on what really matters - coaching your clients to success. 
+                  Get started with our coaching management system today
+          </div>
+        </div>
+      </section>
+      <hr class="half-width" />
+      <section class="features-section" id="features">
+        <div class="section-header text-center">
+          <fa-icon [icon]="featuresIcon"></fa-icon>
+          <h4 class="display-6 mb-3">Key Features</h4>
+          <div class="section-text">
+            <h5 class="fw-bold">Scheduling and Alerts: </h5>
+            <p>
+               The system offers a comprehensive scheduling tool that helps coaches and clients manage their time efficiently. 
+                It sends alerts for upcoming meetings and payments, 
+                ensuring that no important appointments are missed.
+            </p>
+          </div>
+        </div>
+        <div class="features-list">
+          <div
+            id="carouselExampleDark"
+            class="carousel carousel-dark slide"
+            data-bs-ride="carousel"
+          >
+            <!-- <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#carouselExampleDark"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleDark"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleDark"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"
+              ></button>
+            </div> -->
+            <div class="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="10000">
+                <div class="feature-imgs">
+                  <img
+                    src="../../../assets/images/mobiledashboard.png"
+                    class="d-block w-100"
+                    alt="..."
+                  />
+                </div>
+                <div class="captions text-center">
+                  <h5 class="fw-bold"> Feedback Management:</h5>
+                  <p>
+                    The system enables clients to provide feedback electronically,
+                     making it easier for coaches to track progress and improve their services.
+                  </p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="feature-imgs">
+                  <img
+                    src="../../../assets/images/myorders.png"
+                    class="d-block w-100"
+                    alt="..."
+                  />
+                </div>
+                <div class="captions text-center">
+                  <h5 class="fw-bold"> Analytics and Reporting: </h5>
+                  <p>
+                   The system offers robust analytics and reporting features that provide coaches with detailed insights into their performance,
+                     enabling them to make data-driven decisions and improve their coaching services.
+                  </p>
+                </div>
+              </div>
+              <div class="carousel-item" data-bs-interval="2000">
+                <div class="feature-imgs">
+                  <img
+                    src="../../../assets/images/allcustomers.png"
+                    class="d-block w-100"
+                    alt="..."
+                  />
+                </div>
+                <div class="captions text-center">
+                  <h5 class="fw-bold">Payment Management:</h5>
+                  <p>
+                     The system provides a secure and convenient way for clients to manage their payments, 
+                     eliminating the need for manual transactions and reducing the risk of errors.
+                  </p>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="feature-imgs">
+                  <img
+                    src="../../../assets/images/settings.png"
+                    class="d-block w-100"
+                    alt="..."
+                  />
+                </div>
+                <div class="captions text-center">
+                  <h5 class="fw-bold">Contract Management: </h5>
+                  <p>
+                    The system provides a digital platform for the signing of coaching contracts,
+                     which streamlines the process and reduces the risk of errors.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <button
+              class="btn"
+              type="button"
+              data-bs-target="#carouselExampleDark"
+              data-bs-slide="prev"
+            >
+              <fa-icon class="carousel-icon" [icon]="leftIcon"></fa-icon>
+              <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span> -->
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="btn"
+              type="button"
+              data-bs-target="#carouselExampleDark"
+              data-bs-slide="next"
+            >
+              <fa-icon class="carousel-icon" [icon]="rightIcon"></fa-icon>
+              <!-- <span class="carousel-control-prev-icon" aria-hidden="true"></span> -->
+              <span class="visually-hidden">Previous</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <hr class="half-width" />
+      <section class="mt-5 mb-4" id="contact">
+        <!--Section heading-->
+        <div class="section-header text-center">
+          <fa-icon [icon]="contactIcon"></fa-icon>
+          <h4 class="display-6 mb-3">Contact us</h4>
+          <!--Section description-->
+          <p class="section-text mb-3">
+            Do you have any questions? Please do not hesitate to contact us
+            directly. Our team will come back to you to help you.
+          </p>
+        </div>
+        <div class="contact-form">
+          <form
+            class="form"
+            [formGroup]="contactForm"
+            (ngSubmit)="contactUsMessage()"
+            ngNativeValidate
+          >
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="form_name">Name *</label>
+                  <input
+                    formControlName="name"
+                    id="form_name"
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder=""
+                    required
+                    data-error="Firstname is required."
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="form_email">Email *</label>
+                  <input
+                    formControlName="email"
+                    id="form_email"
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder=""
+                    required
+                    data-error="Valid email is required."
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group mt-2">
+                  <label for="form_message">Message *</label>
+                  <textarea
+                    formControlName="message"
+                    id="form_message"
+                    name="message"
+                    class="form-control"
+                    placeholder=""
+                    rows="2"
+                    required
+                    data-error="Please, leave us a message."
+                  ></textarea>
+                </div>
+              </div>
+  
+              <div class="text-center">
+                <button type="submit" class="btn btn-signup mt-3 theEnd">
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+  

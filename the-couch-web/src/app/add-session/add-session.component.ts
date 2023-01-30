@@ -87,12 +87,25 @@ export class AddSessionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private sessionService: ClientService,
     // private toastrService: ToastrService
-  ) {}
+  ) {
+    this.addsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      goals:''
+   
+    });
+  }
   ngOnInit(): void {
     this.clientService.getContracts().subscribe(
       data => {
         this.contracts = data;
-        console.log("here")
+        console.log("contracts here")
         console.log(data)
       },
       error => {
@@ -107,18 +120,7 @@ export class AddSessionComponent implements OnInit {
     
     this.getContracts();
 
-    this.addsessionForm = this.formbuilder.group({
-      sessionDate: '',
-      sessionStartTime: '',
-      sessionDuration: '',
-      sessionType: '',
-      sessionVenue: '',
-      name:'',
-      sessionDetails:'',
-      sessionEndTime:'',
-      goals:''
-   
-    });
+ 
   }
  
   onContractChange(event: any) {
@@ -151,9 +153,12 @@ export class AddSessionComponent implements OnInit {
   }
 
   addSession () {
-    
-   this.addSessionForm.clientId = this.selectedContract.client.id;
+    console.log('add button clicked here')
+    if (this.selectedContract && this.selectedContract.client) {
+      this.addSessionForm.clientId = this.selectedContract.client.id;
+    }
    console.log(this.addSessionForm);
+   console.log('add button clicked here')
    const params = {
       clientId: this.selectedContract.client.id,
       
