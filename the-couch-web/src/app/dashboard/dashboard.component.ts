@@ -117,6 +117,9 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
+
+
   getUser() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
