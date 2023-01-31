@@ -58,6 +58,10 @@ export class SignUpComponent implements OnInit {
       next: (response) => {
         console.log(response);
         console.log('here');
+
+        this.registrationSuccess = true;
+        this.router.navigate(['registration/confirm']);
+        
         if (response.body.error) {
           this.errorMessage = response.body.message;
           console.log('here');

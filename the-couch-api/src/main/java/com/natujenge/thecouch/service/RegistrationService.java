@@ -86,10 +86,13 @@ public class RegistrationService {
 
                         )
                 );
-                // Sending Confirmation Token
-                String token = (String) response.get(1);
-                NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
-
+                try {
+                    // Sending Confirmation Token
+                    String token = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                } catch (Exception e) {
+                    log.info("Error while sending confirmation token: ", e);
+                }
                 break;
             }
             case ORGANIZATION: {
@@ -115,9 +118,13 @@ public class RegistrationService {
 
                         )
                 );
-                // Sending Confirmation Token
-                String token = (String) response.get(1);
-                NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                try {
+                    // Sending Confirmation Token
+                    String token = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                } catch (Exception e){
+                    log.info("Error while sending confirmation token: ", e);
+                }
                 break;
             }
             default:
