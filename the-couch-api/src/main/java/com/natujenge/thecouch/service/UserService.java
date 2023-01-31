@@ -46,6 +46,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
         }
 
+
         // Encode Password > from spring boot
         String encodedPassword = passwordEncoder.encode(user.getPassword());
 

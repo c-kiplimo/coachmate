@@ -67,4 +67,9 @@ public class OrganizationService {
         }
         organizationRepository.deleteById(id);
     }
+
+    public Optional<Organization> getOrganizationBySuperCoachId(Long superCoachId) {
+    return organizationRepository.findBySuperCoachId(superCoachId);
+
+    }
 }

@@ -97,16 +97,7 @@ public class RegistrationService {
             }
             case ORGANIZATION: {
                 //CREATE A ORGANIZATION
-                organization = new Organization();
-                organization.setOrgName(registrationRequest.getBusinessName());
-                organization.setEmail(registrationRequest.getEmail());
-                organization.setMsisdn(registrationRequest.getMsisdn());
-                organization.setFirstName(registrationRequest.getFirstName());
-                organization.setSecondName(registrationRequest.getLastName());
-                organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
 
-                organizationService.addNewOrganization(organization);
-                log.info("Organization registered");
                 List<Object> response = userService.signupUser(
                         new User(
                                 registrationRequest.getFirstName(),
@@ -119,6 +110,20 @@ public class RegistrationService {
                         )
                 );
                 try {
+                    User user = (User) response.get(0);
+
+                    organization = new Organization();
+                    organization.setOrgName(registrationRequest.getBusinessName());
+                    organization.setEmail(registrationRequest.getEmail());
+                    organization.setMsisdn(registrationRequest.getMsisdn());
+                    organization.setFirstName(registrationRequest.getFirstName());
+                    organization.setSecondName(registrationRequest.getLastName());
+                    organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                    organization.setSuperCoachId(user.getId());
+
+                    organizationService.addNewOrganization(organization);
+                    log.info("Organization registered");
+
                     // Sending Confirmation Token
                     String token = (String) response.get(1);
                     NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));

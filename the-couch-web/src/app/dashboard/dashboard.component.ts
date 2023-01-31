@@ -12,7 +12,9 @@ export class DashboardComponent implements OnInit {
   // ClientService: any;
   clients: any;
   User: any;
+  Organization: any;
   sessions: any;
+  orgName: any;
   contracts: any;
   numberOfClients!: number;
   numberOfSessions!: number;
@@ -78,6 +80,25 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  getOrganization(id: any) {
+    const data = {
+      superCoachId: id,
+    }
+    this.clientService.getOrganization(data).subscribe(
+      (response: any) => {
+        console.log('here Organization=>', response);
+        this.Organization = response;
+        this.orgName = this.Organization.orgName;
+        
+        sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
+        
+
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
   getNoOfSessions() {
     const options = {
       page: 1,
@@ -123,6 +144,7 @@ export class DashboardComponent implements OnInit {
   getUser() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
+    this.getOrganization(this.User.id);
   }
 
 
