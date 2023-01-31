@@ -15,6 +15,7 @@ import {
 })
 export class SignUpComponent implements OnInit {
   formData = {
+    userRole: '',
     firstName: '',
     lastName: '',
     businessName: '',

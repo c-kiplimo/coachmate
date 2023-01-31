@@ -25,8 +25,20 @@
             ngNativeValidate
           >
             <div class="row p-2">
+              <div class="mb-3 col-md-6">
+                <label for="userRole">Register as *</label>
+                <select
+                  [(ngModel)]="formData.userRole"
+                  class="form-select"
+                  id="inputGroupSelect01"
+                  name="userRole"
+                  required>
+                  <option value="COACH">COACH</option>
+                  <option value="ORGANIZATION">ORGANIZATION</option>
+                </select>
+              </div>
               <div class=" mb-3 col-md-6 ">
-                <label for="fullname">First Name *</label>
+                <label for="fullname">Firstfdfd Name *</label>
                 <input
                   [(ngModel)]="formData.firstName"
                   name="firstName"
