@@ -139,12 +139,12 @@
               <span
                 class="redirect-link"
                 [routerLink]="['/session', session.id]"
-                >{{ session.sessionNumber }}</span
+                >{{ session.id }}</span
               >
             </td>
             <td>{{ session.sessionDate }}</td>
-            <td>{{ session.startTime | date : " h:mm a" }}</td>
-            <td>{{ session.endTime }}</td>
+            <td>{{ session.sessionStartTime | date : " h:mm a" }}</td>
+            <td>{{ session.sessionEndTime }}</td>
             <td>{{ session.sessionDuration }}</td>
             <td>{{ session.sessionStatus }}</td>
           
@@ -216,12 +216,12 @@
         <span>
           <span>
             <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
-            {{ session.dueDate }}
+            {{ session.sessionDate }}
           </span>
           <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
           <p class="mb-1">
             <fa-icon class="me-2" [icon]="clockIcon"></fa-icon>
-            Due: {{ session.dueDate | date : " h:mm a" }}
+            Due: {{ session.sessionDate | date : " h:mm a" }}
           </p>
           <p
             class="mb-1"
@@ -315,7 +315,7 @@
           <h6>{{ payment.narration | titlecase }}</h6>
           <p class="mb-1">
             <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
-            Amount: {{ payment.session.sessionAmount }}
+            Amount: {{ payment.session.sessionDuration }}
           </p>
           <p class="mb-1">Paid:{{ payment.amount }}</p>
         </div>
@@ -449,7 +449,7 @@ aria-hidden="true"
                 <option selected>Select Client you want to create a session for</option>
                
                <!--Loop through clients and form options-->
-                <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+                <!-- <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
               </select>
               
               </div>
@@ -562,7 +562,7 @@ aria-hidden="true"
               >Create Session</button>
         </div>
         </div>
-</div>
+</div> -->
 
 <!--edit client modal-->
 <div

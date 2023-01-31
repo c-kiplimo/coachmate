@@ -82,5 +82,13 @@
     max-height: 300px;
     overflow-y: scroll;
 }
-
+.badge-warning {
+    background-color: yellow !important;
+  }
+  .badge-success {
+    background-color: green !important;
+  }
+  .badge-danger {
+    background-color: red !important;
+  }
     

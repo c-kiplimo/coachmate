@@ -97,7 +97,25 @@ export class ApiService {
       }
     );
   }
+  //send feedback
+  sendFeedback(feedback: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + '/response', feedback, {
+      observe: 'response',
+    });
+  }
+
+  //contact us  message
+  contactUsMessage(message: any): Observable<any> {
+    return this.http.post<any>(
+      this.baseURL + '/v1/registration/contact',
+      message,
+      {
+        observe: 'response',
+      }
+    );
+  }
 }
+
 // {
 //     headers: {
 //         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`

@@ -29,7 +29,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 })
 
 export class ClientViewComponent implements OnInit {
-customer: any;
+client: any;
+loading: boolean = false;
 goToItem(arg0: string,_t227: any) {
 throw new Error('Method not implemented.');
 }
@@ -49,13 +50,15 @@ throw new Error('Method not implemented.');
 getsessions(arg0: number) {
 throw new Error('Method not implemented.');
 }
-client: any;
 onContractChange($event: Event) {
 throw new Error('Method not implemented.');
 }
 addSession() {
 throw new Error('Method not implemented.');
+
+console.log("here")
 }
+
 contracts:any;
 orderForm!: FormGroup;
 editClientForm!: FormGroup;
@@ -94,7 +97,7 @@ notificationType = ['sms', 'email'];
 loadingClient = false;
 totalLength: any;
 page: number = 1;
-itemsPerPage = 20;
+itemsPerPage:number = 20;
 open = false;
 sessions:any;
 clients:any;
@@ -126,7 +129,7 @@ addSessionForm: any;
 
   constructor(
     private ClientService:ClientService,
-    private restApiService:ApiService,
+    private apiService:ClientService,
     private router:Router,
     private formbuilder: FormBuilder,
     private activatedRoute: ActivatedRoute)
@@ -160,8 +163,34 @@ addSessionForm: any;
       reason: '',
   
       });
-
+      this.getAllSessions();
   }
+  getAllSessions() {
+    console.log("here")
+    this.loading = true;
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.apiService.getSessions(options).subscribe(
+      (response: any) => {
+        console.log(response.body.data);
+        this.sessions = response.body.data;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  navigateToSessionView(id: any) {
+    console.log(id);
+    this.router.navigate(['sessionView', id]);
+  }
+  
+  
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -190,6 +219,7 @@ addSessionForm: any;
 
     });
   }
+  
   getClass(Clients: any) {
     if (Clients.status === 'SUSPENDED') {
         return 'badge-warning';
@@ -265,6 +295,8 @@ addSessionForm: any;
   }
 
 }
+
+
 // getOrders(page: number, navigator?: boolean): void {
 //   this.searching = true;
 //   this.orders = [];
