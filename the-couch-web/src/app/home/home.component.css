@@ -1,0 +1,123 @@
+/* .container-fluid{
+    background-color: #ffffff;
+    position: relative;
+    color: #5C656D;
+}
+
+
+.hero-section{
+    position: relative;
+    padding: 30px;
+
+
+}
+.hero-text{
+    position: absolute;
+    color: #003d4c;
+    top: 10%;
+    right: 45%;
+    left: 0;
+    background-color: #f4f4f4;
+    width: 500px;
+    height: 65%;
+    padding: 20px;
+}
+    .info{
+        font-size: 12px;
+    }
+
+    .abt-section-img,.abt-section-text{
+        padding: 20px;}
+        h4{
+            color: #003d4c;
+        }
+        
+     
+    .abt-section-img{
+        border: 1px solid #f8f8f8;
+        background-color: #f4f4f4;
+    }
+ fa-icon{
+    font-size: 40px;
+    color: #003d4c;
+ }
+ h4{
+    color:#003d4c;
+ }
+ .section-text{
+    line-height: 150%;
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 5px;
+ }
+
+.carousel-icon{
+    font-size: 40px;
+    color: #003d4c;  
+}
+.feature-imgs{
+    margin: 0 auto;
+    max-width: 700px;
+    max-height: 500px;
+}
+
+   h5{
+    color: #003d4c;
+   }
+
+.contact-form{
+margin: 0 auto!important;
+  max-width: 1200px!important;
+  width: 80%;
+}
+ .form{
+  padding: 40px;
+}
+.btn-signup{
+    background-color: #003d4c;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-radius: 4px ;
+}
+hr.half-width{
+    width:50%;
+    margin: 0 auto;
+  }
+
+
+input[type="text"],input[type="email"],textarea{
+  padding: 5px!important;
+  border: none!important;
+  border-radius: 0%;
+  border-bottom: 1px rgb(59, 57, 57) solid!important;
+  margin: 0.75rem !important;
+}
+
+textarea:focus{
+  color: #003d4c!important;
+  border-bottom: #003d4c solid!important;
+  outline: none!important;
+  overflow: hidden!important;
+}
+textarea:hover{
+    border-bottom: #003d4c solid!important;
+
+
+}
+input[type=email]:hover{
+    border-bottom: #003d4c solid!important;
+}
+input[type=text]:hover{
+    border-bottom: #003d4c solid!important;
+
+}
+input[type=text]:focus {
+    outline: none;
+    border-bottom: #003d4c solid!important;
+    
+}
+input[type=email]:focus {
+  outline: none;
+  border-bottom: #003d4c solid!important;
+} */

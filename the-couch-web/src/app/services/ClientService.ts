@@ -34,6 +34,11 @@ export class ClientService {
           observe: 'response',
         });
       } 
+      getOneSession(id:number): Observable<any> {
+        return this.http.get<any>(this.baseURL + '/sessions/' + id, {
+            observe: 'response',
+          });
+    }
     
     //client status
     // ACTIVE,
@@ -87,7 +92,8 @@ export class ClientService {
     
 
     getClientSessions(clientId: any): Observable<any> {
-        return this.http.get(`${this.baseURL}sessions/clientSessions/${clientId}`)
+        console.log("Get Sessions reached!");
+        return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId)
     }
 
     getClientByEmail(email: any): Observable<any> {

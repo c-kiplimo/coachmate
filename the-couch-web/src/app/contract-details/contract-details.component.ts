@@ -37,6 +37,12 @@ export class ContractDetailsComponent implements OnInit {
     sessionType:"INDIVIDUAL",
     sessionVenue:"VIRTUAL",
   }; 
+  loading = true;
+  itemsPerPage = 20;
+  filters: any = {
+    status: '',
+    searchItem: '',
+  };
   firstName: any;
   lastName: any;
   user: any;
@@ -64,15 +70,14 @@ export class ContractDetailsComponent implements OnInit {
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
-  itemsPerPage: any;
-  filters: any;
   clients: any;
   numberOfClients!: number; 
   coachSessionData: any;
   coachData: any;
-loading: any;
   sessionToBeUpdated: any;
   updateSession: any;
+userDetails: any;
+  sessions: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
   console.log(event.target.attributes.id.nodeValue);
 
@@ -85,7 +90,7 @@ loading: any;
     }
   }
     constructor(
-    private apiService:ApiService,
+    private apiService:ClientService,
     private http: HttpClient,
     private clientService : ClientService,
     private formbuilder: FormBuilder,
@@ -101,21 +106,18 @@ loading: any;
       this.contract = data.body;
       console.log(this.contract);
       console.log("contract details");
+      this.clientId = this.contract.client.id;
+      console.log("client id", this.clientId);
   }
   )},
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}'));
     this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    
+    console.log("CoachData",this.coachData);
     this.getContracts();
-
-    this.addsessionForm = this.formbuilder.group({
-   
-    });
-    this.getClients();
-
+    console.log("After Contracts");
+    this.getContractSessions();
     this.updateSession = this.formbuilder.group({
      
       sessionDate: '',
@@ -140,7 +142,7 @@ loading: any;
 
     //get client details from contract id
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
-    console.log(this.selectedContract);
+    console.log("Selected contract" ,this.selectedContract);
 
   }
   getClients(){
@@ -186,16 +188,33 @@ loading: any;
       console.log(res);
       this.contracts = res;    });
   }
-
-    navigateToSessionView(id: any) {
+  getContractSessions() {
+ 
+    
+    
+    // this.clientId = this.selectedContract.data.client.id;
+    console.log("clientid on call ",this.clientId);
+    this.loading = true;
+    this.apiService.getClientSessions(this.clientId).subscribe(
+      (response: any) => {
+        console.log("sessions here")
+        console.log(response.body.data);
+        this.sessions = response.body.data;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  getClientSessions(clientId: any) {
+    console.log(this.sessions);
+  }
+navigateToSessionView(id: any) {
       console.log(id);
       this.router.navigate(['sessionView', id]);
     }
-    sessions: any;
-  
-    editSession(client:any){
-      this.sessionToBeUpdated = client;
-  
+editSession(client:any){
       this.updateSession = this.formbuilder.group({
         sessionDate:this.sessionToBeUpdated.sessionDate,
         sessionStartTime: this.sessionToBeUpdated.sessionStartTime,
