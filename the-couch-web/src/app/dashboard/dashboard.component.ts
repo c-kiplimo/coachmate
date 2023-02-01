@@ -52,7 +52,11 @@ export class DashboardComponent implements OnInit {
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
-    } else {
+    } else if(this.userRole == 'ORGANIZATION'){
+      console.log('ORGANIZATION');
+      this.getUserOrg();
+     
+    }else {
       console.log('not coach');
       this.getUser();
      
@@ -89,7 +93,7 @@ export class DashboardComponent implements OnInit {
         console.log('here Organization=>', response);
         this.Organization = response;
         this.orgName = this.Organization.orgName;
-        
+
         sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
         
 
@@ -142,6 +146,10 @@ export class DashboardComponent implements OnInit {
 
 
   getUser() {
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.User);
+  }
+  getUserOrg() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
     this.getOrganization(this.User.id);

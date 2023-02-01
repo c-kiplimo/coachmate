@@ -93,6 +93,52 @@
         </div>
     </div>
 </div>
+
+<!--ORGANIZATION-->
+<div class="row row-height"
+*ngIf="this.userRole == 'ORGANIZATION'">
+
+<div class="col-3 card text-center top-cards" >
+  <div class="card-body">
+    <h6 class="card-title">Number of Coaches</h6>
+    <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+    <button type="button" routerLink="/addCoach" class="btn addbtn"><i class="fa fa-plus"></i> Add a Coach</button>
+    
+  </div>
+</div>
+
+    <div class="col-3 card text-center top-cards" >
+        <div class="card-body">
+          <h6 class="card-title">Sessions Created</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+        
+          
+        </div>
+    </div>
+    <div class="col-3 card text-center top-cards" >
+        <div class="card-body">
+          <h6 class="card-title">Number of Clients</h6>
+          <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
+        
+         
+        </div>
+    </div>
+    <div class="col-3 card text-center top-cards">
+        <div class="card-body">
+          <h6 class="card-title">Number of Contracts</h6>
+          <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
+        
+          
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 <!-- 
 <div class="row row-height">
     <div class="col-12">
