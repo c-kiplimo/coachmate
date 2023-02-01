@@ -34,6 +34,11 @@ export class ClientService {
           observe: 'response',
         });
       } 
+      getOneSession(id:number): Observable<any> {
+        return this.http.get<any>(this.baseURL + '/sessions/' + id, {
+            observe: 'response',
+          });
+    }
     
     //client status
     // ACTIVE,

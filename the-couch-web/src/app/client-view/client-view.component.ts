@@ -29,6 +29,14 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 })
 
 export class ClientViewComponent implements OnInit {
+editSession(_t92: any) {
+throw new Error('Method not implemented.');
+}
+userDetails: any;
+id: any;
+deleteSession(arg0: any,arg1: any) {
+throw new Error('Method not implemented.');
+}
 client: any;
 loading: boolean = false;
 goToItem(arg0: string,_t227: any) {
@@ -163,6 +171,7 @@ addSessionForm: any;
       reason: '',
   
       });
+      this.getSessions() 
       this.getAllSessions();
   }
   getAllSessions() {
@@ -185,6 +194,17 @@ addSessionForm: any;
       }
     );
   }
+  getSessions() {
+    console.log("client sessions")
+    this.ClientService.getClientSessions(this.clientId)
+      .subscribe((res: any) => {
+        console.log(res.body.data);
+        this.sessions = res.body.data;
+        this.loading = false;
+      });
+      console.log("client sessions")
+  }
+
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
@@ -293,6 +313,7 @@ addSessionForm: any;
       );
     }
   }
+  
 
 }
 

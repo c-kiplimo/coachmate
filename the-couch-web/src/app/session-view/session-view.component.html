@@ -160,6 +160,7 @@
         </button>
         <button
           class="btn btn-add"
+          class="recordpaybtn"
           data-bs-toggle="modal"
           data-bs-target="#payementFormModal"
         >
@@ -913,7 +914,7 @@
             </div>
           </div>
 
-          <!-- <div class="d-flex input-group mb-3 mt-3">
+         <div class="d-flex input-group mb-3 mt-3">
           <label for="notification">Notify the client</label>
           <div class="d-flex-column justify-content-between ms-3">
             <label class="">
@@ -929,17 +930,17 @@
           </div>
         </div> -->
         </form>
-        <!-- <div *ngIf="!showHideMessage" [@fadeIn]>
+         <div *ngIf="!showHideMessage" [@fadeIn]>
         <p>The Client will not be notified</p>
-      </div> -->
-        <!-- <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
+      </div> 
+        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
         <div class="">
           <label for="message">Message to be sent</label>
           <p class="lead">
             "Dear {{ client?.firstName | titlecase }}. Your
-            {{ SessionType }} session of amount {{ sessionDuration }} has been
+            {{ sessionType }} session of amount {{ sessionDuration }} has been
             recorded. I am working to promptly have your session delivered by
-            {{ sessionDueDate | date }}. Thank you. "
+            {{ sessionDate | date }}. Thank you. "
           </p>
         </div>
       </div> -->
@@ -1145,7 +1146,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="confirmsession()"
+          (click)="confirmSession()"
         >
           Submit
         </button>
@@ -1166,7 +1167,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Delivered session
+          Conducted session
         </h1>
 
         <button
@@ -1202,7 +1203,7 @@
         </div>
         <form [formGroup]="deliveredSessionForm">
           <div class="mb-3">
-            <label for="exampleInputEmail1">Delivered On</label>
+            <label for="exampleInputEmail1">Conducted  On</label>
             <input
               formControlName="deliveredOn"
               [(ngModel)]="sessionDate"
@@ -1230,7 +1231,7 @@
           <div class="mb-3">
             <label for="exampleInputEmail1">narration</label>
             <textarea
-              formControlName="narration"
+              formControlName="goals"
               name="narration"
               class="form-control"
               id="narration"
@@ -1258,7 +1259,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="deliveredSession()"
+          (click)="ConductedSession()"
         >
           Submit
         </button>
@@ -1296,22 +1297,22 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Product</p>
-          <span>{{ session.details }}</span>
+          <p>Balance</p>
+          <span>{{ session.sessionBalance }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session Type</p>
           <span>{{ session.sessionType }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>session Amount</p>
+          <p>session Duration</p>
           <span>{{ session.sessionDuration }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>session Amount Paid</p>
           <span>{{ session.amountPaid }}</span>
         </div>
-        <form [formGroup]="cancelsessionForm">
+        <form [formGroup]="cancelSessionForm">
           <div class="mb-3">
             <label for="exampleInputEmail1">narration</label>
             <textarea
@@ -1372,8 +1373,8 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Product</p>
-          <span>{{ session.details }}</span>
+          <p>Balance</p>
+          <span>{{ session.sessionBalance }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session Type</p>
