@@ -89,8 +89,8 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
             
     }
-    deleteSession(id: number, userDetails: any): Observable<any> {
-        return this.http.delete(this.baseURL + `/sessions/` + id, {params: userDetails });
+    deleteSession(id: any ): Observable<any> {
+        return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
     
     

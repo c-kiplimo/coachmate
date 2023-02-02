@@ -129,6 +129,24 @@ userDetails: any;
         sessionVenue: "VIRTUAL",
       } 
     });
+    this.addsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      attachments:'',
+      notes:'',
+      feedback:'',
+      paymentCurrency:'',
+      amountPaid:'',
+      sessionAmount:'',
+      sessionBalance:'',
+
+    });
   }
  
   onContractChange(event: any) {
@@ -185,9 +203,10 @@ editSession(client:any){
       });
     
     }
-  deleteSession(id: number, userDetails: any) {
-    this.clientService.deleteSession(id, userDetails).subscribe(response => {
+  deleteSession(id:any, userDetails: any) {
+    this.clientService.deleteSession(id).subscribe(response => {
       console.log(response);
+      console.log("user deleted")
     });
   }
    
