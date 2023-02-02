@@ -22,6 +22,7 @@ import java.util.Collections;
 @Table(name = "tbl_users")
 public class User implements UserDetails {
 
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -58,6 +59,11 @@ public class User implements UserDetails {
     @JoinColumn(name="coach_id")
     Coach coach;
 
+    @ManyToOne
+    @JoinColumn(name="org_id_id")
+    Organization organization;
+
+
     // Access fields
     private Boolean locked = false;
     private Boolean enabled = false;
@@ -74,6 +80,20 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
         this.coach = coach;
+
+    }
+    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
+                Organization organization) {
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = email;
+        this.msisdn = msisdn;
+        this.password = password;
+        this.userRole = userRole;
+
+        this.organization = organization;
     }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
         this.fullName = firstName + ' '+lastName;

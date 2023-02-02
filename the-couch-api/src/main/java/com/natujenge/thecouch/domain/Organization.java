@@ -25,9 +25,12 @@ public class Organization {
     private String orgName;
     private String msisdn;
     private String email;
-    private String address;
+    private String address; //remove
+    private String firstName;
+    private String secondName;
+    private String fullName;
 
-    private Long superCoachId;
+    private Long superCoachId; //user id
 
     @Enumerated(EnumType.STRING)
     private OrgStatus status;

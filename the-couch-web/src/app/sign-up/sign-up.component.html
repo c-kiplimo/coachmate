@@ -28,6 +28,31 @@
           ngNativeValidate
         >
           <div class="row p-2">
+            <div class="mb-3 col-12">
+              <label for="userRole">Register as *</label>
+              <select
+                [(ngModel)]="formData.userRole"
+                class="form-select"
+                id="inputGroupSelect01"
+                name="userRole"
+                placeholder="Get Registered As"
+                required>
+                <option value="COACH">INDIVIDUAL COACH</option>
+                <option value="ORGANIZATION">ORGANIZATION</option>
+              </select>
+            </div>
+            <div class="mb-3 col-12">
+              <label for="businessName">Business or Organization Name *</label>
+              <input
+                [(ngModel)]="formData.businessName"
+                name="businessName"
+                placeholder="eg. Meliora"
+                type="text"
+                class="form-control"
+                required
+              />
+            </div>
+
             <div class="mb-3 col-md-6">
               <label for="fullname">First Name *</label>
               <input
@@ -35,6 +60,7 @@
                 name="firstName"
                 type="text"
                 class="form-control"
+                placeholder="Enter User First Name"
                 id="firstame"
                 required
               />
@@ -43,24 +69,17 @@
               <label for="fullname">Last Name *</label>
               <input
                 [(ngModel)]="formData.lastName"
+                
                 name="lastName"
                 type="text"
+                placeholder="Enter User Last Name"
                 class="form-control"
                 id="lastName"
                 required
               />
             </div>
           </div>
-          <div class="mb-3 col">
-            <label for="businessName">Business Name *</label>
-            <input
-              [(ngModel)]="formData.businessName"
-              name="businessName"
-              type="text"
-              class="form-control"
-              required
-            />
-          </div>
+      
           <div class="row p-2">
             <div class="mb-3 col-md-6">
               <label for="email"
@@ -77,7 +96,7 @@
                 class="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
-                placeholder="Enter Email"
+                placeholder="Enter User Email Address"
                 required
               />
             </div>
@@ -89,7 +108,7 @@
                 type="text"
                 class="form-control"
                 required
-                placeholder="eg 0700123456"
+                placeholder="eg. 0700123456"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
               />
             </div>

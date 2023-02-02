@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @Slf4j
 @RequestMapping(path="/api/organizations")
@@ -44,6 +46,27 @@ public class OrganizationResource {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //GET ORGANIZATION BY SUPER COACH ID
+    @GetMapping(path = "getOrganizationBySuperCoachId")
+    ResponseEntity<?> getOrganizationBySuperCoachId(@RequestParam("superCoachId") Long superCoachId,
+                                             @AuthenticationPrincipal User userDetails) {
+    log.info("REQUEST TO GET ORGANIZATION BY SUPER COACH {}", superCoachId);
+
+    try{
+        Optional<Organization> organization1 = organizationService.getOrganizationBySuperCoachId(superCoachId);
+        if(organization1.isPresent()){
+            return new ResponseEntity<>(organization1.get(), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new RestResponse(true, "ORGANIZATION NOT FOUND"),
+                    HttpStatus.NOT_FOUND);
+        }
+    } catch (Exception e) {
+        log.error("Error occurred ", e);
+        return new ResponseEntity<>(new RestResponse(true,
+                "Organization could not be fetched, contact admin"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     }
 
     @GetMapping

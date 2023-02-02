@@ -1,10 +1,9 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.ConfirmationToken;
-import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
@@ -30,6 +29,7 @@ public class RegistrationService {
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
     private final UserService userService;
     private final CoachService coachService;
+    private final OrganizationService organizationService;
     private EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
 
@@ -37,6 +37,12 @@ public class RegistrationService {
     PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CoachRepository coachRepository;
+
+    @Autowired
+    OrganizationRepository organizationRepository;
 
 
     // Register User
@@ -46,38 +52,91 @@ public class RegistrationService {
 
 
         // Exception handling logic here
-        if(!isValidEmail){
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID,registrationRequest.getEmail()));
+        if (!isValidEmail) {
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
         }
 
-        // CREATE Coach
-        Coach coach = new Coach();
-        coach.setBusinessName(registrationRequest.getBusinessName());
-        coach.setFirstName(registrationRequest.getFirstName());
-        coach.setLastName(registrationRequest.getLastName());
-        coach.setFullName( registrationRequest.getFirstName()+" "+registrationRequest.getLastName() );
-        coach.setMsisdn(registrationRequest.getMsisdn());
-        coach.setEmailAddress(registrationRequest.getEmail());
+        Coach coach;
+        Organization organization;
+
+        switch (registrationRequest.getUserRole()) {
+            case COACH: {
+                // CREATE Coach
+                coach = new Coach();
+                coach.setBusinessName(registrationRequest.getBusinessName());
+                coach.setFirstName(registrationRequest.getFirstName());
+                coach.setLastName(registrationRequest.getLastName());
+                coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                coach.setMsisdn(registrationRequest.getMsisdn());
+                coach.setEmailAddress(registrationRequest.getEmail());
+                coach.setOrgIdId(registrationRequest.getOrgIdId());
 
 
-        coachService.addNewCoach(coach);
+                coachService.addNewCoach(coach);
 
-        log.info("Coach registered");
-        List<Object> response =  userService.signupUser(
-                new User(
-                        registrationRequest.getFirstName(),
-                        registrationRequest.getLastName(),
-                        registrationRequest.getEmail(),
-                        registrationRequest.getMsisdn(),
-                        registrationRequest.getPassword(),
-                        UserRole.COACH,
-                        coach
-                )
-        );
+                log.info("Coach registered");
+                List<Object> response = userService.signupUser(
+                        new User(
+                                registrationRequest.getFirstName(),
+                                registrationRequest.getLastName(),
+                                registrationRequest.getEmail(),
+                                registrationRequest.getMsisdn(),
+                                registrationRequest.getPassword(),
+                                UserRole.COACH,
+                                coach
 
-        // Sending Confirmation Token
-        String token = (String) response.get(1);
-        NotificationHelper.sendConfirmationToken(token,"CONFIRM",(User) response.get(0));
+                        )
+                );
+                try {
+                    // Sending Confirmation Token
+                    String token = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                } catch (Exception e) {
+                    log.info("Error while sending confirmation token: ", e);
+                }
+                break;
+            }
+            case ORGANIZATION: {
+                //CREATE A ORGANIZATION
+
+                List<Object> response = userService.signupUser(
+                        new User(
+                                registrationRequest.getFirstName(),
+                                registrationRequest.getLastName(),
+                                registrationRequest.getEmail(),
+                                registrationRequest.getMsisdn(),
+                                registrationRequest.getPassword(),
+                                UserRole.ORGANIZATION
+
+                        )
+                );
+                try {
+                    User user = (User) response.get(0);
+
+                    organization = new Organization();
+                    organization.setOrgName(registrationRequest.getBusinessName());
+                    organization.setEmail(registrationRequest.getEmail());
+                    organization.setMsisdn(registrationRequest.getMsisdn());
+                    organization.setFirstName(registrationRequest.getFirstName());
+                    organization.setSecondName(registrationRequest.getLastName());
+                    organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                    organization.setSuperCoachId(user.getId());
+
+                    organizationService.addNewOrganization(organization);
+                    log.info("Organization registered");
+
+                    // Sending Confirmation Token
+                    String token = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                } catch (Exception e){
+                    log.info("Error while sending confirmation token: ", e);
+                }
+                break;
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + registrationRequest.getUserRole());
+        }
+
     }
 
     //Register Client as user

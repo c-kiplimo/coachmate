@@ -105,6 +105,12 @@ export class ClientService {
     }
 
 
+    //ORGANIZATION SERVICES
+    getOrganization(data: any): Observable<any>{
+        return this.http.get(`${this.baseURL}organizations/getOrganizationBySuperCoachId`, {params: data})
+    }
+
+
 
 }
 // {
