@@ -25,6 +25,7 @@ public class RegistrationResource {
                     HttpStatus.OK);
 
         } catch (Exception e){
+
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }

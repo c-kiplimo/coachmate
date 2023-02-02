@@ -46,6 +46,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
         }
 
+
         // Encode Password > from spring boot
         String encodedPassword = passwordEncoder.encode(user.getPassword());
 
@@ -53,7 +54,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy(UserRole.ADMIN);
+        //user.setCreatedBy(UserRole.ADMIN);
 
 
         // save the User in the database

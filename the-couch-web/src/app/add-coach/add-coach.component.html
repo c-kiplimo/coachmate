@@ -1,23 +1,17 @@
 <div class="container mb-5">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <p class="back-link p-3" routerLink="/home">
-          <fa-icon [icon]="backIcon"></fa-icon> Back to website
-        </p>
-        <div class="card card-table d-flex justify-content-center align-items-center">
+        <div
+          class="card card-table d-flex justify-content-center align-items-center"
+        >
           <div class="">
-            <h1 class="text-center mb-3">Register</h1>
-            <!-- <h6 class="mb-3">Register</h6> -->
-            <!-- <button type="button" class="btn btn-primary mb-3">
-              <fa-icon [icon]="googleIcon"></fa-icon> with Google
-            </button> -->
-            <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-            <h5>Or</h5> -->
-            <!-- <hr /> -->
+            <h1 class="text-center mb-3">Add a Coach</h1>
+ 
             <div class="alert alert-danger" *ngIf="errorMessage">
               {{ errorMessage }}
             </div>
           </div>
+      
           <form
             *ngIf="!registrationSuccess"
             #registrationForm="ngForm"
@@ -25,51 +19,35 @@
             ngNativeValidate
           >
             <div class="row p-2">
+           
+  
               <div class="mb-3 col-md-6">
-                <label for="userRole">Register as *</label>
-                <select
-                  [(ngModel)]="formData.userRole"
-                  class="form-select"
-                  id="inputGroupSelect01"
-                  name="userRole"
-                  required>
-                  <option value="COACH">COACH</option>
-                  <option value="ORGANIZATION">ORGANIZATION</option>
-                </select>
-              </div>
-              <div class=" mb-3 col-md-6 ">
-                <label for="fullname">Firstfdfd Name *</label>
+                <label for="fullname">Coach First Name *</label>
                 <input
                   [(ngModel)]="formData.firstName"
                   name="firstName"
                   type="text"
                   class="form-control"
+                  placeholder="Enter User First Name"
                   id="firstame"
                   required
                 />
               </div>
-              <div class="mb-3  col">
-                <label for="fullname">Last Name *</label>
+              <div class="mb-3 col">
+                <label for="fullname">Coach Last Name *</label>
                 <input
                   [(ngModel)]="formData.lastName"
+                  
                   name="lastName"
                   type="text"
+                  placeholder="Enter User Last Name"
                   class="form-control"
                   id="lastName"
                   required
                 />
               </div>
             </div>
-            <div class="mb-3 col p-2">
-              <label for="businessName">Business Name *</label>
-              <input
-                [(ngModel)]="formData.businessName"
-                name="businessName"
-                type="text"
-                class="form-control"
-                required
-              />
-            </div>
+        
             <div class="row p-2">
               <div class="mb-3 col-md-6">
                 <label for="email"
@@ -86,7 +64,7 @@
                   class="form-control"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
-                  placeholder="Enter Email"
+                  placeholder="Enter User Email Address"
                   required
                 />
               </div>
@@ -98,12 +76,12 @@
                   type="text"
                   class="form-control"
                   required
-                  placeholder="eg 0700123456"
+                  placeholder="eg. 0700123456"
                   oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                 />
               </div>
             </div>
-            
+  
             <div class="row p-2">
               <div class="mb-3 col-md-6 form-group">
                 <label for="Password">Password *</label>
@@ -186,17 +164,16 @@
             </div>
   
             <!-- <div>
-                <input type="checkbox" /><span
-                  >I have read the terms and conditions</span
-                >
-              </div> -->
+          <input type="checkbox" /><span
+            >I have read the terms and conditions</span
+          >
+        </div> -->
             <button
               type="submit"
-              class="btn btn-signup mb-3 mt-2 p-3"
+              class="btn btn-success mb-3 mt-2 p-2"
               [disabled]="
                 !formData.password ||
                 !formData.email ||
-                !formData.businessName ||
                 !formData.msisdn ||
                 !formData.firstName ||
                 !formData.lastName
@@ -205,10 +182,6 @@
               SUBMIT
             </button>
           </form>
-          <p>
-            Already have an account?
-            <a *ngIf="!registrationSuccess" routerLink="/login"> Login</a>
-          </p>
         </div>
       </div>
     </div>

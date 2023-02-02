@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest.request;
 
+import com.natujenge.thecouch.domain.enums.UserRole;
 import lombok.Data;
 
 @Data
@@ -12,4 +13,8 @@ public class RegistrationRequest {
     private String msisdn;
     private final String email;
     private final String password;
+    private UserRole userRole;
+    private Long orgIdId;
+
+
 }

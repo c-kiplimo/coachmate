@@ -17,6 +17,7 @@ export class RegistrationComponent implements OnInit {
   backIcon = faChevronLeft;
 
   formData = {
+    userRole: '',
     firstName: '',
     lastName: '',
     businessName: '',
