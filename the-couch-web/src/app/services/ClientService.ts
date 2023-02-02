@@ -78,6 +78,10 @@ export class ClientService {
             observe: 'response',
         })
     }
+     // Get sessions by contractId
+  getSessionsBycontractId(contractId:any):Observable<any>{
+    return this.http.get(`${this.baseURL}sessions/contractSessions/` + contractId,{observe:'response'})
+  }
     
     addSession(session: any, params: any): Observable<any> {
         console.log(session)
