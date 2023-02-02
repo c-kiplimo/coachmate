@@ -78,12 +78,9 @@ body {
   }
 }
 
-.modal-backdrop{
-  display: none;    
-}
-.modal {
+ .modal {
   backdrop-filter: blur(2px);
-}
+} 
 
   .modal-content {
     border-radius: 8px;
@@ -112,6 +109,9 @@ body {
   input[type='checkbox'] {
     z-index: 2000;
   }
+  .modal-backdrop.show {
+    opacity: 0 !important;
+  }
 
 
 .modal-footer >.btn {
@@ -138,9 +138,4 @@ body {
    .tabs-section button {
     padding: 4px !important;
     /* // width: 30%!important; */
-  }
-
-  .btn-tabs {
-    font-size: 0.7rem!important;
-    /* // margin-right: 10px!important; */
   }

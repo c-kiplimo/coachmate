@@ -21,6 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 export class contractViewComponent implements OnInit {
   loading = false;
   contracts: any;
+  contractId: any;
   constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -30,11 +31,28 @@ export class contractViewComponent implements OnInit {
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
     });
+   
   }
   navigateToContractDetail(id: any) {
-    console.log(id)
+    console.log("contractId on navigate",id);
+    this.contractId = id;
     this.router.navigate(['/contractDetail', id]);
 
+
+  }
+  getSessionsBycontractId(){
+    console.log(this.contractId);
+    this.loading = true;
+    this.clientService.getSessionsBycontractId(this.contractId).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
 
   }
   getAllContracts() {

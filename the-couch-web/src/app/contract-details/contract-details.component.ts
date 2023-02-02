@@ -34,8 +34,7 @@ export class ContractDetailsComponent implements OnInit {
   addsessionForm!:FormGroup;
   addClient!: FormGroup;
   addSessionForm:any={
-    sessionType:"INDIVIDUAL",
-    sessionVenue:"VIRTUAL",
+
   }; 
   loading = true;
   itemsPerPage = 20;
@@ -105,21 +104,17 @@ userDetails: any;
     this.contract = this.clientService.getContract(id).subscribe((data: any) => {
       this.contract = data.body;
       console.log(this.contract);
-      console.log("contract details");
-      this.clientId = this.contract.client.id;
-      console.log("client id", this.clientId);
+      const contractId = params['id'];
+      console.log("contract id gottten", contractId);
+      this.getSessionsBycontractId(contractId)
+
   }
   )},
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}'));
-    this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log("CoachData",this.coachData);
-    this.getContracts();
-    console.log("After Contracts");
-    this.getContractSessions();
     this.updateSession = this.formbuilder.group({
-     
       sessionDate: '',
       sessionStartTime: '',
       sessionDuration: '',
@@ -134,39 +129,31 @@ userDetails: any;
         sessionVenue: "VIRTUAL",
       } 
     });
+    this.addsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      attachments:'',
+      notes:'',
+      feedback:'',
+      paymentCurrency:'',
+      amountPaid:'',
+      sessionAmount:'',
+      sessionBalance:'',
+
+    });
   }
  
   onContractChange(event: any) {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
-
-    //get client details from contract id
-    this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
-    console.log("Selected contract" ,this.selectedContract);
-
   }
-  getClients(){
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.clientService.getClient(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        console.log("here");
-        this.clients = response.body.data;
-        this.numberOfClients = this.clients.length;
-        console.log(this.numberOfClients)
-      }, (error: any) => {
-        console.log(error)
-      }
-    )
-  }
-
   addSession () {
-    
    this.addSessionForm.clientId = this.selectedContract.client.id;
    console.log(this.addSessionForm);
    const params = {
@@ -182,33 +169,21 @@ userDetails: any;
       this.router.navigate(['/sessions']);
     });
   }
-
-  getContracts() {
-    this.sessionService.getContracts().subscribe((res:any) => {
-      console.log(res);
-      this.contracts = res;    });
-  }
-  getContractSessions() {
- 
-    
-    
-    // this.clientId = this.selectedContract.data.client.id;
-    console.log("clientid on call ",this.clientId);
+  getSessionsBycontractId(contractId:any){
+    console.log("contract id gottten", contractId);
     this.loading = true;
-    this.apiService.getClientSessions(this.clientId).subscribe(
-      (response: any) => {
-        console.log("sessions here")
-        console.log(response.body.data);
-        this.sessions = response.body.data;
+    this.clientService.getSessionsBycontractId(contractId).subscribe(
+      (data: any) => {
+        this.sessions = data.body;
+        console.log(this.sessions);
         this.loading = false;
+        console.log("sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
       }
     );
-  }
-  getClientSessions(clientId: any) {
-    console.log(this.sessions);
+
   }
 navigateToSessionView(id: any) {
       console.log(id);
@@ -228,9 +203,10 @@ editSession(client:any){
       });
     
     }
-  deleteSession(id: number, userDetails: any) {
-    this.clientService.deleteSession(id, userDetails).subscribe(response => {
+  deleteSession(id:any, userDetails: any) {
+    this.clientService.deleteSession(id).subscribe(response => {
       console.log(response);
+      console.log("user deleted")
     });
   }
    

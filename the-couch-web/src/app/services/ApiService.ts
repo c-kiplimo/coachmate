@@ -45,6 +45,7 @@ export class ApiService {
   getSessions(): Observable<any> {
     return this.http.get(`${this.baseURL}sessions`);
   }
+ 
 
   addSession(session: any): Observable<any> {
     console.log(session);
@@ -72,6 +73,8 @@ export class ApiService {
   getContracts(): Observable<any> {
     return this.http.get(`${this.baseURL}contract`);
   }
+  
+
 
   //get otp code for new password service
   getResetCode(options:any): Observable<any> {

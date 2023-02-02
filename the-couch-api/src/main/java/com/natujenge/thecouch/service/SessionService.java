@@ -186,4 +186,9 @@ public class SessionService {
         log.debug("Request to get sessions : {} by clientId : {}", clientId);
         return sessionRepository.findByClientId(clientId);
     }
+
+    public List<SessionDto> findSessionByContractId(Long contractId) {
+        log.debug("Request to get sessions : {} by contractId : {}", contractId);
+        return sessionRepository.findByContractId(contractId);
+    }
 }
