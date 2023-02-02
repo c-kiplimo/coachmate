@@ -24,9 +24,9 @@
               </div>
             </div>
             <div class="col-2">
-              <button type="button"  data-bs-toggle="modal" data-bs-target="#editModal" class="btn btn-success">
-                <i class="fa-solid fa-user-plus"></i><i data-bs-toggle="modal" data-bs-target="#confirmDelete"
-               ></i>Add Session
+              <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
+                <i class="fa-solid fa-user-plus"></i>
+               Add Session
               </button>
             </div>
             <div class="row list-container container mt-2 " >
@@ -61,7 +61,7 @@
 
                       <i data-bs-toggle="modal" data-bs-target="#sessionModal"class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
 
-                      <i class="fa-solid fa-trash-can"(click)="deleteSession(id,userDetails)"></i>
+                      <i class="fa-solid fa-trash-can"(click)="deleteSession(session.id,userDetails)"></i>
                     </td>
                   </tr>
                 </tbody>
@@ -74,7 +74,7 @@
               </p>
             </div>
   
-  <!-- Modal for adding or editing a session -->
+  <!-- Modal for editing a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -161,3 +161,5 @@
   <button type="submit" class="btn btn-primary">Save</button>
   <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
 </div>
+<!-- Modal for adding a session -->
+

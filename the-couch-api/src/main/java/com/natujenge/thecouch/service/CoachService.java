@@ -5,6 +5,7 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,9 @@ public class CoachService {
     //DELETE a coach
     public void deleteCoach(Long id){
         coachRepository.deleteCoachById(id);
+    }
+
+    public List<Coach> getCoachByOrgId(Long orgId) {
+        return coachRepository.findByOrgIdId(orgId);
     }
 }

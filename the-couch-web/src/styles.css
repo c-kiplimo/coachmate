@@ -1,9 +1,51 @@
 
 @import 'ngx-toastr/toastr';
-@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap'); */
+/* 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+/* 
+body {
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
 
+.card {
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    background-color: #fff;
+    margin: 1.25rem 0 1.25rem 0;
+    box-shadow: 0 .25rem .5rem #e6edef;
+}
+.card-head {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #edf1f7;
+    font-size: 1rem;
+    font-weight: 600;
+}
 
+.card-body {
+    padding: 1rem 1.5rem; 
+} */
+
+.card-table {
+  padding: 20px 30px;
+  border-radius: 8px!important;
+  border: 1px solid #f1f1f1!important;
+  margin-bottom: 30px;
+  min-height: 320px;
+}
+.card-table .title {
+    font-weight: 600;
+    color: #5f6063;
+}
 
 /* // ************************
 // GLOBAL SPINNER STYLING
@@ -35,29 +77,65 @@
     transform: rotate(360deg);
   }
 }
-.modal{
-  z-index: index 1;
-}
 
-.modal {
+ .modal {
   backdrop-filter: blur(2px);
-  
-}
+} 
 
-.modal > .modal-content {
+  .modal-content {
     border-radius: 8px;
   }
 
-.modal-body {
-  padding: 16px 32px;
-  
+
+.modal-header {
+  padding: 32px 32px 16px;
 }
 
+  .modal-title {
+    font-size: 22px;
+    color: #3c4043;
+    font-weight: 600;
+  }
 
-.modal-footer>.btn  {
+  .btn-close {
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/0.8em auto no-repeat;
+  }
+
+
+.modal-body {
+  padding: 16px 32px;
+}
+
+  input[type='checkbox'] {
+    z-index: 2000;
+  }
+  .modal-backdrop.show {
+    opacity: 0 !important;
+  }
+
+
+.modal-footer >.btn {
     font-weight: 600;
     font-size: 0.9rem;
     padding: 5px 15px;
     letter-spacing: 0.5px;
     border-radius: 4px;
+  }
+  .btn-refresh{
+    width: 100px!important;
+    font-size: 12px!important;
+    padding: 3px 6px!important;
+  }
+  .dropdown-menu{
+    background-color: #eaecef!important;
+    border: none!important;
+    box-shadow: none!important;
+  }
+  .dropdown-menu>.dropdown-item{
+    color: rgb(11, 10, 10)!important;
+    z-index: 0;
+   }
+   .tabs-section button {
+    padding: 4px !important;
+    /* // width: 30%!important; */
   }

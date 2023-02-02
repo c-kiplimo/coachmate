@@ -89,8 +89,8 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
             
     }
-    deleteSession(id: number, userDetails: any): Observable<any> {
-        return this.http.delete(this.baseURL + `/sessions/` + id, {params: userDetails });
+    deleteSession(id: any ): Observable<any> {
+        return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
     
     
@@ -109,6 +109,11 @@ export class ClientService {
     getOrganization(data: any): Observable<any>{
         return this.http.get(`${this.baseURL}organizations/getOrganizationBySuperCoachId`, {params: data})
     }
+
+    getOrgCoaches(data: any): Observable<any>{
+        return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, {params: data})
+    }
+
 
 
 

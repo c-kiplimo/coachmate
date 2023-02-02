@@ -1,7 +1,9 @@
 package com.natujenge.thecouch.web.rest;
 
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.OrganizationService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
@@ -13,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+
 import java.util.Optional;
 
 @RestController
@@ -23,8 +28,11 @@ public class OrganizationResource {
     private ModelMapper modelMapper;
     private final OrganizationService organizationService;
 
-    public OrganizationResource(OrganizationService organizationService) {
+    private final CoachService coachService;
+    public OrganizationResource(OrganizationService organizationService,
+                                CoachService coachService) {
         this.organizationService = organizationService;
+        this.coachService = coachService;
     }
 
     @PostMapping
@@ -82,6 +90,23 @@ public class OrganizationResource {
             return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //GET ALL COACHES IN ORG
+    @GetMapping(path = "getCoachesByOrgId")
+    ResponseEntity<?> getCoachesByOrgId(@RequestParam("OrgId") Long OrgId,
+                                        @AuthenticationPrincipal User userDetails){
+        log.info("Request to getCoachesByOrgId {}", OrgId);
+
+        try{
+            List<Coach> listResponse = coachService.getCoachByOrgId(OrgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @DeleteMapping(path = "{superCoachId}/{id}")
