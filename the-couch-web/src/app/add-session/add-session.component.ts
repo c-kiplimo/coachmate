@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClientService } from '../services/ClientService';
@@ -14,6 +14,7 @@ import {SessionsService }  from '../services/SessionsService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
+
 @Component({
   selector: 'app-add-session',
   templateUrl: './add-session.component.html',
@@ -38,7 +39,6 @@ export class AddSessionComponent implements OnInit {
   firstName: any;
   lastName: any;
   user: any;
-  newOrderMessage: any;
   addclientForm!: FormGroup;
   clientId: any;
   client: any;
@@ -86,13 +86,32 @@ export class AddSessionComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private sessionService: ClientService,
-    // private toastrService: ToastrService
-  ) {}
+    private toastrService: ToastrService
+  ) {
+    this.addsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      attachments:'',
+      notes:'',
+      feedback:'',
+      paymentCurrency:'',
+      amountPaid:'',
+      sessionAmount:'',
+      sessionBalance:'',
+
+    });
+  }
   ngOnInit(): void {
     this.clientService.getContracts().subscribe(
       data => {
         this.contracts = data;
-        console.log("here")
+        console.log("contracts here")
         console.log(data)
       },
       error => {
@@ -107,18 +126,7 @@ export class AddSessionComponent implements OnInit {
     
     this.getContracts();
 
-    this.addsessionForm = this.formbuilder.group({
-      sessionDate: '',
-      sessionStartTime: '',
-      sessionDuration: '',
-      sessionType: '',
-      sessionVenue: '',
-      name:'',
-      sessionDetails:'',
-      sessionEndTime:'',
-      goals:''
-   
-    });
+ 
   }
  
   onContractChange(event: any) {
@@ -151,9 +159,12 @@ export class AddSessionComponent implements OnInit {
   }
 
   addSession () {
-    
-   this.addSessionForm.clientId = this.selectedContract.client.id;
+    console.log('add button clicked here')
+    if (this.selectedContract && this.selectedContract.client) {
+      this.addSessionForm.clientId = this.selectedContract.client.id;
+    }
    console.log(this.addSessionForm);
+   console.log('add button clicked here')
    const params = {
       clientId: this.selectedContract.client.id,
       

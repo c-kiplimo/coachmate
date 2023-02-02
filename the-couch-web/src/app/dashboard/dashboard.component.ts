@@ -197,6 +197,19 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  getClass(session: any) {
+    if (session.status === 'SUSPENDED') {
+        return 'badge-warning';
+    } else if (session.status === 'CONFIRMED') {
+        return 'badge-success';
+    }
+    else if (session.status === 'NEW'){
+      return 'badge-success'
+    }
+    else {
+        return 'badge-success';
+    }
+}
 
   getClientByEmail() {
     const email = {

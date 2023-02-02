@@ -20,7 +20,11 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
 import { FeebackFormComponent } from './feeback-form/feeback-form.component';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
+
 import { AddCoachComponent } from './add-coach/add-coach.component';
+
+import { HomeComponent } from './home/home.component';
+
 
 const routes: Routes = [
   {
@@ -82,6 +86,10 @@ const routes: Routes = [
     path:'support',
    component:FeebackFormComponent
  },
+ {
+  path:'home',
+ component:HomeComponent
+},
   {
     path: 'AddTraining',
     component: AddTrainingComponent

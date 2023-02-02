@@ -54,7 +54,11 @@ import { ClientConfirmComponent } from './client-confirm/client-confirm.componen
 import { PipesPipe } from './pipes.pipe';
 import { RegistrationComponent } from './coach-aggregator/registration/registration.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
+
 import { AddCoachComponent } from './add-coach/add-coach.component';
+
+import { HomeComponent } from './home/home.component';
+
 
 
 
@@ -90,7 +94,11 @@ import { AddCoachComponent } from './add-coach/add-coach.component';
     PipesPipe,
     RegistrationComponent,
     ContractDetailsComponent,
+
     AddCoachComponent,
+
+    HomeComponent,
+
 
   ],
   imports: [

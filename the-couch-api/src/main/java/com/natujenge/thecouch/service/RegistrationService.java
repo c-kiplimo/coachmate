@@ -69,6 +69,7 @@ public class RegistrationService {
                 coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 coach.setMsisdn(registrationRequest.getMsisdn());
                 coach.setEmailAddress(registrationRequest.getEmail());
+                coach.setOrgIdId(registrationRequest.getOrgIdId());
 
 
                 coachService.addNewCoach(coach);

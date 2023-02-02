@@ -97,7 +97,100 @@ export class ApiService {
       }
     );
   }
+  //send feedback
+  sendFeedback(feedback: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + '/response', feedback, {
+      observe: 'response',
+    });
+  }
+
+  //contact us  message
+  contactUsMessage(message: any): Observable<any> {
+    return this.http.post<any>(
+      this.baseURL + '/v1/registration/contact',
+      message,
+      {
+        observe: 'response',
+      }
+    );
+  }
+  addNewPayment(newPayment: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + '/payments', newPayment, {
+      observe: 'response',
+    });
+  }
+
+  // edit payment details
+  editPayment(id: number, editedPaymentObject: any): Observable<any> {
+    return this.http.put<any>(
+      this.baseURL + '/payments/' + id,
+      editedPaymentObject,
+      { observe: 'response' }
+    );
+  }
+  // filter payments by client Id
+  filterPaymentsByclientId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/payments/filter-by-client-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  filterPaymentsBySessionId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/payments/filter-by-session-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getOnePayment(id: number): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/payments/' + id, {
+      observe: 'response',
+    });
+  }
+  //payment reminder 
+  paymentReminder(id:number):Observable<any>{
+    return this.http.post<any>(this.baseURL + '/payments/payRemind/'+ id,{
+      observe: 'response',
+    })
+  }
+
+  // filter notifications by client id
+  filterNotificationsByclientId(options: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/v1/notification', {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  //client actions(Edit,suspend,activate,close)
+  editclient(id: number, editedclientObject: any): Observable<any> {
+    return this.http.put<any>(
+      this.baseURL + '/client/' + id,
+      editedclientObject,
+      { observe: 'response' }
+    );
+  }
+  clientAction(id: number, client: any, options: any): Observable<any> {
+    return this.http.put<any>(
+      this.baseURL + '/client/change-status/' + id,
+      client,
+      { params: options, observe: 'response' }
+    );
+  }
+  closeclient(id: number): Observable<any> {
+    return this.http.put<any>(
+      this.baseURL + '/client/close-client/' + id,
+      { observe: 'response' }
+    );
+  }
+
 }
+
 // {
 //     headers: {
 //         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`

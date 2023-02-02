@@ -22,6 +22,8 @@ public class Coach implements Serializable {
     @Id
     private Long id;
 
+    private Long orgIdId;
+
     private String businessName;
     private String fullName;
     private String firstName;

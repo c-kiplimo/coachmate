@@ -25,11 +25,11 @@ export class SessionsComponent implements OnInit {
     searchItem: '',
   };
 
-  constructor(private restApiService: ClientService, private router: Router) {}
+  constructor(private apiService: ClientService, private router: Router) {}
 
   sessions: any;
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.getAllSessions();
   }
   getAllSessions() {
@@ -40,7 +40,7 @@ export class SessionsComponent implements OnInit {
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    this.restApiService.getSessions(options).subscribe(
+    this.apiService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response.body.data);
         this.sessions = response.body.data;

@@ -25,7 +25,9 @@ export class AddCoachComponent implements OnInit {
     email: '',
     password: '',
     passwordConfirm: '',
+    orgIdId: '',
   };
+
   fieldTextType!: boolean;
   eyeIcon = faEye;
   eyeSlashIcon = faEyeSlash;
@@ -70,6 +72,10 @@ export class AddCoachComponent implements OnInit {
 
     signUp() {
       this.errorMessage = '';
+
+      this.formData.orgIdId = this.orgData.id;
+      this.formData.businessName = this.orgData.orgName;
+
       console.log(this.formData)
       this.registrationSuccess = false;
       this.LoginService.signUp(this.formData).subscribe({
@@ -77,8 +83,6 @@ export class AddCoachComponent implements OnInit {
           console.log(response);
           console.log('here');
   
-          this.registrationSuccess = true;
-          this.router.navigate(['registration/confirm']);
           
           if (response.body.error) {
             this.errorMessage = response.body.message;

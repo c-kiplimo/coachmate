@@ -14,6 +14,7 @@ public class RegistrationRequest {
     private final String email;
     private final String password;
     private UserRole userRole;
+    private Long orgIdId;
 
 
 }
