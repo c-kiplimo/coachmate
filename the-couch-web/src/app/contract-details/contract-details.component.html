@@ -14,17 +14,12 @@
             <p><strong>End Date:</strong> {{ contract.endDate }}</p>
           </div>
           <div class="col-md-6">
-            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
             <p><strong>Number of Sessions:</strong> {{ contract.noOfSessions }}</p>
             <p><strong>Fees per Session [Individual]:</strong> {{ contract.individualFeesPerSession}}</p>
             <p><strong>Fees per Session [Group]:</strong> {{ contract.groupFeesPerSession }}</p>
+            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <p><strong>Terms and Conditions:</strong> {{ contract.termsAndConditions }}</p>
-            </div>
-            </div>
             </div>
               </div>
             </div>
@@ -98,19 +93,6 @@
             </div>
             <form [formGroup]="addSessionForm" >
               <div class="row p-2">
-                <div class="mb-3 col-md-12">
-                  <label for="sessionname">Select Contract</label>
-                  <select 
-                  class="form-select" 
-                  id="inputGroupSelect01" 
-                  name="type" 
-                  (change)="onContractChange($event)"
-                  [(ngModel)]="addSessionForm.contractId"> 
-                  <option *ngFor="let contract of contract" value="{{contract.id}}">{{contract.coachingTopic}}</option>
-                </select>
-                </div>
-              </div>
-              <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
                   <label for="sessionname">Session Name</label>
                   <input 
@@ -120,21 +102,6 @@
                   placeholder="Enter Session Name" 
                   name="name" 
                   [(ngModel)]="addSessionForm.name">
-               
-                </div>
-                <div class="mb-3 col-md-6" >
-                  <div class="form-group-prepend">
-                    <label class="form-group-text" for="clientType">Session Type</label>
-                  </div>
-                  <select 
-                    class="form-select" 
-                    id="inputGroupSelect01" 
-                    name="type" 
-                    [(ngModel)]="addSessionForm.sessionType"> 
-                    <option value="INDIVIDUAL">INDIVIDUAL</option>
-                    <option value="GROUP">GROUP</option>
-                    <option value="OTHER">OTHER</option>
-                  </select>
                 </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
@@ -155,8 +122,7 @@
                   id="inputEmail4" 
                   placeholder="Date" 
                   name="session_date" 
-                  [(ngModel)]="addSessionForm.sessionDate" >
-                  
+                  [(ngModel)]="addSessionForm.sessionDate" >   
                 </div>
               </div>
               <div class="row p-2">
@@ -168,7 +134,6 @@
                     placeholder="Time" 
                     name="session_time_from" 
                     [(ngModel)]="addSessionForm.sessionStartTime" >
-                    
                     </div>
                 <div class="mb-3 col-md-6">
                   <label for="inputEmail4">To</label>
@@ -178,9 +143,7 @@
                   placeholder="Time" 
                   name="session_time_to" 
                   [(ngModel)]="addSessionForm.sessionEndTime" >
-                  
                 </div>
-  
               </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">

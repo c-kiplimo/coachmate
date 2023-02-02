@@ -176,4 +176,17 @@ public class SessionResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
         }
+    //GET: Get contracts sessions by contract_id
+    @GetMapping("/contractSessions/{contractId}")
+    public ResponseEntity<?> getContractsSessions (@PathVariable("contractId") Long contractId,
+                                                @AuthenticationPrincipal User userDetails) {
+        try {
+            List<SessionDto> session = sessionService.findSessionByContractId(contractId);
+            return new ResponseEntity<>(session, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
