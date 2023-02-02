@@ -181,6 +181,7 @@ userDetails: any;
       },
       (error: any) => {
         console.log(error);
+        this.loading = false;
       }
     );
 
