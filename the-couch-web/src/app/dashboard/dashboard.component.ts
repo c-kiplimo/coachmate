@@ -34,14 +34,14 @@ export class DashboardComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
   userRole: any;
-<<<<<<< HEAD
+
   contractId: any;
   loading!: boolean;
-=======
+
   OrgCoaches: any;
   numberofCoaches: any;
   
->>>>>>> 7169c0f8c301f772b40aef033ba0f280e11799e2
+
   
 
   constructor(
@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();
-      
+
      
     }else {
       console.log('not coach');
@@ -112,7 +112,10 @@ export class DashboardComponent implements OnInit {
         console.log('here Organization=>', response);
         this.Organization = response;
         this.orgName = this.Organization.orgName;
+
         this.getOrgCoaches(this.Organization.id);
+
+
 
         sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
         
@@ -123,6 +126,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
   getOrgCoaches(id: any) {
     const data = {
       OrgId: id,
@@ -140,6 +144,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
   getNoOfSessions() {
     const options = {
       page: 1,
