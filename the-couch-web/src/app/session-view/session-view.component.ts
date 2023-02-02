@@ -33,6 +33,8 @@ import { ApiService } from '../services/ApiService';
   ],
 })
 export class sessionViewComponent implements OnInit {
+addSessionForm: any;
+modalTitle: any;
 editedsession() {
 throw new Error('Method not implemented.');
 }
