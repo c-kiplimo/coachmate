@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
 import { CoachEducationService } from '../services/CoachEducationService';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -30,11 +32,15 @@ export class DashboardComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
   userRole: any;
+  contractId: any;
+  loading!: boolean;
   
 
   constructor(
     private clientService: ClientService,
     private CoachEducationService: CoachEducationService,
+    private route: Router,
+    private router:ActivatedRoute
     ) {}
 
   ngOnInit(): void {
@@ -43,6 +49,12 @@ export class DashboardComponent implements OnInit {
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+    this.getAllContracts();
+    this.router.params.subscribe((params: { [x: string]: any; }) => {
+      const id = params['id'];
+      // Retrieve the contract from the database using the id
+      this.contracts = this.clientService.getContract(id);
+    });
 
     if(this.userRole == 'COACH'){
     this.getClients();
@@ -117,7 +129,26 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  getAllContracts() {
+    this.loading = true;
+    this.clientService.getContracts().subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  navigateToContractDetail(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    this.route.navigate(['/contractDetail/' + id]);
 
+
+  }
 
 
   getUser() {

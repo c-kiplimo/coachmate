@@ -31,7 +31,7 @@ export class contractViewComponent implements OnInit {
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
     });
-    this.getSessionsBycontractId();
+   
   }
   navigateToContractDetail(id: any) {
     console.log("contractId on navigate",id);

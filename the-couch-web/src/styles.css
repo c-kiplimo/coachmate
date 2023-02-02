@@ -1,5 +1,8 @@
 
 @import 'ngx-toastr/toastr';
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+
 
 
 /* // ************************
@@ -32,9 +35,13 @@
     transform: rotate(360deg);
   }
 }
+.modal{
+  z-index: index 1;
+}
 
 .modal {
   backdrop-filter: blur(2px);
+  
 }
 
 .modal > .modal-content {
@@ -43,12 +50,9 @@
 
 .modal-body {
   padding: 16px 32px;
-}
-
-.modal-body>.input[type='checkbox'] {
-    z-index: 2000;
   
 }
+
 
 .modal-footer>.btn  {
     font-weight: 600;

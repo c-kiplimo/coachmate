@@ -35,9 +35,7 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">session Name</th>
-                    <th scope="col">Contract</th>
                     <th scope="col">Session Venue</th>
-                    <th scope="col">Client</th>
                     <th scope="col">Session Type</th>
                     <th scope="col">session Date</th>
                     <th scope="col">Starts at</th>
@@ -50,9 +48,7 @@
                   <tr *ngFor="let session of sessions">
                     <th scope="row">{{ session.id }}</th>
                     <td>{{ session.name }}</td>
-                    <td>{{ session.contract.coachingTopic }}</td>
                     <td>{{ session.sessionVenue }}</td>
-                    <td>{{ session.client.fullName }}</td>
                     <td>{{ session.sessionType }}</td>
                     <td>{{ session.sessionDate }}</td>
                     <td>{{ session.sessionStartTime }}</td>
@@ -89,8 +85,6 @@
           </button>
         </div>
         <div class="modal-body">
-              <h1 class="text-center mb-3">Add session</h1>
-            </div>
             <form [formGroup]="addSessionForm" >
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
