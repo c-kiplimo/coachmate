@@ -88,7 +88,7 @@ export class AddSessionComponent implements OnInit {
     private sessionService: ClientService,
     private toastrService: ToastrService
   ) {
-    this.addsessionForm = this.formbuilder.group({
+    this.addSessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
       sessionDuration: '',
@@ -108,16 +108,7 @@ export class AddSessionComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.clientService.getContracts().subscribe(
-      data => {
-        this.contracts = data;
-        console.log("contracts here")
-        console.log(data)
-      },
-      error => {
-        console.log(error);
-      }
-    );
+ 
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 

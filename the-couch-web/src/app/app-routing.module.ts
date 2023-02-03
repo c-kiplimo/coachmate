@@ -28,6 +28,10 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
+    path:'home',
+   component:HomeComponent
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent
   },
@@ -86,10 +90,7 @@ const routes: Routes = [
     path:'support',
    component:FeebackFormComponent
  },
- {
-  path:'home',
- component:HomeComponent
-},
+
   {
     path: 'AddTraining',
     component: AddTrainingComponent
