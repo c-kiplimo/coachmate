@@ -728,67 +728,84 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addSessionForm" >
+        <form [formGroup]="editedsessionForm" >
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-              <label for="sessionname">Session Name</label>
-              <input 
-              type="text" 
-              class="form-control" 
-              id="sessionname" 
-              placeholder="Enter Session Name" 
-              name="name" 
-              [(ngModel)]="addSessionForm.name">
+              <label for="name">Session Name *</label>
+              <input
+              formControlName="name"
+              value="{{currentSessionName?.name}}"
+                name="name"
+                type="text"
+                class="form-control"
+                id="name"
+                required
+              />
             </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
               <label for="inputlastname">Session Details</label>
-              <input type="text" 
+              <input 
+              formControlName="details"
+              value="{{currentdetails?.provider}}"
+              type="text" 
               class="form-control" 
               id="inputEmail4" 
               placeholder="Enter Session Description" 
               name="details" 
-              [(ngModel)]="addSessionForm.sessionDetails" >
+              required >
             
             </div>
             <div class="mb-3 col-md-6">
               <label for="inputEmail4">Session Date</label>
-              <input type="date" 
+              <input
+              formControlName="sessionDate"
+              value="{{currentSessionDate?.sessionDate}}" 
+              type="date" 
               variant="success" 
               class="form-control" 
               id="inputEmail4" 
               placeholder="Date" 
               name="session_date" 
-              [(ngModel)]="addSessionForm.sessionDate" >   
+              >   
             </div>
           </div>
           <div class="row p-2">
               <div class="mb-3 col-md-6">
                 <label for="inputEmail4">From</label>
-                <input type="time" 
+                <input
+                formControlName="sessionStartTime"
+                value="{{currentsessionStartTime?.sessionStartTime}}" 
+                type="time" 
                 class="form-control" 
                 id="inputEmail4" 
                 placeholder="Time" 
                 name="session_time_from" 
-                [(ngModel)]="addSessionForm.sessionStartTime" >
+               >
                 </div>
             <div class="mb-3 col-md-6">
               <label for="inputEmail4">To</label>
-              <input type="time" 
+              <input 
+              formControlName="sessionEndTime"
+              value="{{currentsessionEndTime?.provider}}"
+              type="time" 
               class="form-control" 
               id="inputEmail4" 
               placeholder="Time" 
               name="session_time_to" 
-              [(ngModel)]="addSessionForm.sessionEndTime" >
+              >
             </div>
           </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
                 <label class="form-group-text" for="clientType">Session Venue</label>
-            <select class="form-select" 
+            <select 
+            formControlName="sessionVenue"
+            value="{{currentsessionVenue?.sessionVenue}}"
+            class="form-select" 
                 id="inputGroupSelect01" 
                 name="session_venue" 
-                [(ngModel)]="addSessionForm.sessionVenue">
+               >
                 <option value="VIRTUAL">VIRTUAL</option>
                 <option value="PHYSICAL">PHYSICAL</option>
               </select>
@@ -796,11 +813,12 @@
                 <div class="mb-3 col-md-6">
                   <label for="inputEmail4">Session Goals</label>
                   <input 
+                  formControlName="goals"
+                  value="{{currentgoals?.goals}}"
                   type="email" class="form-control" 
                   id="inputEmail4" placeholder="Goals" 
-                  name="goals" [(ngModel)]="addSessionForm.goals">
+                  name="goals" >
                 </div>
-
          <div class="d-flex input-group mb-3 mt-3">
           <label for="notification">Notify the client</label>
           <div class="d-flex-column justify-content-between ms-3">
@@ -856,67 +874,84 @@
         </button>
       </div>
       <div class="modal-body">
-          <form [formGroup]="addSessionForm" >
+          <form [formGroup]="editedsessionForm" >
             <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
-                <label for="sessionname">Session Name</label>
-                <input 
-                type="text" 
-                class="form-control" 
-                id="sessionname" 
-                placeholder="Enter Session Name" 
-                name="name" 
-                [(ngModel)]="addSessionForm.name">
+                <label for="name">Session Name *</label>
+                <input
+                formControlName="name"
+                value="{{currentSessionName?.name}}"
+                  name="name"
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  required
+                />
               </div>
             <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
                 <label for="inputlastname">Session Details</label>
-                <input type="text" 
+                <input 
+                formControlName="details"
+                value="{{currentdetails?.provider}}"
+                type="text" 
                 class="form-control" 
                 id="inputEmail4" 
                 placeholder="Enter Session Description" 
                 name="details" 
-                [(ngModel)]="addSessionForm.sessionDetails" >
+                required >
               
               </div>
               <div class="mb-3 col-md-6">
                 <label for="inputEmail4">Session Date</label>
-                <input type="date" 
+                <input
+                formControlName="sessionDate"
+                value="{{currentSessionDate?.sessionDate}}" 
+                type="date" 
                 variant="success" 
                 class="form-control" 
                 id="inputEmail4" 
                 placeholder="Date" 
                 name="session_date" 
-                [(ngModel)]="addSessionForm.sessionDate" >   
+                >   
               </div>
             </div>
             <div class="row p-2">
                 <div class="mb-3 col-md-6">
                   <label for="inputEmail4">From</label>
-                  <input type="time" 
+                  <input
+                  formControlName="sessionStartTime"
+                  value="{{currentsessionStartTime?.sessionStartTime}}" 
+                  type="time" 
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Time" 
                   name="session_time_from" 
-                  [(ngModel)]="addSessionForm.sessionStartTime" >
+                 >
                   </div>
               <div class="mb-3 col-md-6">
                 <label for="inputEmail4">To</label>
-                <input type="time" 
+                <input 
+                formControlName="sessionEndTime"
+                value="{{currentsessionEndTime?.provider}}"
+                type="time" 
                 class="form-control" 
                 id="inputEmail4" 
                 placeholder="Time" 
                 name="session_time_to" 
-                [(ngModel)]="addSessionForm.sessionEndTime" >
+                >
               </div>
             </div>
             <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
                   <label class="form-group-text" for="clientType">Session Venue</label>
-              <select class="form-select" 
+              <select 
+              formControlName="sessionVenue"
+              value="{{currentsessionVenue?.sessionVenue}}"
+              class="form-select" 
                   id="inputGroupSelect01" 
                   name="session_venue" 
-                  [(ngModel)]="addSessionForm.sessionVenue">
+                 >
                   <option value="VIRTUAL">VIRTUAL</option>
                   <option value="PHYSICAL">PHYSICAL</option>
                 </select>
@@ -924,9 +959,11 @@
                   <div class="mb-3 col-md-6">
                     <label for="inputEmail4">Session Goals</label>
                     <input 
+                    formControlName="goals"
+                    value="{{currentgoals?.goals}}"
                     type="email" class="form-control" 
                     id="inputEmail4" placeholder="Goals" 
-                    name="goals" [(ngModel)]="addSessionForm.goals">
+                    name="goals" >
                   </div>
 <div class="modal-footer">
 <button type="submit" class="btn btn-primary">Save</button>
@@ -1037,7 +1074,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 
 <!-- Confirm session modal -->
 <div
