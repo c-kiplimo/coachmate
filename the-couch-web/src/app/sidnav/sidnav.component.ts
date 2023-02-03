@@ -46,7 +46,10 @@ export class SidnavComponent implements OnInit {
   @Output() onToggleSidebar: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
-  navData = navbarData;
+  navData: any;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -59,6 +62,20 @@ export class SidnavComponent implements OnInit {
   
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+    if(this.userRole == 'COACH'){
+      this.navData = navbarData.navDataforCoach;
+    } else if(this.userRole == 'ORGANIZATION'){
+      this.navData = navbarData.navDataforOrg;;
+    } else if(this.userRole == 'CLIENT'){
+      this.navData = navbarData.navDataforClient;
+    }
+    
   }
   constructor(public router: Router) {}
 

@@ -70,9 +70,11 @@ export class DashboardComponent implements OnInit {
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();
+     
 
      
     }else {
@@ -80,6 +82,7 @@ export class DashboardComponent implements OnInit {
       this.getUser();
      
       this.getClientByEmail();
+      
     }
 
   }
@@ -138,6 +141,22 @@ export class DashboardComponent implements OnInit {
         console.log(this.OrgCoaches);
         this.numberofCoaches = this.OrgCoaches.length;
        
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  getClientContracts(id: any) {
+    // const data = {
+    //   clientId: id,
+    // }
+    this.clientService.getClientContracts(id).subscribe(
+      (response: any) => {
+        console.log('here contracts=>', response);
+        this.contracts = response;
+        console.log(this.contracts);
+      
       },
       (error: any) => {
         console.log(error);
@@ -283,6 +302,8 @@ export class DashboardComponent implements OnInit {
         this.clients = response;
         this.numberOfClients = this.clients.length;
         this.getClientSessions(response[0].id);
+
+        this.getClientContracts(response[0].id);
       },
       (error: any) => {
         console.log(error);
