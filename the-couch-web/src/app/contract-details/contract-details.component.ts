@@ -161,7 +161,7 @@ export class ContractDetailsComponent implements OnInit {
    session.contractId = this.contractId;
    if (typeof this.sessionType === "string") {
     let stringValue = this.sessionType;
-    if(this.sessionType === 'GROUP') {
+    if(this.sessionType === 'INDIVIDUAL') {
       session.sessionAmount = this.contract.individualFeesPerSession;
     }
     else

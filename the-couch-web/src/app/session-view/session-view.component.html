@@ -146,7 +146,7 @@
           class="btn btn-refresh me-2 btn-success"
           data-bs-toggle="modal"
           data-bs-target="#paymentReminderModal"
-          *ngIf="session.sessionBalance > 0"
+        
         >
           <fa-icon [icon]="alertIcon"></fa-icon>
           Remind
@@ -217,7 +217,7 @@
           <th colspan="1">Status</th>
         </thead>
         <tbody>
-          <td>{{session.sessionDuration}}</td>
+          <td>{{session.sessionAmount}}</td>
           <td>{{session.amountPaid}}</td>
           <td>{{session.sessionBalance}}</td>
           <td>
