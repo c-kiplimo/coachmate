@@ -30,7 +30,7 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
   ],
 })
 export class AddSessionComponent implements OnInit {
-  addsessionForm!:FormGroup;
+  
   addClient!: FormGroup;
   addSessionForm:any={
     sessionType:"INDIVIDUAL",
@@ -58,6 +58,26 @@ export class AddSessionComponent implements OnInit {
   contracts: any;
   createSessionClientId: any;
   selectedContract: any;
+
+
+  formData = {
+    sessionDate: '',
+    sessionStartTime: '',
+    sessionDuration: '',
+    sessionType: '',
+    sessionVenue: '',
+    name:'',
+    sessionDetails:'',
+    sessionEndTime:'',
+    attachments:'',
+    notes:'',
+    feedback:'',
+    paymentCurrency:'USD',
+    amountPaid:'',
+    sessionAmount:'',
+    sessionBalance:'',
+
+  };
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
@@ -88,36 +108,31 @@ export class AddSessionComponent implements OnInit {
     private sessionService: ClientService,
     private toastrService: ToastrService
   ) {
-    this.addSessionForm = this.formbuilder.group({
-      sessionDate: '',
-      sessionStartTime: '',
-      sessionDuration: '',
-      sessionType: '',
-      sessionVenue: '',
-      name:'',
-      sessionDetails:'',
-      sessionEndTime:'',
-      attachments:'',
-      notes:'',
-      feedback:'',
-      paymentCurrency:'',
-      amountPaid:'',
-      sessionAmount:'',
-      sessionBalance:'',
-
-    });
+    
   }
   ngOnInit(): void {
- 
+    
+    this.clientService.getContracts().subscribe(
+      data => {
+        this.contracts = data;
+        console.log("contracts here")
+        console.log(data)
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    this.getContracts();
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
-    
-    this.getContracts();
 
- 
+    
+  
+
+    
   }
  
   onContractChange(event: any) {
@@ -151,10 +166,11 @@ export class AddSessionComponent implements OnInit {
 
   addSession () {
     console.log('add button clicked here')
+    console.log(this.formData);
     if (this.selectedContract && this.selectedContract.client) {
       this.addSessionForm.clientId = this.selectedContract.client.id;
     }
-   console.log(this.addSessionForm);
+   console.log(this.formData);
    console.log('add button clicked here')
    const params = {
       clientId: this.selectedContract.client.id,
@@ -164,7 +180,7 @@ export class AddSessionComponent implements OnInit {
 
    console.log(params);
  
-    this.sessionService.addSession(this.addSessionForm, params).subscribe((res:any) => {
+    this.sessionService.addSession(this.formData, params).subscribe((res:any) => {
       console.log(res);
       this.router.navigate(['/sessions']);
     });
