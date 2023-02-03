@@ -8,11 +8,11 @@
 }
 
   .modal-header {
-    background-color: #003d4c;
+    background-color: #1B3A27;
   }
   
   .modal-title {
-    background-color: #003d4c;
+    background-color: #1B3A27;
     color: white;
   }
   .switch {
@@ -53,11 +53,11 @@
   }
   
   input:checked + .slider {
-    background-color: #003d4c;
+    background-color: #1B3A27;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px #003d4c;
+    box-shadow: 0 0 1px #1B3A27;
   }
   
   input:checked + .slider:before {
@@ -80,11 +80,11 @@
   }
   
   .modal-header {
-    background-color: #003d4c;
+    background-color: #1B3A27;
   }
   
   .modal-title {
-    background-color: #003d4c;
+    background-color: #1B3A27;
     color: white;
   }
   .switch {
@@ -125,11 +125,11 @@
   }
   
   input:checked + .slider {
-    background-color: #003d4c;
+    background-color: #1B3A27;
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 1px #003d4c;
+    box-shadow: 0 0 1px #1B3A27;
   }
   
   input:checked + .slider:before {

@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 
 
 export class ClientService {
+  
 
     baseURL: string = environment.apiURL + '/api/';
   deleteClient: any;
@@ -89,6 +90,9 @@ export class ClientService {
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
             
     }
+    editSession(id: any) : Observable<any> {
+        return this.http.delete(this.baseURL + `/sessions/` + id,);
+      }
     deleteSession(id: any ): Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }

@@ -11,7 +11,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h1 class="modal-title fs-5" id="exampleModalLabel">
+      <h1 class="modal-title fs-5 text-center" id="exampleModalLabel" >
         Add New Client
       </h1>
 
@@ -24,6 +24,8 @@
     </div>
     <div class="modal-body">
       <form [formGroup]="addClient" ngNativeValidate>
+        <div class="row p-2">
+          <div class=" mb-3 col-md-6 ">
         <div class="mb-3 form-group">
           <label for="exampleInputEmail1">First Name *</label>
           <input
@@ -38,7 +40,9 @@
             required
           />
         </div>
-        <div class="mb-3 form-group">
+          </div>
+        <div class=" mb-3 col-md-6 ">
+        <div class="mb-3 ">
           <label for="exampleInputEmail1">Last Name *</label>
           <input
             formControlName="lastName"
@@ -52,7 +56,10 @@
             required
           />
         </div>
-   
+        </div>
+          </div>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
         <div class="form-group">
           <label for="exampleInputPassword1">Mobile no *</label>
           <input
@@ -67,6 +74,8 @@
             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
           />
         </div>
+            </div>
+            <div class=" mb-3 col-md-6 ">
         <div class="form-group">
           <label for="exampleInputPassword1">Email *</label>
           <input
@@ -78,6 +87,9 @@
             placeholder="Email"
           />
         </div>
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
         <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
@@ -90,6 +102,8 @@
             required
           />
         </div>
+              </div>
+              <div class=" mb-3 col-md-6 ">
         <div class="form-group ">
           <label for="profession">Profession</label>
           <input 
@@ -100,26 +114,12 @@
           formControlName="profession" 
           >
         </div>
-        <!-- <div class="form-group ">
-          <label for="profession">added by </label>
-          <input 
-          type="text" 
-          class="form-control" 
-          id="" placeholder="Enter created by" 
-          formControlName="createdBy"
-          >
-        </div> -->
-        <div class="form-group mb-3">
-          <label for="reason">Reason</label>
-          <input 
-          type="text" 
-          class="form-control" 
-          placeholder="Reason" 
-          formControlName="reason" >
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="input-group mb-3">
+              </div>
+            
+              <div class="row p-2">
+                <div class=" mb-3 col-md-6 ">
+          <div >
+            <div>
               <div class="input-group-prepend">
                 <label class="input-group-text" for="PaymentMode">Payment Mode</label>
               </div>
@@ -130,7 +130,9 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+                </div>
+          <div class=" mb-3 col-md-6 ">
+          <div>
             <div class="input-group">
               <div class="input-group-prepend">
                 <label class="input-group-text" for="clientType">Client Type</label>
@@ -144,8 +146,19 @@
             </div>
           </div>
         </div>
-      </form>
+                </div>
+        <div class="row p-2">
+          <div class=" mb-3 col-md-6 ">
+    <div class="form-group mb-3">
+      <label for="reason">Reason</label>
+      <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Reason" 
+      formControlName="reason" >
     </div>
+          </div>
+        </div>
     <div class="modal-footer">
       <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
         Close
