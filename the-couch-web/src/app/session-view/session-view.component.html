@@ -8,72 +8,66 @@
 </div>
 
 <br>
+<h5 class="section-title text-center ">Session Details</h5>
 <div class="row">
-  <div class="col-2"></div>
+  <div class="col-2">
+  </div>
   <div class="col-8">
 <div class="container-fluid Client mb-5">
     <div class="container">
       <div class="card details-card">
-        <div class="d-flex justify-content-between mb-3 flex-wrap" [@fadeIn]>
+        <div class="mt-5" class="d-flex justify-content-between flex-wrap"[@fadeIn]>
           <div>
-            <h5 class="section-title">Session view</h5>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
+            "
+            >
+              <i class="fas fa-edit"></i>
+              Edit
+            </button>
           </div>
-  
           <div class="d-flex">
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
-      >
-        <i class="fas fa-edit"></i>
-        Edit
-      </button>
             <div class="dropdown">
-              <a
-                class="btn btn-refresh dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Actions
-              </a>
-  
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <a
-                    class="dropdown-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#confirmsessionModal"
-                    >Confirm</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deliveredsessionModal"
-                    >conducted</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#cancelsessionModal"
-                    >Cancel</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deletesessionModal"
-                    >Reschedule</a
-                  >
-                </li>
-              </ul>
+              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Actions</a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#confirmsessionModal"
+                      >Confirm</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deliveredsessionModal"
+                      >conducted</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#cancelsessionModal"
+                      >Cancel</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#sessionModal"
+                      >Reschedule</a
+                    >
+                  </li>
+                </ul>
             </div>
+           
           </div>
         </div>
-
         <div class="session-details" [@fadeIn] >
           <div class="d-flex justify-content-between main-detail">
             <span class="title">Session for:</span>
@@ -138,15 +132,14 @@
       >
         Notifications
       </button>
-      <!-- <button
+      <button
           class="btn btn-tabs"
           (click)="toggleTab('attachments')"
           [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
         >
           Attachments
-        </button> -->
+        </button>
     </div>
-
     <div class="d-none d-lg-block">
       <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
         <button
@@ -434,8 +427,7 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="d-none d-md-block">
+    <div class="d-none d-md-block">
         <table class="table" *ngIf="currentTab === 'attachments'" [@fadeIn]>
           <thead>
             <th coslpan="1">Attachment No</th>
@@ -459,9 +451,8 @@
             </tr>
           </tbody>
         </table>
-      </div> -->
-
-    <!-- <div class="show-ms" *ngIf="currentTab === 'attachments'" [@fadeIn]>
+      </div>
+      <div class="show-ms" *ngIf="currentTab === 'attachments'" [@fadeIn]>
         <div *ngFor="let attachment of attachments" class="listing-item">
           <div class="d-flex justify-content-between mb-3">
             <h4>{{ attachment.session.name }}</h4>
@@ -470,7 +461,7 @@
           <span>{{ attachment.narration }}</span>
           <h6>{{ attachment.paidAt | date: "MMM d, y " }}</h6>
         </div>
-      </div> -->
+      </div>
   </div>
 
 <!-- Record payment details form modal -->
@@ -737,182 +728,78 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="editedsessionForm">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="sessionTypeDropdown">Session type</label>
-                <select
-                  value="{{ session?.sessionType }}"
-                  formControlName="sessionType"
-                  class="form-select"
-                  id="sessionTypeDropdown"
-                >
-                  <option *ngFor="let type of sessionType" [value]="type">
-                    {{ type | titlecase }}
-                  </option>
-                </select>
-              </div>
+        <form [formGroup]="addSessionForm" >
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+              <label for="sessionname">Session Name</label>
+              <input 
+              type="text" 
+              class="form-control" 
+              id="sessionname" 
+              placeholder="Enter Session Name" 
+              name="name" 
+              [(ngModel)]="addSessionForm.name">
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">session amount </label>
-                <input
-                  formControlName="sessionDuration"
-                  name="sessionDuration"
-                  type="number"
-                  class="form-control"
-                  id="sessionDuration"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. 3000"
-                  value="{{ session?.sessionDuration }}"
-                />
-              </div>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+              <label for="inputlastname">Session Details</label>
+              <input type="text" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Enter Session Description" 
+              name="details" 
+              [(ngModel)]="addSessionForm.sessionDetails" >
+            
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputPassword1">Session </label>
-                <select
-                  formControlName="cakeSize"
-                  class="form-select"
-                  id="cakeSizeDropdown"
-                  value="{{ session?.cakeSize }}"
-                >
-                  <option *ngFor="let size of sessionDuration" [value]="size">
-                    {{ size | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Amount paid</label>
-                <input
-                  formControlName="amountPaid"
-                  name="amountPaid"
-                  type="number"
-                  class="form-control"
-                  id="amountPaid"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. 1000"
-                  value="{{ session?.amountPaid }}"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Due date</label>
-                <input
-                  formControlName="dueDate"
-                  name="dueDate"
-                  type="text"
-                  class="form-control"
-                  id="dueDate"
-                  aria-describedby="emailHelp"
-                  placeholder="yyyy-mm-dd"
-                  value="{{ sessionDate }}"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Due time</label>
-                <input
-                  formControlName="dueTime"
-                  name="duetime"
-                  type="text"
-                  class="form-control"
-                  id="dueTime"
-                  aria-describedby="emailHelp"
-                  placeholder="09:00"
-                  value="{{ sessionTime }}"
-                />
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Product </label>
-                <input
-                  formControlName="details"
-                  name="flavor"
-                  type="text"
-                  class="form-control"
-                  id="flavor"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. Vanilla,Blackforest,miiror glaze, royal icing, chocolate"
-                  value="{{ session?.details }}"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1"
-                  >Message on cake (If applicable)</label
-                >
-                <input
-                  formControlName="messageOnCake"
-                  name="cakeMessage"
-                  type="text"
-                  class="form-control"
-                  id="cakeMessage"
-                  aria-describedby="emailHelp"
-                  placeholder="happy birthday"
-                  value="{{ session?.messageOnCake }}"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">session to be</label>
-                <select
-                  formControlName="deliveryOption"
-                  class="form-select"
-                  id="deliveryOption"
-                  value="{{ session?.deliveryOption }}"
-                >
-                  <option
-                    *ngFor="let option of sessionVenue"
-                    [value]="option"
-                  >
-                    {{ option | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Delivery address</label>
-                <input
-                  formControlName="sessionVenue"
-                  name="sessionVenue"
-                  type="text"
-                  class="form-control"
-                  id="sessionVenue"
-                  aria-describedby="emailHelp"
-                  placeholder="eg. Ngong"
-                  value="{{ session?.sessionVenue }}"
-                />
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Additional notes</label>
-                <textarea
-                  formControlName="notes"
-                  name="notes"
-                  class="form-control"
-                  id="notes"
-                  rows="4"
-                  aria-describedby="notes"
-                  placeholder="Additional notes"
-                  value="{{ session?.notes }}"
-                >
-                </textarea>
-              </div>
+            <div class="mb-3 col-md-6">
+              <label for="inputEmail4">Session Date</label>
+              <input type="date" 
+              variant="success" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Date" 
+              name="session_date" 
+              [(ngModel)]="addSessionForm.sessionDate" >   
             </div>
           </div>
+          <div class="row p-2">
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">From</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="session_time_from" 
+                [(ngModel)]="addSessionForm.sessionStartTime" >
+                </div>
+            <div class="mb-3 col-md-6">
+              <label for="inputEmail4">To</label>
+              <input type="time" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Time" 
+              name="session_time_to" 
+              [(ngModel)]="addSessionForm.sessionEndTime" >
+            </div>
+          </div>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+                <label class="form-group-text" for="clientType">Session Venue</label>
+            <select class="form-select" 
+                id="inputGroupSelect01" 
+                name="session_venue" 
+                [(ngModel)]="addSessionForm.sessionVenue">
+                <option value="VIRTUAL">VIRTUAL</option>
+                <option value="PHYSICAL">PHYSICAL</option>
+              </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">Session Goals</label>
+                  <input 
+                  type="email" class="form-control" 
+                  id="inputEmail4" placeholder="Goals" 
+                  name="goals" [(ngModel)]="addSessionForm.goals">
+                </div>
 
          <div class="d-flex input-group mb-3 mt-3">
           <label for="notification">Notify the client</label>
@@ -928,8 +815,7 @@
               <span class=""></span>
             </label>
           </div>
-        </div> -->
-        </form>
+        </div> 
          <div *ngIf="!showHideMessage" [@fadeIn]>
         <p>The Client will not be notified</p>
       </div> 
@@ -943,7 +829,7 @@
             {{ sessionDate | date }}. Thank you. "
           </p>
         </div>
-      </div> -->
+      </div> 
       </div>
       <div class="modal-footer d-flex justify-content-between">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -959,9 +845,93 @@
         </button>
       </div>
     </div>
-  </div>
+<!-- Modal for adding or editing a session -->
+<div class="modal" id="sessionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitle }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form [formGroup]="addSessionForm" >
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="sessionname">Session Name</label>
+                <input 
+                type="text" 
+                class="form-control" 
+                id="sessionname" 
+                placeholder="Enter Session Name" 
+                name="name" 
+                [(ngModel)]="addSessionForm.name">
+              </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="inputlastname">Session Details</label>
+                <input type="text" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Enter Session Description" 
+                name="details" 
+                [(ngModel)]="addSessionForm.sessionDetails" >
+              
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">Session Date</label>
+                <input type="date" 
+                variant="success" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Date" 
+                name="session_date" 
+                [(ngModel)]="addSessionForm.sessionDate" >   
+              </div>
+            </div>
+            <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">From</label>
+                  <input type="time" 
+                  class="form-control" 
+                  id="inputEmail4" 
+                  placeholder="Time" 
+                  name="session_time_from" 
+                  [(ngModel)]="addSessionForm.sessionStartTime" >
+                  </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">To</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="session_time_to" 
+                [(ngModel)]="addSessionForm.sessionEndTime" >
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                  <label class="form-group-text" for="clientType">Session Venue</label>
+              <select class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="session_venue" 
+                  [(ngModel)]="addSessionForm.sessionVenue">
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PHYSICAL">PHYSICAL</option>
+                </select>
+                  </div>
+                  <div class="mb-3 col-md-6">
+                    <label for="inputEmail4">Session Goals</label>
+                    <input 
+                    type="email" class="form-control" 
+                    id="inputEmail4" placeholder="Goals" 
+                    name="goals" [(ngModel)]="addSessionForm.goals">
+                  </div>
+<div class="modal-footer">
+<button type="submit" class="btn btn-primary">Save</button>
+<button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
 </div>
-
 <!-- Edit Payment details modal -->
 <div
   class="modal fade"
@@ -1010,7 +980,7 @@
               value="{{ payment.amount }}"
             />
           </div>
-          <!-- <div class="form-group">
+          <div class="form-group">
             <label for="exampleInputEmail1">Balance after </label>
             <input
             formControlName="balanceAfter"
@@ -1021,7 +991,7 @@
             aria-describedby="balance amount"
             value="{{ payment.balanceAfter }}"
           />
-          </div> -->
+          </div> 
           <!-- <div class="form-group">
             <label for="exampleInputEmail1">Payment date </label>
             <input
@@ -1033,7 +1003,7 @@
             aria-describedby="payment amount"
             value="{{ payment.paidAt | date : 'MMM d, y hh:mm a' }}"
           />
-          </div> -->
+          </div>
           <div class="form-group">
             <label for="exampleInputEmail1">Narration</label>
             <textarea

@@ -14,24 +14,19 @@
             <p><strong>End Date:</strong> {{ contract.endDate }}</p>
           </div>
           <div class="col-md-6">
-            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
             <p><strong>Number of Sessions:</strong> {{ contract.noOfSessions }}</p>
             <p><strong>Fees per Session [Individual]:</strong> {{ contract.individualFeesPerSession}}</p>
             <p><strong>Fees per Session [Group]:</strong> {{ contract.groupFeesPerSession }}</p>
+            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <p><strong>Terms and Conditions:</strong> {{ contract.termsAndConditions }}</p>
-            </div>
-            </div>
             </div>
               </div>
             </div>
             <div class="col-2">
-              <button type="button"  data-bs-toggle="modal" data-bs-target="#editModal" class="btn btn-success">
-                <i class="fa-solid fa-user-plus"></i><i data-bs-toggle="modal" data-bs-target="#confirmDelete"
-               ></i>Add Session
+              <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
+                <i class="fa-solid fa-user-plus"></i>
+               Add Session
               </button>
             </div>
             <div class="row list-container container mt-2 " >
@@ -40,9 +35,7 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">session Name</th>
-                    <th scope="col">Contract</th>
                     <th scope="col">Session Venue</th>
-                    <th scope="col">Client</th>
                     <th scope="col">Session Type</th>
                     <th scope="col">session Date</th>
                     <th scope="col">Starts at</th>
@@ -55,9 +48,7 @@
                   <tr *ngFor="let session of sessions">
                     <th scope="row">{{ session.id }}</th>
                     <td>{{ session.name }}</td>
-                    <td>{{ session.contract.coachingTopic }}</td>
                     <td>{{ session.sessionVenue }}</td>
-                    <td>{{ session.client.fullName }}</td>
                     <td>{{ session.sessionType }}</td>
                     <td>{{ session.sessionDate }}</td>
                     <td>{{ session.sessionStartTime }}</td>
@@ -70,7 +61,7 @@
 
                       <i data-bs-toggle="modal" data-bs-target="#sessionModal"class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
 
-                      <i class="fa-solid fa-trash-can"(click)="deleteSession(id,userDetails)"></i>
+                      <i class="fa-solid fa-trash-can"(click)="deleteSession(session.id,userDetails)"></i>
                     </td>
                   </tr>
                 </tbody>
@@ -83,7 +74,7 @@
               </p>
             </div>
   
-  <!-- Modal for adding or editing a session -->
+  <!-- Modal for editing a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -94,22 +85,7 @@
           </button>
         </div>
         <div class="modal-body">
-              <h1 class="text-center mb-3">Add session</h1>
-            </div>
             <form [formGroup]="addSessionForm" >
-              <div class="row p-2">
-                <div class="mb-3 col-md-12">
-                  <label for="sessionname">Select Contract</label>
-                  <select 
-                  class="form-select" 
-                  id="inputGroupSelect01" 
-                  name="type" 
-                  (change)="onContractChange($event)"
-                  [(ngModel)]="addSessionForm.contractId"> 
-                  <option *ngFor="let contract of contract" value="{{contract.id}}">{{contract.coachingTopic}}</option>
-                </select>
-                </div>
-              </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
                   <label for="sessionname">Session Name</label>
@@ -120,21 +96,6 @@
                   placeholder="Enter Session Name" 
                   name="name" 
                   [(ngModel)]="addSessionForm.name">
-               
-                </div>
-                <div class="mb-3 col-md-6" >
-                  <div class="form-group-prepend">
-                    <label class="form-group-text" for="clientType">Session Type</label>
-                  </div>
-                  <select 
-                    class="form-select" 
-                    id="inputGroupSelect01" 
-                    name="type" 
-                    [(ngModel)]="addSessionForm.sessionType"> 
-                    <option value="INDIVIDUAL">INDIVIDUAL</option>
-                    <option value="GROUP">GROUP</option>
-                    <option value="OTHER">OTHER</option>
-                  </select>
                 </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
@@ -155,8 +116,7 @@
                   id="inputEmail4" 
                   placeholder="Date" 
                   name="session_date" 
-                  [(ngModel)]="addSessionForm.sessionDate" >
-                  
+                  [(ngModel)]="addSessionForm.sessionDate" >   
                 </div>
               </div>
               <div class="row p-2">
@@ -168,7 +128,6 @@
                     placeholder="Time" 
                     name="session_time_from" 
                     [(ngModel)]="addSessionForm.sessionStartTime" >
-                    
                     </div>
                 <div class="mb-3 col-md-6">
                   <label for="inputEmail4">To</label>
@@ -178,9 +137,7 @@
                   placeholder="Time" 
                   name="session_time_to" 
                   [(ngModel)]="addSessionForm.sessionEndTime" >
-                  
                 </div>
-  
               </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
@@ -204,3 +161,5 @@
   <button type="submit" class="btn btn-primary">Save</button>
   <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
 </div>
+<!-- Modal for adding a session -->
+

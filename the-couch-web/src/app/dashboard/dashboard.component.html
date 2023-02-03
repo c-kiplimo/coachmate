@@ -101,7 +101,11 @@
 <div class="col-3 card text-center top-cards" >
   <div class="card-body">
     <h6 class="card-title">Number of Coaches</h6>
+
     <h3 class="card-text fw-bold">{{numberofCoaches}}</h3>
+
+    <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
+
     <button type="button" routerLink="/addCoach" class="btn addbtn"><i class="fa fa-plus"></i> Add a Coach</button>
     
   </div>
@@ -158,6 +162,9 @@
         </div>
     </div>
 </div> -->
+
+
+=======
 
 <div class="row" *ngIf="this.userRole != 'ORGANIZATION'">
     <div class="col-6">
@@ -231,7 +238,7 @@
                 <td>{{ contract.noOfSessions }}</td>
                 <td>{{ contract.client.fullName }}</td>
                 <td class="text-center">
-                  <button type="button" class="btn btn-sm btn-success">View</button>
+                  <button type="button" class="btn btn-sm btn-success"routerLink="/contractDetail/{{contract.id}}" >View</button>
 
               </tr>
             </tbody>
@@ -240,6 +247,7 @@
     </div>
 </div>  
 </div>
+
 
 
 <div class="row" *ngIf="this.userRole == 'ORGANIZATION'">
@@ -289,6 +297,7 @@
          
         </div>
       </div>
+
 
 
 
