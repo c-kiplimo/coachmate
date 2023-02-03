@@ -35,6 +35,14 @@ import { ApiService } from '../services/ApiService';
 export class sessionViewComponent implements OnInit {
 addSessionForm: any;
 modalTitle: any;
+currentSessionName: any;
+currentdetails: any;
+currentSessionDate: any;
+currentsessionStartTime: any;
+currentsessionEndTime: any;
+currentsessionVenue: any;
+currentgoals: any;
+  currentSession: any;
 editedsession() {
 throw new Error('Method not implemented.');
 }
@@ -70,7 +78,7 @@ client: any;
   sessionVenue: any;
   sessionTime: any;
   sessionType: any;
-  editedsessionForm!: FormGroup<any>;
+  editedsessionForm!: FormGroup;
   isPaymentRef: any;
   loading = false;
   service: any;
@@ -121,9 +129,8 @@ client: any;
     });
     this.getSession();
     this.getPayments();
+    this.newPayment();
     this.getNotifications();
-    this.getAllSessions();
-
     this.paymentForm = this.formbuilder.group({
       extPaymentRef: '',
       amount: '',
@@ -171,7 +178,54 @@ client: any;
       narration: '',
       sendNotification: true,
     });
+    this.editedsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      attachments:'',
+      notes:'',
+      feedback:'',
+      paymentCurrency:'',
+      amountPaid:'',
+      sessionAmount:'',
+      sessionBalance:'',
+
+    });
   
+  }
+  setCurrectSession(session: any) {
+    this.currentSession = session;
+    console.log(this.currentSession);
+  
+    this.editedsessionForm = this.formbuilder.group({
+     name: this.currentSession.name,
+      sessionDate: this.currentSession.sessionDate,
+      sessionStartTime: this.currentSession.sessionStartTime,
+      sessionEndTime: this.currentSession.sessionEndTime,
+      sessionType: this.currentSession.sessionType,
+      sessionVenue: this.currentSession.sessionVenue,
+      
+    });
+  }
+  editedSession() {
+    console.log(this.editedsessionForm.value);
+    this.loading = true;
+    var data = this.editedsessionForm.value;
+    data.id = this.currentSession.id;
+    console.log(data);
+    this.clientService.editSession(data).subscribe(
+      (response: any) => {
+        this.loading = false;
+        console.log(response);
+      }, (error: any) => {
+        console.log(error);
+      }
+    )
   }
   goToItem(type: any, entityObj: any): void {
     this.router.navigate([type, entityObj.id]);
@@ -179,6 +233,7 @@ client: any;
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
+  
   getSession() {
     this.loading = true;
 
@@ -187,7 +242,6 @@ client: any;
       this.loading = false;
       this.sessions = res.body;
       console.log(this.sessions);
-
       this.clientId = this.order.client.id;
       this.getPayments();
       this.getNotifications();
@@ -202,25 +256,7 @@ client: any;
    
     });
   }
-  getAllSessions() {
-    this.loading = true;
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.clientService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
-        this.loading = false;
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
 
@@ -271,12 +307,12 @@ closeModal() {
   }
 
   newPayment() {
-    // console.log(this.paymentForm.value);
+    console.log(this.paymentForm.value);
     this.paymentForm.patchValue({
       sendNotification: this.showHideMessage,
       paymentType: this.selectedPaymentOption,
     });
-    this.service.addNewPayment(this.paymentForm.value).subscribe({
+    this.apiService.addNewPayment(this.paymentForm.value).subscribe({
       next: (response: any) => {
         this.paymentForm.reset();
         this.toastrService.success('Payment added!', 'Success!');
