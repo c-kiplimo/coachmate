@@ -100,6 +100,11 @@ export class ClientService {
         return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId)
     }
 
+    getClientContracts(clientId: any): Observable<any> {
+        console.log("Get Contracts reached!");
+        return this.http.get(`${this.baseURL}contracts/byClient/` + clientId)
+    }
+
     getClientByEmail(email: any): Observable<any> {
         return this.http.post(`${this.baseURL}clients/getClientByEmail`, email);
     }

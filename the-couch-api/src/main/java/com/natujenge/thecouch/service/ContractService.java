@@ -53,6 +53,9 @@ public class ContractService {
         }
         return optionalContract.get();
     }
+    public List<Contract> getContractByClientId(Long clientId) {
+        return contractRepository.findAllByClientId(clientId);
+    }
 
     public Contract createContract(Long coachId,ContractRequest contractRequest) {
 
@@ -138,4 +141,6 @@ public class ContractService {
 
         contractRepository.delete(contract);
     }
+
+
 }

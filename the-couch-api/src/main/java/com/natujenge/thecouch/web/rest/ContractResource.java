@@ -52,6 +52,17 @@ public class ContractResource {
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //Get contract by client Id
+    @GetMapping("byClient/{id}")
+    public ResponseEntity<?> getContractByClientId(@PathVariable("id") Long clientId,
+                                                   @AuthenticationPrincipal User userDetails) {
+        try{
+            List<Contract> contract = contractService.getContractByClientId(clientId);
+            return new ResponseEntity<>(contract, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // Create contract
     @PostMapping
