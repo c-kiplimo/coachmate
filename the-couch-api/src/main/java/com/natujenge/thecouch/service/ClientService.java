@@ -85,6 +85,8 @@ public class ClientService {
 
         registrationService.registerClientAsUser((Client) saveClient);
         return (Client) saveClient;
+
+
     }
 
     // Get all clients

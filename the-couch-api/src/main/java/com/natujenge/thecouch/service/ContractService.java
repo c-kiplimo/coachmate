@@ -1,6 +1,8 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
@@ -35,6 +37,9 @@ public class ContractService {
 
     @Autowired
     CoachService coachService;
+
+    @Autowired
+    WalletService walletService;
     @Autowired
     ContractObjectiveRepository contractObjectiveRepository;
 
@@ -70,10 +75,49 @@ public class ContractService {
         contract.setCoachingCategory(contractRequest.getCoachingCategory());
         contract.setStartDate(contractRequest.getStartDate());
         contract.setEndDate((contractRequest.getEndDate()));
-        //contract.setFeesPerPerson(contractRequest.getFeesPerPerson());
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
+
+
+        // CHECK wallet balance
+        // Update contact payment status and amountDue
+        // Get wallet balance should check the last record on dB by client
+        ClientWallet clientWallet =  walletService.getClientWalletRecentRecord(Long clientId);
+        Float walletBalance = clientWallet.getWalletBalance();
+
+        Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
+                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
+                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
+
+
+        float paymentBalance;
+        if (walletBalance >= amountDue){
+            paymentBalance = walletBalance - amountDue;
+            // update wallet balance
+            // update contract status and amountDue on contract
+            contract.setAmountDue(0f);
+            contract.setPaymentStatus(PaymentStatus.FULLY_PAID);
+
+            // update above obtained wallet
+            // If on automatic payment client records should not update before this logic
+
+            walletService.updateWalletBalance(clientWallet.getId(), paymentBalance);
+
+        } else if (walletBalance < amountDue && walletBalance > 0f) {
+            paymentBalance = amountDue-walletBalance;
+            // update walletBalance to zero
+            // update amountDue on contract
+            contract.setAmountDue(paymentBalance);
+            contract.setPaymentStatus(PaymentStatus.PARTIALLY_PAID);
+
+            walletService.updateWalletBalance(clientWallet.getId(), 0f);
+
+        }else{
+            contract.setAmountDue(amountDue);
+            contract.setPaymentStatus(PaymentStatus.NOT_PAID);
+        }
+
         contract.setClient(client);
         contract.setCoach(coach);
 
