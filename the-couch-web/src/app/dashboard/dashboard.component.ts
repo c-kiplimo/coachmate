@@ -177,18 +177,34 @@ export class DashboardComponent implements OnInit {
         this.sessions = response.body.data;
         this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
+  
         for (let i = 0; i < this.sessions.length; i++) {
-          totalMinutes += Number(this.sessions[i].sessionDuration);
-
-          this.numberOfHours = Math.floor(totalMinutes / 60);
-          this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+          if (this.sessions[i].sessionStatus === 'CONFIRMED'){
+          let startTime = this.sessions[i].sessionStartTime;
+          let endTime = this.sessions[i].sessionEndTime;
+        
+          let start = startTime.split(':');
+          let end = endTime.split(':');
+  
+          let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
+          let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
+  
+          if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
+            totalMinutes += endMinutes - startMinutes;
+          }
         }
+        
+        this.numberOfHours = Math.floor(totalMinutes / 60);
+        this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+      }
+        
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
+  
   getNoOfContracts() {
     this.clientService.getContracts().subscribe(
       (response: any) => {
