@@ -4,7 +4,7 @@
     Your input will help us to continue to improve our coaching services and ensure that you have the best experience possible. 
     Please rate each statement on a scale of 1-5, with 1 being the least and 5 being the most.
     Your comments and suggestions are also welcome. Thank you for your time and support.</p>
-<form [formGroup]="feedbackForm" (ngSubmit)="submitForm()">
+<form [formGroup]="feebackForm" (ngSubmit)="submitForm()">
     <div class="form-group">
       <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me personally and professionally:</label>
       <div class="form-group__rating">
@@ -101,6 +101,6 @@
     <label for="additionalComments">Additional Comments:</label>
     <textarea formControlName="additionalComments" id="additionalComments"></textarea>
   </div>
-  <button type="submit" [disabled]="!feedbackForm.valid">Submit</button>
+  <button type="submit" [disabled]="!feebackForm.valid">Submit</button>
 </form>
 

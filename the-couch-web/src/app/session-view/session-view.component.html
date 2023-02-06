@@ -6,6 +6,10 @@
       <app-user></app-user>
   </div>
 </div>
+<button [routerLink]="['/feedback', { sessionId: sessionId }]">
+  Give Feedback
+</button>
+
 
 <br>
 <h5 class="section-title text-center ">Session Details</h5>
@@ -115,14 +119,14 @@
     </div>
     </div>
   </div>
-  <div class="card card-table">
+  <div class="card  details-card">
     <div class="tabs-section">
       <button
         class="btn btn-tabs"
-        (click)="toggleTab('payments')"
-        [ngClass]="{ 'active-tab': currentTab === 'payments' }"
+        (click)="toggleTab('feedback')"
+        [ngClass]="{ 'active-tab': currentTab === 'feedback' }"
       >
-        Payments
+        Feedback
       </button>
 
       <button
@@ -141,7 +145,7 @@
         </button>
     </div>
     <div class="d-none d-lg-block">
-      <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <div class="text-end mt-2" *ngIf="currentTab === 'feedback'" [@fadeIn]>
         <button
           class="btn btn-refresh me-2 btn-success"
           data-bs-toggle="modal"
@@ -151,108 +155,33 @@
           <fa-icon [icon]="alertIcon"></fa-icon>
           Remind
         </button>
-        <button
-          class="btn btn-add"
-          class="recordpaybtn"
-          data-bs-toggle="modal"
-          data-bs-target="#payementFormModal"
-        >
-          <fa-icon [icon]="addIcon"></fa-icon>
-          Record payment
-        </button>
       </div>
-
-      <table class="table" *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <table class="table" *ngIf="currentTab === 'feedback'" [@fadeIn]>
         <thead>
-          <th colspan="1">session Duration</th>
-          <th colspan="1">Payment</th>
-          <th colspan="1">Balance</th>
-          <th colspan="1">Paid On</th>
-          <th colspan="1">Narration</th>
-          <th colspan="1">Actions</th>
+          <th colspan="1">#</th>
+          <th colspan="1">Understanding</th>
+          <th colspan="1">Emotional Intelligence</th>
+          <th colspan="1">Listening Skills</th>
+          <th colspan="1">Clarification</th>
+          <th colspan="1">Availability</th>
+          <th colspan="1">Total Score</th>
         </thead>
-        <tbody *ngIf="payments?.length" [@fadeIn]>
-          <tr *ngFor="let payment of payments">
-            <td>{{ payment.session.sessionDuration }}</td>
-            <td>{{ payment.amount }}</td>
-            <!-- <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'badge-balance': payment.balanceAfter > '0',
-                  'badge-overpaid': payment.balanceAfter < '0',
-                  'badge-paid': payment.balanceAfter === 0
-                }"
-              >
-                <span *ngIf="payment.balanceAfter < '0'">Overpaid </span>
-                <span *ngIf="payment.balanceAfter === 0"> Fully paid </span>
-                <span *ngIf="payment.balanceAfter > '0'">
-                  {{ payment.balanceAfter }}
-                </span>
-              </span>
-            </td> -->
-            <!-- <td>{{ payment.balanceAfter }}</td> -->
-
-            <td>{{ payment.paidAt | date : "MMM d, y hh:mm a " }}</td>
-            <td>{{ payment.narration }}</td>
-            <td>
-              <div class="d-flex justify-content-around">
-                <button
-                  class="btn btn-view"
-                  (click)="goToItem('payment', payment)"
-                >
-                  view
-                </button>
-              </div>
-            </td>
+        <tbody *ngIf="feedback?.length" [@fadeIn]>
+          <tr>
+            <td>{{feedback.understandingScore}}</td>
+            <td>{{feedback.emotionalIntelligenceScore}}</td>
+            <td>{{feedback.listeningSkillsScore}}</td>
+            <td>{{feedback.clarificationScore }}</td>
+            <td>{{feedback.availabilityScore }}</td>
+            <td>{{feedback.overrallScore }}</td>
           </tr>
         </tbody>
       </table>
-      <div class=" pay-summary me-3 ">
-      <table class="table " *ngIf="currentTab === 'payments'">
-        <thead>
-          <th colspan="1">Price </th>
-          <th colspan="1">Total paid</th>
-          <th colspan="1">Balance</th>
-          <th colspan="1">Status</th>
-        </thead>
-        <tbody>
-          <td>{{session.sessionAmount}}</td>
-          <td>{{session.amountPaid}}</td>
-          <td>{{session.sessionBalance}}</td>
-          <td>
-            <span
-            class="mb-1 "
-            class="badge"
-            [ngClass]="{
-              'badge-balance': session.sessionBalance === session.sessionDuration,
-               'badge-partial': session.sessionBalance > '0' && session.sessionBalance !== session.sessionDuration, 'badge-overpaid':session.sessionBalance < '0',
-               'badge-paid': session.sessionBalance == '0' 
-            }"
-          >
-            <p class="p-0 mb-0" *ngIf="session.sessionBalance > '0' && session.sessionBalance !== session.sessionDuration">
-              Partially paid
-            </p>
-            <p class="p-0 mb-0" *ngIf="session.sessionBalance < '0'">
-            Overpaid
-            </p>
-            <p class="p-0 mb-0" *ngIf="session.sessionBalance == '0'">
-             Fully paid
-            </p>
-            <p class="p-0 mb-0" *ngIf="session.sessionBalance === session.sessionDuration">
-              Not paid
-             </p>
-
-          </span>
-          </td>
-
-        </tbody>
-      </table>
-    </div>
-
-      <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-        <p class="text-muted mt-5" *ngIf="!payments?.length">
-          No payments found.
+      <h6>Client comments</h6>
+      <p>{{feedback.comments}}</p>
+      <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
+        <p class="text-muted mt-5" *ngIf="!feedback?.length">
+          No feedback found.
         </p>
       </div>
 
@@ -261,7 +190,7 @@
       </div>
     </div>
 
-    <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
+    <div class="show-ms" *ngIf="currentTab === 'feedback'" [@fadeIn]>
 
       <div class="d-flex justify-content-between mt-2 mb-2">
         <p *ngIf="session.sessionBalance <= 0"></p>
@@ -275,95 +204,12 @@
           <fa-icon [icon]="alertIcon"></fa-icon>
           Remind
         </button>
-        <button
-          class="btn btn-add"
-          type="button"
-          data-bs-toggle="modal"
-          data-bs-target="#payementFormModal"
-        >
-          <fa-icon [icon]="addIcon"></fa-icon>Payment
-        </button>
       </div>
       <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
         <div class="donut multi"></div>
       </div>
-      <div *ngIf="payments?.length">
-        <div
-          (click)="goToItem('payment', payment)"
-          *ngFor="let payment of payments"
-          class="listing-item"
-        >
-          <div class="d-flex justify-content-between mb-1">
-            <div>
-              <h6>{{ payment.narration | titlecase }}</h6>
-              <p class="mb-1">Amount: {{ payment.session.sessionDuration }}</p>
-            </div>
-
-            <div>
-              <span>
-                {{ payment.paidAt | date : "MMM d y" }}
-              </span>
-              <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-              <!-- <p></p> -->
-              <p class="mb-1">Paid:{{ payment.amount }}</p>
-              <!-- <div
-              class="mb-1 "
-              class="badge"
-              [ngClass]="{
-                 'badge-balance': payment.balanceAfter > '0', 'badge-overpaid': payment.balanceAfter < '0',
-                 'badge-paid': payment.balanceAfter == 0
-              }"
-            >
-              <p *ngIf="payment.balanceAfter > '0'">
-                Bal: {{ payment.balanceAfter }}
-              </p>
-              <p *ngIf="payment.balanceAfter < '0'">
-              Overpaid
-              </p>
-              <p *ngIf="payment.balanceAfter == '0'">
-               Fully paid
-              </p>
-
-            </div> -->
-            </div>
-          </div>
-        </div>
-        <div class="listing-item pay-summary d-flex justify-content-between">
-          <span>
-            <p>Price (Excluding tax)</p>
-            <p>Total paid</p>
-            <p>Balance</p>
-            <p>Status</p>
-          </span>
-          <span>
-            <p>Kes {{session.sessionDuration}}</p>
-            <p>Kes {{session.amountPaid}}</p>
-            <p>Kes {{session.sessionBalance}}</p>
-            <div
-              class="mb-1 "
-              class="badge"
-              [ngClass]="{
-                 'badge-partial': session.sessionBalance > '0', 'badge-overpaid':session.sessionBalance < '0',
-                 'badge-paid': session.sessionBalance == 0
-              }"
-            >
-              <p *ngIf="session.sessionBalance > '0'">
-                Partially paid
-              </p>
-              <p *ngIf="session.sessionBalance < '0'">
-              Overpaid
-              </p>
-              <p *ngIf="session.sessionBalance == '0'">
-               Fully paid
-              </p>
-
-            </div>
-          </span>
-        </div>
-      </div>
-
-      <p class="text-muted mt-5" *ngIf="!payments?.length">
-        No payments found.
+      <p class="text-muted mt-5" *ngIf="!feedback?.length">
+        No feedback found.
       </p>
     </div>
 
@@ -463,196 +309,6 @@
         </div>
       </div>
   </div>
-
-<!-- Record payment details form modal -->
-<div
-  class="bd-example-modal-lg modal fade"
-  id="payementFormModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Record Payment
-        </h1>
-
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="paymentForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Payment Mode</label>
-            <select
-              formControlName="paymentType"
-              class="form-select"
-              id="paymentType"
-            >
-              <option
-                [selected]="isPaymentRef"
-                (click)="showPaymentRef('MPESA')"
-              >
-                MPESA
-              </option>
-              <option (click)="showPaymentRef('BANK')">BANK</option>
-              <option (click)="showPaymentRef('CASH')">CASH</option>
-            </select>
-          </div>
-
-          <div class="mb-3" *ngIf="isPaymentRef">
-            <label for="exampleInputEmail1">Transaction ref</label>
-            <input
-              formControlName="extPaymentRef"
-              name="extpaymentRef"
-              type="text"
-              class="form-control"
-              id="extPaymentRef"
-              aria-describedby="payment reference number"
-              placeholder="Payment reference number"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Amount</label>
-            <input
-              formControlName="amount"
-              name="amount"
-              type="number"
-              class="form-control"
-              id="amount"
-              aria-describedby="amount paid"
-              placeholder="Amount paid"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="Payment narration"
-            >
-            </textarea>
-          </div>
-          <div class="d-flex input-group align-items-center mt-3 mb-3">
-            <label for="exampleInputEmail1">Notify the client</label>
-            <div class="d-flex-column justify-content-between ms-3">
-              <input
-                type="checkbox"
-                name="cancelsession"
-                checked
-                [(ngModel)]="showHideMessage"
-                formControlName="sendNotification"
-              />
-            </div>
-          </div>
-        </form>
-        <div class="message-area" *ngIf="!showHideMessage" [@fadeIn]>
-          <p class="message-sent">
-            {{ session?.client?.firstName | titlecase }}, shall not be
-            notified that this payment has been received :( Studies show that
-            transparency improves Client retention. Tick the check box to
-            improve your business' transparency.
-          </p>
-        </div>
-        <div class="col mb-3 message-area" *ngIf="showHideMessage" [@fadeIn]>
-          <p class="message-sent">
-            {{ session?.client?.firstName | titlecase }}, shall receive a text
-            message to show that this payment has been received :)
-          </p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)="newPayment()"
-        >
-          Create Payment
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Payment details modal -->
-<div
-  class="modal fade"
-  id="payementModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Payment Details
-        </h1>
-
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" *ngIf="payment">
-        <div class="d-flex justify-content-between">
-          <p>Ext Payment Ref</p>
-          <span>{{ payment.extPaymentRef }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Mode</p>
-          <span>Manual</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Amount</p>
-          <span>{{ payment.amount }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Balance After:</p>
-          <span>{{ payment.balanceAfter }}</span>
-        </div>
-
-        <div class="d-flex justify-content-between">
-          <p>Narration</p>
-          <span>{{ payment.narration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Payment Date</p>
-          <span>{{ payment.paidAt | date : "MMM d, y hh:mm a" }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Over Payment:</p>
-          <span>{{ payment.overPayment }}</span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Notification details modal -->
 <div
   class="modal fade"
@@ -970,65 +626,7 @@
 <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
 </div>
 <!-- Edit Payment details modal -->
-<div
-  class="modal fade"
-  id="editPaymentModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Edit Payment Details
-        </h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" *ngIf="payment">
-        <form [formGroup]="editPaymentForm">
-          <div class="mb-3 form-group">
-            <label for="exampleInputEmail1">Transaction RefNo</label>
-            <input
-              formControlName="extPaymentRef"
-              name="extPaymentRef"
-              type="text"
-              class="form-control"
-              id="extPaymentRef"
-              aria-describedby="transaction refNo"
-              value="{{ payment.extPaymentRef }}"
-            />
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Amount </label>
-            <input
-              formControlName="amount"
-              name="amount"
-              type="text"
-              class="form-control"
-              id="amount"
-              aria-describedby="payment amount"
-              value="{{ payment.amount }}"
-            />
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Balance after </label>
-            <input
-            formControlName="balanceAfter"
-            name="balanceAfter"
-            type="text"
-            class="form-control"
-            id="balanceAfter"
-            aria-describedby="balance amount"
-            value="{{ payment.balanceAfter }}"
-          />
-          </div> 
           <!-- <div class="form-group">
             <label for="exampleInputEmail1">Payment date </label>
             <input
@@ -1508,87 +1106,4 @@
     </div>
   </div>
 
-
-
-
-
-<!-- invoice modal -->
-<div class="modal fade" id="invoicemodal" tabindex="-1" role="dialog" aria-labelledby="receiptModal" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-  <div class="modal-content">
-
-    <div class="modal-body" id="invoice">
-      <div class="m-2" >
-        <img class="welcome-img mb-3" src="../../../assets/images/Logo.png" />
-
-        <div class="client-details" *ngIf="!loadingsession && session"  [@fadeIn]>
-          <div class="d-flex justify-content-between">
-            <span class="title">session No</span>
-            <span class="value">{{ session.sessionNumber }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Client name</span>
-            <span class="value">{{
-              session.client.firstName + " " + session.client.lastName
-                | titlecase
-            }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Session type</span>
-            <span class="value">{{ session.sessionType }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Session date</span>
-            <span class="value">{{ session.sessionDate | date : "MMM d, y " }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Status</span>
-            <span class="value">
-              <span
-                class="badge"
-                [ngClass]="{
-                  'badge-warning': session.sessionStatus === 'CONDUCTED',
-                  'badge-success': session.sessionStatus === 'CONFIRMED',
-                  'badge-danger': session.sessionStatus === 'CANCELLED',
-                  'badge-primary': session.sessionStatus === 'NEW'
-                }"
-                >{{ session.sessionStatus }}</span
-              >
-            </span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">session amount</span>
-            <span class="value">{{ session.sessionDuration }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Amount paid</span>
-            <span class="value">{{ session.amountPaid }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Product</span>
-            <span class="value">{{ session.details }}</span>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span class="title">Session Venue</span>
-            <span class="value">{{ session.sessionVenue }}</span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="close btn-secondary" data-bs-dismiss="modal">Close</button>
-      <button
-    class="download btn-add"
-    (click)="savePdf()"
-  >
-  <i class="fa fa-download"></i>
-    Download
-  </button>
-    </div>
-  </div>
-</div>
-</div>
 

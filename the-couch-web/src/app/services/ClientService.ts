@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
  
  
 @Injectable({
@@ -11,6 +12,10 @@ import { environment } from 'src/environments/environment';
 
 
 export class ClientService {
+  getFiltered: any;
+  getFilteredSessions(options: { page: number; per_page: number; status: any; search: any; period: string; balance: any; }) {
+    throw new Error('Method not implemented.');
+  }
   
 
     baseURL: string = environment.apiURL + '/api/';
@@ -101,7 +106,7 @@ export class ClientService {
 
     getClientSessions(clientId: any): Observable<any> {
         console.log("Get Sessions reached!");
-        return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId)
+        return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId,{observe:'response'})
     }
 
     getClientContracts(clientId: any): Observable<any> {
@@ -123,7 +128,16 @@ export class ClientService {
         return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, {params: data})
     }
 
+// FEEDBACK SERVICES
+addFeedback(feeback: any): Observable<any> {
+    console.log(feeback)
+    console.log(feeback.sessionId)
+    return this.http.post(`${this.baseURL}feedback`, feeback)
+} 
 
+getFeedback(sessionId:any):Observable<any>{
+    return this.http.get(`${this.baseURL}feedback/get-by-session-id` + sessionId,{observe:'response'})
+}
 
 
 }

@@ -43,6 +43,7 @@ currentsessionEndTime: any;
 currentsessionVenue: any;
 currentgoals: any;
   currentSession: any;
+feedback: any;
 editedsession() {
 throw new Error('Method not implemented.');
 }
@@ -119,14 +120,13 @@ client: any;
     private clientService:ClientService,
     private http: HttpClient,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private formbuilder: FormBuilder,
     private apiService:ApiService  ) {}
 
   ngOnInit() {
-   this.activatedRoute.params.subscribe((params) => {
-      this.sessionId = params['id'];
-    });
+    const sessionId = this.route.snapshot.paramMap.get('id');
+  console.log('Session ID: ', sessionId);
     this.getSession();
     this.getPayments();
     this.newPayment();
@@ -143,7 +143,7 @@ client: any;
       extPaymentRef: '',
       amount: '',
       narration: '',
-      orderId: this.sessionId,
+      sessionId: this.sessionId,
       clientId: this.clientId,
       sendNotification: true,
     });
@@ -152,7 +152,7 @@ client: any;
       extPaymentRef: '',
       amount: '',
       narration: '',
-      orderId: this.sessionId,
+      sessionId: this.sessionId,
 
       sendNotification: true,
     });
@@ -233,7 +233,15 @@ client: any;
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
-  
+  getFeedback(){
+    this.loading = true;
+    this.clientService.getFeedback(this.sessionId).subscribe((res:any)=> {
+      
+      this.loading = false;
+      this.feedback = res.body;
+      console.log(this.feedback);
+      });
+  }
   getSession() {
     this.loading = true;
 

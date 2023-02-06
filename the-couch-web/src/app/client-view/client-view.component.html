@@ -8,6 +8,7 @@
 </div>
 <h5 class="section-title text-center">Client View</h5>
 <div class="card details-card">
+  <div class="card details-card">
   <div class="d-flex justify-content-between flex-wrap">
     <div>
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
@@ -35,7 +36,7 @@
      
     </div>
   </div>
-</div>
+  </div>
 <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
     <div class="donut multi">
       
@@ -89,7 +90,9 @@
       </div>
   </div>
 </div>
+</div>
 <br>
+<div class="card details-card">
 <div class="card card-table">
   <div class="tabs-section">
     <button
@@ -115,17 +118,16 @@
     </button>
   </div>
   <div *ngIf="currentTab === 'sessions'" >
-    <div class="row list-container container mt-2 " >
-      <table class="table table-striped"  >
+    <div class="row list-container container  " >
+      <table class="table" >
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">session Name</th>
             <th scope="col">Contract</th>
-            <th scope="col">Session Venue</th>
-            <th scope="col">Client</th>
             <th scope="col">Session Type</th>
-            <th scope="col">session Status</th>
+            <th scope="col">Session Venue</th>
+            <th scope="col">session Date</th>
             <th scope="col">Starts at</th>
             <th scope="col">Ends at</th>
             <th scope="col">Actions</th>
@@ -136,22 +138,19 @@
           <tr *ngFor="let session of sessions">
             <th scope="row">{{ session.id }}</th>
             <td>{{ session.name }}</td>
-            <td>{{ session.contract.coachingTopic }}</td>
-            <td>{{ session.sessionVenue }}</td>
-            <td>{{ session.client.fullName }}</td>
+            <td>{{ session.contract.coachingTopic }}</td> 
             <td>{{ session.sessionType }}</td>
-            <td>{{ session.sessionStatus }}</td>
+            <td>{{ session.sessionVenue }}</td>
+            <td>{{ session.sessionDate }}</td>
             <td>{{ session.sessionStartTime }}</td>
             <td>{{ session.sessionEndTime }}</td>
             <td class="actions">
               <i
-              (click)="navigateToSessionView(session.id)"
-              class="fa-solid fa-arrow-up-right-from-square"
-            ></i>
-
-              <i data-bs-toggle="modal" data-bs-target="#sessionModal"class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
-
-              <i class="fa-solid fa-trash-can"(click)="deleteSession(id,userDetails)"></i>
+                (click)="navigateToSessionView(session.id)"
+                class="fa-solid fa-arrow-up-right-from-square"
+              ></i>
+              <i class="fa-solid fa-pen-to-square"></i>
+              <!-- <i class="fa-solid fa-trash-can"></i>  -->
             </td>
           </tr>
         </tbody>
@@ -163,6 +162,7 @@
         No sessions Found.
       </p>
     </div>
+    
       <!-- <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
         <div class="donut multi"></div>
       </div>

@@ -171,46 +171,29 @@ addSessionForm: any;
       reason: '',
   
       });
-      this.getSessions() 
-      this.getAllSessions();
+      this.getClientSessions() 
   }
-  getAllSessions() {
-    console.log("here")
+  getClientSessions() {
+    console.log("client id",this.clientId)
     this.loading = true;
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.apiService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
+    this.ClientService.getClientSessions(this.clientId)
+      .subscribe((data: any) => {
+        this.sessions = data.body;
+        console.log(this.sessions);
         this.loading = false;
+        console.log("sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
-      }
-    );
-  }
-  getSessions() {
-    console.log("client sessions")
-    this.ClientService.getClientSessions(this.clientId)
-      .subscribe((res: any) => {
-        console.log(res.body.data);
-        this.sessions = res.body.data;
         this.loading = false;
-      });
-      console.log("client sessions")
+      }
+      );
   }
 
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
-  
-  
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }

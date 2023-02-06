@@ -56,7 +56,7 @@ import { RegistrationComponent } from './coach-aggregator/registration/registrat
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
 
 import { AddCoachComponent } from './add-coach/add-coach.component';
-
+import { GetPeriodPipe } from './pipes/get-period.pipe';
 import { HomeComponent } from './home/home.component';
 
 
@@ -94,7 +94,7 @@ import { HomeComponent } from './home/home.component';
     PipesPipe,
     RegistrationComponent,
     ContractDetailsComponent,
-
+    GetPeriodPipe,
     AddCoachComponent,
 
     HomeComponent,
@@ -104,6 +104,7 @@ import { HomeComponent } from './home/home.component';
   imports: [
     BrowserModule,
     CoachEducationModule,
+    ReactiveFormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
     BrowserAnimationsModule,

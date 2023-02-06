@@ -54,10 +54,8 @@
         <th scope="col">Client Name</th>
         <th scope="col">Email</th>
         <th scope="col">Phone Number</th>
-        <th scope="col">Group/Individual</th>
+        <th scope="col">Group/Cooporate</th>
         <th scope="col">Address</th>
-        <th scope="col">Added On</th>
-        <th scope="col">Reason</th>
         <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
@@ -71,8 +69,6 @@
         <td>{{ client.msisdn }}</td>
         <td>{{ client.clientType }}</td>
         <td>{{ client.physicalAddress }}</td>
-        <td>{{ client.createdAt }}</td>
-        <td>{{ client.reason }}</td>
         <td>
           <span class="badge"[ngClass]="getClass(client)"
           > {{ client.status }}</span>
