@@ -19,6 +19,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientsComponent implements OnInit {
+  
 salesData: any;
 getAllCustomers(arg0: number) {
 throw new Error('Method not implemented.');
@@ -150,4 +151,5 @@ throw new Error('Method not implemented.');
       }
     );
   }
+  
 }
