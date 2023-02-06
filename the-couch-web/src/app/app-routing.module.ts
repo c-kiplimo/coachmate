@@ -87,6 +87,10 @@ const routes: Routes = [
      component:contractComponent
   },
   {
+    path:'payment',
+    component:contractComponent
+ },
+  {
     path:'feedback',
    component:FeebackFormComponent
  },
