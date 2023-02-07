@@ -40,7 +40,10 @@ export class DashboardComponent implements OnInit {
 
   OrgCoaches: any;
   numberofCoaches: any;
-  
+  Clients: any;
+  OrgData: any;
+  orgSession: any;
+  OrgContracts: any;
 
   
 
@@ -75,7 +78,14 @@ export class DashboardComponent implements OnInit {
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();
-     
+      this.getOrgClients();
+
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      
+      this.getOrgContracts(this.orgSession.id);
+      this.getAllOrgSessions(this.orgSession.id);
 
      
     }else {
@@ -87,6 +97,68 @@ export class DashboardComponent implements OnInit {
     }
 
   }
+
+  getAllOrgSessions(id: any) {
+    this.loading = true;
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getOrgSessions(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        this.loading = false;
+        this.numberOfSessions = this.sessions.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getOrgContracts(id: any) {
+    this.loading = true;
+    this.clientService.getOrgContracts(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+        this.numberOfContracts = this.contracts.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getOrgClients(){
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    const id = this.coachData.id;
+    this.loading = true;
+    this.clientService.getOrgClients(id).subscribe(
+      (response) => {
+        this.loading = false;
+        this.Clients = response;
+        console.log(response)
+        console.log('clients',this.Clients)
+        this.numberOfClients = this.Clients.length;
+  
+      }, (error) => {
+        console.log(error)
+      }
+    )
+  }
+
+
+
   getClients() {
     const options = {
       page: 1,
