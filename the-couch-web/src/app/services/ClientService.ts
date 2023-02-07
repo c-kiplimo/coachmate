@@ -126,6 +126,10 @@ export class ClientService {
         return this.http.get(`${this.baseURL}clients/getOrgClients/` + id);
     }
 
+    getOrgContracts(id: any): Observable<any>{
+        return this.http.get(`${this.baseURL}contracts/getOrgContracts/` + id);
+    }
+
 
 
 

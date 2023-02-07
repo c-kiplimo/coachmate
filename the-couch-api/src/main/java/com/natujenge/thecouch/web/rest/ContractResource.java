@@ -64,6 +64,21 @@ public class ContractResource {
         }
     }
 
+    //API TO GET CONTRACTS BY ORG ID
+    @GetMapping(path = "getOrgContracts/{id}")
+    ResponseEntity<?> getOrgContracts(@PathVariable("id") Long orgId,
+                                      @AuthenticationPrincipal User userDetails){
+        log.info("Request to get Organization contracts", orgId);
+        try {
+            List<Contract> listResponse = contractService.getContractByOrgId(orgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // Create contract
     @PostMapping
     public ResponseEntity<?> createContract(

@@ -79,6 +79,7 @@ public class ContractService {
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
         contract.setClient(client);
         contract.setCoach(coach);
+        contract.setOrgId(coach.getOrgIdId());
 
         Contract contract1 = contractRepository.save(contract);
 
@@ -143,4 +144,7 @@ public class ContractService {
     }
 
 
+    public List<Contract> getContractByOrgId(Long orgId) {
+        return contractRepository.findContractByOrgId(orgId);
+    }
 }
