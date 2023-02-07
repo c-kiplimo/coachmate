@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
 
   OrgCoaches: any;
   numberofCoaches: any;
+session: any;
   
 
   
@@ -85,6 +86,31 @@ export class DashboardComponent implements OnInit {
       
     }
 
+  }
+  getAllSessions() {
+    this.loading = true;
+    this.sessions = [];
+    window.scroll(0, 0);
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getSessions(options).subscribe(
+      (response: any) => {
+        console.log(response.body.data);
+        this.sessions = response.body.data;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  navigateToSessionView(id: any) {
+    console.log(id);
+    this.route.navigate(['sessionView', id]);
   }
   getClients() {
     const options = {
@@ -203,6 +229,7 @@ export class DashboardComponent implements OnInit {
         console.log(error);
       }
     );
+    
   }
   
   getNoOfContracts() {
