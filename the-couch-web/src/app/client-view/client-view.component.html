@@ -24,13 +24,13 @@
           Actions</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <li (click)="statusState('ACTIVE')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#confirmStatusChange"
+                data-bs-toggle="modal" data-bs-target="#activateclientModal"
                 >Activate</a></li>
             <li (click)="statusState('SUSPENDED')"><a class="dropdown-item"
-              data-bs-toggle="modal" data-bs-target="#confirmStatusChange"
+              data-bs-toggle="modal" data-bs-target="#suspendclientModal"
               >Suspend</a></li>
               <li (click)="statusState('CLOSED')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#confirmStatusChange">Close</a></li>
+                data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a></li>
           </ul>
       </div>
      
@@ -467,7 +467,7 @@ aria-hidden="true"
 <div class="modal-dialog modal-xl">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
+    <h1 class="modal-title fs-5" >Create session</h1>
 
     <button
       type="button"
@@ -619,7 +619,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
+    <h1 class="modal-title fs-5" >
       Edit client details
     </h1>
 
@@ -733,7 +733,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
+    <h1 class="modal-title fs-5">
       Suspend client
     </h1>
 
@@ -792,7 +792,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Close client</h1>
+    <h1 class="modal-title fs-5" >Close client</h1>
 
     <button
       type="button"
@@ -849,7 +849,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
+    <h1 class="modal-title fs-5">
       Activate client
     </h1>
 
@@ -1010,4 +1010,4 @@ aria-hidden="true"
   </div>
 </div>
 </div>
-</div>  -->
+</div> 

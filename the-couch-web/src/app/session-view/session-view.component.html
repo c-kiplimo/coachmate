@@ -6,10 +6,7 @@
       <app-user></app-user>
   </div>
 </div>
-<button routerLink="/feedback/{{sessionId}}">
-  Give Feedback
-</button>
-
+<button (click)="giveFeedback(sessionId)">Give Feedback</button>
 
 <br>
 <h5 class="section-title text-center ">Session Details</h5>
@@ -47,7 +44,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#deliveredsessionModal"
+                      data-bs-target="#conductedsessionModal"
                       >conducted</a
                     >
                   </li>
@@ -63,7 +60,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#sessionModal"
+                      data-bs-target="#editsessionModal"
                       >Reschedule</a
                     >
                   </li>
@@ -625,54 +622,6 @@
 <button type="submit" class="btn btn-primary">Save</button>
 <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
 </div>
-<!-- Edit Payment details modal -->
-
-          <!-- <div class="form-group">
-            <label for="exampleInputEmail1">Payment date </label>
-            <input
-            formControlName="paymentDate"
-            name="paymentDate"
-            type="text"
-            class="form-control"
-            id="paymentDate"
-            aria-describedby="payment amount"
-            value="{{ payment.paidAt | date : 'MMM d, y hh:mm a' }}"
-          />
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="editNarration"
-              aria-describedby="narration"
-              placeholder="Edited Payment narration"
-            >
-            </textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="updatePaymentDetails()"
-        >
-          Update
-        </button>
-      </div>
-    </div>
-  </div>
-</div>-->
 
 <!-- Confirm session modal -->
 <div
@@ -760,10 +709,10 @@
   </div>
 </div>
 
-<!-- Delivered session modal -->
+<!-- conducted session modal -->
 <div
   class="modal fade bd-example-modal-lg"
-  id="deliveredsessionModal"
+  id="conductedsessionModal"
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
@@ -771,7 +720,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
+        <h1 class="modal-title fs-5" >
           Conducted session
         </h1>
 
@@ -884,7 +833,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel session</h1>
+        <h1 class="modal-title fs-5">Cancel session</h1>
 
         <button
           type="button"
@@ -960,7 +909,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete session</h1>
+        <h1 class="modal-title fs-5">Delete session</h1>
 
         <button
           type="button"

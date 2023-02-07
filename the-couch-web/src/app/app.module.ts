@@ -58,6 +58,11 @@ import { ContractDetailsComponent } from './contract-details/contract-details.co
 import { AddCoachComponent } from './add-coach/add-coach.component';
 import { GetPeriodPipe } from './pipes/get-period.pipe';
 import { HomeComponent } from './home/home.component';
+import { PaymentModule } from './payment/payment.module';
+import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
+import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
+import { AccountStatementComponent } from './payment/payment/account-statement/account-statement.component';
+import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
 
 
 
@@ -87,7 +92,6 @@ import { HomeComponent } from './home/home.component';
     FeebackFormComponent,
 
     AddTrainingComponent,
-
     ForgotPaswordComponent,
     ConfirmedViewComponent,
     ClientConfirmComponent,
@@ -112,6 +116,7 @@ import { HomeComponent } from './home/home.component';
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
+    PaymentModule,
     SharedModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

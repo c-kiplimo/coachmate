@@ -44,6 +44,7 @@ currentsessionVenue: any;
 currentgoals: any;
   currentSession: any;
 feedback: any;
+  coachId: any;
 editedsession() {
 throw new Error('Method not implemented.');
 }
@@ -125,8 +126,9 @@ client: any;
     private apiService:ApiService  ) {}
 
   ngOnInit() {
-    const sessionId = this.route.snapshot.paramMap.get('id');
-  console.log('Session ID: ', sessionId);
+   this.route.params.subscribe((params) => {
+      this.sessionId = params['id'];
+    });
     this.getSession();
     this.getPayments();
     this.newPayment();
@@ -152,7 +154,7 @@ client: any;
       extPaymentRef: '',
       amount: '',
       narration: '',
-      sessionId: this.sessionId,
+      orderId: this.sessionId,
 
       sendNotification: true,
     });
@@ -233,15 +235,7 @@ client: any;
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
-  getFeedback(){
-    this.loading = true;
-    this.clientService.getFeedback(this.sessionId).subscribe((res:any)=> {
-      
-      this.loading = false;
-      this.feedback = res.body;
-      console.log(this.feedback);
-      });
-  }
+  
   getSession() {
     this.loading = true;
 
@@ -264,6 +258,33 @@ client: any;
    
     });
   }
+  //get coach id from the session
+
+  giveFeedback(sessionId: any) {
+    this.router.navigate(['/feedback', sessionId]);
+  }
+  //send feedback to the  server based on the session id , coach id  and feedback as parameters
+  sendFeedback() {
+     this.sessionId = this.sessionId;
+     this.coachId = this.session.sessionId.coach.id;
+    console.log(this.sessionId);
+    console.log(this.coachId);
+    console.log(this.feedback);
+    this.clientService.addFeedback(this.feedback, this.sessionId, this.coachId).subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  
+
+ 
+  
+  
+
 
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
@@ -538,4 +559,3 @@ deleteSession() {
   }
 }
 }
-

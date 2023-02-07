@@ -129,12 +129,10 @@ export class ClientService {
     }
 
 // FEEDBACK SERVICES
-addFeedback(feeback: any): Observable<any> {
-    console.log(feeback)
-    console.log(feeback.sessionId)
-    return this.http.post(`${this.baseURL}feedback`, feeback)
-} 
-
+addFeedback(feedback: any, sessionId: any, coachId: any): Observable<any> {
+    const payload = { feedback, sessionId, coachId };
+    return this.http.post(`${this.baseURL}feedback`, payload);
+  }
 getFeedback(sessionId:any):Observable<any>{
     return this.http.get(`${this.baseURL}feedback/get-by-session-id` + sessionId,{observe:'response'})
 }
