@@ -1,13 +1,11 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.QClient;
-import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
@@ -41,6 +39,9 @@ public class ClientService {
     @Autowired
     CoachRepository coachRepository;
 
+    @Autowired
+    OrganizationRepository organizationRepository;
+
     private final ClientRepository clientRepository;
     private final RegistrationService registrationService;
     private final UserRepository userRepository;
@@ -63,9 +64,12 @@ public class ClientService {
             throw new IllegalArgumentException("Coach not found");
 
         }
+        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(coachId);
+
 
         Client client = new Client();
         client.setCoach(optionalCoach.get());
+        client.setOrganization(optionalOrganization.get());
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
         client.setFullName(clientRequest.getFirstName()+' '+clientRequest.getLastName());
@@ -343,5 +347,12 @@ public class ClientService {
 
     public List<Client> findByEmail(String email) {
         return clientRepository.findByEmail(email);
+    }
+
+    public List<Client> getClientByOrgId(Long orgId) {
+
+        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(orgId);
+
+        return clientRepository.findClientByOrganization(optionalOrganization.get());
     }
 }

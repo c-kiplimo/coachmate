@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.Client;
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,6 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
     Optional<Client> findClientByIdAndCoachId(Long clientId, Long coachId);
 
     List<Client> findByEmail(String email);
+
+    List<Client> findClientByOrganization(Organization orgId);
 }

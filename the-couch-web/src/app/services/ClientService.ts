@@ -122,6 +122,9 @@ export class ClientService {
     getOrgCoaches(data: any): Observable<any>{
         return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, {params: data})
     }
+    getOrgClients(id: any): Observable<any>{
+        return this.http.get(`${this.baseURL}clients/getOrgClients/` + id);
+    }
 
 
 

@@ -16,4 +16,6 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
 
     Optional<Organization> findBySuperCoachId(Long superCoachId);
 
+    Optional<Organization> getOrganizationBySuperCoachId(Long coachId);
+
 }

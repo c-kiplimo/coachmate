@@ -40,8 +40,24 @@ throw new Error('Method not implemented.');
   Clients!: any;
 
   clientToBeUpdated!: any;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+
   ngOnInit(): void {
-    this.getClients();
+
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+    if(this.userRole == 'COACH'){
+       this.getClients();
+    }else if(this.userRole == 'ORGANIZATION'){
+      this.getOrgClients();
+
+    }
 
     this.updateClient = this.formbuilder.group({
      
@@ -68,6 +84,27 @@ throw new Error('Method not implemented.');
     }
 }
 
+getOrgClients(){
+  const options = {
+    page: 1,
+    per_page: this.itemsPerPage,
+    status: this.filters.status,
+    search: this.filters.searchItem,
+  };
+  const id = this.coachData.id;
+  this.loading = true;
+  this.ClientService.getOrgClients(id).subscribe(
+    (response) => {
+      this.loading = false;
+      this.Clients = response;
+      console.log(response)
+      console.log('clients',this.Clients)
+
+    }, (error) => {
+      console.log(error)
+    }
+  )
+}
   
   getClients(){
     const options = {

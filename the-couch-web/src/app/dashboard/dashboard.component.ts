@@ -70,6 +70,7 @@ export class DashboardComponent implements OnInit {
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+ 
 
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');

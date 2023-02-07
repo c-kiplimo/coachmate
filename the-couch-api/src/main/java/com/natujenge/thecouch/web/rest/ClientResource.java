@@ -81,6 +81,21 @@ public class ClientResource {
         }
     }
 
+    //API TO GET CLIENTS BY ORG ID
+    @GetMapping(path = "getOrgClients/{id}")
+    ResponseEntity<?> getOrgClients(@PathVariable("id") Long OrgId,
+                                    @AuthenticationPrincipal User userDetails){
+        log.info("Request to get Organization clients");
+        try{
+            List<Client> listResponse = clientService.getClientByOrgId(OrgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //api to find one Client by id
     @GetMapping(path = "{id}")
     ResponseEntity<?> findById(@PathVariable("id") Long id,
