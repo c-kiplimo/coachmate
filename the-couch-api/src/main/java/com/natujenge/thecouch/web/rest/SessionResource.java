@@ -57,7 +57,7 @@ public class SessionResource {
                                              @AuthenticationPrincipal User userDetails) {
 
         try {
-            SessionDto sessionRequest = sessionService.findSessionByIdAndCoachId(id, userDetails.getCoach().getId());
+            Session sessionRequest = sessionService.findSessionByIdAndCoachId(id);
             return new ResponseEntity<>(sessionRequest, HttpStatus.OK);
 
         } catch (Exception e) {

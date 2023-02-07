@@ -44,8 +44,8 @@ public class ContractResource {
     public ResponseEntity<?> getContractById(@PathVariable("id") Long contractId,
                                              @AuthenticationPrincipal User userDetails) {
         try{
-            Long coachId = userDetails.getCoach().getId();
-            Contract contract = contractService.getSingleContract(coachId,contractId);
+           // Long coachId = userDetails.getCoach().getId();
+            Contract contract = contractService.getSingleContract(contractId);
             return new ResponseEntity<>(contract, HttpStatus.OK);
 
         }catch (Exception e){

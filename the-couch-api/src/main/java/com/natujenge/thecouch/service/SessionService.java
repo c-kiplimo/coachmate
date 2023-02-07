@@ -62,10 +62,10 @@ public class SessionService {
     }
 
     // Get Individual Sessions by id
-    public SessionDto findSessionByIdAndCoachId(Long id, Long coachId) {
-        log.debug("Request to get session : {} and coachId : {}", id,coachId);
+    public Session findSessionByIdAndCoachId(Long id) {
+        log.debug("Request to get session : {} and coachId : {}", id);
 
-        Optional<SessionDto> sessionOptional = sessionRepository.findByIdAndCoachId(id,coachId);
+        Optional<Session> sessionOptional = sessionRepository.findById(id);
         if (sessionOptional.isPresent()) {
             return sessionOptional.get();
 
