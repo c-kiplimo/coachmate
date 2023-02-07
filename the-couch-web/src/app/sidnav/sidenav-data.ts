@@ -43,9 +43,9 @@ navDataforOrg: [
         label: 'Dashboard'
     },
     {
-        routeLink: 'contracts',
+        routeLink: 'sessions',
         icon: 'fal fa-presentation',
-        label: 'Contracts'
+        label: 'Sessions'
     },
     {
         routeLink: 'clients',

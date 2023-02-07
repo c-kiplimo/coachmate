@@ -103,6 +103,11 @@ client: any;
   sessionAmount = '';
   eventType = '';
   open = false;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+
+
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
@@ -124,9 +129,13 @@ client: any;
     private apiService:ApiService  ) {}
 
   ngOnInit() {
+
+  
+
    this.activatedRoute.params.subscribe((params) => {
       this.sessionId = params['id'];
     });
+
     this.getSession();
     this.getPayments();
     this.newPayment();

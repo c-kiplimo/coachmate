@@ -96,6 +96,10 @@ export class ClientService {
     deleteSession(id: any ): Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
+
+    getOrgSessions(id: any): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions/getorgSessions/` + id);
+    }
     
     
 
