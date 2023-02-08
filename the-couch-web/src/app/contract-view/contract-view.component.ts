@@ -29,6 +29,9 @@ export class contractViewComponent implements OnInit {
   OrgData: any;
   orgSession: any;
 
+  User: any;
+  
+
   constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -55,6 +58,23 @@ export class contractViewComponent implements OnInit {
     console.log(this.orgSession);
     
     this.getOrgContracts(this.orgSession.id);
+  } else if (this.userRole == 'CLIENT') {
+
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      console.log(this.User);
+      const email = {
+        email: this.User.email
+      }
+      this.clientService.getClientByEmail(email).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.getClientContracts(response[0].id);
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+
   }
 
    
@@ -109,4 +129,23 @@ export class contractViewComponent implements OnInit {
       }
     );
   }
+
+  getClientContracts(id: any) {
+    // const data = {
+    //   clientId: id,
+    // }
+    this.clientService.getClientContracts(id).subscribe(
+      (response: any) => {
+        console.log('here contracts=>', response);
+        this.contracts = response;
+        console.log(this.contracts);
+      
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+
 }
