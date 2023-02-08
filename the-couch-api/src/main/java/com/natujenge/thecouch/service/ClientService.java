@@ -157,6 +157,8 @@ public class ClientService {
             client.setEmail(clientRequest.getEmail());
             client.setMsisdn(clientRequest.getMsisdn());
             client.setPhysicalAddress(clientRequest.getPhysicalAddress());
+            client.setReason(clientRequest.getReason());
+
             client = clientRepository.save(client);
             log.info("Updated client with id {}:", client.getId());
             return Optional.of(client);

@@ -123,11 +123,10 @@ public class ClientResource {
         try{
             log.info("request to update client with id : {} by client of id {}", id,userDetails.getCoach().getId());
 
-            Optional<Client> updatedClient;
-            updatedClient = clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
+            clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "Client updated successfully"),
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.OK);
         } catch (Exception e){
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),

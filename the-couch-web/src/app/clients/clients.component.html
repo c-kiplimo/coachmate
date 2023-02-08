@@ -130,7 +130,7 @@
         <div class="mb-3 form-group">
           <label for="email_address" class="form-label">Email</label>
           <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email_address"
-          value="{{ clientToBeUpdated?.email_address }}">
+          value="{{ clientToBeUpdated?.email }}">
         </div>
         <div class="mb-3 form-group">
           <label for="msisdn" class="form-label">Phone Number</label>
@@ -139,21 +139,21 @@
         </div>
 
         <div class="mb-3 form-group">
-          <label for="physical_address" class="form-label">Address</label>
-          <input type="text" class="form-control" id="physical_address" name="physical_address" formControlName="physical_address"
-          value="{{ clientToBeUpdated?.physical_address}}">
+          <label for="physicalAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physical_address"
+          value="{{ clientToBeUpdated?.physicalAddress}}">
         </div>
         <div class="mb-3 form-group">
           <label for="reason" class="form-label">Reason</label>
           <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
           value="{{ clientToBeUpdated?.reason}}">
         </div>
-        <div class="input-group mb-3">
+        <!-- <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
           <select class="form-select" id="inputGroupSelect01" formControlName="payment_mode"
-          value="{{ clientToBeUpdated?.payment_mode }}">
+          value="{{ clientToBeUpdated?.paymentMode }}">
             <option selected>Select Payment Mode</option>
             <option value="PREPAY">PREPAY</option>
             <option value="POSTPAY">POSTPAY</option>
@@ -170,7 +170,7 @@
             <option value="CORPORATE">CORPORATE</option>
             <option value="GROUP">GROUP</option>
           </select>
-        </div>
+        </div> -->
        </form>
       </div>
       <div class="modal-footer">

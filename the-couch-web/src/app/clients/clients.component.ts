@@ -65,10 +65,10 @@ throw new Error('Method not implemented.');
     lastName: ' ',
     type: ' ',
     msisdn: ' ',
-    email_address: ' ',
-    physical_address: ' ',
+    email: ' ',
+    physicalAddress: ' ',
     profession: ' ',
-    payment_mode: ' ',
+    paymentMode: ' ',
     reason: '',
 
     });
@@ -147,12 +147,12 @@ getOrgClients(){
     this.updateClient = this.formbuilder.group({
       firstName: this.clientToBeUpdated.firstName,
       lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.type,
+      clientType: this.clientToBeUpdated.clientType,
       msisdn: this.clientToBeUpdated.msisdn,
-      email_address: this.clientToBeUpdated.email_address,
-      physical_address: this.clientToBeUpdated.physical_address,
+      email: this.clientToBeUpdated.email,
+      physicalAddress: this.clientToBeUpdated.physicalAddress,
       profession: this.clientToBeUpdated.profession,
-      payment_mode: this.clientToBeUpdated.payment_mode,
+      paymentMode: this.clientToBeUpdated.paymentMode,
       reason: this.clientToBeUpdated.reason,
     });
   

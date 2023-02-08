@@ -118,7 +118,7 @@
   <div class="card card-table">
     <div class="tabs-section">
       <button
-        class="btn btn-tabs"
+        class="btn btn-outline-success"
         (click)="toggleTab('payments')"
         [ngClass]="{ 'active-tab': currentTab === 'payments' }"
       >
@@ -126,14 +126,14 @@
       </button>
 
       <button
-        class="btn btn-tabs"
+        class="btn btn-outline-success"
         (click)="toggleTab('notifications')"
         [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
       >
         Notifications
       </button>
       <button
-          class="btn btn-tabs"
+          class="btn btn-outline-success"
           (click)="toggleTab('attachments')"
           [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
         >
@@ -143,17 +143,16 @@
     <div class="d-none d-lg-block">
       <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
         <button
-          class="btn btn-refresh me-2 btn-success"
+          class="btn btn-success"
           data-bs-toggle="modal"
           data-bs-target="#paymentReminderModal"
         
         >
           <fa-icon [icon]="alertIcon"></fa-icon>
-          Remind
+          Reminder
         </button>
         <button
-          class="btn btn-add"
-          class="recordpaybtn"
+          class="btn btn-success"
           data-bs-toggle="modal"
           data-bs-target="#payementFormModal"
         >
