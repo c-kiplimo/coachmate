@@ -141,6 +141,7 @@ public class ClientService {
     }
 
     //Update client
+    @Transactional
     public Optional<Client> updateClient(Long id,Long coachId,
                                          ClientRequest clientRequest) {
         Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(id,coachId);

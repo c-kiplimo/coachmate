@@ -31,9 +31,9 @@ export const navbarData = {
         label: 'Education'
     },
     {
-        routeLink: 'support',
-        icon: 'fal fa-phone',
-        label: 'Support'
+        routeLink: 'payment',
+        icon: 'fal fa-money-check-edit-alt',
+        label: 'Payment'
     },
 ],
 navDataforOrg: [

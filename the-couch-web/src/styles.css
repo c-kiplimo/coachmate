@@ -139,3 +139,41 @@ body {
     padding: 4px !important;
     /* // width: 30%!important; */
   }
+  body {
+    background-color: #e9f5ee!important;
+    scroll-behavior: smooth !important;
+    letter-spacing: 0.5px;
+    font-size: 1.0em;
+    font-family: 'Poppins', sans-serif!important;
+  }
+  
+/* **********************
+TABLE GENERAL STYLING
+********************** */
+
+.tabs-section {
+  border-bottom: 1px solid #f1f1f1;
+}
+
+  .tabs-section>.button {
+    padding: 15px;
+    border-radius: 0;
+    color: #80868b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    border-bottom: 3px solid #fff;
+    margin: 0;
+  }
+
+  .tabs-section>.button :hover {
+      border-bottom: 3px solid #e1e1e1;
+      background-color: #f1f1f188;
+    }
+  
+
+  .active-tab {
+    font-weight: 600!important;
+    color: #003d4c!important;
+    border-bottom: 3px solid #2f2c2c!important;
+  }

@@ -1,4 +1,4 @@
-/* .container-fluid{
+.container-fluid{
     background-color: #ffffff;
     position: relative;
     color: #5C656D;
@@ -120,4 +120,4 @@ input[type=text]:focus {
 input[type=email]:focus {
   outline: none;
   border-bottom: #003d4c solid!important;
-} */
+}

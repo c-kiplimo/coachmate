@@ -29,6 +29,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 })
 
 export class ClientViewComponent implements OnInit {
+  Clients!: [];
 editSession(_t92: any) {
 throw new Error('Method not implemented.');
 }
@@ -143,14 +144,6 @@ addSessionForm: any;
     private activatedRoute: ActivatedRoute)
    { }
 
-  // loadingClient = false;
- 
-
-  
-  // page: number = 1;
-  // itemsPerPage = 20;
-  // ApiService: any;
-
   clientToBeUpdated!: any;
   ngOnInit(): void {
     this.clientId = this.activatedRoute.snapshot.params['id'];
@@ -161,56 +154,38 @@ addSessionForm: any;
     
       firstName: ' ',
       lastName: ' ',
-      type: ' ',
+      clientType: ' ',
       msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
+      email: ' ',
+      physicalAddress: ' ',
       profession: ' ',
-      paymentMode: '',
-      payment_mode: ' ',
+      paymentMode: ' ',
       reason: '',
   
       });
-      this.getSessions() 
-      this.getAllSessions();
+      this.getClientSessions() 
   }
-  getAllSessions() {
-    console.log("here")
+  getClientSessions() {
+    console.log("client id",this.clientId)
     this.loading = true;
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.apiService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
+    this.ClientService.getClientSessions(this.clientId)
+      .subscribe((data: any) => {
+        this.sessions = data.body;
+        console.log(this.sessions);
         this.loading = false;
+        console.log("sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
-      }
-    );
-  }
-  getSessions() {
-    console.log("client sessions")
-    this.ClientService.getClientSessions(this.clientId)
-      .subscribe((res: any) => {
-        console.log(res.body.data);
-        this.sessions = res.body.data;
         this.loading = false;
-      });
-      console.log("client sessions")
+      }
+      );
   }
 
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
-  
-  
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -223,19 +198,10 @@ addSessionForm: any;
       this.loadingClient = false;
       this.clients = data.body;
       console.log(this.clients);
-
-      this.updateClient = this.formbuilder.group({
-       
-        firstName: this.clients.firstName,
-        lastName: this.clients.lastName,
-        type: this.clients.type,
-        msisdn: this.clients.msisdn,
-        email_address: this.clients.email_address,
-        physical_address: this.clients.physical_address,
-        profession: this.clients.profession,
-        payment_mode: this.clients.payment_mode,
-        reason: this.clients.reason,
-      });
+    },  
+    (error: any) => {
+      console.log(error);
+      this.loadingClient = false;
 
     });
   }
@@ -249,21 +215,43 @@ addSessionForm: any;
         return 'badge-danger';
     }
 }
-  updateClientDetails(){
+editClient(client:any){
+  this.clientToBeUpdated = client;
+
+  this.updateClient = this.formbuilder.group({
+    firstName: this.clientToBeUpdated.firstName,
+    lastName: this.clientToBeUpdated.lastName,
+    clientType: this.clientToBeUpdated.clientType,
+    msisdn: this.clientToBeUpdated.msisdn,
+    email: this.clientToBeUpdated.email,
+    physicalAddress: this.clientToBeUpdated.physicAddress,
+    profession: this.clientToBeUpdated.profession,
+    paymentMode: this.clientToBeUpdated.paymentMode,
+    reason: this.clientToBeUpdated.reason,
+  });
+
+}
+
+updateClientDetails(id:any){
+
+  console.log(this.updateClient.value)
+  console.log(this.clientToBeUpdated)
   
-    console.log(this.updateClient.value)
-    
-    
-    console.log(this.updateClient.value)
-   
-    this.ClientService.editClient(this.clientId, this.updateClient.value).subscribe(
-      (response) => {
-        this.router.navigate(['/clients']);
-      }, (error) => {
-        console.log(error)
-      }
-    );
-  }
+  console.log(id)
+  const params = {
+    id: this.clientId,
+  };
+ 
+  this.ClientService.editClient(this.clientToBeUpdated,params).subscribe(
+    (response) => {
+      this.getClients();
+      this.loading = false;
+
+    }, (error) => {
+      console.log(error)
+    }
+  );
+}
 
   showStatus: any;
 
@@ -314,211 +302,50 @@ addSessionForm: any;
     }
   }
   
+  // updateClientDetails(id:any){
+  
+  //   console.log(this.updateClient.value)
+  //   console.log(this.clientToBeUpdated)
+    
+  //   console.log(id)
+   
+  //   this.ClientService.editClient(id).subscribe(
+  //     (response) => {
+  //       this.getClients();
+  //       this.loading = false;
+
+  //     }, (error) => {
+  //       console.log(error)
+  //     }
+  //   );
+  // }
+  getClients(){
+    this.Clients = [];
+    this.loading = true;
+    window.scroll(0, 0);
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.loading = true;
+    this.ClientService.getClient(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.Clients = response.body.data;
+        console.log(response.body)
+        console.log('clients',this.Clients)
+        
+      }, (error) => {
+        console.log(error)
+      }
+    )
+  }
+
 
 }
 
-
-// getOrders(page: number, navigator?: boolean): void {
-//   this.searching = true;
-//   this.orders = [];
-//   const Option = {
-//     page: page,
-//     per_page: 10,
-//     Client_id: this.lientId,
-//   };
-//   // console.log(this.ClientId);
-//   this.service.filterOrdersBy ClientId(Option).subscribe((res: any) => {
-//     // console.log('orders->',res.body.data);
-//     this.orders = res.body.data;
-//     console.log("here are this  Clients orders=>",this.orders)
-//     this.totalLength = Number(res.body.totalElements);
-//     this.searching = false;
-//     this.getNotifications();
-//   });
-// }
-
-// // get payments for specific  Client
-// getPayments(navigator?: boolean): void {
-//   this.searching = true;
-//   this.payments = [];
-//   const Option = {
-//     page: 1,
-//     per_page: 10,
-//     Client_id: this.lientId,
-//   };
-
-//   this.service.filterPaymentsBy ClientId(Option).subscribe((res: any) => {
-//     // console.log('payments here=>', res.body.data);
-//     this.payments = res.body.data;
-//     console.log("payments for this  Client=>",this.payments)
-  
-//     this.searching = false;
-//   });
-// }
-
-// // Get Notification for specific  Client
-// getNotifications(navigator?: boolean): void {
-//   this.searching = true;
-//   this.notifications = [];
-//   const Option = {
-//     page: 1,
-//     per_page: 10,
-//     Client_id: this.lientId,
-//   };
-
-//   this.service.getNotificationsby ClientId(options).subscribe((res: any) => {
-//     // console.log(res.body);
-//     this.notifications = res.body.data;
-//     this.searching = false;
-//   });
-// }
-
-// newOrder() {
-//   const names = this.searchTerm.split(' ');
-
-//   // console.log(this.orderForm.value);
-//   this.orderForm.patchValue({
-//     name: this. Client.firstName + ' ' + this.orderForm.value.orderType,
-//     sendNotification: this.showHideMessage,
-//     dueDate: this.orderDueDate + 'T' + this.orderDueTime,
-//   });
-//   this.service.addNewOrder(this.orderForm.value).subscribe({
-//     next: (response: any) => {
-//       this.orderForm.reset();
-//       this.toastrService.success('Order created!', 'Success!');
-//       setTimeout(() => {
-//         location.reload();
-//       }, 5);
-//     },
-//     error: (err) => {
-//       console.log(err);
-//       this.toastrService.error('Order not created, try again!', 'Failed!');
-//     },
-//   });
-// }
-// viewPayment(payment: any): void {
-//   this.payment = payment;
-//   this.paymentId = this.payment.id;
-//   this.orderId = this.payment.order.id;
-//   this.orders.forEach((order: any) => {
-//     if (this.payment.order.id === order.id) {
-//       // console.log(order.id);
-//       this.payment.balance = order.orderAmount - this.payment.amount;
-//     }
-//   });
-// }
-// viewNotification(notification: any): void {
-//   this.notification = notification;
-// }
-
-//edit Client details
-// editedClientDetails() {
-//   console.log(
-//     'these are edited Client details=>',
-//     this. ClientId,
-//     this.edit ClientForm.value
-//   );
-//   this.service
-//     .edit Client(this. ClientId, this.editClientForm.value)
-//     .subscribe({
-//       next:(response: any) => {
-//       console.log(response);
-//       this.toastrService.success('Clients details updated!', 'Success!');
-//       setTimeout(() => {
-//         location.reload();
-//       }, 2);
-//     },
-//     error: (err) => {
-//       console.log(err);
-//       this.toastrService.error(
-//         ' Client not updated, try again!',
-//         'Failed!'
-//       );
-//     },
-//   });
- //update payment details
-//  updatePaymentDetails() {
-//   this.service.editPayment(this.paymentId, this.editPaymentForm.value).subscribe({
-//     next: (response: any) => {
-//       console.log(response);
-//       this.toastrService.success('Payment details updated!', 'Success!');
-//       setTimeout(() => {
-//         location.reload();
-//       }, 2);
-//     },
-//     error: (err) => {
-//       console.log(err);
-//       this.toastrService.error('Payment not updated, try again!', 'Failed!');
-//     },
-//   });
-// }
-// Client Actions functions
-// suspend Client() {
-//   const options = {
-//     status: 'SUSPENDED',
-//   };
-//   // console.log('details to suspend', this.suspend ClientForm.value);
-//   this.service
-//     . ClientAction(this. ClientId, this.suspend ClientForm.value, options)
-//     .subscribe({
-//       next: (res: any) => {
-//         console.log(res);
-//         this.toastrService.info(' Client suspended!', 'Info!');
-//         this.suspendClientForm.reset();
-//         setTimeout(() => {
-//           location.reload();
-//         }, 5);
-//       },
-//       error: (err) => {
-//         console.log(err);
-//         this.toastrService.error(
-//           ' Client not suspended, try again!',
-//           'Failed!'
-//         );
-//       },
-//     });
-// }
-// closeclient() {
-//   this.service.closeClient(this.lientId).subscribe({
-//     next: (res: any) => {
-//       console.log(res);
-//       this.toastrService.info(' Client closed!', 'Info!');
-//       this.closeClientForm.reset();
-//     },
-//     error: (err) => {
-//       console.log(err);
-//       this.toastrService.error('Client not closed, try again!', 'Failed!');
-//     },
-//   });
-// }
-// activateClient() {
-//   const options = {
-//     status: 'ACTIVATE',
-//   };
-//   this.service
-//     . ClientAction(this. ClientId, this.activateClientForm.value, options)
-//     .subscribe({
-//       next: (res: any) => {
-//         // console.log(res);
-//         this.toastrService.success('Client activated!', 'Success!');
-//         this.activate ClientForm.reset();
-//         setTimeout(() => {
-//           location.reload();
-//         }, 5);
-//       },
-//       error: (err) => {
-//         console.log(err);
-//         this.toastrService.error(
-//           ' Client not activated, try again!',
-//           'Failed!'
-//         );
-//       },
-//     });
-// }
-;
-// back(){
-//   window.history.back()
-// }
 
 
 function getOrders(page: any, number: any, arg2: any) {

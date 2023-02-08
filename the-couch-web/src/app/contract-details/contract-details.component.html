@@ -1,5 +1,5 @@
 <div class="container mb-3">
-    <div class="card">
+    <div class="card details-card">
       <div class="card-header">
         <h3>{{ contract.coachingTopic }} Coaching Contract</h3>
       </div>
@@ -23,8 +23,9 @@
             </div>
               </div>
             </div>
+            <div class="card details-card">
             <div class="col-2">
-              <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
+               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success" style="margin: 5px;">
                 <i class="fa-solid fa-user-plus"></i>
                Add Session
               </button>
@@ -74,7 +75,7 @@
               </p>
             </div>
   
-  <!-- Modal for editing a session -->
+  <!-- Modal for additing a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -87,95 +88,100 @@
           </button>
         </div>
         <div class="modal-body">
-            <form [formGroup]="addSessionForm" >
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="sessionname">Session Name</label>
-                  <input 
-                  type="text" 
-                  class="form-control" 
-                  id="sessionname" 
-                  placeholder="Enter Session Name" 
-                  name="name" 
-                  [(ngModel)]="addSessionForm.name">
+          <form>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="sessionname">Session Name</label>
+                <input 
+                [(ngModel)]="addSessionForm.name" 
+                
+                type="text" 
+                class="form-control" 
+                id="name"
+                placeholder="Enter Session Name" 
+                name="name" 
+               >
+             
+              </div>
+              <div class="mb-3 col-md-6" >
+                <div class="form-group-prepend">
+                  <label class="form-group-text" for="clientType">Session Type</label>
                 </div>
-                <div class=" mb-3 col-md-6 ">
-                  <label for="sessionname">Session Type</label>
-                  <select 
+                <select 
                   class="form-select" 
-                  formControlName="sessionType" 
                   id="inputGroupSelect01" 
-                  name="type" 
+                  name="sessionType" 
                   [(ngModel)]="addSessionForm.sessionType"> 
                   <option value="INDIVIDUAL">INDIVIDUAL</option>
                   <option value="GROUP">GROUP</option>
                   <option value="OTHER">OTHER</option>
                 </select>
-                </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Session Details</label>
-                  <input type="text" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="details" 
-                  [(ngModel)]="addSessionForm.sessionDetails" >
-                
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Session Date</label>
-                  <input type="date" 
-                  variant="success" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Date" 
-                  name="session_date" 
-                  [(ngModel)]="addSessionForm.sessionDate" >   
-                </div>
               </div>
-              <div class="row p-2">
-                  <div class="mb-3 col-md-6">
-                    <label for="inputEmail4">From</label>
-                    <input type="time" 
-                    class="form-control" 
-                    id="inputEmail4" 
-                    placeholder="Time" 
-                    name="session_time_from" 
-                    [(ngModel)]="addSessionForm.sessionStartTime" >
-                    </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="inputlastname">Session Details</label>
+                <input type="text" 
+                class="form-control" 
+                [(ngModel)]="addSessionForm.sessionDetails"
+                id="inputEmail4" 
+                placeholder="Enter Session Description" 
+                name="sessionDetails" 
+               >
+              
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">Session Date</label>
+                <input type="date" 
+                variant="success" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Date" 
+                name="sessionDate" 
+                [(ngModel)]="addSessionForm.sessionDate"
+              >
+                
+              </div>
+            </div>
+            <div class="row p-2">
                 <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">To</label>
+                  <label for="inputEmail4">From</label>
                   <input type="time" 
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Time" 
-                  name="session_time_to" 
-                  [(ngModel)]="addSessionForm.sessionEndTime" >
-                </div>
+                  name="sessionStartTime" 
+                  [(ngModel)]="addSessionForm.sessionStartTime" >
+                  
+                  </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">To</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="sessionEndTime"
+                [(ngModel)]="addSessionForm.sessionEndTime"
+                >
+                
               </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                    <label class="form-group-text" for="clientType">Session Venue</label>
-                <select class="form-select" 
-                    id="inputGroupSelect01" 
-                    name="session_venue" 
-                    [(ngModel)]="addSessionForm.sessionVenue">
-                    <option value="VIRTUAL">VIRTUAL</option>
-                    <option value="PHYSICAL">PHYSICAL</option>
-                  </select>
-                    </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="inputEmail4">Session Goals</label>
-                      <input 
-                      type="email" class="form-control" 
-                      id="inputEmail4" placeholder="Goals" 
-                      name="goals" [(ngModel)]="addSessionForm.goals">
-                    </div>
+
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                  <label class="form-group-text" for="clientType">Session Venue</label>
+              <select class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="sessionVenue" 
+                  [(ngModel)]="addSessionForm.sessionVenue">
+                 >
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PHYSICAL">PHYSICAL</option>
+                </select>
+                  </div>
                     <div class="modal-footer">
-                      <button type="button"  class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                      <button type="button" class="btn btn-primary" routerLink="/contractDetail/{{contract.id}}"(click)="addSession()">Add Session</button>
+                      <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-primary"(click)="addSession()">Add Session</button>
                     </div>
                     
-<!-- Modal for adding a session -->
+
 

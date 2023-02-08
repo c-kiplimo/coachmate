@@ -7,12 +7,13 @@
     </div>
 </div>
 <div class="row">
-  <div class="d-none d-md-block"class="col-4">
+  <div class="d-none d-md-block"class="col-2">
     <div class="filters-section">
       <div class="wrap">
         <select
           class="form-control"
           name="codes"
+          [(ngModel)]="filters.status"
         >
           <option value="">Filtering options</option>
           <option value="ACTIVE">ACTIVE</option>
@@ -22,26 +23,52 @@
       </div>
       </div>
   </div>
-<div class="wrap" class="col-3">
+<div class="wrap" class="col-2">
         <input
           type="text"
           class="form-control search-bar"
           name="customer"
           placeholder="Name, Phone or Email"
-          autocomplete="off"
+          [(ngModel)]="filters.search"
+          autocomplete ="on"
         />
       </div>
-<div class="col-3">
-<button class="btn button-filter" >
+<div class="wrap" class="col-2">
+<button class="btn button-filter" 
+(click)="getFilteredSessions(1, this.currentTab)">
         <i class="fa fa-search" aria-hidden="true"></i>
         Search
       </button>
 </div>
-
-<div class="col-2">
+<div class="col-2"></div>
+<div class="wrap" class="col-2">
   <button type="button" routerLink="/addSession" class="btn btn-success">
     <i class="fa-solid fa-user-plus"></i>Add Session
   </button>
+</div>
+<div class="tabs-section d-flex justify-content-between mb-1 mt-5">
+  <button
+  class="btn btn-tabs"
+  (click)="getAllSessions()"
+  [ngClass]="{ 'active-tab': currentTab === 'past' }"
+>
+  All sessions
+</button>
+
+  <button
+    class="btn btn-tabs"
+    (click)="toggleTab('today')"
+    [ngClass]="{ 'active-tab': currentTab === 'today' }"
+  >
+    Due today
+  </button>
+  <button
+  class="btn btn-tabs"
+  (click)="toggleTab('future')"
+  [ngClass]="{ 'active-tab': currentTab === 'future' }"
+>
+  Upcoming
+</button>
 </div>
 </div>
 <div class="row list-container container  " >
@@ -51,9 +78,9 @@
         <th scope="col">#</th>
         <th scope="col">session Name</th>
         <th scope="col">Contract</th>
-        <th scope="col">Session Venue</th>
         <th scope="col">Client</th>
         <th scope="col">Session Type</th>
+        <th scope="col">Session Venue</th>
         <th scope="col">session Date</th>
         <th scope="col">Starts at</th>
         <th scope="col">Ends at</th>
@@ -66,9 +93,9 @@
         <th scope="row">{{ session.id }}</th>
         <td>{{ session.name }}</td>
         <td>{{ session.contract.coachingTopic }}</td>
-        <td>{{ session.sessionVenue }}</td>
         <td>{{ session.client.fullName }}</td>
         <td>{{ session.sessionType }}</td>
+        <td>{{ session.sessionVenue }}</td>
         <td>{{ session.sessionDate }}</td>
         <td>{{ session.sessionStartTime }}</td>
         <td>{{ session.sessionEndTime }}</td>
@@ -77,8 +104,8 @@
             (click)="navigateToSessionView(session.id)"
             class="fa-solid fa-arrow-up-right-from-square"
           ></i>
-          <!-- <i class="fa-solid fa-pen-to-square"></i>
-          <i class="fa-solid fa-trash-can"></i> -->
+          <i class="fa-solid fa-pen-to-square"></i>
+          <!-- <i class="fa-solid fa-trash-can"></i>  -->
         </td>
       </tr>
     </tbody>

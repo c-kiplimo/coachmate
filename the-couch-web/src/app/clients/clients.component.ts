@@ -19,6 +19,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientsComponent implements OnInit {
+  clientId: any;
+  editedClient: any;
+getSearchedClient(arg0: number) {
+throw new Error('Method not implemented.');
+}
+  
 salesData: any;
 getAllCustomers(arg0: number) {
 throw new Error('Method not implemented.');
@@ -47,12 +53,12 @@ throw new Error('Method not implemented.');
      
     firstName: ' ',
     lastName: ' ',
-    type: ' ',
+    clientType: ' ',
     msisdn: ' ',
-    email_address: ' ',
-    physical_address: ' ',
+    email: ' ',
+    physicalAddress: ' ',
     profession: ' ',
-    payment_mode: ' ',
+    paymentMode: ' ',
     reason: '',
 
     });
@@ -70,6 +76,9 @@ throw new Error('Method not implemented.');
 
   
   getClients(){
+    this.Clients = [];
+    this.loading = true;
+    window.scroll(0, 0);
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -110,28 +119,26 @@ throw new Error('Method not implemented.');
     this.updateClient = this.formbuilder.group({
       firstName: this.clientToBeUpdated.firstName,
       lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.type,
+      clientType: this.clientToBeUpdated.clientType,
       msisdn: this.clientToBeUpdated.msisdn,
-      email_address: this.clientToBeUpdated.email_address,
-      physical_address: this.clientToBeUpdated.physical_address,
+      email: this.clientToBeUpdated.email,
+      physicalAddress: this.clientToBeUpdated.physicAddress,
       profession: this.clientToBeUpdated.profession,
-      payment_mode: this.clientToBeUpdated.payment_mode,
+      paymentMode: this.clientToBeUpdated.paymentMode,
       reason: this.clientToBeUpdated.reason,
     });
   
   }
 
   updateClientDetails(id:any){
-  
-    console.log(this.updateClient.value)
     console.log(this.clientToBeUpdated)
-    
-    console.log(id)
-   
-    this.ClientService.editClient(id, this.updateClient.value).subscribe(
-      (response) => {
-        this.getClients();
+    console.log(id)  
+    this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+      (data) => {
         this.loading = false;
+        this.editedClient = data.body;
+        console.log(this.editedClient)
+        console.log('clients',this.editedClient)
 
       }, (error) => {
         console.log(error)
@@ -150,4 +157,10 @@ throw new Error('Method not implemented.');
       }
     );
   }
+  // filter clients by status
+  filterClientsByStatus(status: any) {
+    this.filters.status = status;
+    this.getClients();
+  }
+  
 }

@@ -29,7 +29,7 @@ public class FeedbackResource {
                                         @AuthenticationPrincipal User userDetails) {
         log.info("request to create feedback");
         try {
-            feedBackService.addNewFeedBack(sessionId,userDetails.getCoach().getId(), feedback);
+            feedBackService.addNewFeedBack(sessionId,userDetails.getCoach(), feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
