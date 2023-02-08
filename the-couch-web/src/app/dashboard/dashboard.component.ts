@@ -93,7 +93,7 @@ session: any;
       this.getAllOrgSessions(this.orgSession.id);
 
      
-    }else {
+    }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
      
@@ -105,10 +105,7 @@ session: any;
 
 
   getAllOrgSessions(id: any) {
-    this.loading = true;
 
-  getAllSessions() {
-    this.loading = true;
     this.sessions = [];
     window.scroll(0, 0);
 
@@ -132,11 +129,14 @@ session: any;
         this.sessions = response.body.data;
         this.loading = false;
 
-      },
+      })
+    ,
       (error: any) => {
         console.log(error);
       }
+    }
     );
+  
   }
 
 
@@ -281,30 +281,8 @@ session: any;
         let totalHours = 0;
         for (let i = 0; i < this.sessions.length; i++) {
           //sessionStartTime 17:04
-          //sessionEndTime
-          let starttime = this.sessions[i].sessionStartTime.split(":");
-          let endtime = this.sessions[i].sessionEndTime.split(":");
-
-          // let time1 = parseInt(starttime[0]*3600 + parseInt(starttime[1])*60 + parseInt(starttime[2]));
-          // let time2 = parseInt(endtime[0]*3600 + parseInt(endtime[1])*60 + parseInt(endtime[2]));
-
-          // let dif = Math.max(time1, time2) - Math.min(time1, time2);
-          
-          // var ans = [];
-          // ans[0] = Math.floor(dif/3600);
-          // if(ans[0]<10){ans[0] = "0"+ans[0]}
-          // dif = dif%3600;
-          // ans[1] = Math.floor(dif/60);
-          // if(ans[1]<10){ans[1] = "0"+ans[1]}
-          // ans[2] = dif%60;
-          // if(ans[2]<10){ans[2] = "0"+ans[2]}
-          // console.log(ans.join(":"));
-
-          
-          console.log(totalHours);
-          this.numberOfHours = totalMinutes;
-          //this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
-
+       
+       
   
         for (let i = 0; i < this.sessions.length; i++) {
           if (this.sessions[i].sessionStatus === 'CONFIRMED'){
@@ -327,7 +305,7 @@ session: any;
         this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
       }
         
-      },
+      }},
       (error: any) => {
         console.log(error);
       }
