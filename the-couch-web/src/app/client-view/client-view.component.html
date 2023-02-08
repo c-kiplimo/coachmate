@@ -6,8 +6,11 @@
       <app-user></app-user>
     </div>
 </div>
-<h5 class="section-title text-center">Client View</h5>
-<div class="card details-card">
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-6">
+  <div class="card details-card">
   <div class="d-flex justify-content-between flex-wrap">
     <div>
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
@@ -23,73 +26,78 @@
           Actions</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <li (click)="statusState('ACTIVE')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#confirmStatusChange"
+                data-bs-toggle="modal" data-bs-target="#activateclientModal"
                 >Activate</a></li>
             <li (click)="statusState('SUSPENDED')"><a class="dropdown-item"
-              data-bs-toggle="modal" data-bs-target="#confirmStatusChange"
+              data-bs-toggle="modal" data-bs-target="#suspendclientModal"
               >Suspend</a></li>
               <li (click)="statusState('CLOSED')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#confirmStatusChange">Close</a></li>
+                data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a></li>
           </ul>
       </div>
      
     </div>
   </div>
 </div>
-<div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-    <div class="donut multi">
-      
-    </div>
-  </div> 
-<div class="client-details">
-      <div class="client-details" >
-        <div class="d-flex justify-content-between onedetail">
-          <span class="title">Client Id</span>
-          <span class="value">{{clients.id}}</span>
+      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+          <div class="donut multi">
+            
+          </div>
+      </div> 
+      <div class="client-details">
+            <div class="client-details" >
+              <div class="d-flex justify-content-between onedetail">
+                <span class="title">Client Id</span>
+                <span class="value">{{clients.id}}</span>
+              </div>
+              <div class="d-flex justify-content-between onedetail">
+                <span class="title">Client Name</span>
+                <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client email</span>
+              <span class="value">{{clients.email}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client Phone</span>
+              <span class="value">{{clients.msisdn}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client Address</span>
+              <span class="value">{{clients.physicalAddress}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Profession</span>
+              <span class="value">{{clients.profession}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Reason</span>
+              <span class="value">{{clients.reason}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Payment Mode</span>
+              <span class="value">{{clients.paymentMode}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Status</span>
+              <span class="value" class="badge"[ngClass]="getClass(clients)">{{clients.status}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Created On</span>
+              <span class="value">{{clients.createdAt}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Last Updated</span>
+              <span class="value">{{clients.lastUpdatedAt}}</span>
+            </div>
         </div>
-        <div class="d-flex justify-content-between onedetail">
-          <span class="title">Client Name</span>
-          <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
       </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client email</span>
-        <span class="value">{{clients.email}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client Phone</span>
-        <span class="value">{{clients.msisdn}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client Address</span>
-        <span class="value">{{clients.physicalAddress}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Profession</span>
-        <span class="value">{{clients.profession}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Reason</span>
-        <span class="value">{{clients.reason}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Payment Mode</span>
-        <span class="value">{{clients.paymentMode}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Status</span>
-        <span class="value" class="badge"[ngClass]="getClass(clients)">{{clients.status}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Created On</span>
-        <span class="value">{{clients.createdAt}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Last Updated</span>
-        <span class="value">{{clients.lastUpdatedAt}}</span>
-      </div>
-  </div>
 </div>
+</div>
+
+
 <br>
+
 <div class="card card-table">
   <div class="tabs-section">
     <button
@@ -163,319 +171,28 @@
         No sessions Found.
       </p>
     </div>
-      <!-- <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
-      <table class="table">
-        <thead>
-          <th colspan="1">Session #</th>
-          <th colspan="1">Session date</th>
-          <th colspan="1">session time from</th>
-          <th colspan="1">session time to</th>
-          <th colspan="1">Session Duration</th>
-          <th colspan="1">Status</th>
-          <th colspan="1">Actions</th>
-          <th colspan="1">payment</th>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="
-              let session of sessions
-            "
-          >
-            <td>
-              <span>{{ session.id }}</span
-              >
-            </td>
-            <td>{{ session.sessionDate }}</td>
-            <td>{{ session.sessionStartTime | date : " h:mm a" }}</td>
-            <td>{{ session.sessionEndTime }}</td>
-            <td>{{ session.sessionDuration }}</td>
-            <td>{{ session.sessionStatus }}</td>
-
-            <td>
-              <span
-                class="badge"
-                [ngClass]="{
-                  'badge-danger': session.sessionBalance > '0',
-                  'badge-primary': session.sessionBalance < '0',
-                  'badge-success': session.sessionBalance === 0
-                }"
-              >
-                <span *ngIf="session.sessionBalance < '0'">Overpaid </span>
-                <span *ngIf="session.sessionBalance === 0"> Fully Paid </span>
-                <span *ngIf="session.sessionBalance > '0'">
-                  {{ session.sessionBalance }}
-                </span>
-              </span>
-            </td>
-
-            <td>
-              <button
-                class="btn btn-view"
-                [routerLink]="['/session', session.id]"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
-        No sessions Found.
-      </p>
-      <div
-        align="center"
-        *ngIf="totalLength > 20 && sessions.length && !loadingClient"
-        [@fadeIn]
-      >
-        <pagination-controls
-          (pageChange)="getsession()"
-          [maxSize]="7"
-          previousLabel=""
-          nextLabel=""
-        ></pagination-controls> --> 
-      <!-- </div>
-    </div>
   </div>
-    <div
-      *ngFor="let session of sessions"
-      class="listing-item"
-      [routerLink]="['/session', session.id]"
-    >
-      <div class="d-flex justify-content-between mb-1">
-        <div>
-          <h6>{{ session.details | titlecase }}</h6>
-          <p class="mb-1">
-            <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
-            Cust:
-            {{
-              session.client.firstName + " " + session.client.lastName
-                | titlecase
-            }}
-          </p>
-          <p class="mb-1">Status:{{ session.sessionStatus }}</p>
-        </div>
+</div>
 
-        <span>
-          <span>
-            <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
-            {{ session.sessionDate }}
-          </span>
-          <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-          <p class="mb-1">
-            <fa-icon class="me-2" [icon]="clockIcon"></fa-icon>
-            Due: {{ session.sessionDate | date : " h:mm a" }}
-          </p>
-          <p
-            class="mb-1"
-            class="badge"
-            [ngClass]="{
-              'badge-danger': session.sessionBalance > '0'
-            }"
-          >
-            <span *ngIf="session.sessionBalance > '0'">
-              Bal: {{ session.sessionBalance }}
-            </span>
-          </p>
-        </span>
-      </div>
-    </div>
-  <div class="d-none d-md-block">
-    <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <button class="btn btn-refresh" (click)="getPayments()">
-        <fa-icon [icon]="refreshIcon"></fa-icon>
-        Refresh
-      </button>
-    </div>
-    <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
-
-      <table class="table">
-        <thead>
-          <th colspan="1">session Duration</th>
-          <th colspan="1">Amount Paid</th>
-          <th colspan="1">Balance</th>
-          <th colspan="1">Paid at</th>
-          <th colspan="1">Payment ref</th>
-          <th colspan="1">Narration</th>
-          <th colspan="1">Actions</th>
-        </thead>
-
-        <tbody *ngIf="payments?.length" [@fadeIn]>
-          <tr *ngFor="let payment of payments">
-            <td>{{ payment.session.sessionAmount }}</td>
-            <td>{{ payment.amount }}</td>
-            <td>{{ payment.balanceAfter }}</td>
-            <td>{{ payment.paidAt | date : "MMM d, y hh:mm a" }}</td>
-            <td>{{ payment.extPaymentRef }}</td>
-            <td>{{ payment.narration }}</td>
-            <td>
-              <span class="d-flex justify-content-around">
-                <button
-                  class="btn btn-view"
-                 
-                >
-                  view
-                </button>
-                <button
-              class="btn btn-view"
-              data-bs-toggle="modal"
-              data-bs-target="#editPaymentModal"
-              (click)="viewPayment(payment)"
-              (click)="goToItem('payment', payment)"
-            >
-            <fa-icon [icon]="editIcon"></fa-icon>
-              edit
-            </button>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
-        No Payments Found.
-      </p>
-    </div>
-    <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-      <div class="donut multi"></div>
-    </div>
-  </div> 
-
-  <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
-    <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-      <div class="donut multi"></div>
-    </div>
-
-    <div
-      
-      *ngFor="let payment of payments"
-      class="listing-item"
-    >
-      <div class="d-flex justify-content-between mb-1">
-        <div>
-          <h6>{{ payment.narration | titlecase }}</h6>
-          <p class="mb-1">
-            <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
-            Amount: {{ payment.session.sessionDuration }}
-          </p>
-          <p class="mb-1">Paid:{{ payment.amount }}</p>
-        </div>
-
-        <div>
-          <span>
-            <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
-            {{ payment.paidAt}}
-          </span>
-          <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
-          <p></p>
-          <p
-            class="mb-1"
-            class="badge"
-            [ngClass]="{
-              'badge-danger': payment.balanceAfter > '0'
-            }"
-          >
-            <span *ngIf="payment.balanceAfter > '0'">
-              Bal: {{ payment.balanceAfter }}
-            </span>
-          </p>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mb-3">
-        <h4>{{ payment.session.name }}</h4>
-        <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
-        
-      </div>
-
-      <span>{{ payment.narration }}</span>
-      <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6>
-    </div>
-    <p class="text-muted mt-5" *ngIf="!payments?.length">
-      No payments found.
-    </p>
-  </div>
-
-  <div
-    class="d-none d-md-block"
-    *ngIf="currentTab === 'notifications'"
-    [@fadeIn]
-  >
-    <table class="table">
-      <thead>
-        <th coslpan="1">Notification Reason</th>
-        <th coslpan="1">Notification Date</th>
-        <th coslpan="1">Notification Mode</th>
-      </thead>
-      <tbody *ngIf="notifications.length">
-        <tr *ngFor="let notification of notifications">
-          <td>{{ notification.subject }}</td>
-          <td>{{ notification.sentAt}}</td>
-          <td>{{ notification.notificationMode }}</td>
-          <td>
-            <button
-              class="btn btn-view"
-              data-bs-toggle="modal"
-              data-bs-target="#notificationModal"
-              
-            >
-              view
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p class="text-muted mt-5" *ngIf="!notifications?.length">
-      No notifications found.
-    </p>
-  </div>
-  <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-    <div
-      data-bs-toggle="modal"
-      data-bs-target="#notificationModal"
-      
-      *ngFor="let notification of notifications"
-      class="listing-item"
-    >
-      <div class="d-flex justify-content-between mb-1">
-        <div>
-          <p class="mb-1">{{ notification.subject }}</p>
-          <p class="mb-1">{{ notification.notificationMode }}</p>
-        </div>
-        <span
-          >{{ notification.sentAt }}
-          <fa-icon [icon]="rightIcon"> </fa-icon>
-        </span>
-      </div>
-    </div>
-    <p class="text-muted mt-5" *ngIf="!notifications?.length">
-      No notifications found.
-    </p>
-  </div> -->
 <!-- add session modal -->
 <div>
-<div
-class="modal fade"
-id="addsessionModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog modal-xl">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
+  <div class="modal fade" id="addsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
   <div class="container mb-5">
     <div class="row justify-content-center">
@@ -493,7 +210,7 @@ aria-hidden="true"
                 <option selected>Select Client you want to create a session for</option>
                
                <!--Loop through clients and form options-->
-                <!-- <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+                <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
               </select>
               
               </div>
@@ -604,9 +321,18 @@ aria-hidden="true"
               type="submit" (click)="addSession()"
               class="btn btn-signup mb-3 mt-2 p-2 text-center"
               >Create Session</button>
+              
         </div>
         </div>
-</div> -->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
 <!--edit client modal-->
 <div
@@ -722,60 +448,29 @@ aria-hidden="true"
 </div>
 </div>
 
-<!-- suspend client modal -->
-<div
-class="modal fade bd-example-modal-lg"
-id="suspendclientModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Suspend client
-    </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
+<!-- suspend client modal -->
+<div class="modal" id="suspendclientModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body" *ngIf="client">
     <div class="d-flex justify-content-between">
-      <p>client Name:</p>
-      <span>{{
-        client.firstName + " " + client.lastName | titlecase
-      }}</span>
+      <p class="">
+        Are you sure you want to suspend
+        <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
+      </p>
+      
     </div>
-    <form [formGroup]="suspendClientForm">
-      <div class="mb-3">
-        <label for="exampleInputEmail1">narration</label>
-        <textarea
-          formControlName="narration"
-          name="narration"
-          class="form-control"
-          id="narration"
-          aria-describedby="narration"
-          placeholder="narration for suspending the client"
-        >
-        </textarea>
-      </div>
-    </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-add"
-    >
-      Submit
-    </button>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Close
-    </button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
   </div>
 </div>
 </div>
@@ -840,7 +535,7 @@ aria-hidden="true"
 
 <!-- Activate client modal -->
 <div
-class="modal fade bd-example-modal-lg"
+class="modal fade"
 id="activateclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
@@ -1010,4 +705,4 @@ aria-hidden="true"
   </div>
 </div>
 </div>
-</div>  -->
+</div>
