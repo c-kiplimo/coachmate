@@ -33,6 +33,7 @@ export class SessionsComponent implements OnInit {
   OrgData: any;
   orgSession: any;
 
+  User: any;
 
 
   constructor(private apiService: ClientService, private router: Router) {}
@@ -56,7 +57,42 @@ export class SessionsComponent implements OnInit {
       
     } else if(this.userRole == 'COACH'){
       this.getAllSessions();
+    } else if(this.userRole == 'CLIENT'){
+     
+      this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      console.log(this.User);
+      const email = {
+        email: this.User.email
+      }
+      this.apiService.getClientByEmail(email).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.getClientSessions(response[0].id);
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
     }
+  }
+
+  
+
+
+  
+  getClientSessions(id: any) {
+
+    this.apiService.getClientSessions(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        console.log(this.sessions);
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 
   getAllOrgSessions(id: any) {

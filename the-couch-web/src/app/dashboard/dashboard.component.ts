@@ -351,6 +351,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
         return 'badge-warning';
