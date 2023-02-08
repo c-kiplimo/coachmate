@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./receipts.component.css']
 })
 export class ReceiptsComponent implements OnInit {
+payment: any;
+loadingpayment: any;
+savePdf() {
+throw new Error('Method not implemented.');
+}
 
   constructor() { }
 

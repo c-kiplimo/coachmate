@@ -27,13 +27,88 @@
       <td>40 USD</td>
       <td>60 USD</td>
       <td >
-        <div class="tooltip"><i class="fa fa-download" ></i>
-        <span class="tooltiptext">Download the receipt</span>
+        <div class=""><i class="fa fa-download" ></i>
         </div>
-            <div class="tooltip"> <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            <span class="tooltiptext">View the receipt</span>
+            <div class=""> <i   data-bs-toggle="modal"
+              data-bs-target="#invoicemodal"class="fa-solid fa-arrow-up-right-from-square"></i>
             </div>
     </td>
     </tr>
 </table>
+</div>
+<!-- invoice modal -->
+<div class="modal fade" id="invoicemodal" tabindex="-1" role="dialog" aria-labelledby="receiptModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body" id="invoice">
+        <div class="m-2" >
+          <!-- <img class="welcome-img mb-3" src="../../../assets/images/Logo.png" /> -->
+
+          <div class="customer-details" *ngIf="!loadingpayment && payment"  [@fadeIn]>
+            <div class="d-flex justify-content-between">
+              <span class="title">payment No</span>
+              <span class="value">{{ payment.paymentNumber }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Customer name</span>
+              <span class="value">{{
+                payment.customer.firstName + " " + payment.customer.lastName
+                  | titlecase
+              }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Event type</span>
+              <span class="value">{{ payment.paymentType }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">paymented on</span>
+              <span class="value">{{
+                payment.paymentedOn | date : "MMM d, y "
+              }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Status</span>
+              <span class="value">
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'badge-warning': payment.paymentStatus === 'DELIVERED',
+                    'badge-success': payment.paymentStatus === 'CONFIRMED',
+                    'badge-danger': payment.paymentStatus === 'CANCELLED',
+                    'badge-primary': payment.paymentStatus === 'NEW'
+                  }"
+                  >{{ payment.paymentStatus }}</span
+                >
+              </span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">payment amount</span>
+              <span class="value">{{ payment.paymentAmount }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Amount paid</span>
+              <span class="value">{{ payment.amountPaid }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Balance</span>
+              <span class="value">{{ payment.balance }}</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button
+      class="download btn-add"
+      (click)="savePdf()"
+    >
+    <i class="fa fa-download"></i>
+      Download
+    </button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -15,9 +15,11 @@ export class FeebackFormComponent implements OnInit {
   sessionId: any;
   session: any;
   coachId: any;
+  sessions: any;
+  loading: any;
   constructor(
     private formbuilder: FormBuilder,
-    private ClientService: ClientService,
+    private clientService: ClientService,
     private toastrService: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
@@ -25,29 +27,33 @@ export class FeebackFormComponent implements OnInit {
   ) { }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
+   
     this.sessionId = this.route.snapshot.params['sessionId'];
-    this.http.get(`/api/sessions/${this.sessionId}`)
-    .subscribe(session => this.session = session);
+    console.log(this.sessionId);
+  
+    
+    
+      
     
     
     this.feebackForm = this.formbuilder.group({
-      goalSetting: [''],
-      emotionManagement: [''],
-      activeListening: [''],
-      clarification: [''],
-      agenda: [''],
-      presence: [''],
-      additionalComments: ['']
+      understandingScore: [''],
+      emotionalIntelligenceScore: [''],
+      listeningSkillsScore: [''],
+      clarificationScore: [''],
+      availabilityScore: [''],
+      comments: ['']
     });
   }
+  
 
   submitForm() {
-    console.log(this.feebackForm.value);
-    this.feebackForm.value.sessionId = this.sessionId;
-    this.feebackForm.value.coachId = this.coachId;
+    const params = {
+      session_id: this.sessionId,
+    };
 
-    this.ClientService.addFeedback(this.feebackForm.value, this.sessionId, this.coachId).subscribe(
+    this.clientService.addFeedback(this.feebackForm.value, params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');

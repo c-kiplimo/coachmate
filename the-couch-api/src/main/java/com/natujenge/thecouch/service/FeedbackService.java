@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.Client;
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Feedback;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.repository.ClientRepository;
@@ -27,20 +28,21 @@ public class FeedbackService {
     @Autowired
     FeedbackRepository feedbackRepository;
 
-    public void addNewFeedBack(Long id,Long coachId, Feedback feedback) {
+    public void addNewFeedBack(Long id, Coach coach, Feedback feedback) {
         // Get associated session
-        Optional<Session> optionalSession = sessionRepository.getSessionByIdAndCoachId(id,coachId);
+        Optional<Session> optionalSession = sessionRepository.getSessionByIdAndCoachId(id,coach.getId());
         if (optionalSession.isEmpty()){
             throw new IllegalArgumentException("Session Not Found!");
         }
 
         // Get associated Client
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(id,coachId);
+        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(id,coach.getId());
         if (optionalClient.isEmpty()){
             throw new IllegalArgumentException("Client Not Found!");
         }
         feedback.setClient(optionalClient.get());
         feedback.setSession(optionalSession.get());
+        feedback.setCoach(coach);
 
         // compute overall score
         Integer totalScore = feedback.getAvailabilityScore()+feedback.getClarificationScore()+

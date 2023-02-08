@@ -43,8 +43,12 @@ invoicesPaid: any;
      
       
     }
+    setTimeout(() => {
+      location.reload();
+    }, 5);
 
   }
+  
   getUser() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
