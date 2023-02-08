@@ -5,20 +5,23 @@
     <div class="col-2">
       <app-user></app-user>
     </div>
-</div>
 
 <div class="row">
   <div class="col-3"></div>
   <div class="col-6">
+<h5 class="section-title text-center">Client View</h5>
+<div class="card details-card">
+
   <div class="card details-card">
   <div class="d-flex justify-content-between flex-wrap">
-    <div>
-      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
+      <button class="btn btn-success"
+        data-bs-toggle="modal"
+      data-bs-target="#editClientModal"
       >
         <i class="fas fa-edit"></i>
         Edit
       </button>
-    </div>
+
     <div class="d-flex">
       <div class="dropdown">
         <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -38,6 +41,7 @@
      
     </div>
   </div>
+
 </div>
       <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
           <div class="donut multi">
@@ -90,13 +94,31 @@
               <span class="title">Last Updated</span>
               <span class="value">{{clients.lastUpdatedAt}}</span>
             </div>
+
+  </div>
+<div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+    <div class="donut multi">
+      
+    </div>
+  </div> 
+<div class="client-details">
+      <div class="client-details" >
+        <div class="d-flex justify-content-between onedetail">
+          <span class="title">Client Id</span>
+          <span class="value">{{clients.id}}</span>
+
         </div>
       </div>
 </div>
 </div>
 
 
+
 <br>
+
+
+<br>
+<div class="card details-card">
 
 <div class="card card-table">
   <div class="tabs-section">
@@ -123,17 +145,16 @@
     </button>
   </div>
   <div *ngIf="currentTab === 'sessions'" >
-    <div class="row list-container container mt-2 " >
-      <table class="table table-striped"  >
+    <div class="row list-container container  " >
+      <table class="table" >
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">session Name</th>
             <th scope="col">Contract</th>
-            <th scope="col">Session Venue</th>
-            <th scope="col">Client</th>
             <th scope="col">Session Type</th>
-            <th scope="col">session Status</th>
+            <th scope="col">Session Venue</th>
+            <th scope="col">session Date</th>
             <th scope="col">Starts at</th>
             <th scope="col">Ends at</th>
             <th scope="col">Actions</th>
@@ -144,22 +165,19 @@
           <tr *ngFor="let session of sessions">
             <th scope="row">{{ session.id }}</th>
             <td>{{ session.name }}</td>
-            <td>{{ session.contract.coachingTopic }}</td>
-            <td>{{ session.sessionVenue }}</td>
-            <td>{{ session.client.fullName }}</td>
+            <td>{{ session.contract.coachingTopic }}</td> 
             <td>{{ session.sessionType }}</td>
-            <td>{{ session.sessionStatus }}</td>
+            <td>{{ session.sessionVenue }}</td>
+            <td>{{ session.sessionDate }}</td>
             <td>{{ session.sessionStartTime }}</td>
             <td>{{ session.sessionEndTime }}</td>
             <td class="actions">
               <i
-              (click)="navigateToSessionView(session.id)"
-              class="fa-solid fa-arrow-up-right-from-square"
-            ></i>
-
-              <i data-bs-toggle="modal" data-bs-target="#sessionModal"class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
-
-              <i class="fa-solid fa-trash-can"(click)="deleteSession(id,userDetails)"></i>
+                (click)="navigateToSessionView(session.id)"
+                class="fa-solid fa-arrow-up-right-from-square"
+              ></i>
+              <i class="fa-solid fa-pen-to-square"></i>
+              <!-- <i class="fa-solid fa-trash-can"></i>  -->
             </td>
           </tr>
         </tbody>
@@ -171,6 +189,124 @@
         No sessions Found.
       </p>
     </div>
+
+  </div>
+  <div class="d-none d-md-block">
+    <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <button class="btn btn-refresh" (click)="getPayments()">
+        <fa-icon [icon]="refreshIcon"></fa-icon>
+        Refresh
+      </button>
+    </div>
+    <div *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <th colspan="1">session Duration</th>
+          <th colspan="1">Amount Paid</th>
+          <th colspan="1">Balance</th>
+          <th colspan="1">Paid at</th>
+          <th colspan="1">Payment ref</th>
+          <th colspan="1">Narration</th>
+          <th colspan="1">Actions</th>
+        </thead>
+
+        <tbody *ngIf="payments?.length" [@fadeIn]>
+          <tr *ngFor="let payment of payments">
+            <td>{{ payment.session.sessionAmount }}</td>
+            <td>{{ payment.amount }}</td>
+            <td>{{ payment.balanceAfter }}</td>
+            <td>{{ payment.paidAt | date : "MMM d, y hh:mm a" }}</td>
+            <td>{{ payment.extPaymentRef }}</td>
+            <td>{{ payment.narration }}</td>
+            <td>
+              <span class="d-flex justify-content-around">
+                <button
+                  class="btn btn-view"
+                 
+                >
+                  view
+                </button>
+                <button
+              class="btn btn-view"
+              data-bs-toggle="modal"
+              data-bs-target="#editPaymentModal"
+              (click)="viewPayment(payment)"
+              (click)="goToItem('payment', payment)"
+            >
+            <fa-icon [icon]="editIcon"></fa-icon>
+              edit
+            </button>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
+        No Payments Found.
+      </p>
+    </div>
+    <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+      <div class="donut multi"></div>
+    </div>
+  </div> 
+
+  <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
+    <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+      <div class="donut multi"></div>
+    </div>
+
+    <div
+      
+      *ngFor="let payment of payments"
+      class="listing-item"
+    >
+      <div class="d-flex justify-content-between mb-1">
+        <div>
+          <h6>{{ payment.narration | titlecase }}</h6>
+          <p class="mb-1">
+            <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
+            Amount: {{ payment.session.sessionDuration }}
+          </p>
+          <p class="mb-1">Paid:{{ payment.amount }}</p>
+        </div>
+
+        <div>
+          <span>
+            <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
+            {{ payment.paidAt}}
+          </span>
+          <fa-icon class="m-2" [icon]="rightIcon"> </fa-icon>
+          <p></p>
+          <p
+            class="mb-1"
+            class="badge"
+            [ngClass]="{
+              'badge-danger': payment.balanceAfter > '0'
+            }"
+          >
+            <span *ngIf="payment.balanceAfter > '0'">
+              Bal: {{ payment.balanceAfter }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mb-3">
+        <h4>{{ payment.session.name }}</h4>
+        <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
+        
+      </div>
+
+      <span>{{ payment.narration }}</span>
+      <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6>
+    </div>
+    <p class="text-muted mt-5" *ngIf="!payments?.length">
+      No payments found.
+    </p>
+
   </div>
 </div>
 
@@ -191,6 +327,32 @@
         </div>
       </div>
     </div>
+
+    <p class="text-muted mt-5" *ngIf="!notifications?.length">
+      No notifications found.
+    </p>
+  </div> 
+<!-- add session modal -->
+<div>
+<div
+class="modal fade"
+id="addsessionModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-xl">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" >Create session</h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+
   </div>
 </div>
 
@@ -209,8 +371,10 @@
               formControlName="clientId">
                 <option selected>Select Client you want to create a session for</option>
                
+
                <!--Loop through clients and form options-->
                 <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+
               </select>
               
               </div>
@@ -324,6 +488,7 @@
               
         </div>
         </div>
+
             </div>
           </form>
         </div>
@@ -448,6 +613,23 @@ aria-hidden="true"
 </div>
 </div>
 
+</div>
+</form>
+<!-- suspend client modal -->
+<div
+class="modal fade bd-example-modal-lg"
+id="suspendclientModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5">
+      Suspend client
+    </h1>
+
 
 <!-- suspend client modal -->
 <div class="modal" id="suspendclientModal" tabindex="-1" role="dialog">
@@ -487,7 +669,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">Close client</h1>
+    <h1 class="modal-title fs-5" >Close client</h1>
 
     <button
       type="button"
@@ -544,7 +726,7 @@ aria-hidden="true"
 <div class="modal-dialog">
 <div class="modal-content">
   <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
+    <h1 class="modal-title fs-5">
       Activate client
     </h1>
 
@@ -705,4 +887,82 @@ aria-hidden="true"
   </div>
 </div>
 </div>
+</div> 
+<!-- Edit Client Modal -->
+<div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form [formGroup]="updateClient">
+        <div class="mb-3 form-group">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+          value="{{ clientToBeUpdated?.firstName }}"/>
+        </div>
+        <div class="mb-3 form-group">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+          value="{{ clientToBeUpdated?.lastName }}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="email_address" class="form-label">Email</label>
+          <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email"
+          value="{{ clientToBeUpdated?.email }}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="msisdn" class="form-label">Phone Number</label>
+          <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
+          value="{{ clientToBeUpdated?.msisdn }}">
+        </div>
+
+        <div class="mb-3 form-group">
+          <label for="physical_address" class="form-label">Address</label>
+          <input type="text" class="form-control" id="physical_address" name="physicalAddress" formControlName="physicalAddress"
+          value="{{ clientToBeUpdated?.physicalAddress}}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="reason" class="form-label">Reason</label>
+          <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
+          value="{{ clientToBeUpdated?.reason}}">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+          </div>
+          <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
+          value="{{ clientToBeUpdated?.paymentMode }}">
+            <option selected>Select Payment Mode</option>
+            <option value="PREPAY">PREPAY</option>
+            <option value="POSTPAY">POSTPAY</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="clientType">Client Type</label>
+          </div>
+          <select class="form-select" id="inputGroupSelect01" formControlName="type" 
+          value="{{ clientToBeUpdated?.clientType }}">
+            <option selected>Select Client type</option>
+            <option value="INDIVIDUAL">INDIVIDUAL</option>
+            <option value="CORPORATE">CORPORATE</option>
+            <option value="GROUP">GROUP</option>
+          </select>
+        </div>
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success"
+        (click)="updateClientDetails(clientToBeUpdated.id)"
+        >Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
+

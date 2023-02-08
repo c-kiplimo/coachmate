@@ -19,6 +19,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientsComponent implements OnInit {
+  clientId: any;
+  editedClient: any;
+getSearchedClient(arg0: number) {
+throw new Error('Method not implemented.');
+}
+  
 salesData: any;
 getAllCustomers(arg0: number) {
 throw new Error('Method not implemented.');
@@ -63,7 +69,7 @@ throw new Error('Method not implemented.');
      
     firstName: ' ',
     lastName: ' ',
-    type: ' ',
+    clientType: ' ',
     msisdn: ' ',
     email: ' ',
     physicalAddress: ' ',
@@ -107,6 +113,9 @@ getOrgClients(){
 }
   
   getClients(){
+    this.Clients = [];
+    this.loading = true;
+    window.scroll(0, 0);
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -150,7 +159,9 @@ getOrgClients(){
       clientType: this.clientToBeUpdated.clientType,
       msisdn: this.clientToBeUpdated.msisdn,
       email: this.clientToBeUpdated.email,
+
       physicalAddress: this.clientToBeUpdated.physicalAddress,
+
       profession: this.clientToBeUpdated.profession,
       paymentMode: this.clientToBeUpdated.paymentMode,
       reason: this.clientToBeUpdated.reason,
@@ -159,16 +170,14 @@ getOrgClients(){
   }
 
   updateClientDetails(id:any){
-  
-    console.log(this.updateClient.value)
     console.log(this.clientToBeUpdated)
-    
-    console.log(id)
-   
-    this.ClientService.editClient(id, this.updateClient.value).subscribe(
-      (response) => {
-        this.getClients();
+    console.log(id)  
+    this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+      (data) => {
         this.loading = false;
+        this.editedClient = data.body;
+        console.log(this.editedClient)
+        console.log('clients',this.editedClient)
 
       }, (error) => {
         console.log(error)
@@ -187,4 +196,10 @@ getOrgClients(){
       }
     );
   }
+  // filter clients by status
+  filterClientsByStatus(status: any) {
+    this.filters.status = status;
+    this.getClients();
+  }
+  
 }

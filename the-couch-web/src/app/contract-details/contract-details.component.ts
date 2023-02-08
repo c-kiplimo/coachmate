@@ -16,6 +16,8 @@ import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 
+
+
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',
@@ -98,7 +100,8 @@ export class ContractDetailsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: ClientService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+   
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params: { [x: string]: any; }) => {
@@ -153,6 +156,8 @@ export class ContractDetailsComponent implements OnInit {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
   }
+  @ViewChild('sessionModal', { static: false })
+  sessionModal!: ElementRef;
   addSession () {
     this.loading = true;
     console.log(this.addSessionForm);
@@ -174,11 +179,27 @@ export class ContractDetailsComponent implements OnInit {
    };
 
    console.log(params);
- 
+ console.log("indivudual fee per person", session.sessionAmount)
     this.sessionService.addSession(this.addSessionForm, params).subscribe((res:any) => {
       console.log(res);
+      this.toastrService.success('Session added!', 'Success!');
+      setTimeout(() => {
+        location.reload();
+      }, 5);
+      this.sessionModal.nativeElement.classList.remove('show');
+      this.sessionModal.nativeElement.style.display = 'none';
+      
+
+      
     });
 }
+@ViewChild('modal', { static: false })
+modal!: ElementRef;
+closeModal() {
+  this.modal.nativeElement.style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+
   getSessionsBycontractId(contractId:any){
     console.log("contract id gottten", contractId);
     this.loading = true;
@@ -226,9 +247,6 @@ editSession(client:any){
     sessionGoals: any;
     session: any;
     id:any;
-    closeModal() {
-    throw new Error('Method not implemented.');
-    }
     
     
       }

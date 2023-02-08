@@ -41,10 +41,14 @@ export class DashboardComponent implements OnInit {
 
   OrgCoaches: any;
   numberofCoaches: any;
+
   Clients: any;
   OrgData: any;
   orgSession: any;
   OrgContracts: any;
+
+session: any;
+  
 
   
 
@@ -99,26 +103,42 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
   getAllOrgSessions(id: any) {
     this.loading = true;
+
+  getAllSessions() {
+    this.loading = true;
+    this.sessions = [];
+    window.scroll(0, 0);
+
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
     };
+
     this.clientService.getOrgSessions(id).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response;
         this.loading = false;
         this.numberOfSessions = this.sessions.length;
+
+    this.clientService.getSessions(options).subscribe(
+      (response: any) => {
+        console.log(response.body.data);
+        this.sessions = response.body.data;
+        this.loading = false;
+
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
+
 
   getOrgContracts(id: any) {
     this.loading = true;
@@ -159,6 +179,12 @@ export class DashboardComponent implements OnInit {
   }
 
 
+
+
+  navigateToSessionView(id: any) {
+    console.log(id);
+    this.route.navigate(['sessionView', id]);
+  }
 
   getClients() {
     const options = {
@@ -251,6 +277,7 @@ export class DashboardComponent implements OnInit {
         this.sessions = response.body.data;
         this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
+
         let totalHours = 0;
         for (let i = 0; i < this.sessions.length; i++) {
           //sessionStartTime 17:04
@@ -277,13 +304,37 @@ export class DashboardComponent implements OnInit {
           console.log(totalHours);
           this.numberOfHours = totalMinutes;
           //this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+
+  
+        for (let i = 0; i < this.sessions.length; i++) {
+          if (this.sessions[i].sessionStatus === 'CONFIRMED'){
+          let startTime = this.sessions[i].sessionStartTime;
+          let endTime = this.sessions[i].sessionEndTime;
+        
+          let start = startTime.split(':');
+          let end = endTime.split(':');
+  
+          let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
+          let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
+  
+          if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
+            totalMinutes += endMinutes - startMinutes;
+          }
+
         }
+        
+        this.numberOfHours = Math.floor(totalMinutes / 60);
+        this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+      }
+        
       },
       (error: any) => {
         console.log(error);
       }
     );
+    
   }
+  
   getNoOfContracts() {
     this.clientService.getContracts().subscribe(
       (response: any) => {

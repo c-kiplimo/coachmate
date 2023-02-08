@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
  
  
 @Injectable({
@@ -11,6 +12,10 @@ import { environment } from 'src/environments/environment';
 
 
 export class ClientService {
+  getFiltered: any;
+  getFilteredSessions(options: { page: number; per_page: number; status: any; search: any; period: string; balance: any; }) {
+    throw new Error('Method not implemented.');
+  }
   
 
     baseURL: string = environment.apiURL + '/api/';
@@ -53,11 +58,15 @@ export class ClientService {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
+
     editClient(id: any, client: any): Observable<any> {
         client.id = id;
         return this.http.put(`${this.baseURL}clients/${id}`, client)
     }
 
+
+
+   
 
     changeClientStatus(clientId: any, status: any): Observable<any> {
         var client = {
@@ -66,6 +75,7 @@ export class ClientService {
         }
     
         return this.http.put(`${this.baseURL}clients/changeStatus`, client)
+        "/change-status/{id}"
     }
 
      
@@ -85,7 +95,7 @@ export class ClientService {
   getSessionsBycontractId(contractId:any):Observable<any>{
     return this.http.get(`${this.baseURL}sessions/contractSessions/` + contractId,{observe:'response'})
   }
-    
+    // session actions
     addSession(session: any, params: any): Observable<any> {
         console.log(session)
      
@@ -107,7 +117,7 @@ export class ClientService {
 
     getClientSessions(clientId: any): Observable<any> {
         console.log("Get Sessions reached!");
-        return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId)
+        return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId,{observe:'response'})
     }
 
     getClientContracts(clientId: any): Observable<any> {
@@ -136,7 +146,19 @@ export class ClientService {
         return this.http.get(`${this.baseURL}contracts/getOrgContracts/` + id);
     }
 
-
+// FEEDBACK SERVICES
+addFeedback(feedback: any, options: any): Observable<any> {
+    return this.http.post<any>(
+        this.baseURL + 'feedback',
+        feedback,
+        { params: options, observe: 'response' }
+      );
+  }
+getFeedback(sessionId:any):Observable<any>{
+    return this.http.get(`${this.baseURL}feedback/get-by-session-id`,{
+        params:{session_id:sessionId},
+        observe:'response'})
+}
 
 
 }

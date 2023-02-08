@@ -116,7 +116,7 @@ public class ClientResource {
     }
 
     //api to update client
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "{id}")
     ResponseEntity<?> updateClient(@RequestBody ClientRequest clientRequest,
                                      @PathVariable Long id,
                                      @AuthenticationPrincipal User userDetails){
