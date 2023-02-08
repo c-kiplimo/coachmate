@@ -57,7 +57,7 @@ export class FeebackFormComponent implements OnInit {
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');
-        this.router.navigate(['/sessions']);
+        this.router.navigate(['sessionView', this.sessionId]);
       },
       (error) => {
         console.log(error);

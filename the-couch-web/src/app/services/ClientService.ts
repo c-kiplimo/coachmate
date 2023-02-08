@@ -57,11 +57,13 @@ export class ClientService {
     suspendClient(clientData: any): Observable<any> {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
-
-    editClient(id: any, client: any): Observable<any> {
-        client.id = id;
-        return this.http.put(`${this.baseURL}clients/updateClient`, client)
-    }
+    editClient(clientToBeUpdated:any,id:any): Observable<any> {
+        return this.http.put<any>(
+            this.baseURL + 'clients/'+ id,
+            clientToBeUpdated,
+            { observe: 'response' }
+          );
+      }
     changeClientStatus(clientId: any, status: any): Observable<any> {
         var client = {
             id: clientId,
@@ -89,7 +91,7 @@ export class ClientService {
   getSessionsBycontractId(contractId:any):Observable<any>{
     return this.http.get(`${this.baseURL}sessions/contractSessions/` + contractId,{observe:'response'})
   }
-    
+    // session actions
     addSession(session: any, params: any): Observable<any> {
         console.log(session)
      

@@ -19,6 +19,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   ],
 })
 export class ClientsComponent implements OnInit {
+  clientId: any;
+  editedClient: any;
 getSearchedClient(arg0: number) {
 throw new Error('Method not implemented.');
 }
@@ -129,16 +131,14 @@ throw new Error('Method not implemented.');
   }
 
   updateClientDetails(id:any){
-  
-    console.log(this.updateClient.value)
     console.log(this.clientToBeUpdated)
-    
-    console.log(id)
-   
-    this.ClientService.editClient(id, this.updateClient.value).subscribe(
-      (response) => {
-        this.getClients();
+    console.log(id)  
+    this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+      (data) => {
         this.loading = false;
+        this.editedClient = data.body;
+        console.log(this.editedClient)
+        console.log('clients',this.editedClient)
 
       }, (error) => {
         console.log(error)

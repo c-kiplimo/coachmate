@@ -166,10 +166,10 @@ TABLE GENERAL STYLING
     margin: 0;
   }
 
-  /* .tabs-section>.button :hover {
+  .tabs-section>.button :hover {
       border-bottom: 3px solid #e1e1e1;
       background-color: #f1f1f188;
-    } */
+    }
   
 
   .active-tab {

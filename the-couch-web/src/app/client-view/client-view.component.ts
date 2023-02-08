@@ -154,13 +154,12 @@ addSessionForm: any;
     
       firstName: ' ',
       lastName: ' ',
-      type: ' ',
+      clientType: ' ',
       msisdn: ' ',
-      email_address: ' ',
-      physical_address: ' ',
+      email: ' ',
+      physicalAddress: ' ',
       profession: ' ',
-      paymentMode: '',
-      payment_mode: ' ',
+      paymentMode: ' ',
       reason: '',
   
       });
@@ -199,19 +198,10 @@ addSessionForm: any;
       this.loadingClient = false;
       this.clients = data.body;
       console.log(this.clients);
-
-      this.updateClient = this.formbuilder.group({
-       
-        firstName: this.clients.firstName,
-        lastName: this.clients.lastName,
-        type: this.clients.type,
-        msisdn: this.clients.msisdn,
-        email_address: this.clients.email_address,
-        physical_address: this.clients.physical_address,
-        profession: this.clients.profession,
-        payment_mode: this.clients.payment_mode,
-        reason: this.clients.reason,
-      });
+    },  
+    (error: any) => {
+      console.log(error);
+      this.loadingClient = false;
 
     });
   }
@@ -225,21 +215,43 @@ addSessionForm: any;
         return 'badge-danger';
     }
 }
-  updatedClientDetails(){
+editClient(client:any){
+  this.clientToBeUpdated = client;
+
+  this.updateClient = this.formbuilder.group({
+    firstName: this.clientToBeUpdated.firstName,
+    lastName: this.clientToBeUpdated.lastName,
+    clientType: this.clientToBeUpdated.clientType,
+    msisdn: this.clientToBeUpdated.msisdn,
+    email: this.clientToBeUpdated.email,
+    physicalAddress: this.clientToBeUpdated.physicAddress,
+    profession: this.clientToBeUpdated.profession,
+    paymentMode: this.clientToBeUpdated.paymentMode,
+    reason: this.clientToBeUpdated.reason,
+  });
+
+}
+
+updateClientDetails(id:any){
+
+  console.log(this.updateClient.value)
+  console.log(this.clientToBeUpdated)
   
-    console.log(this.updateClient.value)
-    
-    
-    console.log(this.updateClient.value)
-   
-    this.ClientService.editClient(this.clientId, this.updateClient.value).subscribe(
-      (response) => {
-        this.router.navigate(['/clients']);
-      }, (error) => {
-        console.log(error)
-      }
-    );
-  }
+  console.log(id)
+  const params = {
+    id: this.clientId,
+  };
+ 
+  this.ClientService.editClient(this.clientToBeUpdated,params).subscribe(
+    (response) => {
+      this.getClients();
+      this.loading = false;
+
+    }, (error) => {
+      console.log(error)
+    }
+  );
+}
 
   showStatus: any;
 
@@ -289,40 +301,24 @@ addSessionForm: any;
       );
     }
   }
-  editClient(client:any){
-    this.clientToBeUpdated = client;
-
-    this.updateClient = this.formbuilder.group({
-      firstName: this.clientToBeUpdated.firstName,
-      lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.type,
-      msisdn: this.clientToBeUpdated.msisdn,
-      email_address: this.clientToBeUpdated.emailaddress,
-      physical_address: this.clientToBeUpdated.physicaladdress,
-      profession: this.clientToBeUpdated.profession,
-      payment_mode: this.clientToBeUpdated.paymentmode,
-      reason: this.clientToBeUpdated.reason,
-    });
   
-  }
+  // updateClientDetails(id:any){
   
-  updateClientDetails(id:any){
-  
-    console.log(this.updateClient.value)
-    console.log(this.clientToBeUpdated)
+  //   console.log(this.updateClient.value)
+  //   console.log(this.clientToBeUpdated)
     
-    console.log(id)
+  //   console.log(id)
    
-    this.ClientService.editClient(id, this.updateClient.value).subscribe(
-      (response) => {
-        this.getClients();
-        this.loading = false;
+  //   this.ClientService.editClient(id).subscribe(
+  //     (response) => {
+  //       this.getClients();
+  //       this.loading = false;
 
-      }, (error) => {
-        console.log(error)
-      }
-    );
-  }
+  //     }, (error) => {
+  //       console.log(error)
+  //     }
+  //   );
+  // }
   getClients(){
     this.Clients = [];
     this.loading = true;

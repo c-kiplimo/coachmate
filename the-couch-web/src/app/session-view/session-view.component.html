@@ -36,15 +36,16 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#confirmsessionModal"
+                      data-bs-target="#editsessionModal"
                       >Confirm</a
                     >
+            
                   </li>
                   <li>
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#conductedsessionModal"
+                      data-bs-target="#editsessionModal"
                       >conducted</a
                     >
                   </li>
@@ -141,21 +142,10 @@
           Attachments
         </button>
     </div>
-    <div class="d-none d-lg-block">
-      <div class="text-end mt-2" *ngIf="currentTab === 'feedback'" [@fadeIn]>
-        <button
-          class="btn btn-refresh me-2 btn-success"
-          data-bs-toggle="modal"
-          data-bs-target="#paymentReminderModal"
-        
-        >
-          <fa-icon [icon]="alertIcon"></fa-icon>
-          Remind
-        </button>
-      </div>
-      <table class="table" *ngIf="currentTab === 'feedback'" [@fadeIn]>
+      <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
+        <div class="row list-container container  " >
+      <table class="table" >
         <thead>
-          <th colspan="1">#</th>
           <th colspan="1">Understanding</th>
           <th colspan="1">Emotional Intelligence</th>
           <th colspan="1">Listening Skills</th>
@@ -171,46 +161,14 @@
             <td>{{feedback.listeningSkillsScore}}</td>
             <td>{{feedback.clarificationScore }}</td>
             <td>{{feedback.availabilityScore }}</td>
-            <td>{{feedback.overrallScore }}</td>
+            <td>{{feedback.overallScore}}</td>
           </tr>
         </tbody>
       </table>
       <h6>Client comments</h6>
       <p>{{feedback.comments}}</p>
-      <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
-        <p class="text-muted mt-5" *ngIf="!feedback?.length">
-          No feedback found.
-        </p>
-      </div>
-
-      <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
     </div>
-
-    <div class="show-ms" *ngIf="currentTab === 'feedback'" [@fadeIn]>
-
-      <div class="d-flex justify-content-between mt-2 mb-2">
-        <p *ngIf="session.sessionBalance <= 0"></p>
-
-        <button
-          class="btn btn-refresh me-2"
-          data-bs-toggle="modal"
-          data-bs-target="#paymentReminderModal"
-          *ngIf="session.sessionBalance > 0"
-        >
-          <fa-icon [icon]="alertIcon"></fa-icon>
-          Remind
-        </button>
       </div>
-      <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
-      <p class="text-muted mt-5" *ngIf="!feedback?.length">
-        No feedback found.
-      </p>
-    </div>
-
     <div
       class="d-none d-lg-block"
       *ngIf="currentTab === 'notifications'"
@@ -511,119 +469,12 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="editedsession()"
+          (click)="editedSession()"
         >
           Update session
         </button>
       </div>
     </div>
-<!-- Modal for adding or editing a session -->
-<div class="modal" id="sessionModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ modalTitle }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <form [formGroup]="editedsessionForm" >
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                <label for="name">Session Name *</label>
-                <input
-                formControlName="name"
-                value="{{currentSessionName?.name}}"
-                  name="name"
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  required
-                />
-              </div>
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                <label for="inputlastname">Session Details</label>
-                <input 
-                formControlName="details"
-                value="{{currentdetails?.provider}}"
-                type="text" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Enter Session Description" 
-                name="details" 
-                required >
-              
-              </div>
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">Session Date</label>
-                <input
-                formControlName="sessionDate"
-                value="{{currentSessionDate?.sessionDate}}" 
-                type="date" 
-                variant="success" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Date" 
-                name="session_date" 
-                >   
-              </div>
-            </div>
-            <div class="row p-2">
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">From</label>
-                  <input
-                  formControlName="sessionStartTime"
-                  value="{{currentsessionStartTime?.sessionStartTime}}" 
-                  type="time" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Time" 
-                  name="session_time_from" 
-                 >
-                  </div>
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">To</label>
-                <input 
-                formControlName="sessionEndTime"
-                value="{{currentsessionEndTime?.provider}}"
-                type="time" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Time" 
-                name="session_time_to" 
-                >
-              </div>
-            </div>
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                  <label class="form-group-text" for="clientType">Session Venue</label>
-              <select 
-              formControlName="sessionVenue"
-              value="{{currentsessionVenue?.sessionVenue}}"
-              class="form-select" 
-                  id="inputGroupSelect01" 
-                  name="session_venue" 
-                 >
-                  <option value="VIRTUAL">VIRTUAL</option>
-                  <option value="PHYSICAL">PHYSICAL</option>
-                </select>
-                  </div>
-                  <div class="mb-3 col-md-6">
-                    <label for="inputEmail4">Session Goals</label>
-                    <input 
-                    formControlName="goals"
-                    value="{{currentgoals?.goals}}"
-                    type="email" class="form-control" 
-                    id="inputEmail4" placeholder="Goals" 
-                    name="goals" >
-                  </div>
-<div class="modal-footer">
-<button type="submit" class="btn btn-primary">Save</button>
-<button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-</div>
-
 <!-- Confirm session modal -->
 <div
   class="modal fade bd-example-modal-lg"
@@ -648,7 +499,7 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            session.client.firstName + " " + session.client.lastName
+            sessions.client.fullName 
               | titlecase
           }}</span>
         </div>
@@ -736,7 +587,7 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            session.client.firstName + " " + session.client.lastName
+            sessions.client.fullName 
               | titlecase
           }}</span>
         </div>
@@ -756,24 +607,24 @@
           <p>session Amount Paid</p>
           <span>{{ session.amountPaid }}</span>
         </div>
-        <form [formGroup]="deliveredSessionForm">
+        <form [formGroup]="conductedSessionForm">
           <div class="mb-3">
             <label for="exampleInputEmail1">Conducted  On</label>
             <input
-              formControlName="deliveredOn"
+              formControlName="sessionDate"
               [(ngModel)]="sessionDate"
               name="deliveredOn"
               type="date"
               class="form-control"
               id="deliveredOn"
               aria-describedby="emailHelp"
-              placeholder="Delivered On Date"
+              placeholder="On Date"
             />
           </div>
           <div class="mb-3">
             <label for="exampleInputEmail1">Time</label>
             <input
-              formControlName="deliveredOn"
+              formControlName="sessionStartTime"
               [(ngModel)]="sessionStartTime"
               name="deliveredtime"
               type="time"
@@ -784,7 +635,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="exampleInputEmail1">narration</label>
+            <label for="exampleInputEmail1">goals</label>
             <textarea
               formControlName="goals"
               name="narration"
@@ -847,7 +698,7 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            session.client.firstName + " " + session.client.lastName
+            sessions.client.fullName 
               | titlecase
           }}</span>
         </div>
@@ -923,7 +774,7 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            session.client.firstName + " " + session.client.lastName
+            sessions.client.fullName 
               | titlecase
           }}</span>
         </div>
@@ -974,86 +825,3 @@
     </div>
   </div>
 </div>
-
-<!-- Send payment reminder modal -->
-<div
-  class="modal fade bd-example-modal-lg"
-  id="paymentReminderModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Payment reminder
-        </h1>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body" *ngIf="session">
-        <div class="d-flex justify-content-between">
-          <p>Client Name</p>
-          <span>{{
-            session.client.firstName + " " + session.client.lastName
-              | titlecase
-          }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Product</p>
-          <span>{{ session.details }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Session Type</p>
-          <span>{{ session.sessionType }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount</p>
-          <span>{{ session.sessionDuration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount Paid</p>
-          <span>{{ session.amountPaid }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Balance</p>
-          <span>{{ session.sessionBalance }}</span>
-        </div>
-        <div class="">
-          <p class="message-title mb-2">
-            The message below will be sent to
-            {{ session.client.firstName | titlecase }}.
-          </p>
-        </div>
-        <div class="message-area">
-          <p class="message-sent">
-            "Dear {{ this.session?.client.firstName }} please pay the balance
-            of, Ksh.{{ this.session?.sessionBalance }}, for session
-            {{ this.session.sessionNumber }} by,
-            {{ this.session?.dueDate | date : "MMM d, y " }}. Thank you,
-            {{ this.session?.coach.businessName }}
-          </p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)="sendReminder()"
-        >
-          Send
-        </button>
-      </div>
-    </div>
-  </div>
-
-
