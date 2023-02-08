@@ -5,32 +5,74 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-6">
-            <p><strong>Contract Id:</strong> {{ contract.id }}</p>
-            <p><strong>Coaching Topic:</strong> {{ contract.coachingTopic }}</p>
-            <p><strong>Contract Type:</strong> {{ contract.coachingCategory }}</p>
-            <p><strong>Client Name:</strong> {{ contract.client.fullName }}</p>
-            <p><strong>Start Date:</strong> {{ contract.startDate }}</p>
-            <p><strong>End Date:</strong> {{ contract.endDate }}</p>
-          </div>
-          <div class="col-md-6">
-            <p><strong>Number of Sessions:</strong> {{ contract.noOfSessions }}</p>
-            <p><strong>Fees per Session [Individual]:</strong> {{ contract.individualFeesPerSession}}</p>
-            <p><strong>Fees per Session [Group]:</strong> {{ contract.groupFeesPerSession }}</p>
-            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
-          </div>
-        </div>
-            </div>
+          <div class="col"></div>
+          <div class="col-md-8">
+            <div class="session-details" [@fadeIn] >
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Contract Id:</span>
+                <span class="value">{{ contract.id }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Coaching Topic:</span>
+                <span class="value">{{ contract.coachingTopic }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Contract Type:</span>
+                <span class="value">{{ contract.coachingCategory }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail ">
+                <span class="title">Client Name:</span>
+                <span class="value">{{ contract.client.fullName }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Start Date:</span>
+                <span class="value">{{ contract.startDate }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">End Date:</span>
+                <span class="value">{{ contract.endDate }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Number of Sessions:</span>
+                <span class="value">{{ contract.noOfSessions }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Fees per Session [Individual]:</span>
+                <span class="value">{{ contract.individualFeesPerSession }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Fees per Session [Group]:</span>
+                <span class="value">{{ contract.groupFeesPerSession }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Objectives:</span>
+                <span class="value">{{ contract.objectives }}</span>
               </div>
             </div>
-            <div class="card details-card">
-            <div class="col-2">
-               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success" style="margin: 5px;">
+        
+          
+          </div>
+          <div class="col"></div>
+        
+        </div>
+      </div>
+
+        <br/>
+            <div class="row">
+              <div class="col-md-2">
+                <h4 class="text-center">Sessions</h4>
+              </div>
+
+              <div class="col-md-8"></div>
+              <div class="col-md-2">
+              <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
+
                 <i class="fa-solid fa-user-plus"></i>
                Add Session
               </button>
+              </div>
             </div>
-            <div class="row list-container container mt-2 " >
+            <div class="row list-container container mt-2">
               <table class="table table-striped"  >
                 <thead>
                   <tr>
@@ -45,7 +87,7 @@
                   </tr>
                 </thead>
             
-                <tbody  class="list-container">
+                <tbody>
                   <tr *ngFor="let session of sessions">
                     <th scope="row">{{ session.id }}</th>
                     <td>{{ session.name }}</td>
@@ -74,6 +116,8 @@
                 No sessions Found.
               </p>
             </div>
+    </div>
+  </div>
   
   <!-- Modal for additing a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">

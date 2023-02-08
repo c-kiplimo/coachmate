@@ -40,9 +40,14 @@
         Search
       </button>
 </div>
+<div class="col-2">
+  <button type="button" routerLink="/addSession" class="btn btn-success"
+  *ngIf="this.userRole != 'CLIENT'">
+
 <div class="col-2"></div>
 <div class="wrap" class="col-2">
   <button type="button" routerLink="/addSession" class="btn btn-success">
+
     <i class="fa-solid fa-user-plus"></i>Add Session
   </button>
 </div>

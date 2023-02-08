@@ -42,11 +42,11 @@ public class ContractService {
         return contractRepository.findAllByCoachId(coachId);
     }
 
-    public Contract getSingleContract(Long coachId, Long contractId) {
+    public Contract getSingleContract(Long contractId) {
 
         // Verify Coach
 
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
 
         if (optionalContract.isEmpty()){
             throw new IllegalArgumentException("Contract with Id "+contractId+" does not exist!");
@@ -79,6 +79,7 @@ public class ContractService {
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
         contract.setClient(client);
         contract.setCoach(coach);
+        contract.setOrgId(coach.getOrgIdId());
 
         Contract contract1 = contractRepository.save(contract);
 
@@ -137,10 +138,13 @@ public class ContractService {
     public void deleteContract(Long coachId, Long contractId) {
 
         // GetContract ById and CoachId
-        Contract contract = getSingleContract(coachId,contractId);
+        Contract contract = getSingleContract(contractId);
 
         contractRepository.delete(contract);
     }
 
 
+    public List<Contract> getContractByOrgId(Long orgId) {
+        return contractRepository.findContractByOrgId(orgId);
+    }
 }

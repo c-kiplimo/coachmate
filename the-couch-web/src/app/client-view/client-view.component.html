@@ -5,9 +5,13 @@
     <div class="col-2">
       <app-user></app-user>
     </div>
-</div>
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-6">
 <h5 class="section-title text-center">Client View</h5>
 <div class="card details-card">
+
   <div class="card details-card">
   <div class="d-flex justify-content-between flex-wrap">
       <button class="btn btn-success"
@@ -37,6 +41,60 @@
      
     </div>
   </div>
+
+</div>
+      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+          <div class="donut multi">
+            
+          </div>
+      </div> 
+      <div class="client-details">
+            <div class="client-details" >
+              <div class="d-flex justify-content-between onedetail">
+                <span class="title">Client Id</span>
+                <span class="value">{{clients.id}}</span>
+              </div>
+              <div class="d-flex justify-content-between onedetail">
+                <span class="title">Client Name</span>
+                <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client email</span>
+              <span class="value">{{clients.email}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client Phone</span>
+              <span class="value">{{clients.msisdn}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Client Address</span>
+              <span class="value">{{clients.physicalAddress}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Profession</span>
+              <span class="value">{{clients.profession}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Reason</span>
+              <span class="value">{{clients.reason}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Payment Mode</span>
+              <span class="value">{{clients.paymentMode}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Status</span>
+              <span class="value" class="badge"[ngClass]="getClass(clients)">{{clients.status}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Created On</span>
+              <span class="value">{{clients.createdAt}}</span>
+            </div>
+            <div class="d-flex justify-content-between onedetail">
+              <span class="title">Last Updated</span>
+              <span class="value">{{clients.lastUpdatedAt}}</span>
+            </div>
+
   </div>
 <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
     <div class="donut multi">
@@ -48,52 +106,20 @@
         <div class="d-flex justify-content-between onedetail">
           <span class="title">Client Id</span>
           <span class="value">{{clients.id}}</span>
+
         </div>
-        <div class="d-flex justify-content-between onedetail">
-          <span class="title">Client Name</span>
-          <span class="value">{{clients.firstName + " " + clients.lastName | titlecase}}</span>
       </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client email</span>
-        <span class="value">{{clients.email}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client Phone</span>
-        <span class="value">{{clients.msisdn}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Client Address</span>
-        <span class="value">{{clients.physicalAddress}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Profession</span>
-        <span class="value">{{clients.profession}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Reason</span>
-        <span class="value">{{clients.reason}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Payment Mode</span>
-        <span class="value">{{clients.paymentMode}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Status</span>
-        <span class="value" class="badge"[ngClass]="getClass(clients)">{{clients.status}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Created On</span>
-        <span class="value">{{clients.createdAt}}</span>
-      </div>
-      <div class="d-flex justify-content-between onedetail">
-        <span class="title">Last Updated</span>
-        <span class="value">{{clients.lastUpdatedAt}}</span>
-      </div>
-  </div>
 </div>
 </div>
+
+
+
+<br>
+
+
 <br>
 <div class="card details-card">
+
 <div class="card card-table">
   <div class="tabs-section">
     <button
@@ -163,6 +189,7 @@
         No sessions Found.
       </p>
     </div>
+
   </div>
   <div class="d-none d-md-block">
     <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
@@ -279,61 +306,28 @@
     <p class="text-muted mt-5" *ngIf="!payments?.length">
       No payments found.
     </p>
-  </div>
 
-  <div
-    class="d-none d-md-block"
-    *ngIf="currentTab === 'notifications'"
-    [@fadeIn]
-  >
-    <table class="table">
-      <thead>
-        <th coslpan="1">Notification Reason</th>
-        <th coslpan="1">Notification Date</th>
-        <th coslpan="1">Notification Mode</th>
-      </thead>
-      <tbody *ngIf="notifications.length">
-        <tr *ngFor="let notification of notifications">
-          <td>{{ notification.subject }}</td>
-          <td>{{ notification.sentAt}}</td>
-          <td>{{ notification.notificationMode }}</td>
-          <td>
-            <button
-              class="btn btn-view"
-              data-bs-toggle="modal"
-              data-bs-target="#notificationModal"
-              
-            >
-              view
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p class="text-muted mt-5" *ngIf="!notifications?.length">
-      No notifications found.
-    </p>
   </div>
-  <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-    <div
-      data-bs-toggle="modal"
-      data-bs-target="#notificationModal"
-      
-      *ngFor="let notification of notifications"
-      class="listing-item"
-    >
-      <div class="d-flex justify-content-between mb-1">
-        <div>
-          <p class="mb-1">{{ notification.subject }}</p>
-          <p class="mb-1">{{ notification.notificationMode }}</p>
+</div>
+
+<!-- add session modal -->
+<div>
+  <div class="modal fade" id="addsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
+
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-        <span
-          >{{ notification.sentAt }}
-          <fa-icon [icon]="rightIcon"> </fa-icon>
-        </span>
       </div>
     </div>
+
     <p class="text-muted mt-5" *ngIf="!notifications?.length">
       No notifications found.
     </p>
@@ -358,7 +352,9 @@ aria-hidden="true"
       data-bs-dismiss="modal"
       aria-label="Close"
     ></button>
+
   </div>
+</div>
 
   <div class="container mb-5">
     <div class="row justify-content-center">
@@ -375,8 +371,10 @@ aria-hidden="true"
               formControlName="clientId">
                 <option selected>Select Client you want to create a session for</option>
                
-               Loop through clients and form options-->
-              <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+
+               <!--Loop through clients and form options-->
+                <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+
               </select>
               
               </div>
@@ -487,8 +485,134 @@ aria-hidden="true"
               type="submit" (click)="addSession()"
               class="btn btn-signup mb-3 mt-2 p-2 text-center"
               >Create Session</button>
+              
         </div>
         </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!--edit client modal-->
+<div
+class="modal fade"
+id="editclientModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">
+      Edit client details
+    </h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editClientForm" ngNativeValidate>
+      <div class="mb-3 form-group">
+        <label for="exampleInputEmail1">First name *</label>
+        <input
+          formControlName="firstName"
+          name="firstname"
+          value="{{ client?.firstName | titlecase }}"
+          type="firstname"
+          class="form-control"
+          id="firstname"
+          aria-describedby="emailHelp"
+          placeholder="First Name"
+          required
+        />
+      </div>
+      <div class="mb-3 form-group">
+        <label for="exampleInputEmail1">Last name</label>
+        <input
+          required
+          formControlName="lastName"
+          name="lastname"
+          value="{{ client?.lastName | titlecase }}"
+          type="lastname"
+          class="form-control"
+          id="lastname"
+          aria-describedby="emailHelp"
+          placeholder="Last Name"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Mobile no *:</label>
+        <input
+          required
+          value="{{ client?.msisdn }}"
+          formControlName="msisdn"
+          name="msisdn"
+          type="number"
+          class="form-control"
+          id="contact"
+          placeholder="Contact"
+          required
+          oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+        />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Email</label>
+        <input
+          formControlName="email"
+          value="{{ client?.email | titlecase }}"
+          name="email"
+          type="email"
+          class="form-control"
+          id="email"
+          placeholder="Email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Address *</label>
+        <input
+          formControlName="physicalAddress"
+          name="address"
+          value="{{ client?.physicalAddress | titlecase }}"
+          type="text"
+          class="form-control"
+          id="adress"
+          placeholder="Address"
+          required
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="btn btn-add"
+
+      [disabled]="
+        !editClientForm.value.firstName || !editClientForm.value.msisdn
+      "
+    >
+      Update
+    </button>
+  </div>
+</div>
+</div>
+</div>
+
 </div>
 </form>
 <!-- suspend client modal -->
@@ -506,45 +630,29 @@ aria-hidden="true"
       Suspend client
     </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
+
+<!-- suspend client modal -->
+<div class="modal" id="suspendclientModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body" *ngIf="client">
     <div class="d-flex justify-content-between">
-      <p>client Name:</p>
-      <span>{{
-        client.firstName + " " + client.lastName | titlecase
-      }}</span>
+      <p class="">
+        Are you sure you want to suspend
+        <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
+      </p>
+      
     </div>
-    <form [formGroup]="suspendClientForm">
-      <div class="mb-3">
-        <label for="exampleInputEmail1">narration</label>
-        <textarea
-          formControlName="narration"
-          name="narration"
-          class="form-control"
-          id="narration"
-          aria-describedby="narration"
-          placeholder="narration for suspending the client"
-        >
-        </textarea>
-      </div>
-    </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-add"
-    >
-      Submit
-    </button>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Close
-    </button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
   </div>
 </div>
 </div>
@@ -609,7 +717,7 @@ aria-hidden="true"
 
 <!-- Activate client modal -->
 <div
-class="modal fade bd-example-modal-lg"
+class="modal fade"
 id="activateclientModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
@@ -857,3 +965,4 @@ aria-hidden="true"
     </div>
   </div>
 </div>
+

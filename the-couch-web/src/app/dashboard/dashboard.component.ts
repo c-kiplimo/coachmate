@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   };
   coachEducationData: any;
   numberOfHoursCoachEducation: any;
+  numberOfHoursCoachingHours: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -40,6 +41,12 @@ export class DashboardComponent implements OnInit {
 
   OrgCoaches: any;
   numberofCoaches: any;
+
+  Clients: any;
+  OrgData: any;
+  orgSession: any;
+  OrgContracts: any;
+
 session: any;
   
 
@@ -71,11 +78,19 @@ session: any;
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+ 
 
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();
-     
+      this.getOrgClients();
+
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      
+      this.getOrgContracts(this.orgSession.id);
+      this.getAllOrgSessions(this.orgSession.id);
 
      
     }else {
@@ -87,31 +102,90 @@ session: any;
     }
 
   }
+
+
+  getAllOrgSessions(id: any) {
+    this.loading = true;
+
   getAllSessions() {
     this.loading = true;
     this.sessions = [];
     window.scroll(0, 0);
+
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
     };
+
+    this.clientService.getOrgSessions(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        this.loading = false;
+        this.numberOfSessions = this.sessions.length;
+
     this.clientService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response.body.data);
         this.sessions = response.body.data;
         this.loading = false;
+
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
+
+
+  getOrgContracts(id: any) {
+    this.loading = true;
+    this.clientService.getOrgContracts(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+        this.numberOfContracts = this.contracts.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getOrgClients(){
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    const id = this.coachData.id;
+    this.loading = true;
+    this.clientService.getOrgClients(id).subscribe(
+      (response) => {
+        this.loading = false;
+        this.Clients = response;
+        console.log(response)
+        console.log('clients',this.Clients)
+        this.numberOfClients = this.Clients.length;
+  
+      }, (error) => {
+        console.log(error)
+      }
+    )
+  }
+
+
+
+
   navigateToSessionView(id: any) {
     console.log(id);
     this.route.navigate(['sessionView', id]);
   }
+
   getClients() {
     const options = {
       page: 1,
@@ -203,6 +277,34 @@ session: any;
         this.sessions = response.body.data;
         this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
+
+        let totalHours = 0;
+        for (let i = 0; i < this.sessions.length; i++) {
+          //sessionStartTime 17:04
+          //sessionEndTime
+          let starttime = this.sessions[i].sessionStartTime.split(":");
+          let endtime = this.sessions[i].sessionEndTime.split(":");
+
+          // let time1 = parseInt(starttime[0]*3600 + parseInt(starttime[1])*60 + parseInt(starttime[2]));
+          // let time2 = parseInt(endtime[0]*3600 + parseInt(endtime[1])*60 + parseInt(endtime[2]));
+
+          // let dif = Math.max(time1, time2) - Math.min(time1, time2);
+          
+          // var ans = [];
+          // ans[0] = Math.floor(dif/3600);
+          // if(ans[0]<10){ans[0] = "0"+ans[0]}
+          // dif = dif%3600;
+          // ans[1] = Math.floor(dif/60);
+          // if(ans[1]<10){ans[1] = "0"+ans[1]}
+          // ans[2] = dif%60;
+          // if(ans[2]<10){ans[2] = "0"+ans[2]}
+          // console.log(ans.join(":"));
+
+          
+          console.log(totalHours);
+          this.numberOfHours = totalMinutes;
+          //this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+
   
         for (let i = 0; i < this.sessions.length; i++) {
           if (this.sessions[i].sessionStatus === 'CONFIRMED'){
@@ -218,6 +320,7 @@ session: any;
           if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
             totalMinutes += endMinutes - startMinutes;
           }
+
         }
         
         this.numberOfHours = Math.floor(totalMinutes / 60);
@@ -321,6 +424,7 @@ session: any;
       }
     );
   }
+
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
         return 'badge-warning';

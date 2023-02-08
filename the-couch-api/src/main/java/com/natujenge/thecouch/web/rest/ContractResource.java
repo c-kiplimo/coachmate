@@ -44,8 +44,8 @@ public class ContractResource {
     public ResponseEntity<?> getContractById(@PathVariable("id") Long contractId,
                                              @AuthenticationPrincipal User userDetails) {
         try{
-            Long coachId = userDetails.getCoach().getId();
-            Contract contract = contractService.getSingleContract(coachId,contractId);
+           // Long coachId = userDetails.getCoach().getId();
+            Contract contract = contractService.getSingleContract(contractId);
             return new ResponseEntity<>(contract, HttpStatus.OK);
 
         }catch (Exception e){
@@ -61,6 +61,21 @@ public class ContractResource {
             return new ResponseEntity<>(contract, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //API TO GET CONTRACTS BY ORG ID
+    @GetMapping(path = "getOrgContracts/{id}")
+    ResponseEntity<?> getOrgContracts(@PathVariable("id") Long orgId,
+                                      @AuthenticationPrincipal User userDetails){
+        log.info("Request to get Organization contracts", orgId);
+        try {
+            List<Contract> listResponse = contractService.getContractByOrgId(orgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

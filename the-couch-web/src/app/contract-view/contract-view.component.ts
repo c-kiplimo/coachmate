@@ -22,15 +22,61 @@ export class contractViewComponent implements OnInit {
   loading = false;
   contracts: any;
   contractId: any;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+
+  OrgData: any;
+  orgSession: any;
+
+  User: any;
+  
+
   constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+  
+   
+
+
+    if(this.userRole == 'COACH'){
     this.getAllContracts();
     this.route.params.subscribe(params => {
       const id = params['id'];
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
     });
+  } else if (this.userRole == 'ORGANIZATION') {
+    this.OrgData = sessionStorage.getItem('Organization');
+    this.orgSession = JSON.parse(this.OrgData);
+    console.log(this.orgSession);
+    
+    this.getOrgContracts(this.orgSession.id);
+  } else if (this.userRole == 'CLIENT') {
+
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      console.log(this.User);
+      const email = {
+        email: this.User.email
+      }
+      this.clientService.getClientByEmail(email).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.getClientContracts(response[0].id);
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+
+  }
+
    
   }
   navigateToContractDetail(id: any) {
@@ -55,6 +101,21 @@ export class contractViewComponent implements OnInit {
     );
 
   }
+
+  getOrgContracts(id: any) {
+    this.loading = true;
+    this.clientService.getOrgContracts(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
   getAllContracts() {
     this.loading = true;
     this.clientService.getContracts().subscribe(
@@ -68,4 +129,23 @@ export class contractViewComponent implements OnInit {
       }
     );
   }
+
+  getClientContracts(id: any) {
+    // const data = {
+    //   clientId: id,
+    // }
+    this.clientService.getClientContracts(id).subscribe(
+      (response: any) => {
+        console.log('here contracts=>', response);
+        this.contracts = response;
+        console.log(this.contracts);
+      
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+
 }

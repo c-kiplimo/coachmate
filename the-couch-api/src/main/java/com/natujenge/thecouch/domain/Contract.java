@@ -31,6 +31,7 @@ public class Contract {
     private float groupFeesPerSession;
     private int noOfSessions;
 
+    private long orgId;
 
     // relations
     @ManyToOne

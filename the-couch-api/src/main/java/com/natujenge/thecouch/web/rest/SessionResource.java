@@ -57,7 +57,7 @@ public class SessionResource {
                                              @AuthenticationPrincipal User userDetails) {
 
         try {
-            SessionDto sessionRequest = sessionService.findSessionByIdAndCoachId(id, userDetails.getCoach().getId());
+            Session sessionRequest = sessionService.findSessionByIdAndCoachId(id);
             return new ResponseEntity<>(sessionRequest, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -176,6 +176,21 @@ public class SessionResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
         }
+
+        //GET ORGANIZATION SESSIONS
+    @GetMapping(path = "getorgSessions/{id}")
+    ResponseEntity<?> getOrgSessions(@PathVariable("id") Long orgId,
+                                     @AuthenticationPrincipal User userDetails){
+        log.info("Request to get Organization sessions", orgId);
+
+        try {
+            List<Session> listResponse = sessionService.getSessionByOrgId(orgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     //GET: Get contracts sessions by contract_id
     @GetMapping("/contractSessions/{contractId}")
     public ResponseEntity<?> getContractsSessions (@PathVariable("contractId") Long contractId,

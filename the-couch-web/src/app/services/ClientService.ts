@@ -57,13 +57,17 @@ export class ClientService {
     suspendClient(clientData: any): Observable<any> {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
-    editClient(clientToBeUpdated:any,id:any): Observable<any> {
-        return this.http.put<any>(
-            this.baseURL + 'clients/'+ id,
-            clientToBeUpdated,
-            { observe: 'response' }
-          );
-      }
+
+
+    editClient(id: any, client: any): Observable<any> {
+        client.id = id;
+        return this.http.put(`${this.baseURL}clients/${id}`, client)
+    }
+
+
+
+   
+
     changeClientStatus(clientId: any, status: any): Observable<any> {
         var client = {
             id: clientId,
@@ -104,6 +108,10 @@ export class ClientService {
     deleteSession(id: any ): Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
+
+    getOrgSessions(id: any): Observable<any> {
+        return this.http.get(`${this.baseURL}sessions/getorgSessions/` + id);
+    }
     
     
 
@@ -129,6 +137,13 @@ export class ClientService {
 
     getOrgCoaches(data: any): Observable<any>{
         return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, {params: data})
+    }
+    getOrgClients(id: any): Observable<any>{
+        return this.http.get(`${this.baseURL}clients/getOrgClients/` + id);
+    }
+
+    getOrgContracts(id: any): Observable<any>{
+        return this.http.get(`${this.baseURL}contracts/getOrgContracts/` + id);
     }
 
 // FEEDBACK SERVICES

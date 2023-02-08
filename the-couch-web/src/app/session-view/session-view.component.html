@@ -120,6 +120,7 @@
   <div class="card  details-card">
     <div class="tabs-section">
       <button
+
         class="btn btn-tabs"
         (click)="toggleTab('feedback')"
         [ngClass]="{ 'active-tab': currentTab === 'feedback' }"
@@ -128,23 +129,25 @@
       </button>
 
       <button
-        class="btn btn-tabs"
+        class="btn btn-outline-success"
         (click)="toggleTab('notifications')"
         [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
       >
         Notifications
       </button>
       <button
-          class="btn btn-tabs"
+          class="btn btn-outline-success"
           (click)="toggleTab('attachments')"
           [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
         >
           Attachments
         </button>
     </div>
+
       <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
         <div class="row list-container container  " >
       <table class="table" >
+
         <thead>
           <th colspan="1">Understanding</th>
           <th colspan="1">Emotional Intelligence</th>

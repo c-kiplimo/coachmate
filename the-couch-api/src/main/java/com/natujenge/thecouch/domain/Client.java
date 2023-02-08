@@ -59,9 +59,16 @@ public class Client {
     @JoinColumn(name = "coach_id")
     private Coach coach;
 
+    @ManyToOne
+    @JoinColumn(name = "org_id_id")
+    private Organization organization;
+
 
 
     public void setName(String name) {
+    }
+    public Organization getOrganization(Long id) {
+        return organization;
     }
 
 

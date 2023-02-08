@@ -125,7 +125,9 @@
         </div>
         <div class="mb-3 form-group">
           <label for="email_address" class="form-label">Email</label>
-          <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email"
+
+          <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
+
           value="{{ clientToBeUpdated?.email }}">
         </div>
         <div class="mb-3 form-group">
@@ -135,8 +137,11 @@
         </div>
 
         <div class="mb-3 form-group">
-          <label for="physical_address" class="form-label">Address</label>
-          <input type="text" class="form-control" id="physical_address" name="physicalAddress" formControlName="physicalAddress"
+
+          <label for="physicalAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physicalAddress"
+
+
           value="{{ clientToBeUpdated?.physicalAddress}}">
         </div>
         <div class="mb-3 form-group">
@@ -144,11 +149,13 @@
           <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
           value="{{ clientToBeUpdated?.reason}}">
         </div>
-        <div class="input-group mb-3">
+        <!-- <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
+
           <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
+
           value="{{ clientToBeUpdated?.paymentMode }}">
             <option selected>Select Payment Mode</option>
             <option value="PREPAY">PREPAY</option>
@@ -166,7 +173,7 @@
             <option value="CORPORATE">CORPORATE</option>
             <option value="GROUP">GROUP</option>
           </select>
-        </div>
+        </div> -->
        </form>
       </div>
       <div class="modal-footer">
