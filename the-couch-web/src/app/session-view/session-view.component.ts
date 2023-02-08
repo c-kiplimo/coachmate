@@ -68,7 +68,7 @@ client: any;
   orderId!: any;
   customerId!: any;
   paymentId!: any;
-  payment!: any;
+  payment!: any;  
   order!: any;
   response_data!: any;
   searching = false;
@@ -130,6 +130,7 @@ client: any;
       this.sessionId = params['id'];
     });
     this.getSession();
+    this.getFeedback();
     this.getPayments();
     this.newPayment();
     this.getNotifications();
@@ -200,6 +201,18 @@ client: any;
     });
   
   }
+  //get feedback for session
+  getFeedback() {
+    this.clientService.getFeedback(this.sessionId).subscribe(
+      (data: any) => {
+        this.feedback = data.body;
+        console.log("feedback is here",this.feedback);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
   setCurrectSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
@@ -244,6 +257,8 @@ client: any;
       this.loading = false;
       this.sessions = res.body;
       console.log(this.sessions);
+      this.coachId = this.sessions.coach.id;
+      console.log("coach id",this.coachId);
       this.clientId = this.order.client.id;
       this.getPayments();
       this.getNotifications();
@@ -258,34 +273,11 @@ client: any;
    
     });
   }
-  //get coach id from the session
+
 
   giveFeedback(sessionId: any) {
     this.router.navigate(['/feedback', sessionId]);
   }
-  //send feedback to the  server based on the session id , coach id  and feedback as parameters
-  sendFeedback() {
-     this.sessionId = this.sessionId;
-     this.coachId = this.session.sessionId.coach.id;
-    console.log(this.sessionId);
-    console.log(this.coachId);
-    console.log(this.feedback);
-    this.clientService.addFeedback(this.feedback, this.sessionId, this.coachId).subscribe(
-      (response: any) => {
-        console.log(response);
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
-  
-
- 
-  
-  
-
-
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
 

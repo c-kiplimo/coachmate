@@ -69,6 +69,7 @@ export class ClientService {
         }
     
         return this.http.put(`${this.baseURL}clients/changeStatus`, client)
+        "/change-status/{id}"
     }
 
      
@@ -129,12 +130,17 @@ export class ClientService {
     }
 
 // FEEDBACK SERVICES
-addFeedback(feedback: any, sessionId: any, coachId: any): Observable<any> {
-    const payload = { feedback, sessionId, coachId };
-    return this.http.post(`${this.baseURL}feedback`, payload);
+addFeedback(feedback: any, options: any): Observable<any> {
+    return this.http.post<any>(
+        this.baseURL + 'feedback',
+        feedback,
+        { params: options, observe: 'response' }
+      );
   }
 getFeedback(sessionId:any):Observable<any>{
-    return this.http.get(`${this.baseURL}feedback/get-by-session-id` + sessionId,{observe:'response'})
+    return this.http.get(`${this.baseURL}feedback/get-by-session-id`,{
+        params:{session_id:sessionId},
+        observe:'response'})
 }
 
 
