@@ -393,8 +393,8 @@ session: any;
     this.clientService.getClientSessions(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.sessions = response;
-        console.log(this.sessions);
+        this.sessions = response.body;
+        console.log(this.sessions.body);
         this.numberOfSessions = this.sessions.length;
       },
       (error: any) => {

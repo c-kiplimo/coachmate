@@ -154,9 +154,9 @@ addFeedback(feedback: any, options: any): Observable<any> {
         { params: options, observe: 'response' }
       );
   }
-getFeedback(sessionId:any):Observable<any>{
+getFeedback(params:any):Observable<any>{
     return this.http.get(`${this.baseURL}feedback/get-by-session-id`,{
-        params:{session_id:sessionId},
+        params: params,
         observe:'response'})
 }
 

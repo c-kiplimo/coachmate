@@ -96,7 +96,10 @@ client: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
+  orgIdId: any;
+  createdBy: any;
 
+  feebackForm: any;
 
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
@@ -120,6 +123,27 @@ client: any;
 
   ngOnInit() {
 
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+    if(this.userRole == 'CLIENT'){
+    this.sessionId = this.route.snapshot.params['sessionId'];
+    console.log(this.sessionId);
+
+    this.feebackForm = this.formbuilder.group({
+      understandingScore: [''],
+      emotionalIntelligenceScore: [''],
+      listeningSkillsScore: [''],
+      clarificationScore: [''],
+      availabilityScore: [''],
+      comments: ['']
+    });
+
+    }
+
    this.route.params.subscribe((params) => {
 
       this.sessionId = params['id'];
@@ -127,6 +151,8 @@ client: any;
 
     this.getSession();
     this.getFeedback();
+
+
     this.getNotifications();
     this.confirmSessionForm = this.formbuilder.group({
       narration: '',
@@ -165,7 +191,11 @@ client: any;
   }
   //get feedback for session
   getFeedback() {
-    this.clientService.getFeedback(this.sessionId).subscribe(
+    const params = {
+      sessionId: this.sessionId,
+     
+    };
+    this.clientService.getFeedback(params).subscribe(
       (data: any) => {
         this.feedback = data.body;
         console.log("feedback is here",this.feedback);
@@ -204,6 +234,39 @@ client: any;
       }
     )
   }
+
+
+  giveFeedback() {
+    const params = {
+      sessionId: this.sessionId,
+      coachId: this.coachId,
+      orgIdId: this.orgIdId,
+    };
+    console.log(this.feebackForm.value);
+    const data = this.feebackForm.value;
+
+    data.sessionId = this.sessionId;
+    data.orgIdId = this.orgIdId;
+    data.coachId = this.coachId;
+    data.clientId = this.clientId;
+    data.createdBy = this.createdBy;
+
+
+    this.clientService.addFeedback(data, params).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Feedback Added Successfully');
+        this.router.navigate(['sessionView', this.sessionId]);
+      },
+      (error) => {
+        console.log(error);
+        this.toastrService.error('Error in adding Feedback');
+      }
+    );
+  }
+
+
+
   goToItem(type: any, entityObj: any): void {
     this.router.navigate([type, entityObj.id]);
   }
@@ -219,18 +282,21 @@ client: any;
       this.loading = false;
       this.sessions = res.body;
       console.log(this.sessions);
-      this.coachId = this.sessions.coach.id;
+    
       console.log("coach id",this.coachId);
       this.clientId = this.sessions.client.id;
+      this.orgIdId = this.sessions.coach.orgIdId;
+      this.coachId = this.sessions.coach.id;
+      this.createdBy = this.sessions.client.fullName;
       this.getNotifications();
    
+     
     });
+
+   
   }
 
 
-  giveFeedback(sessionId: any) {
-    this.router.navigate(['/feedback', sessionId]);
-  }
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
@@ -330,4 +396,7 @@ cancelSession() {
   reload() {
     location.reload();
   }
+
+
+ 
 }
