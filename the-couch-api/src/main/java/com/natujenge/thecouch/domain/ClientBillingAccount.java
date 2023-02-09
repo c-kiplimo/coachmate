@@ -44,6 +44,6 @@ public class ClientBillingAccount {
     Coach coach;
 
     @OneToOne
-    @JoinColumn(name="coach_id")
+    @JoinColumn(name="organization_id")
     Organization organization;
 }

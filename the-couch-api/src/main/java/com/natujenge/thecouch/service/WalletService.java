@@ -1,10 +1,11 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
+import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
-import com.natujenge.thecouch.web.rest.dto.PaymentDto;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -23,13 +23,10 @@ public class WalletService {
 
     @Autowired
     ClientWalletRepository clientWalletRepository;
-
     @Autowired
-    ClientService clientService;
+    ClientBillingAccountRepository clientBillingAccountRepository;
     @Autowired
-    ContractService contractService;
-    @Autowired
-    ClientBillingAccountService clientBillingAccountService;
+    ClientRepository clientRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -59,18 +56,56 @@ public class WalletService {
 
     }
 
-    public void createWallet(ClientWallet clientWallet) {
-        log.info("Creating client wallet for client of id {}", clientWallet.getClient().getId());
-        clientWalletRepository.save(clientWallet);
-        log.info("Wallet created");
+    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance) {
+
+        // obtain recent record on billing account
+
+        Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
+                findFirstByCoachIdAndClientIdOrderByIdDesc(coach.getId(), client.getId());
+
+        if(optionalClientBillingAccount.isEmpty()){
+            throw new IllegalArgumentException("Client Billing Account not found!");
+        }
+
+        ClientBillingAccount clientBillingAccountPrevious = optionalClientBillingAccount.get();
+        float amountBilled = (clientBillingAccountPrevious.getAmountBilled() != null)?
+                clientBillingAccountPrevious.getAmountBilled():
+                0f;
+
+        // new client Billing Account record
+        ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
+        clientBillingAccount.setCreatedBy(coach.getFullName());
+        clientBillingAccount.setCoach(coach);
+        clientBillingAccount.setClient(client);
 
 
+        // Calculate Balances
+        float paymentBalance;
+        float walletBalance = 0f;
+        if (clientBalance >= amountBilled){
+            paymentBalance = clientBalance - amountBilled;
+            walletBalance = paymentBalance;
+            clientBillingAccount.setAmountBilled(0f);
+
+
+        } else if (clientBalance < amountBilled && clientBalance > 0f) {
+            paymentBalance = amountBilled-clientBalance;
+            walletBalance = 0f;
+            clientBillingAccount.setAmountBilled(paymentBalance);
+        }
+        clientBillingAccountRepository.save(clientBillingAccount);
+        return walletBalance ;
     }
 
     public ClientWalletDto createPayment(PaymentRequest paymentRequest, Coach coach) {
 
         // Obtain Client associated with wallet
-        Client client = clientService.getClient(paymentRequest.getClientId(), coach.getId());
+        Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(paymentRequest.getClientId()
+                ,coach.getId());
+        if(clientOptional.isEmpty()){
+            throw new IllegalArgumentException("Client not found!");
+        }
+        Client client = clientOptional.get();
 
         // obtain previous payment Record
         ClientWallet previousWalletRecord = getClientWalletRecentRecord(coach.getId(), paymentRequest.getClientId());
@@ -96,7 +131,7 @@ public class WalletService {
 
         // update billing account
         // return walletBalance
-        Float walletBalanceAfter = clientBillingAccountService.updateBillingAccountOnPayment(
+        Float walletBalanceAfter = updateBillingAccountOnPayment(
                 coach,client,walletBalance);
 
 

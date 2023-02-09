@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
+import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
@@ -44,12 +45,13 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final RegistrationService registrationService;
     private final UserRepository userRepository;
-    private final WalletService walletService;
-    public ClientService(ClientRepository clientRepository, RegistrationService registrationService, UserRepository userRepository, WalletService walletService) {
+    private final ClientWalletRepository clientWalletRepository;
+    public ClientService(ClientRepository clientRepository, RegistrationService registrationService,
+                         UserRepository userRepository, ClientWalletRepository clientWalletRepository) {
         this.clientRepository = clientRepository;
         this.registrationService = registrationService;
         this.userRepository = userRepository;
-        this.walletService = walletService;
+        this.clientWalletRepository = clientWalletRepository;
     }
 
 
@@ -92,7 +94,8 @@ public class ClientService {
         clientWallet.setCreatedBy(optionalCoach.get().getFullName());
         clientWallet.setClient(saveClient);
         clientWallet.setCoach(optionalCoach.get());
-        walletService.createWallet(clientWallet);
+        clientWalletRepository.save(clientWallet);
+        log.info("Client Wallet created Successfully!");
 
         // Create client Billing Account
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
@@ -361,13 +364,4 @@ public class ClientService {
         return clientRepository.findByEmail(email);
     }
 
-    public Client getClient(Long clientId,Long coachId){
-        Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(clientId
-                ,coachId);
-        if(clientOptional.isEmpty()){
-            throw new IllegalArgumentException("Client not found!");
-        }
-        return clientOptional.get();
-
-    }
 }
