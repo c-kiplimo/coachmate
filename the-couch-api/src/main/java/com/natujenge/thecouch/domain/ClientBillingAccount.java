@@ -1,7 +1,5 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.ModeOfPayment;
-import com.natujenge.thecouch.domain.enums.PaymentCurrency;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,23 +13,14 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "tbl_client_wallet")
-public class ClientWallet {
+@Table(name = "tbl_client_billing_account")
+public class ClientBillingAccount {
     @Id
     @GeneratedValue(strategy = GenerationType
-                    .IDENTITY)
+            .IDENTITY)
     Long id;
-    // updated on every payment
-    Float walletBalance;
-    Float amountDeposited;
-    private String extPaymentRef;
-    public String description;
-    @Enumerated(EnumType.STRING)
-    private ModeOfPayment modeOfPayment;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentCurrency paymentCurrency;
-
+    Float amountBilled;
 
     // Management Details
     @CreationTimestamp
@@ -55,7 +44,6 @@ public class ClientWallet {
     Coach coach;
 
     @OneToOne
-    @JoinColumn(name="organization_id")
+    @JoinColumn(name="coach_id")
     Organization organization;
-
 }

@@ -31,10 +31,7 @@ public class Contract {
     private float individualFeesPerSession;
     private float groupFeesPerSession;
     private int noOfSessions;
-
-    private PaymentStatus paymentStatus;
     private float amountDue;
-
 
 
     // relations
