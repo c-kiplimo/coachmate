@@ -35,4 +35,5 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
 
     List<Session> findSessionByOrgId(Long orgId);
 
+    Optional<Session> getSessionById(Long id);
 }
