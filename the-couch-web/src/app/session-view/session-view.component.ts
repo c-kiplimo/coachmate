@@ -256,7 +256,7 @@ client: any;
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');
-        this.router.navigate(['sessionView', this.sessionId]);
+        this.getFeedback();
       },
       (error) => {
         console.log(error);

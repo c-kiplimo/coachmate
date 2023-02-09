@@ -61,6 +61,7 @@ public class FeedbackService {
         feedback.setEmotionalIntelligenceScore(feedbackReq.getEmotionalIntelligenceScore());
         feedback.setListeningSkillsScore(feedbackReq.getListeningSkillsScore());
         feedback.setComments(feedbackReq.getComments());
+        feedback.setUnderstandingScore(feedbackReq.getUnderstandingScore());
         // compute overall score
         Integer totalScore = feedbackReq.getAvailabilityScore()+feedbackReq.getClarificationScore()+
                 feedbackReq.getEmotionalIntelligenceScore()+ feedbackReq.getListeningSkillsScore()+
@@ -91,5 +92,9 @@ public class FeedbackService {
             throw new IllegalArgumentException("Feedback not found!");
 
         }
+    }
+
+    public List<FeedbackDto> getOrgFeedback(Long orgId) {
+        return feedbackRepository.findByOrganization(orgId);
     }
 }

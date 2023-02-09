@@ -18,4 +18,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
 
     List<FeedbackDto> findBySessionId(Long sessionId);
 
+   
+    List<FeedbackDto> findByOrganization(Long orgId);
+
 }

@@ -96,4 +96,18 @@ public class FeedbackResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //Get ORg FeedBack
+    @GetMapping(path = "getOrgFeedbacks/{id}")
+    ResponseEntity<?> getOrgFeedbacks(@PathVariable("id") Long OrgId) {
+        log.error("Request to get Organization Feedbacks");
+        try{
+            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(OrgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

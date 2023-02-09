@@ -139,9 +139,9 @@ public class ClientService {
     }
 
     //get one client
-    public Optional<ClientDto> findById(Long id,Long coachId) {
+    public Optional<Client> findById(Long id) {
 
-        return clientRepository.findByCoachIdAndId(coachId,id);
+        return clientRepository.findById(id);
     }
 
     //Update client
