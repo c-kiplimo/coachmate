@@ -30,7 +30,7 @@ public class Feedback {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+
     private String createdBy;
 
     @UpdateTimestamp
@@ -38,16 +38,21 @@ public class Feedback {
     private String lastUpdatedBy;
 
     @OneToOne
-    @JoinColumn(name="session_id")
+    @JoinColumn(name = "session_id")
     Session session;
 
-    @OneToOne
-    @JoinColumn(name="client_id")
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    Coach coach;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     Client client;
 
-    @OneToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @ManyToOne
+    @JoinColumn(name = "org_id_id")
+    Organization organization;
+
 
 
 }

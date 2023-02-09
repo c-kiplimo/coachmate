@@ -3,10 +3,9 @@
       <h3></h3>
   </div>
   <div class="col-2">
-      <app-user></app-user>
+    <app-user></app-user>
   </div>
 </div>
-<button (click)="giveFeedback(sessionId)">Give Feedback</button>
 
 <br>
 <h5 class="section-title text-center ">Session Details</h5>
@@ -17,16 +16,22 @@
 <div class="container-fluid Client mb-5">
     <div class="container">
       <div class="card details-card">
-        <div class="mt-5" class="d-flex justify-content-between flex-wrap"[@fadeIn]>
-          <div>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
-            "
-            >
-              <i class="fas fa-edit"></i>
-              Edit
-            </button>
-          </div>
+        <div class="mt-5" class=""[@fadeIn]>
+        
           <div class="d-flex">
+            <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" 
+            data-bs-toggle="modal"
+          data-bs-target="#addfeedbackModal"
+            >Give Feedback</button>
+
+            <div *ngIf="this.userRole != 'CLIENT'">
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
+              ">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+            </div>
+
             <div class="dropdown">
               <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                 data-bs-toggle="dropdown" aria-expanded="false">
@@ -149,6 +154,7 @@
       <table class="table" >
 
         <thead>
+          <th colspan="1">Comment</th>
           <th colspan="1">Understanding</th>
           <th colspan="1">Emotional Intelligence</th>
           <th colspan="1">Listening Skills</th>
@@ -157,19 +163,18 @@
           <th colspan="1">Total Score</th>
         </thead>
         <tbody>
-          <tr>
-            
-            <td>{{feedback.understandingScore}}</td>
-            <td>{{feedback.emotionalIntelligenceScore}}</td>
-            <td>{{feedback.listeningSkillsScore}}</td>
-            <td>{{feedback.clarificationScore }}</td>
-            <td>{{feedback.availabilityScore }}</td>
-            <td>{{feedback.overallScore}}</td>
+          <tr *ngFor="let feedbck of feedback">
+            <td>{{feedbck.comments}}</td>
+            <td>{{feedbck.understandingScore}}</td>
+            <td>{{feedbck.emotionalIntelligenceScore}}</td>
+            <td>{{feedbck.listeningSkillsScore}}</td>
+            <td>{{feedbck.clarificationScore }}</td>
+            <td>{{feedbck.availabilityScore }}</td>
+            <td>{{feedbck.overallScore}}</td>
           </tr>
         </tbody>
       </table>
-      <h6>Client comments</h6>
-      <p>{{feedback.comments}}</p>
+      
     </div>
       </div>
     <div
@@ -357,6 +362,7 @@
                 required
               />
             </div>
+          </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
               <label for="inputlastname">Session Details</label>
@@ -397,7 +403,7 @@
                 placeholder="Time" 
                 name="session_time_from" 
                >
-                </div>
+              </div>
             <div class="mb-3 col-md-6">
               <label for="inputEmail4">To</label>
               <input 
@@ -423,8 +429,8 @@
                >
                 <option value="VIRTUAL">VIRTUAL</option>
                 <option value="PHYSICAL">PHYSICAL</option>
-              </select>
-                </div>
+            </select>
+            </div>
                 <div class="mb-3 col-md-6">
                   <label for="inputEmail4">Session Goals</label>
                   <input 
@@ -434,38 +440,24 @@
                   id="inputEmail4" placeholder="Goals" 
                   name="goals" >
                 </div>
-         <div class="d-flex input-group mb-3 mt-3">
-          <label for="notification">Notify the client</label>
-          <div class="d-flex-column justify-content-between ms-3">
-            <label class="">
-              <input
-                type="checkbox"
-                checked
-                name="notification"
-                [(ngModel)]="showHideMessage"
-                formControlName="sendNotification"
-              />
-              <span class=""></span>
-            </label>
+          
+         
+          </div> 
+        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
+          <div class="">
+            <label for="message">Message to be sent</label>
+            <p class="lead">
+              "Dear {{ client?.firstName | titlecase }}. Your
+              {{ sessionType }} session of amount {{ sessionDuration }} has been
+              recorded. I am working to promptly have your session delivered by
+              {{ sessionDate | date }}. Thank you. "
+            </p>
           </div>
         </div> 
-         <div *ngIf="!showHideMessage" [@fadeIn]>
-        <p>The Client will not be notified</p>
-      </div> 
-        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
-        <div class="">
-          <label for="message">Message to be sent</label>
-          <p class="lead">
-            "Dear {{ client?.firstName | titlecase }}. Your
-            {{ sessionType }} session of amount {{ sessionDuration }} has been
-            recorded. I am working to promptly have your session delivered by
-            {{ sessionDate | date }}. Thank you. "
-          </p>
-        </div>
-      </div> 
+        </form>
       </div>
       <div class="modal-footer d-flex justify-content-between">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+      <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Cancel
         </button>
         <button
@@ -477,7 +469,12 @@
           Update session
         </button>
       </div>
-    </div>
+   
+  
+</div>
+</div>
+</div>
+
 <!-- Confirm session modal -->
 <div
   class="modal fade bd-example-modal-lg"
@@ -824,6 +821,121 @@
         >
           Submit
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Edit Client Modal -->
+<div class="modal fade" id="addfeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Give Session Feedback</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>Session Feedback Form</h3>
+        <p>Thank you for choosing to work with our professional coach. 
+            We value your feedback and would appreciate if you could take a few minutes to complete this form.
+            Your input will help us to continue to improve our coaching services and ensure that you have the best experience possible. 
+            Please rate each statement on a scale of 1-5, with 1 being the least and 5 being the most.
+            Your comments and suggestions are also welcome. Thank you for your time and support.</p>
+        <form [formGroup]="feebackForm">
+            <div class="form-group">
+              <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me personally and professionally:</label>
+              <div class="form-group__rating">
+                <input type="radio" formControlName="understandingScore" value="1" id="goalSetting1">
+                <label for="goalSetting1">1</label>
+                <input type="radio" formControlName="understandingScore" value="2" id="goalSetting2">
+                <label for="goalSetting2">2</label>
+                <input type="radio" formControlName="understandingScore" value="3" id="goalSetting3">
+                <label for="goalSetting3">3</label>
+                <input type="radio" formControlName="understandingScore" value="4" id="goalSetting4">
+                <label for="goalSetting4">4</label>
+                <input type="radio" formControlName="understandingScore" value="5" id="goalSetting5">
+                <label for="goalSetting5">5</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="emotionManagement">2. My coach demonstrated an ability to work with strong emotions and was not overpowered:</label>
+              <div class="form-group__rating">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="1" id="emotionManagement1">
+                <label for="emotionManagement1">1</label>
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="2" id="emotionManagement2">
+                <label for="emotionManagement2">2</label>
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="3" id="emotionManagement3">
+                <label for="emotionManagement3">3</label>
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="4" id="emotionManagement4">
+                <label for="emotionManagement4">4</label>
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="5" id="emotionManagement5">
+                <label for="emotionManagement5">5</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="activeListening">3. My coach asked questions that demonstrated active listening and understanding of my perspective and encouraged clarity, learning and exploration:</label>
+              <div class="form-group__rating">
+                <input type="radio" formControlName="listeningSkillsScore" value="1" id="activeListening1">
+                <label for="activeListening1">1</label>
+                <input type="radio" formControlName="listeningSkillsScore" value="2" id="activeListening2">
+                <label for="activeListening2">2</label>
+                <input type="radio" formControlName="listeningSkillsScore" value="3" id="activeListening3">
+                <label for="activeListening3">3</label>
+                <input type="radio" formControlName="listeningSkillsScore" value="4" id="activeListening4">
+                <label for="activeListening4">4</label>
+        <input type="radio" formControlName="listeningSkillsScore" value="5" id="activeListening5">
+        <label for="activeListening5">5</label>
+        </div>
+        
+          </div>
+          <div class="form-group">
+            <label for="clarification">4. My coach was able to repeat what I said for clarification:</label>
+            <div class="form-group__rating">
+              <input type="radio" formControlName="clarificationScore" value="1" id="clarification1">
+              <label for="clarification1">1</label>
+              <input type="radio" formControlName="clarificationScore" value="2" id="clarification2">
+              <label for="clarification2">2</label>
+              <input type="radio" formControlName="clarificationScore" value="3" id="clarification3">
+              <label for="clarification3">3</label>
+              <input type="radio" formControlName="clarificationScore" value="4" id="clarification4">
+              <label for="clarification4">4</label>
+              <input type="radio" formControlName="clarificationScore" value="5" id="clarification5">
+              <label for="clarification5">5</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="presence">5. I felt that the coach was fully present and flexible during the session:</label>
+            <div class="form-group__rating">
+              <input type="radio" formControlName="availabilityScore" value="1" id="presence1">
+              <label for="presence1">1</label>
+              <input type="radio" formControlName="availabilityScore" value="2" id="presence2">
+              <label for="presence2">2</label>
+              <input type="radio" formControlName="availabilityScore" value="3" id="presence3">
+              <label for="presence3">3</label>
+              <input type="radio" formControlName="availabilityScore" value="4" id="presence4">
+        <label for="presence4">4</label>
+        <input type="radio" formControlName="availabilityScore" value="5" id="presence5">
+        <label for="presence5">5</label>
+        </div>
+        
+          </div>
+          <div class="form-group">
+            <label for="additionalComments">Additional Comments:</label>
+            <textarea formControlName="comments" id="additionalComments"></textarea>
+          </div>
+        
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success"  [disabled]="!feebackForm.valid"
+        (click)="giveFeedback()"
+        >Save changes</button>
       </div>
     </div>
   </div>

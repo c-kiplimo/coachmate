@@ -107,8 +107,8 @@ salesData: any;
     this.apiService.getClientSessions(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.sessions = response;
-        console.log(this.sessions);
+        this.sessions = response.body;
+        console.log(this.sessions.body);
         this.loading = false;
       },
       (error: any) => {

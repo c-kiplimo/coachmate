@@ -10,7 +10,10 @@
   "
 >
   <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()">c</button>
+    <button class="logo" (click)="toggleCollapse()">
+      <img src="../../assets/images/CoachMatePRO.png" alt="logo" 
+      width="40px" height="40px"/>
+    </button>
     <div class="logo-text" @fadeInOut *ngIf="collapsed">CMS</div>
     <button
       class="btn-close"
