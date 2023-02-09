@@ -145,6 +145,7 @@ export class ClientService {
     getOrgContracts(id: any): Observable<any>{
         return this.http.get(`${this.baseURL}contracts/getOrgContracts/` + id);
     }
+ 
 
 // FEEDBACK SERVICES
 addFeedback(feedback: any, options: any): Observable<any> {
@@ -158,6 +159,13 @@ getFeedback(params:any):Observable<any>{
     return this.http.get(`${this.baseURL}feedback/get-by-session-id`,{
         params: params,
         observe:'response'})
+}
+getOrgFeedbacks(id: any): Observable<any>{
+    return this.http.get(`${this.baseURL}feedback/getOrgFeedbacks/` + id);
+}
+
+getCoachFeedbacks(id: any): Observable<any>{
+    return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
 
 
