@@ -20,6 +20,7 @@ export class AddClientPageComponent implements OnInit {
   userRole: any;
   OrgCoaches: any;
 
+  selectedCoachId: any;
 
   addClient = {
     firstName: ' ',
@@ -38,6 +39,7 @@ export class AddClientPageComponent implements OnInit {
     status: '',
     password: '',
     org_id_id: '',
+    coachId: '',
 
   };
 
@@ -80,19 +82,32 @@ export class AddClientPageComponent implements OnInit {
     );
   }
 
+  selectedClient(event: any) {
+    console.log(event.target.value);
+    this.selectedCoachId = event.target.value;
+  }
 
+  
   // Client = {};
   newClient() {
     var details = this.addClient;
     details.createdBy = this.coachData.fullName;
-    details.coach_id = this.coachData.id;
+  
     details.status = 'NEW';
     details.password = '12345678';
    
     
   if(this.userRole == 'ORGANIZATION'){
     details.org_id_id = this.orgData.id;
+    details.coach_id = this.selectedCoachId;
+    details.coachId = this.selectedCoachId;
+
+  } else if (this.userRole == 'COACH'){
+    details.org_id_id = this.coachData.coach.orgIdId;
+    details.coach_id = this.coachData.coach.id;
+    details.coachId = this.coachData.coach.id;
   }
+
 
     
     console.log(details);

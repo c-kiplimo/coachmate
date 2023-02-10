@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.service.ClientService;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
 
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
@@ -65,7 +64,7 @@ public class ClientResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("request to add new client");
         try {
-            Client newClient = clientService.addNewClient(userDetails.getCoach().getId(),
+            Client newClient = clientService.addNewClient(clientRequest.getCoachId(),
                     clientRequest);
             if (newClient != null) {
                 ClientRequest response = modelMapper.map(newClient, ClientRequest.class);
@@ -101,7 +100,7 @@ public class ClientResource {
     ResponseEntity<?> findById(@PathVariable("id") Long id,
                                @AuthenticationPrincipal User userDetails) {
         try{
-            Optional<ClientDto> clientOptional = clientService.findById(id,userDetails.getCoach().getId());
+            Optional<Client> clientOptional = clientService.findById(id);
             if (clientOptional.isPresent()) {
                 return new ResponseEntity<>(clientOptional.get(), HttpStatus.OK);
             } else {

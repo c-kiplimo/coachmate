@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Contract {
     private float individualFeesPerSession;
     private float groupFeesPerSession;
     private int noOfSessions;
+    private float amountDue;
 
     private long orgId;
 

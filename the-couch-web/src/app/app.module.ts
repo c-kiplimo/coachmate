@@ -57,6 +57,7 @@ import { ReceiptsComponent } from './payment/payment/receipts/receipts.component
 import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
 import { AccountStatementComponent } from './payment/payment/account-statement/account-statement.component';
 import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 
@@ -94,6 +95,7 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
     AddCoachComponent,
 
     HomeComponent,
+      FeedbackComponent,
 
 
   ],

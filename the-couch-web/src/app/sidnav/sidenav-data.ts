@@ -35,6 +35,16 @@ export const navbarData = {
         icon: 'fal fa-money-check-edit-alt',
         label: 'Payment'
     },
+    {
+        routeLink: 'feedback',
+        icon: 'fal fa-phone',
+        label: 'Feedback'
+    },
+    {
+        routeLink: 'support',
+        icon: 'fal fa-phone',
+        label: 'Support'
+    },
 ],
 navDataforOrg: [
     {
@@ -56,6 +66,16 @@ navDataforOrg: [
         routeLink: 'contracts',
         icon: 'fa-solid fa-file-contract',
         label: 'Contracts'
+    },
+    {
+        routeLink: 'payment',
+        icon: 'fal fa-money-check-edit-alt',
+        label: 'Payment'
+    },
+    {
+        routeLink: 'feedback',
+        icon: 'fal fa-phone',
+        label: 'Feedback'
     },
     {
         routeLink: 'support',
@@ -84,6 +104,11 @@ navDataforClient: [
         routeLink: 'contracts',
         icon: 'fa-solid fa-file-contract',
         label: 'Contracts'
+    },
+    {
+        routeLink: 'payment',
+        icon: 'fal fa-money-check-edit-alt',
+        label: 'Payment'
     },
  
     {
