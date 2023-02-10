@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
+import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -40,15 +41,22 @@ public class ClientService {
     CoachRepository coachRepository;
 
     @Autowired
+
+    ClientBillingAccountService clientBillingAccountService;
+
     OrganizationRepository organizationRepository;
+
 
     private final ClientRepository clientRepository;
     private final RegistrationService registrationService;
     private final UserRepository userRepository;
-    public ClientService(ClientRepository clientRepository, RegistrationService registrationService, UserRepository userRepository) {
+    private final ClientWalletRepository clientWalletRepository;
+    public ClientService(ClientRepository clientRepository, RegistrationService registrationService,
+                         UserRepository userRepository, ClientWalletRepository clientWalletRepository) {
         this.clientRepository = clientRepository;
         this.registrationService = registrationService;
         this.userRepository = userRepository;
+        this.clientWalletRepository = clientWalletRepository;
     }
 
 
@@ -85,10 +93,25 @@ public class ClientService {
         //client.setProfession(optionalCoach.getProfession());
 
 
-        Object saveClient = clientRepository.save(client);
+        Client saveClient = clientRepository.save(client);
 
-        registrationService.registerClientAsUser((Client) saveClient);
-        return (Client) saveClient;
+        registrationService.registerClientAsUser(saveClient);
+
+        // Create client wallet
+        ClientWallet clientWallet = new ClientWallet();
+        clientWallet.setCreatedBy(optionalCoach.get().getFullName());
+        clientWallet.setClient(saveClient);
+        clientWallet.setCoach(optionalCoach.get());
+        clientWalletRepository.save(clientWallet);
+        log.info("Client Wallet created Successfully!");
+
+        // Create client Billing Account
+        ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
+        clientBillingAccount.setCreatedBy(optionalCoach.get().getFullName());
+        clientBillingAccount.setCoach(optionalCoach.get());
+        clientBillingAccountService.createBillingAccount(clientBillingAccount);
+        return saveClient;
+
     }
 
     // Get all clients
@@ -352,10 +375,12 @@ public class ClientService {
         return clientRepository.findByEmail(email);
     }
 
+
     public List<Client> getClientByOrgId(Long orgId) {
 
         Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(orgId);
 
         return clientRepository.findClientByOrganization(optionalOrganization.get());
     }
+
 }
