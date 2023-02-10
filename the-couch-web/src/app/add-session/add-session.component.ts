@@ -144,6 +144,13 @@ export class AddSessionComponent implements OnInit {
     console.log(this.selectedContract);
 
   }
+  @ViewChild('modal', { static: false })
+modal!: ElementRef;
+closeModal() {
+  this.modal.nativeElement.style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+  
   getClients(){
     const options = {
       page: 1,
