@@ -64,7 +64,7 @@ public class ClientResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("request to add new client");
         try {
-            Client newClient = clientService.addNewClient(userDetails.getCoach().getId(),
+            Client newClient = clientService.addNewClient(clientRequest.getCoachId(),
                     clientRequest);
             if (newClient != null) {
                 ClientRequest response = modelMapper.map(newClient, ClientRequest.class);

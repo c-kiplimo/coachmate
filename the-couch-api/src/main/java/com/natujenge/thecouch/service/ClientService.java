@@ -44,6 +44,7 @@ public class ClientService {
 
     ClientBillingAccountService clientBillingAccountService;
 
+    @Autowired
     OrganizationRepository organizationRepository;
 
 
@@ -72,12 +73,18 @@ public class ClientService {
             throw new IllegalArgumentException("Coach not found");
 
         }
+
         Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(coachId);
 
 
         Client client = new Client();
+
+        if (optionalOrganization.isPresent()){
+            client.setOrganization(optionalOrganization.get());
+        }
+
         client.setCoach(optionalCoach.get());
-        client.setOrganization(optionalOrganization.get());
+
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
         client.setFullName(clientRequest.getFirstName()+' '+clientRequest.getLastName());
@@ -90,7 +97,7 @@ public class ClientService {
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
         client.setCreatedBy(optionalCoach.get().getFullName());
-        //client.setProfession(optionalCoach.getProfession());
+        client.setProfession(clientRequest.getProfession());
 
 
         Client saveClient = clientRepository.save(client);
