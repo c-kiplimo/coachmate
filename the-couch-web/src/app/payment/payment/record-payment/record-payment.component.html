@@ -15,26 +15,21 @@
           Record Payment
         </h1>
   
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
       </div>
       <div class="modal-body">
         <form  ngNativeValidate>
           <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-6">
                 <div >
                     <div class="input-group" >
                       <div class="input-group-prepend">
-                <label for="client">Client</label>
+                <label for="client">Select The Client How Payed</label>
                 <br>
-                <select id="client" formControlName="client">
+                <select class="form-select" id="clientId" name="clientId"
+                [(ngModel)]="paymentForm.clientId">
                     <option selected>Select Client To Record</option>
-                  <option *ngFor="let client of clients" [value]="client">
-                    {{ client }}
+                  <option *ngFor="let client of clients" value="{{client.id}}">
+                    {{ client.firstName + " " + client.lastName }}
                   </option>
                 </select>
           </div>
@@ -42,19 +37,20 @@
                 </div>
             </div>
           <div class=" mb-3 col-md-6 ">
-            <div >
+            <!-- <div >
                 <div class="input-group" >
                   <div class="input-group-prepend">
                 <label for="modeOfPayment">Mode of Payment</label>
                     <br>
-                <select id="modeOfPayment" formControlName="modeOfPayment">
+                <select id="modeOfPayment" class="form-select" name="modeOfPayment"
+                  [(ngModel)]="paymentForm.modeOfPayment">
                     <option selected>Select Payment Mode</option>
-                    <option value="PREPAY">MPESA</option>
-                    <option value="POSTPAY">BANK</option>
+                    <option value="MANUAL">MANUAL</option>
+                    <option value="AUTO">AUTO</option>
                 </select>
               </div>
           </div>    
-          </div>
+          </div> -->
           </div>
                 </div>
             <div class="row p-2">
@@ -63,42 +59,63 @@
                 <label for="extPaymentRef">External Payment Ref</label>
                 <br>
                 <input
+                class="form-control"
                   type="text"
                   id="extPaymentRef"
-                  formControlName="extPaymentRef"
+                  name="extPaymentRef"
+                  [(ngModel)]="paymentForm.extPaymentRef"
                 />
           </div>
               </div>
+
               <div class=" mb-3 col-md-6 ">
-                <label for="paymentRef">Payment Reference</label>
+                <label for="paymentCurrency">Payment Currency</label>
+                <br>
+      
+                <select id="paymentCurrency" class="form-select" name="paymentCurrency"
+                  [(ngModel)]="paymentForm.paymentCurrency">
+                    <option selected>Select Payment Currency</option>
+                    <option value="KSH">KSH</option>
+                    <option value="USD">USD</option>
+                    <option value="CNY">CNY</option>
+                </select>
+              </div>
+
+              <div class=" mb-3 col-md-6 ">
+                <label for="description">Description</label>
                 <br>
                 <input
+                class="form-control"
                   type="text"
-                  id="paymentRef"
-                  formControlName="paymentRef"
+                  id="description"
+                  name="description"
+                  [(ngModel)]="paymentForm.description"
                 />
-          </div>
               </div>
+
+          </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
           <div class="form-group">
             
-    <div>
+        <div>
         <label for="amount">Amount</label>
         <br>
-        <input type="number" id="amount" formControlName="amount" />
+        <input type="number" class="form-control" id="amount" name="amount"
+        [(ngModel)]="paymentForm.amount" />
       </div>
-          </div>
-                </div>
-              </div>
+      </div>
+      </div>
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" 
+        [(ngModel)]="paymentForm.sendNotification" id="sendNotification">
+        <label class="form-check-label" name="sendNotification" for="sendNotification">Send Notification to Client</label>
+     </div>
       <div class="modal-footer">
-        <button
-          type="submit"
-          class="btn btn-success"
-          data-bs-dismiss="modal"
-          [disabled]="
-       
-        ">Record 
+        <button (click)="recordPayment()"
+          type="submit" class="btn btn-success"
+        >Record 
         </button>
       </div>
       </form>
