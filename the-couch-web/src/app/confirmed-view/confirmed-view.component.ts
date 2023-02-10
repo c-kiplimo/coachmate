@@ -30,6 +30,7 @@ export class ConfirmedViewComponent implements OnInit {
           this.errorMessage = res.body.message;
         } else {
           this.confirmationSuccess = true;
+          this.router.navigate(['/signin']);
         }
       },
       (err: any) => {

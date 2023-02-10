@@ -30,14 +30,9 @@ import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { contractComponent } from './contract/contract.component';
-import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
-
 import { FeebackFormComponent } from './feeback-form/feeback-form.component';
-
-
-
- import { contractViewComponent } from './contract-view/contract-view.component';
+import { contractViewComponent } from './contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
@@ -52,7 +47,6 @@ import { AddTrainingComponent } from './coach-education/add-training/add-trainin
 import { CoachEducationService } from './services/CoachEducationService';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { PipesPipe } from './pipes.pipe';
-import { RegistrationComponent } from './coach-aggregator/registration/registration.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
 
 import { AddCoachComponent } from './add-coach/add-coach.component';
@@ -87,7 +81,6 @@ import { FeedbackComponent } from './feedback/feedback.component';
     AddSessionComponent,
     SchedulesComponent,
     contractComponent,
-    AddObjectiveComponent,
     ClientViewComponent,
 
     FeebackFormComponent,
@@ -97,7 +90,6 @@ import { FeedbackComponent } from './feedback/feedback.component';
     ConfirmedViewComponent,
     ClientConfirmComponent,
     PipesPipe,
-    RegistrationComponent,
     ContractDetailsComponent,
     GetPeriodPipe,
     AddCoachComponent,

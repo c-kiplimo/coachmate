@@ -8,7 +8,6 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { SessionsComponent } from './sessions/sessions.component';
 import { AddSessionComponent } from './add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
-import { AddObjectiveComponent } from './add-objective/add-objective.component';
 import { ClientViewComponent } from './client-view/client-view.component';
 import { contractViewComponent } from './contract-view/contract-view.component';
 import { contractComponent } from './contract/contract.component';

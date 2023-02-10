@@ -31,6 +31,7 @@ export class contractComponent implements OnInit{
   Objectives = {
     objective: ''
   };
+coachingCategory: any;
 
   constructor(private clientService : ClientService,
     private apiService:ApiService,

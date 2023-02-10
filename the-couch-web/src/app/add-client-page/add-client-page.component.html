@@ -1,34 +1,29 @@
 <div class="row">
-  <div class="col-10">
-      <h3>Add Client</h3>
+  <div class="col-5">
   </div>
+  <div class="col-5">
+    
+      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
+      height: 100px; padding-top: 0%; margin-top: 0%;">
+    
+</div>
   <div class="col-2">
-      <app-user></app-user>
+        <app-user></app-user>
   </div>
-
 </div>
 
 <div class="container mb-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card card-table d-flex justify-content-center align-items-center">
+      <div class="card card-table d-flex">
         <div class="">
       <h1 class="modal-title fs-5 text-center" id="exampleModalLabel" >
         Add New Client
       </h1>
-
-      <button
-        type="button"
-        class="btn-close btn-close-white"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      ></button>
     </div>
-    <div class="modal-body">
       <form>
         <div class="row p-2">
           <div class=" mb-3 col-md-6 ">
-        <div class="mb-3 form-group">
           <label for="exampleInputEmail1">First Name *</label>
           <input
           [(ngModel)]="addClient.firstName" 
@@ -41,9 +36,7 @@
             required
           />
         </div>
-          </div>
         <div class=" mb-3 col-md-6 ">
-        <div class="mb-3 ">
           <label for="exampleInputEmail1">Last Name *</label>
           <input
           [(ngModel)]="addClient.lastName"
@@ -57,10 +50,8 @@
           />
         </div>
         </div>
-          </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-        <div class="form-group">
           <label for="exampleInputPassword1">Mobile no *</label>
           <input
             required
@@ -74,9 +65,7 @@
             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
           />
         </div>
-            </div>
             <div class=" mb-3 col-md-6 ">
-        <div class="form-group">
           <label for="exampleInputPassword1">Email *</label>
           <input
           [(ngModel)]="addClient.email" 
@@ -90,7 +79,6 @@
             </div>
             <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
-        <div class="form-group">
           <label for="exampleInputPassword1">Address *</label>
           <input
           [(ngModel)]="addClient.physicalAddress"
@@ -102,9 +90,7 @@
             required
           />
         </div>
-              </div>
               <div class=" mb-3 col-md-6 ">
-        <div class="form-group ">
           <label for="profession">Profession</label>
           <input 
           type="text" 
@@ -118,57 +104,33 @@
               </div>
             
               <div class="row p-2">
-                <div class=" mb-3 col-md-12 ">
-          <div >
-
-            <div class="input-group">
-
-            <div class="input-group" >
-
-              <div class="input-group-prepend">
+                <div class=" mb-3 col-md-6 ">
                 <label class="input-group-text" for="paymentMode">Payment Mode</label>
-              </div>
               <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode">
                 <option selected>Select Payment Mode</option>
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
               </select>
-            </div>
-          </div>
                 </div>
-          <div class=" mb-3 col-md-12 ">
-          <div>
-            <div class="input-group">
-              <div class="input-group-prepend">
+          <div class=" mb-3 col-md-6 ">
                 <label class="input-group-text" for="clientType">Client Type</label>
-              </div>
               <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType" >
                 <option selected>Select Client type</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="CORPORATE">CORPORATE</option>
                 <option value="GROUP">GROUP</option>
               </select>
-            </div>
-          </div>
         </div>
-        <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
-          <div>
-            <div class="input-group">
-              <div class="input-group-prepend">
+        <div class=" mb-3 col-md-6 " *ngIf="this.userRole == 'ORGANIZATION'">
                 <label class="input-group-text" for="coach">Assign Coach</label>
-              </div>
               <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id" 
               (change)="selectedClient($event)" >
                <option *ngFor="let coach of OrgCoaches" [value]="coach.id">{{coach.firstName}} {{coach.lastName}}</option>
               </select>
-            </div>
           </div>
         </div>
-                </div>
         <div class="row p-2">
-          <div class=" mb-3 col-md-12">
-          <div >
-    <div class="form-group mb-3">
+    <div class=" mb-3">
       <label for="reason">Reason</label>
       <input 
       type="text" 
@@ -177,7 +139,6 @@
       name="reason"
       [(ngModel)]="addClient.reason" >
     </div>
-          </div>
         </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-bs-dismiss="exampleModalLabel">
@@ -197,8 +158,6 @@
       ">ADD CLIENT
       </button>
     </div>
-  </div>
-</div>
 <!-- <div class="row">
   <div class="col-10">
      
