@@ -16,7 +16,7 @@
                 name="codes"
                 [(ngModel)]="filters.status"
               >
-                <option value="">Filtering options</option>
+                <option value="">All statuses</option>
                 <option value="ACTIVE">ACTIVE</option>
                 <option value="SUSPENDED">SUSPENDED</option>
                 <option value="CLOSED">CLOSED</option>
@@ -35,7 +35,7 @@
               />
             </div>
 <div class="col-3">
-    <button class="btn button-filter  search-bar" (click)="getAllCustomers(1)">
+    <button class="btn button-filter  search-bar" (click)="getSearchedClient(1)">
               <i class="fa fa-search" aria-hidden="true"></i>
               Search
             </button>
@@ -46,6 +46,7 @@
     </button>
   </div>
   </div>
+  
 <div class="row list-container container ">
   <table class="table">
     <thead>
@@ -54,10 +55,8 @@
         <th scope="col">Client Name</th>
         <th scope="col">Email</th>
         <th scope="col">Phone Number</th>
-        <th scope="col">Group/Individual</th>
+        <th scope="col">Group/Cooporate</th>
         <th scope="col">Address</th>
-        <th scope="col">Added On</th>
-        <th scope="col">Reason</th>
         <th scope="col">Status</th>
         <th scope="col">Actions</th>
       </tr>
@@ -71,8 +70,6 @@
         <td>{{ client.msisdn }}</td>
         <td>{{ client.clientType }}</td>
         <td>{{ client.physicalAddress }}</td>
-        <td>{{ client.createdAt }}</td>
-        <td>{{ client.reason }}</td>
         <td>
           <span class="badge"[ngClass]="getClass(client)"
           > {{ client.status }}</span>
@@ -129,8 +126,10 @@
         </div>
         <div class="mb-3 form-group">
           <label for="email_address" class="form-label">Email</label>
-          <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email_address"
-          value="{{ clientToBeUpdated?.email_address }}">
+
+          <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
+
+          value="{{ clientToBeUpdated?.email }}">
         </div>
         <div class="mb-3 form-group">
           <label for="msisdn" class="form-label">Phone Number</label>
@@ -139,21 +138,26 @@
         </div>
 
         <div class="mb-3 form-group">
-          <label for="physical_address" class="form-label">Address</label>
-          <input type="text" class="form-control" id="physical_address" name="physical_address" formControlName="physical_address"
-          value="{{ clientToBeUpdated?.physical_address}}">
+
+          <label for="physicalAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physicalAddress"
+
+
+          value="{{ clientToBeUpdated?.physicalAddress}}">
         </div>
         <div class="mb-3 form-group">
           <label for="reason" class="form-label">Reason</label>
           <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
           value="{{ clientToBeUpdated?.reason}}">
         </div>
-        <div class="input-group mb-3">
+        <!-- <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
-          <select class="form-select" id="inputGroupSelect01" formControlName="payment_mode"
-          value="{{ clientToBeUpdated?.payment_mode }}">
+
+          <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
+
+          value="{{ clientToBeUpdated?.paymentMode }}">
             <option selected>Select Payment Mode</option>
             <option value="PREPAY">PREPAY</option>
             <option value="POSTPAY">POSTPAY</option>
@@ -164,13 +168,13 @@
             <label class="input-group-text" for="clientType">Client Type</label>
           </div>
           <select class="form-select" id="inputGroupSelect01" formControlName="type" 
-          value="{{ clientToBeUpdated?.type }}">
+          value="{{ clientToBeUpdated?.clientType }}">
             <option selected>Select Client type</option>
             <option value="INDIVIDUAL">INDIVIDUAL</option>
             <option value="CORPORATE">CORPORATE</option>
             <option value="GROUP">GROUP</option>
           </select>
-        </div>
+        </div> -->
        </form>
       </div>
       <div class="modal-footer">

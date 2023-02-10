@@ -6,7 +6,7 @@
             <div class="">
               <h1 class="text-center mb-3">Add session</h1>
             </div>
-            <form [formGroup]="addSessionForm"  >
+            <form>
               <div class="row p-2">
 
                 <div class="mb-3 col-md-12">
@@ -26,13 +26,14 @@
                 <div class=" mb-3 col-md-6 ">
                   <label for="sessionname">Session Name</label>
                   <input 
-                  formControlName="name" 
+                  [(ngModel)]="formData.name" 
+                  
                   type="text" 
                   class="form-control" 
-                  id="sessionname" 
+                  id="name"
                   placeholder="Enter Session Name" 
                   name="name" 
-                  [(ngModel)]="addSessionForm.name">
+                 >
                
                 </div>
                 <div class="mb-3 col-md-6" >
@@ -41,10 +42,9 @@
                   </div>
                   <select 
                     class="form-select" 
-                    formControlName="sessionType" 
                     id="inputGroupSelect01" 
-                    name="type" 
-                    [(ngModel)]="addSessionForm.sessionType"> 
+                    name="sessionType" 
+                    [(ngModel)]="formData.sessionType"> 
                     <option value="INDIVIDUAL">INDIVIDUAL</option>
                     <option value="GROUP">GROUP</option>
                     <option value="OTHER">OTHER</option>
@@ -55,11 +55,11 @@
                   <label for="inputlastname">Session Details</label>
                   <input type="text" 
                   class="form-control" 
-                  formControlName="sessionDetails" 
+                  [(ngModel)]="formData.sessionDetails"
                   id="inputEmail4" 
                   placeholder="Enter Session Description" 
-                  name="details" 
-                  [(ngModel)]="addSessionForm.sessionDetails" >
+                  name="sessionDetails" 
+                 >
                 
                 </div>
                 <div class="mb-3 col-md-6">
@@ -69,9 +69,9 @@
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Date" 
-                  name="session_date" 
-                  formControlName="sessionDate" 
-                  [(ngModel)]="addSessionForm.sessionDate" >
+                  name="sessionDate" 
+                  [(ngModel)]="formData.sessionDate"
+                >
                   
                 </div>
               </div>
@@ -82,9 +82,8 @@
                     class="form-control" 
                     id="inputEmail4" 
                     placeholder="Time" 
-                    name="session_time_from" 
-                    formControlName="sessionStartTime" 
-                    [(ngModel)]="addSessionForm.sessionStartTime" >
+                    name="sessionStartTime" 
+                    [(ngModel)]="formData.sessionStartTime" >
                     
                     </div>
                 <div class="mb-3 col-md-6">
@@ -93,9 +92,9 @@
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Time" 
-                  name="session_time_to"
-                  formControlName="sessionEndTime"  
-                  [(ngModel)]="addSessionForm.sessionEndTime" >
+                  name="sessionEndTime"
+                  [(ngModel)]="formData.sessionEndTime"
+                  >
                   
                 </div>
   
@@ -105,25 +104,27 @@
                     <label class="form-group-text" for="clientType">Session Venue</label>
                 <select class="form-select" 
                     id="inputGroupSelect01" 
-                    name="session_venue" 
-                    formControlName="sessionVenue" 
-                    [(ngModel)]="addSessionForm.sessionVenue">
+                    name="sessionVenue" 
+                    [(ngModel)]="formData.sessionVenue">
+                   >
                     <option value="VIRTUAL">VIRTUAL</option>
                     <option value="PHYSICAL">PHYSICAL</option>
                   </select>
                     </div>
                     <div class="mb-3 col-md-6">
-                      <label for="inputEmail4">Session Goals</label>
+                      <label for="inputEmail4">Session Amount: (in USD)</label>
                       <input 
-                      type="email" class="form-control" 
-                      id="inputEmail4" placeholder="Goals" 
-                      name="goals" 
-                      formControlName="goals" 
-                      [(ngModel)]="addSessionForm.goals">
+                      type="number" class="form-control" 
+                      value="this.selectedContract.individualFeesPerSession"
+                      id="inputEmail4" placeholder="Session Amount in USD" 
+                      name="sessionAmount" 
+                      [(ngModel)]="formData.sessionAmount"
+                    >
                     </div>
                     <div class="text-center">
                 <button 
-                type="submit" (click)="addSession()"
+                type="submit" 
+                (click)="addSession()"
                 class="btn btn-signup mb-3 mt-2 p-2 text-center"
                 >Create Session</button>
           </div>

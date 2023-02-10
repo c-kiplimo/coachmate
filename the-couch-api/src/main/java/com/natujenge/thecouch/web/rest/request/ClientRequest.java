@@ -18,5 +18,7 @@ public class ClientRequest {
     private String password;
     private String token;
     private Long id;
+    private Long coachId;
+    private String createdBy;
 
 }

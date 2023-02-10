@@ -16,6 +16,8 @@ import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 
+
+
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',
@@ -75,8 +77,10 @@ export class ContractDetailsComponent implements OnInit {
   coachData: any;
   sessionToBeUpdated: any;
   updateSession: any;
-userDetails: any;
+  userDetails: any;
   sessions: any;
+  contractId: any;
+  contract: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
   console.log(event.target.attributes.id.nodeValue);
 
@@ -96,11 +100,13 @@ userDetails: any;
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: ClientService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+   
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
+      this.contractId = id;
     this.contract = this.clientService.getContract(id).subscribe((data: any) => {
       this.contract = data.body;
       console.log(this.contract);
@@ -124,10 +130,7 @@ userDetails: any;
       sessionEndTime:'',
       sessionVenue:'',
       goals:'',
-      addSessionForm: {
-        sessionType: "INDIVIDUAL",
-        sessionVenue: "VIRTUAL",
-      } 
+      
     });
     this.addsessionForm = this.formbuilder.group({
       sessionDate: '',
@@ -153,22 +156,50 @@ userDetails: any;
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
   }
+  @ViewChild('sessionModal', { static: false })
+  sessionModal!: ElementRef;
   addSession () {
-   this.addSessionForm.clientId = this.selectedContract.client.id;
-   console.log(this.addSessionForm);
+    this.loading = true;
+    console.log(this.addSessionForm);
+   console.log('add button clicked here')
+   const session = this.addSessionForm;
+   session.contractId = this.contractId;
+   if (typeof this.sessionType === "string") {
+    let stringValue = this.sessionType;
+    if(this.sessionType === 'INDIVIDUAL') {
+      session.sessionAmount = this.contract.individualFeesPerSession;
+    }
+    else
+    {session.sessionAmount = this.contract.groupFeesPerSession;}
+  }
    const params = {
-      clientId: this.selectedContract.client.id,
+      clientId: this.contract.client.id,
       
-      contractId: this.addSessionForm.contractId
+      contractId:this.contract.id
    };
 
    console.log(params);
- 
+ console.log("indivudual fee per person", session.sessionAmount)
     this.sessionService.addSession(this.addSessionForm, params).subscribe((res:any) => {
       console.log(res);
-      this.router.navigate(['/sessions']);
+      this.toastrService.success('Session added!', 'Success!');
+      setTimeout(() => {
+        location.reload();
+      }, 5);
+      this.sessionModal.nativeElement.classList.remove('show');
+      this.sessionModal.nativeElement.style.display = 'none';
+      
+
+      
     });
-  }
+}
+@ViewChild('modal', { static: false })
+modal!: ElementRef;
+closeModal() {
+  this.modal.nativeElement.style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+
   getSessionsBycontractId(contractId:any){
     console.log("contract id gottten", contractId);
     this.loading = true;
@@ -181,6 +212,7 @@ userDetails: any;
       },
       (error: any) => {
         console.log(error);
+        this.loading = false;
       }
     );
 
@@ -215,13 +247,10 @@ editSession(client:any){
     sessionGoals: any;
     session: any;
     id:any;
-    contract:any;
-    contractId!: number;
-    closeModal() {
-    throw new Error('Method not implemented.');
-    }
     
     
       }
     
     
+
+

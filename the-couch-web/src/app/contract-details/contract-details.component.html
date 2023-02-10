@@ -1,35 +1,78 @@
 <div class="container mb-3">
-    <div class="card">
+    <div class="card details-card">
       <div class="card-header">
-        <h3>Coaching Contract</h3>
+        <h3>{{ contract.coachingTopic }} Coaching Contract</h3>
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-6">
-            <p><strong>Contract Id:</strong> {{ contract.id }}</p>
-            <p><strong>Coaching Topic:</strong> {{ contract.coachingTopic }}</p>
-            <p><strong>Contract Type:</strong> {{ contract.coachingCategory }}</p>
-            <p><strong>Client Name:</strong> {{ contract.client.fullName }}</p>
-            <p><strong>Start Date:</strong> {{ contract.startDate }}</p>
-            <p><strong>End Date:</strong> {{ contract.endDate }}</p>
-          </div>
-          <div class="col-md-6">
-            <p><strong>Number of Sessions:</strong> {{ contract.noOfSessions }}</p>
-            <p><strong>Fees per Session [Individual]:</strong> {{ contract.individualFeesPerSession}}</p>
-            <p><strong>Fees per Session [Group]:</strong> {{ contract.groupFeesPerSession }}</p>
-            <p><strong>Objectives:</strong> {{ contract.objectives }}</p>
-          </div>
-        </div>
-            </div>
+          <div class="col"></div>
+          <div class="col-md-8">
+            <div class="session-details" [@fadeIn] >
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Contract Id:</span>
+                <span class="value">{{ contract.id }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Coaching Topic:</span>
+                <span class="value">{{ contract.coachingTopic }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Contract Type:</span>
+                <span class="value">{{ contract.coachingCategory }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail ">
+                <span class="title">Client Name:</span>
+                <span class="value">{{ contract.client.fullName }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Start Date:</span>
+                <span class="value">{{ contract.startDate }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">End Date:</span>
+                <span class="value">{{ contract.endDate }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Number of Sessions:</span>
+                <span class="value">{{ contract.noOfSessions }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Fees per Session [Individual]:</span>
+                <span class="value">{{ contract.individualFeesPerSession }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Fees per Session [Group]:</span>
+                <span class="value">{{ contract.groupFeesPerSession }}</span>
+              </div>
+              <div class="d-flex justify-content-between main-detail">
+                <span class="title">Objectives:</span>
+                <span class="value">{{ contract.objectives }}</span>
               </div>
             </div>
-            <div class="col-2">
+        
+          
+          </div>
+          <div class="col"></div>
+        
+        </div>
+      </div>
+
+        <br/>
+            <div class="row">
+              <div class="col-md-2">
+                <h4 class="text-center">Sessions</h4>
+              </div>
+
+              <div class="col-md-8"></div>
+              <div class="col-md-2">
               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
+
                 <i class="fa-solid fa-user-plus"></i>
                Add Session
               </button>
+              </div>
             </div>
-            <div class="row list-container container mt-2 " >
+            <div class="row list-container container mt-2">
               <table class="table table-striped"  >
                 <thead>
                   <tr>
@@ -44,7 +87,7 @@
                   </tr>
                 </thead>
             
-                <tbody  class="list-container">
+                <tbody>
                   <tr *ngFor="let session of sessions">
                     <th scope="row">{{ session.id }}</th>
                     <td>{{ session.name }}</td>
@@ -73,93 +116,116 @@
                 No sessions Found.
               </p>
             </div>
+    </div>
+  </div>
   
-  <!-- Modal for editing a session -->
+  <!-- Modal for additing a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{{ modalTitle }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close"class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <form [formGroup]="addSessionForm" >
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="sessionname">Session Name</label>
-                  <input 
-                  type="text" 
-                  class="form-control" 
-                  id="sessionname" 
-                  placeholder="Enter Session Name" 
-                  name="name" 
-                  [(ngModel)]="addSessionForm.name">
-                </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Session Details</label>
-                  <input type="text" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="details" 
-                  [(ngModel)]="addSessionForm.sessionDetails" >
+          <form>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="sessionname">Session Name</label>
+                <input 
+                [(ngModel)]="addSessionForm.name" 
                 
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Session Date</label>
-                  <input type="date" 
-                  variant="success" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Date" 
-                  name="session_date" 
-                  [(ngModel)]="addSessionForm.sessionDate" >   
-                </div>
+                type="text" 
+                class="form-control" 
+                id="name"
+                placeholder="Enter Session Name" 
+                name="name" 
+               >
+             
               </div>
-              <div class="row p-2">
-                  <div class="mb-3 col-md-6">
-                    <label for="inputEmail4">From</label>
-                    <input type="time" 
-                    class="form-control" 
-                    id="inputEmail4" 
-                    placeholder="Time" 
-                    name="session_time_from" 
-                    [(ngModel)]="addSessionForm.sessionStartTime" >
-                    </div>
+              <div class="mb-3 col-md-6" >
+                <div class="form-group-prepend">
+                  <label class="form-group-text" for="clientType">Session Type</label>
+                </div>
+                <select 
+                  class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="sessionType" 
+                  [(ngModel)]="addSessionForm.sessionType"> 
+                  <option value="INDIVIDUAL">INDIVIDUAL</option>
+                  <option value="GROUP">GROUP</option>
+                  <option value="OTHER">OTHER</option>
+                </select>
+              </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="inputlastname">Session Details</label>
+                <input type="text" 
+                class="form-control" 
+                [(ngModel)]="addSessionForm.sessionDetails"
+                id="inputEmail4" 
+                placeholder="Enter Session Description" 
+                name="sessionDetails" 
+               >
+              
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">Session Date</label>
+                <input type="date" 
+                variant="success" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Date" 
+                name="sessionDate" 
+                [(ngModel)]="addSessionForm.sessionDate"
+              >
+                
+              </div>
+            </div>
+            <div class="row p-2">
                 <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">To</label>
+                  <label for="inputEmail4">From</label>
                   <input type="time" 
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Time" 
-                  name="session_time_to" 
-                  [(ngModel)]="addSessionForm.sessionEndTime" >
-                </div>
+                  name="sessionStartTime" 
+                  [(ngModel)]="addSessionForm.sessionStartTime" >
+                  
+                  </div>
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">To</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="sessionEndTime"
+                [(ngModel)]="addSessionForm.sessionEndTime"
+                >
+                
               </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                    <label class="form-group-text" for="clientType">Session Venue</label>
-                <select class="form-select" 
-                    id="inputGroupSelect01" 
-                    name="session_venue" 
-                    [(ngModel)]="addSessionForm.sessionVenue">
-                    <option value="VIRTUAL">VIRTUAL</option>
-                    <option value="PHYSICAL">PHYSICAL</option>
-                  </select>
+
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                  <label class="form-group-text" for="clientType">Session Venue</label>
+              <select class="form-select" 
+                  id="inputGroupSelect01" 
+                  name="sessionVenue" 
+                  [(ngModel)]="addSessionForm.sessionVenue">
+                 >
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PHYSICAL">PHYSICAL</option>
+                </select>
+                  </div>
+                    <div class="modal-footer">
+                      <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-primary"(click)="addSession()">Add Session</button>
                     </div>
-                    <div class="mb-3 col-md-6">
-                      <label for="inputEmail4">Session Goals</label>
-                      <input 
-                      type="email" class="form-control" 
-                      id="inputEmail4" placeholder="Goals" 
-                      name="goals" [(ngModel)]="addSessionForm.goals">
-                    </div>
-<div class="modal-footer">
-  <button type="submit" class="btn btn-primary">Save</button>
-  <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-</div>
-<!-- Modal for adding a session -->
+                    
+
 

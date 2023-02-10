@@ -14,7 +14,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-              <h5 class="card-title">Continues Coaching Education Hours</h5>
+              <h5 class="card-title">Continuous Coaching Education Hours</h5>
               <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
             </div>
             <div class="col">
@@ -51,9 +51,6 @@
         <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
         <td scope="row">{{coachEducation.trainingHours}}</td>
         <td class="actions">
-          <i 
-            class="fa-solid fa-arrow-up-right-from-square p-1"
-          ></i>
           <i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
           (click)="setCurrectCoachEducation(coachEducation)"></i>
           <i data-bs-toggle="modal" data-bs-target="#confirmDelete"
@@ -63,10 +60,10 @@
      
     </tbody>
   </table>
-  <div class="donut-wrapper" [@fadeIn]>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
-  <p class="text-muted mt-5" >
+  <p class="text-muted mt-5" *ngIf="loading" >
     No Courses Found.
   </p>
 </div>

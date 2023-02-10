@@ -2,10 +2,7 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.CoachRepository;
-import com.natujenge.thecouch.repository.ContractRepository;
-import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +33,8 @@ public class SessionService {
     ClientRepository clientRepository;
     @Autowired
     ContractRepository contractRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
 
     @Autowired
     CoachRepository coachRepository;
@@ -63,10 +62,10 @@ public class SessionService {
     }
 
     // Get Individual Sessions by id
-    public SessionDto findSessionByIdAndCoachId(Long id, Long coachId) {
-        log.debug("Request to get session : {} and coachId : {}", id,coachId);
+    public Session findSessionByIdAndCoachId(Long id) {
+        log.debug("Request to get session : {} and coachId : {}", id);
 
-        Optional<SessionDto> sessionOptional = sessionRepository.findByIdAndCoachId(id,coachId);
+        Optional<Session> sessionOptional = sessionRepository.findById(id);
         if (sessionOptional.isPresent()) {
             return sessionOptional.get();
 
@@ -92,6 +91,8 @@ public class SessionService {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
+        Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
+
         // Client
         Client client = optionalClient.get();
         // Coach
@@ -106,6 +107,7 @@ public class SessionService {
         sessionRequest.setContract(contract);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
+        sessionRequest.setOrgId(optionalOrganization.get().getId());
 
         try{
             return sessionRepository.save(sessionRequest);
@@ -190,5 +192,9 @@ public class SessionService {
     public List<SessionDto> findSessionByContractId(Long contractId) {
         log.debug("Request to get sessions : {} by contractId : {}", contractId);
         return sessionRepository.findByContractId(contractId);
+    }
+
+    public List<Session> getSessionByOrgId(Long orgId) {
+        return sessionRepository.findSessionByOrgId(orgId);
     }
 }

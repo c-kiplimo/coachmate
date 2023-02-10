@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   };
   coachEducationData: any;
   numberOfHoursCoachEducation: any;
+  numberOfHoursCoachingHours: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -40,6 +41,13 @@ export class DashboardComponent implements OnInit {
 
   OrgCoaches: any;
   numberofCoaches: any;
+
+  Clients: any;
+  OrgData: any;
+  orgSession: any;
+  OrgContracts: any;
+
+session: any;
   
 
   
@@ -70,19 +78,114 @@ export class DashboardComponent implements OnInit {
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+ 
+
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();
+      this.getOrgClients();
+
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      
+      this.getOrgContracts(this.orgSession.id);
+      this.getAllOrgSessions(this.orgSession.id);
 
      
-    }else {
+    }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
      
       this.getClientByEmail();
+      
     }
 
   }
+
+
+  getAllOrgSessions(id: any) {
+
+    this.sessions = [];
+    window.scroll(0, 0);
+
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+
+    this.clientService.getOrgSessions(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.sessions = response;
+        this.loading = false;
+        this.numberOfSessions = this.sessions.length;
+
+    this.clientService.getSessions(options).subscribe(
+      (response: any) => {
+        console.log(response.body.data);
+        this.sessions = response.body.data;
+        this.loading = false;
+
+      })
+    ,
+      (error: any) => {
+        console.log(error);
+      }
+    }
+    );
+  
+  }
+
+
+  getOrgContracts(id: any) {
+    this.loading = true;
+    this.clientService.getOrgContracts(id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.contracts = response;
+        this.loading = false;
+        this.numberOfContracts = this.contracts.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  getOrgClients(){
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    const id = this.coachData.id;
+    this.loading = true;
+    this.clientService.getOrgClients(id).subscribe(
+      (response) => {
+        this.loading = false;
+        this.Clients = response;
+        console.log(response)
+        console.log('clients',this.Clients)
+        this.numberOfClients = this.Clients.length;
+  
+      }, (error) => {
+        console.log(error)
+      }
+    )
+  }
+
+
+
+
+  navigateToSessionView(id: any) {
+    console.log(id);
+    this.route.navigate(['sessionView', id]);
+  }
+
   getClients() {
     const options = {
       page: 1,
@@ -144,6 +247,22 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  getClientContracts(id: any) {
+    // const data = {
+    //   clientId: id,
+    // }
+    this.clientService.getClientContracts(id).subscribe(
+      (response: any) => {
+        console.log('here contracts=>', response);
+        this.contracts = response;
+        console.log(this.contracts);
+      
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
 
   getNoOfSessions() {
     const options = {
@@ -158,18 +277,42 @@ export class DashboardComponent implements OnInit {
         this.sessions = response.body.data;
         this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
-        for (let i = 0; i < this.sessions.length; i++) {
-          totalMinutes += Number(this.sessions[i].sessionDuration);
 
-          this.numberOfHours = Math.floor(totalMinutes / 60);
-          this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+        let totalHours = 0;
+        for (let i = 0; i < this.sessions.length; i++) {
+          //sessionStartTime 17:04
+       
+       
+  
+        for (let i = 0; i < this.sessions.length; i++) {
+          if (this.sessions[i].sessionStatus === 'CONFIRMED'){
+          let startTime = this.sessions[i].sessionStartTime;
+          let endTime = this.sessions[i].sessionEndTime;
+        
+          let start = startTime.split(':');
+          let end = endTime.split(':');
+  
+          let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
+          let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
+  
+          if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
+            totalMinutes += endMinutes - startMinutes;
+          }
+
         }
-      },
+        
+        this.numberOfHours = Math.floor(totalMinutes / 60);
+        this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+      }
+        
+      }},
       (error: any) => {
         console.log(error);
       }
     );
+    
   }
+  
   getNoOfContracts() {
     this.clientService.getContracts().subscribe(
       (response: any) => {
@@ -250,8 +393,8 @@ export class DashboardComponent implements OnInit {
     this.clientService.getClientSessions(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.sessions = response;
-        console.log(this.sessions);
+        this.sessions = response.body;
+        console.log(this.sessions.body);
         this.numberOfSessions = this.sessions.length;
       },
       (error: any) => {
@@ -259,6 +402,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
         return 'badge-warning';
@@ -283,6 +427,8 @@ export class DashboardComponent implements OnInit {
         this.clients = response;
         this.numberOfClients = this.clients.length;
         this.getClientSessions(response[0].id);
+
+        this.getClientContracts(response[0].id);
       },
       (error: any) => {
         console.log(error);

@@ -6,6 +6,7 @@ import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
@@ -40,7 +41,11 @@ public class ClientService {
     CoachRepository coachRepository;
 
     @Autowired
+
     ClientBillingAccountService clientBillingAccountService;
+
+    OrganizationRepository organizationRepository;
+
 
     private final ClientRepository clientRepository;
     private final RegistrationService registrationService;
@@ -67,9 +72,12 @@ public class ClientService {
             throw new IllegalArgumentException("Coach not found");
 
         }
+        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(coachId);
+
 
         Client client = new Client();
         client.setCoach(optionalCoach.get());
+        client.setOrganization(optionalOrganization.get());
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
         client.setFullName(clientRequest.getFirstName()+' '+clientRequest.getLastName());
@@ -154,12 +162,13 @@ public class ClientService {
     }
 
     //get one client
-    public Optional<ClientDto> findById(Long id,Long coachId) {
+    public Optional<Client> findById(Long id) {
 
-        return clientRepository.findByCoachIdAndId(coachId,id);
+        return clientRepository.findById(id);
     }
 
     //Update client
+    @Transactional
     public Optional<Client> updateClient(Long id,Long coachId,
                                          ClientRequest clientRequest) {
         Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(id,coachId);
@@ -172,6 +181,8 @@ public class ClientService {
             client.setEmail(clientRequest.getEmail());
             client.setMsisdn(clientRequest.getMsisdn());
             client.setPhysicalAddress(clientRequest.getPhysicalAddress());
+            client.setReason(clientRequest.getReason());
+
             client = clientRepository.save(client);
             log.info("Updated client with id {}:", client.getId());
             return Optional.of(client);
@@ -362,6 +373,14 @@ public class ClientService {
 
     public List<Client> findByEmail(String email) {
         return clientRepository.findByEmail(email);
+    }
+
+
+    public List<Client> getClientByOrgId(Long orgId) {
+
+        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(orgId);
+
+        return clientRepository.findClientByOrganization(optionalOrganization.get());
     }
 
 }

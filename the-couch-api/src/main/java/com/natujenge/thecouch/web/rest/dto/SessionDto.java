@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 public interface SessionDto {
     Long getId();
+    Long getCoachId();
     String getName();
     SessionType getSessionType();
     SessionStatus getSessionStatus();
@@ -22,7 +23,7 @@ public interface SessionDto {
     String getAmountPaid();
 
     ClientView getClient();
-
+    CoachView getCoach();
     ContractView getContract();
 
     interface ClientView{
@@ -32,6 +33,9 @@ public interface SessionDto {
         ClientType getClientType();
 
         String getMsisdn() ;
+    }
+    interface CoachView{
+        Long getId();
     }
 
     interface ContractView{

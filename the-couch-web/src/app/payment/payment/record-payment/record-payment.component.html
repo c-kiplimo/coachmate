@@ -1,0 +1,107 @@
+<div class="row">
+    <div class="col-10">
+        
+    </div>
+    <div class="col-2">
+          <app-user></app-user>
+    </div>
+  </div>
+  <div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card card-table d-flex  ">
+          <div class="">
+        <h1 class="modal-title fs-5 text-center" id="exampleModalLabel" >
+          Record Payment
+        </h1>
+  
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form  ngNativeValidate>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+                <div >
+                    <div class="input-group" >
+                      <div class="input-group-prepend">
+                <label for="client">Client</label>
+                <br>
+                <select id="client" formControlName="client">
+                    <option selected>Select Client To Record</option>
+                  <option *ngFor="let client of clients" [value]="client">
+                    {{ client }}
+                  </option>
+                </select>
+          </div>
+            </div>
+                </div>
+            </div>
+          <div class=" mb-3 col-md-6 ">
+            <div >
+                <div class="input-group" >
+                  <div class="input-group-prepend">
+                <label for="modeOfPayment">Mode of Payment</label>
+                    <br>
+                <select id="modeOfPayment" formControlName="modeOfPayment">
+                    <option selected>Select Payment Mode</option>
+                    <option value="PREPAY">MPESA</option>
+                    <option value="POSTPAY">BANK</option>
+                </select>
+              </div>
+          </div>    
+          </div>
+          </div>
+                </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+          <div class="form-group">
+                <label for="extPaymentRef">External Payment Ref</label>
+                <br>
+                <input
+                  type="text"
+                  id="extPaymentRef"
+                  formControlName="extPaymentRef"
+                />
+          </div>
+              </div>
+              <div class=" mb-3 col-md-6 ">
+                <label for="paymentRef">Payment Reference</label>
+                <br>
+                <input
+                  type="text"
+                  id="paymentRef"
+                  formControlName="paymentRef"
+                />
+          </div>
+              </div>
+              <div class="row p-2">
+                <div class=" mb-3 col-md-6 ">
+          <div class="form-group">
+            
+    <div>
+        <label for="amount">Amount</label>
+        <br>
+        <input type="number" id="amount" formControlName="amount" />
+      </div>
+          </div>
+                </div>
+              </div>
+      <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-success"
+          data-bs-dismiss="modal"
+          [disabled]="
+       
+        ">Record 
+        </button>
+      </div>
+      </form>
+      </div>
+        
+ 

@@ -24,9 +24,16 @@ import { ContractDetailsComponent } from './contract-details/contract-details.co
 import { AddCoachComponent } from './add-coach/add-coach.component';
 
 import { HomeComponent } from './home/home.component';
+import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
+import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 const routes: Routes = [
+  {
+    path:'home',
+   component:HomeComponent
+  },
   {
     path: 'dashboard',
     component: DashboardComponent
@@ -83,13 +90,16 @@ const routes: Routes = [
      component:contractComponent
   },
   {
-    path:'support',
+    path:'payment',
+    component:AccountSummaryComponent
+ },
+  {
+    path:'feedback1',
    component:FeebackFormComponent
  },
- {
-  path:'home',
- component:HomeComponent
-},
+ { path: 'feedback/:sessionId', 
+ component: FeebackFormComponent },
+
   {
     path: 'AddTraining',
     component: AddTrainingComponent
@@ -109,6 +119,10 @@ const routes: Routes = [
   {
     path: 'addCoach',
     component: AddCoachComponent
+  },
+  {
+    path: 'feedback',
+    component: FeedbackComponent
   }
   
 ];

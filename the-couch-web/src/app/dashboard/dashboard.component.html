@@ -53,21 +53,21 @@
           
         </div>
     </div> -->
-    <!-- <div class="col-3 card text-center top-cards">
+    <div class="col-3 card text-center top-cards">
       <div class="card-body">
-        <h6 class="card-title">Log hours</h6>
+        <h6 class="card-title">Coaching Hours</h6>
         <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
         
       </div>
-  </div> -->
-  <div class="col-3 card text-center top-cards" >
+  </div>
+  <!-- <div class="col-3 card text-center top-cards" >
     <div class="card-body">
       <h6 class="card-title">Coach Education</h6>
-      <h3 class="card-text fw-bold">{{numberOfHoursCoachEducation}} hrs</h3>
+      <h3 class="card-text fw-bold">{{ numberOfHours }} hrs</h3>
       <button type="button" routerLink="/AddTraining" class="btn addbtn"><i class="fa fa-plus"></i> Add Training</button>
       
     </div>
-</div>
+</div> -->
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
           <h6 class="card-title">Sessions Created</h6>
@@ -104,8 +104,6 @@
 
     <h3 class="card-text fw-bold">{{numberofCoaches}}</h3>
 
-    <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
-
     <button type="button" routerLink="/addCoach" class="btn addbtn"><i class="fa fa-plus"></i> Add a Coach</button>
     
   </div>
@@ -123,7 +121,7 @@
         <div class="card-body">
           <h6 class="card-title">Number of Clients</h6>
           <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
-        
+          <button type="button" routerLink="/addclient" class="btn addbtn"><i class="fa fa-plus"></i> Add a Client</button>
          
         </div>
     </div>
@@ -164,8 +162,6 @@
 </div> -->
 
 
-=======
-
 <div class="row" *ngIf="this.userRole != 'ORGANIZATION'">
     <div class="col-6">
         <div class="card upcomingSessions">
@@ -189,9 +185,9 @@
                 <tbody class="list-container">
                   <tr *ngFor="let session of sessions">
                     <td>{{ session.name }}</td>
-                    <td>{{ session.sessionDate | date: "MMM d y" }}</td>
-                    <td>{{ session.sessionStartTime | date: " h:mm a" }}</td>
-                    <td>{{ session.sessionEndTime | date: " h:mm a" }}</td>
+                    <td>{{ session.sessionDate  }}</td>
+                    <td>{{ session.sessionStartTime  }}</td>
+                    <td>{{ session.sessionEndTime }}</td>
                     <td>{{ session.sessionVenue | titlecase }}</td>
                     <td>
                       <span class="value">
@@ -202,7 +198,7 @@
                       
                     </span>
                     <td class="text-center">
-                      <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{session.id}}">View</button>
+                      <button type="button" class="btn btn-sm btn-success" routerLink="/sessionView/{{session.id}}">View</button>
                     </td>
 
                   </tr>
@@ -238,7 +234,7 @@
                 <td>{{ contract.noOfSessions }}</td>
                 <td>{{ contract.client.fullName }}</td>
                 <td class="text-center">
-                  <button type="button" class="btn btn-sm btn-success"routerLink="/contractDetail/{{contract.id}}" >View</button>
+                  <button type="button"  class="btn btn-sm btn-success"routerLink="/contractDetail/{{contract.id}}" >View</button>
 
               </tr>
             </tbody>

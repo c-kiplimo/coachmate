@@ -1,17 +1,13 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Feedback;
-import com.natujenge.thecouch.domain.Session;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.FeedbackRepository;
-import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.web.rest.dto.FeedbackDto;
-import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,45 +23,62 @@ public class FeedbackService {
     @Autowired
     FeedbackRepository feedbackRepository;
 
-    public void addNewFeedBack(Long id,Long coachId, Feedback feedback) {
-        // Get associated session
-        Optional<Session> optionalSession = sessionRepository.getSessionByIdAndCoachId(id,coachId);
-        if (optionalSession.isEmpty()){
-            throw new IllegalArgumentException("Session Not Found!");
-        }
+    @Autowired
+    CoachRepository coachRepository;
 
-        // Get associated Client
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(id,coachId);
-        if (optionalClient.isEmpty()){
-            throw new IllegalArgumentException("Client Not Found!");
-        }
-        feedback.setClient(optionalClient.get());
-        feedback.setSession(optionalSession.get());
+    @Autowired
+    OrganizationRepository organizationRepository;
 
+    public FeedbackService(FeedbackRepository feedbackRepository, OrganizationRepository organizationRepository
+    , CoachRepository coachRepository, ClientRepository clientRepository) {
+        this.feedbackRepository = feedbackRepository;
+        this.coachRepository = coachRepository;
+        this.clientRepository = clientRepository;
+        this.organizationRepository = organizationRepository;
+    }
+
+    public void addNewFeedBack(Long SessionId, Long coachId, Long orgIdId, Feedback feedbackReq) {
+        Feedback feedback = new Feedback();
+
+        //GEt Client
+//        Optional<Client> client = clientRepository.findById(i);
+
+        //GET SESSION
+        Optional<Session> session = sessionRepository.findSessionById(SessionId);
+
+        Optional<Client> client = clientRepository.findById(session.get().getClient().getId());
+
+        Optional<Coach> coach = coachRepository.getCoachById(coachId);
+
+        Optional<Organization> organization = organizationRepository.findById(orgIdId);
+
+        feedback.setClient(client.get());
+        feedback.setSession(session.get());
+        feedback.setCoach(coach.get());
+        feedback.setOrganization(organization.get());
+        feedback.setAvailabilityScore(feedbackReq.getAvailabilityScore());
+        feedback.setClarificationScore(feedbackReq.getClarificationScore());
+        feedback.setEmotionalIntelligenceScore(feedbackReq.getEmotionalIntelligenceScore());
+        feedback.setListeningSkillsScore(feedbackReq.getListeningSkillsScore());
+        feedback.setComments(feedbackReq.getComments());
+        feedback.setUnderstandingScore(feedbackReq.getUnderstandingScore());
         // compute overall score
-        Integer totalScore = feedback.getAvailabilityScore()+feedback.getClarificationScore()+
-                feedback.getEmotionalIntelligenceScore()+ feedback.getListeningSkillsScore()+
-                feedback.getUnderstandingScore();
+        Integer totalScore = feedbackReq.getAvailabilityScore()+feedbackReq.getClarificationScore()+
+                feedbackReq.getEmotionalIntelligenceScore()+ feedbackReq.getListeningSkillsScore()+
+                feedbackReq.getUnderstandingScore();
         feedback.setOverallScore(totalScore);
-
-        feedback.setCreatedBy(optionalClient.get().getFullName());
-        feedback.setLastUpdatedBy(optionalClient.get().getFullName());
+        feedback.setCreatedBy(feedback.getCreatedBy());
         feedbackRepository.save(feedback);
 
         log.info("FeedBack Saved!");
     }
 
-    public FeedbackDto getFeedbackBySessionId(Long sessionId, Long coachId) {
-        log.info("Request to get feedback by session id: {} and coachId : {}", sessionId,coachId);
+    public List<FeedbackDto> getFeedbackBySessionId(Long sessionId) {
+        log.info("Request to get feedback by session id: {} and coachId : {}", sessionId);
 
-        Optional<FeedbackDto> feedbackOptional = feedbackRepository.findBySessionIdAndCoachId(sessionId,coachId);
-        if (feedbackOptional.isPresent()) {
-            return feedbackOptional.get();
+        List<FeedbackDto> feedbackOptional = feedbackRepository.findBySessionId(sessionId);
 
-        } else {
-            throw new IllegalArgumentException("Feedback not found!");
-
-        }
+        return feedbackOptional;
     }
 
     public FeedbackDto getFeedbackByClientId(Long clientId, Long coachId) {
@@ -79,5 +92,9 @@ public class FeedbackService {
             throw new IllegalArgumentException("Feedback not found!");
 
         }
+    }
+
+    public List<FeedbackDto> getOrgFeedback(Long orgId) {
+        return feedbackRepository.findByOrganization(orgId);
     }
 }

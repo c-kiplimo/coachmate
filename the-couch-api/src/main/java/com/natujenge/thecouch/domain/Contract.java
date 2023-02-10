@@ -33,6 +33,7 @@ public class Contract {
     private int noOfSessions;
     private float amountDue;
 
+    private long orgId;
 
     // relations
     @ManyToOne

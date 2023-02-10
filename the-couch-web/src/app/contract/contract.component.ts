@@ -11,8 +11,6 @@ import { ApiService } from '../services/ApiService';
 })
 export class contractComponent implements OnInit{
   contractForm!: FormGroup;
-  // ClientService: any; 
- 
   clients: any;
   sessions:any;
   contracts:any;

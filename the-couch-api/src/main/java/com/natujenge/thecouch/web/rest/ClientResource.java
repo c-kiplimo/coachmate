@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.service.ClientService;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
 
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
@@ -81,12 +80,27 @@ public class ClientResource {
         }
     }
 
+    //API TO GET CLIENTS BY ORG ID
+    @GetMapping(path = "getOrgClients/{id}")
+    ResponseEntity<?> getOrgClients(@PathVariable("id") Long OrgId,
+                                    @AuthenticationPrincipal User userDetails){
+        log.info("Request to get Organization clients");
+        try{
+            List<Client> listResponse = clientService.getClientByOrgId(OrgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //api to find one Client by id
     @GetMapping(path = "{id}")
     ResponseEntity<?> findById(@PathVariable("id") Long id,
                                @AuthenticationPrincipal User userDetails) {
         try{
-            Optional<ClientDto> clientOptional = clientService.findById(id,userDetails.getCoach().getId());
+            Optional<Client> clientOptional = clientService.findById(id);
             if (clientOptional.isPresent()) {
                 return new ResponseEntity<>(clientOptional.get(), HttpStatus.OK);
             } else {
@@ -101,18 +115,17 @@ public class ClientResource {
     }
 
     //api to update client
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "{id}")
     ResponseEntity<?> updateClient(@RequestBody ClientRequest clientRequest,
                                      @PathVariable Long id,
                                      @AuthenticationPrincipal User userDetails){
         try{
             log.info("request to update client with id : {} by client of id {}", id,userDetails.getCoach().getId());
 
-            Optional<Client> updatedClient;
-            updatedClient = clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
+            clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "Client updated successfully"),
-                    HttpStatus.NOT_FOUND);
+                    HttpStatus.OK);
         } catch (Exception e){
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),

@@ -33,45 +33,43 @@ import { ApiService } from '../services/ApiService';
   ],
 })
 export class sessionViewComponent implements OnInit {
-addSessionForm: any;
-modalTitle: any;
-editedsession() {
+  conductedSessionForm!: FormGroup<any>;
+deleteSession() {
 throw new Error('Method not implemented.');
 }
+ConductedSession() {
+throw new Error('Method not implemented.');
+}
+addSessionForm: any;
+modalTitle: any;
+currentSessionName: any;
+currentdetails: any;
+currentSessionDate: any;
+currentsessionStartTime: any;
+currentsessionEndTime: any;
+currentsessionVenue: any;
+currentgoals: any;
+currentSession: any;
+feedback: any;
+coachId: any;
 loadingsession: any;
 client: any;
   showHideMessage = true;
-  cancelOrderForm!: FormGroup;
-  deleteOrderForm!: FormGroup;
-  deliveredOrderForm!: FormGroup;
-  editedOrderForm!: FormGroup;
-  editPaymentForm!: FormGroup;
   caretDown = faCaretDown;
   addIcon = faPlus;
   rightIcon = faChevronRight;
   backIcon = faChevronLeft;
   alertIcon = faBell;
-  payments!: any;
   notifications!: any;
   notification!: any;
   attachments!: any;
-  orderId!: any;
-  customerId!: any;
-  paymentId!: any;
-  payment!: any;
-  order!: any;
-  response_data!: any;
   searching = false;
   currentTab = 'payments';
   loadingOrder = false;
-  deliveredDate = '';
-  deliveredTime = '';
-  paymentForm!: FormGroup;
   sessionVenue: any;
   sessionTime: any;
   sessionType: any;
-  editedsessionForm!: FormGroup<any>;
-  isPaymentRef: any;
+  editedsessionForm!: FormGroup;
   loading = false;
   service: any;
   sessions:any;
@@ -95,6 +93,14 @@ client: any;
   sessionAmount = '';
   eventType = '';
   open = false;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+  orgIdId: any;
+  createdBy: any;
+
+  feebackForm: any;
+
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
@@ -111,44 +117,43 @@ client: any;
     private clientService:ClientService,
     private http: HttpClient,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private formbuilder: FormBuilder,
     private apiService:ApiService  ) {}
 
   ngOnInit() {
-   this.activatedRoute.params.subscribe((params) => {
+
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+    if(this.userRole == 'CLIENT'){
+    this.sessionId = this.route.snapshot.params['sessionId'];
+    console.log(this.sessionId);
+
+    this.feebackForm = this.formbuilder.group({
+      understandingScore: [''],
+      emotionalIntelligenceScore: [''],
+      listeningSkillsScore: [''],
+      clarificationScore: [''],
+      availabilityScore: [''],
+      comments: ['']
+    });
+
+    }
+
+   this.route.params.subscribe((params) => {
+
       this.sessionId = params['id'];
     });
+
     this.getSession();
-    this.getPayments();
+    this.getFeedback();
+
+
     this.getNotifications();
-    this.getAllSessions();
-
-    this.paymentForm = this.formbuilder.group({
-      extPaymentRef: '',
-      amount: '',
-      narration: '',
-    
-      sendNotification: true,
-    });
-    this.paymentForm = this.formbuilder.group({
-      paymentType:'',
-      extPaymentRef: '',
-      amount: '',
-      narration: '',
-      orderId: this.sessionId,
-      clientId: this.clientId,
-      sendNotification: true,
-    });
-    this.editPaymentForm = this.formbuilder.group({
-      paymentType:'',
-      extPaymentRef: '',
-      amount: '',
-      narration: '',
-      orderId: this.sessionId,
-
-      sendNotification: true,
-    });
     this.confirmSessionForm = this.formbuilder.group({
       narration: '',
     });
@@ -164,21 +169,111 @@ client: any;
     this.deleteSessionForm = this.formbuilder.group({
       narration: '',
     });
-    this.editPaymentForm = this.formbuilder.group({
-      paymentType: this.payments.paymentType,
-      extPaymentRef: this.payments.extPaymentRef,
-      amount: this.payments.amount,
-      narration: '',
-      sendNotification: true,
+    this.editedsessionForm = this.formbuilder.group({
+      sessionDate: '',
+      sessionStartTime: '',
+      sessionDuration: '',
+      sessionType: '',
+      sessionVenue: '',
+      name:'',
+      sessionDetails:'',
+      sessionEndTime:'',
+      attachments:'',
+      notes:'',
+      feedback:'',
+      paymentCurrency:'',
+      amountPaid:'',
+      sessionAmount:'',
+      sessionBalance:'',
+
     });
   
   }
+  //get feedback for session
+  getFeedback() {
+    const params = {
+      sessionId: this.sessionId,
+     
+    };
+    this.clientService.getFeedback(params).subscribe(
+      (data: any) => {
+        this.feedback = data.body;
+        console.log("feedback is here",this.feedback);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  setCurrectSession(session: any) {
+    this.currentSession = session;
+    console.log(this.currentSession);
+  
+    this.editedsessionForm = this.formbuilder.group({
+     name: this.currentSession.name,
+      sessionDate: this.currentSession.sessionDate,
+      sessionStartTime: this.currentSession.sessionStartTime,
+      sessionEndTime: this.currentSession.sessionEndTime,
+      sessionType: this.currentSession.sessionType,
+      sessionVenue: this.currentSession.sessionVenue,
+      
+    });
+  }
+  editedSession() {
+    console.log(this.editedsessionForm.value);
+    this.loading = true;
+    var data = this.editedsessionForm.value;
+    data.id = this.currentSession.id;
+    console.log(data);
+    this.clientService.editSession(data).subscribe(
+      (response: any) => {
+        this.loading = false;
+        console.log(response);
+      }, (error: any) => {
+        console.log(error);
+      }
+    )
+  }
+
+
+  giveFeedback() {
+    const params = {
+      sessionId: this.sessionId,
+      coachId: this.coachId,
+      orgIdId: this.orgIdId,
+    };
+    console.log(this.feebackForm.value);
+    const data = this.feebackForm.value;
+
+    data.sessionId = this.sessionId;
+    data.orgIdId = this.orgIdId;
+    data.coachId = this.coachId;
+    data.clientId = this.clientId;
+    data.createdBy = this.createdBy;
+
+
+    this.clientService.addFeedback(data, params).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Feedback Added Successfully');
+        this.getFeedback();
+      },
+      (error) => {
+        console.log(error);
+        this.toastrService.error('Error in adding Feedback');
+      }
+    );
+  }
+
+
+
   goToItem(type: any, entityObj: any): void {
     this.router.navigate([type, entityObj.id]);
   }
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
+  
   getSession() {
     this.loading = true;
 
@@ -187,72 +282,24 @@ client: any;
       this.loading = false;
       this.sessions = res.body;
       console.log(this.sessions);
-
-      this.clientId = this.order.client.id;
-      this.getPayments();
+    
+      console.log("coach id",this.coachId);
+      this.clientId = this.sessions.client.id;
+      this.orgIdId = this.sessions.coach.orgIdId;
+      this.coachId = this.sessions.coach.id;
+      this.createdBy = this.sessions.client.fullName;
       this.getNotifications();
-      this.editPaymentForm = this.formbuilder.group({
-        paymentType: this.payments.paymentType,
-        extPaymentRef: this.payments.extPaymentRef,
-        amount: this.payments.amount,
-        narration: '',
-        orderId: this.orderId,
-        sendNotification: true,
-      });
    
+     
     });
-  }
-  getAllSessions() {
-    this.loading = true;
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.clientService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
-        this.loading = false;
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
-  @ViewChild('modal', { static: false })
-  modal!: ElementRef;
 
-openModal() {
-    this.modal.nativeElement.style.display = 'block';
-    document.body.classList.add('modal-open');
-}
+   
+  }
 
-closeModal() {
-    this.modal.nativeElement.style.display = 'none';
-    document.body.classList.remove('modal-open');
-}
 
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
-  }
-  // get payments for specific order
-  getPayments(navigate?: boolean): void {
-    this.searching = true;
-    this.payments = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-      order_id: this.orderId,
-    };
-
-    this.service.filterPaymentsBySessionId(options).subscribe((res: any) => {
-      this.payments = res.body.data;
-      console.log('payments ni', this.payments);
-      this.searching = false;
-    });
   }
   getNotifications(navigate?: boolean): void {
     this.searching = true;
@@ -260,7 +307,6 @@ closeModal() {
     const options = {
       page: 1,
       per_page: 10,
-      order_id: this.orderId,
     };
 
     this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
@@ -269,67 +315,9 @@ closeModal() {
       this.searching = false;
     });
   }
-
-  newPayment() {
-    // console.log(this.paymentForm.value);
-    this.paymentForm.patchValue({
-      sendNotification: this.showHideMessage,
-      paymentType: this.selectedPaymentOption,
-    });
-    this.service.addNewPayment(this.paymentForm.value).subscribe({
-      next: (response: any) => {
-        this.paymentForm.reset();
-        this.toastrService.success('Payment added!', 'Success!');
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.toastrService.error('Payment not added, try again!', 'Failed!');
-      },
-    });
-  }
-
-  viewPayment(payment: any): void {
-    console.log(this.order);
-    this.payment = payment;
-    this.paymentId = this.payment.id;
-    if (this.payment.order.id === this.order?.id) {
-      console.log(this.order.id);
-      this.payment.balance = this.order.orderAmount - this.payment.amount;
-    }
-  }
-  editPayment(payment: any): void {
-    this.payment = payment;
-    this.paymentId = this.payment.id;
-  }
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);
-  }
-
-  updatePaymentDetails() {
-  
-    console.log(this.paymentId);
-    this.service
-      .editPayment(this.paymentId, this.editPaymentForm.value)
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
-          this.toastrService.success('Payment details updated!', 'Success!');
-          setTimeout(() => {
-            location.reload();
-          }, 2);
-        },
-        error: (err: any) => {
-          console.log(err);
-          this.toastrService.error(
-            'Payment not updated, try again!',
-            'Failed!'
-          );
-        },
-      });
   }
  //session Actions functions
  confirmSession() {
@@ -338,7 +326,7 @@ closeModal() {
   };
   console.log(this.confirmSessionForm.value);
   this.service
-    .orderAction(this.orderId, this.confirmSessionForm.value, options)
+    .orderAction(this.sessionId, this.confirmSessionForm.value, options)
     .subscribe({
       next: (res: any) => {
         console.log(res);
@@ -363,12 +351,12 @@ cancelSession() {
     status: 'CANCELLED',
   };
   this.service
-    .orderAction(this.orderId, this.cancelOrderForm.value, options)
+    .orderAction(this.sessionId, this.cancelSessionForm.value, options)
     .subscribe({
       next: (res: any) => {
         console.log(res);
         this.toastrService.info('Order status is cancelled!', 'Info!');
-        this.cancelOrderForm.reset();
+        this.cancelSessionForm.reset();
         setTimeout(() => {
           location.reload();
         }, 5);
@@ -383,58 +371,6 @@ cancelSession() {
     });
 }
 
-ConductedSession() {
-  this.deliveredOrderForm.patchValue({
-    deliveredOn: this.deliveredDate + 'T' + this.deliveredTime,
-  });
-  const options = {
-    status: 'DELIVERED',
-  };
-  this.service
-    .orderAction(this.orderId, this.deliveredOrderForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order status is delivered!', 'Info!');
-        this.deliveredOrderForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
-
-deleteSession() {
-  const options = {
-    status: 'DELETED',
-  };
-  this.service
-    .orderAction(this.orderId, this.deleteOrderForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order status is deleted!', 'Info!');
-        this.deleteOrderForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
 
   sendReminder() {
     this.service.paymentReminder(this.sessionId).subscribe({
@@ -462,36 +398,5 @@ deleteSession() {
   }
 
 
-  savePdf() {
-
-    let DATA: any = document.getElementById("invoice");
-    // html2canvas(DATA, { logging: true, allowTaint: true, useCORS: true }).then(
-    //   (canvas: { height: number; width: number; toDataURL: (arg0: string) => any; }) => {
-    //     let fileWidth = 200;
-    //    // let fileHeight =100;
-    //    let fileHeight = (canvas.height * fileWidth) / canvas.width;
-    //     const FILEURI = canvas.toDataURL("image/*");
-    //     // let PDF = new jsPDF("p", "mm", "a4");
-    //     let position = 0;
-    //     // PDF.addImage(FILEURI, "image/*", 0, position, fileWidth, fileHeight);
-    //     // PDF.save("invoice.pdf");
-
-    //   }
-    
-  }
- // toggle paymentRef
- showPaymentRef(val: String): void {
-  if (val === "MPESA") {
-    this.isPaymentRef = true;
-    this.selectedPaymentOption = 'MPESA';
-  } else if(val === "BANK") {
-    this.isPaymentRef = false;
-    this.selectedPaymentOption = 'BANK';
-  }
-  else{
-    this.isPaymentRef = false;
-    this.selectedPaymentOption = 'CASH';
-  }
+ 
 }
-}
-

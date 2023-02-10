@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/feedback")
 @RequiredArgsConstructor
@@ -25,11 +27,13 @@ public class FeedbackResource {
     // create feedback
     @PostMapping
     ResponseEntity<?> createNewFeedBack(@RequestBody Feedback feedback,
-                                        @RequestParam(name = "session_id",required = false) Long sessionId,
+                                        @RequestParam(name = "sessionId",required = false) Long sessionId,
+                                        @RequestParam(name = "coachId") Long coachId,
+                                        @RequestParam(name = "orgIdId") Long orgIdId,
                                         @AuthenticationPrincipal User userDetails) {
         log.info("request to create feedback");
         try {
-            feedBackService.addNewFeedBack(sessionId,userDetails.getCoach().getId(), feedback);
+            feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,22 +44,25 @@ public class FeedbackResource {
     @GetMapping("/get-by-session-id")
     public ResponseEntity<?> getFeedbackBySessionId(
             @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "session_id",required = false) Long sessionId
+            @RequestParam(name = "sessionId",required = false) Long sessionId
     ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+
             log.debug(
                     "REST request to get feedback given session Id {} and coachId {}",
-                    sessionId,
-                    coachId
+                    sessionId
             );
-            FeedbackDto feedbackDto = feedBackService.getFeedbackBySessionId(
-                    sessionId,
-                    coachId
-            );
+            try {
+                List<FeedbackDto> feedbackDto = feedBackService.getFeedbackBySessionId(
+                        sessionId
+                );
+                return new ResponseEntity<>(feedbackDto, HttpStatus.OK);
+            } catch (Exception e) {
+                log.error("Error Occurred ", e);
+                return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
-
-            return ResponseEntity.ok().body(feedbackDto);
         } catch (Exception e) {
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, "An Error occurred, contact admin"),
@@ -86,6 +93,20 @@ public class FeedbackResource {
         } catch (Exception e) {
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, "An Error occurred, contact admin"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //Get ORg FeedBack
+    @GetMapping(path = "getOrgFeedbacks/{id}")
+    ResponseEntity<?> getOrgFeedbacks(@PathVariable("id") Long OrgId) {
+        log.error("Request to get Organization Feedbacks");
+        try{
+            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(OrgId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

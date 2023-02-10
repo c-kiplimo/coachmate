@@ -1,0 +1,23 @@
+
+
+  .card {
+    
+        color: #1B3A27;
+        text-decoration: none;
+    }
+  .input-error{
+    border: 1px solid red!important;
+  }
+  .back-link{
+    cursor: pointer;
+  }
+    :hover {
+    color: #0c0d0e;
+  }
+  fa-icon{
+    font-size:larger;
+   
+  }
+  fa-icon {
+    cursor: pointer;
+  }

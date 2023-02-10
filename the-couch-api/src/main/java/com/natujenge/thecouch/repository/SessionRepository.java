@@ -32,4 +32,8 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     List<SessionDto> findByClientId(Long clientId);
 
     List<SessionDto> findByContractId(Long contractId);
+
+    List<Session> findSessionByOrgId(Long orgId);
+
+    Optional<Session> getSessionById(Long id);
 }
