@@ -67,9 +67,7 @@ public class Client {
 
     public void setName(String name) {
     }
-    public Organization getOrganization(Long id) {
-        return organization;
-    }
+
 
 
 }
