@@ -1,6 +1,8 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientRepository;
@@ -35,6 +37,10 @@ public class ContractService {
 
     @Autowired
     CoachService coachService;
+
+    @Autowired
+    ClientBillingAccountService clientBillingAccountService;
+
     @Autowired
     ContractObjectiveRepository contractObjectiveRepository;
 
@@ -73,10 +79,20 @@ public class ContractService {
         contract.setCoachingCategory(contractRequest.getCoachingCategory());
         contract.setStartDate(contractRequest.getStartDate());
         contract.setEndDate((contractRequest.getEndDate()));
-        //contract.setFeesPerPerson(contractRequest.getFeesPerPerson());
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
+
+
+
+
+        float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
+                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
+                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
+
+
+        clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
+
         contract.setClient(client);
         contract.setCoach(coach);
         contract.setOrgId(coach.getOrgIdId());

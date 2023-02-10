@@ -55,12 +55,18 @@ public class User implements UserDetails {
     private UserRole userRole;
 
     // Object Relationships
+
+    @ManyToOne
+    @JoinColumn(name="client_id")
+    Client client;
+
+
     @ManyToOne
     @JoinColumn(name="coach_id")
     Coach coach;
 
     @ManyToOne
-    @JoinColumn(name="org_id_id")
+    @JoinColumn(name="org_id")
     Organization organization;
 
 
