@@ -5,35 +5,42 @@
     <div class="col-2">
       <app-user></app-user>
     </div>
-  </div>
+</div>
+
   <br>
 
- 
   <div class="row list-container container ">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">#</th>
+       
+          <th scope="col">Comments</th>
+          <th scope="col">Session Name</th>
           <th scope="col">Client Name</th>
-          <th scope="col">Email</th>
           <th scope="col">Phone Number</th>
-          <th scope="col">Group/Cooporate</th>
-          <th scope="col">Address</th>
-          <th scope="col">Status</th>
-          <th scope="col">Actions</th>
+          <th scope="col">availabilityScore</th>
+          <th scope="col">clarificationScore</th>
+          <th scope="col">emotionalIntelligenceScore</th>
+          <th scope="col">listeningSkillsScore</th>
+          <th scope="col">understandingScore</th>
+          <th scope="col">overallScore</th>
         </tr>
       </thead>
   
       <tbody>
         <tr *ngFor="let feedback of Feedbacks">
-          <th>{{ feedback.id }}</th>
-          <td>{{ feedback.firstName }}</td>
-          <td>{{ feedback.email }}</td>
-          <td>{{ feedback.msisdn }}</td>
-          <td>{{ feedback.clientType }}</td>
-          <td>{{ feedback.physicalAddress }}</td>
-          
       
+          <td>{{ feedback.comments }}</td>
+          <td>{{ feedback.session.name }}</td>
+          <td>{{ feedback.client.firstName }}</td>
+          <td>{{ feedback.client.msisdn }}</td>
+          <td>{{ feedback.availabilityScore }}</td>
+          <td>{{ feedback.clarificationScore }}</td>
+          <td>{{ feedback.emotionalIntelligenceScore }}</td>
+          <td>{{ feedback.listeningSkillsScore }}</td>
+          <td>{{ feedback.understandingScore }}</td>
+          <td>{{ feedback.overallScore }}</td>
+          
         </tr>
       </tbody>
     </table>

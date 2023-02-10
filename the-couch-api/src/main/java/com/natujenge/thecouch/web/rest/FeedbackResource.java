@@ -110,4 +110,18 @@ public class FeedbackResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //GET COACH FEEDBACKS
+    @GetMapping(path = "getCoachFeedbacks/{id}")
+    ResponseEntity<?> getCoachFeedbacks(@PathVariable("id") Long coachId) {
+        log.error("Request to get COACH Feedbacks");
+        try{
+            List<FeedbackDto> listResponse = feedBackService.getCoachFeedback(coachId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

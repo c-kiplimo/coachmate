@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ClientService } from '../services/ClientService';
 
 @Component({
   selector: 'app-feedback',
@@ -17,7 +18,9 @@ export class FeedbackComponent implements OnInit {
   orgSession: any;
 
 
-  constructor() { }
+  constructor(
+    private apiService: ClientService,
+  ) { }
   
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
@@ -32,11 +35,35 @@ export class FeedbackComponent implements OnInit {
       console.log(this.orgSession);
 
       this.getOrgFeedbacks(this.orgSession.id);
+  } else if (this.userRole == 'COACH') {
+    this.getCoachFeedbacks(this.coachData.coach.id);
   }
 }
 
   getOrgFeedbacks(orgId: any) {
     this.loading = true;
+    this.apiService.getCoachFeedbacks(orgId).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.Feedbacks = response;
+        console.log(this.Feedbacks);
+        this.loading = false;
+      }
+    );
+
+  }
+
+  getCoachFeedbacks(coachId: any) {
+    this.loading = true;
+    this.apiService.getOrgFeedbacks(coachId).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.Feedbacks = response;
+        console.log(this.Feedbacks);
+        this.loading = false;
+      }
+    );
+
   }
 
 

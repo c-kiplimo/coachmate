@@ -24,6 +24,7 @@ invoicesPaid: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+
     if(this.userRole == 'COACH'){
     this.getClients();
     this.getUser();
@@ -35,17 +36,11 @@ invoicesPaid: any;
       console.log('ORGANIZATION');
       this.getUserOrg();
      
-
-     
-    }else {
+    }else if(this.userRole == 'CLIENT'){
       console.log('not coach');
       this.getUser();
-     
-      
     }
-    setTimeout(() => {
-      location.reload();
-    }, 5);
+
 
   }
   
