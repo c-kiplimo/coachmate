@@ -74,7 +74,7 @@ navDataforOrg: [
     },
     {
         routeLink: 'feedback',
-        icon: 'fal fa-phone',
+        icon: 'fa-regular fa-star',
         label: 'Feedback'
     },
     {
