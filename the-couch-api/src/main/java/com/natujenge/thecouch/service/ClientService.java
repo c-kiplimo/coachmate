@@ -109,6 +109,8 @@ public class ClientService {
         clientWallet.setCreatedBy(optionalCoach.get().getFullName());
         clientWallet.setClient(saveClient);
         clientWallet.setCoach(optionalCoach.get());
+        clientWallet.setWalletBalance(Float.valueOf(0));
+        clientWallet.setOrganization(optionalOrganization.get());
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -116,6 +118,9 @@ public class ClientService {
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setCreatedBy(optionalCoach.get().getFullName());
         clientBillingAccount.setCoach(optionalCoach.get());
+        clientBillingAccount.setOrganization(optionalOrganization.get());
+        clientBillingAccount.setClient(saveClient);
+        clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         return saveClient;
 
