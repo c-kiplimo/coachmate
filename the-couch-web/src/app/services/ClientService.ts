@@ -169,6 +169,17 @@ getCoachFeedbacks(id: any): Observable<any>{
 }
 
 
+
+//PAYMENT SERVICES
+recordPayment(payment: any): Observable<any> {
+    return this.http.post<any>(
+        this.baseURL + 'wallet',
+        payment,
+        { observe: 'response' }
+      );
+  }
+
+
 }
 // {
 //     headers: {

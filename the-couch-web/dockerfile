@@ -1,0 +1,5 @@
+FROM nginx:stable
+COPY dist/couching-manager-web /usr/share/nginx/html
+
+# Copy the config
+COPY nginx.conf /etc/nginx/nginx.conf
