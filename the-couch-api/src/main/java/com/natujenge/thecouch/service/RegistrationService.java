@@ -197,7 +197,7 @@ public class RegistrationService {
 
     }
     // Request OTP
-    public String requestOTP(String msisdn) {
+    public String requestOTP(String msisdn, String resend) {
         log.info("Generating OTP");
 
         Optional<User> userOptional = userService.findByMsisdn(msisdn);

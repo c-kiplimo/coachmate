@@ -12,23 +12,42 @@
             </p>
           </div>
           <!--Get Code View-->
-          <div class="alert alert-danger" *ngIf="getCodeErrorMessage">
-            {{ getCodeErrorMessage }}
-          </div>
-          <!--RESET CODE VIEW ERRor-->
-          <div class="alert alert-danger" *ngIf="passwordResetSuccessMessage">
-            {{ passwordResetSuccessMessage }}
+          <div class="ps-4">
+            <div class="alert alert-danger" *ngIf="getCodeErrorMessage">
+              {{ getCodeErrorMessage }}
+            </div>
+            <!--RESET CODE VIEW ERRor-->
+            <div class="alert alert-danger" *ngIf="passwordResetSuccessMessage">
+              {{ passwordResetSuccessMessage }}
+            </div>
+
+            <!--RESET CODE VIEW Success-->
+            <div class="alert alert-success" *ngIf="errorMessage">
+              {{ errorMessage }} <br />Use the code to reset your password.
+            </div>
+            <div *ngIf="countDownStarted">
+              <p id="timer" *ngIf="!isCountdownOver && !passwordResetSuccess">
+                OTP will expire in: <span>{{ time }}</span>
+              </p>
+              <p id="timer" *ngIf="isCountdownOver && !passwordResetSuccess">OTP has Expired</p>
+            </div>
+            <div *ngIf="resetCodeDefault">
+              <button
+                type="button"
+                (click)="resendOtp()"
+                class="btn btn-resend-otp mt-2 mb-3"
+                *ngIf="isCountdownOver"
+              >
+                Resend OTP
+              </button>
+            </div>
+            
+            <div class="alert alert-success" *ngIf="passwordResetSuccess">
+              {{ errorResetMessage }} <br />You can proceed to login.
+            </div>
           </div>
 
-          <!--RESET CODE VIEW Success-->
-          <div class="alert alert-success" *ngIf="errorMessage">
-            {{ errorMessage }} <br />Use the code to reset your password.
-          </div>
-          <div class="alert alert-success" *ngIf="passwordResetSuccess">
-            {{ errorResetMessage }} <br />You can proceed to login.
-          </div>
-
-          <form #restForm="ngForm">
+          <form #restForm="ngForm" class="ps-4">
             <div class="mb-3" *ngIf="getCodeView">
               <label for="phone">Phone No:</label>
               <input
@@ -39,16 +58,21 @@
                 class="form-control"
                 id="msisdn"
                 aria-describedby="emailHelp"
-                placeholder=""
+                placeholder="254701234567"
                 required
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
               />
               <button
                 type="submit"
-                class="btn btn-signup mt-2 mb-5"
+                class="btn btn-signup mt-3 mb-3"
                 (click)="getCode()"
+                [disabled]="!formData.msisdn"
               >
                 Get Code
+              </button>
+              
+              <button class="btn btn-signup" routerLink="/login">
+                <fa-icon [icon]="backIcon"></fa-icon> Back to login
               </button>
             </div>
             <div *ngIf="resetCodeDefault">
@@ -63,18 +87,26 @@
                     id="code"
                     placeholder=""
                     required
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g,'$1');"
                   />
                 </div>
               </div>
-              <div class="mb-5">
+              <div class="mb-5 form-group">
                 <label for="password">New Password</label>
                 <div class="input-group">
                   <input
-                    [(ngModel)]="formData.password"
-                    name="password"
+                    #yourElement
                     [type]="fieldTextType ? 'text' : 'password'"
-                    class="form-control"
+                    [ngClass]="
+                      passwordInvalid && formData.password.length
+                        ? 'input-error'
+                        : ''
+                    "
+                    [(ngModel)]="formData.password"
+                    (ngModelChange)="validatePasswordRule()"
+                    name="password"
+                    type="password"
+                    class="form-control border-end-0 border"
                     id="password"
                     placeholder="Password"
                     required
@@ -101,20 +133,21 @@
                   </span>
                 </div>
               </div>
-              <div class="mb-5">
-                <label for="password"
-                  >Confirm Password
-                  <small class="redText ms-2" *ngIf="passwordInvalid">
-                    Passwords don't match</small
-                  >
-                </label>
+              <div class="mb-5 form-group">
+                <label for="password">Confirm Password </label>
                 <div class="input-group">
                   <input
-                    [(ngModel)]="formData.confirmPassword"
-                    (ngModelChange)="passwordInvalid = false"
-                    name="password"
                     [type]="fieldTextType ? 'text' : 'password'"
-                    class="form-control"
+                    [ngClass]="
+                      passwordInvalid && formData.confirmPassword.length
+                        ? 'input-error'
+                        : ''
+                    "
+                    [(ngModel)]="formData.confirmPassword"
+                    (ngModelChange)="validatePasswordRule()"
+                    name="password"
+                    type="password"
+                    class="form-control border-end-0 border"
                     id="confirmpassword"
                     placeholder="Password"
                     required
@@ -141,7 +174,9 @@
                   </span>
                 </div>
               </div>
-
+              <small class="redText ms-2" *ngIf="passwordInvalid">
+                {{ passwordErrorMessage }}</small
+              >
               <button
                 type="submit"
                 class="btn btn-signup mt-2 mb-5"
@@ -149,6 +184,7 @@
               >
                 Reset Password <fa-icon></fa-icon>
               </button>
+            
             </div>
           </form>
           <p *ngIf="passwordResetSuccess">
