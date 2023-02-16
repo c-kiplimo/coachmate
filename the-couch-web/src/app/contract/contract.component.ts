@@ -60,6 +60,8 @@ coachingCategory: any;
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.addContract();
+    this.coachingCategory();
+    this.coachingCategory=this.contractForm
   }
   getClients(){
     const options = {
