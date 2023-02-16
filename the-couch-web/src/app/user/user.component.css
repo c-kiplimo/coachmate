@@ -7,4 +7,22 @@
     width: 100px;
     height: 100px;
   }
-  
+  @media only screen and (max-width: 767px) {
+    .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+    .col-2, .col-5 {
+    width: 100%;
+    text-align: center;
+    }
+    .fa-solid.fa-bell, .fa-solid.fa-user {
+    font-size: 20px;
+    margin-bottom: 10px;
+    }
+    .btn {
+    width: 80%;
+    margin: 10px 0;
+    }
+    }

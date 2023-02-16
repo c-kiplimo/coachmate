@@ -43,7 +43,19 @@ public class RegistrationResource {
     @GetMapping(path = "reset")
     public ResponseEntity<?> reset(@RequestParam("msisdn") String msisdn) {
         try{
-            String response =registrationService.requestOTP(msisdn);
+            String response =registrationService.requestOTP(msisdn , "RESET");
+            return new ResponseEntity<>(new RestResponse(false,response),
+                    HttpStatus.OK);
+
+        } catch (Exception e){
+            return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(path = "resend")
+    public ResponseEntity<?> resend(@RequestParam("msisdn") String msisdn) {
+        try{
+            String response =registrationService.requestOTP(msisdn,"RESEND");
             return new ResponseEntity<>(new RestResponse(false,response),
                     HttpStatus.OK);
 
@@ -63,7 +75,9 @@ public class RegistrationResource {
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
+
 
 
 }

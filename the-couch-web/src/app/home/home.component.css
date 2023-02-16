@@ -13,7 +13,7 @@
 }
 .hero-text{
     position: absolute;
-    color: #003d4c;
+    color: #1B3A27;
     top: 10%;
     right: 45%;
     left: 0;
@@ -29,7 +29,7 @@
     .abt-section-img,.abt-section-text{
         padding: 20px;}
         h4{
-            color: #003d4c;
+            color: #1B3A27;
         }
         
      
@@ -39,10 +39,10 @@
     }
  fa-icon{
     font-size: 40px;
-    color: #003d4c;
+    color: #1B3A27;
  }
  h4{
-    color:#003d4c;
+    color:#1B3A27;
  }
  .section-text{
     line-height: 150%;
@@ -53,7 +53,7 @@
 
 .carousel-icon{
     font-size: 40px;
-    color: #003d4c;  
+    color: #1B3A27;  
 }
 .feature-imgs{
     margin: 0 auto;
@@ -62,7 +62,7 @@
 }
 
    h5{
-    color: #003d4c;
+    color: #1B3A27;
    }
 
 .contact-form{
@@ -74,7 +74,7 @@ margin: 0 auto!important;
   padding: 40px;
 }
 .btn-signup{
-    background-color: #003d4c;
+    background-color: #1B3A27;
     color: #fff;
     letter-spacing: 1px;
     font-size: 0.9rem;
@@ -95,29 +95,29 @@ input[type="text"],input[type="email"],textarea{
 }
 
 textarea:focus{
-  color: #003d4c!important;
-  border-bottom: #003d4c solid!important;
+  color: #1B3A27!important;
+  border-bottom: #1B3A27 solid!important;
   outline: none!important;
   overflow: hidden!important;
 }
 textarea:hover{
-    border-bottom: #003d4c solid!important;
+    border-bottom: #1B3A27 solid!important;
 
 
 }
 input[type=email]:hover{
-    border-bottom: #003d4c solid!important;
+    border-bottom: #1B3A27 solid!important;
 }
 input[type=text]:hover{
-    border-bottom: #003d4c solid!important;
+    border-bottom: #1B3A27 solid!important;
 
 }
 input[type=text]:focus {
     outline: none;
-    border-bottom: #003d4c solid!important;
+    border-bottom: #1B3A27 solid!important;
     
 }
 input[type=email]:focus {
   outline: none;
-  border-bottom: #003d4c solid!important;
+  border-bottom: #1B3A27 solid!important;
 }
