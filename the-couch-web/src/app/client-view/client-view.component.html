@@ -297,29 +297,7 @@
 
   </div>
 </div>
-
-<!-- add session modal -->
-<div>
-  <div class="modal fade" id="addsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Create session</h1>
-
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-      </div>
-    </div>
-
-    <p class="text-muted mt-5" *ngIf="!notifications?.length">
-      No notifications found.
-    </p>
-  </div> 
+</div>
 <!-- add session modal -->
 <div>
 <div
@@ -343,7 +321,6 @@ aria-hidden="true"
 
   </div>
 </div>
-
   <div class="container mb-5">
     <div class="row justify-content-center">
       <div class="col-md-8">
@@ -483,17 +460,20 @@ aria-hidden="true"
       </div>
     </div>
   </div>
+</div>
+</div>
+</div>
 <!-- suspend client modal -->
-<div class="modal" id="suspendclientModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="suspendclientModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Suspend Client</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body" *ngIf="client">
+  <div class="modal-body" >
     <div class="d-flex justify-content-between">
       <p class="">
         Are you sure you want to suspend
@@ -503,8 +483,15 @@ aria-hidden="true"
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary">Save changes</button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button
+      type="button"
+      class="btn btn-add"
+    >
+      Submit
+    </button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+      Close
+    </button>
   </div>
 </div>
 </div>
@@ -530,11 +517,11 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngIf="client">
+  <div class="modal-body">
     <div class="d-flex justify-content-between">
       <p>client Name:</p>
       <span>{{
-        client.firstName + " " + client.lastName | titlecase
+        clients.firstName + " " + clients.lastName | titlecase
       }}</span>
     </div>
     <form [formGroup]="closeClientForm">
@@ -589,11 +576,11 @@ aria-hidden="true"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngIf="client">
+  <div class="modal-body" >
     <div class="d-flex justify-content-between">
       <p>client Name:</p>
       <span>{{
-        client.firstName + " " + client.lastName | titlecase
+        clients.firstName + " " + clients.lastName | titlecase
       }}</span>
     </div>
     <form [formGroup]="activateClientForm">
@@ -615,11 +602,10 @@ aria-hidden="true"
     <button
       type="button"
       class="btn btn-add"
-  
     >
       Submit
     </button>
-    <button type="button" class="btn btn-secondary" >
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
       Close
     </button>
   </div>
