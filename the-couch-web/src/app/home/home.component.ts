@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
   faChevronLeft,
   faChevronRight,
+  faEnvelope,
+
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,14 +14,11 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
   contactIcon = faEnvelope;
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
   service: any;
-  featuresIcon!: IconProp;
-
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService

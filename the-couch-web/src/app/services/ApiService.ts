@@ -90,6 +90,13 @@ export class ApiService {
       observe: 'response',
     });
   }
+    // get OTP resend code
+    getResendOtpCode(options: any): Observable<any> {
+      return this.http.get<any>(this.baseURL + '/v1/registration/resend', {
+        params: options,
+        observe: 'response',
+      });
+    }
 
   //confirm registration service
   confirmMobileNumber(token: any): Observable<any> {
