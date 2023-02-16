@@ -97,7 +97,7 @@ public class WalletService {
         return walletBalance ;
     }
 
-    public ClientWalletDto createPayment(PaymentRequest paymentRequest, Coach coach) {
+    public ClientWallet createPayment(PaymentRequest paymentRequest, Coach coach) {
 
         // Obtain Client associated with wallet
         Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(paymentRequest.getClientId()
@@ -107,9 +107,15 @@ public class WalletService {
         }
         Client client = clientOptional.get();
 
+
         // obtain previous payment Record
-        ClientWallet previousWalletRecord = getClientWalletRecentRecord(coach.getId(), paymentRequest.getClientId());
-        float prevWalletBalance = previousWalletRecord.getWalletBalance();
+        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getCoachId(), paymentRequest.getClientId()));
+        float prevWalletBalance;
+        if(previousWalletRecord.get().getWalletBalance().equals(null)){
+             prevWalletBalance = 0;
+        }else {
+             prevWalletBalance = previousWalletRecord.get().getWalletBalance();
+        }
 
         ClientWallet clientWallet = new ClientWallet();
         clientWallet.setAmountDeposited(paymentRequest.getAmount());
@@ -124,6 +130,7 @@ public class WalletService {
 
         // mngmnt
         clientWallet.setCreatedBy(coach.getFullName());
+        //clientWallet.setOrganization();
 
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
@@ -142,8 +149,9 @@ public class WalletService {
         ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
         log.info("Wallet successfully saved");
 
+        return clientWallet1;
         // Map to Dto and return
-        return modelMapper.map(clientWallet1, ClientWalletDto.class);
+        //return modelMapper.map(clientWallet1, ClientWalletDto.class);
 
     }
 

@@ -32,7 +32,7 @@ public class WalletResource {
                                            @AuthenticationPrincipal User userDetails) {
         log.info("Request to create payment");
         try {
-            ClientWalletDto wallet = walletService.createPayment(paymentRequest, userDetails.getCoach());
+            ClientWallet wallet = walletService.createPayment(paymentRequest, userDetails.getCoach());
 
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                     .toUriString());

@@ -13,6 +13,7 @@ public class PaymentRequest {
     public String description;
     public PaymentCurrency paymentCurrency;
     public Long clientId;
+    public Long coachId;
 
     // notification clients override choice
     public boolean sendNotification;
