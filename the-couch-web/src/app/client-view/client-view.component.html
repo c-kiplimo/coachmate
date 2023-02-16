@@ -20,13 +20,13 @@
 
   <div class="card details-card">
   <div class="d-flex justify-content-between flex-wrap">
-      <!-- <button class="btn btn-success"
+      <button class="btn btn-success"
         data-bs-toggle="modal"
       data-bs-target="#editClientModal"
       >
         <i class="fas fa-edit"></i>
         Edit
-      </button> -->
+      </button>
 
     <div class="d-flex">
       <div class="dropdown">
@@ -49,13 +49,6 @@
   </div>
 
 </div>
-      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-          <div class="donut multi">
-            
-          </div>
-      </div> 
-      <div class="client-details">
-            <div class="client-details" >
               <div class="d-flex justify-content-between onedetail">
                 <span class="title">Client Id</span>
                 <span class="value">{{clients.id}}</span>
@@ -94,38 +87,19 @@
             </div>
             <div class="d-flex justify-content-between onedetail">
               <span class="title">Created On</span>
-              <span class="value">{{clients.createdAt}}</span>
+              <span class="value">{{clients.createdAt | date: "MMM d y"}}</span>
             </div>
             <div class="d-flex justify-content-between onedetail">
               <span class="title">Last Updated</span>
-              <span class="value">{{clients.lastUpdatedAt}}</span>
+              <span class="value">{{clients.lastUpdatedAt| date: "MMM d y"}}</span>
             </div>
 
   </div>
-<div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-    <div class="donut multi">
-      
-    </div>
-  </div> 
-<div class="client-details">
-      <div class="client-details" >
-        <div class="d-flex justify-content-between onedetail">
-          <span class="title">Client Id</span>
-          <span class="value">{{clients.id}}</span>
-
-        </div>
-      </div>
 </div>
 </div>
-
-
-
 <br>
-
-
 <br>
 <div class="card details-card">
-
 <div class="card card-table">
   <div class="tabs-section">
     <button
@@ -195,7 +169,15 @@
         No sessions Found.
       </p>
     </div>
-
+    <!-- add session button -->
+    <div class="d-flex justify-content-end">
+      <button
+        class="btn btn-primary"
+        *ngIf="!loading"
+      >
+        Add Session
+      </button>
+  </div>
   </div>
   <div class="d-none d-md-block">
     <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
@@ -211,12 +193,12 @@
 
       <table class="table">
         <thead>
-          <th colspan="1">session Duration</th>
-          <th colspan="1">Amount Paid</th>
-          <th colspan="1">Balance</th>
+          <th colspan="1">Date Paid</th>
           <th colspan="1">Paid at</th>
+          <th colspan="1">Amount</th>
+          <th colspan="1">Balance</th>
           <th colspan="1">Payment ref</th>
-          <th colspan="1">Narration</th>
+          <th colspan="1">Description</th>
           <th colspan="1">Actions</th>
         </thead>
 
@@ -501,142 +483,6 @@ aria-hidden="true"
       </div>
     </div>
   </div>
-
-
-
-
-<!--edit client modal-->
-<div
-class="modal fade"
-id="editclientModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Edit client details
-    </h1>
-
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="editClientForm" ngNativeValidate>
-      <div class="mb-3 form-group">
-        <label for="exampleInputEmail1">First name *</label>
-        <input
-          formControlName="firstName"
-          name="firstname"
-          value="{{ client?.firstName | titlecase }}"
-          type="firstname"
-          class="form-control"
-          id="firstname"
-          aria-describedby="emailHelp"
-          placeholder="First Name"
-          required
-        />
-      </div>
-      <div class="mb-3 form-group">
-        <label for="exampleInputEmail1">Last name</label>
-        <input
-          required
-          formControlName="lastName"
-          name="lastname"
-          value="{{ client?.lastName | titlecase }}"
-          type="lastname"
-          class="form-control"
-          id="lastname"
-          aria-describedby="emailHelp"
-          placeholder="Last Name"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Mobile no *:</label>
-        <input
-          required
-          value="{{ client?.msisdn }}"
-          formControlName="msisdn"
-          name="msisdn"
-          type="number"
-          class="form-control"
-          id="contact"
-          placeholder="Contact"
-          required
-          oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Email</label>
-        <input
-          formControlName="email"
-          value="{{ client?.email | titlecase }}"
-          name="email"
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="Email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Address *</label>
-        <input
-          formControlName="physicalAddress"
-          name="address"
-          value="{{ client?.physicalAddress | titlecase }}"
-          type="text"
-          class="form-control"
-          id="adress"
-          placeholder="Address"
-          required
-        />
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer d-flex justify-content-between">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Cancel
-    </button>
-    <button
-      type="submit"
-      class="btn btn-add"
-
-      [disabled]="
-        !editClientForm.value.firstName || !editClientForm.value.msisdn
-      "
-    >
-      Update
-    </button>
-  </div>
-</div>
-</div>
-</div>
-
-</div>
-
-<!-- suspend client modal -->
-<div
-class="modal fade bd-example-modal-lg"
-id="suspendclientModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5">
-      Suspend client
-    </h1>
-
-
 <!-- suspend client modal -->
 <div class="modal" id="suspendclientModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
