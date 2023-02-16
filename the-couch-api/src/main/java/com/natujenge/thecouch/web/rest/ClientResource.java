@@ -231,20 +231,7 @@ public class ClientResource {
 
     }
 
-    //api to confirm client and update password
-    @PostMapping(path = "/confirmClientToken")
-    ResponseEntity<?> updateAndConfirmClientToken(@RequestBody ClientRequest clientRequest){
-        log.info("Request to confirm client token and update password");
-        try {
-            Optional<User> updateClient;
-            updateClient = clientService.confirmClientTokenAndUpdatePassword(clientRequest);
 
-            return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error while Confirming Client and Updating Client password", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
 
     //api to delete client

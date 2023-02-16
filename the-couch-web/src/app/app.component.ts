@@ -30,10 +30,10 @@ export class AppComponent {
      this.notlogged=true; 
      }
 
-     this.User = JSON.parse(sessionStorage.getItem('user') as any);
-     if(!this.User) {
-      this.router.navigate(['/signin']);
-     }
+    //  this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    //  if(!this.User) {
+    //   this.router.navigate(['/signin']);
+    //  }
   }
   
   isSideNavCollapsed = false;
