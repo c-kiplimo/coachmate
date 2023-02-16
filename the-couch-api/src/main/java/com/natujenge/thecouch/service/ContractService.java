@@ -11,6 +11,7 @@ import com.natujenge.thecouch.repository.ContractRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ContractService {
     @Autowired
     SessionRepository sessionRepository;
@@ -66,8 +68,7 @@ public class ContractService {
     public Contract createContract(Long coachId,ContractRequest contractRequest) {
 
         // Get Client
-        Client client = clientRepository.findByIdAndCoachId(contractRequest.getClientId(),
-                coachId).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
+        Client client = clientRepository.findById(contractRequest.getClientId()).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
                 + " not found"));
 
         // Get Coach
@@ -89,13 +90,19 @@ public class ContractService {
         float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
                 contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-
+    log.info("Amount Due:{} ",amountDue);
 
         clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
-
+        log.info("Amount Due:{} ",amountDue);
+        log.info("Contract: "+contract.toString());
+        log.info("Client: "+client.toString());
+        log.info("Coach: "+coach.toString());
         contract.setClient(client);
         contract.setCoach(coach);
-        contract.setOrgId(coach.getOrgIdId());
+        if(coach.getOrgIdId()!=null){
+            contract.setOrgId(coach.getOrgIdId());
+        }
+        log.info("Contract: "+contract.toString());
 
         Contract contract1 = contractRepository.save(contract);
 
@@ -117,36 +124,6 @@ public class ContractService {
             coachingObjectives.add(coachingObjective);
         }
         contractObjectiveRepository.saveAll(coachingObjectives);
-
-        // Save Sessions
-       // List<SessionRequest> sessionRequests = contractRequest.getSessions();
-
-        // save Objectives
-        //List<Session> coachingSessions = new ArrayList<>();
-
-//        for (SessionRequest sessionRequest:
-//                sessionRequests) {
-//            Session session = new Session();
-//            session.setName(sessionRequest.getName());
-//            session.setSessionType(sessionRequest.getSessionType());
-//            session.setSessionStatus(SessionStatus.CONFIRMED);
-//            session.setNotes(sessionRequest.getNotes());
-//            session.setSessionDate(sessionRequest.getSessionDate());
-//            session.setSessionDuration(sessionRequest.getSessionDuration());
-//            session.setSessionVenue(sessionRequest.getSessionVenue());
-//            session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
-//            session.setAmountPaid(sessionRequest.getAmountPaid());
-//            session.setCreatedBy(coach.getFullName());
-//            session.setLastUpdatedBy(coach.getFullName());
-
-            // Relations
-//            session.setClient(client);
-//            session.setContract(contract1);
-//            session.setCoach(coach);
-
-//            coachingSessions.add(session);
-//        }
-//        sessionRepository.saveAll(coachingSessions);
 
         return contract1;
     }

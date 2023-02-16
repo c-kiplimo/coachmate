@@ -43,4 +43,23 @@ public class Coach implements Serializable {
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
+    @Override
+    public String toString() {
+        return "Coach{" +
+                "id=" + id +
+                ", orgIdId=" + orgIdId +
+                ", businessName='" + businessName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", status=" + status +
+                ", reason='" + reason + '\'' +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                '}';
+    }
 }

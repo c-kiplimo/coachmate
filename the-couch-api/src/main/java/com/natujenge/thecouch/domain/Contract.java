@@ -28,12 +28,12 @@ public class Contract {
     private LocalDate endDate;
 
 
-    private float individualFeesPerSession;
-    private float groupFeesPerSession;
-    private int noOfSessions;
-    private float amountDue;
+    private     Float individualFeesPerSession;
+    private Float groupFeesPerSession;
+    private Integer noOfSessions;
+    private Float amountDue;
 
-    private long orgId;
+    private Long orgId;
 
     // relations
     @ManyToOne
@@ -44,4 +44,21 @@ public class Contract {
     @JoinColumn(name="coach_id")
     Coach coach;
 
+    @Override
+    public String toString() {
+        return "Contract{" +
+                "id=" + id +
+                ", coachingCategory=" + coachingCategory +
+                ", coachingTopic='" + coachingTopic + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", individualFeesPerSession=" + individualFeesPerSession +
+                ", groupFeesPerSession=" + groupFeesPerSession +
+                ", noOfSessions=" + noOfSessions +
+                ", amountDue=" + amountDue +
+                ", orgId=" + orgId +
+                ", client=" + client +
+                ", coach=" + coach +
+                '}';
+    }
 }

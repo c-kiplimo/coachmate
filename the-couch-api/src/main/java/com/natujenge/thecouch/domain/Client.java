@@ -69,5 +69,28 @@ public class Client {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", clientType=" + clientType +
+                ", msisdn='" + msisdn + '\'' +
+                ", email='" + email + '\'' +
+                ", physicalAddress='" + physicalAddress + '\'' +
+                ", profession='" + profession + '\'' +
+                ", paymentMode=" + paymentMode +
+                ", status=" + status +
+                ", reason='" + reason + '\'' +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                ", coach=" + coach +
+                ", organization=" + organization +
+                '}';
+    }
 }
