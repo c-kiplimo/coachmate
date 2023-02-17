@@ -10,27 +10,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+
 @Service
 @Slf4j
 public class ClientBillingAccountService {
 
     @Autowired
     WalletService walletService;
-
     @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
 
     // create new wallet
     public void createBillingAccount(ClientBillingAccount clientBillingAccount) {
+
         clientBillingAccountRepository.save(clientBillingAccount);
     }
-
-
-    public void updateBillingAccount(float amountBilled,Coach coach, Client client) {
+   
+    public void updateBillingAccount(float amountBilled, Coach coach, Client client) {
         // CHECK wallet balance
         // Update contract payment status and amountDue
         // Get wallet balance should check the last record on dB by client
-        log.info("Amount Due:{} ",amountBilled);
+
+        
 
         ClientWallet clientWallet =  walletService.getClientWalletRecentRecord(coach.getId(),
                 client.getId());

@@ -107,7 +107,13 @@ public class SessionService {
         sessionRequest.setContract(contract);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
-        sessionRequest.setOrgId(optionalOrganization.get().getId());
+        if(optionalOrganization.isPresent()){
+            sessionRequest.setOrgId(optionalOrganization.get().getId());
+        }
+        //set organization id null if not found
+        else{
+            sessionRequest.setOrgId(null);
+        }
 
         try{
             return sessionRepository.save(sessionRequest);

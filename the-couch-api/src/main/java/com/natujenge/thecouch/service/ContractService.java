@@ -9,8 +9,11 @@ import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ContractObjectiveRepository;
 import com.natujenge.thecouch.repository.ContractRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,9 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Data
 public class ContractService {
+    public ContractDto contractDto;
     @Autowired
     SessionRepository sessionRepository;
 
@@ -31,8 +36,6 @@ public class ContractService {
     @Autowired
     ContractRepository contractRepository;
 
-    @Autowired
-    ClientService clientService;
 
     @Autowired
     ClientRepository clientRepository;
@@ -87,11 +90,11 @@ public class ContractService {
 
 
 
-        float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
+        Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
                 contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
     log.info("Amount Due:{} ",amountDue);
-
+        contract.setAmountDue(amountDue);
         clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
         log.info("Amount Due:{} ",amountDue);
         log.info("Contract: "+contract.toString());
@@ -102,6 +105,7 @@ public class ContractService {
         if(coach.getOrgIdId()!=null){
             contract.setOrgId(coach.getOrgIdId());
         }
+
         log.info("Contract: "+contract.toString());
 
         Contract contract1 = contractRepository.save(contract);

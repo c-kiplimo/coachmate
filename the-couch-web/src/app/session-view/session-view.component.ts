@@ -34,6 +34,7 @@ import { ApiService } from '../services/ApiService';
 })
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
+  status!: string;
 deleteSession() {
 throw new Error('Method not implemented.');
 }
@@ -83,7 +84,6 @@ client: any;
   clientId: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
-  deliveredSessionForm: any;
   deleteSessionForm: any;
   toastrService: any;
   sessionDate = '';
@@ -161,7 +161,7 @@ client: any;
       narration: '',
       isSendNotification: true,
     });
-    this.deliveredSessionForm = this.formbuilder.group({
+    this.conductedSessionForm = this.formbuilder.group({
       deliveredOn: '',
       narration: '',
       isSendNotification: true,
@@ -219,6 +219,54 @@ client: any;
       
     });
   }
+  showStatus: any;
+
+  statusState (currentstatus: any) {
+    console.log(currentstatus);
+    if (currentstatus === 'ACTIVE') {
+      this.showStatus = "ACTIVATE";
+      this.status = "ACTIVE";
+    } else if (currentstatus === 'SUSPENDED') {
+      this.showStatus = "SUSPEND";
+      this.status = "SUSPENDED";
+    } else if (currentstatus === 'CLOSED') {
+      this.showStatus = "CLOSE";
+      this.status = "CLOSED";
+    }
+
+  }
+  changeClientStatus(){
+    console.log(this.status);
+    if(this.status === "ACTIVE") {
+      this.clientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
+        (response) => {
+          this.router.navigate(['/clients']);
+        }, (error) => {
+          console.log(error)
+        }
+      );
+    }
+
+    if(this.status === "SUSPENDED") {
+      this.clientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
+        (response) => {
+          this.router.navigate(['/clients']);
+        }, (error) => {
+          console.log(error)
+        }
+      );
+    }
+
+    if(this.status === "CLOSED") {
+      this.clientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
+        (response) => {
+          this.router.navigate(['/clients']);
+        }, (error) => {
+          console.log(error)
+        }
+      );
+    }
+  }
   editedSession() {
     console.log(this.editedsessionForm.value);
     this.loading = true;
@@ -234,7 +282,19 @@ client: any;
       }
     )
   }
-
+  getClass(session: any) {
+    if (session.status === 'SUSPENDED') {
+        return 'badge-warning';
+    } else if (session.status === 'CONFIRMED') {
+        return 'badge-success';
+    }
+    else if (session.status === 'NEW'){
+      return 'badge-success'
+    }
+    else {
+        return 'badge-success';
+    }
+}
 
   giveFeedback() {
     const params = {
