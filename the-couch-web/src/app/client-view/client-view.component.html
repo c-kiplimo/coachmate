@@ -23,6 +23,7 @@
       <button class="btn btn-success"
         data-bs-toggle="modal"
       data-bs-target="#editClientModal"
+      (click)="editClient(clients)"
       >
         <i class="fas fa-edit"></i>
         Edit
@@ -156,8 +157,6 @@
                 (click)="navigateToSessionView(session.id)"
                 class="fa-solid fa-arrow-up-right-from-square"
               ></i>
-              <i class="fa-solid fa-pen-to-square"></i>
-              <!-- <i class="fa-solid fa-trash-can"></i>  -->
             </td>
           </tr>
         </tbody>
@@ -174,6 +173,8 @@
       <button
         class="btn btn-primary"
         *ngIf="!loading"
+        data-bs-toggle="modal"
+        data-bs-target="#addsessionModal"
       >
         Add Session
       </button>
@@ -469,8 +470,8 @@ aria-hidden="true"
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Suspend Client</h5>
+           
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body" >
