@@ -18,11 +18,11 @@ public class ContractRequest {
     public int noOfSessions;
     public long clientId;
     public String coachingTopic;
-    public Float amountDue;
 
 
     public List<String> objectives;
     public List<SessionRequest> sessions;
-
+    // notification options
+    public boolean sendNotification;
 
 }
