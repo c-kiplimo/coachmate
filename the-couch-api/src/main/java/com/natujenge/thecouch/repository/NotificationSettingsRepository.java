@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface NotificationSettingsRepository extends JpaRepository<NotificationSettings, Long> {
 
-    Optional<NotificationSettingsDto> findAllByCoachId(Long coachId);
+//    Optional<NotificationSettingsDto> findAllByCoachId(Long coachId);
 
     Optional<NotificationSettings> findByCoachId(Long coachId);
 }

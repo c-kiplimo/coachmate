@@ -33,11 +33,11 @@ public class NotificationSettingsService {
         this.userService = userService;
     }
 
-    public Optional<NotificationSettingsDto> getAllNotifications(Long coachId) {
-        log.info("Getting Notifications Settings");
-        // Get All Notifications By coachId
-        return notificationSettingsRepository.findAllByCoachId(coachId);
-    }
+//    public Optional<NotificationSettingsDto> getAllNotifications(Long coachId) {
+//        log.info("Getting Notifications Settings");
+//        // Get All Notifications By coachId
+//        return notificationSettingsRepository.findAllByCoachId(coachId);
+//    }
 
 
     public NotificationSettings updateSettings(NotificationSettingsRequest notificationSettingsRequest, Long coachId, String coachName) {
