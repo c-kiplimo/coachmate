@@ -22,8 +22,8 @@
     <div class="container">
       <div class="card details-card">
         <div class="mt-5" class=""[@fadeIn]>
-        
-          <div class="d-flex">
+            <div class="card details-card">
+            <div class="d-flex justify-content-between flex-wrap">
             <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" 
             data-bs-toggle="modal"
           data-bs-target="#addfeedbackModal"
@@ -46,7 +46,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#editsessionModal"
+                      data-bs-target="#confirmsessionModal"
                       >Confirm</a
                     >
             
@@ -55,7 +55,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#editsessionModal"
+                      data-bs-target="#deletesessionModal"
                       >conducted</a
                     >
                   </li>
@@ -71,7 +71,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#editsessionModal"
+                      data-bs-target="#conductedsessionModal"
                       >Reschedule</a
                     >
                   </li>
@@ -106,16 +106,17 @@
               <span class="title">End Time</span>
               <span class="value">{{ sessions.sessionEndTime }}</span>
             </div>
+            
             <div class="d-flex justify-content-between">
               <span class="title">Status</span>
-              <span class="value">{{ sessions.sessionStatus }}</span>
+              
+              <span
+              class="badge"
+              [ngClass]="getClass(sessions)"
+              >{{ sessions.sessionStatus }}
+              </span> 
+              
             </div>
-  
-            <div class="d-flex justify-content-between">
-              <span class="title">Amount paid</span>
-              <span class="value">{{ sessions.amountPaid }}</span>
-            </div>
-        
             <div class="d-flex justify-content-between">
               <span class="title">Session Venue</span>
               <span class="value">{{sessions.sessionVenue}}</span>
@@ -127,8 +128,9 @@
     </div>
     </div>
   </div>
-  <div class="card  details-card">
-    <div class="tabs-section">
+  <div class="card details-card">
+    <div class="card card-table">
+      <div class="tabs-section">
       <button
 
         class="btn btn-tabs"
@@ -139,14 +141,14 @@
       </button>
 
       <button
-        class="btn btn-outline-success"
+          class="btn btn-tabs"
         (click)="toggleTab('notifications')"
         [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
       >
         Notifications
       </button>
       <button
-          class="btn btn-outline-success"
+            class="btn btn-tabs"
           (click)="toggleTab('attachments')"
           [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
         >
@@ -155,32 +157,46 @@
     </div>
 
       <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
-        <div class="row list-container container  " >
-      <table class="table" >
-
-        <thead>
-          <th colspan="1">Comment</th>
-          <th colspan="1">Understanding</th>
-          <th colspan="1">Emotional Intelligence</th>
-          <th colspan="1">Listening Skills</th>
-          <th colspan="1">Clarification</th>
-          <th colspan="1">Availability</th>
-          <th colspan="1">Total Score</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let feedbck of feedback">
-            <td>{{feedbck.comments}}</td>
-            <td>{{feedbck.understandingScore}}</td>
-            <td>{{feedbck.emotionalIntelligenceScore}}</td>
-            <td>{{feedbck.listeningSkillsScore}}</td>
-            <td>{{feedbck.clarificationScore }}</td>
-            <td>{{feedbck.availabilityScore }}</td>
-            <td>{{feedbck.overallScore}}</td>
-          </tr>
-        </tbody>
-      </table>
-      
-    </div>
+        <div class="row list-container container ">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Session Name</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Availability</th>
+                <th scope="col">Clarification Score</th>
+                <th scope="col">Emotional Intelligence</th>
+                <th scope="col">Listening Skills</th>
+                <th scope="col">Understanding</th>
+                <th scope="col">Average</th>
+                <th scope="col">Comments</th>
+              </tr>
+            </thead>
+        
+            <tbody>
+              <tr>
+            
+               
+                <td>{{ feedback.session.name }}</td>
+                <td>{{ feedback.client.firstName }}</td>
+                <td>{{ feedback.availabilityScore }}</td>
+                <td>{{ feedback.clarificationScore }}</td>
+                <td>{{ feedback.emotionalIntelligenceScore }}</td>
+                <td>{{ feedback.listeningSkillsScore }}</td>
+                <td>{{ feedback.understandingScore }}</td>
+                <td>{{ feedback.overallScore }}</td>
+                <td>     <button class="btn btn-success"
+                  data-bs-toggle="modal"
+                data-bs-target="#feedbackModal"
+                >
+                  <i   class="fa-solid fa-arrow-up-right-from-square"></i>
+                  Comments
+                </button></td>
+                
+              </tr>
+            </tbody>
+          </table>
+      </div>
       </div>
     <div
       class="d-none d-lg-block"
@@ -831,10 +847,7 @@
   </div>
 </div>
 
-
-
-
-<!-- Edit Client Modal -->
+<!-- Add Feedback Modal -->
 <div class="modal fade" id="addfeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-x1">
     <div class="modal-content">
@@ -945,3 +958,54 @@
     </div>
   </div>
 </div>
+ <!-- feedback comments modal -->
+ <div
+ class="modal fade"
+ id="feedbackModal"
+ tabindex="-1"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true"
+ >
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+   <div class="modal-header">
+     <h1 class="modal-title fs-5" id="exampleModalLabel">
+       feedback Details
+     </h1>
+ 
+     <button
+       type="button"
+       class="btn-close btn-close-white"
+       
+       aria-label="Close"
+     ></button>
+   </div>
+   <div class="modal-body">
+     <div class="d-flex justify-content-between">
+       <p>feedback Subject:</p>
+       <span>{{ feedback.subject }}</span>
+     </div>
+     <div class="d-flex justify-content-between">
+       <p>Reason</p>
+       <span>{{ feedback.sendReason }}</span>
+     </div>
+ 
+     <div class="d-flex justify-content-between">
+       <p>Source Address</p>
+       <span>{{ feedback.srcAddress }}</span>
+     </div>
+     <div class="d-flex justify-content-between">
+       <p>Sent at:</p>
+       <span>{{ feedback.sentAt }}</span>
+     </div>
+     <div class="d-flex-column">
+       <p>Content:</p>
+       <span>{{ feedback.content }}</span>
+     </div>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+   </div>
+ </div>
+ </div>
+ </div> 

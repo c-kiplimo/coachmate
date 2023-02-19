@@ -6,9 +6,9 @@ server:
 
 spring:
   datasource:
-   # password: natujenge
-   # url: jdbc:mysql://51.15.141.206:3308/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-   # username: natujenge
+#    password: natujenge
+#    url: jdbc:mysql://164.92.70.172:3315/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+#    username: root
 #    password: pass
 
     url: jdbc:mysql://localhost:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
@@ -27,3 +27,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    com.natujenge.thecouch: debug

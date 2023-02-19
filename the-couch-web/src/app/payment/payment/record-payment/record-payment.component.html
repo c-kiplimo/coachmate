@@ -8,56 +8,38 @@
   </div>
   <div class="container mb-5">
     <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card card-table d-flex  ">
+      <div class="col-md-6">
+        <div class="card">
           <div class="">
         <h1 class="modal-title fs-5 text-center" id="exampleModalLabel" >
           Record Payment
         </h1>
-  
       </div>
       <div class="modal-body">
         <form  ngNativeValidate>
-          <div class="row p-2">
+          <div class="row">
             <div class=" mb-3 col-md-6">
-                <div >
-                    <div class="input-group" >
-                      <div class="input-group-prepend">
-                <label for="client">Select The Client How Payed</label>
-                <br>
-                <select class="form-select" id="clientId" name="clientId"
-                [(ngModel)]="paymentForm.clientId">
-                    <option selected>Select Client To Record</option>
-                  <option *ngFor="let client of clients" value="{{client.id}}">
-                    {{ client.firstName + " " + client.lastName }}
-                  </option>
-                </select>
-          </div>
-            </div>
-                </div>
-            </div>
+              <label for="client">Payment for:</label>
+              <br>
+              <select class="form-select" id="clientId" name="clientId"
+              [(ngModel)]="paymentForm.clientId">
+                  <option selected>Select Client To Record</option>
+                <option *ngFor="let client of clients" value="{{client.id}}">
+                  {{ client.firstName + " " + client.lastName }}
+                </option>
+              </select>
+        </div>
           <div class=" mb-3 col-md-6 ">
-            <!-- <div >
-                <div class="input-group" >
-                  <div class="input-group-prepend">
                 <label for="modeOfPayment">Mode of Payment</label>
                     <br>
-                <select id="modeOfPayment" class="form-select" name="modeOfPayment"
-                  [(ngModel)]="paymentForm.modeOfPayment">
+                <select id="modeOfPayment" class="form-select" name="modeOfPayment">
                     <option selected>Select Payment Mode</option>
                     <option value="MANUAL">MANUAL</option>
                     <option value="AUTO">AUTO</option>
                 </select>
               </div>
-          </div>    
-          </div> -->
-          </div>
-                </div>
-            <div class="row p-2">
               <div class=" mb-3 col-md-6 ">
-          <div class="form-group">
                 <label for="extPaymentRef">External Payment Ref</label>
-                <br>
                 <input
                 class="form-control"
                   type="text"
@@ -66,8 +48,6 @@
                   [(ngModel)]="paymentForm.extPaymentRef"
                 />
           </div>
-              </div>
-
               <div class=" mb-3 col-md-6 ">
                 <label for="paymentCurrency">Payment Currency</label>
                 <br>
@@ -92,19 +72,11 @@
                   [(ngModel)]="paymentForm.description"
                 />
               </div>
-
-          </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-          <div class="form-group">
-            
+              <div class=" mb-3 col-md-6 ">
         <div>
         <label for="amount">Amount</label>
-        <br>
         <input type="number" class="form-control" id="amount" name="amount"
         [(ngModel)]="paymentForm.amount" />
-      </div>
-      </div>
       </div>
       </div>
       <div class="form-group form-check">
@@ -118,7 +90,6 @@
         >Record 
         </button>
       </div>
-      </form>
       </div>
         
  

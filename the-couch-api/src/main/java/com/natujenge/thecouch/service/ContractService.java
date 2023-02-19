@@ -2,24 +2,34 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
-import com.natujenge.thecouch.domain.enums.PaymentStatus;
+
+import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.ContractObjectiveRepository;
-import com.natujenge.thecouch.repository.ContractRepository;
-import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
+import com.natujenge.thecouch.util.NotificationHelper;
+import com.natujenge.thecouch.util.NotificationUtil;
+import com.natujenge.thecouch.web.rest.dto.ClientDto;
+import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
+import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
+@Slf4j
+@Data
 public class ContractService {
+    public ContractDto contractDto;
     @Autowired
     SessionRepository sessionRepository;
 
@@ -30,16 +40,25 @@ public class ContractService {
     ContractRepository contractRepository;
 
     @Autowired
-    ClientService clientService;
+    NotificationRepository notificationRepository;
+
 
     @Autowired
     ClientRepository clientRepository;
 
     @Autowired
     CoachService coachService;
+    @Autowired
+    private NotificationServiceHTTPClient notificationServiceHTTPClient;
+    @Autowired
+    NotificationSettingsService notificationSettingsService;
 
     @Autowired
     ClientBillingAccountService clientBillingAccountService;
+
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     ContractObjectiveRepository contractObjectiveRepository;
@@ -66,8 +85,8 @@ public class ContractService {
     public Contract createContract(Long coachId,ContractRequest contractRequest) {
 
         // Get Client
-        Client client = clientRepository.findByIdAndCoachId(contractRequest.getClientId(),
-                coachId).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
+
+        Client client = clientRepository.findById(contractRequest.getClientId()).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
                 + " not found"));
 
         // Get Coach
@@ -86,16 +105,23 @@ public class ContractService {
 
 
 
-        float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
+        Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
                 contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-
-
+        log.info("Amount Due:{} ",amountDue);
+        contract.setAmountDue(amountDue);
         clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
-
+        log.info("Amount Due:{} ",amountDue);
+        log.info("Contract: "+contract.toString());
+        log.info("Client: "+client.toString());
+        log.info("Coach: "+coach.toString());
         contract.setClient(client);
         contract.setCoach(coach);
-        contract.setOrgId(coach.getOrgIdId());
+        if(coach.getOrganization()!=null){
+            contract.setOrganization(coach.getOrganization());
+        }
+
+        log.info("Contract: "+contract.toString());
 
         Contract contract1 = contractRepository.save(contract);
 
@@ -118,36 +144,43 @@ public class ContractService {
         }
         contractObjectiveRepository.saveAll(coachingObjectives);
 
-        // Save Sessions
-       // List<SessionRequest> sessionRequests = contractRequest.getSessions();
+        log.info("Prep to send sms");
+        Map<String, Object> replacementVariables = new HashMap<>();
+        replacementVariables.put("client_name", contract1.getClient().getFullName());
+        replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
+        replacementVariables.put("start_date",contract1.getStartDate());
+        replacementVariables.put("end_date",contract1.getEndDate());
+        replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
 
-        // save Objectives
-        //List<Session> coachingSessions = new ArrayList<>();
+        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
 
-//        for (SessionRequest sessionRequest:
-//                sessionRequests) {
-//            Session session = new Session();
-//            session.setName(sessionRequest.getName());
-//            session.setSessionType(sessionRequest.getSessionType());
-//            session.setSessionStatus(SessionStatus.CONFIRMED);
-//            session.setNotes(sessionRequest.getNotes());
-//            session.setSessionDate(sessionRequest.getSessionDate());
-//            session.setSessionDuration(sessionRequest.getSessionDuration());
-//            session.setSessionVenue(sessionRequest.getSessionVenue());
-//            session.setPaymentCurrency(sessionRequest.getPaymentCurrency());
-//            session.setAmountPaid(sessionRequest.getAmountPaid());
-//            session.setCreatedBy(coach.getFullName());
-//            session.setLastUpdatedBy(coach.getFullName());
+        //replacement to get content
+        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
+        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
+        String referenceId = contract1.getId().toString();
+        String msisdn = contract1.getClient().getMsisdn();
 
-            // Relations
-//            session.setClient(client);
-//            session.setContract(contract1);
-//            session.setCoach(coach);
+        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
 
-//            coachingSessions.add(session);
-//        }
-//        sessionRepository.saveAll(coachingSessions);
+        //send sms
+        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
+        log.info("sms sent ");
 
+        // sendEmail
+        notificationServiceHTTPClient.sendEmail(client.getEmail(),"Contract Created",smsContent,false);
+        log.info("Email sent");
+
+
+        //create notification object and send it
+        Notification notification = new Notification();
+        notification.setNotificationMode(NotificationMode.SMS);
+        notification.setDestinationAddress(msisdn);
+        notification.setSourceAddress(sourceAddress);
+        notification.setContent(smsContent);
+        notification.setCreatedBy(coach.getFullName());
+        //TO DO: add logic to save notification to db
+
+        notificationRepository.save(notification);
         return contract1;
     }
 
@@ -160,7 +193,7 @@ public class ContractService {
     }
 
 
-    public List<Contract> getContractByOrgId(Long orgId) {
-        return contractRepository.findContractByOrgId(orgId);
+    public List<Contract> getContractByOrgId(Long organizationId) {
+        return contractRepository.findContractByOrganizationId(organizationId);
     }
 }

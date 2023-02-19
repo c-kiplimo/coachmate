@@ -21,7 +21,7 @@ import { ClientConfirmComponent } from './client-confirm/client-confirm.componen
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
 
 import { AddCoachComponent } from './add-coach/add-coach.component';
-
+import { SupportComponent } from './support/support.component';
 import { HomeComponent } from './home/home.component';
 import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
 import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
@@ -53,6 +53,10 @@ const routes: Routes = [
   {
     path: 'signin',
     component: SignInComponent
+  },
+  {
+    path: 'support',
+    component: SupportComponent
   },
   {
     path: 'signup',
