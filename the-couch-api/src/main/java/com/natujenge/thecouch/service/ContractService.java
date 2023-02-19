@@ -108,7 +108,7 @@ public class ContractService {
         Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
                 contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-    log.info("Amount Due:{} ",amountDue);
+        log.info("Amount Due:{} ",amountDue);
         contract.setAmountDue(amountDue);
         clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
         log.info("Amount Due:{} ",amountDue);
@@ -144,51 +144,44 @@ public class ContractService {
         }
         contractObjectiveRepository.saveAll(coachingObjectives);
 
+        log.info("Prep to send sms");
+        Map<String, Object> replacementVariables = new HashMap<>();
+        replacementVariables.put("client_name", contract1.getClient().getFullName());
+        replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
+        replacementVariables.put("start_date",contract1.getStartDate());
+        replacementVariables.put("end_date",contract1.getEndDate());
+        replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
 
-//            Map<String, Object> replacementVariables = new HashMap<>();
-//            replacementVariables.put("client_name", contract1.getClient().getFullName());
-//            replacementVariables.put("coachingTopic", contract1.getCoachingTopic());
-//            String[] startDate = contract1.getStartDate().toString().split("T");
-//            String contractStartDate = startDate[0] + " at "
-//                    + startDate[1];
-//            replacementVariables.put("startDate",contractStartDate);
-//            String[] endDate = contract1.getEndDate().toString().split("T");
-//            String contractEndDate = endDate[0] + " at "
-//                    + endDate[1];
-//            replacementVariables.put("endDate",contractEndDate);
-//            replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
-//
-//
-//        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
-//
-//        //replacement to get content
-//        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-//        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
-//        String referenceId = contract1.getId().toString();
-//        String msisdn = contract1.getClient().getMsisdn();
-//
-//        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
-//
-//        //send sms
-//        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-//
-//        log.info("sms sent ");
-//
-//        //create notification object and send it
-//        Notification notification = new Notification();
-//        notification.setNotificationMode(NotificationMode.SMS);
-//        notification.setDestinationAddress(msisdn);
-//        notification.setSourceAddress(sourceAddress);
-//        notification.setContent(smsContent);
-//        notification.setSubject(null);
-//
-//        //TO DO: add logic to save notification to db
-//
-//        notificationRepository.save(notification);
+        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
+
+        //replacement to get content
+        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
+        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
+        String referenceId = contract1.getId().toString();
+        String msisdn = contract1.getClient().getMsisdn();
+
+        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
+
+        //send sms
+        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
+        log.info("sms sent ");
+
+        // sendEmail
+        notificationServiceHTTPClient.sendEmail(client.getEmail(),"Contract Created",smsContent,false);
+        log.info("Email sent");
 
 
+        //create notification object and send it
+        Notification notification = new Notification();
+        notification.setNotificationMode(NotificationMode.SMS);
+        notification.setDestinationAddress(msisdn);
+        notification.setSourceAddress(sourceAddress);
+        notification.setContent(smsContent);
+        notification.setCreatedBy(coach.getFullName());
+        //TO DO: add logic to save notification to db
+
+        notificationRepository.save(notification);
         return contract1;
-
     }
 
     public void deleteContract(Long coachId, Long contractId) {

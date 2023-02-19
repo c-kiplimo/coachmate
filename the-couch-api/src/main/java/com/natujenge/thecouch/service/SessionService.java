@@ -202,8 +202,9 @@ public class SessionService {
         log.debug("Request to get sessions by contractId : {}", contractId);
         return sessionRepository.findByContractId(contractId);
     }
+
     //send notification to client and coach when session is upcoming
-    @Scheduled(cron = "0 20 05 * * ?")
+    @Scheduled(cron = "* 59 17 ? ? ? ")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
@@ -211,24 +212,24 @@ public class SessionService {
             if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
                 //send notification to coach
                 NotificationHelper.sendUpcomingSessionReminderToCoach(session);
-                //send notification to coach
-                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
-            }
-        }
-    }
-    @Scheduled(cron = "0 20 05 * * ?")
-    public void sendUpcomingSessionReminderToClient() {
-        log.debug("Request to send upcoming session reminder");
-        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
-        for (Session session : sessions) {
-            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
-                //send notification to client
-                NotificationHelper.sendUpcomingSessionReminderToClient(session);
                 //send notification to client
                 NotificationHelper.sendUpcomingSessionReminderToClient(session);
             }
         }
     }
+//    @Scheduled(cron = "0 20 05 * * ?")
+//    public void sendUpcomingSessionReminderToClient() {
+//        log.debug("Request to send upcoming session reminder");
+//        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+//        for (Session session : sessions) {
+//            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
+//                //send notification to client
+//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
+//                //send notification to client
+//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
+//            }
+//        }
+//    }
 
 
 

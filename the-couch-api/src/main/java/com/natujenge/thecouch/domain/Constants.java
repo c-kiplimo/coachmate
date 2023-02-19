@@ -16,8 +16,8 @@ public class Constants {
 
 
     // DEFAULT TEMPLATES FOR ALL USERS
-    public static final String DEFAULT_NEW_CONTRACT_SMS_TEMPLATE = "Dear $client_name. Your contract $coachingTopic " +
-            ", starting  on $startDate to $endDate , has been created. Please login to your account to sign the contract. Thank you. $business_name";
+    public static final String DEFAULT_NEW_CONTRACT_SMS_TEMPLATE = "Dear $client_name. Your contract $coaching_topic " +
+            ", starting  on $start_date to $end_date , has been created. Please login to your account to sign the contract. Thank you. $business_name";
     public static final String DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE = "Dear $client_name. Your contract $coachingTopic " +
             " starting  on $startDate to $endDate , has been created. Please login to your account to sign the contract. Thank you. $business_name";
 

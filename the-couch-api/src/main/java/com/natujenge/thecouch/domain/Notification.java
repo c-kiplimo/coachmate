@@ -43,7 +43,6 @@ public class Notification {
 
     // Management fields
     @CreationTimestamp
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
