@@ -4,13 +4,13 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
 
 import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.ContractObjectiveRepository;
-import com.natujenge.thecouch.repository.ContractRepository;
-import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
+import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.util.NotificationUtil;
+import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -36,6 +38,9 @@ public class ContractService {
 
     @Autowired
     ContractRepository contractRepository;
+
+    @Autowired
+    NotificationRepository notificationRepository;
 
 
     @Autowired
@@ -80,6 +85,7 @@ public class ContractService {
     public Contract createContract(Long coachId,ContractRequest contractRequest) {
 
         // Get Client
+
         Client client = clientRepository.findById(contractRequest.getClientId()).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
                 + " not found"));
 
@@ -111,8 +117,8 @@ public class ContractService {
         log.info("Coach: "+coach.toString());
         contract.setClient(client);
         contract.setCoach(coach);
-        if(coach.getOrgIdId()!=null){
-            contract.setOrgId(coach.getOrgIdId());
+        if(coach.getOrganization()!=null){
+            contract.setOrganization(coach.getOrganization());
         }
 
         log.info("Contract: "+contract.toString());
@@ -137,72 +143,50 @@ public class ContractService {
             coachingObjectives.add(coachingObjective);
         }
         contractObjectiveRepository.saveAll(coachingObjectives);
-        if (contractRequest.isSendNotification()) {
-            // check notificationType from dB
-            Optional<NotificationSettings> optionalNotificationSettings = notificationSettingsService.
-                    getNotification(coachId);
-            log.info("Obtained NotificationDTO");
-            if (optionalNotificationSettings.isEmpty()) {
-                throw new IllegalStateException("Notification Not Found!");
-            }
-            NotificationSettings NotificationSettings = optionalNotificationSettings.get();
-            Map<String, Object> replacementVariables = new HashMap<>();
-            replacementVariables.put("client_name",contract1.getCoach().getFullName());
-            replacementVariables.put("coachingTopic", contract1.getCoachingTopic());
-            String[] startDate = contract1.getStartDate().toString().split("T");
-            String contractStartDate = startDate[0] + " at "
-                    + startDate[1];
-            replacementVariables.put("startDate",contractStartDate);
-            String[] endDate = contract1.getEndDate().toString().split("T");
-            String contractEndDate = endDate[0] + " at "
-                    + endDate[1];
-            replacementVariables.put("endDate",contractEndDate);
-            replacementVariables.put("business_name", contract1.getCoach().getBusinessName());
-            // Check if Notifications are allowed
-            if ((NotificationSettings.isNotificationEnable() && NotificationSettings.isNewContractEnable()) ||
-                    contractRequest.isSendNotification()) {
 
-                log.info(" Sending Notification to Client");
-                if (NotificationSettings.getNotificationMode() == NotificationMode.SMS) {
-                    // Default
-                    String smsTemplate = NotificationSettings.getNewContractTemplate();
-                    //replacement to get content
-                    String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-                    // SHORTCODE
-                    String sourceAddress = NotificationSettings.getSmsDisplayName();
-                    String referenceId = contract1.getId().toString();
-                    String msisdn = client.getMsisdn();
 
-                    log.info("about to send message to client content: {}, from: {}, to: {}, ref id {}",
-                            smsContent, sourceAddress, msisdn, referenceId);
-                    //send sms
-                    log.info("Sending notification to client");
-                    notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-                    log.info("sms sent ");
-                    // Store notification object to DB
-                    NotificationRequest notificationRequest = new NotificationRequest();
-                    notificationRequest.setNotificationMode(NotificationSettings.getNotificationMode());
+//            Map<String, Object> replacementVariables = new HashMap<>();
+//            replacementVariables.put("client_name", contract1.getClient().getFullName());
+//            replacementVariables.put("coachingTopic", contract1.getCoachingTopic());
+//            String[] startDate = contract1.getStartDate().toString().split("T");
+//            String contractStartDate = startDate[0] + " at "
+//                    + startDate[1];
+//            replacementVariables.put("startDate",contractStartDate);
+//            String[] endDate = contract1.getEndDate().toString().split("T");
+//            String contractEndDate = endDate[0] + " at "
+//                    + endDate[1];
+//            replacementVariables.put("endDate",contractEndDate);
+//            replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
+//
+//
+//        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
+//
+//        //replacement to get content
+//        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
+//        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
+//        String referenceId = contract1.getId().toString();
+//        String msisdn = contract1.getClient().getMsisdn();
+//
+//        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
+//
+//        //send sms
+//        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
+//
+//        log.info("sms sent ");
+//
+//        //create notification object and send it
+//        Notification notification = new Notification();
+//        notification.setNotificationMode(NotificationMode.SMS);
+//        notification.setDestinationAddress(msisdn);
+//        notification.setSourceAddress(sourceAddress);
+//        notification.setContent(smsContent);
+//        notification.setSubject(null);
+//
+//        //TO DO: add logic to save notification to db
+//
+//        notificationRepository.save(notification);
 
-                    notificationRequest.setSubject("NEW CONTRACT");
-                    // ShortCode
-                    notificationRequest.setSrcAddress(NotificationSettings.getSmsDisplayName());
-                    notificationRequest.setContent(smsContent);
-                    notificationRequest.setSendReason(contract.getCoachingTopic());
-                    notificationRequest.setClientId(client.getId());
-                    notificationRequest.setContractId(contract1.getId());
 
-                    // Invoke notificationService to save notification
-                    notificationService.createNotificationOnContractCreation(notificationRequest,contract,coach);
-
-                } else {
-                    // Send Email
-                    log.info("Sending Email");
-                }
-            } else {
-                log.info("Notifications Not allowed! Notifications not sent");
-            }
-
-        }
         return contract1;
 
     }
@@ -216,7 +200,7 @@ public class ContractService {
     }
 
 
-    public List<Contract> getContractByOrgId(Long orgId) {
-        return contractRepository.findContractByOrgId(orgId);
+    public List<Contract> getContractByOrgId(Long organizationId) {
+        return contractRepository.findContractByOrganizationId(organizationId);
     }
 }

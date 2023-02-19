@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -33,7 +34,11 @@ public class Contract {
     private Integer noOfSessions;
     private Float amountDue;
 
-    private Long orgId;
+    @Nullable
+    @ManyToOne
+    @JoinColumn(name="organization_id")
+
+ private Organization organization;
 
     // relations
     @ManyToOne
@@ -56,7 +61,7 @@ public class Contract {
                 ", groupFeesPerSession=" + groupFeesPerSession +
                 ", noOfSessions=" + noOfSessions +
                 ", amountDue=" + amountDue +
-                ", orgId=" + orgId +
+                ", organization=" + organization +
                 ", client=" + client +
                 ", coach=" + coach +
                 '}';

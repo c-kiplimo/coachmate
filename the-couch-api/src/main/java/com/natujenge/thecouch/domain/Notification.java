@@ -27,8 +27,8 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "notification_sequence")
     private Long id;
     private String subject;
-    private String srcAddress;
-    private String dstAddress;
+    private String sourceAddress;
+    private String destinationAddress;
     private String content;
     private LocalDateTime sentAt;
 

@@ -36,8 +36,8 @@ public class NotificationService {
         Notification notification = new Notification();
         notification.setNotificationMode(notificationRequest.getNotificationMode());
         notification.setSubject(notificationRequest.getSubject());
-        notification.setSrcAddress(notificationRequest.getSrcAddress());
-        notification.setDstAddress(notificationRequest.getDstAddress());
+        notification.setSourceAddress(notificationRequest.getSrcAddress());
+        notification.setDestinationAddress(notificationRequest.getDstAddress());
         notification.setContent(notificationRequest.getContent());
         notification.setSentAt(LocalDateTime.now());
         notification.setCreatedAt(LocalDateTime.now());

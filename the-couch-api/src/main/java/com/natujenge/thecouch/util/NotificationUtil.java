@@ -59,7 +59,7 @@ public class NotificationUtil {
 
 
         Map<String, Object> replacementVariables = new HashMap<>();
-        replacementVariables.put("client_name", "Boniface Mutea");
+        replacementVariables.put("client_name", "Amos Kinuthia");
         replacementVariables.put("amountBilled", "CY-3456");
         replacementVariables.put("startDate", "02-15-2022");
         replacementVariables.put("endDate", "02-15-2022");

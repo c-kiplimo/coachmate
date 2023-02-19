@@ -203,7 +203,7 @@ public class SessionService {
         return sessionRepository.findByContractId(contractId);
     }
     //send notification to client and coach when session is upcoming
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 20 05 * * ?")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
@@ -216,7 +216,7 @@ public class SessionService {
             }
         }
     }
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 20 05 * * ?")
     public void sendUpcomingSessionReminderToClient() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
