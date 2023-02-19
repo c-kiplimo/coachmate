@@ -3,6 +3,7 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -191,14 +194,44 @@ public class SessionService {
     }
 
     public List<SessionDto> findSessionByClientId(Long clientId) {
-        log.debug("Request to get sessions : {} by clientId : {}", clientId);
+        log.debug("Request to get sessions  by clientId : {}", clientId);
         return sessionRepository.findByClientId(clientId);
     }
 
     public List<SessionDto> findSessionByContractId(Long contractId) {
-        log.debug("Request to get sessions : {} by contractId : {}", contractId);
+        log.debug("Request to get sessions by contractId : {}", contractId);
         return sessionRepository.findByContractId(contractId);
     }
+    //send notification to client and coach when session is upcoming
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void sendUpcomingSessionReminderToCoach() {
+        log.debug("Request to send upcoming session reminder");
+        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+        for (Session session : sessions) {
+            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
+                //send notification to coach
+                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+                //send notification to coach
+                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+            }
+        }
+    }
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void sendUpcomingSessionReminderToClient() {
+        log.debug("Request to send upcoming session reminder");
+        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+        for (Session session : sessions) {
+            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
+                //send notification to client
+                NotificationHelper.sendUpcomingSessionReminderToClient(session);
+                //send notification to client
+                NotificationHelper.sendUpcomingSessionReminderToClient(session);
+            }
+        }
+    }
+
+
+
 
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);
