@@ -38,7 +38,7 @@ export class LoginService {
       //Update Password and complete client registration
       confirmAndUpdateClientPassword(signupObject: any): Observable<any> {
         return this.http.post<any>(
-          this.baseURL+ 'clients/confirmClientToken',
+          this.baseURL+ 'registration/confirmClientToken',
           signupObject,
           { observe: 'response' }
         );
