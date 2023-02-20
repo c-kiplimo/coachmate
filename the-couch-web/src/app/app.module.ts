@@ -59,6 +59,7 @@ import { AccountStatementComponent } from './payment/payment/account-statement/a
 import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
+import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 
 
 
@@ -98,6 +99,7 @@ import { SupportComponent } from './support/support.component';
     HomeComponent,
       FeedbackComponent,
       SupportComponent,
+      TermsAndConditionsPageComponent,
 
 
   ],
