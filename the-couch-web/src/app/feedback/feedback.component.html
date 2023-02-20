@@ -19,33 +19,37 @@
     <table class="table">
       <thead>
         <tr>
-       
-          <th scope="col">Comments</th>
           <th scope="col">Session Name</th>
           <th scope="col">Client Name</th>
-          <th scope="col">Phone Number</th>
-          <th scope="col">availabilityScore</th>
-          <th scope="col">clarificationScore</th>
-          <th scope="col">emotionalIntelligenceScore</th>
-          <th scope="col">listeningSkillsScore</th>
-          <th scope="col">understandingScore</th>
-          <th scope="col">overallScore</th>
+          <th scope="col">Availability</th>
+          <th scope="col">Clarification Score</th>
+          <th scope="col">Emotional Intelligence</th>
+          <th scope="col">Listening Skills</th>
+          <th scope="col">Understanding</th>
+          <th scope="col">Average</th>
+          <th scope="col">Comments</th>
         </tr>
       </thead>
   
       <tbody>
         <tr *ngFor="let feedback of Feedbacks">
       
-          <td>{{ feedback.comments }}</td>
+         
           <td>{{ feedback.session.name }}</td>
           <td>{{ feedback.client.firstName }}</td>
-          <td>{{ feedback.client.msisdn }}</td>
           <td>{{ feedback.availabilityScore }}</td>
           <td>{{ feedback.clarificationScore }}</td>
           <td>{{ feedback.emotionalIntelligenceScore }}</td>
           <td>{{ feedback.listeningSkillsScore }}</td>
           <td>{{ feedback.understandingScore }}</td>
           <td>{{ feedback.overallScore }}</td>
+          <td>     <button class="btn btn-success"
+            data-bs-toggle="modal"
+          data-bs-target="#feedbackModal"
+          >
+            <i   class="fa-solid fa-arrow-up-right-from-square"></i>
+            Comments
+          </button></td>
           
         </tr>
       </tbody>
@@ -57,3 +61,56 @@
       No clients Found.
     </p>
   </div>
+  <!-- feedback details modal -->
+<div
+class="modal fade"
+id="feedbackModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">
+      feedback Details
+    </h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body" *ngFor="let feedback of Feedbacks">
+    <div class="d-flex justify-content-between">
+      <p>feedback Subject:</p>
+      <span>{{ feedback.subject }}</span>
+    </div>
+    <div class="d-flex justify-content-between">
+      <p>Reason</p>
+      <span>{{ feedback.sendReason }}</span>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <p>Source Address</p>
+      <span>{{ feedback.srcAddress }}</span>
+    </div>
+    <div class="d-flex justify-content-between">
+      <p>Sent at:</p>
+      <span>{{ feedback.sentAt }}</span>
+    </div>
+    <div class="d-flex-column">
+      <p>Content:</p>
+      <span>{{ feedback.content }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" >
+      Close
+    </button>
+  </div>
+</div>
+</div>
+</div> 

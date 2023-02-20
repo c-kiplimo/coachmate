@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest.request;
 
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class RegistrationRequest {
     private final String email;
     private final String password;
     private UserRole userRole;
-    private Long orgIdId;
+    private Organization organization;
 
 
 }

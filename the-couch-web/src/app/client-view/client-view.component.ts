@@ -4,8 +4,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-
-
 import { style, animate, transition, trigger } from '@angular/animations';
 import { id } from 'date-fns/locale';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -30,6 +28,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export class ClientViewComponent implements OnInit {
   Clients!: [];
+  editedClient: any;
 editSession(_t92: any) {
 throw new Error('Method not implemented.');
 }
@@ -38,7 +37,6 @@ id: any;
 deleteSession(arg0: any,arg1: any) {
 throw new Error('Method not implemented.');
 }
-client: any;
 loading: boolean = false;
 goToItem(arg0: string,_t227: any) {
 throw new Error('Method not implemented.');
@@ -69,8 +67,6 @@ console.log("here")
 }
 
 contracts:any;
-orderForm!: FormGroup;
-editClientForm!: FormGroup;
 suspendClientForm!: FormGroup;
 closeClientForm!: FormGroup;
 activateClientForm!: FormGroup;
@@ -79,16 +75,11 @@ caretDown = faCaretDown;
 addIcon = faPlus;
 editIcon = faPenSquare;
 rightIcon = faChevronRight;
-// refreshIcon = faRefresh;
 backIcon = faChevronLeft;
-lientId: any;
+clientId: any;
 orderId: any;
 paymentId: any;
 searchTerm = '';
-orderAmount = '';
-eventType = '';
-orderDueDate = '';
-orderDueTime = '';
 lient: any;
 orders!: any;
 showHideMessage = true;
@@ -98,7 +89,6 @@ notification!: any;
 payment!: any;
 currentTab = 'orders';
 searching = false;
-deliveryOption = ['DELIVERED', 'PICKUP'];
 actions = ['Activate', 'Close', 'Suspend'];
 
 notificationOptions = [false, true];
@@ -110,7 +100,6 @@ itemsPerPage:number = 20;
 open = false;
 sessions:any;
 clients:any;
-clientId:any;
   console: any;
   filters: any = {
     status: '',
@@ -231,21 +220,15 @@ editClient(client:any){
   });
 
 }
-
 updateClientDetails(id:any){
-
-  console.log(this.updateClient.value)
   console.log(this.clientToBeUpdated)
-  
-  console.log(id)
-  const params = {
-    id: this.clientId,
-  };
- 
-  this.ClientService.editClient(this.clientToBeUpdated,params).subscribe(
-    (response) => {
-      this.getClients();
+  console.log(id)  
+  this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+    (data) => {
       this.loading = false;
+      this.editedClient = data.body;
+      console.log(this.editedClient)
+      console.log('clients',this.editedClient)
 
     }, (error) => {
       console.log(error)
@@ -301,24 +284,6 @@ updateClientDetails(id:any){
       );
     }
   }
-  
-  // updateClientDetails(id:any){
-  
-  //   console.log(this.updateClient.value)
-  //   console.log(this.clientToBeUpdated)
-    
-  //   console.log(id)
-   
-  //   this.ClientService.editClient(id).subscribe(
-  //     (response) => {
-  //       this.getClients();
-  //       this.loading = false;
-
-  //     }, (error) => {
-  //       console.log(error)
-  //     }
-  //   );
-  // }
   getClients(){
     this.Clients = [];
     this.loading = true;

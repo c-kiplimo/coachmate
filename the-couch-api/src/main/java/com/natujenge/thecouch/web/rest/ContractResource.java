@@ -94,7 +94,7 @@ public class ContractResource {
             return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>("Error occurred! Contact Admin", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

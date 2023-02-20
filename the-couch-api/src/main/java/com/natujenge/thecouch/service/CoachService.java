@@ -65,7 +65,7 @@ public class CoachService {
         coachRepository.deleteCoachById(id);
     }
 
-    public List<Coach> getCoachByOrgId(Long orgId) {
-        return coachRepository.findByOrgIdId(orgId);
+    public List<Coach> getCoachByOrganizationId(Long organizationId) {
+        return coachRepository.findByOrganizationId(organizationId);
     }
 }

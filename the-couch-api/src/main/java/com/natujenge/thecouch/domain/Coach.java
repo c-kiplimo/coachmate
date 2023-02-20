@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,8 +22,10 @@ public class Coach implements Serializable {
 
     @Id
     private Long id;
-
-    private Long orgIdId;
+    @Nullable
+@ManyToOne
+@JoinColumn(name = "organization_id")
+    private Organization organization;
 
     private String businessName;
     private String fullName;
@@ -43,4 +46,23 @@ public class Coach implements Serializable {
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
+    @Override
+    public String toString() {
+        return "Coach{" +
+                "id=" + id +
+                ", organization=" + organization +
+                ", businessName='" + businessName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", status=" + status +
+                ", reason='" + reason + '\'' +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                '}';
+    }
 }

@@ -22,6 +22,7 @@ public class ContractRequest {
 
     public List<String> objectives;
     public List<SessionRequest> sessions;
-
+    // notification options
+    public boolean sendNotification;
 
 }

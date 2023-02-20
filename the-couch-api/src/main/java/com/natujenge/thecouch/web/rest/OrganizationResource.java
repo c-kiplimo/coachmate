@@ -94,12 +94,12 @@ public class OrganizationResource {
 
     //GET ALL COACHES IN ORG
     @GetMapping(path = "getCoachesByOrgId")
-    ResponseEntity<?> getCoachesByOrgId(@RequestParam("OrgId") Long OrgId,
+    ResponseEntity<?> getCoachesByOrgId(@RequestParam("OrgId") Long organizationId,
                                         @AuthenticationPrincipal User userDetails){
-        log.info("Request to getCoachesByOrgId {}", OrgId);
+        log.info("Request to getCoachesByOrgId {}", organizationId);
 
         try{
-            List<Coach> listResponse = coachService.getCoachByOrgId(OrgId);
+            List<Coach> listResponse = coachService.getCoachByOrganizationId(organizationId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e){
             log.error("Error Occurred ", e);
