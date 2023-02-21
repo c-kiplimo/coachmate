@@ -130,8 +130,10 @@ public class WalletService {
 
         // mngmnt
         clientWallet.setCreatedBy(coach.getFullName());
-        //clientWallet.setOrganization();
-
+        Optional<Organization> org = Optional.ofNullable(coach.getOrganization());
+        if(org.isPresent()) {
+            clientWallet.setOrganization(coach.getOrganization());
+        }
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
 

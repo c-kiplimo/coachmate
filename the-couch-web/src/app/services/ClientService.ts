@@ -180,6 +180,12 @@ recordPayment(payment: any): Observable<any> {
       );
   }
 
+  getPaymentsByCoachId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByCoachId`,{
+        params: options,
+        observe:'response'})
+  }
+
 
 }
 // {
