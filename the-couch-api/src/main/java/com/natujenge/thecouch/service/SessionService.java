@@ -237,4 +237,8 @@ public class SessionService {
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);
     }
+
+    public List<Session> getSessionsByContract(Long contractId) {
+        return sessionRepository.findSessionByContractId(contractId);
+    }
 }

@@ -50,14 +50,23 @@
                 <span class="title">Number of Sessions:</span>
                 <span class="value">{{ contract.noOfSessions }}</span>
               </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Fees per Session [Individual]:</span>
+              <div *ngIf="contract.coachingCategory === 'INDIVIDUAL'" class="d-flex justify-content-between onedetail">
+                <span class="title">Fees per Session :</span>
                 <span class="value">{{ contract.individualFeesPerSession }}</span>
               </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Fees per Session [Group]:</span>
+              <div  *ngIf="contract.coachingCategory === 'GROUP'" class="d-flex justify-content-between onedetail">
+                <span class="title">Fees per Session:</span>
                 <span class="value">{{ contract.groupFeesPerSession }}</span>
               </div> 
+              <div class="d-flex justify-content-between onedetail">
+                <span class="title">Total Fees:</span>
+                <span *ngIf="(contract.coachingCategory === 'INDIVIDUAL')"class="value"> 
+                  {{contract.individualFeesPerSession * contract.noOfSessions}}
+                </span>
+                <span *ngIf="(contract.coachingCategory === 'GROUP')"class="value"> 
+                  {{contract.groupFeesPerSession * contract.noOfSessions}}
+                </span>
+              </div>
           </div>
         </div>
       </div>
@@ -70,8 +79,8 @@
                 <h4 class="text-center">Contract Sessions</h4>
               </div>
 
-              <div class="col-md-8"></div>
-              <div class="col-md-2">
+              <div class="col-md-6"></div>
+              <div *ngIf="sessions < contract.noOfSessions" class="col-md-2">
               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
 
                 <i class="fa-solid fa-user-plus"></i>
@@ -109,10 +118,6 @@
                       (click)="navigateToSessionView(session.id)"
                       class="fa-solid fa-arrow-up-right-from-square"
                     ></i>
-
-                      <i data-bs-toggle="modal" data-bs-target="#sessionModal"class="fa-solid fa-pen-to-square"(click)="editSession(session)"></i>
-
-                      <i class="fa-solid fa-trash-can"(click)="deleteSession(session.id,userDetails)"></i>
                     </td>
                   </tr>
                 </tbody>
@@ -232,7 +237,7 @@
                   </div>
                     <div class="modal-footer">
                       <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
-                      <button type="button" class="btn btn-primary"(click)="addSession()">Add Session</button>
+                      <button type="button" class="btn btn-success"(click)="addSession()">Add Session</button>
                     </div>
                     
 
