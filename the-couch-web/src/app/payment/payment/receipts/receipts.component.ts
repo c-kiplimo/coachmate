@@ -31,7 +31,7 @@ filters: any = {
 coachSessionData: any;
 coachData: any;
 userRole: any;
-
+ClientId: any;
 
 savePdf() {
 throw new Error('Method not implemented.');
@@ -51,7 +51,46 @@ throw new Error('Method not implemented.');
 
     if(this.userRole == 'COACH'){
       this.getPaymentsByCoachId();
+    } else if(this.userRole == 'CLIENT'){
+     // this.getUser();
+
+     const email = {
+      email: this.coachData.email
     }
+    this.ClientService.getClientByEmail(email).subscribe(
+      (response: any) => {
+        console.log(response);
+       this.ClientId = response[0].id;
+        
+
+      this.getPaymentsByClientId(response[0].id);
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+
+    }
+  }
+  getPaymentsByClientId(id: any){
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      client_id: id,
+    };
+
+    this.loading = true;
+    this.ClientService.getPaymentsByClientId(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.payments = response.body;
+        console.log('payments', this.payments);
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 
   getPaymentsByCoachId(){
@@ -77,5 +116,6 @@ throw new Error('Method not implemented.');
 
 
   }
+
 
 }

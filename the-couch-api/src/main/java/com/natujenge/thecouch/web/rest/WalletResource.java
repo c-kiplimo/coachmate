@@ -109,33 +109,19 @@ public class WalletResource {
             @RequestParam(name = "client_id",required = false) Long clientId
     ) {
         try {
-            Long organizationId = (userDetails.getCoach().getId() == null) ? userDetails.getOrganization().getId() :
-                    null;
-            Long coachId = (userDetails.getOrganization().getId() == null) ? userDetails.getCoach().getId() :
-                    null;
 
             log.debug(
                     "REST request to filter payments given, coach id : {}, client id  : {}",
-                    clientId,
-                    coachId
+                    clientId
+
 
             );
 
-
             ListResponse listResponse;
-            if (organizationId != null) {
-                listResponse = walletService.getPaymentsByOrganizationIdAndClientId
-                        (page, perPage, organizationId,clientId);
-            } else if (coachId != null) {
-                listResponse = walletService.getPaymentsByCoachIdIdAndClientId
-                        (page, perPage, coachId,clientId);
-            } else {
                 listResponse = walletService.getPaymentsByClientId
                         (page, perPage, clientId);
-            }
-
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
+            
         } catch (Exception e){
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),

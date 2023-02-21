@@ -185,6 +185,11 @@ recordPayment(payment: any): Observable<any> {
         params: options,
         observe:'response'})
   }
+  getPaymentsByClientId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filter-by-client-id`,{
+        params: options,
+        observe:'response'})
+  }
 
 
 }
