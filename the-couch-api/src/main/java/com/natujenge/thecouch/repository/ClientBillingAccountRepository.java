@@ -14,5 +14,9 @@ public interface ClientBillingAccountRepository extends JpaRepository<ClientBill
     Optional<ClientBillingAccount> findFirstByCoachIdAndClientIdOrderByIdDesc(Long coachId,Long clientId);
 
 
-    Page<ClientBillingAccount> findAllByCoach_id(Long coachId, Pageable pageable);
+    Page<ClientBillingAccount> findAllByCoachId(Long coachId, Pageable pageable);
+
+    Page<ClientBillingAccount> findAllByCoach_organization_id(Long organizationId, Pageable pageable);
+
+    Page<ClientBillingAccount> findAllByClient_id(Long clientId, Pageable pageable);
 }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ClientService } from 'src/app/services/ClientService';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { id } from 'date-fns/locale';
 
 @Component({
   selector: 'app-account-statement',
@@ -39,13 +40,15 @@ export class AccountStatementComponent implements OnInit {
       console.log(this.coachData);
       this.userRole = this.coachData.userRole;
       console.log(this.userRole);
-  
+      if (this.userRole == 'CLIENT') {
+        this.getBillByClientId(id);
+      }
       if(this.userRole == 'COACH'){
         this.getPaymentsByCoachId();
         this. getBillByCoachId();
+        
       } else if(this.userRole == 'CLIENT'){
-       // this.getUser();
-  
+      
        const email = {
         email: this.coachData.email
       }
@@ -56,13 +59,19 @@ export class AccountStatementComponent implements OnInit {
           
   
         this.getPaymentsByClientId(response[0].id);
+        this.getBillByClientId(id);
         },
         (error: any) => {
           console.log(error);
         }
       );
+     
   
       }
+      else if(this.userRole == 'CLIENT'){
+        this.getBillByClientId(id);
+      }
+      
     }
     getPaymentsByClientId(id: any){
       const options = {
@@ -125,6 +134,26 @@ export class AccountStatementComponent implements OnInit {
         }
       )
     }
+  // get bill by client id
+    getBillByClientId(id: any){
+      const options = {
+        page: 1, 
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        client_id: id,
+      };
+      this.loading = true;
+      this.ClientService. getBillingsByClientId(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.billingAccount = response.body.data;
+          console.log('billing Account by client', this.billingAccount);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
 
 
 
@@ -146,7 +175,7 @@ export class AccountStatementComponent implements OnInit {
       );
     }
     savePdfDesktop() {
-      let DATA: any = document.getElementById('invoiceDesktop');
+      let DATA: any = document.getElementById('statementDesktop');
       html2canvas(DATA, { logging: true, allowTaint: true, useCORS: true }).then(
         (canvas) => {
           let fileWidth = 200;

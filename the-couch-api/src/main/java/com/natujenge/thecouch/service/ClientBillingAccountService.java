@@ -30,14 +30,14 @@ public class ClientBillingAccountService {
         log.info("Get all billing accounts by Coach id {}", coachId);
 
         page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC,    "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
         Page<ClientBillingAccount> clientBillingAccountPage;
 
         // search billingAccount by coach id
-        clientBillingAccountPage = clientBillingAccountRepository.findAllByCoach_id(coachId, pageable);
-
+        clientBillingAccountPage = clientBillingAccountRepository.findAllByCoachId(coachId, pageable);
+        log.info("client billing account page:{}",clientBillingAccountPage.getContent());
         return new ListResponse(clientBillingAccountPage.getContent(),
                 clientBillingAccountPage.getTotalPages(),clientBillingAccountPage.getNumberOfElements(),
                 clientBillingAccountPage.getTotalElements());
@@ -89,4 +89,37 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
         clientBillingAccountRepository.save(clientBillingAccount);
     }
 
+    public ListResponse getBillingAccountByOrganizationId(int perPage, int page, Long organizationId) {
+        log.info("Get all billing accounts by organization id {}", organizationId);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientBillingAccount> clientBillingAccountPage;
+
+        // search billingAccount by org id
+        clientBillingAccountPage = clientBillingAccountRepository.findAllByCoach_organization_id(organizationId, pageable);
+
+        return new ListResponse(clientBillingAccountPage.getContent(),
+                clientBillingAccountPage.getTotalPages(),clientBillingAccountPage.getNumberOfElements(),
+                clientBillingAccountPage.getTotalElements());
+    }
+
+    public ListResponse getBillingAccountByClientId(int perPage, int page, Long clientId) {
+        log.info("Get all billing accounts by client id {}", clientId);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientBillingAccount> clientBillingAccountPage;
+
+        // search billingAccount by client id
+        clientBillingAccountPage = clientBillingAccountRepository.findAllByClient_id(clientId, pageable);
+
+        return new ListResponse(clientBillingAccountPage.getContent(),
+                clientBillingAccountPage.getTotalPages(),clientBillingAccountPage.getNumberOfElements(),
+                clientBillingAccountPage.getTotalElements());
+    }
 }

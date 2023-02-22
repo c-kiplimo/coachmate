@@ -206,6 +206,12 @@ recordPayment(payment: any): Observable<any> {
             params: options,
             observe:'response'})
       }
+//get billing account by client id
+    getBillingsByClientId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}billing/filterByClientId`,{
+            params: options,
+            observe:'response'})
+      }
 
 
 }

@@ -26,13 +26,53 @@ public class ClientBillingAccountResource {
     public ResponseEntity<?> filterByCoachId(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "coachId") Long coachId
+            @AuthenticationPrincipal User userDetails
+
     ) {
         try {
-            log.info("Request to get billing account by coach Id");
-            ListResponse listResponse = clientBillingAccountService.getBillingAccountByCoachId( perPage, page,coachId);
+            Long coachId = userDetails.getCoach().getId();
+            log.info("Request to get billing account by coach Id {}", coachId);
+            ListResponse listResponse = clientBillingAccountService.getBillingAccountByCoachId( perPage, page, coachId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    // get billing account by organization id
+    @GetMapping("/filterByOrganizationId")
+    public ResponseEntity<?> filterByOrganizationId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails
+
+    ) {
+        try {
+            Long organizationId = userDetails.getOrganization().getId();
+            log.info("Request to get billing account by organization Id {}", organizationId);
+            ListResponse listResponse = clientBillingAccountService.getBillingAccountByOrganizationId( perPage, page, organizationId);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    // get billing account by client id
+    @GetMapping("/filterByClientId")
+    public ResponseEntity<?> filterByClientId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails
+
+    ) {
+        try {
+            Long clientId = userDetails.getClient().getId();
+            log.info("Request to get billing account by client Id {}", clientId);
+            ListResponse listResponse = clientBillingAccountService.getBillingAccountByClientId( perPage, page, clientId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         } catch (Exception e) {
