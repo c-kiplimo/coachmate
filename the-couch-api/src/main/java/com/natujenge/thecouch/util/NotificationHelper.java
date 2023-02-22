@@ -55,7 +55,7 @@ public class NotificationHelper {
         log.info("About to send message to Client content: {}, from: {}, to: {}, ref id {}",
                 smsContent, sourceAddress, msisdn, referenceId);
         //send sms
-        log.info("Sending notification to client");
+        log.info("Sending sms notification to client");
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         notificationServiceHTTPClient.sendSMS(sourceAddress,msisdn,smsContent,referenceId);
     }
