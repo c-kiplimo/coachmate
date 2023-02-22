@@ -1,55 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/ApiService';
-import { ClientService } from '../services/ClientService';
-import { style, animate, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { ClientService } from '../services/ClientService';
 @Component({
-  selector: 'app-contract-view',
-  templateUrl: './contract-view.component.html',
-  styleUrls: ['./contract-view.component.css'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        // :enter is alias to 'void => *'
-        style({ opacity: 0 }),
-        animate(600, style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
+  selector: 'app-terms-and-conditions-page',
+  templateUrl: './terms-and-conditions-page.component.html',
+  styleUrls: ['./terms-and-conditions-page.component.css']
 })
-export class contractViewComponent implements OnInit {
 
+export class TermsAndConditionsPageComponent implements OnInit {
+  
+  
+  agreedToTerms: boolean = false;
+  contract: any;
+  User: any;
   loading = false;
   contracts: any;
   contractId: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
-
   OrgData: any;
   orgSession: any;
 
-  User: any;
-  
-
   constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
-
   ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    console.log("contractId here",id);
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
 
-  
-   
-
-
     if(this.userRole == 'COACH'){
     this.getAllContracts();
     this.route.params.subscribe(params => {
       const id = params['id'];
+      console.log("contractId here",id);
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
     });
@@ -77,21 +65,9 @@ export class contractViewComponent implements OnInit {
       );
 
   }
+}
 
-   
-  }
-  navigateToTerms(id: any) {
-    console.log("contractId on navigate",id);
-    this.contractId = id;
-    if(this.userRole == 'COACH'){
-
-    this.router.navigate(['/contractDetail', id]);
-    } else if (this.userRole == 'CLIENT') {
-      this.router.navigate(['/terms', id]);
-    }
-
-
-  }
+  
   getSessionsBycontractId(){
     console.log(this.contractId);
     this.loading = true;
@@ -107,6 +83,8 @@ export class contractViewComponent implements OnInit {
     );
 
   }
+
+
 
   getOrgContracts(id: any) {
     this.loading = true;
@@ -152,6 +130,16 @@ export class contractViewComponent implements OnInit {
       }
     );
   }
+  navigateToContractDetail() {
+    const id = this.route.snapshot.params['id'];
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    this.router.navigate(['/contractDetail', id]);
 
+
+  }
 
 }
+
+
+

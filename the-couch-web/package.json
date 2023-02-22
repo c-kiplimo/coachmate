@@ -27,6 +27,7 @@
     "date-fns": "^2.29.1",
     "flatpickr": "^4.6.13",
     "g": "^2.0.1",
+    "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "ng-slim-scroll": "^0.2.2",
     "ngx-perfect-scrollbar": "^10.1.1",

@@ -196,4 +196,9 @@ public class ContractService {
     public List<Contract> getContractByOrgId(Long organizationId) {
         return contractRepository.findContractByOrganizationId(organizationId);
     }
+
+    public Contract getContract(Long contractId) {
+        return contractRepository.findById(contractId).orElseThrow(() -> new UserNotFoundException("Contract by id " + contractId
+                + " not found"));
+    }
 }

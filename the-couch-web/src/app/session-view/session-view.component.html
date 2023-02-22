@@ -131,7 +131,7 @@
   <div class="card details-card">
     <div class="card card-table">
       <div class="tabs-section">
-      <button
+      <button  *ngIf="this.userRole == 'COACH'" 
 
         class="btn btn-tabs"
         (click)="toggleTab('feedback')"

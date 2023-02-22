@@ -16,25 +16,28 @@
 <div class="mt-3" style="overflow-x:auto;">
   <table>
     <tr>
-      <th>Date</th>
+      <th>#</th>
       <th>Ref No.</th>
-      <th>Description</th>
-      <th>Balance Before</th>
       <th>Amount In</th>
-      <th>Balance After</th>
+      <th>Payed By</th>
+      <th>Description</th>
+      <th>modeOfPayment</th>
+      
+      <th>walletBalance</th>
+      <th>Created At</th>
       <th>Actions</th>
 
     </tr>
-    <tr>
-      <td>21/2/2023</td>
-      <td>QWDGH-234</td>
-      <td>Contract-1 session-2</td>
-      <td>100 USD</td>
-      <td>40 USD</td>
-      <td>60 USD</td>
+    <tr *ngFor="let payment of payments.data">
+      <td>{{ payment.id}}</td>
+      <td>{{ payment.extPaymentRef}}</td>
+      <td>{{ payment.amountDeposited}}</td>
+      <td>{{ payment.client.firstName }}</td>
+      <td>{{ payment.description}}</td>
+      <td>{{ payment.modeOfPayment}}</td>
+      <td>{{ payment.walletBalance}}</td>
+      <td>{{ payment.createdAt | date: "MMM d y" }}</td>
       <td >
-        <div class=""><i class="fa fa-download" ></i>
-        </div>
             <div class=""> <i   data-bs-toggle="modal"
               data-bs-target="#invoicemodal"class="fa-solid fa-arrow-up-right-from-square"></i>
             </div>
@@ -49,44 +52,29 @@
 
       <div class="modal-body" id="invoice">
         <div class="m-2" >
-          <!-- <img class="welcome-img mb-3" src="../../../assets/images/Logo.png" /> -->
+          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
+      height: 100px; padding-top: 0%; margin-top: 0%;">
 
-          <div class="customer-details" *ngIf="!loadingpayment && payment"  [@fadeIn]>
+          <div class="customer-details" *ngIf="payment">
             <div class="d-flex justify-content-between">
               <span class="title">payment No</span>
-              <span class="value">{{ payment.paymentNumber }}</span>
+              <span class="value">{{ payment.extPaymentRef}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Customer name</span>
-              <span class="value">{{
-                payment.customer.firstName + " " + payment.customer.lastName
-                  | titlecase
-              }}</span>
+              <span class="value">{{ payment.client.firstName }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Event type</span>
-              <span class="value">{{ payment.paymentType }}</span>
+              <span class="value">{{ payment.modeOfPayment}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">paymented on</span>
-              <span class="value">{{
-                payment.paymentedOn | date : "MMM d, y "
-              }}</span>
+              <span class="value">{{ payment.createdAt | date: "MMM d y" }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Status</span>
-              <span class="value">
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'badge-warning': payment.paymentStatus === 'DELIVERED',
-                    'badge-success': payment.paymentStatus === 'CONFIRMED',
-                    'badge-danger': payment.paymentStatus === 'CANCELLED',
-                    'badge-primary': payment.paymentStatus === 'NEW'
-                  }"
-                  >{{ payment.paymentStatus }}</span
-                >
-              </span>
+              <span class="title">Description</span>
+              <span class="value">{{ payment.description}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">payment amount</span>
@@ -94,11 +82,11 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>
-              <span class="value">{{ payment.amountPaid }}</span>
+              <span class="value">{{ payment.amountDeposited}}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Balance</span>
-              <span class="value">{{ payment.balance }}</span>
+              <span class="title">Wallet Balance</span>
+              <span class="value">{{ payment.walletBalance}}</span>
             </div>
           </div>
 

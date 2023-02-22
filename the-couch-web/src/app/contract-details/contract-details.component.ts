@@ -182,16 +182,27 @@ export class ContractDetailsComponent implements OnInit {
  console.log("indivudual fee per person", session.sessionAmount)
     this.sessionService.addSession(this.addSessionForm, params).subscribe((res:any) => {
       console.log(res);
-      this.toastrService.success('Session added!', 'Success!');
+      this.toastrService.success('Session added!', 'Success!', { timeOut: 8000 });
       setTimeout(() => {
         location.reload();
-      }, 5);
+      }, 5000);
       this.sessionModal.nativeElement.classList.remove('show');
       this.sessionModal.nativeElement.style.display = 'none';
       
 
       
+    } , error => {
+      console.log(error);
+      this.toastrService.error(error.error, 'Error', { timeOut: 8000 });
+      setTimeout(() => {
+        location.reload();
+      }, 5000);
+      this.sessionModal.nativeElement.classList.remove('show');
+      this.sessionModal.nativeElement.style.display = 'none';
+      
     });
+    
+    
 }
 @ViewChild('modal', { static: false })
 modal!: ElementRef;
