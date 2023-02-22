@@ -190,6 +190,12 @@ recordPayment(payment: any): Observable<any> {
         params: options,
         observe:'response'})
   }
+  //get billings by coach id
+    getBillingsByCoachId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}billing/filterByCoachId`,{
+            params: options,
+            observe:'response'})
+      }
 
 
 }

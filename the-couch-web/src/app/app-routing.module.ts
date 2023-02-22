@@ -126,6 +126,10 @@ const routes: Routes = [
   {
     path: 'feedback',
     component: FeedbackComponent
+  },
+  {
+    path: 'feedback',
+    component: FeedbackComponent
   }
   
 ];

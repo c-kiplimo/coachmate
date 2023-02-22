@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ClientService } from 'src/app/services/ClientService';
 
 @Component({
   selector: 'app-account-summary',
@@ -16,7 +17,7 @@ amountDeposited: any;
 invoicesPiad: any;
 invoicesPaid: any;
 
-  constructor() { }
+  constructor( private clientService:ClientService) { }
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
@@ -26,11 +27,9 @@ invoicesPaid: any;
     console.log(this.userRole);
 
     if(this.userRole == 'COACH'){
-    this.getClients();
+    
     this.getUser();
-    this.getNoOfSessions();
-    this.getNoOfContracts();
-    this.getCoachEducation(this.coachData.id);
+ 
 
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
@@ -42,6 +41,15 @@ invoicesPaid: any;
     }
 
 
+  }
+  getClients(id: any) {
+    this.clientService.getClient(id).subscribe((data: any) => {
+      console.log(data);
+      this.totalDue = data.totalDue;
+      this.amountDeposited = data.amountDeposited;
+      this.invoicesPiad = data.invoicesPiad;
+      this.invoicesPaid = data.invoicesPaid;
+    });
   }
   
   getUser() {
@@ -55,23 +63,24 @@ invoicesPaid: any;
 
   }
   getOrganization(id: any) {
-    throw new Error('Method not implemented.');
-  }
-
-  getClients() {
-    throw new Error('Method not implemented.');
-  }
+    this.clientService.getOrganization(id).subscribe((data: any) => {
+      console.log(data);
+      this.orgName = data.name;
+      console.log(this.orgName);
+      this.getOrgClients(this.orgName);
+    });
  
-  getNoOfSessions() {
-    throw new Error('Method not implemented.');
-  }
-  getNoOfContracts() {
-    throw new Error('Method not implemented.');
-  }
-  getCoachEducation(id: any) {
-    throw new Error('Method not implemented.');
-  }
+
  
   }
+  getOrgClients(orgName: any) {
+    this.clientService.getOrgClients(orgName).subscribe((data: any) => {
+      console.log(data);
+      this.totalDue = data.totalDue;
+      this.amountDeposited = data.amountDeposited;
+      this.invoicesPiad = data.invoicesPiad;
+      this.invoicesPaid = data.invoicesPaid;
+    });
+  }
 
-
+}

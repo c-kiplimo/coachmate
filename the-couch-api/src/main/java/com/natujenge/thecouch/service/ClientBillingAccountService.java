@@ -5,8 +5,14 @@ import com.natujenge.thecouch.domain.ClientBillingAccount;
 import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +25,23 @@ public class ClientBillingAccountService {
     WalletService walletService;
     @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
+    // Get all billingAccounts by coach Id
+    public ListResponse getBillingAccountByCoachId(int page, int perPage, Long coachId) {
+        log.info("Get all billing accounts by Coach id {}", coachId);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientBillingAccount> clientBillingAccountPage;
+
+        // search billingAccount by coach id
+        clientBillingAccountPage = clientBillingAccountRepository.findAllByCoach_id(coachId, pageable);
+
+        return new ListResponse(clientBillingAccountPage.getContent(),
+                clientBillingAccountPage.getTotalPages(),clientBillingAccountPage.getNumberOfElements(),
+                clientBillingAccountPage.getTotalElements());
+    }
 
     // create new wallet
     public void createBillingAccount(ClientBillingAccount clientBillingAccount) {
