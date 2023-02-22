@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './sidnav/sidnav.component';
 
+
 import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BodyComponent } from './body/body.component';
@@ -59,6 +60,7 @@ import { AccountStatementComponent } from './payment/payment/account-statement/a
 import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
+import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 
 
 
@@ -98,6 +100,7 @@ import { SupportComponent } from './support/support.component';
     HomeComponent,
       FeedbackComponent,
       SupportComponent,
+      TermsAndConditionsPageComponent,
 
 
   ],

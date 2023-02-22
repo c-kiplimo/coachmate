@@ -138,6 +138,45 @@ session: any;
     );
   
   }
+  getNoOfSessions() {
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.clientService.getSessions(options).subscribe(
+      (response: any) => {
+        console.log('here=>', response);
+        this.sessions = response.body.data;
+        this.numberOfSessions = response.body.totalElements;
+        let totalMinutes = 0;
+        for (let i = 0; i < Math.max(this.sessions.length, 1); i++) {
+          let startTime = i < this.sessions.length ? this.sessions[i].sessionStartTime : "00:00";
+          let endTime = i < this.sessions.length ? this.sessions[i].sessionEndTime : "00:00";
+          
+          let start = startTime.split(':');
+          let end = endTime.split(':');
+        
+          let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
+          let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
+        
+          if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
+            totalMinutes += endMinutes - startMinutes;
+          }
+        }
+        
+        
+        this.numberOfHours = Math.floor(totalMinutes / 60);
+        this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
+        
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+  
 
 
   getOrgContracts(id: any) {
@@ -262,55 +301,6 @@ session: any;
         console.log(error);
       }
     );
-  }
-
-  getNoOfSessions() {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.clientService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log('here=>', response);
-        this.sessions = response.body.data;
-        this.numberOfSessions = response.body.totalElements;
-        let totalMinutes = 0;
-
-        let totalHours = 0;
-        for (let i = 0; i < this.sessions.length; i++) {
-          //sessionStartTime 17:04
-       
-       
-  
-        for (let i = 0; i < this.sessions.length; i++) {
-          if (this.sessions[i].sessionStatus === 'CONFIRMED'){
-          let startTime = this.sessions[i].sessionStartTime;
-          let endTime = this.sessions[i].sessionEndTime;
-        
-          let start = startTime.split(':');
-          let end = endTime.split(':');
-  
-          let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
-          let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
-  
-          if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
-            totalMinutes += endMinutes - startMinutes;
-          }
-
-        }
-        
-        this.numberOfHours = Math.floor(totalMinutes / 60);
-        this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
-      }
-        
-      }},
-      (error: any) => {
-        console.log(error);
-      }
-    );
-    
   }
   
   getNoOfContracts() {

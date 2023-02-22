@@ -2,8 +2,10 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
+import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 
@@ -29,6 +31,8 @@ public class SessionResource {
 
     @Autowired
     SessionService sessionService;
+    @Autowired
+    ContractService contractService;
     @Autowired
     SessionRepository sessionRepository;
 
@@ -90,14 +94,23 @@ public class SessionResource {
                                            @AuthenticationPrincipal User userDetails){
         log.info("Request to create session");
         try{
+            // check if the number of sessions has been exceeded
+            Contract contract = contractService.getContract(contractId);
+            List<Session> sessions = sessionService.getSessionsByContract(contractId);
+            int sessionCount = sessions.size();
+            if (sessionCount >= contract.getNoOfSessions()) {
+                return new ResponseEntity<>(new RestResponse(false, "Cannot create session: maximum number of sessions has been reached"), HttpStatus.BAD_REQUEST);
+            }
+
             Session sessionResponse = sessionService.createSession(userDetails.getCoach().getId(),clientId,contractId,session);
             return new ResponseEntity<>(new RestResponse(false,"Session Created Successfully"), HttpStatus.CREATED);
-
         } catch(Exception e) {
             log.error("Error", e);
             return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     // UPDATE SESSION DETAILS
     @PutMapping(path = "/{id}")

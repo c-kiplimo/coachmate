@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../services/ClientService';
+import { style, animate, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-feedback',
