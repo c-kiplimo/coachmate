@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   numberOfContracts!: number;
   numberOfHours: any;
   numberOfMinutes: any;
+  success_rate_percent: any;
   rightIcon: any;
   itemsPerPage = 20;
   filters: any = {
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit {
   OrgContracts: any;
 
 session: any;
+Feedbacks: any;
   
 
   
@@ -78,6 +80,8 @@ session: any;
     this.getNoOfSessions();
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
+    this.getCoachFeedbacks(this.coachData.coach.id);
+   
  
 
     } else if(this.userRole == 'ORGANIZATION'){
@@ -91,7 +95,7 @@ session: any;
       
       this.getOrgContracts(this.orgSession.id);
       this.getAllOrgSessions(this.orgSession.id);
-
+      this.getOrgFeedbacks(this.orgSession.id);
      
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
@@ -102,6 +106,50 @@ session: any;
     }
 
   }
+  getOrgFeedbacks(orgId: any) {
+    this.loading = true;
+    this.clientService.getCoachFeedbacks(orgId).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.Feedbacks = response;
+        console.log(this.Feedbacks);
+        let totalScore = 0;
+
+        for (let i = 0; i < Math.max(this.Feedbacks.length, 1); i++) {
+          totalScore += this.Feedbacks[i].overallScore;
+        }
+        const success_rate = totalScore / (Math.max(this.Feedbacks.length, 1)*25);
+        this.success_rate_percent = Math.round(success_rate * 100);
+
+        this.loading = false;
+      }
+    );
+
+  }
+
+  getCoachFeedbacks(coachId: any) {
+  
+    this.loading = true;
+    this.clientService.getOrgFeedbacks(coachId).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.Feedbacks = response;
+        console.log(this.Feedbacks);
+        let totalScore = 0;
+
+        for (let i = 0; i < Math.max(this.Feedbacks.length, 1); i++) {
+          totalScore += this.Feedbacks[i].overallScore;
+        }
+        const success_rate = totalScore / (Math.max(this.Feedbacks.length, 1)*25);
+        this.success_rate_percent = Math.round(success_rate * 100);
+
+        this.loading = false;
+      }
+    );
+
+  }
+  // get all feedbacks overrall score and get a percentage
+
 
 
   getAllOrgSessions(id: any) {
