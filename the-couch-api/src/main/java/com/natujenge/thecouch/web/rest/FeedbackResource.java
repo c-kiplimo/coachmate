@@ -38,7 +38,7 @@ public class FeedbackResource {
             orgIdId = Long.valueOf(0);
         }
         try {
-            feedBackService.addNewFeedBack(sessionId, coachId, orgId, feedback);
+            feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
