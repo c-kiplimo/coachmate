@@ -16,7 +16,7 @@ public interface CoachRepository extends PagingAndSortingRepository<Coach,Long>,
     List<Coach> findAll();
     void deleteCoachById(long id);
     Optional<Coach> findCoachById(Long id);
-
-
+    
     List<Coach> findByOrganizationId(Long organizationId);
+
 }
