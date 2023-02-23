@@ -29,11 +29,11 @@ public class FeedbackResource {
     ResponseEntity<?> createNewFeedBack(@RequestBody Feedback feedback,
                                         @RequestParam(name = "sessionId",required = false) Long sessionId,
                                         @RequestParam(name = "coachId") Long coachId,
-                                        @RequestParam(name = "orgIdId") Long orgIdId,
+                                        @RequestParam(name = "orgId") Long orgId,
                                         @AuthenticationPrincipal User userDetails) {
         log.info("request to create feedback");
         try {
-            feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
+            feedBackService.addNewFeedBack(sessionId, coachId, orgId, feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -3,6 +3,7 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
@@ -15,7 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
+import com.natujenge.thecouch.domain.Session;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,6 +39,8 @@ public class SessionService {
     ContractRepository contractRepository;
     @Autowired
     OrganizationRepository organizationRepository;
+    @Autowired
+    private NotificationServiceHTTPClient notificationServiceHTTPClient;
 
     @Autowired
     CoachRepository coachRepository;
@@ -203,20 +206,36 @@ public class SessionService {
         return sessionRepository.findByContractId(contractId);
     }
 
+
     //send notification to client and coach when session is upcoming
-    @Scheduled(cron = "* 59 17 ? ? ? ")
+    @Scheduled(cron = "* 50 9 ? ? ? ")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+
         for (Session session : sessions) {
-            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
+            String smsContent;
+            smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
+                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+                    + session.getSessionStartTime() + " to " + session.getSessionEndTime() + "\n See you there!";
+            String smsContentClient;
+            smsContentClient = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
+                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+                    + session.getSessionStartTime() + "to " + session.getSessionEndTime() + "\n See you there!";
                 //send notification to coach
                 NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+                // sendEmail
+              String email =  session.getCoach().getEmailAddress();
+                notificationServiceHTTPClient.sendEmail(email,"SESSION DUE TODAY",smsContent,false);
+                log.info("Email sent");
                 //send notification to client
                 NotificationHelper.sendUpcomingSessionReminderToClient(session);
+                // sendEmail
+                String clientEmail =  session.getClient().getEmail();
+                notificationServiceHTTPClient.sendEmail(clientEmail,"SESSION DUE TODAY", smsContentClient,false);
             }
         }
-    }
+
 //    @Scheduled(cron = "0 20 05 * * ?")
 //    public void sendUpcomingSessionReminderToClient() {
 //        log.debug("Request to send upcoming session reminder");

@@ -36,6 +36,7 @@ export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
   status!: string;
   orgId: any;
+  organizationId: any;
 deleteSession() {
 throw new Error('Method not implemented.');
 }
