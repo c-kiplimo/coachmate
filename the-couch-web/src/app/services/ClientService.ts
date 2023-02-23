@@ -102,16 +102,16 @@ export class ClientService {
     addSession(session: any, params: any): Observable<any> {
         console.log(session);
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
-          .pipe(
-            tap(response => {
-              this.toastr.success('Session created successfully');
-            }),
-            catchError(error => {
-              console.error('Session not added:', error);
-              this.toastr.error(error.error, 'Error');
-              throw error;
-            })
-          );
+        //   .pipe(
+        //     tap(response => {
+        //       this.toastr.success('Session created successfully');
+        //     }),
+        //     catchError(error => {
+        //       console.error('Session not added:', error);
+        //       this.toastr.error(error.error, 'Maximum sessions reached contact coach');
+        //       throw error;
+        //     })
+        //   );
       }
     editSession(id: any) : Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);

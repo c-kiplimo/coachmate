@@ -193,7 +193,7 @@ closeModal() {
     this.router.navigate(['/sessions']);
   }, error => {
     console.log(error);
-    this.toastrService.error(error.error, 'Error');
+    this.toastrService.error(error.error, 'Maximum sessions contact coach');
     this.router.navigate(['/sessions']);
   });
   
