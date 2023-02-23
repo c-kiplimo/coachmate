@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
-import { map, catchError} from 'rxjs/operators';
+import { map, catchError, tap} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
  
  
 @Injectable({
@@ -21,7 +22,8 @@ export class ClientService {
     baseURL: string = environment.apiURL + '/api/';
   deleteClient: any;
     
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+        private toastr: ToastrService) {
 
     }
     getContract(id: any):Observable<any> {
@@ -98,11 +100,19 @@ export class ClientService {
   }
     // session actions
     addSession(session: any, params: any): Observable<any> {
-        console.log(session)
-     
+        console.log(session);
         return this.http.post(`${this.baseURL}sessions`, session, {params: params})
-            
-    }
+        //   .pipe(
+        //     tap(response => {
+        //       this.toastr.success('Session created successfully');
+        //     }),
+        //     catchError(error => {
+        //       console.error('Session not added:', error);
+        //       this.toastr.error(error.error, 'Maximum sessions reached contact coach');
+        //       throw error;
+        //     })
+        //   );
+      }
     editSession(id: any) : Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
@@ -179,6 +189,29 @@ recordPayment(payment: any): Observable<any> {
         { observe: 'response' }
       );
   }
+
+  getPaymentsByCoachId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByCoachId`,{
+        params: options,
+        observe:'response'})
+  }
+  getPaymentsByClientId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filter-by-client-id`,{
+        params: options,
+        observe:'response'})
+  }
+  //get billings by coach id
+    getBillingsByCoachId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}billing/filterByCoachId`,{
+            params: options,
+            observe:'response'})
+      }
+//get billing account by client id
+    getBillingsByClientId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}billing/filterByClientId`,{
+            params: options,
+            observe:'response'})
+      }
 
 
 }

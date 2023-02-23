@@ -22,4 +22,9 @@ public interface ClientDto {
         Long getId();
         String getBusinessName();
     }
+    // client billing account
+    public interface ClientBillingAccountView {
+        Long getId();
+        Float getAmountBilled();
+    }
 }

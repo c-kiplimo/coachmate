@@ -1,12 +1,18 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
+import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
+import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
+import com.natujenge.thecouch.domain.ClientBillingAccount;
+import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -24,9 +32,16 @@ public class WalletService {
     @Autowired
     ClientWalletRepository clientWalletRepository;
     @Autowired
+    NotificationRepository notificationRepository;
+    @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    private NotificationServiceHTTPClient notificationServiceHTTPClient;
+    @Autowired
+    NotificationSettingsService notificationSettingsService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -130,8 +145,10 @@ public class WalletService {
 
         // mngmnt
         clientWallet.setCreatedBy(coach.getFullName());
-        //clientWallet.setOrganization();
-
+        Optional<Organization> org = Optional.ofNullable(coach.getOrganization());
+        if(org.isPresent()) {
+            clientWallet.setOrganization(coach.getOrganization());
+        }
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
 
@@ -148,6 +165,42 @@ public class WalletService {
         // save wallet
         ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
         log.info("Wallet successfully saved");
+        log.info("Prep to send sms");
+        Map<String, Object> replacementVariables = new HashMap<>();
+        replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
+        replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
+        replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
+        replacementVariables.put("business_name",clientWallet1.getClient().getCoach().getBusinessName());
+
+        String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
+
+        //replacement to get content
+        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
+        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from  settings
+        String referenceId = clientWallet1.getId().toString();
+        String msisdn = clientWallet1.getClient().getMsisdn();
+
+        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
+
+        //send sms
+        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
+        log.info("sms sent ");
+
+        // sendEmail
+        notificationServiceHTTPClient.sendEmail(client.getEmail(),"PAYMENT RECEIVED",smsContent,false);
+        log.info("Email sent");
+
+
+        //create notification object and send it
+        Notification notification = new Notification();
+        notification.setNotificationMode(NotificationMode.SMS);
+        notification.setDestinationAddress(msisdn);
+        notification.setSourceAddress(sourceAddress);
+        notification.setContent(smsContent);
+        notification.setCreatedBy(coach.getFullName());
+        //TO DO: add logic to save notification to db
+
+        notificationRepository.save(notification);
 
         return clientWallet1;
         // Map to Dto and return

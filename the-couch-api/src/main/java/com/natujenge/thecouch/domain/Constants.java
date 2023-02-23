@@ -22,7 +22,7 @@ public class Constants {
             " starting  on $startDate to $endDate , has been created. Please login to your account to sign the contract. Thank you. $business_name";
 
     public static final String DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE =  "Dear $client_name. We have received " +
-            "your payment of amount $amountDeposited . Your outstanding " +
+            "your payment of amount $amountDeposited . Your wallet balance " +
             "balance is $amountBilled." +
             " Thank you. $business_name";
 

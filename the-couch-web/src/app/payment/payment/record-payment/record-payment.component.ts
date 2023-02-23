@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ro } from 'date-fns/locale';
 import { ClientService } from 'src/app/services/ClientService';
 @Component({
   selector: 'app-record-payment',
@@ -25,6 +27,7 @@ export class RecordPaymentComponent implements OnInit {
 
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private clientService:ClientService
   
@@ -72,7 +75,10 @@ export class RecordPaymentComponent implements OnInit {
       (response: any) => {
         console.log(response);
         this.successMessage = response.message;
+      
         this.errorMessage = '';
+        //Router.navigate(['/payment']);
+        this.router.navigate(['/receipts']);
       }
     );
 

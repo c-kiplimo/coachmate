@@ -39,4 +39,6 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     Optional<Session> getSessionById(Long id);
 
     List<Session> findSessionBySessionDate(LocalDate now);
+
+    List<Session> findSessionByContractId(Long contractId);
 }
