@@ -29,9 +29,12 @@ public class FeedbackResource {
     ResponseEntity<?> createNewFeedBack(@RequestBody Feedback feedback,
                                         @RequestParam(name = "sessionId",required = false) Long sessionId,
                                         @RequestParam(name = "coachId") Long coachId,
-                                        @RequestParam(name = "orgIdId") Long orgIdId,
+                                        @RequestParam(name = "orgIdId", required = false) Long orgIdId,
                                         @AuthenticationPrincipal User userDetails) {
         log.info("request to create feedback");
+        if(orgIdId.equals(null)){
+            orgIdId = Long.valueOf(0);
+        }
         try {
             feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
