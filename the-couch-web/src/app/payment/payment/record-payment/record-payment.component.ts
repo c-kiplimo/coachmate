@@ -75,6 +75,7 @@ export class RecordPaymentComponent implements OnInit {
       (response: any) => {
         console.log(response);
         this.successMessage = response.message;
+      
         this.errorMessage = '';
         //Router.navigate(['/payment']);
         this.router.navigate(['/receipts']);

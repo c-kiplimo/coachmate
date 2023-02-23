@@ -26,6 +26,7 @@ import { HomeComponent } from './home/home.component';
 import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
 import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 
 
 const routes: Routes = [
@@ -126,6 +127,14 @@ const routes: Routes = [
   {
     path: 'feedback',
     component: FeedbackComponent
+  },
+  {
+    path: 'feedback',
+    component: FeedbackComponent
+  },
+  {
+    path: 'terms/:id',
+    component: TermsAndConditionsPageComponent
   }
   
 ];

@@ -187,10 +187,16 @@ closeModal() {
 
    console.log(params);
  
-    this.sessionService.addSession(this.formData, params).subscribe((res:any) => {
-      console.log(res);
-      this.router.navigate(['/sessions']);
-    });
+   this.sessionService.addSession(this.formData, params).subscribe((res:any) => {
+    console.log(res);
+    this.toastrService.success('Session added successfully');
+    this.router.navigate(['/sessions']);
+  }, error => {
+    console.log(error);
+    this.toastrService.error(error.error, 'Maximum sessions contact coach');
+    this.router.navigate(['/sessions']);
+  });
+  
   }
 
   getContracts() {

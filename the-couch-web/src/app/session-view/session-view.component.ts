@@ -35,6 +35,8 @@ import { ApiService } from '../services/ApiService';
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
   status!: string;
+  orgId: any;
+  organizationId: any;
 deleteSession() {
 throw new Error('Method not implemented.');
 }
@@ -143,6 +145,11 @@ client: any;
     });
 
     }
+    else if(this.userRole == 'COACH'){
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      console.log(this.sessionId);
+    }
+    else 
 
    this.route.params.subscribe((params) => {
 
@@ -300,13 +307,13 @@ client: any;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
-      orgIdId: this.orgIdId,
+    
     };
     console.log(this.feebackForm.value);
     const data = this.feebackForm.value;
 
     data.sessionId = this.sessionId;
-    data.orgIdId = this.orgIdId;
+    
     data.coachId = this.coachId;
     data.clientId = this.clientId;
     data.createdBy = this.createdBy;

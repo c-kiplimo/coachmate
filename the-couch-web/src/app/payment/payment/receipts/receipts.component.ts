@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'src/app/services/ClientService';
 import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-receipts',
@@ -32,10 +34,6 @@ coachSessionData: any;
 coachData: any;
 userRole: any;
 ClientId: any;
-
-savePdf() {
-throw new Error('Method not implemented.');
-}
 
   constructor(
     private ClientService: ClientService,
@@ -116,6 +114,38 @@ throw new Error('Method not implemented.');
 
 
   }
+  savePdf() {
+    let DATA: any = document.getElementById('invoice');
+    html2canvas(DATA, { logging: true, allowTaint: true, useCORS: true }).then(
+      (canvas) => {
+        let fileWidth = 185;
+        // let fileHeight =100;
+        let fileHeight = (canvas.height * fileWidth) / canvas.width;
+        const FILEURI = canvas.toDataURL('image/*');
+        let PDF = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+        PDF.addImage(FILEURI, 'image/*', 0, position, fileWidth, fileHeight);
+        PDF.save('invoice.pdf');
+      }
+    );
+  }
+  savePdfDesktop() {
+    let DATA: any = document.getElementById('invoiceDesktop');
+    html2canvas(DATA, { logging: true, allowTaint: true, useCORS: true }).then(
+      (canvas) => {
+        let fileWidth = 200;
+        // let fileHeight =50;
+        let fileHeight = (canvas.height * fileWidth) / canvas.width;
+        const FILEURI = canvas.toDataURL('image/*');
+        let PDF = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+        PDF.addImage(FILEURI, 'image/*', 0, position, fileWidth, fileHeight);
+        PDF.save('invoice.pdf');
+      }
+    );
+  }
+
+
 
 
 }
