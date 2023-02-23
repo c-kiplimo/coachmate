@@ -121,7 +121,7 @@ public class WalletResource {
                 listResponse = walletService.getPaymentsByClientId
                         (page, perPage, clientId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
-            
+
         } catch (Exception e){
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
