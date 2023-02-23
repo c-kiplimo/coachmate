@@ -4,11 +4,13 @@ import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
-public interface ClientWalletRepository extends JpaRepository<ClientWallet,Long> {
+public interface ClientWalletRepository extends PagingAndSortingRepository<ClientWallet,Long>,
+        QuerydslPredicateExecutor<ClientWallet> {
 
     Optional<ClientWallet> findFirstByCoachIdAndClientIdOrderByIdDesc(long coachId, long clientId);
 
