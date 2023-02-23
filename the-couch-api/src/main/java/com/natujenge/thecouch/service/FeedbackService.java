@@ -50,12 +50,18 @@ public class FeedbackService {
 
         Optional<Coach> coach = coachRepository.getCoachById(coachId);
 
-        Optional<Organization> organization = organizationRepository.findById(orgIdId);
+        if(orgIdId != null) {
+            Optional<Organization> organization = organizationRepository.findById(orgIdId);
+
+            if(organization.isPresent()){
+                feedback.setOrganization(organization.get());
+            }
+        }
 
         feedback.setClient(client.get());
         feedback.setSession(session.get());
         feedback.setCoach(coach.get());
-        feedback.setOrganization(organization.get());
+
         feedback.setAvailabilityScore(feedbackReq.getAvailabilityScore());
         feedback.setClarificationScore(feedbackReq.getClarificationScore());
         feedback.setEmotionalIntelligenceScore(feedbackReq.getEmotionalIntelligenceScore());

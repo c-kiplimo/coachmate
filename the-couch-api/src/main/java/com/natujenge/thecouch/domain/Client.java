@@ -3,6 +3,7 @@ package com.natujenge.thecouch.domain;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
 import com.natujenge.thecouch.domain.enums.PaymentMode;
+import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

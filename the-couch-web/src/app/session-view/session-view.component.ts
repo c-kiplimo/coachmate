@@ -35,6 +35,10 @@ import { ApiService } from '../services/ApiService';
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
   status!: string;
+
+  orgId: any;
+  organizationId: any;
+
 deleteSession() {
 throw new Error('Method not implemented.');
 }
@@ -343,10 +347,12 @@ client: any;
       this.sessions = res.body;
       console.log(this.sessions);
     
-      console.log("coach id",this.coachId);
+      
       this.clientId = this.sessions.client.id;
-      this.orgIdId = this.sessions.coach.orgIdId;
+      this.orgIdId = this.sessions.orgId;
+      console.log("org id",this.orgIdId);
       this.coachId = this.sessions.coach.id;
+      console.log("coach id",this.coachId);
       this.createdBy = this.sessions.client.fullName;
       this.getNotifications();
    

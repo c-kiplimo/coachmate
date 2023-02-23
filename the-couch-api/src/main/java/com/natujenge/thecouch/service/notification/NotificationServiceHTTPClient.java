@@ -123,7 +123,7 @@ public class NotificationServiceHTTPClient {
         String referenceId = "C-3452";
         String msisdn = user.getCoach().getMsisdn();
         String email = user.getCoach().getEmailAddress();
-        log.info("About to send message to Cooperative content: {}, from: {}, to: {}, ref id {}",
+        log.info("About to send message to Coach content: {}, from: {}, to: {}, ref id {}",
                 smsContent, sourceAddress, msisdn, referenceId);
 
         //send sms
