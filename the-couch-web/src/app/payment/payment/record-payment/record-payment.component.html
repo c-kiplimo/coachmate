@@ -24,7 +24,8 @@
       <div class="modal-body">
         <form  ngNativeValidate>
           <div class="row">
-            <div class=" mb-3 col-md-6">
+            <div *ngIf="userRole === 'COACH' or 'ORGANIZATION'"
+            class=" mb-3 col-md-6">
               <label for="client">Payment for:</label>
               <br>
               <select class="form-select" id="clientId" name="clientId"

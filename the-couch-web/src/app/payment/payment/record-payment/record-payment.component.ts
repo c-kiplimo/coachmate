@@ -11,6 +11,11 @@ import { ClientService } from 'src/app/services/ClientService';
 export class RecordPaymentComponent implements OnInit {
   clients: any;
   modesOfPayment ='';
+  coachSessionData!: any;
+  coachData: any;
+  userRole: any;
+  User: any;
+  orgName!: any;
   successMessage!: string;
   errorMessage!: string;
   itemsPerPage = 20;
@@ -20,10 +25,6 @@ export class RecordPaymentComponent implements OnInit {
   };
 
   loading = false;
-
-  coachSessionData: any;
-  coachData: any;
-  userRole: any;
 
 
   constructor(
@@ -56,10 +57,23 @@ export class RecordPaymentComponent implements OnInit {
     console.log(this.userRole);
 
  if(this.userRole == 'COACH'){
+  this.getUser();
     this.getClients()
  } else if(this.userRole == 'ORGANIZATION'){
+  this.getUserOrg();
     this.getOrgClients()
  }
+  
+
+  }
+  getUser() {
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.User);
+  }
+  getUserOrg() {
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.User);
+  
   
   }
 

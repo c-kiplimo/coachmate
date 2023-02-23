@@ -7,6 +7,7 @@ import {
 
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { ClientService } from '../services/ClientService';
 
 @Component({
   selector: 'app-home',
@@ -18,10 +19,11 @@ export class HomeComponent implements OnInit {
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
-  service: any;
+ 
   constructor(
     private formBuilder: FormBuilder,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private service: ClientService
   ) {}
 
   ngOnInit(): void {
