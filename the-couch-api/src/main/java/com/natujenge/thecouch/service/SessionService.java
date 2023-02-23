@@ -208,7 +208,7 @@ public class SessionService {
 
 
     //send notification to client and coach when session is upcoming
-    @Scheduled(cron = "* 50 9 ? ? ? ")
+    @Scheduled(cron = "0 0 9 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
