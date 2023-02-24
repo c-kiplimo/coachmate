@@ -43,7 +43,7 @@ public class ClientBillingAccountService {
                 clientBillingAccountPage.getTotalElements());
     }
 
-    // create new wallet
+    // create new billing account
     public void createBillingAccount(ClientBillingAccount clientBillingAccount) {
 
         clientBillingAccountRepository.save(clientBillingAccount);
@@ -121,5 +121,10 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
         return new ListResponse(clientBillingAccountPage.getContent(),
                 clientBillingAccountPage.getTotalPages(),clientBillingAccountPage.getNumberOfElements(),
                 clientBillingAccountPage.getTotalElements());
+    }
+
+
+    public ClientBillingAccount getClientBillingAccountByCoachIdAndClientId(Long id, Long id1) {
+        return clientBillingAccountRepository.findByCoach_idAndClient_id(id,id1);
     }
 }

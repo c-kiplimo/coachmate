@@ -4,7 +4,7 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
 
 import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.enums.SessionStatus;
+import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
@@ -15,6 +15,7 @@ import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -122,6 +123,7 @@ public class ContractService {
         }
 
         log.info("Contract: "+contract.toString());
+        //check client wallet balance
 
         Contract contract1 = contractRepository.save(contract);
 

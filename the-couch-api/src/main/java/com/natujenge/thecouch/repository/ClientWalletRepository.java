@@ -23,4 +23,5 @@ public interface ClientWalletRepository extends PagingAndSortingRepository<Clien
     Page<ClientWalletDto> findByOrganizationIdAndClientId(Long organizationId, Long clientId, Pageable pageable);
 
 
+    void findAllByClient_idAndCoach_id(Long id, Long id1);
 }

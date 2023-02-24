@@ -26,6 +26,8 @@ export class AccountStatementComponent implements OnInit {
   ClientId: any;
   bills: any;
   billingAccount: any;
+  selectedDateRange: any;
+  selectedPeriod: any;
   
  
   
@@ -189,6 +191,42 @@ export class AccountStatementComponent implements OnInit {
         }
       );
     }
+    applyFilter() {
+      switch (this.selectedPeriod) {
+        case '1':
+          // apply filter for 1 month
+          break;
+        case '2':
+          // apply filter for 6 months
+          break;
+        case '3':
+          // apply filter for 1 year
+          break;
+        default:
+          // no filter applied
+          break;
+      }
+    }
+    // applyFilter() {
+    //   const now = new Date();
+    //   const startDate = new Date(now);
+    //   if (this.selectedPeriod === '1') { // 1 month
+    //     startDate.setMonth(now.getMonth() - 1);
+    //   } else if (this.selectedPeriod === '2') { // 6 months
+    //     startDate.setMonth(now.getMonth() - 6);
+    //   } else if (this.selectedPeriod === '3') { // 1 year
+    //     startDate.setFullYear(now.getFullYear() - 1);
+    //   }
+    //   const endDate = now;
+      
+    //   const filteredPayments = this.payments.filter(payment => {
+    //     const paymentDate = new Date(payment.createdAt);
+    //     return paymentDate >= startDate && paymentDate <= endDate;
+    //   });
+    
+    //   // do something with filteredPayments
+    // }
+    
   
   
   }

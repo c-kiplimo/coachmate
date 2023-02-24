@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,8 @@ public class Contract {
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
     @Nullable
     @ManyToOne
