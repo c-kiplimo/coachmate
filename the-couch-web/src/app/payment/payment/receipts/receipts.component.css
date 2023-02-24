@@ -140,5 +140,10 @@ table {
     padding-right: 21px;
     padding-left: 0px;
   }
+  .search-bar{
+    
+    border-radius: 4px;
+    margin: 0 0 !important;
+  }
   
   

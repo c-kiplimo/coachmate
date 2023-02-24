@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "tbl_account_statement")
-public class accountStatement {
+public class AccountStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,13 +23,13 @@ public class accountStatement {
     private String description;
 
     @Column(name = "balance_before")
-    private BigDecimal balanceBefore;
+    private float balanceBefore;
 
     @Column(name = "amount_in")
-    private BigDecimal amountIn;
+    private float amountIn;
 
     @Column(name = "balance_after")
-    private BigDecimal balanceAfter;
+    private float balanceAfter;
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
 

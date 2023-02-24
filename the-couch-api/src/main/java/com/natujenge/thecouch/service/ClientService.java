@@ -24,11 +24,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import static org.springframework.util.StringUtils.hasLength;
+import com.natujenge.thecouch.domain.AccountStatement;
 @Service
 @Slf4j
 public class ClientService {
@@ -43,6 +45,8 @@ public class ClientService {
     @Autowired
 
     ClientBillingAccountService clientBillingAccountService;
+    @Autowired
+    AccountStatementService accountStatementService;
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -122,6 +126,22 @@ public class ClientService {
         clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
+        log.info("Client Billing Account created Successfully!");
+        // create account statement for client
+        AccountStatement accountStatement = new AccountStatement();
+        accountStatement.setCoach(optionalCoach.get());
+        accountStatement.setClient(saveClient);
+        accountStatement.setAmountIn((float) 0);
+        accountStatement.setBalanceAfter((float) 0);
+        accountStatement.setBalanceBefore((float) 0);
+        accountStatement.setDate(LocalDate.from(LocalDateTime.now()));
+        accountStatement.setLastUpdatedBy(optionalCoach.get().getFullName());
+        accountStatement.setLastUpdatedAt(LocalDateTime.now());
+        accountStatement.setDescription("Account created");
+        accountStatementService.createAccountStatement(accountStatement);
+
+
+
         return saveClient;
 
     }

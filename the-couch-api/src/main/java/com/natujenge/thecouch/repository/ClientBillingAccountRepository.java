@@ -22,4 +22,6 @@ public interface ClientBillingAccountRepository extends PagingAndSortingReposito
     Page<ClientBillingAccount> findAllByCoach_organization_id(Long organizationId, Pageable pageable);
 
     Page<ClientBillingAccount> findAllByClient_id(Long clientId, Pageable pageable);
+
+    ClientBillingAccount findByCoach_idAndClient_id(Long id, Long id1);
 }

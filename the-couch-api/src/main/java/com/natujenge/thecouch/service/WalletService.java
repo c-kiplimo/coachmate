@@ -12,7 +12,7 @@ import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.ClientBillingAccount;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
+import com.natujenge.thecouch.domain.AccountStatement;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,18 +38,21 @@ public class WalletService {
     ClientBillingAccountRepository clientBillingAccountRepository;
     @Autowired
     ClientRepository clientRepository;
-
+    @Autowired
+    AccountStatementService accountStatementService;
     @Autowired
     private NotificationServiceHTTPClient notificationServiceHTTPClient;
     @Autowired
     NotificationSettingsService notificationSettingsService;
+    @Autowired
+    ClientWalletRepository walletRepository;
 
     @Autowired
     ModelMapper modelMapper;
 
     // Obtain the recent wallet account for the given client
     public ClientWallet getClientWalletRecentRecord(long coachId, long clientId) {
-
+log.info("Get client wallet recent record for coach id {} and client id {}", coachId, clientId);
         // obtain latest payment Record
         Optional<ClientWallet> optionalClientWallet = clientWalletRepository.
                 findFirstByCoachIdAndClientIdOrderByIdDesc(
@@ -56,6 +60,7 @@ public class WalletService {
 
         if (optionalClientWallet.isEmpty()) {
             throw new IllegalArgumentException("Specified wallet does not exist!!!");
+
         }
 
         return optionalClientWallet.get();
@@ -161,9 +166,29 @@ public class WalletService {
 
         clientWallet.setWalletBalance(walletBalanceAfter);
         clientWallet.setDescription("New payment entry");
+        WalletService walletService = new WalletService();
+        ClientBillingAccountService clientBillingAccountService = new ClientBillingAccountService();
+        ClientBillingAccount clientBillingAccount = clientBillingAccountService.getClientBillingAccountByCoachIdAndClientId(coach.getId(), client.getId());
+
+        float balanceBefore = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
+                0f;
+
+        log.info("balanceBefore:{}",balanceBefore);
+        float amountIn = (clientWallet.getAmountDeposited() != null)?clientWallet.getAmountDeposited():
+                0f;
+        log.info("amount deposited:{}",amountIn);
+        ;
+        float balanceAfter = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
+                0f;
+        log.info("amount billed:{}",balanceAfter);
+        //update account statement
+        accountStatementService.updateAccountStatement(coach, client,amountIn,balanceBefore,balanceAfter);
+
 
         // save wallet
         ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
+
+
         log.info("Wallet successfully saved");
         log.info("Prep to send sms");
         Map<String, Object> replacementVariables = new HashMap<>();
@@ -206,6 +231,10 @@ public class WalletService {
         // Map to Dto and return
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
 
+    }
+
+    private ClientBillingAccount getClientBillingAccountByCoachIdAndClientId(Long id, Long id1) {
+        return clientBillingAccountRepository.findByCoach_idAndClient_id(id,id1);
     }
 
     // Get all payments by organization Id
