@@ -2,8 +2,14 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.natujenge.thecouch.repository.AccountStatementRepository;
 import java.time.LocalDateTime;
@@ -41,19 +47,81 @@ public class AccountStatementService {
         log.info("saving account statement:{}",accountStatement);
         accountStatementRepository.save(accountStatement);
         log.info("account statement saved");
+    }
+    // Get account statement by organization Id
+    public ListResponse getStatementByOrganizationId(int page, int perPage, Long organizationId) {
+        log.info("Get account statement by organization Id{}", organizationId);
 
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
 
+        Page<AccountStatement> statementPage;
+        statementPage = accountStatementRepository.findAllByOrganization_id(organizationId, pageable);
 
+        return new ListResponse(statementPage.getContent(),
+                statementPage.getTotalPages(), statementPage.getNumberOfElements(),
+                statementPage.getTotalElements());
+    }
+    // Get account statement by coach Id
+    public ListResponse getStatementByCoachId(int page, int perPage, Long coachId) {
+        log.info("Get account statement by coach Id{}", coachId);
 
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
 
+        Page<AccountStatement> statementPage;
+        statementPage = accountStatementRepository.findAllByCoach_id(coachId, pageable);
 
+        return new ListResponse(statementPage.getContent(),
+                statementPage.getTotalPages(), statementPage.getNumberOfElements(),
+                statementPage.getTotalElements());
+    }
+    // Get account statement by client Id
+    public ListResponse getStatementByClientId(int page, int perPage, Long clientId) {
+        log.info("Get account statement by client Id{}", clientId);
 
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
 
+        Page<AccountStatement> statementPage;
+        statementPage = accountStatementRepository.findAllByClient_id(clientId, pageable);
 
+        return new ListResponse(statementPage.getContent(),
+                statementPage.getTotalPages(), statementPage.getNumberOfElements(),
+                statementPage.getTotalElements());
+    }
+    // Get account statement by coach Id and client Id
+    public ListResponse getStatementByCoachIdAndClientId(int page, int perPage, Long coachId, Long clientId) {
+        log.info("Get account statement by coach Id{} and client Id{}", coachId, clientId);
 
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
 
+        Page<AccountStatement> statementPage;
+        statementPage = accountStatementRepository.findAllByCoach_idAndClient_id(coachId, clientId, pageable);
 
+        return new ListResponse(statementPage.getContent(),
+                statementPage.getTotalPages(), statementPage.getNumberOfElements(),
+                statementPage.getTotalElements());
+    }
+    // Get account statement by organization Id and client Id
+    public ListResponse getStatementByOrganizationIdAndClientId(int page, int perPage, Long organizationId, Long clientId) {
+        log.info("Get account statement by organization Id{} and client Id{}", organizationId, clientId);
 
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<AccountStatement> statementPage;
+        statementPage = accountStatementRepository.findAllByOrganization_idAndClient_id(organizationId, clientId, pageable);
+
+        return new ListResponse(statementPage.getContent(),
+                statementPage.getTotalPages(), statementPage.getNumberOfElements(),
+                statementPage.getTotalElements());
     }
 
 }

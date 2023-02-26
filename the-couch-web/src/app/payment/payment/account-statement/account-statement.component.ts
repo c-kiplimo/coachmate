@@ -28,6 +28,7 @@ export class AccountStatementComponent implements OnInit {
   billingAccount: any;
   selectedDateRange: any;
   selectedPeriod: any;
+  accountStatement: any;
   
  
   
@@ -43,11 +44,12 @@ export class AccountStatementComponent implements OnInit {
       this.userRole = this.coachData.userRole;
       console.log(this.userRole);
       if (this.userRole == 'CLIENT') {
-        this.getBillByClientId(id);
+     
       }
       if(this.userRole == 'COACH'){
         this.getPaymentsByCoachId();
-        this. getBillByCoachId();
+        this.getAccountStatementByCoachId();
+       
         
       } else if(this.userRole == 'CLIENT'){
       
@@ -61,7 +63,8 @@ export class AccountStatementComponent implements OnInit {
           
   
         this.getPaymentsByClientId(response[0].id);
-        this.getBillByClientId(id);
+        this.getAccountStatementByClientId(response[0].id);
+       
         },
         (error: any) => {
           console.log(error);
@@ -71,7 +74,12 @@ export class AccountStatementComponent implements OnInit {
   
       }
       else if(this.userRole == 'CLIENT'){
-        this.getBillByClientId(id);
+        this.getAccountStatementByCoachId();
+        
+      }
+      else if(this.userRole == 'ORGANIZATION'){
+        this.getAccountStatementByOrgId();
+        
       }
       
     }
@@ -116,8 +124,8 @@ export class AccountStatementComponent implements OnInit {
         }
       )
     }
-// get bill by coach id
-    getBillByCoachId(){
+// get statement by coach id
+    getAccountStatementByCoachId(){
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -126,18 +134,18 @@ export class AccountStatementComponent implements OnInit {
         coachId: this.coachData.coach.id,
       };
       this.loading = true;
-      this.ClientService. getBillingsByCoachId(options).subscribe(
+      this.ClientService.getAccountStatementByCoachId(options).subscribe(
         (response) => {
           this.loading = false;
-          this.billingAccount = response.body.data;
-          console.log('billing Account', this.billingAccount);
+          this.accountStatement = response.body;
+          console.log('get statement by coach id', this.accountStatement);
         }, (error) => {
           console.log(error);
         }
       )
     }
-  // get bill by client id
-    getBillByClientId(id: any){
+  // get statement by client id
+    getAccountStatementByClientId(id: any){
       const options = {
         page: 1, 
         per_page: this.itemsPerPage,
@@ -146,20 +154,57 @@ export class AccountStatementComponent implements OnInit {
         client_id: id,
       };
       this.loading = true;
-      this.ClientService. getBillingsByClientId(options).subscribe(
+      this.ClientService. getAccountStatementByClientId(options).subscribe(
         (response) => {
           this.loading = false;
-          this.billingAccount = response.body.data;
-          console.log('billing Account by client', this.billingAccount);
+          this.accountStatement = response.body;
+          console.log('get statement by client id', this.accountStatement);
         }, (error) => {
           console.log(error);
         }
       )
     }
-
-
-
-
+  // get statement by coach id and client id
+    getAccountStatementByCoachIdAndClientId(id: any){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        client_id: id,
+        coachId: this.coachData.coach.id,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByCoachIdAndClientId(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatement = response.body.data;
+          console.log('Account statement by coach and client id', this.accountStatement);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
+  // get statement by org id
+    getAccountStatementByOrgId(){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        orgId: this.coachData.organization.id,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByOrgId(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatement = response.body.data;
+          console.log('Account statement by organization', this.accountStatement);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
 
     savePdf() {
       let DATA: any = document.getElementById('invoice');

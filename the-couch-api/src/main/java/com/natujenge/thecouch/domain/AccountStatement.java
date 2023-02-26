@@ -30,6 +30,9 @@ public class AccountStatement {
 
     @Column(name = "balance_after")
     private float balanceAfter;
+    @Column(name = "created_at")
+    @UpdateTimestamp
+    private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
 
