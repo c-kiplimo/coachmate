@@ -46,7 +46,7 @@ export class ConfirmedViewComponent implements OnInit {
         } else {
           this.confirmationSuccess = true;
           setTimeout(() => {
-            this.router.navigate(['login']);
+            this.router.navigate(['signin']);
           }, 5);
          sessionStorage.removeItem('formData');
         }

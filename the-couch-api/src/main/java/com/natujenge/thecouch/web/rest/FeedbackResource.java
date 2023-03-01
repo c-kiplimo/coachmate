@@ -34,9 +34,6 @@ public class FeedbackResource {
 
                                         @AuthenticationPrincipal User userDetails) {
         log.info("request to create feedback");
-        if(orgIdId.equals(null)){
-            orgIdId = Long.valueOf(0);
-        }
         try {
             feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
             return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
@@ -104,10 +101,13 @@ public class FeedbackResource {
 
     //Get ORg FeedBack
     @GetMapping(path = "getOrgFeedbacks/{id}")
-    ResponseEntity<?> getOrgFeedbacks(@PathVariable("id") Long OrgId) {
-        log.error("Request to get Organization Feedbacks");
+    ResponseEntity<?> getOrgFeedbacks(
+    @AuthenticationPrincipal User userDetails,
+    @RequestParam(name = "orgIdId", required = false) Long orgIdId
+    ){
+        log.error("Request to get ORG Feedbacks");
         try{
-            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(OrgId);
+            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(orgIdId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

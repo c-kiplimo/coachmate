@@ -80,10 +80,9 @@
               </div>
 
               <div class="col-md-6"></div>
-              <div *ngIf="sessions < contract.noOfSessions" class="col-md-2">
+              <div class="col-md-2"></div>
+              <div *ngIf="sessions.length < contract.noOfSessions" class="col-md-2">
               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
-
-                <i class="fa-solid fa-user-plus"></i>
                Add Session
               </button>
               </div>
@@ -230,7 +229,6 @@
                   id="inputGroupSelect01" 
                   name="sessionVenue" 
                   [(ngModel)]="addSessionForm.sessionVenue">
-                 >
                   <option value="VIRTUAL">VIRTUAL</option>
                   <option value="PHYSICAL">PHYSICAL</option>
                 </select>

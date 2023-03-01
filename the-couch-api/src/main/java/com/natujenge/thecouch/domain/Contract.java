@@ -34,6 +34,7 @@ public class Contract {
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;
+    private boolean agreedToTerms;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 

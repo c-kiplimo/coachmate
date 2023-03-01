@@ -27,8 +27,9 @@ export class AccountStatementComponent implements OnInit {
   bills: any;
   billingAccount: any;
   selectedDateRange: any;
-  selectedPeriod: any;
+  statementPeriod!: string;
   accountStatement: any;
+  accountStatements: any;
   
  
   
@@ -48,7 +49,8 @@ export class AccountStatementComponent implements OnInit {
       }
       if(this.userRole == 'COACH'){
         this.getPaymentsByCoachId();
-        this.getAccountStatementByCoachId();
+        this.getAccountStatementByCoachIdAndStatementPeriod();
+       
        
         
       } else if(this.userRole == 'CLIENT'){
@@ -74,7 +76,7 @@ export class AccountStatementComponent implements OnInit {
   
       }
       else if(this.userRole == 'CLIENT'){
-        this.getAccountStatementByCoachId();
+  
         
       }
       else if(this.userRole == 'ORGANIZATION'){
@@ -124,26 +126,28 @@ export class AccountStatementComponent implements OnInit {
         }
       )
     }
-// get statement by coach id
-    getAccountStatementByCoachId(){
+// get statement by coach id and selected period
+    getAccountStatementByCoachIdAndStatementPeriod(){
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
         status: this.filters.status,
         search: this.filters.searchItem,
         coachId: this.coachData.coach.id,
+        statementPeriod: this.statementPeriod,
       };
       this.loading = true;
-      this.ClientService.getAccountStatementByCoachId(options).subscribe(
+      this.ClientService. getAccountStatementByCoachIdAndStatementPeriod(options).subscribe(
         (response) => {
           this.loading = false;
-          this.accountStatement = response.body;
-          console.log('get statement by coach id', this.accountStatement);
+          this.accountStatements = response.body.data;
+          console.log('Account statement by coach and selected period', this.accountStatements);
         }, (error) => {
           console.log(error);
         }
       )
     }
+
   // get statement by client id
     getAccountStatementByClientId(id: any){
       const options = {
@@ -236,43 +240,43 @@ export class AccountStatementComponent implements OnInit {
         }
       );
     }
+    // applyFilter() {
+    //   switch (this.statementPeriod) {
+    //     case '1':
+    //       // apply filter for 1 month
+    //       break;
+    //     case '2':
+    //       // apply filter for 6 months
+    //       break;
+    //     case '3':
+    //       // apply filter for 1 year
+    //       break;
+    //     default:
+    //       // no filter applied
+    //       break;
+    //   }
+    // }
     applyFilter() {
-      switch (this.selectedPeriod) {
-        case '1':
+      switch (this.statementPeriod) {
+        case 'PerMonth':
           // apply filter for 1 month
+          this.getAccountStatementByCoachIdAndStatementPeriod();
           break;
-        case '2':
+        case 'Per6Months':
           // apply filter for 6 months
+          this.getAccountStatementByCoachIdAndStatementPeriod();
           break;
-        case '3':
+        case 'PerYear':
           // apply filter for 1 year
+          this.getAccountStatementByCoachIdAndStatementPeriod();
           break;
         default:
           // no filter applied
+    
           break;
       }
     }
-    // applyFilter() {
-    //   const now = new Date();
-    //   const startDate = new Date(now);
-    //   if (this.selectedPeriod === '1') { // 1 month
-    //     startDate.setMonth(now.getMonth() - 1);
-    //   } else if (this.selectedPeriod === '2') { // 6 months
-    //     startDate.setMonth(now.getMonth() - 6);
-    //   } else if (this.selectedPeriod === '3') { // 1 year
-    //     startDate.setFullYear(now.getFullYear() - 1);
-    //   }
-    //   const endDate = now;
-      
-    //   const filteredPayments = this.payments.filter(payment => {
-    //     const paymentDate = new Date(payment.createdAt);
-    //     return paymentDate >= startDate && paymentDate <= endDate;
-    //   });
-    
-    //   // do something with filteredPayments
-    // }
-    
-  
-  
   }
+  
+
   

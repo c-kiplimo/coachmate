@@ -230,6 +230,13 @@ recordPayment(payment: any): Observable<any> {
             params: options,
             observe:'response'})
       }
+      //getAccountStatementByCoachIdAndSelectedPeriod
+      getAccountStatementByCoachIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByCoachIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+      //filterByCoachIdAndStatementPeriod
       //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(

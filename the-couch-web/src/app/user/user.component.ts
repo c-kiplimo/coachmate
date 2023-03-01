@@ -39,6 +39,7 @@ export class UserComponent implements OnInit {
     sessionStorage.removeItem('businessName');
     sessionStorage.removeItem('user');
     this.businessName = '';
+    this.router.navigate(['signin']);
 
   }
   

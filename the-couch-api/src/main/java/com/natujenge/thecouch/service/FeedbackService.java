@@ -100,8 +100,8 @@ public class FeedbackService {
         }
     }
 
-    public List<FeedbackDto> getOrgFeedback(Long orgId) {
-        Optional<Organization> optionalOrganization = organizationRepository.findById(orgId);
+    public List<FeedbackDto> getOrgFeedback(Long orgIdId) {
+        Optional<Organization> optionalOrganization = organizationRepository.findById(orgIdId);
         return feedbackRepository.findByOrganization(optionalOrganization.get());
     }
 

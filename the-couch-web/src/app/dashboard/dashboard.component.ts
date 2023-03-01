@@ -106,9 +106,9 @@ Feedbacks: any;
     }
 
   }
-  getOrgFeedbacks(orgId: any) {
+  getCoachFeedbacks(coachId: any) {
     this.loading = true;
-    this.clientService.getCoachFeedbacks(orgId).subscribe(
+    this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
         this.Feedbacks = response;
@@ -126,11 +126,11 @@ Feedbacks: any;
     );
 
   }
-
-  getCoachFeedbacks(coachId: any) {
+  
+  getOrgFeedbacks(orgId: any) {
   
     this.loading = true;
-    this.clientService.getOrgFeedbacks(coachId).subscribe(
+    this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
         this.Feedbacks = response;
