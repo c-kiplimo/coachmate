@@ -200,18 +200,43 @@ recordPayment(payment: any): Observable<any> {
         params: options,
         observe:'response'})
   }
-  //get billings by coach id
-    getBillingsByCoachId(options: any): Observable<any> {
-        return this.http.get(`${this.baseURL}billing/filterByCoachId`,{
+  //get statement by coach id
+    getAccountStatementByCoachId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByCoachId`,{
             params: options,
             observe:'response'})
       }
-//get billing account by client id
-    getBillingsByClientId(options: any): Observable<any> {
-        return this.http.get(`${this.baseURL}billing/filterByClientId`,{
+//get statement by client id
+    getAccountStatementByClientId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByClientId`,{
             params: options,
             observe:'response'})
       }
+//get statement by organization id
+    getAccountStatementByOrgId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByOrgId`,{
+            params: options,
+            observe:'response'})
+      }
+//get statement by organization id and client id
+    getAccountStatementByOrgIdAndClientId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByOrgIdAndClientId`,{
+            params: options,
+            observe:'response'})
+      }
+//get statement by coach id and client id
+    getAccountStatementByCoachIdAndClientId(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByCoachIdAndClientId`,{
+            params: options,
+            observe:'response'})
+      }
+      //getAccountStatementByCoachIdAndSelectedPeriod
+      getAccountStatementByCoachIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByCoachIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+      //filterByCoachIdAndStatementPeriod
       //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(

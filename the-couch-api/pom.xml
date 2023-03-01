@@ -100,8 +100,13 @@
 			<artifactId>okhttp</artifactId>
 			<version>4.9.0</version>
 		</dependency>
+        <dependency>
+            <groupId>com.github.robtimus</groupId>
+            <artifactId>year-month-validation</artifactId>
+            <version>2.0</version>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

@@ -32,7 +32,7 @@
       </thead>
   
       <tbody>
-        <tr *ngFor="let feedback of Feedbacks">
+        <tr *ngFor="let feedback of feedbacks">
       
          
           <td>{{ feedback.session.name }}</td>
@@ -57,7 +57,7 @@
     <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
       <div class="donut multi"></div>
     </div>
-    <p class="text-muted mt-5" *ngIf="!loading && !Feedbacks.length">
+    <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
       No feedbacks Found.
     </p>
   </div>
@@ -73,41 +73,26 @@ aria-hidden="true"
 <div class="modal-content">
   <div class="modal-header">
     <h1 class="modal-title fs-5" id="exampleModalLabel">
-      feedback Details
+      feedback Comments
     </h1>
 
     <button
       type="button"
       class="btn-close btn-close-white"
-      
+      data-bs-dismiss="modal"
       aria-label="Close"
     ></button>
   </div>
-  <div class="modal-body" *ngFor="let feedback of Feedbacks">
-    <div class="d-flex justify-content-between">
-      <p>feedback Subject:</p>
-      <span>{{ feedback.subject }}</span>
-    </div>
-    <div class="d-flex justify-content-between">
-      <p>Reason</p>
-      <span>{{ feedback.sendReason }}</span>
-    </div>
-
-    <div class="d-flex justify-content-between">
-      <p>Source Address</p>
-      <span>{{ feedback.srcAddress }}</span>
-    </div>
-    <div class="d-flex justify-content-between">
-      <p>Sent at:</p>
-      <span>{{ feedback.sentAt }}</span>
-    </div>
+  <div class="modal-body" *ngFor="let feedback of feedbacks">
     <div class="d-flex-column">
-      <p>Content:</p>
-      <span>{{ feedback.content }}</span>
+      <span>{{ feedback.comments }}</span>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" >
+    <button type="button" 
+    class="btn btn-secondary" 
+    data-bs-dismiss="modal"
+    >
       Close
     </button>
   </div>

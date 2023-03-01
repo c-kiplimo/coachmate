@@ -55,7 +55,7 @@ currentsessionEndTime: any;
 currentsessionVenue: any;
 currentgoals: any;
 currentSession: any;
-feedback: any;
+feedbacks: any;
 coachId: any;
 loadingsession: any;
 client: any;
@@ -193,6 +193,7 @@ client: any;
     });
   
   }
+  
   //get feedback for session
   getFeedback() {
     const params = {
@@ -200,9 +201,9 @@ client: any;
      
     };
     this.clientService.getFeedback(params).subscribe(
-      (data: any) => {
-        this.feedback = data.body;
-        console.log("feedback is here",this.feedback);
+      (res: any) => {
+        this.feedbacks = res.body;
+        console.log("feedback is here",this.feedbacks);
       },
       (error) => {
         console.log(error);
@@ -299,18 +300,17 @@ client: any;
         return 'badge-success';
     }
 }
-
   giveFeedback() {
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
-      orgIdId: this.orgIdId,
+    
     };
     console.log(this.feebackForm.value);
     const data = this.feebackForm.value;
 
     data.sessionId = this.sessionId;
-    data.orgIdId = this.orgIdId;
+    
     data.coachId = this.coachId;
     data.clientId = this.clientId;
     data.createdBy = this.createdBy;
@@ -320,6 +320,8 @@ client: any;
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');
+        this.feebackForm.nativeElement.classList.remove('show');
+        this.feebackForm.nativeElement.style.display = 'none';
         this.getFeedback();
       },
       (error) => {
@@ -328,6 +330,7 @@ client: any;
       }
     );
   }
+
 
 
 

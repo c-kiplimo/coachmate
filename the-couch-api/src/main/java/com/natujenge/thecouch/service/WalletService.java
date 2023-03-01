@@ -76,7 +76,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
     }
 
-    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance) {
+    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance,float amountIn) {
 
         // obtain recent record on billing account
 
@@ -100,7 +100,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
 
         // Calculate Balances
-        float paymentBalance;
+        float paymentBalance =0f;
         float walletBalance = 0f;
         if (clientBalance >= amountBilled){
             paymentBalance = clientBalance - amountBilled;
@@ -113,6 +113,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
             walletBalance = 0f;
             clientBillingAccount.setAmountBilled(paymentBalance);
         }
+        accountStatementService.updateAccountStatement(coach, client,amountIn,amountBilled,paymentBalance);
         clientBillingAccountRepository.save(clientBillingAccount);
         return walletBalance ;
     }
@@ -161,28 +162,11 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // update billing account
         // return walletBalance
         Float walletBalanceAfter = updateBillingAccountOnPayment(
-                coach,client,walletBalance);
-
-
+                coach,client,walletBalance,paymentRequest.getAmount());
         clientWallet.setWalletBalance(walletBalanceAfter);
-        clientWallet.setDescription("New payment entry");
-        WalletService walletService = new WalletService();
-        ClientBillingAccountService clientBillingAccountService = new ClientBillingAccountService();
-        ClientBillingAccount clientBillingAccount = clientBillingAccountService.getClientBillingAccountByCoachIdAndClientId(coach.getId(), client.getId());
 
-        float balanceBefore = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
-                0f;
-
-        log.info("balanceBefore:{}",balanceBefore);
-        float amountIn = (clientWallet.getAmountDeposited() != null)?clientWallet.getAmountDeposited():
-                0f;
-        log.info("amount deposited:{}",amountIn);
-        ;
-        float balanceAfter = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
-                0f;
-        log.info("amount billed:{}",balanceAfter);
         //update account statement
-        accountStatementService.updateAccountStatement(coach, client,amountIn,balanceBefore,balanceAfter);
+
 
 
         // save wallet
