@@ -188,6 +188,7 @@
                 <td>     <button class="btn btn-success"
                   data-bs-toggle="modal"
                 data-bs-target="#feedbackModal"
+                (click)="viewComment(feedback)"
                 >
                   <i   class="fa-solid fa-arrow-up-right-from-square"></i>
                   Comments
@@ -469,8 +470,8 @@
             <label for="message">Message to be sent</label>
             <p class="lead">
               "Dear {{ client?.firstName | titlecase }}. Your
-              {{ sessionType }} session of amount {{ sessionDuration }} has been
-              recorded. I am working to promptly have your session delivered by
+              {{ sessionType }} session of duration {{ sessionDuration }} has been
+              set. It will be held on
               {{ sessionDate | date }}. Thank you. "
             </p>
           </div>
@@ -958,36 +959,41 @@
     </div>
   </div>
 </div>
- <!-- feedback comments modal -->
- <div
- class="modal fade"
- id="feedbackModal"
- tabindex="-1"
- aria-labelledby="exampleModalLabel"
- aria-hidden="true"
- >
- <div class="modal-dialog modal-lg">
- <div class="modal-content">
-   <div class="modal-header">
-     <h1 class="modal-title fs-5" id="exampleModalLabel">
-       feedback Comments
-     </h1>
- 
-     <button
-       type="button"
-       class="btn-close btn-close-white"
-       
-       aria-label="Close"
-     ></button>
-   </div>
-    <div class="modal-body">
-     <div class="d-flex-column">
-       <span>{{ feedbacks.content }}</span>
-     </div>
-   </div>
-   <div class="modal-footer">
-    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-   </div>
- </div>
- </div>
- </div> 
+  <!-- feedback details modal -->
+<div
+class="modal fade"
+id="feedbackModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">
+      feedback Comments
+    </h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body" *ngFor="let feedback of feedbacks">
+    <div class="d-flex-column">
+      <span>{{ feedback.comments }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" 
+    class="btn btn-secondary" 
+    data-bs-dismiss="modal"
+    >
+      Close
+    </button>
+  </div>
+</div>
+</div>
+</div> 

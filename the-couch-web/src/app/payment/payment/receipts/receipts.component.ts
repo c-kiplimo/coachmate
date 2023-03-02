@@ -21,8 +21,7 @@ import jsPDF from 'jspdf';
 })
 
 export class ReceiptsComponent implements OnInit {
-payment: any;
-payments: any;
+payments: any = [];
 loadingpayment: any;
 loading = false;
 itemsPerPage = 20;
@@ -34,6 +33,7 @@ coachSessionData: any;
 coachData: any;
 userRole: any;
 ClientId: any;
+payment: any;
 
   constructor(
     private ClientService: ClientService,
@@ -113,6 +113,10 @@ ClientId: any;
 
 
 
+  }
+  viewInvoice(payment: any): void {
+    this.payment = payment;
+    console.log(this.payment);
   }
   savePdf() {
     let DATA: any = document.getElementById('invoice');

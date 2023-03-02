@@ -58,7 +58,7 @@
       <td>{{ payment.createdAt | date: "MMM d y" }}</td>
       <td >
             <div class=""> <i   data-bs-toggle="modal"
-              data-bs-target="#invoicemodal"class="fa-solid fa-arrow-up-right-from-square"></i>
+              data-bs-target="#invoicemodal" (click)="viewInvoice(payment)" class="fa-solid fa-arrow-up-right-from-square"></i>
             </div>
     </td>
     </tr>
@@ -71,8 +71,8 @@
 
       <div class="modal-body" id="invoice">
         <div class="m-2" >
-          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
+          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 300px;
+      height: 200px; padding-top: 0%; margin-top: 0%;">
 
           <div class="customer-details" *ngIf="payment">
             <div class="d-flex justify-content-between">
@@ -84,7 +84,7 @@
               <span class="value">{{ payment.client.firstName }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">Event type</span>
+              <span class="title">Mode of payment</span>
               <span class="value">{{ payment.modeOfPayment}}</span>
             </div>
             <div class="d-flex justify-content-between">

@@ -38,6 +38,7 @@ export class sessionViewComponent implements OnInit {
 
   orgId: any;
   organizationId: any;
+  feedback: any;
 
 deleteSession() {
 throw new Error('Method not implemented.');
@@ -55,7 +56,7 @@ currentsessionEndTime: any;
 currentsessionVenue: any;
 currentgoals: any;
 currentSession: any;
-feedbacks: any;
+feedbacks:any = [];
 coachId: any;
 loadingsession: any;
 client: any;
@@ -69,7 +70,7 @@ client: any;
   notification!: any;
   attachments!: any;
   searching = false;
-  currentTab = 'payments';
+  currentTab = 'feedback';
   loadingOrder = false;
   sessionVenue: any;
   sessionTime: any;
@@ -133,7 +134,7 @@ client: any;
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
 
-    if(this.userRole == 'CLIENT'){
+    if(this.userRole == 'COACH'){
     this.sessionId = this.route.snapshot.params['sessionId'];
     console.log(this.sessionId);
 
@@ -146,6 +147,11 @@ client: any;
       comments: ['']
     });
 
+    }
+    if(this.userRole == 'COACH'){
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      console.log(this.sessionId);
+      this.getFeedback();
     }
 
    this.route.params.subscribe((params) => {
@@ -223,6 +229,10 @@ client: any;
       sessionVenue: this.currentSession.sessionVenue,
       
     });
+  }
+  viewComment(feedback: any): void {
+    this.feedback = feedback;
+    console.log(this.feedback);
   }
   showStatus: any;
 
@@ -378,11 +388,11 @@ client: any;
       per_page: 10,
     };
 
-    this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
-      this.notifications = res.body.data;
-      console.log('notification ni', this.notifications);
-      this.searching = false;
-    });
+    // this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
+    //   this.notifications = res.body.data;
+    //   console.log('notification ni', this.notifications);
+    //   this.searching = false;
+    // });
   }
   viewNotification(notification: any): void {
     this.notification = notification;

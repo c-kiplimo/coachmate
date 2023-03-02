@@ -87,7 +87,7 @@ payments!: any;
 notifications!: any;
 notification!: any;
 payment!: any;
-currentTab = 'orders';
+currentTab = 'sessions';
 searching = false;
 actions = ['Activate', 'Close', 'Suspend'];
 
@@ -98,7 +98,7 @@ totalLength: any;
 page: number = 1;
 itemsPerPage:number = 20;
 open = false;
-sessions:any;
+sessions:any = [];
 clients:any;
   console: any;
   filters: any = {
