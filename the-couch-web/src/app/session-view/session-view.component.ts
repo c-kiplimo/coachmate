@@ -38,6 +38,7 @@ export class sessionViewComponent implements OnInit {
 
   orgId: any;
   organizationId: any;
+  feedback: any;
 
 deleteSession() {
 throw new Error('Method not implemented.');
@@ -228,6 +229,10 @@ client: any;
       sessionVenue: this.currentSession.sessionVenue,
       
     });
+  }
+  viewComment(feedback: any): void {
+    this.feedback = feedback;
+    console.log(this.feedback);
   }
   showStatus: any;
 

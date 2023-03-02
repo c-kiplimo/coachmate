@@ -17,6 +17,7 @@ export class FeedbackComponent implements OnInit {
 
   OrgData: any;
   orgSession: any;
+  feedback: any;
 
 
   constructor(
@@ -67,6 +68,10 @@ export class FeedbackComponent implements OnInit {
       }
     );
 
+  }
+  viewComment(feedback: any): void {
+    this.feedback = feedback;
+    console.log(this.feedback);
   }
 
 
