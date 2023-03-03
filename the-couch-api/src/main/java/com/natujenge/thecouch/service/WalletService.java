@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -302,4 +303,30 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
     }
+    public ListResponse filterByClientNameAndDate(int page, int perPage, String name ,LocalDate date) {
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientWalletDto> receiptPage = null;
+        if (name != null && date != null ) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(date)), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
+        }
+        if(name !=null){
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name),q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
+        }
+        if(date !=null){
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            receiptPage=walletRepository.findBy(qClientWallet.createdAt.eq(date),q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
+        }
+
+        return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
+    }
+
 }

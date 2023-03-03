@@ -219,7 +219,7 @@ public class SessionResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping
+    @GetMapping("/filterSessions")
     public ResponseEntity<ListResponse> filterSessionsByClientNameAndSessionNameAndDate(
             @RequestParam(required = false) String clientName,
             @RequestParam(required = false) String sessionName,
@@ -227,7 +227,7 @@ public class SessionResource {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int perPage) {
 
-        log.info("Request Deliveries");
+        log.info("Request sessions");
         try {
             ListResponse listResponse = sessionService.filterSessionsByClientNameAndSessionNameAndDate(clientName, sessionName, date, page, perPage);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);

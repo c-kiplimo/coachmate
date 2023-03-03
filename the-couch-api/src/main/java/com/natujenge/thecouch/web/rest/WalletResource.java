@@ -10,6 +10,7 @@ import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 @RestController
 @Slf4j
@@ -126,6 +128,26 @@ public class WalletResource {
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/filterReceipts")
+    public ResponseEntity<ListResponse> filterByClientNameAndDate(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int perPage) {
+
+        log.info("Request receipts");
+        try {
+            ListResponse listResponse = walletService.filterByClientNameAndDate(page, perPage,name, date);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        }
+        catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

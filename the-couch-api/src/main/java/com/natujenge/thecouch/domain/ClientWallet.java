@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -36,13 +37,13 @@ public class ClientWallet {
     // Management Details
     @CreationTimestamp
     @Column(nullable = false,name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = false,name = "created_by")
     private String createdBy;
 
     @UpdateTimestamp
-    private LocalDateTime lastUpdatedAt;
+    private LocalDate lastUpdatedAt;
 
     private String lastUpdatedBy;
 
