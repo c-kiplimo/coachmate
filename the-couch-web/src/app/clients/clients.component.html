@@ -1,18 +1,5 @@
-<div class="row">
-  <div class="col-5">
-    <h4>Clients</h4>
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
+
         <app-user></app-user>
-  </div>
-</div>
-<br>
 <div class="row">
         <div class="d-none d-md-block"class="col-4">
           <div class="filters-section">
@@ -41,7 +28,7 @@
               />
             </div>
 <div class="col-3">
-    <button class="btn button-filter  search-bar" (click)="getSearchedClient(1)">
+    <button class="btn button-filter  search-bar" (click)="getClients()" (click)="getOrgClients()">
               <i class="fa fa-search" aria-hidden="true"></i>
               Search
             </button>
@@ -156,7 +143,7 @@
           <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
           value="{{ clientToBeUpdated?.reason}}">
         </div>
-        <!-- <div class="input-group mb-3">
+        <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
@@ -180,7 +167,7 @@
             <option value="CORPORATE">CORPORATE</option>
             <option value="GROUP">GROUP</option>
           </select>
-        </div> -->
+        </div>
        </form>
       </div>
       <div class="modal-footer">

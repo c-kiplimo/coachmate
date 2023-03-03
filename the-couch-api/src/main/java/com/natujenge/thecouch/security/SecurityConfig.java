@@ -28,7 +28,8 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
             .antMatchers( "/api/token/logout/**", "/api/token", "/api/token/refresh-token",
-                        "/api/registration", "/api/registration/confirmClientToken",
+                        "/api/registration", "/api/registration/confirmClientToken","/api/registration/contact",
+                    "/api/registration/reset","/api/registration/forgot","/api/registration/resend",
                         "/api/registration/confirm","*.html")
 
                 .permitAll()

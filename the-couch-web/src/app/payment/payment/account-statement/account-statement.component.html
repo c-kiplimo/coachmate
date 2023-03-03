@@ -1,17 +1,4 @@
-<div class="row">
-  <div class="col-5">
-        <h3></h3>
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
+<app-user></app-user>
 <button (click)="savePdfDesktop()" class="btn btn-submit"><i class="fa fa-download"></i> Download</button>
 <div class="container mb-3" id="statementDesktop">
 <h2 style="text-align: center ;" class="mb-5" >Account Statememt</h2>
@@ -37,6 +24,7 @@
   <br>
   
   <table>
+    <thead>
     <tr>
       <th>Date</th>
       <th>Ref No.</th>
@@ -46,14 +34,42 @@
       <th>Balance After</th>
 
     </tr>
-    <tr *ngFor="let accountStatement of accountStatements" >
+  </thead>
+  <tbody *ngIf="accountStatements?.length" [@fadeIn] >
+    <tr *ngFor="let accountStatement of accountStatements
+      | paginate
+          : {
+              itemsPerPage: itemsPerPage,
+              currentPage: page,
+              totalItems: totalLength
+            }
+    " >
       <td>{{accountStatement.createdAt | date: "MMM d y" }}</td>
       <td>{{accountStatement.id}}</td>
       <td>{{ accountStatement.description}}</td>
-      <td>{{accountStatement.balanceBefore}}</td>
-      <td>{{ accountStatement.amountIn}}</td>
       <td>{{accountStatement.balanceAfter}}</td>
+      <td>{{ accountStatement.amountIn}}</td>
+      <td>{{accountStatement.balanceBefore}}</td>
     </tr>
+  </tbody>
 </table>
+<div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+  <div class="donut multi"></div>
+</div>
+<p class="text-muted mt-5" *ngIf="!loading && !accountStatements.length">
+  No Statememt found
+</p>
+<div
+        align="center"
+        *ngIf="totalLength > 20 && payments.length && !loading"
+        [@fadeIn]
+      >
+        <pagination-controls
+          (pageChange)="applyFilter()"
+          [maxSize]="7"
+          previousLabel=""
+          nextLabel=""
+        ></pagination-controls>
+      </div>
 </div>
 </div>

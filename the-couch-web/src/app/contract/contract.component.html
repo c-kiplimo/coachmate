@@ -1,17 +1,5 @@
 
-<div class="row">
-  <div class="col-5">
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
         <app-user></app-user>
-  </div>
-</div>
 <body>
   <div class="container">
     <div class="row mb-3">
@@ -26,6 +14,7 @@
             id="nucoachingTopicmber"
             placeholder="Enter the coaching topic"
             formControlName="coachingTopic"
+            required="true"
           />
         </div>
         <br>
@@ -33,7 +22,8 @@
         <div class="col-6 input-group-prepend">
           <label for="coachingCategory" class="form-label">Coaching Category</label>
           <select class="form-select" aria-label="Default select example"
-          formControlName="coachingCategory">
+          formControlName="coachingCategory"
+          required="true">
             <option selected>Contract Category</option>
             <option value="INDIVIDUAL">INDIVIDUAL</option>
             <option value="CORPORATE">CORPORATE</option>
@@ -43,12 +33,18 @@
         <div class="col-6 input-group-prepend">
           <label for="clientId" class="form-label">Select Client</label>
           <select class="form-select" aria-label="Default select example"
-          formControlName="clientId">
-            <option selected>Select Client you want to make contract with</option>
-           
-           <!--Loop through clients and form options-->
-            <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
-          </select>
+          formControlName="clientId" 
+          required="true">
+          <option selected>Select Client you want to make contract with</option>
+        
+          <!--Loop through clients and form options-->
+          <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
+        
+          <!--Render the create client button if no clients are found-->
+          <button *ngIf="clients.length === 0" class="btn btn-success" routerLink="/addclient">Create Client</button>
+        </select>
+        
+        
         </div>
       </div>
       <br>
@@ -61,6 +57,7 @@
               class="form-control"
               placeholder="date"
               formControlName="startDate"
+              required="true"
             />
           </div>
           <div class="col">
@@ -70,13 +67,16 @@
               class="form-control"
               placeholder="date"
               formControlName="endDate"
+              required="true"
             />
           </div>
         </div>
         
         <div class="mb-3 mt-3">
           <div class="row">
-            <div class="col">
+            <div *ngIf="contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'" class="col-6"
+          
+            >
           <label for="number" class="form-label"
             >Individual Fees Per Session</label
           >
@@ -86,9 +86,12 @@
             id="number"
             placeholder="Enter the fee to be paid in USD"
             formControlName="individualFeesPerSession"
+            required="true"
           />
           </div>
-          <div class="col">
+          <div *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'"class="col-6"
+          
+          >
           <label for="number" class="form-label">Group Fees Per Session</label>
           <input
             type="number"
@@ -96,6 +99,7 @@
             id="number"
             placeholder="Enter the fee to be paid in USD"
             formControlName="groupFeesPerSession"
+            required="true"
           />
           </div>
         </div>
@@ -108,6 +112,7 @@
             id="number"
             placeholder="Enter number of Sessions"
             formControlName="noOfSessions"
+            required="true"
           />
           </div>
         </div>
@@ -126,6 +131,7 @@
                 class="form-control"
                 placeholder="Add Objective"
                 formControlName="objectives"
+                required="true"
               />
               </div>
               <div class="col-6">
@@ -281,10 +287,14 @@
           </div>
           </div>
           </div>
-          <button
+
+              <button
           type="button"
           (click)="addContract()"
-          class="btn btn-success col-2"
+          class="btn btn-success"
+          [disabled]="!contractForm.valid
+        "
                 >
                   submit
                 </button>
+          

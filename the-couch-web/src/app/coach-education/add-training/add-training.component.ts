@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CoachEducationService } from '../../services/CoachEducationService';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -28,13 +28,15 @@ coachData: any;
     console.log(this.coachData);
 
     this.addTrainingForm = this.formbuilder.group({
-      courseName: ' ',
-      provider: ' ',
-      dateIssued: ' ',
-      validTill: ' ',
-      trainingHours: ' ',
-      certificateUrl: ' ',
+      courseName: ['', Validators.required],
+      provider: ['', Validators.required],
+      dateIssued: ['', Validators.required],
+      validTill: ['', Validators.required],
+      trainingHours: ['', Validators.required],
+      certificate:'',
+      certificateUrl: ''
     });
+    
   }
 
   addTraining() {

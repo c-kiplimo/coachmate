@@ -1,17 +1,6 @@
-<div class="row">
-  <div class="col-5">
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
 
+
+        <app-user></app-user>
 <div class="container mb-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -47,6 +36,8 @@
             aria-describedby="emailHelp"
             placeholder="First name"
             required
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
           />
         </div>
         </div>
@@ -62,7 +53,7 @@
             id="contact"
             placeholder="Contact"
             required
-            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+            
           />
         </div>
             <div class=" mb-3 col-md-6 ">
@@ -74,6 +65,7 @@
             class="form-control"
             id="email"
             placeholder="Email"
+            required
           />
         </div>
             </div>
@@ -91,7 +83,7 @@
           />
         </div>
               <div class=" mb-3 col-md-6 ">
-          <label for="profession">Profession</label>
+          <label for="profession">Profession *</label>
           <input 
           type="text" 
           class="form-control" 
@@ -99,22 +91,24 @@
           name="profession"
           placeholder="Enter Client Profession" 
           [(ngModel)]="addClient.profession" 
+          required
           >
         </div>
               </div>
             
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
-                <label class="input-group-text" for="paymentMode">Payment Mode</label>
-              <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode">
+                <label class="input-group-text" for="paymentMode">Payment Mode *</label>
+              <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
+              required>
                 <option selected>Select Payment Mode</option>
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
               </select>
                 </div>
           <div class=" mb-3 col-md-6 ">
-                <label class="input-group-text" for="clientType">Client Type</label>
-              <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType" >
+                <label class="input-group-text" for="clientType">Client Type *</label>
+              <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType" required>
                 <option selected>Select Client type</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="CORPORATE">CORPORATE</option>
@@ -122,28 +116,27 @@
               </select>
         </div>
         <div class=" mb-3 col-md-6 " *ngIf="this.userRole == 'ORGANIZATION'">
-                <label class="input-group-text" for="coach">Assign Coach</label>
+                <label class="input-group-text" for="coach">Assign Coach *</label>
               <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id" 
-              (change)="selectedClient($event)" >
+              (change)="selectedClient($event)" required>
                <option *ngFor="let coach of OrgCoaches" [value]="coach.id">{{coach.firstName}} {{coach.lastName}}</option>
               </select>
           </div>
         </div>
         <div class="row p-2">
     <div class=" mb-3">
-      <label for="reason">Reason</label>
+      <label for="reason">Reason *</label>
       <input 
       type="text" 
       class="form-control" 
       placeholder="Reason" 
+      required
       name="reason"
       [(ngModel)]="addClient.reason" >
+      
     </div>
         </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="exampleModalLabel">
-        Close
-      </button>
       <button
         type="submit"
         class="btn btn-success"
@@ -154,86 +147,16 @@
         !addClient.lastName||
         !addClient.email||
         !addClient.msisdn||
-        !addClient.physicalAddress
+        !addClient.physicalAddress||
+        !addClient.paymentMode||
+        !addClient.clientType||
+        !addClient.reason
+        
       ">ADD CLIENT
       </button>
     </div>
-<!-- <div class="row">
-  <div class="col-10">
-     
-  </div>
-  <div class="col-2">
-      <app-user></app-user>
+      </form>
+      </div>
+    </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-4"></div>
-  <div class="col-6">
-    <h3>Add Client</h3>
-    <form #AddClientForm="ngForm" (ngSubmit)="AddClient(AddClientForm)">
-    
-        <div class="form-group col-md-6">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name" placeholder="Enter Client Name" name="name" ngModel required>
-        </div>
-
-
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">Email</label>
-          <input type="email" class="form-control" id="inputEmail4" placeholder="Email" name="email_address" ngModel required>
-        </div>
-
-        
-        <div class="form-group col-md-6">
-          <label for="phone">Phone</label>
-          <input type="text" class="form-control" id="phone" placeholder="phone" name="msisdn" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-          ngModel required>
-        </div>
-    
-        <div class="form-group col-md-6">
-          <label for="address">Address</label>
-          <input type="text" class="form-control" id="address" placeholder="Enter Client Address" name="physical_address" ngModel>
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="profession">Profession</label>
-          <input type="text" class="form-control" id="profession" placeholder="Enter Client Profession" name="profession" ngModel>
-        </div>
-        <div class="form-group col-md-6">
-          <label for="profession">added by </label>
-          <input type="text" class="form-control" id="" placeholder="Enter created by" name="createdBy" ngModel>
-        </div>
-
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="PaymentMode">Payment Mode</label>
-          </div>
-          <select class="custom-select" id="inputGroupSelect01" name="payment_mode" ngModel>
-            <option selected>Select Payment Mode</option>
-            <option value="PREPAY">PREPAY</option>
-            <option value="POSTPAY">POSTPAY</option>
-          </select>
-        </div>
-        
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <label class="input-group-text" for="clientType">Client Type</label>
-          </div>
-          <select class="custom-select" id="inputGroupSelect01" name="type" ngModel>
-            <option selected>Select Client type</option>
-            <option value="INDIVIDUAL">INDIVIDUAL</option>
-            <option value="CORPORATE">CORPORATE</option>
-            <option value="GROUP">GROUP</option>
-          </select>
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="reason">Reason</label>
-          <input type="text" class="form-control" placeholder="Reason" name="reason" ngModel>
-        </div>
-     
-      <button type="submit" class="btn btn-success">ADD Client</button>
-    </form>
-    </div>
-    <div class="col-2"></div>
-  </div> -->

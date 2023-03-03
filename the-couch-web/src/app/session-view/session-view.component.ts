@@ -35,17 +35,10 @@ import { ApiService } from '../services/ApiService';
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
   status!: string;
-
   orgId: any;
   organizationId: any;
   feedback: any;
-
-deleteSession() {
-throw new Error('Method not implemented.');
-}
-ConductedSession() {
-throw new Error('Method not implemented.');
-}
+  notification: any;
 addSessionForm: any;
 modalTitle: any;
 currentSessionName: any;
@@ -57,6 +50,8 @@ currentsessionVenue: any;
 currentgoals: any;
 currentSession: any;
 feedbacks:any = [];
+attachments:any = [];
+attachment: any;
 coachId: any;
 loadingsession: any;
 client: any;
@@ -66,9 +61,7 @@ client: any;
   rightIcon = faChevronRight;
   backIcon = faChevronLeft;
   alertIcon = faBell;
-  notifications!: any;
-  notification!: any;
-  attachments!: any;
+  notifications!: any[];
   searching = false;
   currentTab = 'feedback';
   loadingOrder = false;
@@ -90,7 +83,6 @@ client: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
   deleteSessionForm: any;
-  toastrService: any;
   sessionDate = '';
   sessionStartTime = '';
   sessionDuration = '';
@@ -105,6 +97,7 @@ client: any;
   createdBy: any;
 
   feebackForm: any;
+  attachmentForm:any;
 
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
@@ -124,7 +117,8 @@ client: any;
     private router: Router,
     private route: ActivatedRoute,
     private formbuilder: FormBuilder,
-    private apiService:ApiService  ) {}
+    private apiService:ApiService,
+    private toastrService:ToastrService  ) {}
 
   ngOnInit() {
 
@@ -146,12 +140,18 @@ client: any;
       availabilityScore: [''],
       comments: ['']
     });
+    this.attachmentForm = this.formbuilder.group({
+      uploads:[''],
+      links:['']
+    }
+
+    )
 
     }
     if(this.userRole == 'COACH'){
       this.sessionId = this.route.snapshot.params['sessionId'];
       console.log(this.sessionId);
-      this.getFeedback();
+    
     }
 
    this.route.params.subscribe((params) => {
@@ -161,6 +161,7 @@ client: any;
 
     this.getSession();
     this.getFeedback();
+    this. getAttachment()
 
 
     this.getNotifications();
@@ -216,6 +217,38 @@ client: any;
       }
     );
   }
+    //get attachment for session
+    getAttachment(){
+      const params = {
+        sessionId: this.sessionId,
+       
+      };
+      this.clientService.getAttachment(params).subscribe(
+        (res: any) => {
+          this.attachments = res.body;
+          console.log("attachment is here",this.attachments);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+    getNotifications(): void {
+      this.searching = true;
+      this.notifications = [];
+      const options = {
+         sessionId: this.sessionId,
+         coachId :this.coachData.id,
+        page: 1,
+        per_page: 10,
+      };
+  
+      this.clientService.getAllNotifications(options).subscribe((res: any) => {
+        this.notifications = res.body;
+        console.log('notification ni', this.notifications);
+        this.searching = false;
+      });
+    }
   setCurrectSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
@@ -332,7 +365,6 @@ client: any;
         this.toastrService.success('Feedback Added Successfully');
         this.feebackForm.nativeElement.classList.remove('show');
         this.feebackForm.nativeElement.style.display = 'none';
-        this.getFeedback();
       },
       (error) => {
         console.log(error);
@@ -340,13 +372,40 @@ client: any;
       }
     );
   }
+  addAttachment() {
+    const params = {
+      sessionId: this.sessionId,
+      coachId: this.coachId,
+    
+    };
+    console.log(this. attachmentForm.value);
+    const data = this. attachmentForm.value;
+
+    data.sessionId = this.sessionId;
+    
+    data.coachId = this.coachId;
+    data.clientId = this.clientId;
+    data.createdBy = this.createdBy;
 
 
-
-
-  goToItem(type: any, entityObj: any): void {
-    this.router.navigate([type, entityObj.id]);
+    this.clientService.addAttachment(data, params).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Attachment Added Successfully');
+        this. attachmentForm.nativeElement.classList.remove('show');
+        this. attachmentForm.nativeElement.style.display = 'none';
+      },
+      (error) => {
+        console.log(error);
+        this.toastrService.error('Error in adding Attachment');
+      }
+    );
   }
+
+
+
+
+
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -367,32 +426,11 @@ client: any;
       this.coachId = this.sessions.coach.id;
       console.log("coach id",this.coachId);
       this.createdBy = this.sessions.client.fullName;
-      this.getNotifications();
    
      
     });
 
    
-  }
-
-
-  navigateToSessionView(id: any) {
-    console.log(id);
-    this.router.navigate(['sessionView', id]);
-  }
-  getNotifications(navigate?: boolean): void {
-    this.searching = true;
-    this.notifications = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-    };
-
-    // this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
-    //   this.notifications = res.body.data;
-    //   console.log('notification ni', this.notifications);
-    //   this.searching = false;
-    // });
   }
   viewNotification(notification: any): void {
     this.notification = notification;
