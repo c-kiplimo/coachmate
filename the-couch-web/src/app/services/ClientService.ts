@@ -240,7 +240,7 @@ recordPayment(payment: any): Observable<any> {
       //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(
-      this.baseURL + '/v1/registration/contact',
+      this.baseURL + '/registration/contact',
       message,
       {
         observe: 'response',

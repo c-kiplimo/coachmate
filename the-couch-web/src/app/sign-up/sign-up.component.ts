@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from '../services/LoginService';
 import { Router } from '@angular/router';
-// import { ToastrService } from 'ngx-toastr';
+ import { ToastrService } from 'ngx-toastr';
 import {
   faChevronLeft,
   faEye,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
+import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
@@ -23,6 +24,7 @@ export class SignUpComponent implements OnInit {
     email: '',
     password: '',
     passwordConfirm: '',
+    
   };
   fieldTextType!: boolean;
   eyeIcon = faEye;
@@ -32,22 +34,64 @@ export class SignUpComponent implements OnInit {
   emailInvalid = false;
   passwordInvalid = false;
   errorMessage = '';
+  passwordErrorMessage = '';
+
+  @ViewChild('yourElement') yourElement!: ElementRef;
 
   constructor(private LoginService: LoginService, private router: Router) {}
 
   ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    fromEvent(this.yourElement.nativeElement, 'input')
+      .pipe(map((event: any) => (event.target as HTMLInputElement).value))
+      .pipe(debounceTime(2000))
+      .pipe(distinctUntilChanged())
+      .subscribe((data) => this.validatePasswordRule());
+  }
 
   validateEmail(): void {
     /\S+@\S+\.\S+/.test(this.formData.email)
       ? ((this.emailInvalid = false), this.validatePassword())
       : (this.emailInvalid = true);
   }
+  validatePasswordRule() {
+    const REGEXP =
+      /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/;
+    const upperCase = /[A-Z]/g;
+
+    const lowerCase = /[a-z]/g;
+
+    const specialCharacters = /[-._!"`'#%&,:;<>=@{}~\$\(\)\*\+\/\\\?\[\]\^\|]+/;
+
+    const digit = /[0-9]/g;
+
+    if (this.formData.password.length < 7) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = 'Password should be atleast 8 characters';
+    } else if (!upperCase.test(this.formData.password)) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = 'Password should contain uppecase characters';
+    } else if (!lowerCase.test(this.formData.password)) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage =
+        'Password should contain lowercase characters';
+    } else if (!specialCharacters.test(this.formData.password)) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = 'Password should contain special characters';
+    } else if (!digit.test(this.formData.password)) {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = 'Password should contain atleat one digit';
+    } else {
+      this.passwordInvalid = false;
+      this.passwordErrorMessage = '';
+    }
+  }
   validatePassword() {
     if (this.formData.password === this.formData.passwordConfirm) {
       this.passwordInvalid = false;
-      this.signUp();
     } else {
       this.passwordInvalid = true;
+      this.passwordErrorMessage = "Passwords don't match";
     }
   }
   signUp() {
