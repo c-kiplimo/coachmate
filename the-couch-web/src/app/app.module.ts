@@ -61,6 +61,7 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
+import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
 
 
 
@@ -101,6 +102,7 @@ import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/ter
       FeedbackComponent,
       SupportComponent,
       TermsAndConditionsPageComponent,
+      AddAvailableSlotsComponent,
 
 
   ],
