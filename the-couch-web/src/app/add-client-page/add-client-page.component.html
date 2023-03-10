@@ -1,17 +1,6 @@
-<div class="row">
-  <div class="col-5">
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
 
+
+        <app-user></app-user>
 <div class="container mb-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -62,7 +51,7 @@
             id="contact"
             placeholder="Contact"
             required
-            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
           />
         </div>
             <div class=" mb-3 col-md-6 ">
@@ -141,9 +130,6 @@
     </div>
         </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="exampleModalLabel">
-        Close
-      </button>
       <button
         type="submit"
         class="btn btn-success"

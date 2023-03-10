@@ -61,6 +61,7 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 
@@ -101,6 +102,7 @@ import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/ter
       FeedbackComponent,
       SupportComponent,
       TermsAndConditionsPageComponent,
+      SettingsComponent,
 
 
   ],
@@ -126,6 +128,7 @@ import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/ter
       timeOut: 5000, // 5 seconds
       closeButton: false,
       progressBar: false,
+      preventDuplicates: true,
     }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

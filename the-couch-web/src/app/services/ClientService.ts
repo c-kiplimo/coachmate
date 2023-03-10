@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError, tap} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -54,8 +54,24 @@ export class ClientService {
     // CLOSED
     addClient(client: any): Observable<any> {
         console.log(client)
-        return this.http.post(`${this.baseURL}clients`, client)
+        return this.http.post(`${this.baseURL}clients`, client,
+        {observe: 'response'} ).pipe(
+      catchError(this.handleError)
+    );
+    
     } 
+    private handleError(error: HttpErrorResponse) {
+        let errorMessage = 'An error occurred';
+        if (error.error instanceof ErrorEvent) {
+          // Client-side errors
+          errorMessage = error.error.message;
+        } else {
+          // Server-side errors
+          errorMessage = error.error.message;
+        }
+        // Return an observable with a user-facing error message
+        return throwError(errorMessage);
+      }
     suspendClient(clientData: any): Observable<any> {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
@@ -247,6 +263,14 @@ recordPayment(payment: any): Observable<any> {
       }
     );
   }
+    //save settings service
+    saveSettings(settingsObject: any): Observable<any> {
+        return this.http.put<any>(
+          this.baseURL + '/settings',
+          settingsObject,
+          { observe: 'response' }
+        );
+      }
 
 
 }

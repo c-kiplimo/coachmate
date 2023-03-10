@@ -18,6 +18,7 @@ export class UserComponent implements OnInit {
   userIcon = faUser;
   customersIcon = faUsers;
   businessName: any;
+backIcon: any;
 
   constructor(public router: Router) { }
 
@@ -41,6 +42,9 @@ export class UserComponent implements OnInit {
     this.businessName = '';
     this.router.navigate(['signin']);
 
+  }
+  back() {
+    window.history.back();
   }
   
 }

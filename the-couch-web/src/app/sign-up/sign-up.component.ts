@@ -37,8 +37,9 @@ export class SignUpComponent implements OnInit {
   passwordErrorMessage = '';
 
   @ViewChild('yourElement') yourElement!: ElementRef;
+  isPasswordActive!: boolean;
 
-  constructor(private LoginService: LoginService, private router: Router) {}
+  constructor(private LoginService: LoginService, private router: Router,private toastrService :ToastrService ) {}
 
   ngOnInit(): void {}
   ngAfterViewInit(): void {
@@ -53,6 +54,14 @@ export class SignUpComponent implements OnInit {
     /\S+@\S+\.\S+/.test(this.formData.email)
       ? ((this.emailInvalid = false), this.validatePassword())
       : (this.emailInvalid = true);
+  }
+
+  onPasswordFocus() {
+    this.isPasswordActive = true;
+  }
+
+  onPasswordBlur() {
+    this.isPasswordActive = false;
   }
   validatePasswordRule() {
     const REGEXP =
@@ -87,15 +96,31 @@ export class SignUpComponent implements OnInit {
     }
   }
   validatePassword() {
-    if (this.formData.password === this.formData.passwordConfirm) {
-      this.passwordInvalid = false;
-    } else {
-      this.passwordInvalid = true;
-      this.passwordErrorMessage = "Passwords don't match";
-    }
+    if(this.formData.password!=null && this.formData.passwordConfirm!=null){
+      // validate password rule
+      //check if pass
+      this.validatePasswordRule();
+      if (this.passwordInvalid){
+          return;
+      }else if(this.formData.password != this.formData.passwordConfirm){
+        this.passwordInvalid=true;
+        this.passwordErrorMessage="Passwords don't match";
+        return;
+
+      }else if (this.formData.password.length>7) {
+        this.passwordInvalid = false;     
+        this.signUp();  
+      }
+
+  }else{
+    this.passwordInvalid = true;
+    this.passwordErrorMessage = "Password Fields cannot be empty";
+
+  }
   }
   signUp() {
-    this.errorMessage = '';
+    sessionStorage.setItem('formData', JSON.stringify(this.formData));
+    this.errorMessage = ''
     console.log(this.formData)
     this.registrationSuccess = false;
     this.LoginService.signUp(this.formData).subscribe({
@@ -112,18 +137,18 @@ export class SignUpComponent implements OnInit {
         } else {
           this.registrationSuccess = true;
           this.router.navigate(['registration/confirm']);
-          // this.toastrService.success(
-          //   'Confirm account',
-          //   'Registration successfull!'
-          // );
+          this.toastrService.success(
+            'Confirm account',
+            'Registration successfull!'
+          );
 
           console.log('here');
         }
       },
       error: (error: any) => {
-        // console.log(error);
+        console.log(error);
         this.errorMessage = error.error.message ?? error.error.error.message;
-        // this.toastrService.error('Please retry', 'Registration failled!');
+        this.toastrService.error('Please retry', 'Registration failled!');
       },
     });
   }

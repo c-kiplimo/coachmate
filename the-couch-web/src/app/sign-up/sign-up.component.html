@@ -110,15 +110,22 @@
                 required
                 placeholder="eg. 0700123456"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
               />
             </div>
           </div>
 
           <div class="row p-2">
             <div class="mb-3 col-md-6 form-group">
-              <label for="Password">Password *</label>
+              <label for="Password">Password *
+                <br>
+                <small class="redText ms-2" *ngIf="passwordInvalid">
+                  {{ passwordErrorMessage }}</small>
+              </label>
               <div class="input-group">
                 <input
+                (focus)="onPasswordFocus()"
+                (blur)="onPasswordBlur()"
                 #yourElement
                 [type]="fieldTextType ? 'text' : 'password'"
                 [ngClass]="
@@ -157,18 +164,23 @@
                 </span>
               </div>
             </div>
-            <small class="redText ms-2" *ngIf="passwordInvalid">
-              {{ passwordErrorMessage }}</small>
+        
             <div class="mb-3 col-md-6 form-group">
-              <label for="Password">Confirm Password *</label
+              <label for="Password">Confirm Password *
+                <br>
+                <small class="redText ms-2" *ngIf="passwordInvalid">
+                  {{ passwordErrorMessage }}</small>
+            </label
               >
               <div class="input-group">
+            
                 <input
                   [type]="fieldTextType ? 'text' : 'password'"
                   [ngClass]="passwordInvalid ? 'input-error' : ''"
                   [(ngModel)]="formData.passwordConfirm"
                   (ngModelChange)="passwordInvalid = false"
                   (ngModelChange)="validatePasswordRule()"
+                  
                   required
                   name="password"
                   type="password"
@@ -198,8 +210,6 @@
                 </span>
               </div>
             </div>
-            <small class="redText ms-2" *ngIf="passwordInvalid">
-              {{ passwordErrorMessage }}</small>
           </div>
           <button
             type="submit"
