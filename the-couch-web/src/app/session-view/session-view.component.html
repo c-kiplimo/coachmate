@@ -21,16 +21,8 @@
           data-bs-target="#attachmentModal"
             >Add Attachments</button>
 
-            <div *ngIf="this.userRole != 'CLIENT'">
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
-              ">
-                <i class="fas fa-edit"></i>
-                Edit
-              </button>
-            </div>
-
             <div class="dropdown">
-              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+              <a class="btn btn-success dropdown-toggle"role="button" id="dropdownMenuLink"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Actions</a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -65,6 +57,14 @@
                       data-bs-toggle="modal"
                       data-bs-target="#conductedsessionModal"
                       >Reschedule</a
+                    >
+                  </li>
+                  <li *ngIf="this.userRole != 'CLIENT'">
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editsessionModal"
+                      >Edit</a
                     >
                   </li>
                 </ul>

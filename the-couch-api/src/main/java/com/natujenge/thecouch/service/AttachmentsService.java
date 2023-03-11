@@ -61,7 +61,7 @@ public class AttachmentsService {
 
 
 
-        log.info("FeedBack Saved!");
+        log.info("attachment Saved!");
     }
     //get attachment by session id
     public List<Attachments> getAttachmentBySessionId(Long sessionId) {

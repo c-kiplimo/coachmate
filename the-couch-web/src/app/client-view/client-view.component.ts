@@ -29,6 +29,9 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class ClientViewComponent implements OnInit {
   Clients!: [];
   editedClient: any;
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
 editSession(_t92: any) {
 throw new Error('Method not implemented.');
 }
@@ -135,6 +138,11 @@ addSessionForm: any;
 
   clientToBeUpdated!: any;
   ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
     this.clientId = this.activatedRoute.snapshot.params['id'];
    
     this.getClientData(this.clientId);
