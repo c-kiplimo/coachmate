@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from '../services/LoginService';
 import { Router } from '@angular/router';
  import { ToastrService } from 'ngx-toastr';
+ import intlTelInput from 'intl-tel-input';
+import 'intl-tel-input/build/js/utils';
 import {
   faChevronLeft,
   faEye,
@@ -38,10 +40,14 @@ export class SignUpComponent implements OnInit {
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   isPasswordActive!: boolean;
+  iti!: intlTelInput.Plugin;
 
   constructor(private LoginService: LoginService, private router: Router,private toastrService :ToastrService ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const input = document.querySelector("#phone");
+
+  }
   ngAfterViewInit(): void {
     fromEvent(this.yourElement.nativeElement, 'input')
       .pipe(map((event: any) => (event.target as HTMLInputElement).value))

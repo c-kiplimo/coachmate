@@ -194,6 +194,19 @@ getOrgFeedbacks(id: any): Observable<any>{
 getCoachFeedbacks(id: any): Observable<any>{
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
+// ATTACHMENT SERVICES
+addAttachment(attachment: any, options: any): Observable<any> {
+  return this.http.post<any>(
+      this.baseURL + 'attachments',
+      attachment,
+      { params: options, observe: 'response' }
+    );
+}
+getAttachment(params:any):Observable<any>{
+  return this.http.get(`${this.baseURL}attachments/get-by-session-id`,{
+      params: params,
+      observe:'response'})
+}
 
 
 
@@ -271,6 +284,36 @@ recordPayment(payment: any): Observable<any> {
           { observe: 'response' }
         );
       }
+
+  //notification service
+
+  getNotificationsbySessionId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-session-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getNotificationsbyCoachId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-session-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getNotificationsbyClientId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-client-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
 
 
 }

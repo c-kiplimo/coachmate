@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "tbl_sessionResources")
 @Data
 @Entity
-public class SessionResources {
+public class Attachments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

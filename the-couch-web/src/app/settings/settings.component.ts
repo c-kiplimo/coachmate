@@ -13,14 +13,13 @@ import { ClientService } from '../services/ClientService';
 export class SettingsComponent implements OnInit {
 
   orderTemplateTypes = [
-    'NEW_ORDER ',
-    'PARTIAL_ORDER_PAYMENT',
-    'FULL_ORDER_PAYMENT',
-    'CANCEL_ORDER',
-    'DELIVER_ORDER',
+    'NEW_CONTRACT ',
+    'PARTIAL_BILL_PAYMENT',
+    'FULL_BILL_PAYMENT',
+    'CANCELLED_SESSION',
+    'CONDUCTED_SESSION',
+    'RESCHEDULED_SESSION'
   ];
-
-  newOrderForm!: any;
   template!: any;
   notificationForm: any;
   accountDetailsform:any;
@@ -28,10 +27,16 @@ export class SettingsComponent implements OnInit {
   message: string = 'NEW ORDER';
   businessName!: any;
   userNotificationSettings: any;
-  bakerPhoneNumber:any;
-  bakerEmail:any;
+  coachPhoneNumber:any;
+  coachEmail:any;
   backIcon = faChevronLeft;
   user:any;
+  coachSessionData:any;
+  coachData: any;
+  userRole: any;
+  OrgData: any;
+  orgSession: any;
+  User: any;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -47,18 +52,43 @@ export class SettingsComponent implements OnInit {
     this.userNotificationSettings = JSON.parse(
       sessionStorage.getItem('notificationSettings') || '{}'
     );
-    this.bakerEmail=  this.user.email; 
-    this.bakerPhoneNumber= this.userNotificationSettings.msisdn;
+    this.coachEmail=  this.user.email; 
+    this.coachPhoneNumber= this.userNotificationSettings.msisdn;
     this.notificationForm = this.userNotificationSettings;
-    // this.accountDetailsform = this.bakerAccountDetails;
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
 
-    // console.log(this.notificationForm)
-    // this.businessName = sessionStorage.getItem('businessName');
-    // this.notificationForm.smsDisplayName = this.businessName;
-    // this.notificationForm.emailDisplayName = this.businessName;
-    // // console.log(this.businessName);
+ 
+    if(this.userRole == 'ORGANIZATION'){
+    this.OrgData = sessionStorage.getItem('Organization');
+    this.orgSession = JSON.parse(this.OrgData);
+    console.log(this.orgSession);
+
+
+      
+    } else if(this.userRole == 'COACH'){
+     
+    } else if(this.userRole == 'CLIENT'){
+     
+      this.User = JSON.parse(sessionStorage.getItem('user') as any);
+      console.log(this.User);
+      const email = {
+        email: this.User.email
+      }
+      this.service.getClientByEmail(email).subscribe(
+        (response: any) => {
+          console.log(response);
+         
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
   }
-
   viewTemplate(template: any): void {
     this.template = template;
   }
@@ -85,4 +115,4 @@ export class SettingsComponent implements OnInit {
   back(){
     window.history.back()
   }
-}
+}  

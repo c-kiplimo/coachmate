@@ -1,19 +1,13 @@
+<app-user></app-user>
 <div class="container-fluid mt-3 mb-5">
     <div class="d-lg-block d-none sticky-top mb-3">
       <div class="d-flex justify-content-between page-title p-3">
-        <h5 class="p-3-custom p-custom active-nav ps-1">
-          <fa-icon [icon]="backIcon" (click)="back()" class="pe-3 pt-1 back-icon"></fa-icon>
-          Settings
-        </h5>
       
       </div>
     </div>
     <div class="show-ms sticky-top">
       <div class="d-flex justify-content-between p-3 mt-5">
-        <a class="active-nav secondary-title-ms ps-1">
-          <fa-icon [icon]="backIcon" (click)="back()" class="pe-3 pt-1"></fa-icon>
-          Settings
-        </a>
+
        
       </div>
     </div>
@@ -43,7 +37,7 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">Phone number</label>
               <input
-                value="{{bakerPhoneNumber}}"
+                value="{{user}}"
                 type="text"
                 disabled
                 class="form-control select-dropdown"
@@ -54,7 +48,7 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">Email</label>
               <input
-                value="{{bakerEmail}}"
+                value="{{coachEmail}}"
                 type="text"
                 disabled
                 class="form-control select-dropdown"
@@ -71,7 +65,7 @@
       <div class="card card-table">
         <p>
           This system allows you to send text messages (SMS) to your clients at
-          different levels of the order process. You can customize/turnoff the
+          different levels of the Session process. You can customize/turnoff the
           messages here:
         </p>
         <form>
@@ -93,7 +87,7 @@
             <div class="d-flex select-dropdown notification-options">
               <div class="d-flex">
                 <input
-                  [(ngModel)]="notificationForm.bakerNotificationMode"
+                  [(ngModel)]="notificationForm.NotificationMode"
                   class="px-3"
                   type="radio"
                   id="sms"
@@ -104,7 +98,7 @@
               </div>
               <div class="d-flex">
                 <input
-                  [(ngModel)]="notificationForm.bakerNotificationMode"
+                  [(ngModel)]="notificationForm.NotificationMode"
                   class="px-3"
                   type="radio"
                   id="email"
@@ -115,7 +109,7 @@
               </div>
               <div class="d-flex">
                 <input
-                  [(ngModel)]="notificationForm.bakerNotificationMode"
+                  [(ngModel)]="notificationForm.NotificationMode"
                   class="px-3"
                   type="radio"
                   id="email"
@@ -154,20 +148,20 @@
         </form>
       </div>
   
-      <h5 class="section-title mb-3">Order notification templates</h5>
+      <h5 class="section-title mb-3">Session notification templates</h5>
       <div class="card card-table">
         <div class="mb-5 d-flex flex-wrap justify-content-between">
           <div class="setting-toggle">
-            <h5 class="section-title mb-3">A New order created template</h5>
+            <h5 class="section-title mb-3">A New Session created template</h5>
             <div class="d-flex justify-content-between">
               <p>Enable:</p>
               <label class="switch">
                 <input
                   type="checkbox"
                   [disabled]="!notificationForm.notificationEnable"
-                  [checked]="notificationForm.newOrderEnable"
-                  [(ngModel)]="notificationForm.newOrderEnable"
-                  name="newOrder"
+                  [checked]="notificationForm.newConractEnable"
+                  [(ngModel)]="notificationForm.newConractEnable"
+                  name="newSession"
                 />
                 <span
                   [ngClass]="{
@@ -182,14 +176,14 @@
           <div class="d-flex-column temp">
             <label for="Template">Template</label>
             <textarea
-              name="newOrder"
+              name="newSession"
               class="form-control"
-              id="newOrder"
-              aria-describedby="newOrder"
+              id="newSession"
+              aria-describedby="newSession"
               placeholder=""
               rows="4"
               [disabled]="!notificationForm.notificationEnable"
-              [(ngModel)]="notificationForm.newOrderTemplate"
+              [(ngModel)]="notificationForm.newSessionTemplate"
             >
             </textarea>
           </div>
@@ -197,16 +191,16 @@
         <hr />
         <div class="mb-5 mt-3 d-flex flex-wrap justify-content-between">
           <div class="setting-toggle">
-            <h5 class="section-title mb-3">Partial order payment template</h5>
+            <h5 class="section-title mb-3">Partial Session payment template</h5>
             <div class="d-flex justify-content-between">
               <p>Enable</p>
               <label class="switch">
                 <input
                   type="checkbox"
                   [disabled]="!notificationForm.notificationEnable"
-                  [checked]="notificationForm.partialOrderPaymentEnable"
-                  [(ngModel)]="notificationForm.partialOrderPaymentEnable"
-                  name="partialOrderPayment"
+                  [checked]="notificationForm.partialSessionPaymentEnable"
+                  [(ngModel)]="notificationForm.partialSessionPaymentEnable"
+                  name="partialSessionPayment"
                 />
                 <span
                   [ngClass]="{
@@ -221,54 +215,14 @@
           <div class="d-flex-column temp">
             <label for="Template">Template</label>
             <textarea
-              name="newOrder"
+              name="newSession"
               class="form-control"
-              id="newOrder"
-              aria-describedby="newOrder"
+              id="newSession"
+              aria-describedby="newSession"
               placeholder=""
               rows="4"
               [disabled]="!notificationForm.notificationEnable"
-              [(ngModel)]="notificationForm.partialOrderPaymentTemplate"
-            >
-            </textarea>
-          </div>
-        </div>
-        <hr />
-  
-        <div class="mb-5 mt-3 d-flex flex-wrap justify-content-between">
-          <div class="setting-toggle">
-            <h5 class="section-title mb-3">Full order payment template</h5>
-            <div class="d-flex justify-content-between">
-              <p>Enable</p>
-              <label class="switch">
-                <input
-                  [disabled]="!notificationForm.notificationEnable"
-                  type="checkbox"
-                  [checked]="notificationForm.fullOrderPaymentEnable"
-                  [(ngModel)]="notificationForm.fullOrderPaymentEnable"
-                  name="fullOrderPayment"
-                />
-                <span
-                  [ngClass]="{
-                    'disable-toggle': !notificationForm.notificationEnable
-                  }"
-                  class="slider round"
-                ></span>
-              </label>
-            </div>
-          </div>
-  
-          <div class="d-flex-column temp">
-            <label for="Template">Template</label>
-            <textarea
-              name="newOrder"
-              class="form-control"
-              id="newOrder"
-              aria-describedby="newOrder"
-              placeholder=""
-              rows="4"
-              [disabled]="!notificationForm.notificationEnable"
-              [(ngModel)]="notificationForm.fullOrderPaymentTemplate"
+              [(ngModel)]="notificationForm.partialSessionPaymentTemplate"
             >
             </textarea>
           </div>
@@ -277,16 +231,16 @@
   
         <div class="mb-5 mt-3 d-flex flex-wrap justify-content-between">
           <div class="setting-toggle">
-            <h5 class="section-title mb-3">A delivered order template</h5>
+            <h5 class="section-title mb-3">Full Session payment template</h5>
             <div class="d-flex justify-content-between">
               <p>Enable</p>
               <label class="switch">
                 <input
-                  type="checkbox"
                   [disabled]="!notificationForm.notificationEnable"
-                  [checked]="notificationForm.deliverOrderEnable"
-                  [(ngModel)]="notificationForm.deliverOrderEnable"
-                  name="deliverOrder"
+                  type="checkbox"
+                  [checked]="notificationForm.fullSessionPaymentEnable"
+                  [(ngModel)]="notificationForm.fullSessionPaymentEnable"
+                  name="fullSessionPayment"
                 />
                 <span
                   [ngClass]="{
@@ -301,14 +255,54 @@
           <div class="d-flex-column temp">
             <label for="Template">Template</label>
             <textarea
-              name="newOrder"
+              name="newSession"
               class="form-control"
-              id="newOrder"
-              aria-describedby="newOrder"
+              id="newSession"
+              aria-describedby="newSession"
               placeholder=""
               rows="4"
               [disabled]="!notificationForm.notificationEnable"
-              [(ngModel)]="notificationForm.deliverOrderTemplate"
+              [(ngModel)]="notificationForm.fullSessionPaymentTemplate"
+            >
+            </textarea>
+          </div>
+        </div>
+        <hr />
+  
+        <div class="mb-5 mt-3 d-flex flex-wrap justify-content-between">
+          <div class="setting-toggle">
+            <h5 class="section-title mb-3">A delivered Session template</h5>
+            <div class="d-flex justify-content-between">
+              <p>Enable</p>
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  [disabled]="!notificationForm.notificationEnable"
+                  [checked]="notificationForm.deliverSessionEnable"
+                  [(ngModel)]="notificationForm.deliverSessionEnable"
+                  name="deliverSession"
+                />
+                <span
+                  [ngClass]="{
+                    'disable-toggle': !notificationForm.notificationEnable
+                  }"
+                  class="slider round"
+                ></span>
+              </label>
+            </div>
+          </div>
+  
+          <div class="d-flex-column temp">
+            <label for="Template">Template</label>
+            <textarea
+              name="newSession"
+              class="form-control"
+              id="newSession"
+              aria-describedby="newSession"
+              placeholder=""
+              rows="4"
+              [disabled]="!notificationForm.notificationEnable"
+              [(ngModel)]="notificationForm.deliverSessionTemplate"
             >
             </textarea>
           </div>
@@ -316,16 +310,16 @@
         <hr />
         <div class="mb-5 mt-3 d-flex flex-wrap justify-content-between">
           <div class="setting-toggle">
-            <h5 class="section-title mb-3">Cancel order template</h5>
+            <h5 class="section-title mb-3">Cancel Session template</h5>
             <div class="d-flex justify-content-between">
               <p>Enable</p>
               <label class="switch">
                 <input
                   type="checkbox"
                   [disabled]="!notificationForm.notificationEnable"
-                  [checked]="notificationForm.cancelOrderEnable"
-                  [(ngModel)]="notificationForm.cancelOrderEnable"
-                  name="cancelOrder"
+                  [checked]="notificationForm.cancelSessionEnable"
+                  [(ngModel)]="notificationForm.cancelSessionEnable"
+                  name="cancelSession"
                 />
                 <span
                   [ngClass]="{
@@ -339,14 +333,14 @@
           <div class="d-flex-column temp">
             <label for="Template">Template</label>
             <textarea
-              name="newOrder"
+              name="newSession"
               class="form-control"
-              id="newOrder"
-              aria-describedby="newOrder"
+              id="newSession"
+              aria-describedby="newSession"
               placeholder=""
               rows="4"
               [disabled]="!notificationForm.notificationEnable"
-              [(ngModel)]="notificationForm.cancelOrderTemplate"
+              [(ngModel)]="notificationForm.cancelSessionTemplate"
             >
             </textarea>
           </div>

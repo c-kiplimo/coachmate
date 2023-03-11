@@ -16,6 +16,10 @@
             data-bs-toggle="modal"
           data-bs-target="#addfeedbackModal"
             >Give Feedback</button>
+            <button class="btn btn-success" *ngIf="this.userRole == 'COACH'" 
+            data-bs-toggle="modal"
+          data-bs-target="#attachmentModal"
+            >Add Attachments</button>
 
             <div *ngIf="this.userRole != 'CLIENT'">
               <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
@@ -256,9 +260,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let attachment of attachments">
-              <td>{{ attachment.refNo }}</td>
-              <td>{{ attachment.amount }}</td>
-              <td>{{ attachment.date }}</td>
+              <td>{{ attachment.id }}</td>
+              <td>{{ attachment.uploads }}</td>
+              <td>{{ attachment.links }}</td>
               <td>
                 <button
                   class="btn btn-view-session"
@@ -276,7 +280,7 @@
         <div *ngFor="let attachment of attachments" class="listing-item">
           <div class="d-flex justify-content-between mb-3">
             <h4>{{ attachment.session.name }}</h4>
-            <span>{{ attachment.amount }}</span>
+            <span>{{ attachment.id }}</span>
           </div>
           <span>{{ attachment.narration }}</span>
           <h6>{{ attachment.paidAt | date: "MMM d, y " }}</h6>
@@ -985,3 +989,47 @@ aria-hidden="true"
 </div>
 </div>
 </div> 
+ <!-- add attachment modal -->
+ <div
+ class="modal fade"
+ id="attachmentModal"
+ tabindex="-1"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true"
+ >
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+   <div class="modal-header">
+     <h1 class="modal-title fs-5" id="exampleModalLabel">
+       Attachments
+     </h1>
+ 
+     <button
+       type="button"
+       class="btn-close btn-close-white"
+       data-bs-dismiss="modal"
+       aria-label="Close"
+     ></button>
+   </div>
+   <div>
+    <label for="uploads">Upload:</label>
+    <input type="file">
+   </div>
+   <div>
+    <label for="uploads">Links:</label>
+    <input type="text">
+   </div>
+   <div class="modal-footer">
+     <button type="button" 
+     class="btn btn-secondary" 
+     data-bs-dismiss="modal"
+     >
+       Close
+     </button>
+     <button type="button" class="btn btn-success"
+     (click)="addAttachment()"
+     >add attachments</button>
+   </div>
+ </div>
+ </div>
+ </div> 

@@ -57,6 +57,7 @@ currentsessionVenue: any;
 currentgoals: any;
 currentSession: any;
 feedbacks:any = [];
+attachments:any = [];
 coachId: any;
 loadingsession: any;
 client: any;
@@ -68,7 +69,6 @@ client: any;
   alertIcon = faBell;
   notifications!: any;
   notification!: any;
-  attachments!: any;
   searching = false;
   currentTab = 'feedback';
   loadingOrder = false;
@@ -90,7 +90,6 @@ client: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
   deleteSessionForm: any;
-  toastrService: any;
   sessionDate = '';
   sessionStartTime = '';
   sessionDuration = '';
@@ -105,6 +104,7 @@ client: any;
   createdBy: any;
 
   feebackForm: any;
+  attachmentForm:any;
 
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
@@ -124,7 +124,8 @@ client: any;
     private router: Router,
     private route: ActivatedRoute,
     private formbuilder: FormBuilder,
-    private apiService:ApiService  ) {}
+    private apiService:ApiService,
+    private toastrService:ToastrService  ) {}
 
   ngOnInit() {
 
@@ -146,12 +147,19 @@ client: any;
       availabilityScore: [''],
       comments: ['']
     });
+    this.attachmentForm = this.formbuilder.group({
+      uploads:[''],
+      links:['']
+    }
+
+    )
 
     }
     if(this.userRole == 'COACH'){
       this.sessionId = this.route.snapshot.params['sessionId'];
       console.log(this.sessionId);
       this.getFeedback();
+      this. getAttachment()
     }
 
    this.route.params.subscribe((params) => {
@@ -161,6 +169,7 @@ client: any;
 
     this.getSession();
     this.getFeedback();
+    this. getAttachment()
 
 
     this.getNotifications();
@@ -216,6 +225,22 @@ client: any;
       }
     );
   }
+    //get attachment for session
+    getAttachment(){
+      const params = {
+        sessionId: this.sessionId,
+       
+      };
+      this.clientService.getAttachment(params).subscribe(
+        (res: any) => {
+          this.feedbacks = res.body;
+          console.log("attachment is here",this.feedbacks);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   setCurrectSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
@@ -337,6 +362,36 @@ client: any;
       (error) => {
         console.log(error);
         this.toastrService.error('Error in adding Feedback');
+      }
+    );
+  }
+  addAttachment() {
+    const params = {
+      sessionId: this.sessionId,
+      coachId: this.coachId,
+    
+    };
+    console.log(this. attachmentForm.value);
+    const data = this. attachmentForm.value;
+
+    data.sessionId = this.sessionId;
+    
+    data.coachId = this.coachId;
+    data.clientId = this.clientId;
+    data.createdBy = this.createdBy;
+
+
+    this.clientService.addAttachment(data, params).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Attachment Added Successfully');
+        this. attachmentForm.nativeElement.classList.remove('show');
+        this. attachmentForm.nativeElement.style.display = 'none';
+        this.getFeedback();
+      },
+      (error) => {
+        console.log(error);
+        this.toastrService.error('Error in adding Attachment');
       }
     );
   }

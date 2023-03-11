@@ -206,6 +206,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
+        notification.setCoach(coach);
+        notification.setClient(client);
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
 

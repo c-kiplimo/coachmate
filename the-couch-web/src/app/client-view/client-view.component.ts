@@ -84,7 +84,7 @@ lient: any;
 orders!: any;
 showHideMessage = true;
 payments!: any;
-notifications!: any;
+notifications!: any[];
 notification!: any;
 payment!: any;
 currentTab = 'sessions';
@@ -310,6 +310,9 @@ updateClientDetails(id:any){
 
 
 }
+
+  // Get Notification for specific customer
+
 
 
 
