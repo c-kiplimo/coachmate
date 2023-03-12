@@ -23,6 +23,8 @@ public class SessionSchedules {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    private boolean booked;
+
     @ManyToOne
     @JoinColumn(name = "coach_id")
     Coach coach;

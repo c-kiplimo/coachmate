@@ -40,6 +40,8 @@ public class SessionService {
     @Autowired
     OrganizationRepository organizationRepository;
     @Autowired
+    SessionSchedulesRepository sessionSchedulesRepository;
+    @Autowired
     private NotificationServiceHTTPClient notificationServiceHTTPClient;
 
     @Autowired
@@ -87,6 +89,8 @@ public class SessionService {
         log.info("Creating new session");
         Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
         Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
+
 
         if(optionalClient.isEmpty()){
             log.warn("Client with id {} not found", clientId);
@@ -97,6 +101,10 @@ public class SessionService {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
+        if(optionalSessionSchedules.isEmpty()){
+            log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
+            throw new IllegalArgumentException("Session Slot no found!");
+        }
         Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
 
         // Client
@@ -105,12 +113,15 @@ public class SessionService {
         Coach coach = client.getCoach();
         // Contract
         Contract contract = optionalContract.get();
+        //Session slot
+        SessionSchedules sessionSchedules = optionalSessionSchedules.get();
 
-        // New Sessions enter the confirmed state
-        sessionRequest.setSessionStatus(SessionStatus.CONFIRMED);
+        // New Sessions enter the new state
+        sessionRequest.setSessionStatus(SessionStatus.NEW);
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
+        sessionRequest.setSessionSchedules(sessionSchedules);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
         if(optionalOrganization.isPresent()){
@@ -155,17 +166,8 @@ public class SessionService {
                 session.setNotes(sessionRequest.getNotes());
             }
 
-            if (sessionRequest.getSessionDate() != null) {
-                session.setSessionDate(sessionRequest.getSessionDate());
-            }
-            if (sessionRequest.getSessionDuration() != null && session.getSessionDuration().length() > 0) {
-                session.setSessionDuration(sessionRequest.getSessionDuration());
-            }
-            if (sessionRequest.getSessionStartTime() != null) {
-                session.setSessionStartTime(sessionRequest.getSessionStartTime());
-            }
-            if (sessionRequest.getSessionEndTime() != null) {
-                session.setSessionEndTime(sessionRequest.getSessionEndTime());
+            if (sessionRequest.getSessionSchedules() != null) {
+                session.setSessionSchedules(sessionRequest.getSessionSchedules());
             }
             if (sessionRequest.getSessionVenue() != null) {
                 session.setSessionVenue(sessionRequest.getSessionVenue());
@@ -217,11 +219,11 @@ public class SessionService {
             String smsContent;
             smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
                     " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
-                    + session.getSessionStartTime() + " to " + session.getSessionEndTime() + "\n See you there!";
+                    + session.getSessionSchedules().getStartTime() + " to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
             String smsContentClient;
             smsContentClient = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
                     " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
-                    + session.getSessionStartTime() + "to " + session.getSessionEndTime() + "\n See you there!";
+                    + session.getSessionSchedules().getStartTime() + "to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
                 //send notification to coach
                 NotificationHelper.sendUpcomingSessionReminderToCoach(session);
                 // sendEmail
