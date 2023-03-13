@@ -83,17 +83,17 @@ public class SessionService {
 
 
     //CREATE NEW CONTRACT
-    public Session createSession(Long coachId,Long clientId,Long contractId, Session sessionRequest) throws IllegalArgumentException {
+    public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId, coachId);
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId, coachId);
 
-        if(optionalClient.isEmpty()){
+        if (optionalClient.isEmpty()) {
             log.warn("Client with id {} not found", clientId);
             throw new IllegalArgumentException("Client not found!");
         }
 
-        if(optionalContract.isEmpty()){
+        if (optionalContract.isEmpty()) {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
@@ -113,15 +113,15 @@ public class SessionService {
         sessionRequest.setContract(contract);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
-        if(optionalOrganization.isPresent()){
+        if (optionalOrganization.isPresent()) {
             sessionRequest.setOrgId(optionalOrganization.get().getId());
         }
         //set organization id null if not found
-        else{
+        else {
             sessionRequest.setOrgId(null);
         }
 
-        try{
+        try {
             return sessionRepository.save(sessionRequest);
         } catch (Exception e) {
             log.error("Error occurred ", e);
@@ -131,9 +131,9 @@ public class SessionService {
 
 
     //UPDATE SESSION
-    public Optional<Session> updateSession(Long sessionId, Long coachId,Session sessionRequest){
+    public Optional<Session> updateSession(Long sessionId, Long coachId, Session sessionRequest) {
 
-        Optional<Session> sessionOptional = sessionRepository.findSessionByIdAndCoachId(sessionId,coachId);
+        Optional<Session> sessionOptional = sessionRepository.findSessionByIdAndCoachId(sessionId, coachId);
 
         if (sessionOptional.isPresent()) {
             log.info("Session with id {} found", sessionId);
@@ -184,11 +184,11 @@ public class SessionService {
     }
 
     // Delete session by ID
-    public void deleteSession(Long id,Long coachId) {
+    public void deleteSession(Long id, Long coachId) {
         log.debug("Request to delete session : {}", id);
 
 
-        boolean exist = sessionRepository.existsByIdAndCoachId(id,coachId);
+        boolean exist = sessionRepository.existsByIdAndCoachId(id, coachId);
         if (!exist) {
             throw new IllegalStateException("session doesn't exist");
 
@@ -215,26 +215,26 @@ public class SessionService {
 
         for (Session session : sessions) {
             String smsContent;
-            smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
-                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + session.getName() + " with " +
+                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
                     + session.getSessionStartTime() + " to " + session.getSessionEndTime() + "\n See you there!";
             String smsContentClient;
-            smsContentClient = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
-                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" + session.getName() + "with " +
+                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
                     + session.getSessionStartTime() + "to " + session.getSessionEndTime() + "\n See you there!";
-                //send notification to coach
-                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
-                // sendEmail
-              String email =  session.getCoach().getEmailAddress();
-                notificationServiceHTTPClient.sendEmail(email,"SESSION DUE TODAY",smsContent,false);
-                log.info("Email sent");
-                //send notification to client
-                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-                // sendEmail
-                String clientEmail =  session.getClient().getEmail();
-                notificationServiceHTTPClient.sendEmail(clientEmail,"SESSION DUE TODAY", smsContentClient,false);
-            }
+            //send notification to coach
+            NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+            // sendEmail
+            String email = session.getCoach().getEmailAddress();
+            notificationServiceHTTPClient.sendEmail(email, "SESSION DUE TODAY", smsContent, false);
+            log.info("Email sent");
+            //send notification to client
+            NotificationHelper.sendUpcomingSessionReminderToClient(session);
+            // sendEmail
+            String clientEmail = session.getClient().getEmail();
+            notificationServiceHTTPClient.sendEmail(clientEmail, "SESSION DUE TODAY", smsContentClient, false);
         }
+    }
 
 //    @Scheduled(cron = "0 20 05 * * ?")
 //    public void sendUpcomingSessionReminderToClient() {
@@ -251,8 +251,6 @@ public class SessionService {
 //    }
 
 
-
-
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);
     }
@@ -260,4 +258,68 @@ public class SessionService {
     public List<Session> getSessionsByContract(Long contractId) {
         return sessionRepository.findSessionByContractId(contractId);
     }
+
+    public ListResponse filterSessionsByClientNameAndSessionNameAndDate(String clientName, String sessionName, LocalDate date, int page, int perPage) {
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+        Page<SessionDto> sessionPage = null;
+
+        if (clientName != null && sessionName != null && date != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
+                            .and(qSession.name.containsIgnoreCase(sessionName))
+                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        if (clientName != null && sessionName != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
+                            .and(qSession.name.containsIgnoreCase(sessionName)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        if (clientName != null && date != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
+                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        if (sessionName != null && date != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName)
+                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        if (clientName != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        if (sessionName != null) {
+            QSession qSession = QSession.session;
+            sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+            log.info("This is a list of sessions found {}", sessionPage.getContent());
+            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
+                    sessionPage.getTotalElements());
+        }
+
+        log.info("This is a list of sessions found {}", sessionPage.getContent());
+        return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(), sessionPage.getTotalElements());
+    }
+
 }
