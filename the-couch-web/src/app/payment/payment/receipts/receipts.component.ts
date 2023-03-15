@@ -93,16 +93,19 @@ payment: any;
   }
 
   getPaymentsByCoachId(){
+    window.scroll(0, 0);
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
       coachId: this.coachData.coach.id,
+      
     };
 
     this.loading = true;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
+      
     
       (response) => {
         if(response.body.extPaymentRef!==null){

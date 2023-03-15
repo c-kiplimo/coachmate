@@ -184,6 +184,12 @@
               </tr>
             </tbody>
           </table>
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+            No attachments Found.
+          </p>
       </div>
       </div>
     <div
@@ -251,6 +257,12 @@
             </tr>
           </tbody>
         </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+          No attachment Found.
+        </p>
       </div>
   </div>
   </div>
