@@ -169,6 +169,7 @@ public class RegistrationService {
         String content = "Hey, use this link to confirm your account and set your password," +
                 " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
         notificationServiceHTTPClient.sendEmail(clientRequest.getEmail(),subject, content, false);
+        notificationServiceHTTPClient.sendSMS(clientRequest.getMsisdn(), subject, content, String.valueOf(false));
 
     }
     // Confirm token

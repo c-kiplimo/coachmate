@@ -1,17 +1,4 @@
-<div class="row">
-  <div class="col-5">
-    <h5></h5>
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
+<app-user></app-user>
 <div class="row mb-3" >
   <div class="col-3"></div>
   <div class="col-6">
@@ -80,10 +67,9 @@
               </div>
 
               <div class="col-md-6"></div>
-              <div *ngIf="sessions < contract.noOfSessions" class="col-md-2">
+              <div class="col-md-2"></div>
+              <div *ngIf="sessions.length < contract.noOfSessions" class="col-md-2">
               <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-success">
-
-                <i class="fa-solid fa-user-plus"></i>
                Add Session
               </button>
               </div>
@@ -230,7 +216,6 @@
                   id="inputGroupSelect01" 
                   name="sessionVenue" 
                   [(ngModel)]="addSessionForm.sessionVenue">
-                 >
                   <option value="VIRTUAL">VIRTUAL</option>
                   <option value="PHYSICAL">PHYSICAL</option>
                 </select>

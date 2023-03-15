@@ -41,11 +41,11 @@ public class NotificationSettingsService {
 
 
     public NotificationSettings updateSettings(NotificationSettingsRequest notificationSettingsRequest, Long coachId, String coachName) {
-        log.info("Updating Settings for Baker with id {}", coachId);
+        log.info("Updating Settings for coach with id {}", coachId);
         Optional<NotificationSettings> notificationOptional = notificationSettingsRepository.findByCoachId(coachId);
 
         if (notificationOptional.isEmpty()) {
-            throw new IllegalArgumentException("Baker has no setting configured! Contact Admin");
+            throw new IllegalArgumentException("Coach has no setting configured! Contact Admin");
         }
 
         NotificationSettings NotificationSettings = notificationOptional.get();
@@ -94,7 +94,7 @@ public class NotificationSettingsService {
                         notificationSettingsRequest.getAccountNumber())) {
             NotificationSettings.setAccountNumber(notificationSettingsRequest.getAccountNumber());
         }
-        // depositPercentage
+
 
 
         // contract settings
@@ -217,4 +217,5 @@ public class NotificationSettingsService {
     public Optional<NotificationSettings> getNotification(Long coachId) {
         return notificationSettingsRepository.findByCoachId(coachId);
     }
+    
 }

@@ -18,6 +18,7 @@ export class UserComponent implements OnInit {
   userIcon = faUser;
   customersIcon = faUsers;
   businessName: any;
+backIcon: any;
 
   constructor(public router: Router) { }
 
@@ -39,7 +40,11 @@ export class UserComponent implements OnInit {
     sessionStorage.removeItem('businessName');
     sessionStorage.removeItem('user');
     this.businessName = '';
+    this.router.navigate(['signin']);
 
+  }
+  back() {
+    window.history.back();
   }
   
 }

@@ -24,8 +24,10 @@ public class ClientWallet {
     // updated on every payment
     Float walletBalance;
     Float amountDeposited;
+    Float amountBilled;
     private String extPaymentRef;
     public String description;
+
     @Enumerated(EnumType.STRING)
     private ModeOfPayment modeOfPayment;
 
@@ -58,4 +60,6 @@ public class ClientWallet {
     @JoinColumn(name="organization_id")
     Organization organization;
 
+    public void setPaymentDate(LocalDateTime now) {
+    }
 }

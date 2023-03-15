@@ -127,21 +127,6 @@ public class ClientService {
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         log.info("Client Billing Account created Successfully!");
-        // create account statement for client
-        AccountStatement accountStatement = new AccountStatement();
-        accountStatement.setCoach(optionalCoach.get());
-        accountStatement.setClient(saveClient);
-        accountStatement.setAmountIn((float) 0);
-        accountStatement.setBalanceAfter((float) 0);
-        accountStatement.setBalanceBefore((float) 0);
-        accountStatement.setDate(LocalDate.from(LocalDateTime.now()));
-        accountStatement.setLastUpdatedBy(optionalCoach.get().getFullName());
-        accountStatement.setLastUpdatedAt(LocalDateTime.now());
-        accountStatement.setDescription("Account created");
-        accountStatementService.createAccountStatement(accountStatement);
-
-
-
         return saveClient;
 
     }
@@ -214,12 +199,17 @@ public class ClientService {
             client.setMsisdn(clientRequest.getMsisdn());
             client.setPhysicalAddress(clientRequest.getPhysicalAddress());
             client.setReason(clientRequest.getReason());
+            client.setPaymentMode(clientRequest.getPaymentMode());
+            client.setProfession(clientRequest.getProfession());
+            client.setClientType(clientRequest.getClientType());
 
             client = clientRepository.save(client);
             log.info("Updated client with id {}:", client.getId());
             return Optional.of(client);
+        } else {
+            log.error("Client not found with id {}", id);
+            return Optional.empty();
         }
-        return clientOptional;
     }
 
     //search by name
@@ -414,5 +404,6 @@ public class ClientService {
 
         return clientRepository.findClientByOrganization(optionalOrganization.get());
     }
+
 
 }

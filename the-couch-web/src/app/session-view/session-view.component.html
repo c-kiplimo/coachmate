@@ -1,16 +1,4 @@
-<div class="row">
-  <div class="col-5">
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
+<app-user></app-user>
 
 <br>
 <h5 class="section-title text-center ">Session Details</h5>
@@ -18,36 +6,32 @@
   <div class="col-2">
   </div>
   <div class="col-8">
-<div class="container-fluid Client mb-5">
-    <div class="container">
-      <div class="card details-card">
-        <div class="mt-5" class=""[@fadeIn]>
-            <div class="card details-card">
+    <div class="container-fluid Client mb-5">
+      <div class="container">
+        <div class="card details-card">
+          <div class="mt-5" class=""[@fadeIn]>
             <div class="d-flex justify-content-between flex-wrap">
             <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" 
             data-bs-toggle="modal"
           data-bs-target="#addfeedbackModal"
             >Give Feedback</button>
-
-            <div *ngIf="this.userRole != 'CLIENT'">
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editsessionModal
-              ">
-                <i class="fas fa-edit"></i>
-                Edit
-              </button>
-            </div>
-
+            <button class="btn btn-success" *ngIf="this.userRole == 'COACH'" 
+            data-bs-toggle="modal"
+          data-bs-target="#attachmentModal"
+            >Add Attachments</button>
             <div class="dropdown">
-              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+              <a class="btn btn-success dropdown-toggle"role="button" id="dropdownMenuLink"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                Actions</a>
+                Actions
+              </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li>
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
                       data-bs-target="#confirmsessionModal"
-                      >Confirm</a
+                      >Confirm
+                      </a
                     >
             
                   </li>
@@ -75,17 +59,22 @@
                       >Reschedule</a
                     >
                   </li>
+                  <li *ngIf="this.userRole != 'CLIENT'">
+                    <a
+                      class="dropdown-item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editsessionModal"
+                      >Edit</a
+                    >
+                  </li>
                 </ul>
             </div>
-           
-          </div>
-        </div>
+            </div>
         <div class="session-details" [@fadeIn] >
           <div class="d-flex justify-content-between main-detail">
             <span class="title">Session for:</span>
             <span class="value">{{ sessions.name }}</span>
           </div>
-          <div class="client-details" >
             <div class="d-flex justify-content-between">
               <span class="title">Session Date</span>
               <span class="value">{{ sessions.sessionDate }}</span>
@@ -122,7 +111,6 @@
               <span class="value">{{sessions.sessionVenue}}</span>
             </div>
           </div>
-        </div>
       </div>
       </div>
     </div>
@@ -155,7 +143,6 @@
           Attachments
         </button>
     </div>
-
       <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
         <div class="row list-container container ">
           <table class="table">
@@ -174,7 +161,7 @@
             </thead>
         
             <tbody>
-              <tr>
+              <tr *ngFor="let feedback of feedbacks">
             
                
                 <td>{{ feedback.session.name }}</td>
@@ -188,6 +175,7 @@
                 <td>     <button class="btn btn-success"
                   data-bs-toggle="modal"
                 data-bs-target="#feedbackModal"
+                (click)="viewComment(feedback)"
                 >
                   <i   class="fa-solid fa-arrow-up-right-from-square"></i>
                   Comments
@@ -203,20 +191,21 @@
       *ngIf="currentTab === 'notifications'"
       [@fadeIn]
     >
+    <div class="row list-container container ">
       <table class="table">
         <thead>
           <th coslpan="1">Notification Reason</th>
           <th coslpan="1">Notification Date</th>
           <th coslpan="1">Notification Mode</th>
         </thead>
-        <tbody *ngIf="notifications.length">
+        <tbody>
           <tr *ngFor="let notification of notifications">
-            <td>{{ notification.subject }}</td>
-            <td>{{ notification.sentAt | date : "MMM d, y " }}</td>
+            <td>{{ notification.id }}</td>
+            <td>{{ notification.createdAt | date : "MMM d, y " }}</td>
             <td>{{ notification.notificationMode }}</td>
             <td>
               <button
-                class="btn btn-view"
+                class="btn btn-success"
                 data-bs-toggle="modal"
                 data-bs-target="#notificationModal"
                 (click)="viewNotification(notification)"
@@ -227,39 +216,19 @@
           </tr>
         </tbody>
       </table>
-
-      <p class="text-muted text-center" *ngIf="!notifications?.length">
-        no notifications found
-      </p>
-    </div>
-
     <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
       <p class="text-muted mt-5" *ngIf="!notifications?.length">
         No notifications found.
       </p>
-      <div *ngIf="notifications?.length">
-        <div
-          data-bs-toggle="modal"
-          data-bs-target="#notificationModal"
-          (click)="viewNotification(notification)"
-          *ngFor="let notification of notifications"
-          class="listing-item"
-        >
-          <div class="d-flex justify-content-between mb-1">
-            <div>
-              <p class="mb-1">{{ notification.subject }}</p>
-              <p class="mb-1">{{ notification.notificationMode }}</p>
-            </div>
-            <span
-              >{{ notification.sentAt | date : "MMM d, y " }}
-              <fa-icon [icon]="rightIcon"> </fa-icon>
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="d-none d-md-block">
-        <table class="table" *ngIf="currentTab === 'attachments'" [@fadeIn]>
+    </div>
+    </div>
+  <div
+    class="d-none d-lg-block"
+    *ngIf="currentTab === 'attachments'" [@fadeIn]
+  >
+  <div class="row list-container container ">
+    <table class="table">
           <thead>
             <th coslpan="1">Attachment No</th>
             <th coslpan="1">Attachment date</th>
@@ -267,14 +236,14 @@
           </thead>
           <tbody>
             <tr *ngFor="let attachment of attachments">
-              <td>{{ attachment.refNo }}</td>
-              <td>{{ attachment.amount }}</td>
-              <td>{{ attachment.date }}</td>
+              <td>{{ attachment.id }}</td>
+              <td>{{ attachment.createdAt | date : "MMM d, y " }}</td>
+              <td>{{ attachment.links }}</td>
               <td>
                 <button
-                  class="btn btn-view-session"
+                class="btn btn-success"
                   data-bs-toggle="modal"
-                  data-bs-target="#payementModal"
+                  data-bs-target="#attachmentDetailModal"
                 >
                   View
                 </button>
@@ -283,17 +252,9 @@
           </tbody>
         </table>
       </div>
-      <div class="show-ms" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-        <div *ngFor="let attachment of attachments" class="listing-item">
-          <div class="d-flex justify-content-between mb-3">
-            <h4>{{ attachment.session.name }}</h4>
-            <span>{{ attachment.amount }}</span>
-          </div>
-          <span>{{ attachment.narration }}</span>
-          <h6>{{ attachment.paidAt | date: "MMM d, y " }}</h6>
-        </div>
-      </div>
   </div>
+  </div>
+</div>
 <!-- Notification details modal -->
 <div
   class="modal fade"
@@ -316,28 +277,24 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body" *ngIf="notification">
+        <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
-          <p>Notification Subject:</p>
-          <span>{{ notification.subject }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Reason</p>
-          <span>{{ notification.sendReason }}</span>
+          <p>Destination</p>
+          <span>{{ notification.destinationAddress }}</span>
         </div>
 
         <div class="d-flex justify-content-between">
           <p>Source Address</p>
-          <span>{{ notification.srcAddress }}</span>
+          <span>{{ notification.sourceAddress}}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Sent at:</p>
-          <span>{{ notification.sentAt | date : "MMM d, y " }}</span>
+          <p>Sent on:</p>
+          <span>{{ notification.createdAt | date : "MMM d, y " }}</span>
         </div>
         <div class="d-flex-column">
           <p>Content:</p>
           <span>{{ notification.content }}</span>
-        </div>
+        </div>  
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -469,8 +426,8 @@
             <label for="message">Message to be sent</label>
             <p class="lead">
               "Dear {{ client?.firstName | titlecase }}. Your
-              {{ sessionType }} session of amount {{ sessionDuration }} has been
-              recorded. I am working to promptly have your session delivered by
+              {{ sessionType }} session of duration {{ sessionDuration }} has been
+              set. It will be held on
               {{ sessionDate | date }}. Thank you. "
             </p>
           </div>
@@ -686,7 +643,6 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="ConductedSession()"
         >
           Submit
         </button>
@@ -838,7 +794,6 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="deleteSession()"
         >
           Submit
         </button>
@@ -958,10 +913,48 @@
     </div>
   </div>
 </div>
- <!-- feedback comments modal -->
+  <!-- feedback details modal -->
+<div
+class="modal fade"
+id="feedbackModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">
+      feedback Comments
+    </h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body" *ngIf="feedback">
+    <div class="d-flex-column">
+      <span>{{ feedback.comments }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" 
+    class="btn btn-secondary" 
+    data-bs-dismiss="modal"
+    >
+      Close
+    </button>
+  </div>
+</div>
+</div>
+</div> 
+ <!-- add attachment modal -->
  <div
  class="modal fade"
- id="feedbackModal"
+ id="attachmentModal"
  tabindex="-1"
  aria-labelledby="exampleModalLabel"
  aria-hidden="true"
@@ -970,42 +963,73 @@
  <div class="modal-content">
    <div class="modal-header">
      <h1 class="modal-title fs-5" id="exampleModalLabel">
-       feedback Details
+       Attachments
      </h1>
  
      <button
        type="button"
        class="btn-close btn-close-white"
-       
+       data-bs-dismiss="modal"
        aria-label="Close"
      ></button>
    </div>
-   <div class="modal-body">
-     <div class="d-flex justify-content-between">
-       <p>feedback Subject:</p>
-       <span>{{ feedback.subject }}</span>
-     </div>
-     <div class="d-flex justify-content-between">
-       <p>Reason</p>
-       <span>{{ feedback.sendReason }}</span>
-     </div>
- 
-     <div class="d-flex justify-content-between">
-       <p>Source Address</p>
-       <span>{{ feedback.srcAddress }}</span>
-     </div>
-     <div class="d-flex justify-content-between">
-       <p>Sent at:</p>
-       <span>{{ feedback.sentAt }}</span>
-     </div>
-     <div class="d-flex-column">
-       <p>Content:</p>
-       <span>{{ feedback.content }}</span>
-     </div>
+   <div>
+    <label for="uploads">Upload:</label>
+    <input type="file">
+   </div>
+   <div>
+    <label for="uploads">Links:</label>
+    <input type="text">
    </div>
    <div class="modal-footer">
-    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+     <button type="button" 
+     class="btn btn-secondary" 
+     data-bs-dismiss="modal"
+     >
+       Close
+     </button>
+     <button type="button" class="btn btn-success"
+     (click)="addAttachment()"
+     >add attachments</button>
    </div>
  </div>
  </div>
  </div> 
+ <!-- attachment details modal -->
+<div
+class="modal fade"
+id="attachmentDetailModal"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+  <div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">
+      Attachments
+    </h1>
+
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body" *ngIf="feedback">
+    <div class="d-flex-column">
+      <span>{{ feedback.comments }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" 
+    class="btn btn-secondary" 
+    data-bs-dismiss="modal"
+    >
+      Close
+    </button>
+  </div>
+</div>
+</div>
+</div> 

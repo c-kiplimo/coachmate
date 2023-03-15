@@ -58,10 +58,13 @@
                 class="form-control"
                 id="msisdn"
                 aria-describedby="emailHelp"
-                placeholder="254701234567"
+                placeholder="0701234567"
                 required
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
+                
               />
+              <!-- oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" -->
               <button
                 type="submit"
                 class="btn btn-signup mt-3 mb-3"
@@ -183,6 +186,9 @@
                 (click)="validatePassword()"
               >
                 Reset Password <fa-icon></fa-icon>
+              </button>
+              <button class="btn btn-signup" routerLink="/signin">
+                <fa-icon [icon]="backIcon"></fa-icon> Back to login
               </button>
             
             </div>

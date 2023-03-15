@@ -24,15 +24,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class SessionsComponent implements OnInit {
   filterIcon!: IconProp;
   rightIcon!: IconProp;
-goToItem(arg0: string,arg1: any) {
-throw new Error('Method not implemented.');
-}
   searchIcon!: IconProp;
-session: any;
-back() {
-throw new Error('Method not implemented.');
-}
-
+  session: any;
   loading = true;
   itemsPerPage = 20;
   filters: any = {
@@ -43,25 +36,20 @@ throw new Error('Method not implemented.');
   currentTab!: string;
   totalLength!: number;
   noOfSessions: any;
-  page!: number;
   backIcon!: IconProp;
   addIcon!: IconProp;
-salesData: any;
-
+  salesData: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
-
   OrgData: any;
   orgSession: any;
-
   User: any;
-
-
+  sessions: any;
+  page: number = 1;
   constructor(private apiService: ClientService, private router: Router) {}
 
-  sessions: any;
-
+  
   ngOnInit(): void { 
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
@@ -89,7 +77,7 @@ salesData: any;
       this.apiService.getClientByEmail(email).subscribe(
         (response: any) => {
           console.log(response);
-          this.getClientSessions(response[0].id);
+          this.getClientSessions(response[0].id,1);
         },
         (error: any) => {
           console.log(error);
@@ -99,15 +87,24 @@ salesData: any;
   }
 
   
+  getClientSessions(id: any,page: number) {
+    this.sessions = [];
+    this.loading = true;
 
-
-  
-  getClientSessions(id: any) {
-
-    this.apiService.getClientSessions(id).subscribe(
+    window.scroll(0, 0);
+    this.page = page;
+    const options = {
+      page: page,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.search,
+    };
+    this.apiService.getClientSessions(options).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response.body;
+        this.noOfSessions = this.sessions.length;
+        this.totalLength = Number(response.body.totalElements);
         console.log(this.sessions.body);
         this.loading = false;
       },
@@ -119,13 +116,16 @@ salesData: any;
 
   getAllOrgSessions(id: any) {
     this.loading = true;
+    window.scroll(0, 0);
+    this.page = 1;
     const options = {
       page: 1,
+      id: id,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    this.apiService.getOrgSessions(id).subscribe(
+    this.apiService.getOrgSessions(options).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response;
@@ -199,16 +199,4 @@ salesData: any;
 
 
   }
-  toggleTab(tab: string): void {
-    this.currentTab = tab;
-    // this.filters.period = tab;
-    this.getFilteredSessions(1, tab);
-  }
-  getFilteredSessions(arg0: number, tab: string) {
-    throw new Error('Method not implemented.');
-  }
-
-  toggleFilters(): void {
-    this.filterOptions = !this.filterOptions;
-}
 }

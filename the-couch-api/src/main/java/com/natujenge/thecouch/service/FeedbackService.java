@@ -40,8 +40,7 @@ public class FeedbackService {
     public void addNewFeedBack(Long SessionId, Long coachId, Long orgIdId, Feedback feedbackReq) {
         Feedback feedback = new Feedback();
 
-        //GEt Client
-//        Optional<Client> client = clientRepository.findById(i);
+
 
         //GET SESSION
         Optional<Session> session = sessionRepository.findSessionById(SessionId);
@@ -100,8 +99,8 @@ public class FeedbackService {
         }
     }
 
-    public List<FeedbackDto> getOrgFeedback(Long orgId) {
-        Optional<Organization> optionalOrganization = organizationRepository.findById(orgId);
+    public List<FeedbackDto> getOrgFeedback(Long orgIdId) {
+        Optional<Organization> optionalOrganization = organizationRepository.findById(orgIdId);
         return feedbackRepository.findByOrganization(optionalOrganization.get());
     }
 

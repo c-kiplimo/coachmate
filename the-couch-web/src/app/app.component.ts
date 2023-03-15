@@ -24,11 +24,11 @@ export class AppComponent {
   User: any
 
   ngOnInit(): void {
-    console.log(this.url.path());
-    if(this.url.path()==='/signin'){
+    // console.log(this.url.path());
+    // if(this.url.path()==='/signin'){
 
-     this.notlogged=true; 
-     }
+    //  this.notlogged=true; 
+    //  }
 
     //  this.User = JSON.parse(sessionStorage.getItem('user') as any);
     //  if(!this.User) {

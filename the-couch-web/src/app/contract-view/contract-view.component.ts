@@ -152,6 +152,8 @@ export class contractViewComponent implements OnInit {
       }
     );
   }
+  // window.scroll(0, 0);
+  // this.page = page;
 
 
 }

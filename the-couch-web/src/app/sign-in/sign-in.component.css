@@ -21,3 +21,9 @@ fa-icon{
       font-size:larger;
       cursor: pointer;
 }
+.logo{
+
+  margin: 0 auto;
+  display: block;
+  align-content: center;
+}

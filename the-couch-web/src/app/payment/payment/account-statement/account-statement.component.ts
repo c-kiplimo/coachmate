@@ -20,6 +20,8 @@ export class AccountStatementComponent implements OnInit {
     status: '',
     searchItem: '',
   };
+  totalLength: any;
+  page: number = 1;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -27,7 +29,9 @@ export class AccountStatementComponent implements OnInit {
   bills: any;
   billingAccount: any;
   selectedDateRange: any;
-  selectedPeriod: any;
+  statementPeriod!: string;
+  accountStatement: any;
+  accountStatements: any;
   
  
   
@@ -43,11 +47,13 @@ export class AccountStatementComponent implements OnInit {
       this.userRole = this.coachData.userRole;
       console.log(this.userRole);
       if (this.userRole == 'CLIENT') {
-        this.getBillByClientId(id);
+     
       }
       if(this.userRole == 'COACH'){
         this.getPaymentsByCoachId();
-        this. getBillByCoachId();
+        this.getAccountStatementByCoachIdAndStatementPeriod();
+       
+       
         
       } else if(this.userRole == 'CLIENT'){
       
@@ -61,7 +67,8 @@ export class AccountStatementComponent implements OnInit {
           
   
         this.getPaymentsByClientId(response[0].id);
-        this.getBillByClientId(id);
+        this.getAccountStatementByClientId(response[0].id);
+       
         },
         (error: any) => {
           console.log(error);
@@ -71,7 +78,15 @@ export class AccountStatementComponent implements OnInit {
   
       }
       else if(this.userRole == 'CLIENT'){
-        this.getBillByClientId(id);
+        this.getPaymentsByClientId(this.ClientId);
+        this.getAccountStatementByClientId(this.ClientId);
+  
+        
+      }
+      else if(this.userRole == 'ORGANIZATION'){
+        this.getAccountStatementByOrgId();
+        this.getAccountStatementByOrgIdAndStatementPeriod();
+        
       }
       
     }
@@ -116,28 +131,74 @@ export class AccountStatementComponent implements OnInit {
         }
       )
     }
-// get bill by coach id
-    getBillByCoachId(){
+// get statement by coach id and selected period
+    getAccountStatementByCoachIdAndStatementPeriod(){
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
         status: this.filters.status,
         search: this.filters.searchItem,
         coachId: this.coachData.coach.id,
+        statementPeriod: this.statementPeriod,
       };
       this.loading = true;
-      this.ClientService. getBillingsByCoachId(options).subscribe(
+      this.ClientService. getAccountStatementByCoachIdAndStatementPeriod(options).subscribe(
         (response) => {
           this.loading = false;
-          this.billingAccount = response.body.data;
-          console.log('billing Account', this.billingAccount);
+          this.accountStatements = response.body.data;
+          console.log('Account statement by coach and selected period', this.accountStatements);
         }, (error) => {
           console.log(error);
         }
       )
     }
-  // get bill by client id
-    getBillByClientId(id: any){
+    // get statement by client id and selected period
+    getAccountStatementByClientIdAndStatementPeriod(id: any){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        client_id: id,
+        statementPeriod: this.statementPeriod,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByClientIdAndStatementPeriod(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatements = response.body.data;
+          console.log('Account statement by client and selected period', this.accountStatements);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
+    // get statement by org id and selected period
+    getAccountStatementByOrgIdAndStatementPeriod(){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        orgId: this.coachData.organization.id,
+        statementPeriod: this.statementPeriod,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByOrgIdAndStatementPeriod(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatements = response.body.data;
+          console.log('Account statement by org and selected period', this.accountStatements);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
+   
+    
+
+  // get statement by client id
+    getAccountStatementByClientId(id: any){
       const options = {
         page: 1, 
         per_page: this.itemsPerPage,
@@ -146,20 +207,57 @@ export class AccountStatementComponent implements OnInit {
         client_id: id,
       };
       this.loading = true;
-      this.ClientService. getBillingsByClientId(options).subscribe(
+      this.ClientService. getAccountStatementByClientId(options).subscribe(
         (response) => {
           this.loading = false;
-          this.billingAccount = response.body.data;
-          console.log('billing Account by client', this.billingAccount);
+          this.accountStatement = response.body;
+          console.log('get statement by client id', this.accountStatement);
         }, (error) => {
           console.log(error);
         }
       )
     }
-
-
-
-
+  // get statement by coach id and client id
+    getAccountStatementByCoachIdAndClientId(id: any){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        client_id: id,
+        coachId: this.coachData.coach.id,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByCoachIdAndClientId(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatement = response.body.data;
+          console.log('Account statement by coach and client id', this.accountStatement);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
+  // get statement by org id
+    getAccountStatementByOrgId(){
+      const options = {
+        page: 1,
+        per_page: this.itemsPerPage,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        orgId: this.coachData.organization.id,
+      };
+      this.loading = true;
+      this.ClientService. getAccountStatementByOrgId(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.accountStatement = response.body.data;
+          console.log('Account statement by organization', this.accountStatement);
+        }, (error) => {
+          console.log(error);
+        }
+      )
+    }
 
     savePdf() {
       let DATA: any = document.getElementById('invoice');
@@ -192,42 +290,44 @@ export class AccountStatementComponent implements OnInit {
       );
     }
     applyFilter() {
-      switch (this.selectedPeriod) {
-        case '1':
+      switch (this.statementPeriod) {
+        case 'PerMonth':
           // apply filter for 1 month
+          if (this.coachData.coach) {
+            this.getAccountStatementByCoachIdAndStatementPeriod();
+          } else if (this.coachData.organization) {
+            this.getAccountStatementByOrgIdAndStatementPeriod();
+          } else if (this.coachData.client) {
+            this.getAccountStatementByClientIdAndStatementPeriod(this.coachData.client.id);
+          }
           break;
-        case '2':
+        case 'Per6Months':
           // apply filter for 6 months
+          if (this.coachData.coach) {
+          this.getAccountStatementByCoachIdAndStatementPeriod();
+          } else if (this.coachData.organization) {
+            this.getAccountStatementByOrgIdAndStatementPeriod();
+          } else if (this.coachData.client) {
+            this.getAccountStatementByClientIdAndStatementPeriod(this.coachData.client.id);
+          }
           break;
-        case '3':
+        case 'PerYear':
           // apply filter for 1 year
+          if (this.coachData.coach) {
+          this.getAccountStatementByCoachIdAndStatementPeriod();
+          } else if (this.coachData.organization) {
+            this.getAccountStatementByOrgIdAndStatementPeriod();
+          } else if (this.coachData.client) {
+            this.getAccountStatementByClientIdAndStatementPeriod(this.coachData.client.id);
+          }
           break;
         default:
           // no filter applied
+    
           break;
       }
     }
-    // applyFilter() {
-    //   const now = new Date();
-    //   const startDate = new Date(now);
-    //   if (this.selectedPeriod === '1') { // 1 month
-    //     startDate.setMonth(now.getMonth() - 1);
-    //   } else if (this.selectedPeriod === '2') { // 6 months
-    //     startDate.setMonth(now.getMonth() - 6);
-    //   } else if (this.selectedPeriod === '3') { // 1 year
-    //     startDate.setFullYear(now.getFullYear() - 1);
-    //   }
-    //   const endDate = now;
-      
-    //   const filteredPayments = this.payments.filter(payment => {
-    //     const paymentDate = new Date(payment.createdAt);
-    //     return paymentDate >= startDate && paymentDate <= endDate;
-    //   });
-    
-    //   // do something with filteredPayments
-    // }
-    
-  
-  
   }
+  
+
   

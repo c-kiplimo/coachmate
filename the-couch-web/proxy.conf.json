@@ -8,7 +8,7 @@
     "target": "http://localhost:10290",
 
 
-  //  # "target": "http://51.15.141.206:10290",
+    // "target": "http://51.15.141.206:10290",
 
     "secure": false
   }

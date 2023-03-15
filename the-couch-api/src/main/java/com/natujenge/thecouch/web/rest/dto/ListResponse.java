@@ -12,4 +12,14 @@ public class ListResponse {
     private int totalPages;
     private int totalItemsInPage;
     private long totalElements;
+
+    public ListResponse() {
+
+    }
+
+    public void setPage(int page) {
+    }
+
+    public void setPerPage(int perPage) {
+    }
 }

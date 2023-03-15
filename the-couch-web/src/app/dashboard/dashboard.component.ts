@@ -81,6 +81,7 @@ Feedbacks: any;
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
+    window.scroll(0, 0);
    
  
 
@@ -88,6 +89,7 @@ Feedbacks: any;
       console.log('ORGANIZATION');
       this.getUserOrg();
       this.getOrgClients();
+      window.scroll(0, 0);
 
       this.OrgData = sessionStorage.getItem('Organization');
       this.orgSession = JSON.parse(this.OrgData);
@@ -102,13 +104,17 @@ Feedbacks: any;
       this.getUser();
      
       this.getClientByEmail();
+      window.scroll(0, 0);
       
     }
 
   }
-  getOrgFeedbacks(orgId: any) {
+  reload() {
+    location.reload();
+  }
+  getCoachFeedbacks(coachId: any) {
     this.loading = true;
-    this.clientService.getCoachFeedbacks(orgId).subscribe(
+    this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
         this.Feedbacks = response;
@@ -126,11 +132,11 @@ Feedbacks: any;
     );
 
   }
-
-  getCoachFeedbacks(coachId: any) {
+  
+  getOrgFeedbacks(orgId: any) {
   
     this.loading = true;
-    this.clientService.getOrgFeedbacks(coachId).subscribe(
+    this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
         this.Feedbacks = response;

@@ -79,10 +79,10 @@ export class SignInComponent implements OnInit {
         }
       },
       error: (error: any): any => {
-        // this.toastrService.error(
-        //   'wrong Username/Password',
-        //   'Failled to log in'
-        // );
+        this.toastrService.error(
+          'wrong Username/Password',
+          'Failled to log in'
+        );
 
         return (this.errorMessage = error.error.message);
       },

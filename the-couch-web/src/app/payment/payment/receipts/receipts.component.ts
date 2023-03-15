@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { ParseSourceFile } from '@angular/compiler';
 
 @Component({
   selector: 'app-receipts',
@@ -21,8 +22,7 @@ import jsPDF from 'jspdf';
 })
 
 export class ReceiptsComponent implements OnInit {
-payment: any;
-payments: any;
+payments: any = [];
 loadingpayment: any;
 loading = false;
 itemsPerPage = 20;
@@ -34,6 +34,7 @@ coachSessionData: any;
 coachData: any;
 userRole: any;
 ClientId: any;
+payment: any;
 
   constructor(
     private ClientService: ClientService,
@@ -102,17 +103,24 @@ ClientId: any;
 
     this.loading = true;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
+    
       (response) => {
-        this.loading = false;
-        this.payments = response.body;
-        console.log('payments', this.payments);
+        if(response.body.extPaymentRef!==null){
+          this.loading = false;
+          this.payments = response.body;
+          console.log('payments', this.payments);
+        }
       }, (error) => {
         console.log(error);
       }
     )
+  }
+  
 
 
-
+  viewInvoice(payment: any): void {
+    this.payment = payment;
+    console.log(this.payment);
   }
   savePdf() {
     let DATA: any = document.getElementById('invoice');

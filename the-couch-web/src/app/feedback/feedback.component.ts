@@ -10,13 +10,14 @@ import { style, animate, transition, trigger } from '@angular/animations';
 export class FeedbackComponent implements OnInit {
 
   loading = false;
-  Feedbacks: any;
+  feedbacks: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
 
   OrgData: any;
   orgSession: any;
+  feedback: any;
 
 
   constructor(
@@ -35,36 +36,42 @@ export class FeedbackComponent implements OnInit {
       this.orgSession = JSON.parse(this.OrgData);
       console.log(this.orgSession);
 
-      this.getOrgFeedbacks(this.orgSession.id);
+    
   } else if (this.userRole == 'COACH') {
     this.getCoachFeedbacks(this.coachData.coach.id);
   }
 }
 
-  getOrgFeedbacks(orgId: any) {
+
+
+  getCoachFeedbacks(coachId: any) {
     this.loading = true;
-    this.apiService.getCoachFeedbacks(orgId).subscribe(
+    this.apiService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
-        console.log(this.Feedbacks);
+        this.feedbacks = response;
+        console.log(this.feedbacks);
         this.loading = false;
       }
     );
 
   }
-
-  getCoachFeedbacks(coachId: any) {
+  // get organization feedbacks
+  getOrgFeedbacks(orgId: any) {
     this.loading = true;
-    this.apiService.getOrgFeedbacks(coachId).subscribe(
+    this.apiService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
-        console.log(this.Feedbacks);
+        this.feedbacks = response;
+        console.log(this.feedbacks);
         this.loading = false;
       }
     );
 
+  }
+  viewComment(feedback: any): void {
+    this.feedback = feedback;
+    console.log(this.feedback);
   }
 
 

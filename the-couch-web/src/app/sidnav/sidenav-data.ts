@@ -17,8 +17,9 @@ export const navbarData = {
     },
     {
         routeLink: 'schedules',
-        icon: 'fal fa-clock',
+        icon: '	fas fa-calendar-check',
         label: 'Schedules'
+        
     },
     {
         routeLink: 'contracts',
@@ -42,8 +43,13 @@ export const navbarData = {
     },
     {
         routeLink: 'support',
-        icon: 'fal fa-phone',
+        icon: 'fa-solid fa-headset',
         label: 'Support'
+    },
+    {
+        routeLink: 'settings',
+        icon: 'fa-solid fa-gear',
+        label: 'Settings'
     },
 ],
 navDataforOrg: [
@@ -79,8 +85,13 @@ navDataforOrg: [
     },
     {
         routeLink: 'support',
-        icon: 'fal fa-phone',
+        icon: 'fa-solid fa-headset',
         label: 'Support'
+    },
+    {
+        routeLink: 'settings',
+        icon: 'fa-solid fa-gear',
+        label: 'Settings'
     },
 ],
 navDataforClient: [
@@ -97,7 +108,7 @@ navDataforClient: [
   
     {
         routeLink: 'schedules',
-        icon: 'fal fa-clock',
+        icon: '	fas fa-calendar-check',
         label: 'Schedules'
     },
     {
@@ -113,7 +124,7 @@ navDataforClient: [
  
     {
         routeLink: 'support',
-        icon: 'fal fa-phone',
+        icon: 'fa-solid fa-headset',
         label: 'Support'
     },
 ]

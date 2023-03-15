@@ -16,6 +16,7 @@ export class BodyComponent implements OnInit {
   @Input() screenWidth = 0;
 
   getBodyClass(): string {
+    window.scroll(0, 0);
     let styleClass = '';
     if(this.collapsed && this.screenWidth > 768) {
       styleClass = 'body-trimmed';

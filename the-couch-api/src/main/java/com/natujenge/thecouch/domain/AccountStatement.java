@@ -3,7 +3,6 @@ package com.natujenge.thecouch.domain;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -30,6 +29,9 @@ public class AccountStatement {
 
     @Column(name = "balance_after")
     private float balanceAfter;
+    @Column(name = "created_at")
+    @UpdateTimestamp
+    private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
 

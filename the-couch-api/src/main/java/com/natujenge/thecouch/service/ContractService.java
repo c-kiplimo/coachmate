@@ -179,10 +179,14 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
+        notification.setCoach(coach);
+        notification.setClient(client);
+        notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);
+        log.info("Notification saved");
         return contract1;
     }
 

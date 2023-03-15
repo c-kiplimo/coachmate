@@ -2,6 +2,7 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
 import com.natujenge.thecouch.repository.ClientRepository;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -76,7 +78,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
     }
 
-    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance) {
+    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance,float amountIn) {
 
         // obtain recent record on billing account
 
@@ -100,7 +102,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
 
         // Calculate Balances
-        float paymentBalance;
+        float paymentBalance =0f;
         float walletBalance = 0f;
         if (clientBalance >= amountBilled){
             paymentBalance = clientBalance - amountBilled;
@@ -113,6 +115,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
             walletBalance = 0f;
             clientBillingAccount.setAmountBilled(paymentBalance);
         }
+        accountStatementService.updateAccountStatement(coach, client,amountIn,amountBilled,paymentBalance);
         clientBillingAccountRepository.save(clientBillingAccount);
         return walletBalance ;
     }
@@ -143,6 +146,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
         clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
+        clientWallet.setPaymentDate(LocalDateTime.now());
+
 
 
         clientWallet.setClient(client);
@@ -161,28 +166,12 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // update billing account
         // return walletBalance
         Float walletBalanceAfter = updateBillingAccountOnPayment(
-                coach,client,walletBalance);
-
-
+                coach,client,walletBalance,paymentRequest.getAmount());
         clientWallet.setWalletBalance(walletBalanceAfter);
-        clientWallet.setDescription("New payment entry");
-        WalletService walletService = new WalletService();
-        ClientBillingAccountService clientBillingAccountService = new ClientBillingAccountService();
-        ClientBillingAccount clientBillingAccount = clientBillingAccountService.getClientBillingAccountByCoachIdAndClientId(coach.getId(), client.getId());
 
-        float balanceBefore = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
-                0f;
-
-        log.info("balanceBefore:{}",balanceBefore);
-        float amountIn = (clientWallet.getAmountDeposited() != null)?clientWallet.getAmountDeposited():
-                0f;
-        log.info("amount deposited:{}",amountIn);
-        ;
-        float balanceAfter = (clientBillingAccount.getAmountBilled() != null)?clientBillingAccount.getAmountBilled():
-                0f;
-        log.info("amount billed:{}",balanceAfter);
         //update account statement
-        accountStatementService.updateAccountStatement(coach, client,amountIn,balanceBefore,balanceAfter);
+
+
 
 
         // save wallet
@@ -222,6 +211,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
+        notification.setCoach(coach);
+        notification.setClient(client);
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
 
@@ -317,5 +308,116 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         );
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
+    }
+    // Get all payments by coach Id and statement period
+    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId, StatementPeriod statementPeriod) {
+        log.info("Get account statement by coach Id{} and statement period{}", coachId, statementPeriod);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+        // GET BY STATEMENT PERIOD
+        if (statementPeriod == StatementPeriod.PerMonth) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
+                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.Per6Months) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage=clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
+                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.PerYear) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage= clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
+                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+    }
+    // Get all payments by organization Id and statement period
+    public ListResponse getPaymentsByOrganizationIdAndStatementPeriod(int page, int perPage, Long organizationId, StatementPeriod statementPeriod) {
+        log.info("Get account statement by organization Id{} and statement period{}", organizationId, statementPeriod);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+        // GET BY STATEMENT PERIOD
+        if (statementPeriod == StatementPeriod.PerMonth) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
+                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.Per6Months) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage=clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
+                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.PerYear) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage= clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
+                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+    }
+    // Get all payments by client Id and statement period
+    public ListResponse getPaymentsByClientIdAndStatementPeriod(int page, int perPage, Long clientId, StatementPeriod statementPeriod) {
+        log.info("Get account statement by client Id{} and statement period{}", clientId, statementPeriod);
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+        // GET BY STATEMENT PERIOD
+        if (statementPeriod == StatementPeriod.PerMonth) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
+                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.Per6Months) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage=clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
+                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else if (statementPeriod == StatementPeriod.PerYear) {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage= clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
+                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        } else {
+            Page<ClientWalletDto> paymentPage;
+            paymentPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
+            return new ListResponse( paymentPage.getContent(),
+                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
     }
 }
