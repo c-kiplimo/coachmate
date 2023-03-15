@@ -14,7 +14,6 @@ import { UserComponent } from './user/user.component';
 import { ClientsComponent } from './clients/clients.component';
 
 import { AddClientPageComponent } from './add-client-page/add-client-page.component';
-import { AddCoachPageComponent } from './add-coach-page/add-coach-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SessionsComponent } from './sessions/sessions.component';
@@ -75,7 +74,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     BodyComponent,
     ClientsComponent,
     AddClientPageComponent,
-    AddCoachPageComponent,
     SignUpComponent,
     SignInComponent,
     SessionsComponent,
