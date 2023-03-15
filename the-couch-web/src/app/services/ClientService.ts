@@ -77,9 +77,11 @@ export class ClientService {
     }
 
 
-    editClient(id: any, client: any): Observable<any> {
-        client.id = id;
-        return this.http.put(`${this.baseURL}clients/${id}`, client)
+    editClient(clientToBeUpdated:any,id: any): Observable<any> {
+        console.log("edit client reached")
+        console.log("client  to be updated here",clientToBeUpdated)
+        console.log("client id here",id)
+        return this.http.put(`${this.baseURL}clients/${id}`, clientToBeUpdated)
     }
 //service to change client status
 
@@ -229,6 +231,48 @@ recordPayment(payment: any): Observable<any> {
         params: options,
         observe:'response'})
   }
+  getPaymentsByClientIdAndCoachId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByClientIdAndCoachId`,{
+        params: options,
+        observe:'response'})
+  }
+  getPaymentsByOrgId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByOrgId`,{
+        params: options,
+        observe:'response'})
+  }
+  getPaymentsByOrgIdAndClientId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByOrgIdAndClientId`,{
+        params: options,
+        observe:'response'})
+  }
+  // get payment based on user logged in
+  getPaymentsByUser(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet`,{
+        params: options,
+        observe:'response'})
+  }
+   //getPaymentByCoachIdAndSelectedPeriod
+    getPaymentsByCoachIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+//getPaymentByClientIdAndSelectedPeriod
+    getPaymentsByClientIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByClientIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+            
+      }
+//getPaymentByOrgIdAndSelectedPeriod
+    getPaymentsByOrgIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByOrganizationIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+
+
   //get statement by coach id
     getAccountStatementByCoachId(options: any): Observable<any> {
         return this.http.get(`${this.baseURL}statement/filterByCoachId`,{
@@ -265,7 +309,20 @@ recordPayment(payment: any): Observable<any> {
             params: options,
             observe:'response'})
       }
-      //filterByCoachIdAndStatementPeriod
+      //getAccountStatementByClientIdAndSelectedPeriod
+      getAccountStatementByClientIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByClientIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+      //getAccountStatementByOrgIdAndSelectedPeriod
+      getAccountStatementByOrgIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByOrgIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+
+
       //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(
@@ -298,7 +355,7 @@ recordPayment(payment: any): Observable<any> {
   }
   getNotificationsbyCoachId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-session-id',
+      this.baseURL + '/notification/filter-by-coach-id',
       {
         params: options,
         observe: 'response',
@@ -308,6 +365,15 @@ recordPayment(payment: any): Observable<any> {
   getNotificationsbyClientId(options: any): Observable<any> {
     return this.http.get<any>(
       this.baseURL + '/notification/filter-by-client-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getAllNotifications(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification',
       {
         params: options,
         observe: 'response',

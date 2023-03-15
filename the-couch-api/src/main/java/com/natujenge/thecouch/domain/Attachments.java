@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Table(name = "tbl_sessionResources")
@@ -16,19 +17,20 @@ public class Attachments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String links;
-    private String uploads;
+
+    private String link;
+    private byte[]  file;
 
     // Management
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 
     private String createdBy;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
 
     @OneToOne
     @JoinColumn(name = "session_id")
@@ -45,4 +47,6 @@ public class Attachments {
     @ManyToOne
     @JoinColumn(name = "org_id_id")
     Organization organization;
+
+
 }

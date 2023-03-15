@@ -28,7 +28,7 @@
               />
             </div>
 <div class="col-3">
-    <button class="btn button-filter  search-bar" (click)="getSearchedClient(1)">
+    <button class="btn button-filter  search-bar" (click)="getClients()" (click)="getOrgClients()">
               <i class="fa fa-search" aria-hidden="true"></i>
               Search
             </button>
@@ -143,7 +143,7 @@
           <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
           value="{{ clientToBeUpdated?.reason}}">
         </div>
-        <!-- <div class="input-group mb-3">
+        <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="PaymentMode">Payment Mode</label>
           </div>
@@ -167,7 +167,7 @@
             <option value="CORPORATE">CORPORATE</option>
             <option value="GROUP">GROUP</option>
           </select>
-        </div> -->
+        </div>
        </form>
       </div>
       <div class="modal-footer">

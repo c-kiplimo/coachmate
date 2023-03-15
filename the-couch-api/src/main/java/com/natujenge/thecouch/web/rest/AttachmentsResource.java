@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,21 +23,25 @@ public class AttachmentsResource {
     @Autowired
     AttachmentsService attachmentsService;
     @PostMapping
-    ResponseEntity<?> createNewAttachment(@RequestBody Attachments attachments,
-                                          @RequestParam(name = "sessionId",required = false) Long sessionId,
-                                          @RequestParam(name = "coachId") Long coachId,
+    public ResponseEntity<?> createNewAttachment(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("link") String link,
+            @RequestParam(name = "sessionId",required = false) Long sessionId,
+            @RequestParam(name = "coachId") Long coachId,
+            @RequestParam(name = "orgIdId", required = false) Long orgIdId,
+            @AuthenticationPrincipal User userDetails) {
 
-                                          @RequestParam(name = "orgIdId", required = false) Long orgIdId,
+        log.info("Request to create new attachment");
 
-                                          @AuthenticationPrincipal User userDetails) {
-        log.info("request to create feedback");
         try {
-            attachmentsService.createNewAttachment(sessionId, coachId, orgIdId, attachments);
-            return new ResponseEntity<>(new RestResponse(false,"Attachment Received Successfully"), HttpStatus.CREATED);
+            attachmentsService.createNewAttachment(file, link, sessionId, coachId, orgIdId);
+            return new ResponseEntity<>(new RestResponse(false, "Attachment received successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     // get attachment by session_id
     @GetMapping("/get-by-session-id")
     public ResponseEntity<?> getAttachmentBySessionId(

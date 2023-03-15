@@ -1,18 +1,11 @@
 <app-user></app-user>
 <div class="container-fluid mt-3 mb-5">
-    <div class="d-lg-block d-none sticky-top mb-3">
-      <div class="d-flex justify-content-between page-title p-3">
-      
-      </div>
-    </div>
-    <div class="show-ms sticky-top">
-      <div class="d-flex justify-content-between p-3 mt-5">
-
-       
+    <div class="d-lg-block d-none mb-3 justify-content-center">
+      <div class="d-flex justify-content-center page-title p-3">
+        <h2 class="page-title text-center">Settings</h2>
       </div>
     </div>
     <div class="container">
-      <!-- <h2 class="page-title">Settings</h2> -->
       <h5 class="section-title mb-3">Account details</h5>
   
       <div class="card card-table">
@@ -26,7 +19,7 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">Business name</label>
               <input
-                [(ngModel)]="notificationForm.emailDisplayName"
+              value="{{businessName}}"
                 type="text"
                 disabled
                 class="form-control select-dropdown"
@@ -37,7 +30,7 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">Phone number</label>
               <input
-                value="{{user}}"
+                value="{{coachPhoneNumber}}"
                 type="text"
                 disabled
                 class="form-control select-dropdown"
@@ -125,7 +118,7 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">SMS display name</label>
               <input
-                [(ngModel)]="notificationForm.smsDisplayName"
+              value="{{businessName}}"
                 type="text"
                 disabled
                 class="form-control select-dropdown"
@@ -137,8 +130,9 @@
             <div class="d-flex justify-content-between mb-3">
               <label for="displayName">Email display name</label>
               <input
-                [(ngModel)]="notificationForm.emailDisplayName"
+              value="{{businessName}}"
                 type="text"
+                disabled
                 class="form-control select-dropdown"
                 aria-describedby="emailHelp"
                 name="emailDisplayName"
@@ -159,8 +153,8 @@
                 <input
                   type="checkbox"
                   [disabled]="!notificationForm.notificationEnable"
-                  [checked]="notificationForm.newConractEnable"
-                  [(ngModel)]="notificationForm.newConractEnable"
+                  [checked]="notificationForm.newContractEnable"
+                  [(ngModel)]="notificationForm.newContractEnable"
                   name="newSession"
                 />
                 <span

@@ -12,7 +12,7 @@ import { ClientService } from '../services/ClientService';
 })
 export class SettingsComponent implements OnInit {
 
-  orderTemplateTypes = [
+  notificationTemplateTypes = [
     'NEW_CONTRACT ',
     'PARTIAL_BILL_PAYMENT',
     'FULL_BILL_PAYMENT',
@@ -24,9 +24,9 @@ export class SettingsComponent implements OnInit {
   notificationForm: any;
   accountDetailsform:any;
   saveChanges = true;
-  message: string = 'NEW ORDER';
+  message: string = 'NEW CONTRACT';
   businessName!: any;
-  userNotificationSettings: any;
+  NotificationSettings: any;
   coachPhoneNumber:any;
   coachEmail:any;
   backIcon = faChevronLeft;
@@ -49,12 +49,13 @@ export class SettingsComponent implements OnInit {
     this.user =  JSON.parse(
       sessionStorage.getItem('user') || '{}'
     );
-    this.userNotificationSettings = JSON.parse(
+    this.NotificationSettings = JSON.parse(
       sessionStorage.getItem('notificationSettings') || '{}'
     );
     this.coachEmail=  this.user.email; 
-    this.coachPhoneNumber= this.userNotificationSettings.msisdn;
-    this.notificationForm = this.userNotificationSettings;
+    this.coachPhoneNumber= this.user.msisdn;
+    this.businessName= this.user.coach.businessName;
+    this.notificationForm = this.NotificationSettings;
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);

@@ -24,23 +24,17 @@ public class AccountStatementService {
     ClientWalletRepository walletRepository;
     private StatementPeriod statementPeriod;
 
-
-    // create new account statement
-    public void createAccountStatement(AccountStatement accountStatement) {
-        // save account statement
-        accountStatementRepository.save(accountStatement);
-    }
     // update account statement
-    public void updateAccountStatement(Coach coach, Client client, float amountIn, float balanceBefore,
-                                       float balanceAfter) {
+    public void updateAccountStatement(Coach coach, Client client, float amountIn, float walletBalance,
+                                       float amountBilled) {
         log.info("Update account statement for client {} by coach {}", client.getId(), coach.getId());
 
         AccountStatement accountStatement = new AccountStatement();
         accountStatement.setCoach(coach);
         accountStatement.setClient(client);
         accountStatement.setAmountIn(amountIn);
-        accountStatement.setBalanceBefore(balanceBefore);
-        accountStatement.setBalanceAfter(balanceAfter);
+        accountStatement.setBalanceBefore(amountBilled);
+        accountStatement.setBalanceAfter(walletBalance);
         accountStatement.setLastUpdatedBy("System");
         accountStatement.setLastUpdatedAt(LocalDateTime.now());
         accountStatement.setDescription("Amount deposited");

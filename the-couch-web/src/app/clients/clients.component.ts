@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ClientService } from '../services/ClientService';
 import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-clients',
@@ -20,15 +21,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ClientsComponent implements OnInit {
   clientId: any;
-  editedClient: any;
-getSearchedClient(arg0: number) {
-throw new Error('Method not implemented.');
-}
-  
+  editedClient: any;  
 salesData: any;
-getAllCustomers(arg0: number) {
-throw new Error('Method not implemented.');
-}
   loading = false;
   itemsPerPage = 20;
   filters: any = {
@@ -41,6 +35,7 @@ throw new Error('Method not implemented.');
 
   constructor(private ClientService: ClientService, 
     private router: Router,
+    private toastrService: ToastrService,
     private formbuilder: FormBuilder,) { }
   
   Clients!: any;
@@ -96,6 +91,7 @@ getOrgClients(){
     per_page: this.itemsPerPage,
     status: this.filters.status,
     search: this.filters.searchItem,
+ 
   };
   const id = this.coachData.id;
   this.loading = true;
@@ -150,6 +146,8 @@ getOrgClients(){
         });
     });
 }
+@ViewChild('editClientModal', { static: false })
+editClientModal!: ElementRef;  
   editClient(client:any){
     this.clientToBeUpdated = client;
 
@@ -170,14 +168,18 @@ getOrgClients(){
   }
 
   updateClientDetails(id:any){
+    this.clientToBeUpdated = this.updateClient.value;
     console.log(this.clientToBeUpdated)
     console.log(id)  
     this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
       (data) => {
-        this.loading = false;
-        this.editedClient = data.body;
-        console.log(this.editedClient)
-        console.log('clients',this.editedClient)
+        console.log(data)
+        this.toastrService.success('Client Updated', 'Success!');
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+        this.editClientModal.nativeElement.classList.remove('show');
+        this.editClientModal.nativeElement.style.display = 'none';
 
       }, (error) => {
         console.log(error)

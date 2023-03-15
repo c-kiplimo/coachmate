@@ -35,17 +35,10 @@ import { ApiService } from '../services/ApiService';
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
   status!: string;
-
   orgId: any;
   organizationId: any;
   feedback: any;
-
-deleteSession() {
-throw new Error('Method not implemented.');
-}
-ConductedSession() {
-throw new Error('Method not implemented.');
-}
+  notification: any;
 addSessionForm: any;
 modalTitle: any;
 currentSessionName: any;
@@ -58,6 +51,7 @@ currentgoals: any;
 currentSession: any;
 feedbacks:any = [];
 attachments:any = [];
+attachment: any;
 coachId: any;
 loadingsession: any;
 client: any;
@@ -67,8 +61,7 @@ client: any;
   rightIcon = faChevronRight;
   backIcon = faChevronLeft;
   alertIcon = faBell;
-  notifications!: any;
-  notification!: any;
+  notifications!: any[];
   searching = false;
   currentTab = 'feedback';
   loadingOrder = false;
@@ -158,8 +151,7 @@ client: any;
     if(this.userRole == 'COACH'){
       this.sessionId = this.route.snapshot.params['sessionId'];
       console.log(this.sessionId);
-      this.getFeedback();
-      this. getAttachment()
+    
     }
 
    this.route.params.subscribe((params) => {
@@ -233,13 +225,29 @@ client: any;
       };
       this.clientService.getAttachment(params).subscribe(
         (res: any) => {
-          this.feedbacks = res.body;
-          console.log("attachment is here",this.feedbacks);
+          this.attachments = res.body;
+          console.log("attachment is here",this.attachments);
         },
         (error) => {
           console.log(error);
         }
       );
+    }
+    getNotifications(): void {
+      this.searching = true;
+      this.notifications = [];
+      const options = {
+         sessionId: this.sessionId,
+         coachId :this.coachData.id,
+        page: 1,
+        per_page: 10,
+      };
+  
+      this.clientService.getAllNotifications(options).subscribe((res: any) => {
+        this.notifications = res.body;
+        console.log('notification ni', this.notifications);
+        this.searching = false;
+      });
     }
   setCurrectSession(session: any) {
     this.currentSession = session;
@@ -357,7 +365,6 @@ client: any;
         this.toastrService.success('Feedback Added Successfully');
         this.feebackForm.nativeElement.classList.remove('show');
         this.feebackForm.nativeElement.style.display = 'none';
-        this.getFeedback();
       },
       (error) => {
         console.log(error);
@@ -387,7 +394,6 @@ client: any;
         this.toastrService.success('Attachment Added Successfully');
         this. attachmentForm.nativeElement.classList.remove('show');
         this. attachmentForm.nativeElement.style.display = 'none';
-        this.getFeedback();
       },
       (error) => {
         console.log(error);
@@ -399,9 +405,7 @@ client: any;
 
 
 
-  goToItem(type: any, entityObj: any): void {
-    this.router.navigate([type, entityObj.id]);
-  }
+
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -422,32 +426,11 @@ client: any;
       this.coachId = this.sessions.coach.id;
       console.log("coach id",this.coachId);
       this.createdBy = this.sessions.client.fullName;
-      this.getNotifications();
    
      
     });
 
    
-  }
-
-
-  navigateToSessionView(id: any) {
-    console.log(id);
-    this.router.navigate(['sessionView', id]);
-  }
-  getNotifications(navigate?: boolean): void {
-    this.searching = true;
-    this.notifications = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-    };
-
-    // this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
-    //   this.notifications = res.body.data;
-    //   console.log('notification ni', this.notifications);
-    //   this.searching = false;
-    // });
   }
   viewNotification(notification: any): void {
     this.notification = notification;

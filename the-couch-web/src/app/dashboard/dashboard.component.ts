@@ -109,6 +109,9 @@ Feedbacks: any;
     }
 
   }
+  reload() {
+    location.reload();
+  }
   getCoachFeedbacks(coachId: any) {
     this.loading = true;
     this.clientService.getCoachFeedbacks(coachId).subscribe(

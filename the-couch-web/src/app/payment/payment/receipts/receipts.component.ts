@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { ParseSourceFile } from '@angular/compiler';
 
 @Component({
   selector: 'app-receipts',
@@ -102,18 +103,21 @@ payment: any;
 
     this.loading = true;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
+    
       (response) => {
-        this.loading = false;
-        this.payments = response.body;
-        console.log('payments', this.payments);
+        if(response.body.extPaymentRef!==null){
+          this.loading = false;
+          this.payments = response.body;
+          console.log('payments', this.payments);
+        }
       }, (error) => {
         console.log(error);
       }
     )
-
-
-
   }
+  
+
+
   viewInvoice(payment: any): void {
     this.payment = payment;
     console.log(this.payment);

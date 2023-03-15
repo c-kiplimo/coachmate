@@ -186,6 +186,7 @@ public class ContractService {
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);
+        log.info("Notification saved");
         return contract1;
     }
 
