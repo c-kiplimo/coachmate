@@ -5,7 +5,9 @@ import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.ContractService;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.AllArgsConstructor;
@@ -97,7 +99,36 @@ public class ContractResource {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
+    ResponseEntity<?> updateContractStatus(
+                                         @RequestParam("status") String contractStatus,
+                                         @PathVariable Long id,
+                                         @AuthenticationPrincipal User userDetails) {
+        log.info("Request to update contract status to {}", contractStatus);
+            try {
+                Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+                Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
+                        userDetails.getCoach().getOrganization().getId();
+                Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
 
+                if (organizationId != null) {
+                    contractService.updateContractStatusByOrganizationId
+                            (id,contractStatus,organizationId);
+                } else if (coachId != null) {
+                    contractService.updateContractStatusByCoachId
+                            (id,contractStatus, coachId);
+                } else {
+                    contractService.updateContractStatusByClientId
+                            (id,contractStatus, clientId);
+                }
+            return new ResponseEntity<>(new RestResponse(false, "Contract status set to "+ contractStatus),
+                    HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     // Update a contract
     //    @PutMapping("/{id}")
     //    public ResponseEntity<?> updateContract(@PathVariable("id") Long contractId,

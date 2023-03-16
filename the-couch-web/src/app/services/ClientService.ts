@@ -197,10 +197,10 @@ getCoachFeedbacks(id: any): Observable<any>{
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
 // ATTACHMENT SERVICES
-addAttachment(attachment: any, options: any): Observable<any> {
+addAttachment(formData: any, options: any): Observable<any> {
   return this.http.post<any>(
       this.baseURL + 'attachments',
-      attachment,
+      formData,
       { params: options, observe: 'response' }
     );
 }
