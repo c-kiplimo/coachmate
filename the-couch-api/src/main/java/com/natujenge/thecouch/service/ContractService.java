@@ -1,10 +1,8 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.*;
 
-import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
@@ -12,6 +10,7 @@ import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ContractDto;
+import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
@@ -21,9 +20,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -207,4 +208,84 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new UserNotFoundException("Contract by id " + contractId
                 + " not found"));
     }
+    @Transactional
+    public void updateContractStatusByOrganizationId(Long id, String contractStatus,Long organizationId) {
+        log.info("Changing status of contract {}",id);
+        Optional<Contract> contract = contractRepository.findByIdAndOrganizationId(id,organizationId);
+
+        if (contract.isEmpty()){
+            throw new IllegalStateException("Contract doesn't exist");
+        }
+
+        Contract contract1 = contract.get();
+
+        if (contract1.getContractStatus() == ContractStatus.SIGNED){
+            log.info("Contract {} is  is signed",id);
+            throw new IllegalStateException("Contract is signed");
+        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
+            log.info("Contract {} is  is finished",id);
+            throw new IllegalStateException("Contract is FINISHED");
+
+        } else if (Objects.equals(contractStatus, "SIGN")){
+            contract1.setContractStatus(ContractStatus.SIGNED);
+        }
+        else{
+            contract1.setContractStatus(ContractStatus.FINISHED);
+        }
+        log.info("Contract status updated");
+    }
+    @Transactional
+    public void updateContractStatusByCoachId(Long id, String contractStatus,Long coachId) {
+        log.info("Changing status of contract {}",id);
+        Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,coachId);
+
+        if (contract.isEmpty()){
+            throw new IllegalStateException("Contract doesn't exist");
+        }
+
+        Contract contract1 = contract.get();
+
+        if (contract1.getContractStatus() == ContractStatus.SIGNED){
+            log.info("Contract {} is  is signed",id);
+            throw new IllegalStateException("Contract is signed");
+        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
+            log.info("Contract {} is  is finished",id);
+            throw new IllegalStateException("Contract is FINISHED");
+
+        } else if (Objects.equals(contractStatus, "SIGN")){
+            contract1.setContractStatus(ContractStatus.SIGNED);
+        }
+        else{
+            contract1.setContractStatus(ContractStatus.FINISHED);
+        }
+        log.info("Contract status updated");
+    }
+    @Transactional
+    public void updateContractStatusByClientId(Long id, String contractStatus,Long clientId) {
+        log.info("Changing status of contract {}",id);
+        Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,clientId);
+
+        if (contract.isEmpty()){
+            throw new IllegalStateException("Contract doesn't exist");
+        }
+
+        Contract contract1 = contract.get();
+
+        if (contract1.getContractStatus() == ContractStatus.SIGNED){
+            log.info("Contract {} is  is signed",id);
+            throw new IllegalStateException("Contract is signed");
+        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
+            log.info("Contract {} is  is finished",id);
+            throw new IllegalStateException("Contract is FINISHED");
+
+        } else if (Objects.equals(contractStatus, "SIGN")){
+            contract1.setContractStatus(ContractStatus.SIGNED);
+        }
+        else{
+            contract1.setContractStatus(ContractStatus.FINISHED);
+        }
+        log.info("Contract status updated");
+    }
+
+
 }

@@ -29,8 +29,8 @@
             <li (click)="statusState('SUSPENDED')"><a class="dropdown-item"
               data-bs-toggle="modal" data-bs-target="#suspendclientModal"
               >Suspend</a></li>
-              <!-- <li (click)="statusState('CLOSED')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a></li> -->
+              <li (click)="statusState('CLOSED')"><a class="dropdown-item"
+                data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a></li>
           </ul>
       </div>
      
@@ -448,7 +448,7 @@ aria-hidden="true"
         clients.firstName + " " + clients.lastName | titlecase
       }}</span>
     </div>
-    <!-- <form [formGroup]="activateClientForm">
+    <form [formGroup]="activateClientForm">
       <div class="mb-3">
         <label for="exampleInputEmail1">narration</label>
         <textarea
@@ -461,7 +461,7 @@ aria-hidden="true"
         >
         </textarea>
       </div>
-    </form> -->
+    </form>
   </div>
   <div class="modal-footer">
     <button

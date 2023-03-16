@@ -187,8 +187,8 @@
           <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
-            No attachments Found.
+          <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
+            No feedbacks Found.
           </p>
       </div>
       </div>
@@ -241,7 +241,7 @@
             <th coslpan="1">Details</th>
           </thead>
           <tbody>
-            <tr *ngFor="let attachment of attachments">
+            <tr *ngFor="let attachment of attachmentss">
               <td>{{ attachment.id }}</td>
               <td>{{ attachment.createdAt | date : "MMM d, y " }}</td>
               <td>{{ attachment.links }}</td>
@@ -260,7 +260,7 @@
         <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
           <div class="donut multi"></div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+        <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
           No attachment Found.
         </p>
       </div>
@@ -972,41 +972,78 @@ aria-hidden="true"
  aria-hidden="true"
  >
  <div class="modal-dialog modal-lg">
- <div class="modal-content">
-   <div class="modal-header">
-     <h1 class="modal-title fs-5" id="exampleModalLabel">
-       Attachments
-     </h1>
- 
-     <button
-       type="button"
-       class="btn-close btn-close-white"
-       data-bs-dismiss="modal"
-       aria-label="Close"
-     ></button>
-   </div>
-   <div>
-    <label for="uploads">Upload:</label>
-    <input type="file">
-   </div>
-   <div>
-    <label for="uploads">Links:</label>
-    <input type="text">
-   </div>
-   <div class="modal-footer">
-     <button type="button" 
-     class="btn btn-secondary" 
-     data-bs-dismiss="modal"
-     >
-       Close
-     </button>
-     <button type="button" class="btn btn-success"
-     (click)="addAttachment()"
-     >add attachments</button>
-   </div>
- </div>
- </div>
- </div> 
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Attachments</h1>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <form (submit)="addAttachment()">
+
+    <section>
+      <h3>Links</h3>
+      <div class="row">
+        <div class="col">
+          <input [(ngModel)]="Objectives.objective"
+          type="text"
+          class="form-control"
+          placeholder="Add link"
+          formControlName="objectives"
+        />
+        </div>
+              <div class="col">
+                <button
+                type="button"
+                class="btn btn-success"
+                (click)="addObjective()"
+              >
+             Add link
+              </button>
+              </div>      
+
+      </div>
+          <div class="mb-3">
+          <ol>
+            <li *ngFor="let obj of objectives; index as i">{{ obj }} 
+              <button  (click)="removeObjective(i)"  type="button">
+                <i 
+             role="button"
+              class="fa-solid fa-trash-can p-1">
+             </i>Delete
+            </button>
+            </li>
+          </ol>
+            </div>
+    </section>
+   <section>
+    <h3>Files</h3>
+    <div class="mb-3">
+      <input 
+      type="file" 
+      id="fileInput" 
+      multiple (change)="onFileSelected($event)"
+      placeholder="Add file"
+      >
+      <button  class="btn btn-success" type="button" (click)="addFile()">Add file</button>
+    </div>
+    <div class="mb-3">
+      <ol>
+    <li *ngFor="let file of files; let i = index">
+      <span>{{ file.name }}</span>
+      <button type="button" (click)="removeFile(i)">Remove</button>
+    </li>
+      </ol>
+    </div>
+   </section>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" (click)="addAttachment()">add attachment</button>
+        </div>
+      </form>
+      
+  </div>
+</div>
+</div>
+
  <!-- attachment details modal -->
 <div
 class="modal fade"
