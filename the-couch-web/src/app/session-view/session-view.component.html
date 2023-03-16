@@ -1001,15 +1001,17 @@ aria-hidden="true"
               </div>      
 
       </div>
+
           <div class="mb-3">
           <ol>
             <li *ngFor="let obj of objectives; index as i">{{ obj }} 
+              
               <button  (click)="removeObjective(i)"  type="button">
                 <i 
              role="button"
               class="fa-solid fa-trash-can p-1">
              </i>Delete
-            </button>
+            </button> 
             </li>
           </ol>
             </div>

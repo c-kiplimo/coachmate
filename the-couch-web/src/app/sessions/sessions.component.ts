@@ -90,6 +90,7 @@ export class SessionsComponent implements OnInit {
   getClientSessions(id: any,page: number) {
     this.sessions = [];
     this.loading = true;
+    
 
     window.scroll(0, 0);
     this.page = page;
@@ -98,6 +99,7 @@ export class SessionsComponent implements OnInit {
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.search,
+      clientId: id,
     };
     this.apiService.getClientSessions(options).subscribe(
       (response: any) => {

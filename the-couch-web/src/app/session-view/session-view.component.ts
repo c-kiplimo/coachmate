@@ -138,7 +138,7 @@ attachmentModal!: ElementRef;
     if(this.userRole == 'COACH'){
     this.sessionId = this.route.snapshot.params['sessionId'];
     console.log(this.sessionId);
-
+    this.userRole = this.coachData.userRole;
     this.feebackForm = this.formbuilder.group({
       understandingScore: [''],
       emotionalIntelligenceScore: [''],
@@ -156,10 +156,15 @@ attachmentModal!: ElementRef;
     )
 
     }
-    if(this.userRole == 'COACH'){
+    if(this.userRole == 'CLIENT'){
       this.sessionId = this.route.snapshot.params['sessionId'];
+      this.userRole = this.coachData.userRole;
       console.log(this.sessionId);
     
+    }
+    if(this.userRole == 'ORGANIZATION'){
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      this.userRole = this.coachData.userRole;
     }
 
    this.route.params.subscribe((params) => {
@@ -352,10 +357,11 @@ attachmentModal!: ElementRef;
     }
 }
   giveFeedback() {
-
+    console.log(this.feebackForm.value);
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
+      clientId: this.clientId,
     
     };
     console.log(this.feebackForm.value);
@@ -414,11 +420,12 @@ attachmentModal!: ElementRef;
   
 
   addObjective(){
-    
+  
     console.log(this.Objectives);
     this.objectives.push(this.Objectives.objective);
     console.log(this.objectives);
     this.Objectives.objective = '';
+    console.log(this.Objectives);
   }
 
   removeObjective(index: number){

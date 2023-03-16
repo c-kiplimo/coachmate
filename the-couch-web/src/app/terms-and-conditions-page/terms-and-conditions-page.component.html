@@ -120,6 +120,7 @@
     </ol>
     </div>
     <label>
-        <input type="checkbox" [(ngModel)]="agreedToTerms"> I have read and agree to the terms and conditions.
-      </label>
+      <input type="checkbox" [(ngModel)]="agreedToTerms" (ngModelChange)="onCheckboxChange()"> I have read and agree to the terms and conditions.
+    </label>
+    
       <button   [disabled]="!agreedToTerms" (click)="navigateToContractDetail()">Next</button>
