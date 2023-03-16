@@ -81,6 +81,7 @@ Feedbacks: any;
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
+    window.scroll(0, 0);
    
  
 
@@ -88,6 +89,7 @@ Feedbacks: any;
       console.log('ORGANIZATION');
       this.getUserOrg();
       this.getOrgClients();
+      window.scroll(0, 0);
 
       this.OrgData = sessionStorage.getItem('Organization');
       this.orgSession = JSON.parse(this.OrgData);
@@ -102,9 +104,13 @@ Feedbacks: any;
       this.getUser();
      
       this.getClientByEmail();
+      window.scroll(0, 0);
       
     }
 
+  }
+  reload() {
+    location.reload();
   }
   getCoachFeedbacks(coachId: any) {
     this.loading = true;

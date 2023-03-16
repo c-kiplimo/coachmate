@@ -127,4 +127,5 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
     public ClientBillingAccount getClientBillingAccountByCoachIdAndClientId(Long id, Long id1) {
         return clientBillingAccountRepository.findByCoach_idAndClient_id(id,id1);
     }
+
 }

@@ -118,6 +118,10 @@ export class AddClientPageComponent implements OnInit {
         console.log(response);
         this.toastrService.success('Client added!', 'Success!');
         this.router.navigate(['/clients']);
+      },
+      error => {
+        console.log('error here',error);
+        this.toastrService.error
       }
     );
   }

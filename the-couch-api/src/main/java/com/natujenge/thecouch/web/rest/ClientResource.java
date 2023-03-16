@@ -248,6 +248,7 @@ public class ClientResource {
         }
     }
 
+
     @PostMapping(path = "/getClientByEmail")
     ResponseEntity<?> getClientByEmail(@RequestBody ClientRequest clientRequest,
                                        @AuthenticationPrincipal User userDetails) {
@@ -261,6 +262,7 @@ public class ClientResource {
                     "Client could not be fetched"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         }
+
 
 
 

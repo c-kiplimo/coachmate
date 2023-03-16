@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError, tap} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -54,16 +54,34 @@ export class ClientService {
     // CLOSED
     addClient(client: any): Observable<any> {
         console.log(client)
-        return this.http.post(`${this.baseURL}clients`, client)
+        return this.http.post(`${this.baseURL}clients`, client,
+        {observe: 'response'} ).pipe(
+      catchError(this.handleError)
+    );
+    
     } 
+    private handleError(error: HttpErrorResponse) {
+        let errorMessage = 'An error occurred';
+        if (error.error instanceof ErrorEvent) {
+          // Client-side errors
+          errorMessage = error.error.message;
+        } else {
+          // Server-side errors
+          errorMessage = error.error.message;
+        }
+        // Return an observable with a user-facing error message
+        return throwError(errorMessage);
+      }
     suspendClient(clientData: any): Observable<any> {
         return this.http.put(`${this.baseURL}clients`, clientData)
     }
 
 
-    editClient(id: any, client: any): Observable<any> {
-        client.id = id;
-        return this.http.put(`${this.baseURL}clients/${id}`, client)
+    editClient(clientToBeUpdated:any,id: any): Observable<any> {
+        console.log("edit client reached")
+        console.log("client  to be updated here",clientToBeUpdated)
+        console.log("client id here",id)
+        return this.http.put(`${this.baseURL}clients/${id}`, clientToBeUpdated)
     }
 //service to change client status
 
@@ -178,6 +196,19 @@ getOrgFeedbacks(id: any): Observable<any>{
 getCoachFeedbacks(id: any): Observable<any>{
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
+// ATTACHMENT SERVICES
+addAttachment(attachment: any, options: any): Observable<any> {
+  return this.http.post<any>(
+      this.baseURL + 'attachments',
+      attachment,
+      { params: options, observe: 'response' }
+    );
+}
+getAttachment(params:any):Observable<any>{
+  return this.http.get(`${this.baseURL}attachments/get-by-session-id`,{
+      params: params,
+      observe:'response'})
+}
 
 
 
@@ -200,6 +231,48 @@ recordPayment(payment: any): Observable<any> {
         params: options,
         observe:'response'})
   }
+  getPaymentsByClientIdAndCoachId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByClientIdAndCoachId`,{
+        params: options,
+        observe:'response'})
+  }
+  getPaymentsByOrgId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByOrgId`,{
+        params: options,
+        observe:'response'})
+  }
+  getPaymentsByOrgIdAndClientId(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByOrgIdAndClientId`,{
+        params: options,
+        observe:'response'})
+  }
+  // get payment based on user logged in
+  getPaymentsByUser(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet`,{
+        params: options,
+        observe:'response'})
+  }
+   //getPaymentByCoachIdAndSelectedPeriod
+    getPaymentsByCoachIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+//getPaymentByClientIdAndSelectedPeriod
+    getPaymentsByClientIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByClientIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+            
+      }
+//getPaymentByOrgIdAndSelectedPeriod
+    getPaymentsByOrgIdAndSelectedPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}wallet/filterByOrganizationIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+
+
   //get statement by coach id
     getAccountStatementByCoachId(options: any): Observable<any> {
         return this.http.get(`${this.baseURL}statement/filterByCoachId`,{
@@ -236,13 +309,73 @@ recordPayment(payment: any): Observable<any> {
             params: options,
             observe:'response'})
       }
-      //filterByCoachIdAndStatementPeriod
+      //getAccountStatementByClientIdAndSelectedPeriod
+      getAccountStatementByClientIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByClientIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+      //getAccountStatementByOrgIdAndSelectedPeriod
+      getAccountStatementByOrgIdAndStatementPeriod(options: any): Observable<any> {
+        return this.http.get(`${this.baseURL}statement/filterByOrgIdAndStatementPeriod`,{
+            params: options,
+            observe:'response'})
+      }
+
+
       //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(
-      this.baseURL + '/v1/registration/contact',
+      this.baseURL + '/registration/contact',
       message,
       {
+        observe: 'response',
+      }
+    );
+  }
+    //save settings service
+    saveSettings(settingsObject: any): Observable<any> {
+        return this.http.put<any>(
+          this.baseURL + '/settings',
+          settingsObject,
+          { observe: 'response' }
+        );
+      }
+
+  //notification service
+
+  getNotificationsbySessionId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-session-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getNotificationsbyCoachId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-coach-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getNotificationsbyClientId(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification/filter-by-client-id',
+      {
+        params: options,
+        observe: 'response',
+      }
+    );
+  }
+  getAllNotifications(options: any): Observable<any> {
+    return this.http.get<any>(
+      this.baseURL + '/notification',
+      {
+        params: options,
         observe: 'response',
       }
     );
