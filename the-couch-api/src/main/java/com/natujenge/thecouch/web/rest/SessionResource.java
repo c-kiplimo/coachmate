@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.service.SessionService;
@@ -238,5 +239,19 @@ public class SessionResource {
             return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+    @PutMapping(path = "/change-status/{id}") // change status active or suspend
+    ResponseEntity<?> updateSessionStatus(@RequestParam("status") SessionStatus sessionStatus,
+                                          @PathVariable Long id,
+                                          @AuthenticationPrincipal User userDetails) {
+        try{
+            log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus,userDetails.getCoach().getId());
+            sessionService.updateSessionStatus(id,userDetails.getCoach().getId(), sessionStatus);
+
+            return new ResponseEntity<>(new RestResponse(false, "Session status updated successfully"), HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Session status not updated, contact admin"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

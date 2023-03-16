@@ -21,6 +21,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
 
 
     Page<SessionDto> findAllByCoach_id(Long id, Pageable pageable);
+    Optional<Session> findByIdAndCoach_id(Long id, Long coachId);
 
     Optional<SessionDto> findByIdAndCoachId(Long id, Long coachId);
 
