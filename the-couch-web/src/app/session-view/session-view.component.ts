@@ -42,14 +42,6 @@ export class sessionViewComponent implements OnInit {
   notification: any;
 addSessionForm: any;
 modalTitle: any;
-currentSessionName: any;
-currentdetails: any;
-currentSessionDate: any;
-currentsessionStartTime: any;
-currentsessionEndTime: any;
-currentsessionVenue: any;
-currentgoals: any;
-currentSession: any;
 feedbacks:any = [];
 attachmentss:any = [];
 attachment: any;
@@ -109,6 +101,7 @@ attachmentModal!: ElementRef;
   User: any;
   OrgData: any;
   orgSession: any;
+  currentSession!: any;
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     console.log(event.target.attributes.id.nodeValue);
@@ -224,7 +217,7 @@ attachmentModal!: ElementRef;
     });
     this.deleteSessionForm = this.formbuilder.group({
       narration: '',
-    });
+    });  
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -234,16 +227,8 @@ attachmentModal!: ElementRef;
       name:'',
       sessionDetails:'',
       sessionEndTime:'',
-      attachments:'',
-      notes:'',
-      feedback:'',
-      paymentCurrency:'',
-      amountPaid:'',
-      sessionAmount:'',
-      sessionBalance:'',
-
     });
-  
+      
   }
   
   //get feedback for session
@@ -294,7 +279,7 @@ attachmentModal!: ElementRef;
         this.searching = false;
       });
     }
-  setCurrectSession(session: any) {
+  editSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
   
@@ -305,9 +290,38 @@ attachmentModal!: ElementRef;
       sessionEndTime: this.currentSession.sessionEndTime,
       sessionType: this.currentSession.sessionType,
       sessionVenue: this.currentSession.sessionVenue,
+      sessionDetails: this.currentSession.sessionDetails,
+
       
     });
   }
+  @ViewChild('editsessionModal', { static: false })
+  editsessionModal!: ElementRef;
+    editedSession(id: any) {
+      console.log(id);
+      this.currentSession = this.editedsessionForm.value;
+      console.log(this.currentSession);
+      console.log(this.editedsessionForm.value);
+      var data = this.editedsessionForm.value;
+      data.id = this.currentSession.id;
+      console.log(data);
+      this.clientService.editSession(data).subscribe(
+        (response: any) => {
+          this.toastrService.success(' Updated', 'Success!');
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+  
+      }, (error) => {
+        console.log(error)
+        this.toastrService.error(' not Updated', 'Error!');
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+      }
+    );
+    }
   viewComment(feedback: any): void {
     this.feedback = feedback;
     console.log(this.feedback);
@@ -359,21 +373,6 @@ attachmentModal!: ElementRef;
         }
       );
     }
-  }
-  editedSession() {
-    console.log(this.editedsessionForm.value);
-    this.loading = true;
-    var data = this.editedsessionForm.value;
-    data.id = this.currentSession.id;
-    console.log(data);
-    this.clientService.editSession(data).subscribe(
-      (response: any) => {
-        this.loading = false;
-        console.log(response);
-      }, (error: any) => {
-        console.log(error);
-      }
-    )
   }
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {

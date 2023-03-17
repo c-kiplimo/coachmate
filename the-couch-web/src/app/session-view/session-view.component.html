@@ -37,7 +37,7 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#deletesessionModal"
+                      data-bs-target="#conductedsessionModal"
                       >conducted</a
                     >
                   </li>
@@ -53,7 +53,8 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#conductedsessionModal"
+                      data-bs-target="#editsessionModal"
+                      (click)="editSession(sessions)"
                       >Reschedule</a
                     >
                   </li>
@@ -62,6 +63,8 @@
                       class="dropdown-item"
                       data-bs-toggle="modal"
                       data-bs-target="#editsessionModal"
+                      (click)="editSession(sessions)"
+
                       >Edit</a
                     >
                   </li>
@@ -316,133 +319,52 @@
 </div>
 
 <!-- edit session modal -->
-<div
-  class="modal fade"
-  id="editsessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="editsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Edit session</h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="editedsessionForm" >
+        <form [formGroup]="editedsessionForm">
           <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-6">
               <label for="name">Session Name *</label>
-              <input
-              formControlName="name"
-              value="{{currentSessionName?.name}}"
-                name="name"
-                type="text"
-                class="form-control"
-                id="name"
-                required
-              />
+              <input formControlName="name" value="{{currentSession?.name}}" id="name" name="name" type="text" class="form-control" required />
+            </div>
+            <div class=" mb-3 col-md-6">
+              <label for="sessionType">Session Type *</label>
+              <input formControlName="sessionType" value="{{currentSession?.sessionType}}" id="sessionType" type="text" class="form-control" placeholder="Enter Session Type" name="sessionType" required />
+            </div>
+          </div>
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="sessionStartTime">From *</label>
+              <input formControlName="sessionStartTime" value="{{currentSession?.sessionStartTime}}" id="sessionStartTime" type="time" class="form-control" placeholder="Time" name="session_time_from">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="sessionEndTime">To *</label>
+              <input formControlName="sessionEndTime" value="{{currentSession?.sessionEndTime}}" id="sessionEndTime" type="time" class="form-control" placeholder="Time" name="session_time_to">
             </div>
           </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-              <label for="inputlastname">Session Details</label>
-              <input 
-              formControlName="details"
-              value="{{currentdetails?.provider}}"
-              type="text" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Enter Session Description" 
-              name="details" 
-              required >
-            
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">Session Date</label>
-              <input
-              formControlName="sessionDate"
-              value="{{currentSessionDate?.sessionDate}}" 
-              type="date" 
-              variant="success" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Date" 
-              name="session_date" 
-              >   
-            </div>
-          </div>
-          <div class="row p-2">
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">From</label>
-                <input
-                formControlName="sessionStartTime"
-                value="{{currentsessionStartTime?.sessionStartTime}}" 
-                type="time" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Time" 
-                name="session_time_from" 
-               >
-              </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">To</label>
-              <input 
-              formControlName="sessionEndTime"
-              value="{{currentsessionEndTime?.provider}}"
-              type="time" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Time" 
-              name="session_time_to" 
-              >
-            </div>
-          </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
-                <label class="form-group-text" for="clientType">Session Venue</label>
-            <select 
-            formControlName="sessionVenue"
-            value="{{currentsessionVenue?.sessionVenue}}"
-            class="form-select" 
-                id="inputGroupSelect01" 
-                name="session_venue" 
-               >
+              <label class="form-group-text" for="sessionVenue">Session Venue *</label>
+              <select formControlName="sessionVenue" value="{{currentSession?.sessionVenue}}" id="sessionVenue" class="form-control" name="sessionVenue">
                 <option value="VIRTUAL">VIRTUAL</option>
+                <option value="PHYSICAL">PHYSICAL
+
                 <option value="PHYSICAL">PHYSICAL</option>
             </select>
             </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Session Goals</label>
-                  <input 
-                  formControlName="goals"
-                  value="{{currentgoals?.goals}}"
-                  type="email" class="form-control" 
-                  id="inputEmail4" placeholder="Goals" 
-                  name="goals" >
-                </div>
-          
-         
+            <div class=" mb-3 col-md-6">
+              <label for="sessionDate">Session Date *</label>
+              <input formControlName="sessionDate" value="{{currentSession?.sessionDate}}" id="sessionDate" type="date" class="form-control" placeholder="Date" name="sessionDate">
           </div> 
-        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
-          <div class="">
-            <label for="message">Message to be sent</label>
-            <p class="lead">
-              "Dear {{ client?.firstName | titlecase }}. Your
-              {{ sessionType }} session of duration {{ sessionDuration }} has been
-              set. It will be held on
-              {{ sessionDate | date }}. Thank you. "
-            </p>
           </div>
-        </div> 
-        </form>
+      </form>
       </div>
       <div class="modal-footer d-flex justify-content-between">
       <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -452,16 +374,15 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="editedSession()"
+          (click)="editedSession(currentSession.id)"
         >
           Update session
         </button>
       </div>
-   
-  
+    </div>
+  </div>
 </div>
-</div>
-</div>
+
 
 <!-- Confirm session modal -->
 <div

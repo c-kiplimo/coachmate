@@ -387,11 +387,12 @@ recordPayment(payment: any): Observable<any> {
   }
   // change contract status
   changeContractStatus(contractId: any, status: any): Observable<any> {
-    console.log('contractId', contractId);
-    console.log('status', status);
+    var contract:any = {
+      id: contractId,
+      status: status
+  }
     return this.http.put<any>(
-      this.baseURL + '/contract/changeContractStatus/' + contractId,
-      status,
+      this.baseURL + '/contract/changeContractStatus/' + contractId,contract,
       { observe: 'response' }
     );
   }
