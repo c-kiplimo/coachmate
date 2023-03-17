@@ -315,9 +315,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     }
     public ListResponse filterByClientNameAndDate(int page, int perPage, String name ,LocalDate date) {
 
-    // Get all payments by coach Id and statement period
-    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId, StatementPeriod statementPeriod) {
-        log.info("Get account statement by coach Id{} and statement period{}", coachId, statementPeriod);
+
 
 
         page = page - 1;
@@ -345,31 +343,36 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
     }
 
+    //     Get all payments by coach Id and statement period
+    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId,StatementPeriod statementPeriod) {
+        log.info("Get account statement by coach Id{} and statement period{}", coachId, statementPeriod);
 
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientWalletDto> paymentPage;
         // GET BY STATEMENT PERIOD
         if (statementPeriod == StatementPeriod.PerMonth) {
-            Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
+                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(),pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.Per6Months) {
-            Page<ClientWalletDto> paymentPage;
             paymentPage=clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PerYear) {
-            Page<ClientWalletDto> paymentPage;
             paymentPage= clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
+                    LocalDateTime.now().minusDays(1), LocalDateTime.now(),pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
-            Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
