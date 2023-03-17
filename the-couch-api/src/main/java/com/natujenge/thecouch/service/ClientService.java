@@ -269,7 +269,7 @@ public class ClientService {
                 clientPage.getTotalElements());
     }
     @Transactional
-    public void updateClientStatus(Long id, Long coachId, String clientStatus,
+    public void updateClientStatus(Long id, Long coachId, ClientStatus clientStatus,
                                      ChangeStatusRequest statusRequest) {
         log.info("Changing status of client {}",id);
         Optional<Client> client = clientRepository.findByIdAndCoachId(id,coachId);

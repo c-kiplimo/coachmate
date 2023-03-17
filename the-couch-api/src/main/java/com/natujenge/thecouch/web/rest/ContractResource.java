@@ -3,6 +3,7 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
@@ -101,7 +102,7 @@ public class ContractResource {
     }
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<?> updateContractStatus(
-                                         @RequestParam("status") String contractStatus,
+                                         @RequestParam("status") ContractStatus contractStatus,
                                          @PathVariable Long id,
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
