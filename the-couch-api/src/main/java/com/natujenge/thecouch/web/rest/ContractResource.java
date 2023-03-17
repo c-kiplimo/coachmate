@@ -101,6 +101,7 @@ public class ContractResource {
     }
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<?> updateContractStatus(
+
                                          @RequestParam("status") String contractStatus,
                                          @PathVariable Long id,
                                          @AuthenticationPrincipal User userDetails) {
@@ -110,7 +111,7 @@ public class ContractResource {
                 Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
                         userDetails.getCoach().getOrganization().getId();
                 Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
-
+                log.info("Request to update contract status to {}", contractStatus);
                 if (organizationId != null) {
                     contractService.updateContractStatusByOrganizationId
                             (id,contractStatus,organizationId);

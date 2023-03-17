@@ -141,9 +141,11 @@ export class TermsAndConditionsPageComponent implements OnInit {
   }
   onCheckboxChange() {
     if (this.agreedToTerms) {
-      
-      const status = { status: 'SIGNED' };
-      this.clientService.changeContractStatus(this.contractId, status).subscribe(
+      const id = this.route.snapshot.params['id'];
+      console.log("contractId on navigate",id);
+      this.contractId = id;
+    console.log("contractId on checkbox",this.contractId);
+      this.clientService.changeContractStatus(this.contractId, "SIGNED").subscribe(
         (response) => {
           console.log(response);
           this.toastrService.success('Status Changed successfully');

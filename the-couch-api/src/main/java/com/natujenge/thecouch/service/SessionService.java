@@ -82,7 +82,7 @@ public class SessionService {
     }
 
 
-    //CREATE NEW CONTRACT
+    //CREATE NEW SESSION
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
         Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId, coachId);
@@ -208,20 +208,20 @@ public class SessionService {
 
 
     //send notification to client and coach when session is upcoming
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
 
         for (Session session : sessions) {
             String smsContent;
-            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + session.getName() + " with " +
-                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
-                    + session.getSessionStartTime() + " to " + session.getSessionEndTime() + "\n See you there!";
+            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + " " + session.getName() +  " " + " with " +
+                    " " + " client: " +  " " +session.getClient().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " +" at "
+                    + " "   + session.getSessionStartTime() + " " + " to " + " " + session.getSessionEndTime() + "\n See you there!";
             String smsContentClient;
-            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" + session.getName() + "with " +
-                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
-                    + session.getSessionStartTime() + "to " + session.getSessionEndTime() + "\n See you there!";
+            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" +  " " +session.getName() +  " " +"with " + " " +
+                    " coach: " + " " + session.getCoach().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at "+ " "
+                    + session.getSessionStartTime() +  " " +"to " + " " + session.getSessionEndTime() + "\n See you there!";
             //send notification to coach
             NotificationHelper.sendUpcomingSessionReminderToCoach(session);
             // sendEmail

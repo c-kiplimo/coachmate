@@ -83,6 +83,9 @@ export class RecordPaymentComponent implements OnInit {
     const data = this.paymentForm;
     data.coachId = this.coachData.coach.id;
     data.orgIdId = this.coachData.coach.orgIdId;
+    if(this.userRole == 'CLIENT'){
+      data.clientId = this.coachData.client.id;
+    }
 
 
     this.clientService.recordPayment(this.paymentForm).subscribe(
@@ -91,7 +94,6 @@ export class RecordPaymentComponent implements OnInit {
         this.successMessage = response.message;
       
         this.errorMessage = '';
-        //Router.navigate(['/payment']);
         this.router.navigate(['/receipts']);
       }
     );
