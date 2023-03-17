@@ -317,6 +317,10 @@ closeModal() {
 }
 @ViewChild('editClientModal', { static: false })
 editClientModal!: ElementRef;
+@ViewChild('activateclientModal', { static: false })
+activateclientModal!: ElementRef;
+@ViewChild('suspendclientModal', { static: false })
+suspendclientModal!: ElementRef;
   editClient(client:any){
   this.clientToBeUpdated = client;
 
@@ -376,20 +380,35 @@ updateClientDetails(id:any){
     console.log(this.status);
     if(this.status === "ACTIVE") {
       this.ClientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.activateclientModal.nativeElement.classList.remove('show');
+          this.activateclientModal.nativeElement.style.display = 'none';
+        
         }, (error) => {
           console.log(error)
+          this.toastrService.success('Status change failed');
         }
       );
     }
 
     if(this.status === "SUSPENDED") {
       this.ClientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.suspendclientModal.nativeElement.classList.remove('show');
+          this.suspendclientModal.nativeElement.style.display = 'none';
         }, (error) => {
           console.log(error)
+          this.toastrService.success('Status change failed');
         }
       );
     }

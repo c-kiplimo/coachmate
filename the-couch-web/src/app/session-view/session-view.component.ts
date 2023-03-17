@@ -34,6 +34,7 @@ import { ApiService } from '../services/ApiService';
 })
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
+  attachmentForm!: FormGroup;
   status!: string;
   orgId: any;
   organizationId: any;
@@ -50,7 +51,7 @@ currentsessionVenue: any;
 currentgoals: any;
 currentSession: any;
 feedbacks:any = [];
-attachments:any = [];
+attachmentss:any = [];
 attachment: any;
 coachId: any;
 loadingsession: any;
@@ -95,10 +96,16 @@ client: any;
   userRole: any;
   orgIdId: any;
   createdBy: any;
-
+  objectives: string[] = [];
+  files: File[] = []; 
+    //Add Objective Form
+    Objectives = {
+      objective: ''
+    };
   feebackForm: any;
-  attachmentForm:any;
-
+  @ViewChild('attachmentModal', { static: false })
+attachmentModal!: ElementRef;
+  attachments: any;
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
@@ -141,8 +148,9 @@ client: any;
       comments: ['']
     });
     this.attachmentForm = this.formbuilder.group({
-      uploads:[''],
-      links:['']
+      objectives:'',
+      files: [[]],
+      
     }
 
     )
@@ -344,6 +352,7 @@ client: any;
     }
 }
   giveFeedback() {
+
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
@@ -372,28 +381,71 @@ client: any;
       }
     );
   }
+
+  onFileSelected(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        this.files.push(files[i]);
+      }
+    }
+  }
+  
+  addFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.addEventListener('change', (event: Event) => {
+      const files = (event.target as HTMLInputElement).files;
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          this.files.push(files[i]);
+        }
+      }
+    });
+    input.click();
+    console.log(this.files);
+  }
+  
+  
+  removeFile(index: number) {
+    this.files.splice(index, 1);
+  }
+  
+
+  addObjective(){
+    
+    console.log(this.Objectives);
+    this.objectives.push(this.Objectives.objective);
+    console.log(this.objectives);
+    this.Objectives.objective = '';
+  }
+
+  removeObjective(index: number){
+    this.objectives.splice(index, 1);
+  }
   addAttachment() {
+    const formData = this.attachmentForm.value;
+    formData.objectives =this.objectives;
+    formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
     
     };
-    console.log(this. attachmentForm.value);
-    const data = this. attachmentForm.value;
-
-    data.sessionId = this.sessionId;
-    
-    data.coachId = this.coachId;
-    data.clientId = this.clientId;
-    data.createdBy = this.createdBy;
-
-
-    this.clientService.addAttachment(data, params).subscribe(
+    formData.sessionId = this.sessionId;
+    formData.coachId = this.coachId;
+    formData.clientId = this.clientId;
+    formData.createdBy = this.createdBy;
+    console.log(formData);
+    console.log(this.files);
+    // Send formData to backend using a service or API
+    this.clientService.addAttachment(formData, params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Attachment Added Successfully');
-        this. attachmentForm.nativeElement.classList.remove('show');
-        this. attachmentForm.nativeElement.style.display = 'none';
+        this. attachmentModal.nativeElement.classList.remove('show');
+        this. attachmentModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);

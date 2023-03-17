@@ -445,7 +445,9 @@ Feedbacks: any;
         console.log(error);
       }
     );
+  
   }
+  
 
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
@@ -479,4 +481,5 @@ Feedbacks: any;
       }
     );
   }
+  
 }

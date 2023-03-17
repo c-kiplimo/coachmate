@@ -41,6 +41,7 @@ export class contractViewComponent implements OnInit {
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+    window.scroll(0, 0);
 
   
    
@@ -94,6 +95,7 @@ export class contractViewComponent implements OnInit {
   }
   getSessionsBycontractId(){
     console.log(this.contractId);
+    window.scroll(0, 0);
     this.loading = true;
     this.clientService.getSessionsBycontractId(this.contractId).subscribe(
       (response: any) => {
@@ -109,6 +111,7 @@ export class contractViewComponent implements OnInit {
   }
 
   getOrgContracts(id: any) {
+    window.scroll(0, 0);
     this.loading = true;
     this.clientService.getOrgContracts(id).subscribe(
       (response: any) => {
@@ -123,6 +126,7 @@ export class contractViewComponent implements OnInit {
   }
 
   getAllContracts() {
+    window.scroll(0, 0);
     this.loading = true;
     this.clientService.getContracts().subscribe(
       (response: any) => {
@@ -140,6 +144,7 @@ export class contractViewComponent implements OnInit {
     // const data = {
     //   clientId: id,
     // }
+    window.scroll(0, 0);
     this.clientService.getClientContracts(id).subscribe(
       (response: any) => {
         console.log('here contracts=>', response);
@@ -152,8 +157,7 @@ export class contractViewComponent implements OnInit {
       }
     );
   }
-  // window.scroll(0, 0);
-  // this.page = page;
+ 
 
 
 }
