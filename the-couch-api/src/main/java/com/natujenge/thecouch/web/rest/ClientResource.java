@@ -135,7 +135,7 @@ public class ClientResource {
 
     @PutMapping(path = "/change-status/{id}") // change status active or suspend
     ResponseEntity<?> updateClientStatus(@RequestBody ChangeStatusRequest statusRequest,
-                                     @RequestParam("status") String clientStatus,
+                                     @RequestParam("status") ClientStatus clientStatus,
                                      @PathVariable Long id,
                                      @AuthenticationPrincipal User userDetails) {
         try{

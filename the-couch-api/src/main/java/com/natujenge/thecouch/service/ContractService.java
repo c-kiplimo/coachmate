@@ -209,7 +209,7 @@ public class ContractService {
                 + " not found"));
     }
     @Transactional
-    public void updateContractStatusByOrganizationId(Long id, String contractStatus,Long organizationId) {
+    public void updateContractStatusByOrganizationId(Long id, ContractStatus contractStatus,Long organizationId) {
         log.info("Changing status of contract {}",id);
         Optional<Contract> contract = contractRepository.findByIdAndOrganizationId(id,organizationId);
 
@@ -235,7 +235,7 @@ public class ContractService {
         log.info("Contract status updated");
     }
     @Transactional
-    public void updateContractStatusByCoachId(Long id, String contractStatus,Long coachId) {
+    public void updateContractStatusByCoachId(Long id, ContractStatus contractStatus,Long coachId) {
         log.info("Changing status of contract {}",id);
         Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,coachId);
 
@@ -261,7 +261,7 @@ public class ContractService {
         log.info("Contract status updated");
     }
     @Transactional
-    public void updateContractStatusByClientId(Long id, String contractStatus,Long clientId) {
+    public void updateContractStatusByClientId(Long id, ContractStatus contractStatus,Long clientId) {
         log.info("Changing status of contract {}",id);
         Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,clientId);
 

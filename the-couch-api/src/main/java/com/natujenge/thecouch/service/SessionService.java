@@ -321,5 +321,28 @@ public class SessionService {
         log.info("This is a list of sessions found {}", sessionPage.getContent());
         return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(), sessionPage.getTotalElements());
     }
+    @Transactional
+    public void updateSessionStatus(Long id, Long coachId, SessionStatus sessionStatus) {
+        log.info("Changing status of session {}", id);
+        Optional<Session> session = sessionRepository.findByIdAndCoach_id(id, coachId);
 
+        if (session.isEmpty()) {
+            throw new IllegalStateException("Farmer doesn't exist");
+        }
+
+        Session session1 = session.get();
+
+        if (session1.getSessionStatus() == SessionStatus.CANCELLED) {
+            log.info("Session {} is in Cancelled state", id);
+            throw new IllegalStateException("Session is in Cancelled State");
+        } else if (session1.getSessionStatus() == SessionStatus.CONFIRMED) {
+            session1.setSessionStatus(SessionStatus.CONFIRMED);
+        }
+        else  {
+            session1.setSessionStatus(SessionStatus.CONDUCTED);
+        }
+
+        log.info("Session with id {} changed status", id);
+
+    }
 }
