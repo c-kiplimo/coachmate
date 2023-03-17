@@ -41,6 +41,7 @@ export class sessionViewComponent implements OnInit {
   feedback: any;
   notification: any;
 addSessionForm: any;
+statusForm!:FormGroup;
 modalTitle: any;
 feedbacks:any = [];
 attachmentss:any = [];
@@ -124,6 +125,10 @@ attachmentModal!: ElementRef;
     private toastrService:ToastrService  ) {}
 
   ngOnInit() {
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
 
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
@@ -345,7 +350,7 @@ attachmentModal!: ElementRef;
   changeClientStatus(){
     console.log(this.status);
     if(this.status === "ACTIVE") {
-      this.clientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
+      this.clientService.changeClient(this.clientId, "ACTIVE",this.statusForm.value).subscribe(
         (response) => {
           this.router.navigate(['/clients']);
         }, (error) => {
@@ -355,7 +360,7 @@ attachmentModal!: ElementRef;
     }
 
     if(this.status === "SUSPENDED") {
-      this.clientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
+      this.clientService.changeClient(this.clientId, "SUSPENDED",this.statusForm.value).subscribe(
         (response) => {
           this.router.navigate(['/clients']);
         }, (error) => {
@@ -365,7 +370,7 @@ attachmentModal!: ElementRef;
     }
 
     if(this.status === "CLOSED") {
-      this.clientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
+      this.clientService.changeClient(this.clientId, "CLOSED",this.statusForm.value).subscribe(
         (response) => {
           this.router.navigate(['/clients']);
         }, (error) => {

@@ -2,6 +2,7 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
+import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
@@ -102,23 +103,17 @@ public class ContractResource {
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
             try {
-                Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
-                Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
-                        userDetails.getCoach().getOrganization().getId();
-                Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
-                log.info("Request to update contract status to {}", contractStatus);
-                if (organizationId != null) {
-                    contractService.updateContractStatusByOrganizationId
-                            (id,contractStatus,organizationId);
-                } else if (coachId != null) {
-                    contractService.updateContractStatusByCoachId
-                            (id,contractStatus, coachId);
-                } else {
-                    contractService.updateContractStatusByClientId
-                            (id,contractStatus, clientId);
+                if(userDetails.getUserRole() != UserRole.CLIENT){
+                    return new ResponseEntity<>(new RestResponse(true, "Only a client can sign a contract"),
+                            HttpStatus.INTERNAL_SERVER_ERROR);
                 }
+                contractService.updateContractStatusByClientId
+                        (id,contractStatus, userDetails.getId());
+
             return new ResponseEntity<>(new RestResponse(false, "Contract status set to "+ contractStatus),
                     HttpStatus.OK);
+
+
         } catch (Exception e){
             log.error("Error occurred ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),

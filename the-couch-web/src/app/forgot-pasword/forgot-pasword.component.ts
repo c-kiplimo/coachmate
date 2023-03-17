@@ -117,7 +117,7 @@ export class ForgotPaswordComponent implements OnInit {
     const options = {
       msisdn: this.formData.msisdn,
     };
-    this.countDownTimer();
+
     this.apiservice.getResetCode(options).subscribe({
       next: (response) => {
         if (response.body.error) {
@@ -128,6 +128,7 @@ export class ForgotPaswordComponent implements OnInit {
         } else {
           this.getCodeView = false;
           this.resetCodeDefault = true;
+          this.countDownTimer();
           this.getCodeErrorMessage = '';
           this.errorMessage = response.body.message;
         }

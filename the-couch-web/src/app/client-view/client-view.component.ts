@@ -441,7 +441,7 @@ updateClientDetails(id:any){
         
         }, (error) => {
           console.log(error)
-          this.toastrService.success('Status change failed');
+          this.toastrService.error('Status change failed');
           this.activateclientModal.nativeElement.classList.remove('show');
           this.activateclientModal.nativeElement.style.display = 'none';
         }
@@ -477,7 +477,7 @@ updateClientDetails(id:any){
           }, 1000);
           this.closeclientModal.nativeElement.classList.remove('show');
           this.closeclientModal.nativeElement.style.display = 'none';
-        }, (error) => {
+        }, (error:any) => {
           console.log(error)
           this.toastrService.success('Status change failed');
           this.closeclientModal.nativeElement.classList.remove('show');

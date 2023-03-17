@@ -285,7 +285,7 @@ public class ClientService {
             throw new IllegalStateException("Client is in CLOSED state");
         }
 
-        else if (Objects.equals(clientStatus, "ACTIVATE")){
+        else if (Objects.equals(clientStatus, ClientStatus.ACTIVE)){
             client1.setStatus(ClientStatus.ACTIVE);
             client1.setReason(statusRequest.getNarration());
             client1.setLastUpdatedAt(LocalDateTime.now());

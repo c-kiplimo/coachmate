@@ -57,8 +57,8 @@ Feedbacks: any;
   constructor(
     private clientService: ClientService,
     private CoachEducationService: CoachEducationService,
-    private route: Router,
-    private router:ActivatedRoute
+    private router: Router,
+    private route:ActivatedRoute
     ) {}
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ Feedbacks: any;
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
     this.getAllContracts();
-    this.router.params.subscribe((params: { [x: string]: any; }) => {
+    this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
@@ -130,6 +130,18 @@ Feedbacks: any;
         this.loading = false;
       }
     );
+
+  }
+  navigateToTerms(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    if(this.userRole == 'COACH'){
+
+    this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT') {
+      this.router.navigate(['/terms', id]);
+    }
+
 
   }
   
@@ -276,7 +288,7 @@ Feedbacks: any;
 
   navigateToSessionView(id: any) {
     console.log(id);
-    this.route.navigate(['sessionView', id]);
+    this.router.navigate(['sessionView', id]);
   }
 
   getClients() {
@@ -387,7 +399,7 @@ Feedbacks: any;
   navigateToContractDetail(id: any) {
     console.log("contractId on navigate",id);
     this.contractId = id;
-    this.route.navigate(['/contractDetail/' + id]);
+    this.router.navigate(['/contractDetail/' + id]);
 
 
   }
