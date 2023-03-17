@@ -5,6 +5,7 @@ import { map, catchError, tap} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { param } from 'jquery';
  
  
 @Injectable({
@@ -89,15 +90,21 @@ export class ClientService {
 
    
 
-    changeClientStatus(clientId: any, status: any): Observable<any> {
-        var client:any = {
-            id: clientId,
-            status: status
-        }
-    
-        return this.http.put(`${this.baseURL}clients/changeStatus/`+ clientId, client)
-        "/change-status/{id}"
-    }
+    changeClient(clientId: any, status:any, statusForm: any): Observable<any> {
+      let options = {
+        status: status,
+      };
+        return this.http.put<any>(this.baseURL + 'clients/change-status/'+ clientId,statusForm,
+        {
+
+          params:options,
+          observe:"response"
+
+        });
+
+    } 
+
+
 
      
     // Get all Contracts
