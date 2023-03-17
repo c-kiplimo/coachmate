@@ -100,11 +100,15 @@ export class ClientService {
     }
 
      
-    // Get Contracts
+    // Get all Contracts
     getContracts() : Observable<any> {
         return this.http.get(`${this.baseURL}contracts`)
     }
-
+//Get all contracts by client id
+    getContractsByClientId(clientId: any): Observable<any> {
+        return this.http.get(`${this.baseURL}contracts/byClient/` + clientId,{observe:'response'})
+        
+    }
     getSessions(options: any): Observable<any> {
         return this.http.get(`${this.baseURL}sessions`,
         {
@@ -115,7 +119,8 @@ export class ClientService {
      // Get sessions by contractId
   getSessionsBycontractId(contractId:any):Observable<any>{
     return this.http.get(`${this.baseURL}sessions/contractSessions/` + contractId,{observe:'response'})
-  }
+  } 
+  
     // session actions
     addSession(session: any, params: any): Observable<any> {
         console.log(session);
@@ -380,8 +385,16 @@ recordPayment(payment: any): Observable<any> {
       }
     );
   }
-
-
+  // change contract status
+  changeContractStatus(contractId: any, status: any): Observable<any> {
+    console.log('contractId', contractId);
+    console.log('status', status);
+    return this.http.put<any>(
+      this.baseURL + '/contract/changeContractStatus/' + contractId,
+      status,
+      { observe: 'response' }
+    );
+  }
 }
 // {
 //     headers: {

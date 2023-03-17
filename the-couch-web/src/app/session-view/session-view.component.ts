@@ -106,9 +106,12 @@ client: any;
   @ViewChild('attachmentModal', { static: false })
 attachmentModal!: ElementRef;
   attachments: any;
+  User: any;
+  OrgData: any;
+  orgSession: any;
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
-    // console.log(event.target.attributes.id.nodeValue);
+    console.log(event.target.attributes.id.nodeValue);
 
     if (event.target.attributes && event.target.attributes.id) {
       if (event.target.attributes.id.nodeValue === 'open') {
@@ -138,7 +141,7 @@ attachmentModal!: ElementRef;
     if(this.userRole == 'COACH'){
     this.sessionId = this.route.snapshot.params['sessionId'];
     console.log(this.sessionId);
-
+    this.userRole = this.coachData.userRole;
     this.feebackForm = this.formbuilder.group({
       understandingScore: [''],
       emotionalIntelligenceScore: [''],
@@ -158,8 +161,42 @@ attachmentModal!: ElementRef;
     }
     if(this.userRole == 'COACH'){
       this.sessionId = this.route.snapshot.params['sessionId'];
+      this.route.params.subscribe(params => {
+        const id = params['id'];
+        console.log("contractId here",id);
+      });
+    } else if (this.userRole == 'ORGANIZATION') {
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      this.orgId = this.orgSession.id;
+    } else if (this.userRole == 'CLIENT') {
+  
+      this.User = JSON.parse(sessionStorage.getItem('user') as any);
+        console.log(this.User);
+        const email = {
+          email: this.User.email
+        }
+        this.clientService.getClientByEmail(email).subscribe(
+          (response: any) => {
+            console.log(response);
+          
+          },
+          (error: any) => {
+            console.log(error);
+          }
+        );
+  
+    }
+    if(this.userRole == 'CLIENT'){
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      this.userRole = this.coachData.userRole;
       console.log(this.sessionId);
     
+    }
+    if(this.userRole == 'ORGANIZATION'){
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      this.userRole = this.coachData.userRole;
     }
 
    this.route.params.subscribe((params) => {
@@ -352,10 +389,11 @@ attachmentModal!: ElementRef;
     }
 }
   giveFeedback() {
-
+    console.log(this.feebackForm.value);
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
+      clientId: this.clientId,
     
     };
     console.log(this.feebackForm.value);
@@ -414,11 +452,12 @@ attachmentModal!: ElementRef;
   
 
   addObjective(){
-    
+  
     console.log(this.Objectives);
     this.objectives.push(this.Objectives.objective);
     console.log(this.objectives);
     this.Objectives.objective = '';
+    console.log(this.Objectives);
   }
 
   removeObjective(index: number){

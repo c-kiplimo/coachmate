@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../services/ClientService';
 @Component({
   selector: 'app-terms-and-conditions-page',
@@ -23,7 +24,7 @@ export class TermsAndConditionsPageComponent implements OnInit {
   OrgData: any;
   orgSession: any;
 
-  constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute) {}
+  constructor(private clientService: ClientService, private router: Router,private route: ActivatedRoute, private toastrService: ToastrService,) {}
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     console.log("contractId here",id);
@@ -138,6 +139,25 @@ export class TermsAndConditionsPageComponent implements OnInit {
 
 
   }
+  onCheckboxChange() {
+    if (this.agreedToTerms) {
+      const id = this.route.snapshot.params['id'];
+      console.log("contractId on navigate",id);
+      this.contractId = id;
+    console.log("contractId on checkbox",this.contractId);
+      this.clientService.changeContractStatus(this.contractId, "SIGNED").subscribe(
+        (response) => {
+          console.log(response);
+          this.toastrService.success('Status Changed successfully');
+        },
+        (error) => {
+          console.log(error);
+          this.toastrService.success('Status change failed');
+        }
+      );
+    }
+  }
+  
 
 }
 

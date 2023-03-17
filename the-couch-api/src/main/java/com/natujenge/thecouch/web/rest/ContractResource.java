@@ -1,16 +1,10 @@
 package com.natujenge.thecouch.web.rest;
-
 import com.natujenge.thecouch.domain.Contract;
-import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
-import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.ContractService;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
-import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +96,7 @@ public class ContractResource {
     }
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<?> updateContractStatus(
+
                                          @RequestParam("status") ContractStatus contractStatus,
                                          @PathVariable Long id,
                                          @AuthenticationPrincipal User userDetails) {
@@ -111,7 +106,7 @@ public class ContractResource {
                 Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
                         userDetails.getCoach().getOrganization().getId();
                 Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
-
+                log.info("Request to update contract status to {}", contractStatus);
                 if (organizationId != null) {
                     contractService.updateContractStatusByOrganizationId
                             (id,contractStatus,organizationId);

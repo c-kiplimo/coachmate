@@ -47,7 +47,9 @@ export class SessionsComponent implements OnInit {
   User: any;
   sessions: any;
   page: number = 1;
-  constructor(private apiService: ClientService, private router: Router) {}
+  clientId: any;
+  id: any;
+  constructor(private apiService: ClientService, private router: Router,private activatedRoute: ActivatedRoute) {}
 
   
   ngOnInit(): void { 
@@ -68,16 +70,20 @@ export class SessionsComponent implements OnInit {
     } else if(this.userRole == 'COACH'){
       this.getAllSessions();
     } else if(this.userRole == 'CLIENT'){
-     
       this.User = JSON.parse(sessionStorage.getItem('user') as any);
       console.log(this.User);
+      this.clientId = this.User.id
+      console.log("client id",this.clientId)
+
+      this.id = this.clientId
       const email = {
         email: this.User.email
       }
+      
       this.apiService.getClientByEmail(email).subscribe(
         (response: any) => {
           console.log(response);
-          this.getClientSessions(response[0].id,1);
+          this.getClientSessions() 
         },
         (error: any) => {
           console.log(error);
@@ -86,32 +92,21 @@ export class SessionsComponent implements OnInit {
     }
   }
 
-  
-  getClientSessions(id: any,page: number) {
-    this.sessions = [];
+  getClientSessions() {
+    console.log("client id",this.clientId)
     this.loading = true;
-
-    window.scroll(0, 0);
-    this.page = page;
-    const options = {
-      page: page,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.search,
-    };
-    this.apiService.getClientSessions(options).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.sessions = response.body;
-        this.noOfSessions = this.sessions.length;
-        this.totalLength = Number(response.body.totalElements);
-        console.log(this.sessions.body);
+    this.apiService.getClientSessions(this.clientId)
+      .subscribe((data: any) => {
+        this.sessions = data.body;
+        console.log(this.sessions);
         this.loading = false;
+        console.log("sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
+        this.loading = false;
       }
-    );
+      );
   }
 
   getAllOrgSessions(id: any) {

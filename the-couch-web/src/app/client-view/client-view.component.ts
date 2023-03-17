@@ -35,6 +35,7 @@ import { ApiService } from '../services/ApiService';
 })
 
 export class ClientViewComponent implements OnInit {
+
   Clients!: [];
   addsessionForm!:FormGroup;
   payment: any;
@@ -49,7 +50,7 @@ export class ClientViewComponent implements OnInit {
 userIcon!: IconProp;
 calendarIcon: IconProp = "function";
 clockIcon: IconProp = "function";
-contracts:any;
+contracts!:any [];
 suspendClientForm!: FormGroup;
 closeClientForm!: FormGroup;
 activateClientForm!: FormGroup;
@@ -110,7 +111,16 @@ clientToBeUpdated!: any;
   sessionModal: any;
   contractId: any;
   contract: any;
-
+  contractForm!: FormGroup;
+  numberOfClients!: number;
+  numberOfSessions!:number;
+  numberOfContracts!:number;
+  objectives: string[] = [];
+  //Add Objective Form
+  Objectives = {
+    objective: ''
+  };
+coachingCategory: any;
   constructor(
     private ClientService:ClientService,
     private router:Router,
@@ -134,8 +144,22 @@ clientToBeUpdated!: any;
     console.log(this.sessionId);
     this.clientId = this.activatedRoute.snapshot.params['id'];
     this.getClientData(this.clientId);
+    this.id = this.clientId
     
-    this.getContracts();
+    this.getContracts(this.id);
+    this.contractForm = this.formbuilder.group(
+      {
+        coachingCategory:'',
+        coachingTopic:'',
+        clientId:'',
+        startDate:'',
+        endDate:'',
+        groupFeesPerSession:'',
+        individualFeesPerSession:'',
+        noOfSessions:'',
+        objectives:'',
+      }
+    );
     this.updateClient = this.formbuilder.group({
     
       firstName: ' ',
@@ -280,6 +304,18 @@ clientToBeUpdated!: any;
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
+  navigateToTerms(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    if(this.userRole == 'COACH'){
+
+    this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT') {
+      this.router.navigate(['/terms', id]);
+    }
+
+
+  }
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -319,8 +355,12 @@ closeModal() {
 editClientModal!: ElementRef;
 @ViewChild('activateclientModal', { static: false })
 activateclientModal!: ElementRef;
+@ViewChild('addContractModal', { static: false })
+addContractModal!: ElementRef;
 @ViewChild('suspendclientModal', { static: false })
 suspendclientModal!: ElementRef;
+@ViewChild('closeclientModal', { static: false })
+closeclientModal!: ElementRef;
   editClient(client:any){
   this.clientToBeUpdated = client;
 
@@ -356,6 +396,8 @@ updateClientDetails(id:any){
 
     }, (error) => {
       console.log(error)
+      this.editClientModal.nativeElement.classList.remove('show');
+      this.editClientModal.nativeElement.style.display = 'none';
     }
   );
 }
@@ -392,6 +434,8 @@ updateClientDetails(id:any){
         }, (error) => {
           console.log(error)
           this.toastrService.success('Status change failed');
+          this.activateclientModal.nativeElement.classList.remove('show');
+          this.activateclientModal.nativeElement.style.display = 'none';
         }
       );
     }
@@ -409,6 +453,8 @@ updateClientDetails(id:any){
         }, (error) => {
           console.log(error)
           this.toastrService.success('Status change failed');
+          this.suspendclientModal.nativeElement.classList.remove('show');
+          this.suspendclientModal.nativeElement.style.display = 'none';
         }
       );
     }
@@ -416,35 +462,21 @@ updateClientDetails(id:any){
     if(this.status === "CLOSED") {
       this.ClientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
         (response) => {
-          this.router.navigate(['/clients']);
+          console.log(response);
+          this.toastrService.success('Status changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.closeclientModal.nativeElement.classList.remove('show');
+          this.closeclientModal.nativeElement.style.display = 'none';
         }, (error) => {
           console.log(error)
+          this.toastrService.success('Status change failed');
+          this.closeclientModal.nativeElement.classList.remove('show');
+          this.closeclientModal.nativeElement.style.display = 'none';
         }
       );
     }
-  }
-  getClients(){
-    this.Clients = [];
-    this.loading = true;
-    window.scroll(0, 0);
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.loading = true;
-    this.ClientService.getClient(options).subscribe(
-      (response) => {
-        this.loading = false;
-        this.Clients = response.body.data;
-        console.log(response.body)
-        console.log('clients',this.Clients)
-        
-      }, (error) => {
-        console.log(error)
-      }
-    )
   }
   viewNotification(notification: any): void {
     this.notification = notification;
@@ -454,21 +486,61 @@ updateClientDetails(id:any){
     this.router.navigate([type, entityObj.id]);
   }
   viewPayment(payment: any): void {
-    console.log(this.session);
-    this.payment = payment;
+    this.payment = payment.value;
     this.paymentId = this.payment.id;
-    if (this.payment.session.id === this.session?.id) {
-      console.log(this.session.id);
-    }
   }
 
-  getContracts() {
-    this.ClientService.getContracts().subscribe((res:any) => {
-      console.log(res);
-      this.contracts = res; });
+  getContracts(id: any) {
+    this.contracts = [];
+    this.ClientService.getContractsByClientId(id).subscribe((res:any) => {
+      console.log("client sessions here",res);
+      this.contracts = res.body; });
+  }
+  addContract(){
+    console.log('here');
+    console.log(this.contractForm.value);
+    var data = this.contractForm.value;
+    data.coachId = this.coachData.id;
+    data.objectives = this.objectives;
+    data.clientId = this.clientId;
+    console.log(data);
+    this.apiService.addNewContract(data).subscribe(
+      (response: any) => {
+        this.toastrService.success('Contract added!', 'Success!', { timeOut: 8000 });
+        setTimeout(() => {
+          location.reload();
+        }, 5000);
+        this.addContractModal.nativeElement.classList.remove('show');
+        this.addContractModal.nativeElement.style.display = 'none';
+      }, (error: any) => {
+        console.log(error);
+        this.toastrService.error('Contract not added!', 'Error!', { timeOut: 8000 });
+      setTimeout(() => {
+        location.reload();
+      }, 5000);
+      this.addContractModal.nativeElement.classList.remove('show');
+      this.addContractModal.nativeElement.style.display = 'none';
+      
+      }
+    )
+  }
+  addObjective(){
+    
+    console.log(this.Objectives);
+    this.objectives.push(this.Objectives.objective);
+    console.log(this.objectives);
+    this.Objectives.objective = '';
+  }
+
+  removeObjective(index: number){
+    this.objectives.splice(index, 1);
+  }
+  back() {
+    window.history.back();
   }
 
 }
+
 
   // Get Notification for specific customer
 
