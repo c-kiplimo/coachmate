@@ -103,6 +103,7 @@ public class ContractService {
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
+        contract.setContractStatus(ContractStatus.ONGOING);
 
 
 
@@ -254,6 +255,9 @@ public class ContractService {
 
         } else if (Objects.equals(contractStatus, "SIGN")){
             contract1.setContractStatus(ContractStatus.SIGNED);
+        }
+        else if (contract1.getContractStatus() == ContractStatus.ONGOING){
+            contract1.setContractStatus(ContractStatus.FINISHED);
         }
         else{
             contract1.setContractStatus(ContractStatus.FINISHED);

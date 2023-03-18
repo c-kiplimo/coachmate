@@ -377,38 +377,50 @@
 </div>
 
 <!-- suspend client modal -->
-<div class="modal fade" id="suspendclientModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Suspend Client</h5>
-           
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    </button>
-  </div>
-  <div class="modal-body" >
-    <div class="d-flex justify-content-between">
-      <p class="">
-        Are you sure you want to suspend
-        <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
-      </p>
-      
+<div
+  class="modal fade bd-example-modal-lg"
+  id="suspendclientModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" >
+          Suspend Client
+        </h1>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <p class="">
+            Are you sure you want to suspend
+            <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
+          </p>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+        type="button"
+        class="btn btn-add"
+        (click)=" changeClientStatus()"
+      >
+        Submit
+      </button>
+      </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-add"
-      (click)=" changeClientStatus()"
-    >
-      Submit
-    </button>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Close
-    </button>
-  </div>
-</div>
-</div>
 </div>
 
 <!-- Close client modal -->
@@ -732,7 +744,7 @@ aria-hidden="true"
         <form>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-              <label for="sessionname">Session Name</label>
+              <label for="sessionname">Session Name *</label>
               <input 
               [(ngModel)]="addSessionForm.name" 
               
@@ -746,7 +758,7 @@ aria-hidden="true"
             </div>
             <div class="mb-3 col-md-6" >
               <div class="form-group-prepend">
-                <label class="form-group-text" for="clientType">Session Type</label>
+                <label class="form-group-text" for="clientType">Session Type *</label>
               </div>
               <select 
                 class="form-select" 
@@ -755,37 +767,13 @@ aria-hidden="true"
                 [(ngModel)]="addSessionForm.sessionType"> 
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="GROUP">GROUP</option>
-                <option value="OTHER">OTHER</option>
               </select>
             </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
-              <label for="inputlastname">Session Details</label>
-              <input type="text" 
-              class="form-control" 
-              [(ngModel)]="addSessionForm.sessionDetails"
-              id="inputEmail4" 
-              placeholder="Enter Session Description" 
-              name="sessionDetails" 
-             >
-            
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">Session Date</label>
-              <input type="date" 
-              variant="success" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Date" 
-              name="sessionDate" 
-              [(ngModel)]="addSessionForm.sessionDate"
-            >
-              
-            </div>
           </div>
+
           <div class="row p-2">
               <div class="mb-3 col-md-6">
-                <label for="inputEmail4">From</label>
+                <label for="inputEmail4">From *</label>
                 <input type="time" 
                 class="form-control" 
                 id="inputEmail4" 
@@ -795,7 +783,7 @@ aria-hidden="true"
                 
                 </div>
             <div class="mb-3 col-md-6">
-              <label for="inputEmail4">To</label>
+              <label for="inputEmail4">To *</label>
               <input type="time" 
               class="form-control" 
               id="inputEmail4" 
@@ -809,7 +797,7 @@ aria-hidden="true"
           </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-                <label class="form-group-text" for="clientType">Session Venue</label>
+                <label class="form-group-text" for="clientType">Session Venue *</label>
             <select class="form-select" 
                 id="inputGroupSelect01" 
                 name="sessionVenue" 
@@ -819,7 +807,7 @@ aria-hidden="true"
               </select>
                 </div>
             <div class="mb-3 col-md-6">
-              <label for="sessionname">Select Contract</label>
+              <label for="sessionname">Select Contract *</label>
               <select [(ngModel)]="selectedContract"
               class="form-select" 
               formControlName="selectedContract" 
@@ -829,17 +817,33 @@ aria-hidden="true"
                 <option *ngFor="let contract of contracts" [value]="contract.id">{{contract.coachingTopic}}-{{contract.client.fullName}}</option>
               </select>  
             </div>
+          </div>
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="inputEmail4">Session Date *</label>
+              <input type="date" 
+              variant="success" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Date" 
+              name="sessionDate" 
+              [(ngModel)]="addSessionForm.sessionDate"
+            >
+              
+            </div>
+          </div>
+          </form>
+          </div>
                   <div class="modal-footer">
                     <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success"(click)="addSession()">Add Session</button>
+                    <button type="button" class="btn btn-success"(click)="addSession()"
+                    [disabled]="!addSessionForm.name || !addSessionForm.sessionType || !addSessionForm.sessionStartTime || !addSessionForm.sessionEndTime || !addSessionForm.sessionVenue || !addSessionForm.sessionDate"
+                    >Add Session</button>
                   </div>
                 </div>
               </div>
-   </form>
       </div>
-    </div>
-  </div>
-      </div>
+
 
 
                       
@@ -858,7 +862,7 @@ aria-hidden="true"
       <div class="modal-body">
         <form [formGroup]="contractForm" class="col-10">
           <div class="mb-3 mt-3 description">
-            <h3 for="coachingTopic" class="form-label">Coaching Title</h3>
+            <h3 for="coachingTopic" class="form-label">Coaching Title *</h3>
             <input
               type="text"
               class="form-control"
@@ -871,7 +875,7 @@ aria-hidden="true"
           <br>
           <div class="row">
           <div class="col-6 input-group-prepend">
-            <label for="coachingCategory" class="form-label">Coaching Category</label>
+            <label for="coachingCategory" class="form-label">Coaching Category *</label>
             <select class="form-select" aria-label="Default select example"
             formControlName="coachingCategory"
             required="true">
@@ -886,7 +890,7 @@ aria-hidden="true"
           <h3>Schedule & Fees</h3>
           <div class="row">
             <div class="col">
-              <label for="number" class="form-label">Start Date</label>
+              <label for="number" class="form-label">Start Date *</label>
               <input
                 type="date"
                 class="form-control"
@@ -896,7 +900,7 @@ aria-hidden="true"
               />
             </div>
             <div class="col">
-              <label for="number" class="form-label">End Date</label>
+              <label for="number" class="form-label">End Date *</label>
               <input
                 type="date"
                 class="form-control"
@@ -913,7 +917,7 @@ aria-hidden="true"
             
               >
             <label for="number" class="form-label"
-              >Individual Fees Per Session</label
+              >Individual Fees Per Session *</label
             >
             <input
               type="number"
@@ -927,7 +931,7 @@ aria-hidden="true"
             <div *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'"class="col-6"
             
             >
-            <label for="number" class="form-label">Group Fees Per Session</label>
+            <label for="number" class="form-label">Group Fees Per Session *</label>
             <input
               type="number"
               class="form-control"
@@ -940,7 +944,7 @@ aria-hidden="true"
           </div>
           <div class="row">
             <div class="col-6">
-            <label for="number" class="form-label">No. of Sessions:</label>
+            <label for="number" class="form-label">No. of Sessions: *</label>
             <input
               type="number"
               class="form-control"
@@ -954,7 +958,7 @@ aria-hidden="true"
           </div>
           <section>
             <br>
-            <h3>Coaching Goals</h3>
+            <h3>Coaching Goals *</h3>
             <br>
             <div class="row mb-3">
               <div class="col-12"></div>
@@ -998,7 +1002,9 @@ aria-hidden="true"
 
           <div class="modal-footer">
             <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-success"(click)="addContract()"  >Add contract</button>
+            <button type="button" class="btn btn-success"(click)="addContract()"  
+            [disabled]="!contractForm.valid">
+            Add contract</button>
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -215,13 +216,13 @@ public class SessionService {
 
         for (Session session : sessions) {
             String smsContent;
-            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + " " + session.getName() +  " " + " with " +
-                    " " + " client: " +  " " +session.getClient().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " +" at "
-                    + " "   + session.getSessionStartTime() + " " + " to " + " " + session.getSessionEndTime() + "\n See you there!";
+            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + " " + session.getName() + " " + " with " +
+                    " " + " client: " + " " + session.getClient().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at "
+                    + " " + session.getSessionStartTime() + " " + " to " + " " + session.getSessionEndTime() + "\n See you there!";
             String smsContentClient;
-            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" +  " " +session.getName() +  " " +"with " + " " +
-                    " coach: " + " " + session.getCoach().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at "+ " "
-                    + session.getSessionStartTime() +  " " +"to " + " " + session.getSessionEndTime() + "\n See you there!";
+            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" + " " + session.getName() + " " + "with " + " " +
+                    " coach: " + " " + session.getCoach().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at " + " "
+                    + session.getSessionStartTime() + " " + "to " + " " + session.getSessionEndTime() + "\n See you there!";
             //send notification to coach
             NotificationHelper.sendUpcomingSessionReminderToCoach(session);
             // sendEmail
@@ -268,8 +269,8 @@ public class SessionService {
         if (clientName != null && sessionName != null && date != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                            .and(qSession.name.containsIgnoreCase(sessionName))
-                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.name.containsIgnoreCase(sessionName))
+                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -278,7 +279,7 @@ public class SessionService {
         if (clientName != null && sessionName != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                            .and(qSession.name.containsIgnoreCase(sessionName)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.name.containsIgnoreCase(sessionName)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -287,7 +288,7 @@ public class SessionService {
         if (clientName != null && date != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -296,7 +297,7 @@ public class SessionService {
         if (sessionName != null && date != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName)
-                            .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -321,13 +322,14 @@ public class SessionService {
         log.info("This is a list of sessions found {}", sessionPage.getContent());
         return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(), sessionPage.getTotalElements());
     }
+
     @Transactional
     public void updateSessionStatus(Long id, Long coachId, SessionStatus sessionStatus) {
-        log.info("Changing status of session {}", id);
+        log.info("Changing status of session {} to status {}", id, sessionStatus);
         Optional<Session> session = sessionRepository.findByIdAndCoach_id(id, coachId);
 
         if (session.isEmpty()) {
-            throw new IllegalStateException("Farmer doesn't exist");
+            throw new IllegalStateException("Coach doesn't exist");
         }
 
         Session session1 = session.get();
@@ -335,14 +337,18 @@ public class SessionService {
         if (session1.getSessionStatus() == SessionStatus.CANCELLED) {
             log.info("Session {} is in Cancelled state", id);
             throw new IllegalStateException("Session is in Cancelled State");
+        } else if (Objects.equals(sessionStatus, SessionStatus.CONFIRMED)) {
+            session1.setSessionStatus(SessionStatus.CONFIRMED);
+        } else if (Objects.equals(sessionStatus, SessionStatus.CONDUCTED)) {
+            session1.setSessionStatus(SessionStatus.CONDUCTED);
+        } else if (Objects.equals(sessionStatus, SessionStatus.CANCELLED)) {
+            session1.setSessionStatus(SessionStatus.CANCELLED);
         } else if (session1.getSessionStatus() == SessionStatus.CONFIRMED) {
             session1.setSessionStatus(SessionStatus.CONFIRMED);
-        }
-        else  {
+        } else if (session1.getSessionStatus() == SessionStatus.CONDUCTED) {
             session1.setSessionStatus(SessionStatus.CONDUCTED);
         }
 
-        log.info("Session with id {} changed status", id);
-
+        log.info("Session with id {} changed status to {}", id, sessionStatus);
     }
 }

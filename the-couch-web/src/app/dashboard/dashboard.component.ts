@@ -82,6 +82,7 @@ Feedbacks: any;
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
     window.scroll(0, 0);
+  
    
  
 
@@ -90,6 +91,7 @@ Feedbacks: any;
       this.getUserOrg();
       this.getOrgClients();
       window.scroll(0, 0);
+      
 
       this.OrgData = sessionStorage.getItem('Organization');
       this.orgSession = JSON.parse(this.OrgData);
@@ -108,7 +110,9 @@ Feedbacks: any;
       
     }
 
+    
   }
+  
   reload() {
     location.reload();
   }
@@ -461,18 +465,16 @@ Feedbacks: any;
   }
   
 
-  getClass(session: any) {
-    if (session.status === 'SUSPENDED') {
+  getClass(sessions: any) {
+    if (sessions.status === 'CONDUCTED') {
         return 'badge-warning';
-    } else if (session.status === 'CONFIRMED') {
+    } else if (sessions.status === 'CONFIRMED') {
         return 'badge-success';
     }
-    else if (session.status === 'NEW'){
-      return 'badge-success'
-    }
-    else {
-        return 'badge-success';
-    }
+    else(sessions.status === 'CANCELLED') 
+    return 'badge-success';
+    
+   
 }
 
   getClientByEmail() {

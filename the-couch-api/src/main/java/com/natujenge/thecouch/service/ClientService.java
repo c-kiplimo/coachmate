@@ -290,8 +290,12 @@ public class ClientService {
             client1.setReason(statusRequest.getNarration());
             client1.setLastUpdatedAt(LocalDateTime.now());
             client1.setLastUpdatedBy( client1.getCoach().getFullName());
-        }
-        else{
+        } else if (Objects.equals(clientStatus, ClientStatus.CLOSED)){
+            client1.setStatus(ClientStatus.CLOSED);
+            client1.setReason(statusRequest.getNarration());
+            client1.setLastUpdatedAt(LocalDateTime.now());
+            client1.setLastUpdatedBy( client1.getCoach().getFullName());
+        } else{
             client1.setStatus(ClientStatus.SUSPENDED);
             client1.setReason(statusRequest.getNarration());
             client1.setLastUpdatedAt(LocalDateTime.now());

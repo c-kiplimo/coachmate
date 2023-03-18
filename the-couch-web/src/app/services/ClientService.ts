@@ -103,7 +103,16 @@ export class ClientService {
         });
 
     } 
-
+    changeSession(coachId: any, data: any): Observable<any> {
+console.log("change session status reached")
+console.log("client id",coachId)
+console.log("data status",data.status)
+      return this.http.put<any>(
+        this.baseURL + 'sessions/change-status/' + coachId + "?status="+data.status,
+        {
+          observe: 'response' ,}
+      );
+    }
 
 
      
@@ -209,11 +218,14 @@ getCoachFeedbacks(id: any): Observable<any>{
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
 // ATTACHMENT SERVICES
-addAttachment(formData: any, options: any): Observable<any> {
+addAttachment(formData: any, options: any,headers:any): Observable<any> {
   return this.http.post<any>(
-      this.baseURL + 'attachments',
+      this.baseURL + 'attachments/upload',
       formData,
-      { params: options, observe: 'response' }
+      { params: options, 
+        observe: 'response' ,
+        headers:headers
+      }
     );
 }
 getAttachment(params:any):Observable<any>{

@@ -3,6 +3,7 @@ import { ClientService } from '../services/ClientService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { HttpHeaders } from '@angular/common/http';
 import {
   faBell,
   faCaretDown,
@@ -331,50 +332,94 @@ attachmentModal!: ElementRef;
     this.feedback = feedback;
     console.log(this.feedback);
   }
+@ViewChild('confirmsessionModal', { static: false })
+confirmsessionModal!: ElementRef;
+@ViewChild('conductedsessionModal', { static: false })
+conductedsessionModal!: ElementRef;
+@ViewChild('cancelsessionModal', { static: false })
+cancelsessionModal!: ElementRef;
   showStatus: any;
+  // CONFIRMED
+  // CANCELLED,  
+  // CONDUCTED
 
   statusState (currentstatus: any) {
     console.log(currentstatus);
-    if (currentstatus === 'ACTIVE') {
-      this.showStatus = "ACTIVATE";
-      this.status = "ACTIVE";
-    } else if (currentstatus === 'SUSPENDED') {
-      this.showStatus = "SUSPEND";
-      this.status = "SUSPENDED";
-    } else if (currentstatus === 'CLOSED') {
-      this.showStatus = "CLOSE";
-      this.status = "CLOSED";
+    if (currentstatus === 'CONFIRMED') {
+      this.showStatus = "CONFIRMED";
+      this.status = "CONFIRMED";
+    } else if (currentstatus === 'CANCELLED') {
+      this.showStatus = "CANCELLED";
+      this.status = "CANCELLED";
+    } else if (currentstatus === 'CONDUCTED') {
+      this.showStatus = "CONDUCTED";
+      this.status = "CONDUCTED";
     }
 
   }
-  changeClientStatus(){
+  changeSessionStatus(){
     console.log(this.status);
-    if(this.status === "ACTIVE") {
-      this.clientService.changeClient(this.clientId, "ACTIVE",this.statusForm.value).subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+    let data = {
+       
+      status: this.status,
+  }
+  console.log(data);
+    if(this.status === "CONFIRMED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
+        
         }, (error) => {
           console.log(error)
+          this.toastrService.error('Status change failed');
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
         }
       );
     }
 
-    if(this.status === "SUSPENDED") {
-      this.clientService.changeClient(this.clientId, "SUSPENDED",this.statusForm.value).subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+    if(this.status === "CANCELLED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
+        
         }, (error) => {
           console.log(error)
+          this.toastrService.error('Status change failed');
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
         }
       );
     }
 
-    if(this.status === "CLOSED") {
-      this.clientService.changeClient(this.clientId, "CLOSED",this.statusForm.value).subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+    if(this.status === "CONDUCTED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
+        
         }, (error) => {
           console.log(error)
+          this.toastrService.error('Status change failed');
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
         }
       );
     }
@@ -468,13 +513,16 @@ attachmentModal!: ElementRef;
     this.objectives.splice(index, 1);
   }
   addAttachment() {
+    const boundary = '-------------------------' + Math.random().toString(16).substring(2);
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data; boundary=' + boundary
+    });
     const formData = this.attachmentForm.value;
-    formData.objectives =this.objectives;
+    formData.objectives = this.objectives;
     formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
-    
     };
     formData.sessionId = this.sessionId;
     formData.coachId = this.coachId;
@@ -483,12 +531,12 @@ attachmentModal!: ElementRef;
     console.log(formData);
     console.log(this.files);
     // Send formData to backend using a service or API
-    this.clientService.addAttachment(formData, params).subscribe(
+    this.clientService.addAttachment(formData, params,headers ).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Attachment Added Successfully');
-        this. attachmentModal.nativeElement.classList.remove('show');
-        this. attachmentModal.nativeElement.style.display = 'none';
+        this.attachmentModal.nativeElement.classList.remove('show');
+        this.attachmentModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
@@ -496,7 +544,7 @@ attachmentModal!: ElementRef;
       }
     );
   }
-
+  
 
 
 

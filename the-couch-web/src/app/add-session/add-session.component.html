@@ -13,7 +13,7 @@
               <div class="row p-2">
 
                 <div class="mb-3 col-md-6">
-                  <label for="sessionname">Select Contract</label>
+                  <label for="sessionname">Select Contract *</label>
                   <select [(ngModel)]="selectedContract"
                   class="form-select" 
                   formControlName="selectedContract" 
@@ -26,19 +26,18 @@
                 </div>
                 <div class="mb-3 col-md-6">
           
-                  <label class="form-group-text" for="clientType">Session Type</label>
+                  <label class="form-group-text" for="clientType">Session Type *</label>
                 <select 
                   class="form-select" 
                   name="sessionType" 
                   [(ngModel)]="formData.sessionType"> 
                   <option value="INDIVIDUAL">INDIVIDUAL</option>
                   <option value="GROUP">GROUP</option>
-                  <option value="OTHER">OTHER</option>
                 </select>
               </div>
               <div class="row p-2">
                 <div class=" mb-3 col-md-6 ">
-                  <label for="sessionname">Session Name</label>
+                  <label for="sessionname">Session Name *</label>
                   <input 
                   [(ngModel)]="formData.name" 
                   
@@ -51,7 +50,7 @@
                
                 </div>
                 <div class="mb-3 col-md-6" >
-                  <label class="form-group-text" for="clientType">Session Venue</label>
+                  <label class="form-group-text" for="clientType">Session Venue *</label>
                   <select class="form-select" 
                       id="inputGroupSelect01" 
                       name="sessionVenue" 
@@ -63,34 +62,9 @@
                       </div>
                       </div>
               <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Session Details</label>
-                  <input type="text" 
-                  class="form-control" 
-                  [(ngModel)]="formData.sessionDetails"
-                  id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="sessionDetails" 
-                 >
-                
-                </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Session Date</label>
-                  <input type="date" 
-                  variant="success" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Date" 
-                  name="sessionDate" 
-                  [(ngModel)]="formData.sessionDate"
-                >
-                  
-                </div>
-              </div>
-              <div class="row p-2">
                   <div class="mb-3 col-md-6">
-                    <label for="inputEmail4">From</label>
-                    <input type="datetime" 
+                    <label for="inputEmail4">From *</label>
+                    <input type="time" 
                     class="form-control" 
                     id="inputEmail4" 
                     placeholder="Time" 
@@ -99,8 +73,8 @@
                     
                     </div>
                 <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">To</label>
-                  <input  type="datetime" 
+                  <label for="inputEmail4">To *</label>
+                  <input  type="time" 
                   class="form-control" 
                   id="inputEmail4" 
                   placeholder="Time" 
@@ -111,10 +85,36 @@
                 </div>
   
               </div>
+              <div class="row p-2">
+                <!-- <div class=" mb-3 col-md-6 ">
+                  <label for="inputlastname">Session Details</label>
+                  <input type="text" 
+                  class="form-control" 
+                  [(ngModel)]="formData.sessionDetails"
+                  id="inputEmail4" 
+                  placeholder="Enter Session Description" 
+                  name="sessionDetails" 
+                 >
+                
+                </div> -->
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">Session Date *</label>
+                  <input type="date"
+                  variant="success" 
+                  class="form-control" 
+                  id="inputEmail4" 
+                  placeholder="Date" 
+                  name="sessionDate" 
+                  [(ngModel)]="formData.sessionDate"
+                >
+                  
+                </div>
+              </div>
 
                 <button 
                 type="submit" 
                 (click)="addSession()"
+                [disabled]="!formData.name || !formData.sessionDate || !formData.sessionStartTime || !formData.sessionEndTime || !formData.sessionVenue || !formData.sessionType"
                 class="btn btn-signup mb-3 mt-2 p-2 text-center"
                 >Create Session</button>
           </div>

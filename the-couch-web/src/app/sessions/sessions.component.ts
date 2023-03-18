@@ -74,21 +74,8 @@ export class SessionsComponent implements OnInit {
       console.log(this.User);
       this.clientId = this.User.id
       console.log("client id",this.clientId)
-
       this.id = this.clientId
-      const email = {
-        email: this.User.email
-      }
-      
-      this.apiService.getClientByEmail(email).subscribe(
-        (response: any) => {
-          console.log(response);
-          this.getClientSessions() 
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
+      this.getClientSessions() 
     }
   }
 
@@ -98,9 +85,8 @@ export class SessionsComponent implements OnInit {
     this.apiService.getClientSessions(this.clientId)
       .subscribe((data: any) => {
         this.sessions = data.body;
-        console.log(this.sessions);
         this.loading = false;
-        console.log("sessions gotten here",this.sessions)
+        console.log("client sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
@@ -122,8 +108,8 @@ export class SessionsComponent implements OnInit {
     };
     this.apiService.getOrgSessions(options).subscribe(
       (response: any) => {
-        console.log(response);
         this.sessions = response;
+        console.log("org sessions gotten here",this.sessions)
         this.loading = false;
       },
       (error: any) => {
@@ -144,8 +130,8 @@ export class SessionsComponent implements OnInit {
     };
     this.apiService.getSessions(options).subscribe(
       (response: any) => {
-        console.log(response.body.data);
         this.sessions = response.body.data;
+        console.log("all sessions gotten here",this.sessions)
         this.loading = false;
       },
       (error: any) => {
