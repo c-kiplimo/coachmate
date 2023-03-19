@@ -1,4 +1,5 @@
 <app-user></app-user>
+<br>
 <h5 class="section-title text-center ">Session Details</h5>
 <div class="row">
   <div class="col-2">
@@ -19,11 +20,12 @@
             >Add Attachments</button>
             <div class="dropdown">
               <a class="btn btn-success dropdown-toggle"role="button" id="dropdownMenuLink"
-                data-bs-toggle="dropdown" aria-expanded="false">
+                data-bs-toggle="dropdown" aria-expanded="false"
+                  *ngIf="this.userRole == 'COACH'" >
                 Actions
               </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
+                  <li  *ngIf="this.userRole == 'COACH'" >
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
@@ -34,7 +36,7 @@
                     >
 
                   </li>
-                  <li>
+                  <li  *ngIf="this.userRole == 'COACH'" >
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
@@ -43,7 +45,7 @@
                       >conducted</a
                     >
                   </li>
-                  <li>
+                  <li  *ngIf="this.userRole == 'COACH'" >
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
@@ -66,7 +68,7 @@
             </div>
         <div class="session-details" [@fadeIn] >
           <div class="d-flex justify-content-between main-detail">
-            <span class="title">Session for:</span>
+            <span class="title">Session name:</span>
             <span class="value">{{ sessions.name }}</span>
           </div>
             <div class="d-flex justify-content-between">

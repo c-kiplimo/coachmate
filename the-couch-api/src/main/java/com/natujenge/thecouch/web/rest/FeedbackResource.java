@@ -25,10 +25,10 @@ public class FeedbackResource {
     FeedbackService feedBackService;
 
     // create feedback
-    @PostMapping
+    @PostMapping(value = "/upload")
     ResponseEntity<?> createNewFeedBack(@RequestBody Feedback feedback,
                                         @RequestParam(name = "sessionId",required = false) Long sessionId,
-                                        @RequestParam(name = "coachId") Long coachId,
+                                        @RequestParam(name = "coachId", required = false) Long coachId,
 
                                         @RequestParam(name = "orgIdId", required = false) Long orgIdId,
 

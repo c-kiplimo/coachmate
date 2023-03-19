@@ -29,9 +29,9 @@
       <th>Date</th>
       <th>Ref No.</th>
       <th>Description</th>
-      <th>Balance Before</th>
+      <!-- <th>Balance Before</th> -->
       <th>Amount In</th>
-      <th>Balance After</th>
+      <th>Wallet Balance After</th>
 
     </tr>
   </thead>
@@ -47,7 +47,7 @@
       <td>{{accountStatement.createdAt | date: "MMM d y" }}</td>
       <td>{{accountStatement.id}}</td>
       <td>{{ accountStatement.description}}</td>
-      <td>{{accountStatement.balanceAfter}}</td>
+      <!-- <td>{{accountStatement.balanceAfter}}</td> -->
       <td>{{ accountStatement.amountIn}}</td>
       <td>{{accountStatement.balanceBefore}}</td>
     </tr>

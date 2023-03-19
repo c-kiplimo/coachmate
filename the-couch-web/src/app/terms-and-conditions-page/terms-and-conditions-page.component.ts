@@ -154,6 +154,7 @@ export class TermsAndConditionsPageComponent implements OnInit {
         (response) => {
           console.log(response);
           this.toastrService.success('Status Changed successfully');
+          this.navigateToContractDetail();
         },
         (error) => {
           console.log(error);

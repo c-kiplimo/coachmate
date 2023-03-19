@@ -41,7 +41,12 @@
           <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
         
           <!--Render the create client button if no clients are found-->
-          <button *ngIf="clients.length === 0" class="btn btn-success" routerLink="/addclient">Create Client</button>
+          
+          <div *ngIf="clients.length === 0" >
+            <button class="btn btn-success" routerLink="/addclient">
+            Create Client
+            </button>
+          </div>
         </select>
         
         
@@ -131,7 +136,6 @@
                 class="form-control"
                 placeholder="Add Objective"
                 formControlName="objectives"
-                required="true"
               />
               </div>
               <div class="col-6">

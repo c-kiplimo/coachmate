@@ -17,6 +17,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ApiService } from '../services/ApiService';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-session-view',
@@ -107,21 +108,39 @@ attachmentModal!: ElementRef;
     private toastrService:ToastrService  ) {}
 
   ngOnInit() {
-    this.statusForm = this.formbuilder.group({
-      narration: 'Test',
-      isSendNotification: true
-    });
-
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
     if(this.userRole == 'COACH'){
-    this.sessionId = this.route.snapshot.params['sessionId'];
+      this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
     console.log(this.sessionId);
     this.userRole = this.coachData.userRole;
+    }
+   else if (this.userRole == 'ORGANIZATION') {
+    this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
+    this.userRole = this.coachData.userRole;
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      this.orgId = this.orgSession.id;
+    } else if (this.userRole == 'CLIENT') {
+      this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
+      this.userRole = this.coachData.userRole;
+      console.log(this.sessionId);
+      this.User = sessionStorage.getItem('user');
+      this.client = JSON.parse(this.User);
+      console.log(this.client);
+      this.clientId = this.client.id;
+    }
     this.feebackForm = this.formbuilder.group({
       understandingScore: '',
       emotionalIntelligenceScore: '',
@@ -134,55 +153,7 @@ attachmentModal!: ElementRef;
       links:'',
       files: [[]],
       
-    }
-
-    )
-
-    }
-    if(this.userRole == 'COACH'){
-      this.sessionId = this.route.snapshot.params['sessionId'];
-      this.route.params.subscribe(params => {
-        const id = params['id'];
-        console.log("contractId here",id);
-      });
-    } else if (this.userRole == 'ORGANIZATION') {
-      this.OrgData = sessionStorage.getItem('Organization');
-      this.orgSession = JSON.parse(this.OrgData);
-      console.log(this.orgSession);
-      this.orgId = this.orgSession.id;
-    } else if (this.userRole == 'CLIENT') {
-  
-      this.User = JSON.parse(sessionStorage.getItem('user') as any);
-        console.log(this.User);
-        const email = {
-          email: this.User.email
-        }
-        this.clientService.getClientByEmail(email).subscribe(
-          (response: any) => {
-            console.log(response);
-          
-          },
-          (error: any) => {
-            console.log(error);
-          }
-        );
-  
-    }
-    if(this.userRole == 'CLIENT'){
-      this.sessionId = this.route.snapshot.params['sessionId'];
-      this.userRole = this.coachData.userRole;
-      console.log(this.sessionId);
-    
-    }
-    if(this.userRole == 'ORGANIZATION'){
-      this.sessionId = this.route.snapshot.params['sessionId'];
-      this.userRole = this.coachData.userRole;
-    }
-
-   this.route.params.subscribe((params) => {
-
-      this.sessionId = params['id'];
-    });
+    })
 
     this.getSession();
     this.getFeedback();
@@ -263,7 +234,7 @@ attachmentModal!: ElementRef;
       console.log(data);
       this.clientService.editSession(data,id).subscribe(
         (response: any) => {
-          this.toastrService.success(' Updated', 'Success!');
+          this.toastrService.success('session updated!', 'Success!', { timeOut: 8000 });
         setTimeout(() => {
           location.reload();
         }, 1000);
@@ -272,7 +243,7 @@ attachmentModal!: ElementRef;
   
       }, (error) => {
         console.log(error)
-        this.toastrService.error(' not Updated', 'Error!');
+        this.toastrService.success('session not updated!', 'Failed!', { timeOut: 8000 });
         this.editsessionModal.nativeElement.classList.remove('show');
         this.editsessionModal.nativeElement.style.display = 'none';
       }
@@ -315,10 +286,10 @@ cancelsessionModal!: ElementRef;
   }
   console.log(data);
     if(this.status === "CONFIRMED") {
-      this.clientService.changeSession(this.coachId, data).subscribe(
+      this.clientService.changeSession(this.sessionId, data).subscribe(
         (res) => {
           console.log(res);
-          this.toastrService.success('Status Changed successfully');
+          this.toastrService.success('session confirmed!', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -327,7 +298,7 @@ cancelsessionModal!: ElementRef;
         
         }, (error) => {
           console.log(error)
-          this.toastrService.error('Status change failed');
+          this.toastrService.error('session not confirmed!', 'Failed!', { timeOut: 8000 });
           this.confirmsessionModal.nativeElement.classList.remove('show');
           this.confirmsessionModal.nativeElement.style.display = 'none';
         }
@@ -335,10 +306,10 @@ cancelsessionModal!: ElementRef;
     }
 
     if(this.status === "CANCELLED") {
-      this.clientService.changeSession(this.coachId, data).subscribe(
+      this.clientService.changeSession(this.sessionId, data).subscribe(
         (res) => {
           console.log(res);
-          this.toastrService.success('Status Changed successfully');
+          this.toastrService.success('cancelled successfully', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -347,7 +318,7 @@ cancelsessionModal!: ElementRef;
         
         }, (error) => {
           console.log(error)
-          this.toastrService.error('Status change failed');
+          this.toastrService.error('cancelled failed', 'Failed!', { timeOut: 8000 });
           this.cancelsessionModal.nativeElement.classList.remove('show');
           this.cancelsessionModal.nativeElement.style.display = 'none';
         }
@@ -355,10 +326,10 @@ cancelsessionModal!: ElementRef;
     }
 
     if(this.status === "CONDUCTED") {
-      this.clientService.changeSession(this.coachId, data).subscribe(
+      this.clientService.changeSession(this.sessionId, data).subscribe(
         (res) => {
           console.log(res);
-          this.toastrService.success('Status Changed successfully');
+          this.toastrService.success('Status changed successfully', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -367,7 +338,7 @@ cancelsessionModal!: ElementRef;
         
         }, (error) => {
           console.log(error)
-          this.toastrService.error('Status change failed');
+          this.toastrService.error('Status changed failed', 'Failed!', { timeOut: 8000 });
           this.conductedsessionModal.nativeElement.classList.remove('show');
           this.conductedsessionModal.nativeElement.style.display = 'none';
         }
@@ -395,16 +366,17 @@ cancelsessionModal!: ElementRef;
     
     };
     console.log(params);
+    console.log(this.feebackForm.value);
     this.clientService.addFeedback(this.feebackForm, params).subscribe(
       (response) => {
         console.log(response);
-        this.toastrService.success('Feedback Added Successfully');
+        this.toastrService.success('Feedback added successfully', 'Success!', { timeOut: 8000 });
         this.addfeedbackModal.nativeElement.classList.remove('show');
         this.addfeedbackModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
-        this.toastrService.error('Error in adding Feedback');
+        this.toastrService.error('Feedback not added', 'Failed!', { timeOut: 8000 });
       }
     );
   }
@@ -474,13 +446,13 @@ cancelsessionModal!: ElementRef;
     this.clientService.addAttachment(formData, params,headers ).subscribe(
       (response) => {
         console.log(response);
-        this.toastrService.success('Attachment Added Successfully');
+        this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
         this.attachmentModal.nativeElement.classList.remove('show');
         this.attachmentModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
-        this.toastrService.error('Error in adding Attachment');
+        this.toastrService.error('Attachment not added', 'Failed!', { timeOut: 8000 });
       }
     );
   }
@@ -495,20 +467,11 @@ cancelsessionModal!: ElementRef;
   
   getSession() {
     this.loading = true;
-
     this.clientService.getOneSession(this.sessionId).subscribe((res: any) => {
-      
-      this.loading = false;
+      console.log("sessionId", this.sessionId);
       this.sessions = res.body;
       console.log(this.sessions);
-    
-      
-      this.clientId = this.sessions.client.id;
-      this.orgIdId = this.sessions.orgId;
-      console.log("org id",this.orgIdId);
-      this.coachId = this.sessions.coach.id;
-      console.log("coach id",this.coachId);
-      this.createdBy = this.sessions.client.fullName;
+      this.loading = false;
    
      
     });
@@ -518,77 +481,6 @@ cancelsessionModal!: ElementRef;
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);
-  }
- //session Actions functions
- confirmSession() {
-  const options = {
-    status: 'CONFIRMED',
-  };
-  console.log(this.confirmSessionForm.value);
-  this.service
-    .orderAction(this.sessionId, this.confirmSessionForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order confirmed!', 'Info!');
-        this.confirmSessionForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
-
-cancelSession() {
-  const options = {
-    status: 'CANCELLED',
-  };
-  this.service
-    .orderAction(this.sessionId, this.cancelSessionForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order status is cancelled!', 'Info!');
-        this.cancelSessionForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
-
-
-  sendReminder() {
-    this.service.paymentReminder(this.sessionId).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order reminder was sent!', 'Info!');
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err:any) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order reminder not sent, try again',
-          'Failed!'
-        );
-      },
-    });
   }
   back() {
     window.history.back();

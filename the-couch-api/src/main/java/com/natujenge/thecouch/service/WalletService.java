@@ -255,8 +255,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         log.info("Get all Payments by Coach id {}", coachId);
 
         page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page, perPage, sort);
+        Pageable pageable = PageRequest.of(page, perPage);
 
         Page<ClientWalletDto> walletPage;
 

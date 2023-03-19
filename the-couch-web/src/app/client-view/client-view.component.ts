@@ -388,7 +388,7 @@ updateClientDetails(id:any){
   this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
     (data) => {
       console.log(data)
-      this.toastrService.success('Client Updated', 'Success!');
+      this.toastrService.success('updated!', 'Success!', { timeOut: 8000 });
       setTimeout(() => {
         location.reload();
       }, 1000);
@@ -397,6 +397,7 @@ updateClientDetails(id:any){
 
     }, (error) => {
       console.log(error)
+      this.toastrService.error('Error!', 'Error!', { timeOut: 8000 });
       this.editClientModal.nativeElement.classList.remove('show');
       this.editClientModal.nativeElement.style.display = 'none';
     }
@@ -425,7 +426,7 @@ updateClientDetails(id:any){
       this.ClientService.changeClient(this.clientId, "ACTIVE",this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
-          this.toastrService.success('Status Changed successfully');
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -434,7 +435,7 @@ updateClientDetails(id:any){
         
         }, (error) => {
           console.log(error)
-          this.toastrService.error('Status change failed');
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
           this.activateclientModal.nativeElement.classList.remove('show');
           this.activateclientModal.nativeElement.style.display = 'none';
         }
@@ -445,7 +446,7 @@ updateClientDetails(id:any){
       this.ClientService.changeClient(this.clientId, "SUSPENDED",this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
-          this.toastrService.success('Status changed successfully');
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -453,7 +454,7 @@ updateClientDetails(id:any){
           this.suspendclientModal.nativeElement.style.display = 'none';
         }, (error) => {
           console.log(error)
-          this.toastrService.success('Status change failed');
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
           this.suspendclientModal.nativeElement.classList.remove('show');
           this.suspendclientModal.nativeElement.style.display = 'none';
         }
@@ -464,7 +465,7 @@ updateClientDetails(id:any){
       this.ClientService.changeClient(this.clientId, "CLOSED",this.statusForm.value).subscribe(
         (response) => {
           console.log(response);
-          this.toastrService.success('Status changed successfully');
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
           }, 1000);
@@ -472,7 +473,7 @@ updateClientDetails(id:any){
           this.closeclientModal.nativeElement.style.display = 'none';
         }, (error:any) => {
           console.log(error)
-          this.toastrService.success('Status change failed');
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
           this.closeclientModal.nativeElement.classList.remove('show');
           this.closeclientModal.nativeElement.style.display = 'none';
         }

@@ -33,37 +33,42 @@ public class AttachmentsResource {
     SessionRepository sessionRepository;
     @Autowired
     AttachmentsRepository attachmentsRepository;
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/upload")
     public ResponseEntity<?> uploadAttachments( @RequestParam(name = "sessionId",required = false) Long sessionId,
-                                               @RequestParam("files") MultipartFile[] files,
-                                               @RequestParam("links") String[] links) {
+                                               @RequestParam(name ="files",required = true) MultipartFile  files,
+                                               @RequestParam(name ="links",required = false) String[] links) {
         try {
             // Get the session associated with the given sessionId
             Session session = sessionRepository.findById(sessionId).orElseThrow(
                     () -> new Exception("Session not found")
             );
+            log.info("Files found {}", files);
+            log.info("SessionId found {}", sessionId);
 
             // Handle file uploads
-            for (MultipartFile file : files) {
-                // Create a new attachment entity for each file and associate it with the session
-                Attachments attachment = new Attachments();
-                attachment.setSession(session);
-                attachment.setFileName(file.getOriginalFilename());
-                attachment.setFileType(file.getContentType());
-                attachment.setFileSize(file.getSize());
-                attachment.setFileContent(file.getBytes());
-                attachmentsRepository.save(attachment);
-            }
+            if (files != null){
+//                for (MultipartFile file : files) {
+                    // Create a new attachment entity for each file and associate it with the session
+                    Attachments attachment = new Attachments();
+                    attachment.setSession(session);
+                    attachment.setFileName(files.getOriginalFilename());
+                    attachment.setFileType(files.getContentType());
+                    attachment.setFileSize(files.getSize());
+                    attachment.setFileContent(files.getBytes());
+                    attachmentsRepository.save(attachment);
+//                }
 
-            // Handle link attachments
-            for (String link : links) {
-                // Create a new attachment entity for each link and associate it with the session
-                Attachments attachment = new Attachments();
-                attachment.setSession(session);
-                attachment.setFileName(link);
-                attachment.setFileType("link");
-                attachment.setLinkUrl(link);
-                attachmentsRepository.save(attachment);
+            }
+            if (links != null){
+                for (String link : links) {
+                    // Create a new attachment entity for each link and associate it with the session
+                    Attachments attachment = new Attachments();
+                    attachment.setSession(session);
+                    attachment.setFileName(link);
+                    attachment.setFileType("link");
+                    attachment.setLinkUrl(link);
+                    attachmentsRepository.save(attachment);
+                }
             }
 
             return new ResponseEntity<>(new RestResponse(false, "Attachments uploaded successfully"),

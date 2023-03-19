@@ -286,6 +286,10 @@ public class ContractService {
             contract1.setContractStatus(ContractStatus.SIGNED);
         }else if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.SIGNED){
             throw new IllegalStateException("Contract is signed");
+        }else if (contract1.getContractStatus() == ContractStatus.ONGOING && contractStatus == ContractStatus.SIGNED){
+            contract1.setContractStatus(ContractStatus.SIGNED);
+        }else if (contract1.getContractStatus() == ContractStatus.ONGOING && contractStatus == ContractStatus.FINISHED){
+            contract1.setContractStatus(ContractStatus.FINISHED);
         }
         else{
             throw new IllegalStateException("Contract must be signed");

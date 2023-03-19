@@ -67,7 +67,7 @@ Feedbacks: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.getAllContracts();
+  
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       // Retrieve the contract from the database using the id
@@ -81,6 +81,7 @@ Feedbacks: any;
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
+    this.getAllContracts();
     window.scroll(0, 0);
   
    
@@ -91,6 +92,7 @@ Feedbacks: any;
       this.getUserOrg();
       this.getOrgClients();
       window.scroll(0, 0);
+      
       
 
       this.OrgData = sessionStorage.getItem('Organization');
@@ -104,8 +106,8 @@ Feedbacks: any;
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
-     
-      this.getClientByEmail();
+      this.getClientContracts(this.coachData.id);
+      this.getClientSessions(this.coachData.id);
       window.scroll(0, 0);
       
     }
@@ -121,7 +123,7 @@ Feedbacks: any;
     this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
+        this.Feedbacks = response.body;
         console.log(this.Feedbacks);
         let totalScore = 0;
 
@@ -134,18 +136,6 @@ Feedbacks: any;
         this.loading = false;
       }
     );
-
-  }
-  navigateToTerms(id: any) {
-    console.log("contractId on navigate",id);
-    this.contractId = id;
-    if(this.userRole == 'COACH'){
-
-    this.router.navigate(['/contractDetail', id]);
-    } else if (this.userRole == 'CLIENT') {
-      this.router.navigate(['/terms', id]);
-    }
-
 
   }
   
@@ -171,9 +161,6 @@ Feedbacks: any;
 
   }
   // get all feedbacks overrall score and get a percentage
-
-
-
   getAllOrgSessions(id: any) {
 
     this.sessions = [];
@@ -276,7 +263,7 @@ Feedbacks: any;
     this.clientService.getOrgClients(id).subscribe(
       (response) => {
         this.loading = false;
-        this.Clients = response;
+        this.Clients = response.body;
         console.log(response)
         console.log('clients',this.Clients)
         this.numberOfClients = this.Clients.length;
@@ -314,6 +301,19 @@ Feedbacks: any;
         console.log(error);
       }
     );
+  }
+  navigateToTerms(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    if(this.userRole == 'COACH'){
+
+    this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT'&& id.contractStatus==null) {
+      this.router.navigate(['/terms', id]);
+    }else(this.userRole == 'CLIENT'&& id.contractStatus=="SIGNED")
+    this.router.navigate(['/contractDetail', id]);
+
+
   }
   getOrganization(id: any) {
     const data = {
@@ -360,10 +360,10 @@ Feedbacks: any;
     // const data = {
     //   clientId: id,
     // }
-    this.clientService.getClientContracts(id).subscribe(
+    this.clientService.getContractsByClientId(id).subscribe(
       (response: any) => {
         console.log('here contracts=>', response);
-        this.contracts = response;
+        this.contracts = response.body;
         console.log(this.contracts);
       
       },
@@ -377,7 +377,7 @@ Feedbacks: any;
     this.clientService.getContracts().subscribe(
       (response: any) => {
         
-        this.contracts = response;
+        this.contracts = response.body;
         console.log(this.contracts);
         this.numberOfContracts = this.contracts.length;
         console.log(this.numberOfContracts);
@@ -392,7 +392,7 @@ Feedbacks: any;
     this.clientService.getContracts().subscribe(
       (response: any) => {
         console.log(response);
-        this.contracts = response;
+        this.contracts = response.body;
         this.loading = false;
       },
       (error: any) => {
@@ -477,23 +477,5 @@ Feedbacks: any;
    
 }
 
-  getClientByEmail() {
-    const email = {
-      email: this.User.email
-    }
-    this.clientService.getClientByEmail(email).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.clients = response;
-        this.numberOfClients = this.clients.length;
-        this.getClientSessions(response[0].id);
 
-        this.getClientContracts(response[0].id);
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
-  
 }
