@@ -194,13 +194,6 @@ coachingCategory: any;
     name:'',
     sessionDetails:'',
     sessionEndTime:'',
-    attachments:'',
-    notes:'',
-    feedback:'',
-    paymentCurrency:'',
-    amountPaid:'',
-    sessionAmount:'',
-    sessionBalance:'',
 
   });
   
