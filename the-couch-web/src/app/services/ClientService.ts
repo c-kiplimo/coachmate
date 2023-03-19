@@ -152,9 +152,15 @@ console.log("data status",data.status)
         //     })
         //   );
       }
-    editSession(id: any) : Observable<any> {
-        return this.http.delete(this.baseURL + `/sessions/` + id,);
+    editSession(data:any,id:any) : Observable<any> {
+        console.log("edit session reached")
+        console.log("session  to be updated here",data)
+        console.log("session id here",id)
+        return this.http.put(`${this.baseURL}clients/${id}`, data)
       }
+
+
+
     deleteSession(id: any ): Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }

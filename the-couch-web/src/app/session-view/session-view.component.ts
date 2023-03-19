@@ -64,6 +64,7 @@ client: any;
   sessionTime: any;
   sessionType: any;
   editedsessionForm!: FormGroup;
+  feebackForm!: FormGroup<any>;
   loading = false;
   service: any;
   sessions:any;
@@ -78,25 +79,17 @@ client: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
   deleteSessionForm: any;
-  sessionDate = '';
-  sessionStartTime = '';
-  sessionDuration = '';
-  selectedPaymentOption: any;
-  sessionAmount = '';
-  eventType = '';
-  open = false;
   coachSessionData: any;
   coachData: any;
   userRole: any;
   orgIdId: any;
   createdBy: any;
-  objectives: string[] = [];
+  links: string[] = [];
   files: File[] = []; 
-    //Add Objective Form
-    Objectives = {
-      objective: ''
+    //Add Link Form
+    Links = {
+      link: ''
     };
-  feebackForm: any;
   @ViewChild('attachmentModal', { static: false })
 attachmentModal!: ElementRef;
   attachments: any;
@@ -104,18 +97,6 @@ attachmentModal!: ElementRef;
   OrgData: any;
   orgSession: any;
   currentSession!: any;
-
-  @HostListener('document:click', ['$event']) onClick(event: any) {
-    console.log(event.target.attributes.id.nodeValue);
-
-    if (event.target.attributes && event.target.attributes.id) {
-      if (event.target.attributes.id.nodeValue === 'open') {
-        this.open = true;
-      }
-    } else {
-      this.open = false;
-    }
-  }
   constructor(
     private clientService:ClientService,
     private http: HttpClient,
@@ -142,15 +123,15 @@ attachmentModal!: ElementRef;
     console.log(this.sessionId);
     this.userRole = this.coachData.userRole;
     this.feebackForm = this.formbuilder.group({
-      understandingScore: [''],
-      emotionalIntelligenceScore: [''],
-      listeningSkillsScore: [''],
-      clarificationScore: [''],
-      availabilityScore: [''],
-      comments: ['']
+      understandingScore: '',
+      emotionalIntelligenceScore: '',
+      listeningSkillsScore: '',
+      clarificationScore: '',
+      availabilityScore: '',
+      comments: '',
     });
     this.attachmentForm = this.formbuilder.group({
-      objectives:'',
+      links:'',
       files: [[]],
       
     }
@@ -205,25 +186,7 @@ attachmentModal!: ElementRef;
 
     this.getSession();
     this.getFeedback();
-    this. getAttachment()
-
-
-    this.getNotifications();
-    this.confirmSessionForm = this.formbuilder.group({
-      narration: '',
-    });
-    this.cancelSessionForm = this.formbuilder.group({
-      narration: '',
-      isSendNotification: true,
-    });
-    this.conductedSessionForm = this.formbuilder.group({
-      deliveredOn: '',
-      narration: '',
-      isSendNotification: true,
-    });
-    this.deleteSessionForm = this.formbuilder.group({
-      narration: '',
-    });  
+    this. getAttachment(); 
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -259,6 +222,7 @@ attachmentModal!: ElementRef;
         sessionId: this.sessionId,
        
       };
+      console.log("session id",params)
       this.clientService.getAttachment(params).subscribe(
         (res: any) => {
           this.attachments = res.body;
@@ -268,22 +232,6 @@ attachmentModal!: ElementRef;
           console.log(error);
         }
       );
-    }
-    getNotifications(): void {
-      this.searching = true;
-      this.notifications = [];
-      const options = {
-         sessionId: this.sessionId,
-         coachId :this.coachData.id,
-        page: 1,
-        per_page: 10,
-      };
-  
-      this.clientService.getAllNotifications(options).subscribe((res: any) => {
-        this.notifications = res.body;
-        console.log('notification ni', this.notifications);
-        this.searching = false;
-      });
     }
   editSession(session: any) {
     this.currentSession = session;
@@ -303,6 +251,8 @@ attachmentModal!: ElementRef;
   }
   @ViewChild('editsessionModal', { static: false })
   editsessionModal!: ElementRef;
+  @ViewChild('addfeedbackModal', { static: false })
+  addfeedbackModal!: ElementRef;
     editedSession(id: any) {
       console.log(id);
       this.currentSession = this.editedsessionForm.value;
@@ -311,7 +261,7 @@ attachmentModal!: ElementRef;
       var data = this.editedsessionForm.value;
       data.id = this.currentSession.id;
       console.log(data);
-      this.clientService.editSession(data).subscribe(
+      this.clientService.editSession(data,id).subscribe(
         (response: any) => {
           this.toastrService.success(' Updated', 'Success!');
         setTimeout(() => {
@@ -438,29 +388,19 @@ cancelsessionModal!: ElementRef;
     }
 }
   giveFeedback() {
-    console.log(this.feebackForm.value);
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
       clientId: this.clientId,
     
     };
-    console.log(this.feebackForm.value);
-    const data = this.feebackForm.value;
-
-    data.sessionId = this.sessionId;
-    
-    data.coachId = this.coachId;
-    data.clientId = this.clientId;
-    data.createdBy = this.createdBy;
-
-
-    this.clientService.addFeedback(data, params).subscribe(
+    console.log(params);
+    this.clientService.addFeedback(this.feebackForm, params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');
-        this.feebackForm.nativeElement.classList.remove('show');
-        this.feebackForm.nativeElement.style.display = 'none';
+        this.addfeedbackModal.nativeElement.classList.remove('show');
+        this.addfeedbackModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
@@ -500,17 +440,17 @@ cancelsessionModal!: ElementRef;
   }
   
 
-  addObjective(){
+  addLink(){
   
-    console.log(this.Objectives);
-    this.objectives.push(this.Objectives.objective);
-    console.log(this.objectives);
-    this.Objectives.objective = '';
-    console.log(this.Objectives);
+    console.log(this.Links);
+    this.links.push(this.Links.link);
+    console.log(this.links);
+    this.Links.link = '';
+    console.log(this.Links);
   }
 
-  removeObjective(index: number){
-    this.objectives.splice(index, 1);
+  removeLink(index: number){
+    this.links.splice(index, 1);
   }
   addAttachment() {
     const boundary = '-------------------------' + Math.random().toString(16).substring(2);
@@ -518,7 +458,7 @@ cancelsessionModal!: ElementRef;
       'Content-Type': 'multipart/form-data; boundary=' + boundary
     });
     const formData = this.attachmentForm.value;
-    formData.objectives = this.objectives;
+    formData.links = this.links;
     formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
