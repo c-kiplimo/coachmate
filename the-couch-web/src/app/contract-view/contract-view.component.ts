@@ -26,7 +26,7 @@ export class contractViewComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
   userRole: any;
-
+  contract:any;
   OrgData: any;
   orgSession: any;
 
@@ -87,9 +87,10 @@ export class contractViewComponent implements OnInit {
     if(this.userRole == 'COACH'){
 
     this.router.navigate(['/contractDetail', id]);
-    } else if (this.userRole == 'CLIENT') {
+    } else if (this.userRole == 'CLIENT'&& id.contractStatus==null) {
       this.router.navigate(['/terms', id]);
-    }
+    }else(this.userRole == 'CLIENT'&& id.contractStatus=="SIGNED")
+    this.router.navigate(['/contractDetail', id]);
 
 
   }

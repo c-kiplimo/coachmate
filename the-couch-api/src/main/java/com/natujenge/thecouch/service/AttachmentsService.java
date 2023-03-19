@@ -30,36 +30,6 @@ public class AttachmentsService {
 
     @Autowired
     OrganizationRepository organizationRepository;
-    public void createNewAttachment(MultipartFile file, String link, Long sessionId, Long coachId, Long orgIdId) throws IOException {
-
-        Attachments attachments = new Attachments();
-
-        // GET SESSION
-        Optional<Session> session = sessionRepository.findSessionById(sessionId);
-
-        Optional<Client> client = clientRepository.findById(session.get().getClient().getId());
-
-        Optional<Coach> coach = coachRepository.getCoachById(coachId);
-
-        if (orgIdId != null) {
-            Optional<Organization> organization = organizationRepository.findById(orgIdId);
-
-            if (organization.isPresent()) {
-                attachments.setOrganization(organization.get());
-            }
-        }
-
-        attachments.setClient(client.get());
-        attachments.setSession(session.get());
-        attachments.setCoach(coach.get());
-        attachments.setLink(link);
-        attachments.setFile(file.getBytes());
-        attachments.setCreatedBy(coach.get().getFirstName() + " " + coach.get().getLastName());
-        attachmentsRepository.save(attachments);
-
-        log.info("Attachment saved successfully!");
-    }
-
     //get attachment by session id
     public List<Attachments> getAttachmentBySessionId(Long sessionId) {
         log.info("Request to get attachment by session id: {} and coachId : {}", sessionId);

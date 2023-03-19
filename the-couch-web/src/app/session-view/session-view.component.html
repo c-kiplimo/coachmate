@@ -28,16 +28,18 @@
                       class="dropdown-item"
                       data-bs-toggle="modal"
                       data-bs-target="#confirmsessionModal"
+                      (click)="statusState('CONFIRMED')"
                       >Confirm
                       </a
                     >
-            
+
                   </li>
                   <li>
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#deletesessionModal"
+                      data-bs-target="#conductedsessionModal"
+                      (click)="statusState('CONDUCTED')"
                       >conducted</a
                     >
                   </li>
@@ -46,6 +48,7 @@
                       class="dropdown-item"
                       data-bs-toggle="modal"
                       data-bs-target="#cancelsessionModal"
+                      (click)="statusState('CANCELLED')"
                       >Cancel</a
                     >
                   </li>
@@ -53,16 +56,9 @@
                     <a
                       class="dropdown-item"
                       data-bs-toggle="modal"
-                      data-bs-target="#conductedsessionModal"
-                      >Reschedule</a
-                    >
-                  </li>
-                  <li *ngIf="this.userRole !== 'CLIENT'">
-                    <a
-                      class="dropdown-item"
-                      data-bs-toggle="modal"
                       data-bs-target="#editsessionModal"
-                      >Edit</a
+                      (click)="editSession(sessions)"
+                      >Reschedule</a
                     >
                   </li>
                 </ul>
@@ -125,14 +121,6 @@
       >
         Feedback
       </button>
-
-      <button
-          class="btn btn-tabs"
-        (click)="toggleTab('notifications')"
-        [ngClass]="{ 'active-tab': currentTab === 'notifications' }"
-      >
-        Notifications
-      </button>
       <button
             class="btn btn-tabs"
           (click)="toggleTab('attachments')"
@@ -190,43 +178,6 @@
           </p>
       </div>
       </div>
-    <div
-      class="d-none d-lg-block"
-      *ngIf="currentTab === 'notifications'"
-      [@fadeIn]
-    >
-    <div class="row list-container container ">
-      <table class="table">
-        <thead>
-          <th coslpan="1">Notification Reason</th>
-          <th coslpan="1">Notification Date</th>
-          <th coslpan="1">Notification Mode</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let notification of notifications">
-            <td>{{ notification.id }}</td>
-            <td>{{ notification.createdAt | date : "MMM d, y " }}</td>
-            <td>{{ notification.notificationMode }}</td>
-            <td>
-              <button
-                class="btn btn-success"
-                data-bs-toggle="modal"
-                data-bs-target="#notificationModal"
-                (click)="viewNotification(notification)"
-              >
-                view
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-      <p class="text-muted mt-5" *ngIf="!notifications?.length">
-        No notifications found.
-      </p>
-    </div>
-    </div>
-    </div>
   <div
     class="d-none d-lg-block"
     *ngIf="currentTab === 'attachments'" [@fadeIn]
@@ -316,133 +267,52 @@
 </div>
 
 <!-- edit session modal -->
-<div
-  class="modal fade"
-  id="editsessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="editsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Edit session</h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="editedsessionForm" >
+        <form [formGroup]="editedsessionForm">
           <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-6">
               <label for="name">Session Name *</label>
-              <input
-              formControlName="name"
-              value="{{currentSessionName?.name}}"
-                name="name"
-                type="text"
-                class="form-control"
-                id="name"
-                required
-              />
+              <input formControlName="name" value="{{currentSession?.name}}" id="name" name="name" type="text" class="form-control" required />
+            </div>
+            <div class=" mb-3 col-md-6">
+              <label for="sessionType">Session Type *</label>
+              <input formControlName="sessionType" value="{{currentSession?.sessionType}}" id="sessionType" type="text" class="form-control" placeholder="Enter Session Type" name="sessionType" required />
+            </div>
+          </div>
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="sessionStartTime">From *</label>
+              <input formControlName="sessionStartTime" value="{{currentSession?.sessionStartTime}}" id="sessionStartTime" type="time" class="form-control" placeholder="Time" name="session_time_from">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="sessionEndTime">To *</label>
+              <input formControlName="sessionEndTime" value="{{currentSession?.sessionEndTime}}" id="sessionEndTime" type="time" class="form-control" placeholder="Time" name="session_time_to">
             </div>
           </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
-              <label for="inputlastname">Session Details</label>
-              <input 
-              formControlName="details"
-              value="{{currentdetails?.provider}}"
-              type="text" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Enter Session Description" 
-              name="details" 
-              required >
-            
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">Session Date</label>
-              <input
-              formControlName="sessionDate"
-              value="{{currentSessionDate?.sessionDate}}" 
-              type="date" 
-              variant="success" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Date" 
-              name="session_date" 
-              >   
-            </div>
-          </div>
-          <div class="row p-2">
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">From</label>
-                <input
-                formControlName="sessionStartTime"
-                value="{{currentsessionStartTime?.sessionStartTime}}" 
-                type="time" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Time" 
-                name="session_time_from" 
-               >
-              </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">To</label>
-              <input 
-              formControlName="sessionEndTime"
-              value="{{currentsessionEndTime?.provider}}"
-              type="time" 
-              class="form-control" 
-              id="inputEmail4" 
-              placeholder="Time" 
-              name="session_time_to" 
-              >
-            </div>
-          </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
-                <label class="form-group-text" for="clientType">Session Venue</label>
-            <select 
-            formControlName="sessionVenue"
-            value="{{currentsessionVenue?.sessionVenue}}"
-            class="form-select" 
-                id="inputGroupSelect01" 
-                name="session_venue" 
-               >
+              <label class="form-group-text" for="sessionVenue">Session Venue *</label>
+              <select formControlName="sessionVenue" value="{{currentSession?.sessionVenue}}" id="sessionVenue" class="form-control" name="sessionVenue">
                 <option value="VIRTUAL">VIRTUAL</option>
+                <option value="PHYSICAL">PHYSICAL
+
                 <option value="PHYSICAL">PHYSICAL</option>
             </select>
             </div>
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">Session Goals</label>
-                  <input 
-                  formControlName="goals"
-                  value="{{currentgoals?.goals}}"
-                  type="email" class="form-control" 
-                  id="inputEmail4" placeholder="Goals" 
-                  name="goals" >
-                </div>
-          
-         
+            <div class=" mb-3 col-md-6">
+              <label for="sessionDate">Session Date *</label>
+              <input formControlName="sessionDate" value="{{currentSession?.sessionDate}}" id="sessionDate" type="date" class="form-control" placeholder="Date" name="sessionDate">
           </div> 
-        <div class="col mb-3" *ngIf="showHideMessage" [@fadeIn]>
-          <div class="">
-            <label for="message">Message to be sent</label>
-            <p class="lead">
-              "Dear {{ client?.firstName | titlecase }}. Your
-              {{ sessionType }} session of duration {{ sessionDuration }} has been
-              set. It will be held on
-              {{ sessionDate | date }}. Thank you. "
-            </p>
           </div>
-        </div> 
-        </form>
+      </form>
       </div>
       <div class="modal-footer d-flex justify-content-between">
       <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -452,16 +322,15 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="editedSession()"
+          (click)="editedSession(currentSession.id)"
         >
           Update session
         </button>
       </div>
-   
-  
+    </div>
+  </div>
 </div>
-</div>
-</div>
+
 
 <!-- Confirm session modal -->
 <div
@@ -483,7 +352,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body" *ngIf="session">
+      <div class="modal-body">
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
@@ -492,45 +361,9 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Product</p>
-          <span>{{ session.details }}</span>
+          <p>Session name</p>
+          <span>{{ sessions.name }}</span>
         </div>
-        <div class="d-flex justify-content-between">
-          <p>Session Type</p>
-          <span>{{ session.sessionType }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount</p>
-          <span>{{ session.sessionDuration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount Paid</p>
-          <span>{{ session.amountPaid }}</span>
-        </div>
-
-        <form [formGroup]="confirmSessionForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="narration for confirming the session"
-            >
-            </textarea>
-          </div>
-          <div class="d-flex justify-content-between mb-3">
-            <label for="exampleInputEmail1">notify the client</label>
-            <div class="toggle">
-              <label class="switch">
-                <input type="checkbox" name="cancelsession" checked />
-                <span class="slider round"></span>
-              </label>
-            </div>
-          </div>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -540,7 +373,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="confirmSession()"
+          (click)=" changeSessionStatus()"
         >
           Submit
         </button>
@@ -561,7 +394,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" >
-          Conducted session
+           set session as conducted
         </h1>
 
         <button
@@ -571,7 +404,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body" *ngIf="session">
+      <div class="modal-body">
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
@@ -580,70 +413,9 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Product</p>
-          <span>{{ session.details }}</span>
+          <p>Session name</p>
+          <span>{{ sessions.name }}</span>
         </div>
-        <div class="d-flex justify-content-between">
-          <p>Session Type</p>
-          <span>{{ session.sessionType }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount</p>
-          <span>{{ session.sessionDuration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount Paid</p>
-          <span>{{ session.amountPaid }}</span>
-        </div>
-        <form [formGroup]="conductedSessionForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Conducted  On</label>
-            <input
-              formControlName="sessionDate"
-              [(ngModel)]="sessionDate"
-              name="deliveredOn"
-              type="date"
-              class="form-control"
-              id="deliveredOn"
-              aria-describedby="emailHelp"
-              placeholder="On Date"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">Time</label>
-            <input
-              formControlName="sessionStartTime"
-              [(ngModel)]="sessionStartTime"
-              name="deliveredtime"
-              type="time"
-              class="form-control"
-              id="deliveredtime"
-              aria-describedby="emailHelp"
-              placeholder="Delivery time"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail1">goals</label>
-            <textarea
-              formControlName="goals"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="narration for delivering the session"
-            >
-            </textarea>
-          </div>
-          <div class="d-flex justify-content-between mb-3">
-            <label for="exampleInputEmail1">Notify the client</label>
-            <div class="toggle">
-              <label class="switch">
-                <input type="checkbox" name="cancelsession" checked />
-                <span class="slider round"></span>
-              </label>
-            </div>
-          </div>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -653,6 +425,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
+          (click)=" changeSessionStatus()"
         >
           Submit
         </button>
@@ -681,7 +454,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body" *ngIf="session">
+      <div class="modal-body" >
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
@@ -690,35 +463,9 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Balance</p>
-          <span>{{ session.sessionBalance }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>Session Type</p>
-          <span>{{ session.sessionType }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Duration</p>
-          <span>{{ session.sessionDuration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount Paid</p>
-          <span>{{ session.amountPaid }}</span>
-        </div>
-        <form [formGroup]="cancelSessionForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="narration for cancelling the session"
-            >
-            </textarea>
-          </div>
-        </form>
+          <p>Session</p>
+          <span>{{ sessions.name }}</span>
+      </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -728,7 +475,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
-          (click)="cancelSession()"
+          (click)=" changeSessionStatus()"
         >
           Submit
         </button>
@@ -738,6 +485,7 @@
 </div>
 
 <!-- Delete session modal -->
+
 <div
   class="modal fade bd-example-modal-lg"
   id="deletesessionModal"
@@ -757,7 +505,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body" *ngIf="session">
+      <div class="modal-body">
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
@@ -766,35 +514,9 @@
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
-          <p>Balance</p>
-          <span>{{ session.sessionBalance }}</span>
+          <p>Session</p>
+          <span>{{ sessions.name }}</span>
         </div>
-        <div class="d-flex justify-content-between">
-          <p>Session Type</p>
-          <span>{{ session.sessionType }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount</p>
-          <span>{{ session.sessionDuration }}</span>
-        </div>
-        <div class="d-flex justify-content-between">
-          <p>session Amount Paid</p>
-          <span>{{ session.amountPaid }}</span>
-        </div>
-        <form [formGroup]="deleteSessionForm">
-          <div class="mb-3">
-            <label for="exampleInputEmail1">narration</label>
-            <textarea
-              formControlName="narration"
-              name="narration"
-              class="form-control"
-              id="narration"
-              aria-describedby="narration"
-              placeholder="narration for deleting the session"
-            >
-            </textarea>
-          </div>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -804,6 +526,7 @@
           type="button"
           class="btn btn-submit"
           data-bs-dismiss="modal"
+          (click)=" changeSessionStatus()"
         >
           Submit
         </button>
@@ -811,6 +534,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Add Feedback Modal -->
 <div class="modal fade" id="addfeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -833,45 +557,45 @@
             <div class="form-group">
               <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me personally and professionally:</label>
               <div class="form-group__rating">
-                <input type="radio" formControlName="understandingScore" value="1" id="goalSetting1">
+                <input type="radio" formControlName="understandingScore" value="1" required id="goalSetting1">
                 <label for="goalSetting1">1</label>
-                <input type="radio" formControlName="understandingScore" value="2" id="goalSetting2">
+                <input type="radio" formControlName="understandingScore" value="2" required id="goalSetting2">
                 <label for="goalSetting2">2</label>
-                <input type="radio" formControlName="understandingScore" value="3" id="goalSetting3">
+                <input type="radio" formControlName="understandingScore" value="3" required id="goalSetting3">
                 <label for="goalSetting3">3</label>
-                <input type="radio" formControlName="understandingScore" value="4" id="goalSetting4">
+                <input type="radio" formControlName="understandingScore" value="4" required id="goalSetting4">
                 <label for="goalSetting4">4</label>
-                <input type="radio" formControlName="understandingScore" value="5" id="goalSetting5">
+                <input type="radio" formControlName="understandingScore" value="5" required id="goalSetting5">
                 <label for="goalSetting5">5</label>
               </div>
             </div>
             <div class="form-group">
               <label for="emotionManagement">2. My coach demonstrated an ability to work with strong emotions and was not overpowered:</label>
               <div class="form-group__rating">
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="1" id="emotionManagement1">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="1" required id="emotionManagement1">
                 <label for="emotionManagement1">1</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="2" id="emotionManagement2">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="2" required id="emotionManagement2">
                 <label for="emotionManagement2">2</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="3" id="emotionManagement3">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="3" required id="emotionManagement3">
                 <label for="emotionManagement3">3</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="4" id="emotionManagement4">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="4" required id="emotionManagement4">
                 <label for="emotionManagement4">4</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="5" id="emotionManagement5">
+                <input type="radio" formControlName="emotionalIntelligenceScore" value="5" required id="emotionManagement5">
                 <label for="emotionManagement5">5</label>
               </div>
             </div>
             <div class="form-group">
               <label for="activeListening">3. My coach asked questions that demonstrated active listening and understanding of my perspective and encouraged clarity, learning and exploration:</label>
               <div class="form-group__rating">
-                <input type="radio" formControlName="listeningSkillsScore" value="1" id="activeListening1">
+                <input type="radio" formControlName="listeningSkillsScore" value="1" required id="activeListening1">
                 <label for="activeListening1">1</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="2" id="activeListening2">
+                <input type="radio" formControlName="listeningSkillsScore" value="2" required id="activeListening2">
                 <label for="activeListening2">2</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="3" id="activeListening3">
+                <input type="radio" formControlName="listeningSkillsScore" value="3" required id="activeListening3">
                 <label for="activeListening3">3</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="4" id="activeListening4">
+                <input type="radio" formControlName="listeningSkillsScore" value="4" required id="activeListening4">
                 <label for="activeListening4">4</label>
-        <input type="radio" formControlName="listeningSkillsScore" value="5" id="activeListening5">
+        <input type="radio" formControlName="listeningSkillsScore" value="5" required id="activeListening5">
         <label for="activeListening5">5</label>
         </div>
         
@@ -879,30 +603,30 @@
           <div class="form-group">
             <label for="clarification">4. My coach was able to repeat what I said for clarification:</label>
             <div class="form-group__rating">
-              <input type="radio" formControlName="clarificationScore" value="1" id="clarification1">
+              <input type="radio" formControlName="clarificationScore" value="1" required id="clarification1">
               <label for="clarification1">1</label>
-              <input type="radio" formControlName="clarificationScore" value="2" id="clarification2">
+              <input type="radio" formControlName="clarificationScore" value="2" required id="clarification2">
               <label for="clarification2">2</label>
-              <input type="radio" formControlName="clarificationScore" value="3" id="clarification3">
+              <input type="radio" formControlName="clarificationScore" value="3" required id="clarification3">
               <label for="clarification3">3</label>
-              <input type="radio" formControlName="clarificationScore" value="4" id="clarification4">
+              <input type="radio" formControlName="clarificationScore" value="4" required id="clarification4">
               <label for="clarification4">4</label>
-              <input type="radio" formControlName="clarificationScore" value="5" id="clarification5">
+              <input type="radio" formControlName="clarificationScore" value="5" required id="clarification5">
               <label for="clarification5">5</label>
             </div>
           </div>
           <div class="form-group">
             <label for="presence">5. I felt that the coach was fully present and flexible during the session:</label>
             <div class="form-group__rating">
-              <input type="radio" formControlName="availabilityScore" value="1" id="presence1">
+              <input type="radio" formControlName="availabilityScore" value="1" required id="presence1">
               <label for="presence1">1</label>
-              <input type="radio" formControlName="availabilityScore" value="2" id="presence2">
+              <input type="radio" formControlName="availabilityScore" value="2" required id="presence2">
               <label for="presence2">2</label>
-              <input type="radio" formControlName="availabilityScore" value="3" id="presence3">
+              <input type="radio" formControlName="availabilityScore" value="3" required id="presence3">
               <label for="presence3">3</label>
-              <input type="radio" formControlName="availabilityScore" value="4" id="presence4">
+              <input type="radio" formControlName="availabilityScore" value="4" required id="presence4">
         <label for="presence4">4</label>
-        <input type="radio" formControlName="availabilityScore" value="5" id="presence5">
+        <input type="radio" formControlName="availabilityScore" value="5" required id="presence5">
         <label for="presence5">5</label>
         </div>
         
@@ -916,7 +640,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success"  [disabled]="!feebackForm.valid"
+        <button type="button" class="btn btn-success"
+        [disabled]="!feebackForm.valid"
         (click)="giveFeedback()"
         >Save changes</button>
       </div>
@@ -981,18 +706,18 @@ aria-hidden="true"
       <h3>Links</h3>
       <div class="row">
         <div class="col">
-          <input [(ngModel)]="Objectives.objective"
+          <input [(ngModel)]="Links.link"
           type="text"
           class="form-control"
           placeholder="Add link"
-          formControlName="objectives"
+          formControlName="link"
         />
         </div>
               <div class="col">
                 <button
                 type="button"
                 class="btn btn-success"
-                (click)="addObjective()"
+                (click)="addLink()"
               >
              Add link
               </button>
@@ -1002,9 +727,9 @@ aria-hidden="true"
 
           <div class="mb-3">
           <ol>
-            <li *ngFor="let obj of objectives; index as i">{{ obj }} 
+            <li *ngFor="let link of links; index as i">{{ link }} 
               
-              <button  (click)="removeObjective(i)"  type="button">
+              <button  (click)="removeLink(i)"  type="button">
                 <i 
              role="button"
               class="fa-solid fa-trash-can p-1">

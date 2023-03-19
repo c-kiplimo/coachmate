@@ -103,6 +103,7 @@ public class ContractService {
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
+        contract.setContractStatus(ContractStatus.ONGOING);
 
 
 
@@ -210,7 +211,7 @@ public class ContractService {
     }
     @Transactional
     public void updateContractStatusByOrganizationId(Long id, ContractStatus contractStatus,Long organizationId) {
-        log.info("Changing status of contract {}",id);
+        log.info("Changing status of contract by organization {}",id);
         Optional<Contract> contract = contractRepository.findByIdAndOrganizationId(id,organizationId);
 
         if (contract.isEmpty()){
@@ -236,7 +237,7 @@ public class ContractService {
     }
     @Transactional
     public void updateContractStatusByCoachId(Long id, ContractStatus contractStatus,Long coachId) {
-        log.info("Changing status of contract {}",id);
+        log.info("Changing status of contract by coach {}",id);
         Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,coachId);
 
         if (contract.isEmpty()){
@@ -255,6 +256,9 @@ public class ContractService {
         } else if (Objects.equals(contractStatus, "SIGN")){
             contract1.setContractStatus(ContractStatus.SIGNED);
         }
+        else if (contract1.getContractStatus() == ContractStatus.ONGOING){
+            contract1.setContractStatus(ContractStatus.FINISHED);
+        }
         else{
             contract1.setContractStatus(ContractStatus.FINISHED);
         }
@@ -262,8 +266,8 @@ public class ContractService {
     }
     @Transactional
     public void updateContractStatusByClientId(Long id, ContractStatus contractStatus,Long clientId) {
-        log.info("Changing status of contract {}",id);
-        Optional<Contract> contract = contractRepository.findByIdAndCoachId(id,clientId);
+        log.info("Changing status of contract by client {}",id);
+        Optional<Contract> contract = contractRepository.findByIdAndClientId(id,clientId);
 
         if (contract.isEmpty()){
             throw new IllegalStateException("Contract doesn't exist");
@@ -271,18 +275,20 @@ public class ContractService {
 
         Contract contract1 = contract.get();
 
-        if (contract1.getContractStatus() == ContractStatus.SIGNED){
+        if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.FINISHED){
             log.info("Contract {} is  is signed",id);
-            throw new IllegalStateException("Contract is signed");
+            contract1.setContractStatus(ContractStatus.FINISHED);
         } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
             log.info("Contract {} is  is finished",id);
             throw new IllegalStateException("Contract is FINISHED");
 
-        } else if (Objects.equals(contractStatus, "SIGN")){
+        } else if (contract1.getContractStatus() == null && contractStatus == ContractStatus.SIGNED){
             contract1.setContractStatus(ContractStatus.SIGNED);
+        }else if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.SIGNED){
+            throw new IllegalStateException("Contract is signed");
         }
         else{
-            contract1.setContractStatus(ContractStatus.FINISHED);
+            throw new IllegalStateException("Contract must be signed");
         }
         log.info("Contract status updated");
     }

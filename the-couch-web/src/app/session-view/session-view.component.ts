@@ -3,6 +3,7 @@ import { ClientService } from '../services/ClientService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { HttpHeaders } from '@angular/common/http';
 import {
   faBell,
   faCaretDown,
@@ -41,15 +42,8 @@ export class sessionViewComponent implements OnInit {
   feedback: any;
   notification: any;
 addSessionForm: any;
+statusForm!:FormGroup;
 modalTitle: any;
-currentSessionName: any;
-currentdetails: any;
-currentSessionDate: any;
-currentsessionStartTime: any;
-currentsessionEndTime: any;
-currentsessionVenue: any;
-currentgoals: any;
-currentSession: any;
 feedbacks:any = [];
 attachmentss:any = [];
 attachment: any;
@@ -70,6 +64,7 @@ client: any;
   sessionTime: any;
   sessionType: any;
   editedsessionForm!: FormGroup;
+  feebackForm!: FormGroup<any>;
   loading = false;
   service: any;
   sessions:any;
@@ -84,43 +79,24 @@ client: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
   deleteSessionForm: any;
-  sessionDate = '';
-  sessionStartTime = '';
-  sessionDuration = '';
-  selectedPaymentOption: any;
-  sessionAmount = '';
-  eventType = '';
-  open = false;
   coachSessionData: any;
   coachData: any;
   userRole: any;
   orgIdId: any;
   createdBy: any;
-  objectives: string[] = [];
+  links: string[] = [];
   files: File[] = []; 
-    //Add Objective Form
-    Objectives = {
-      objective: ''
+    //Add Link Form
+    Links = {
+      link: ''
     };
-  feebackForm: any;
   @ViewChild('attachmentModal', { static: false })
 attachmentModal!: ElementRef;
   attachments: any;
   User: any;
   OrgData: any;
   orgSession: any;
-
-  @HostListener('document:click', ['$event']) onClick(event: any) {
-    console.log(event.target.attributes.id.nodeValue);
-
-    if (event.target.attributes && event.target.attributes.id) {
-      if (event.target.attributes.id.nodeValue === 'open') {
-        this.open = true;
-      }
-    } else {
-      this.open = false;
-    }
-  }
+  currentSession!: any;
   constructor(
     private clientService:ClientService,
     private http: HttpClient,
@@ -131,6 +107,10 @@ attachmentModal!: ElementRef;
     private toastrService:ToastrService  ) {}
 
   ngOnInit() {
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
 
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
@@ -143,15 +123,15 @@ attachmentModal!: ElementRef;
     console.log(this.sessionId);
     this.userRole = this.coachData.userRole;
     this.feebackForm = this.formbuilder.group({
-      understandingScore: [''],
-      emotionalIntelligenceScore: [''],
-      listeningSkillsScore: [''],
-      clarificationScore: [''],
-      availabilityScore: [''],
-      comments: ['']
+      understandingScore: '',
+      emotionalIntelligenceScore: '',
+      listeningSkillsScore: '',
+      clarificationScore: '',
+      availabilityScore: '',
+      comments: '',
     });
     this.attachmentForm = this.formbuilder.group({
-      objectives:'',
+      links:'',
       files: [[]],
       
     }
@@ -206,25 +186,7 @@ attachmentModal!: ElementRef;
 
     this.getSession();
     this.getFeedback();
-    this. getAttachment()
-
-
-    this.getNotifications();
-    this.confirmSessionForm = this.formbuilder.group({
-      narration: '',
-    });
-    this.cancelSessionForm = this.formbuilder.group({
-      narration: '',
-      isSendNotification: true,
-    });
-    this.conductedSessionForm = this.formbuilder.group({
-      deliveredOn: '',
-      narration: '',
-      isSendNotification: true,
-    });
-    this.deleteSessionForm = this.formbuilder.group({
-      narration: '',
-    });
+    this. getAttachment(); 
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -234,16 +196,8 @@ attachmentModal!: ElementRef;
       name:'',
       sessionDetails:'',
       sessionEndTime:'',
-      attachments:'',
-      notes:'',
-      feedback:'',
-      paymentCurrency:'',
-      amountPaid:'',
-      sessionAmount:'',
-      sessionBalance:'',
-
     });
-  
+      
   }
   
   //get feedback for session
@@ -268,6 +222,7 @@ attachmentModal!: ElementRef;
         sessionId: this.sessionId,
        
       };
+      console.log("session id",params)
       this.clientService.getAttachment(params).subscribe(
         (res: any) => {
           this.attachments = res.body;
@@ -278,23 +233,7 @@ attachmentModal!: ElementRef;
         }
       );
     }
-    getNotifications(): void {
-      this.searching = true;
-      this.notifications = [];
-      const options = {
-         sessionId: this.sessionId,
-         coachId :this.coachData.id,
-        page: 1,
-        per_page: 10,
-      };
-  
-      this.clientService.getAllNotifications(options).subscribe((res: any) => {
-        this.notifications = res.body;
-        console.log('notification ni', this.notifications);
-        this.searching = false;
-      });
-    }
-  setCurrectSession(session: any) {
+  editSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
   
@@ -305,75 +244,135 @@ attachmentModal!: ElementRef;
       sessionEndTime: this.currentSession.sessionEndTime,
       sessionType: this.currentSession.sessionType,
       sessionVenue: this.currentSession.sessionVenue,
+      sessionDetails: this.currentSession.sessionDetails,
+
       
     });
   }
+  @ViewChild('editsessionModal', { static: false })
+  editsessionModal!: ElementRef;
+  @ViewChild('addfeedbackModal', { static: false })
+  addfeedbackModal!: ElementRef;
+    editedSession(id: any) {
+      console.log(id);
+      this.currentSession = this.editedsessionForm.value;
+      console.log(this.currentSession);
+      console.log(this.editedsessionForm.value);
+      var data = this.editedsessionForm.value;
+      data.id = this.currentSession.id;
+      console.log(data);
+      this.clientService.editSession(data,id).subscribe(
+        (response: any) => {
+          this.toastrService.success(' Updated', 'Success!');
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+  
+      }, (error) => {
+        console.log(error)
+        this.toastrService.error(' not Updated', 'Error!');
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+      }
+    );
+    }
   viewComment(feedback: any): void {
     this.feedback = feedback;
     console.log(this.feedback);
   }
+@ViewChild('confirmsessionModal', { static: false })
+confirmsessionModal!: ElementRef;
+@ViewChild('conductedsessionModal', { static: false })
+conductedsessionModal!: ElementRef;
+@ViewChild('cancelsessionModal', { static: false })
+cancelsessionModal!: ElementRef;
   showStatus: any;
+  // CONFIRMED
+  // CANCELLED,  
+  // CONDUCTED
 
   statusState (currentstatus: any) {
     console.log(currentstatus);
-    if (currentstatus === 'ACTIVE') {
-      this.showStatus = "ACTIVATE";
-      this.status = "ACTIVE";
-    } else if (currentstatus === 'SUSPENDED') {
-      this.showStatus = "SUSPEND";
-      this.status = "SUSPENDED";
-    } else if (currentstatus === 'CLOSED') {
-      this.showStatus = "CLOSE";
-      this.status = "CLOSED";
+    if (currentstatus === 'CONFIRMED') {
+      this.showStatus = "CONFIRMED";
+      this.status = "CONFIRMED";
+    } else if (currentstatus === 'CANCELLED') {
+      this.showStatus = "CANCELLED";
+      this.status = "CANCELLED";
+    } else if (currentstatus === 'CONDUCTED') {
+      this.showStatus = "CONDUCTED";
+      this.status = "CONDUCTED";
     }
 
   }
-  changeClientStatus(){
+  changeSessionStatus(){
     console.log(this.status);
-    if(this.status === "ACTIVE") {
-      this.clientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
-
-    if(this.status === "SUSPENDED") {
-      this.clientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
-
-    if(this.status === "CLOSED") {
-      this.clientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
+    let data = {
+       
+      status: this.status,
   }
-  editedSession() {
-    console.log(this.editedsessionForm.value);
-    this.loading = true;
-    var data = this.editedsessionForm.value;
-    data.id = this.currentSession.id;
-    console.log(data);
-    this.clientService.editSession(data).subscribe(
-      (response: any) => {
-        this.loading = false;
-        console.log(response);
-      }, (error: any) => {
-        console.log(error);
-      }
-    )
+  console.log(data);
+    if(this.status === "CONFIRMED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('Status change failed');
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if(this.status === "CANCELLED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('Status change failed');
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if(this.status === "CONDUCTED") {
+      this.clientService.changeSession(this.coachId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed successfully');
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('Status change failed');
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
   }
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
@@ -389,29 +388,19 @@ attachmentModal!: ElementRef;
     }
 }
   giveFeedback() {
-    console.log(this.feebackForm.value);
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
       clientId: this.clientId,
     
     };
-    console.log(this.feebackForm.value);
-    const data = this.feebackForm.value;
-
-    data.sessionId = this.sessionId;
-    
-    data.coachId = this.coachId;
-    data.clientId = this.clientId;
-    data.createdBy = this.createdBy;
-
-
-    this.clientService.addFeedback(data, params).subscribe(
+    console.log(params);
+    this.clientService.addFeedback(this.feebackForm, params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback Added Successfully');
-        this.feebackForm.nativeElement.classList.remove('show');
-        this.feebackForm.nativeElement.style.display = 'none';
+        this.addfeedbackModal.nativeElement.classList.remove('show');
+        this.addfeedbackModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
@@ -451,26 +440,29 @@ attachmentModal!: ElementRef;
   }
   
 
-  addObjective(){
+  addLink(){
   
-    console.log(this.Objectives);
-    this.objectives.push(this.Objectives.objective);
-    console.log(this.objectives);
-    this.Objectives.objective = '';
-    console.log(this.Objectives);
+    console.log(this.Links);
+    this.links.push(this.Links.link);
+    console.log(this.links);
+    this.Links.link = '';
+    console.log(this.Links);
   }
 
-  removeObjective(index: number){
-    this.objectives.splice(index, 1);
+  removeLink(index: number){
+    this.links.splice(index, 1);
   }
   addAttachment() {
+    const boundary = '-------------------------' + Math.random().toString(16).substring(2);
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data; boundary=' + boundary
+    });
     const formData = this.attachmentForm.value;
-    formData.objectives =this.objectives;
+    formData.links = this.links;
     formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
-    
     };
     formData.sessionId = this.sessionId;
     formData.coachId = this.coachId;
@@ -479,12 +471,12 @@ attachmentModal!: ElementRef;
     console.log(formData);
     console.log(this.files);
     // Send formData to backend using a service or API
-    this.clientService.addAttachment(formData, params).subscribe(
+    this.clientService.addAttachment(formData, params,headers ).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Attachment Added Successfully');
-        this. attachmentModal.nativeElement.classList.remove('show');
-        this. attachmentModal.nativeElement.style.display = 'none';
+        this.attachmentModal.nativeElement.classList.remove('show');
+        this.attachmentModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
@@ -492,7 +484,7 @@ attachmentModal!: ElementRef;
       }
     );
   }
-
+  
 
 
 

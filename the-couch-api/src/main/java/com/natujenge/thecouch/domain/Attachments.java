@@ -17,8 +17,14 @@ public class Attachments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String  FileName;
+    private String  FileType;
+    private Long  FileSize;
+    private  byte[]  FileContent;
+
 
     private String link;
+    private String  linkUrl;
     private byte[]  file;
 
     // Management
@@ -47,6 +53,5 @@ public class Attachments {
     @ManyToOne
     @JoinColumn(name = "org_id_id")
     Organization organization;
-
 
 }

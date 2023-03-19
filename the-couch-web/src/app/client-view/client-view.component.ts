@@ -97,6 +97,8 @@ clients:any;
   };
   status: any;
 
+
+statusForm!:FormGroup;
 updateClient!: FormGroup;
 sessionDueDate: any;
 sessionStartTime: any;
@@ -133,6 +135,12 @@ coachingCategory: any;
    { }
 
   ngOnInit() {
+
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
+
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
@@ -186,13 +194,6 @@ coachingCategory: any;
     name:'',
     sessionDetails:'',
     sessionEndTime:'',
-    attachments:'',
-    notes:'',
-    feedback:'',
-    paymentCurrency:'',
-    amountPaid:'',
-    sessionAmount:'',
-    sessionBalance:'',
 
   });
   
@@ -421,7 +422,7 @@ updateClientDetails(id:any){
   changeClientStatus(){
     console.log(this.status);
     if(this.status === "ACTIVE") {
-      this.ClientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
+      this.ClientService.changeClient(this.clientId, "ACTIVE",this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('Status Changed successfully');
@@ -433,7 +434,7 @@ updateClientDetails(id:any){
         
         }, (error) => {
           console.log(error)
-          this.toastrService.success('Status change failed');
+          this.toastrService.error('Status change failed');
           this.activateclientModal.nativeElement.classList.remove('show');
           this.activateclientModal.nativeElement.style.display = 'none';
         }
@@ -441,7 +442,7 @@ updateClientDetails(id:any){
     }
 
     if(this.status === "SUSPENDED") {
-      this.ClientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
+      this.ClientService.changeClient(this.clientId, "SUSPENDED",this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('Status changed successfully');
@@ -460,7 +461,7 @@ updateClientDetails(id:any){
     }
 
     if(this.status === "CLOSED") {
-      this.ClientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
+      this.ClientService.changeClient(this.clientId, "CLOSED",this.statusForm.value).subscribe(
         (response) => {
           console.log(response);
           this.toastrService.success('Status changed successfully');
@@ -469,7 +470,7 @@ updateClientDetails(id:any){
           }, 1000);
           this.closeclientModal.nativeElement.classList.remove('show');
           this.closeclientModal.nativeElement.style.display = 'none';
-        }, (error) => {
+        }, (error:any) => {
           console.log(error)
           this.toastrService.success('Status change failed');
           this.closeclientModal.nativeElement.classList.remove('show');
@@ -477,7 +478,10 @@ updateClientDetails(id:any){
         }
       );
     }
+
   }
+
+
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);

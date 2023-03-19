@@ -196,7 +196,7 @@
                       <span class="value">
                       <span
                       class="badge"
-                      [ngClass]="getClass(session)"
+                      [ngClass]="getClass(sessions)"
                       >{{ session.sessionStatus }}</span> 
                       
                     </span>
@@ -238,7 +238,7 @@
                 <td>{{ contract.noOfSessions }}</td>
                 <td>{{ contract.client.fullName }}</td>
                 <td class="text-center">
-                  <button type="button"  class="btn btn-sm btn-success"routerLink="/contractDetail/{{contract.id}}" >View</button>
+                  <button type="button"  class="btn btn-sm btn-success"  (click)="navigateToTerms(contract.id)" >View</button>
 
               </tr>
             </tbody>

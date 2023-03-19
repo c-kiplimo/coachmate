@@ -144,15 +144,20 @@ export class TermsAndConditionsPageComponent implements OnInit {
       const id = this.route.snapshot.params['id'];
       console.log("contractId on navigate",id);
       this.contractId = id;
+      let data = {
+       
+        status: 'SIGNED',
+    }
+      console.log("data here",data);
     console.log("contractId on checkbox",this.contractId);
-      this.clientService.changeContractStatus(this.contractId, "SIGNED").subscribe(
+      this.clientService.changeContractStatus(this.contractId, data).subscribe(
         (response) => {
           console.log(response);
           this.toastrService.success('Status Changed successfully');
         },
         (error) => {
           console.log(error);
-          this.toastrService.success('Status change failed');
+          this.toastrService.error(error.message);
         }
       );
     }

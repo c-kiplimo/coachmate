@@ -60,7 +60,6 @@
                 aria-describedby="emailHelp"
                 placeholder="0701234567"
                 required
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
                 
               />

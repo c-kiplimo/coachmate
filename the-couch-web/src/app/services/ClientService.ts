@@ -5,6 +5,7 @@ import { map, catchError, tap} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { param } from 'jquery';
  
  
 @Injectable({
@@ -89,15 +90,30 @@ export class ClientService {
 
    
 
-    changeClientStatus(clientId: any, status: any): Observable<any> {
-        var client:any = {
-            id: clientId,
-            status: status
-        }
-    
-        return this.http.put(`${this.baseURL}clients/changeStatus/`+ clientId, client)
-        "/change-status/{id}"
+    changeClient(clientId: any, status:any, statusForm: any): Observable<any> {
+      let options = {
+        status: status,
+      };
+        return this.http.put<any>(this.baseURL + 'clients/change-status/'+ clientId,statusForm,
+        {
+
+          params:options,
+          observe:"response"
+
+        });
+
+    } 
+    changeSession(coachId: any, data: any): Observable<any> {
+console.log("change session status reached")
+console.log("client id",coachId)
+console.log("data status",data.status)
+      return this.http.put<any>(
+        this.baseURL + 'sessions/change-status/' + coachId + "?status="+data.status,
+        {
+          observe: 'response' ,}
+      );
     }
+
 
      
     // Get all Contracts
@@ -136,9 +152,15 @@ export class ClientService {
         //     })
         //   );
       }
-    editSession(id: any) : Observable<any> {
-        return this.http.delete(this.baseURL + `/sessions/` + id,);
+    editSession(data:any,id:any) : Observable<any> {
+        console.log("edit session reached")
+        console.log("session  to be updated here",data)
+        console.log("session id here",id)
+        return this.http.put(`${this.baseURL}clients/${id}`, data)
       }
+
+
+
     deleteSession(id: any ): Observable<any> {
         return this.http.delete(this.baseURL + `/sessions/` + id,);
       }
@@ -202,11 +224,14 @@ getCoachFeedbacks(id: any): Observable<any>{
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id);
 }
 // ATTACHMENT SERVICES
-addAttachment(formData: any, options: any): Observable<any> {
+addAttachment(formData: any, options: any,headers:any): Observable<any> {
   return this.http.post<any>(
-      this.baseURL + 'attachments',
+      this.baseURL + 'attachments/upload',
       formData,
-      { params: options, observe: 'response' }
+      { params: options, 
+        observe: 'response' ,
+        headers:headers
+      }
     );
 }
 getAttachment(params:any):Observable<any>{
@@ -386,13 +411,12 @@ recordPayment(payment: any): Observable<any> {
     );
   }
   // change contract status
-  changeContractStatus(contractId: any, status: any): Observable<any> {
-    console.log('contractId', contractId);
-    console.log('status', status);
+  changeContractStatus(contractId: any, data: any): Observable<any> {
+
     return this.http.put<any>(
-      this.baseURL + '/contract/changeContractStatus/' + contractId,
-      status,
-      { observe: 'response' }
+      this.baseURL + 'contracts/changeContractStatus/' + contractId + "?status="+data.status,
+      {
+        observe: 'response' ,}
     );
   }
 }
