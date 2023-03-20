@@ -193,6 +193,8 @@ export class ClientService {
   }
 
   getOrgCoaches(data: any): Observable<any> {
+    console.log("get org coaches reached")
+    console.log("data", data)
     return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, { params: data })
   }
   getOrgClients(id: any): Observable<any> {

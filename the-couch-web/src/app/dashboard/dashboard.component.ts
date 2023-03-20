@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   loading!: boolean;
 
   OrgCoaches: any;
-  numberofCoaches: any;
+  numberofCoaches!: number;
 
   Clients: any;
   OrgData: any;
@@ -102,6 +102,7 @@ Feedbacks: any;
       this.getOrgContracts(this.orgSession.id);
       this.getAllOrgSessions(this.orgSession.id);
       this.getOrgFeedbacks(this.orgSession.id);
+      this.getOrgCoaches(this.orgSession.id);
      
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
@@ -145,7 +146,7 @@ Feedbacks: any;
     this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
+        this.Feedbacks = response.body;
         console.log(this.Feedbacks);
         let totalScore = 0;
 
@@ -179,15 +180,6 @@ Feedbacks: any;
         this.sessions = response;
         this.loading = false;
         this.numberOfSessions = this.sessions.length;
-
-    this.clientService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
-        this.loading = false;
-
-      })
-    ,
       (error: any) => {
         console.log(error);
       }
@@ -241,7 +233,7 @@ Feedbacks: any;
     this.clientService.getOrgContracts(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.contracts = response;
+        this.contracts = response.body;
         this.loading = false;
         this.numberOfContracts = this.contracts.length;
       },
@@ -322,10 +314,10 @@ Feedbacks: any;
     this.clientService.getOrganization(data).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
-        this.Organization = response;
-        this.orgName = this.Organization.orgName;
+        this.Organization = response.body;
+        console.log(this.Organization);
+        console.log('here Organization=>', response);
 
-        this.getOrgCoaches(this.Organization.id);
 
 
 
@@ -345,9 +337,10 @@ Feedbacks: any;
     }
     this.clientService.getOrgCoaches(data).subscribe(
       (response: any) => {
-        console.log('here Organization=>', response);
+        console.log('here Organization=> coaches', response);
         this.OrgCoaches = response;
         console.log(this.OrgCoaches);
+        console.log('here Organization=> coaches', response);
         this.numberofCoaches = this.OrgCoaches.length;
        
       },
