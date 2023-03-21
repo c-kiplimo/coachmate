@@ -1,18 +1,25 @@
 package com.natujenge.thecouch.web.rest;
 
+import com.natujenge.thecouch.domain.Client;
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.ClientService;
+import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import com.natujenge.thecouch.service.ResponseService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,7 +33,34 @@ public class RegistrationResource {
 
     private final RegistrationService registrationService;
     private final ClientService clientService;
+    private final CoachService coachService;
+
     private final ResponseService responseService;
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    //api to create a coach by organization
+    @PostMapping
+    ResponseEntity<?> addNewCoach(@RequestBody CoachRequest coachRequest,
+                                   @AuthenticationPrincipal User userDetails) {
+        log.info("request to add new coach by organization");
+        try {
+            Coach newCoach = coachService.addNewCoachByOrganization(coachRequest.getOrgIdId(),
+                    coachRequest);
+            if (newCoach != null) {
+                CoachRequest response = modelMapper.map(newCoach, CoachRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Coach by organization not created"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {

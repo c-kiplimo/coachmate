@@ -36,8 +36,7 @@ public class SessionResource {
     SessionService sessionService;
     @Autowired
     ContractService contractService;
-    @Autowired
-    SessionRepository sessionRepository;
+
 
     //GET: /sessions
     @GetMapping
@@ -74,20 +73,7 @@ public class SessionResource {
         }
     }
 
-    //Get Session Stats
-//    @GetMapping("stats")
-//    public ResponseEntity<?> getSessionStats (@AuthenticationPrincipal User userDetails) {
-//        try{
-//            Long coachId = userDetails.getCoach().getId();
-//            sessionService.getSessionStats(coachId);
-//            return new ResponseEntity<>("Not Implemented", HttpStatus.OK);
-//
-//        }catch (Exception e) {
-//            log.error("Error ", e);
-//            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-//                    HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+
 
     //POST: /api/sessions
     @PostMapping
@@ -135,41 +121,6 @@ public class SessionResource {
         }
     }
 
-
-    //PATCH: /api/sessions/:id
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<?> updateSessionById(@RequestBody SessionRequest sessionRequest,
-//                                               @PathVariable("id") Long id) {
-//        Session session = sessionRepository.findSessionById(id).orElseThrow(()
-//                -> new UserNotFoundException("Session by id " + id + " not found"));
-//
-//        boolean needUpdate = false;
-//
-//        if (hasLength(sessionRequest.getName())){
-//            session.setName(sessionRequest.getName());
-//            needUpdate = true;
-//        }
-//
-//        if (hasLength(sessionRequest.getSessionDuration())){
-//            session.setSessionDuration(sessionRequest.getSessionDuration());
-//            needUpdate = true;
-//        }
-//
-//        if (hasLength(sessionRequest.getAmountPaid())){
-//            session.setAmountPaid(sessionRequest.getAmountPaid());
-//            needUpdate = true;
-//        }
-//
-//        if (hasLength(sessionRequest.getSessionDuration())){
-//            session.setSessionDuration(sessionRequest.getSessionDuration());
-//            needUpdate = true;
-//        }
-//
-//        if (needUpdate) {
-//            sessionRepository.save(session);
-//        }
-//        return new ResponseEntity(session, HttpStatus.OK);
-//    }
 
     //DELETE:/api/sessions/:id
     @DeleteMapping("/{id}")

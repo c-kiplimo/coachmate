@@ -28,7 +28,7 @@ public class RegistrationService {
     private final static String EMAIL_NOT_VALID = "EMAIL %s IS NOT VALID";
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
     private final UserService userService;
-    private final CoachService coachService;
+
     private final OrganizationService organizationService;
     private EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
@@ -72,7 +72,7 @@ public class RegistrationService {
                 coach.setOrganization(registrationRequest.getOrganization());
 
 
-                coachService.addNewCoach(coach);
+                coachRepository.save(coach);
 
                 log.info("Coach registered");
                 List<Object> response = userService.signupUser(
@@ -139,6 +139,39 @@ public class RegistrationService {
 
     }
 
+    //Register Coach as user
+    public void registerCoachAsUser(Coach coachRequest) {
+        log.info("Registering a Client as User");
+        boolean isValidEmail = emailValidator.test(coachRequest.getEmailAddress());
+
+        if(!isValidEmail) {
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coachRequest.getEmailAddress()));
+        }
+
+        //Create Client User
+        List<Object> response = userService.signupCoachAsUser(
+                new User(
+                        coachRequest.getFirstName(),
+                        coachRequest.getLastName(),
+                        coachRequest.getEmailAddress(),
+                        coachRequest.getMsisdn(),
+                        coachRequest.getPassword(),
+                        UserRole.COACH
+                )
+        );
+
+        //SEnding Confirmation token
+        String token = (String) response.get(1);
+        //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+
+        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
+        String subject = "Your TheCoach Account Has Been Created.";
+        String content = "Hey, use this link to confirm your account and set your password," +
+                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
+        notificationServiceHTTPClient.sendEmail(coachRequest.getEmailAddress(),subject, content, false);
+        notificationServiceHTTPClient.sendSMS(coachRequest.getMsisdn(), subject, content, String.valueOf(false));
+
+    }
     //Register Client as user
     public void registerClientAsUser(Client clientRequest) {
         log.info("Registering a Client as User");

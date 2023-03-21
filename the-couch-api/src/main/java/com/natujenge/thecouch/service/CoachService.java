@@ -1,30 +1,33 @@
 package com.natujenge.thecouch.service;
-
-import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
+import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class CoachService {
 
     private final CoachRepository coachRepository;
+    private final OrganizationRepository organizationRepository;
+  @Autowired
+    private RegistrationService registrationService;
 
-//     constructor
-    public CoachService(CoachRepository coachRepository) {
+    //     constructor
+    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, RegistrationService registrationService) {
         this.coachRepository = coachRepository;
+        this.organizationRepository = organizationRepository;
     }
-
 
 
     // add new coach
@@ -37,6 +40,35 @@ public class CoachService {
         }
         return coachRepository.save(coach);
     }
+
+    // create coach by organization
+    public Coach addNewCoachByOrganization(Long organizationId, CoachRequest coachRequest) {
+        log.info("add a new coach to database");
+
+        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationById(organizationId);
+
+
+        Coach coach = new Coach();
+
+        if (optionalOrganization.isPresent()) {
+            coach.setOrganization(optionalOrganization.get());
+            coach.setFirstName(coachRequest.getFirstName());
+            coach.setLastName(coachRequest.getLastName());
+            coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
+            coach.setMsisdn(coachRequest.getMsisdn());
+            coach.setEmailAddress(coachRequest.getEmail());
+            coach.setPassword(coach.getPassword());
+
+        }
+
+        Coach saveCoach = coachRepository.save(coach);
+        //save user
+        registrationService.registerCoachAsUser(saveCoach);
+        return saveCoach;
+
+
+        }
+
 
     //UPDATE
     public Coach updateCoach(Coach coach) {

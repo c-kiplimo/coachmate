@@ -80,6 +80,7 @@
                   required
                   placeholder="eg. 0700123456"
                   oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
                 />
               </div>
             </div>

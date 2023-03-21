@@ -39,7 +39,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent

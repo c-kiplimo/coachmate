@@ -30,6 +30,7 @@ public class Coach implements Serializable {
     private String businessName;
     private String fullName;
     private String firstName;
+    private String password;
     private String lastName;
     private String msisdn;
     private String emailAddress;
@@ -59,10 +60,13 @@ public class Coach implements Serializable {
                 ", emailAddress='" + emailAddress + '\'' +
                 ", status=" + status +
                 ", reason='" + reason + '\'' +
+                ", reason='" + reason + '\'' +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
                 '}';
     }
+
+
 }
