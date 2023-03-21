@@ -13,6 +13,7 @@ import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import com.natujenge.thecouch.service.ResponseService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,37 +31,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @Slf4j
 public class RegistrationResource {
-
     private final RegistrationService registrationService;
     private final ClientService clientService;
     private final CoachService coachService;
-
     private final ResponseService responseService;
-    @Autowired
-    private ModelMapper modelMapper;
 
-
-    //api to create a coach by organization
-    @PostMapping
-    ResponseEntity<?> addNewCoach(@RequestBody CoachRequest coachRequest,
-                                   @AuthenticationPrincipal User userDetails) {
-        log.info("request to add new coach by organization");
-        try {
-            Coach newCoach = coachService.addNewCoachByOrganization(coachRequest.getOrgIdId(),
-                    coachRequest);
-            if (newCoach != null) {
-                CoachRequest response = modelMapper.map(newCoach, CoachRequest.class);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new RestResponse(true,
-                        "Coach by organization not created"), HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PostMapping
     public ResponseEntity<?> register(@RequestBody RegistrationRequest registrationRequest) {
@@ -82,6 +57,18 @@ public class RegistrationResource {
             return new ResponseEntity<>(new RestResponse(false,response), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
+                    HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(path = "/coach/confirm")
+    public ResponseEntity<?> confirmCoach(@RequestParam("token") String token,
+                                             @RequestParam("password") String password) {
+        try {
+            String response = registrationService.confirmCoachToken(token,password);
+            return new ResponseEntity<>(new RestResponse(false, response), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.OK);
         }
     }

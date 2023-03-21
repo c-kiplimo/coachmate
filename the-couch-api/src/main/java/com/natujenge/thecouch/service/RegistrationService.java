@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
@@ -13,6 +14,7 @@ import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,9 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class RegistrationService {
+    private final static String USER_NOT_FOUND_MSG = "user %s not found!";
     private final static String EMAIL_NOT_VALID = "EMAIL %s IS NOT VALID";
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
     private final UserService userService;
@@ -140,38 +144,39 @@ public class RegistrationService {
     }
 
     //Register Coach as user
-    public void registerCoachAsUser(Coach coachRequest) {
-        log.info("Registering a Client as User");
-        boolean isValidEmail = emailValidator.test(coachRequest.getEmailAddress());
+    public void registerCoachAsUser(Coach coach,String msisdn) {
+        log.info("Registering a coach as user");
+        boolean isValidEmail = emailValidator.test(coach.getEmailAddress());
 
         if(!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coachRequest.getEmailAddress()));
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coach.getEmailAddress()));
         }
 
-        //Create Client User
+        //Create Coach User
         List<Object> response = userService.signupCoachAsUser(
                 new User(
-                        coachRequest.getFirstName(),
-                        coachRequest.getLastName(),
-                        coachRequest.getEmailAddress(),
-                        coachRequest.getMsisdn(),
-                        coachRequest.getPassword(),
+                        coach.getFirstName(),
+                        coach.getLastName(),
+                        coach.getEmailAddress(),
+                        coach.getMsisdn(),
                         UserRole.COACH
-                )
+                ), msisdn
         );
 
         //SEnding Confirmation token
         String token = (String) response.get(1);
         //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
 
+        User savedUser = (User) response.get(0);
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
-        String subject = "Your TheCoach Account Has Been Created.";
-        String content = "Hey, use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
-        notificationServiceHTTPClient.sendEmail(coachRequest.getEmailAddress(),subject, content, false);
-        notificationServiceHTTPClient.sendSMS(coachRequest.getMsisdn(), subject, content, String.valueOf(false));
+        String subject = "Coach Account Creation";
+        String content = "Hello " + savedUser.getFirstName() + ", use this link to confirm your account and set your password," +
+                " http://localhost:4200/confirmclient/"+token;
+        notificationServiceHTTPClient.sendEmail(savedUser.getEmail() ,subject, content, false);
+        notificationServiceHTTPClient.sendSMS(savedUser.getMsisdn(),content,"COACH-1234");
 
     }
+
     //Register Client as user
     public void registerClientAsUser(Client clientRequest) {
         log.info("Registering a Client as User");
@@ -230,6 +235,34 @@ public class RegistrationService {
         return "Confirmed! You can now Login to your account";
 
     }
+
+
+    public String confirmCoachToken(String token, String password){
+        ConfirmationToken confirmationToken = confirmationTokenService.getToken(token).orElseThrow(() ->
+                new IllegalStateException("INVALID OTP!"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("Phone Number Already Confirmed!");
+
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Token Expired!");
+
+        }
+        User user = confirmationToken.getUser();
+        user.setPassword(password);
+        userService.confirmCoach(user);
+
+        confirmationTokenService.setConfirmedAt(token);
+
+        return "Account Confirmed, You can Proceed to Login";
+
+    }
+
+
     // Request OTP
     public String requestOTP(String msisdn, String resend) {
         log.info("Generating OTP");

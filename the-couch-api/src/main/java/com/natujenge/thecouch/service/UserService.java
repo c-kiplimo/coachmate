@@ -37,6 +37,26 @@ public class UserService implements UserDetailsService {
     @Autowired
     ConfirmationTokenService confirmationTokenService;
 
+    public void enableAppUser(String email) {
+
+        // Request UserDto rather than all details
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+
+        user.setEnabled(true);
+
+    }
+
+
+    public void confirmCoach(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        // Set details
+        user.setPassword(encodedPassword);
+        enableAppUser(user.getMsisdn());
+    }
+
+
     public List<Object> signupUser(User user) {
         log.info("Signing up User");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
@@ -100,7 +120,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(user.getPassword());
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy(UserRole.CLIENT);
+        user.setCreatedBy("Test");
 
 
         // save the User in the database
@@ -128,9 +148,11 @@ public class UserService implements UserDetailsService {
         return response;
 
     }
-    //Client as User
-    public List<Object> signupCoachAsUser(User user) {
-        log.info("Signing up coach as User");
+
+
+    // Coach as user
+    public List<Object> signupCoachAsUser(User user,String msisdn) {
+        log.info("Signing up coach as user");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
                 .isPresent();
 
@@ -138,19 +160,15 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
         }
 
-        // Encode Password > from spring boot
-        //String encodedPassword = passwordEncoder.encode(user.getPassword());
-
         // Set details
-        user.setPassword(user.getPassword());
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy(UserRole.COACH);
+        user.setCreatedBy(msisdn);
 
 
         // save the User in the database
         User user1 = userRepository.save(user);
-        log.info("Client User saved");
+        log.info("Coach User saved");
 
         // Generate a Random 6 digit OTP - 0 - 999999
         int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
@@ -159,7 +177,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                LocalDateTime.now().plusMinutes(60*24),
                 user
         );
 
@@ -171,16 +189,6 @@ public class UserService implements UserDetailsService {
         response.add(token);
 
         return response;
-
-    }
-
-    public void enableAppUser(String email) {
-
-        // Request UserDto rather than all details
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
-
-        user.setEnabled(true);
 
     }
 

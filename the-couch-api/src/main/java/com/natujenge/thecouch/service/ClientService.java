@@ -67,27 +67,18 @@ public class ClientService {
 
 
     // create client
-    public Client addNewClient(Long coachId, ClientRequest clientRequest) {
+    public Client addNewClient(Coach coach,Organization organization, ClientRequest clientRequest) {
         log.info("add a new client to database");
-
-        Optional<Coach> optionalCoach = coachRepository.getCoachById(coachId);
-
-        if (optionalCoach.isEmpty()) {
-            log.warn("Coach with id {} not found", coachId);
-            throw new IllegalArgumentException("Coach not found");
-
-        }
-
-        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(coachId);
-
 
         Client client = new Client();
 
-        if (optionalOrganization.isPresent()){
-            client.setOrganization(optionalOrganization.get());
+        if(coach != null){
+            client.setCreatedBy(coach.getFullName());
+            client.setCoach(coach);
         }
-
-        client.setCoach(optionalCoach.get());
+        if(organization != null){
+            client.setOrganization(organization);
+        }
 
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
@@ -100,7 +91,8 @@ public class ClientService {
         client.setReason(clientRequest.getReason());
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
-        client.setCreatedBy(optionalCoach.get().getFullName());
+
+
         client.setProfession(clientRequest.getProfession());
 
 
@@ -110,19 +102,29 @@ public class ClientService {
 
         // Create client wallet
         ClientWallet clientWallet = new ClientWallet();
-        clientWallet.setCreatedBy(optionalCoach.get().getFullName());
+
+        if(coach != null){
+            clientWallet.setCreatedBy(coach.getFullName());
+            clientWallet.setCoach(coach);
+        }
+        if(organization != null){
+            clientWallet.setOrganization(organization);
+        }
+
         clientWallet.setClient(saveClient);
-        clientWallet.setCoach(optionalCoach.get());
         clientWallet.setWalletBalance(Float.valueOf(0));
-        optionalOrganization.ifPresent(clientWallet::setOrganization);
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
         // Create client Billing Account
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        clientBillingAccount.setCreatedBy(optionalCoach.get().getFullName());
-        clientBillingAccount.setCoach(optionalCoach.get());
-        optionalOrganization.ifPresent(clientBillingAccount::setOrganization);
+        if(coach != null){
+            clientBillingAccount.setCreatedBy(coach.getFullName());
+            clientBillingAccount.setCoach(coach);
+        }
+        if(organization != null){
+            clientBillingAccount.setOrganization(organization);
+        }
         clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
