@@ -143,41 +143,5 @@ export class SessionsComponent implements OnInit {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
-  getFiltersessions(page: number, period: string, navigate?: boolean):void {
-    this.sessions = [];
-    this.loading = true;
-
-    window.scroll(0, 0);
-    this.page = page;
-
-    const options = {
-      page: page,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.search,
-      period: period,
-      balance: this.filters.balance,
-    };
-
-    this.apiService.getFiltered(options).subscribe(
-      (res: any) => {
-        // console.log( res.body.data);
-        this.loading = false;
-        this.sessions = res.body.data;
-        this.noOfSessions = this.sessions.length;
-        // console.log('here are orders', this.orders);
-
-        this.totalLength = Number(res.body.totalElements);
-
-      },
-      (error: any) => {
-        console.log(error);
-        this.loading = false;
-        
-        // return this.noOfOrders;
-      }
-    );
-
-
-  }
+  
 }

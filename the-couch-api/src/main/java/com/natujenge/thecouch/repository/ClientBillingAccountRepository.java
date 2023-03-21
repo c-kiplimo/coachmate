@@ -25,4 +25,7 @@ public interface ClientBillingAccountRepository extends PagingAndSortingReposito
 
     ClientBillingAccount findByCoach_idAndClient_id(Long id, Long id1);
 
+    Optional<ClientBillingAccount> findFirstByOrganizationIdAndClientIdOrderByIdDesc(Long id, Long id1);
+
+    Optional<ClientBillingAccount> findByClientIdOrderByIdDesc(Long id);
 }

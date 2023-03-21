@@ -29,25 +29,73 @@ public class WalletResource {
     @Autowired
     WalletService walletService;
 
-    // create payment based on coach/organization
+
+
+    // Create payments based on logged-in user
     @PostMapping
-    public ResponseEntity<?> createPayment(@RequestBody PaymentRequest paymentRequest,
-                                           @AuthenticationPrincipal User userDetails) {
+    ResponseEntity<?> createPayment(@RequestBody PaymentRequest paymentRequest,
+                                     @AuthenticationPrincipal User userDetails) {
         log.info("Request to create payment");
         try {
-            ClientWallet wallet = walletService.createPayment(paymentRequest, userDetails.getCoach());
+            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+            Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
+                    userDetails.getCoach().getOrganization().getId();
+            Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
 
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
-                    .toUriString());
-            return ResponseEntity.created(uri).body(wallet);
+            if (organizationId != null) {
+                log.info("Request to create payment by organization");
+                try {
+                    ClientWallet wallet = walletService.createPaymentByOrganization(paymentRequest,
+                            userDetails.getCoach().getOrganization());
 
+                    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
+                            .toUriString());
+                    return ResponseEntity.created(uri).body(wallet);
+
+                } catch (Exception e) {
+                    log.error("Error ", e);
+                    return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                            HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else if (clientId != null) {
+                log.info("Request to create payment by client");
+                try {
+                    ClientWallet wallet = walletService.createPaymentByClient(paymentRequest, userDetails.getClient());
+
+                    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
+                            .toUriString());
+                    return ResponseEntity.created(uri).body(wallet);
+
+                } catch (Exception e) {
+                    log.error("Error ", e);
+                    return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                            HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+            } else if (coachId != null) {
+                log.info("Request to create payment by coach");
+                try {
+                    ClientWallet wallet = walletService.createPaymentByCoach(paymentRequest, userDetails.getCoach());
+
+                    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
+                            .toUriString());
+                    return ResponseEntity.created(uri).body(wallet);
+
+                } catch (Exception e) {
+                    log.error("Error ", e);
+                    return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                            HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity<>(new RestResponse(true, "You are not authorized to perform this action"),
+                        HttpStatus.UNAUTHORIZED);
+            }
         } catch (Exception e) {
             log.error("Error ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     // Get all payments based on logged-in user
     @GetMapping
     ResponseEntity<?> getAllPayments(@RequestParam("per_page") int perPage,
