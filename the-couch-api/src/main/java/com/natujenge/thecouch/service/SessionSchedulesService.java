@@ -18,9 +18,11 @@ import java.util.Optional;
 public class SessionSchedulesService {
     @Autowired
     SessionSchedulesRepository sessionSchedulesRepository;
+
+    @Autowired
     CoachRepository coachRepository;
 
-    //Get all schedule by caoch id
+    //Get all schedule by coach id
     public SessionSchedules findSessionSchedulesByCoachId(Long id) {
         log.debug("Request to get SessionSchedules : {} by coach id {}", id);
 

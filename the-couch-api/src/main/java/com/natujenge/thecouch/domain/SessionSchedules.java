@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "tbl_sessionSchedules")
 public class SessionSchedules {
-    @GeneratedValue (strategy = GenerationType.AUTO.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private Long orgId;

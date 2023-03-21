@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 @Slf4j
 @Transactional
@@ -213,7 +214,8 @@ public class SessionService {
     @Scheduled(cron = "0 0 9 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
-        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+        //List<Session> sessions = sessionSchedulesRepository.findAllBySessionDate(LocalDate.now());
+        List<Session> sessions = sessionRepository.findAllBysessionSchedules(LocalDate.now());
 
         for (Session session : sessions) {
             String smsContent;
