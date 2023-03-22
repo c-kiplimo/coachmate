@@ -309,27 +309,13 @@ public class ContractService {
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
-
-
-
-//
-//        Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
-//                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
-//                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-//        log.info("Amount Due:{} ",amountDue);
-//        contract.setAmountDue(amountDue);
-//        clientBillingAccountService.updateBillingAccount(amountDue,organization,coach);
-//        log.info("Amount Due:{} ",amountDue);
-//        log.info("Contract: "+contract.toString());
-//        log.info("Client: "+client.toString());
-//        log.info("Coach: "+coach.toString());
         contract.setCoach(coach);
         contract.setOrganization(organization);
         if(coach.getOrganization()!=null){
             contract.setOrganization(coach.getOrganization());
         }
 
-        log.info("Contract: "+contract.toString());
+        log.info("Contract: " + contract.toString());
         //check client wallet balance
 
         Contract contract1 = contractRepository.save(contract);
@@ -359,9 +345,9 @@ public class ContractService {
         replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
         replacementVariables.put("start_date",contract1.getStartDate());
         replacementVariables.put("end_date",contract1.getEndDate());
-        replacementVariables.put("full_name", contract1.getClient().getOrganization().getFullName());
+        replacementVariables.put("full_name", contract1.getCoach().getOrganization().getFullName());
 
-        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
+        String smsTemplate = Constants.DEFAULT_NEW_ORGANIZATION_COACH_CONTRACT_SMS_TEMPLATE;
 
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -389,7 +375,7 @@ public class ContractService {
         notification.setOrganization(organization);
         notification.setCoach(coach);
         notification.setContract(contract1);
-        notification.setCreatedBy(coach.getFullName());
+        notification.setCreatedBy(organization.getFullName());
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);
@@ -408,30 +394,6 @@ public class ContractService {
         Organization organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
-
-        contract.setCoachingTopic(contractRequest.getCoachingTopic());
-        contract.setCoachingCategory(contractRequest.getCoachingCategory());
-        contract.setStartDate(contractRequest.getStartDate());
-        contract.setEndDate((contractRequest.getEndDate()));
-        contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
-        contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
-        contract.setNoOfSessions(contractRequest.getNoOfSessions());
-
-
-//
-//
-//        Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
-//                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
-//                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-//        log.info("Amount Due:{} ",amountDue);
-//        contract.setAmountDue(amountDue);
-//        clientBillingAccountService.updateBillingAccount(amountDue,organization,client);
-//        log.info("Amount Due:{} ",amountDue);
-//        log.info("Contract: "+contract.toString());
-//        log.info("Client: "+client.toString());
-//        log.info("Coach: "+coach.toString());
-//        contract.setClient(client);
-//        contract.setCoach(coach);
         if(client.getOrganization()!=null){
             contract.setOrganization(client.getOrganization());
         }
@@ -444,31 +406,17 @@ public class ContractService {
         List<String> objectives = contractRequest.getObjectives();
         // save Objectives
         List<CoachingObjective> coachingObjectives = new ArrayList<>();
-//
-//        for (String objective:
-//                objectives) {
-//            CoachingObjective coachingObjective = new CoachingObjective();
-//            coachingObjective.setObjective(objective);
-//            coachingObjective.setCreatedBy(coach.getFullName());
-//            coachingObjective.setLastUpdatedBy(coach.getFullName());
-//
-//            coachingObjective.setClient(client);
-//            coachingObjective.setContract(contract1);
-//            coachingObjective.setCoach(coach);
-//
-//            coachingObjectives.add(coachingObjective);
-//        }
+
         contractObjectiveRepository.saveAll(coachingObjectives);
 
         log.info("Prep to send sms");
         Map<String, Object> replacementVariables = new HashMap<>();
         replacementVariables.put("client_name", contract1.getClient().getFullName());
-        replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
         replacementVariables.put("start_date",contract1.getStartDate());
         replacementVariables.put("end_date",contract1.getEndDate());
         replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
 
-        String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
+        String smsTemplate = Constants.DEFAULT_NEW_ORGANIZATION_CLIENT_CONTRACT_SMS_TEMPLATE;
 
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
