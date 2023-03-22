@@ -114,6 +114,12 @@ public class SessionService {
         sessionRequest.setContract(contract);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
+        // session Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String sessionL = String.format("%05d", randNo);
+        String sessionNo = client.getCoach().getBusinessName().substring(0, 2) +
+                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
+        sessionRequest.setSessionNumber(sessionNo);
         if (optionalOrganization.isPresent()) {
             sessionRequest.setOrgId(optionalOrganization.get().getId());
         }

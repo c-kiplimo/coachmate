@@ -48,6 +48,12 @@ public class CoachService {
         coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
         coach.setMsisdn(coachRequest.getMsisdn());
         coach.setEmailAddress(coachRequest.getEmail());
+        // coach Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String coachL = String.format("%05d", randNo);
+        String coachNo = coach.getBusinessName().substring(0, 2) +
+                coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+        coach.setCoachNumber(coachNo);
         registrationService.registerCoachAsUser(coach, msisdn);
 
         log.info("coach registered successfully");

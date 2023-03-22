@@ -23,6 +23,7 @@ public class Client {
 
     @Id
     private Long id;
+    private String clientNumber;
     private String fullName;
     private String firstName;
     private String lastName;

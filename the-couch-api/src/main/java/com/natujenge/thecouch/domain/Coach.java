@@ -29,6 +29,7 @@ public class Coach implements Serializable {
 
     private String businessName;
     private String fullName;
+    private String coachNumber;
     private String firstName;
     private String password;
     private String lastName;

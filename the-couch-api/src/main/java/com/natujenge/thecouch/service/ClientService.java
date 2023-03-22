@@ -91,7 +91,12 @@ public class ClientService {
         client.setReason(clientRequest.getReason());
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
-        client.s
+        // client Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String clientL = String.format("%05d", randNo);
+        String clientNo = client.getCoach().getBusinessName().substring(0, 2) +
+                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientL;
+        client.setClientNumber(clientNo);
 
 
         client.setProfession(clientRequest.getProfession());

@@ -60,9 +60,8 @@ payment: any;
       this.User = sessionStorage.getItem('user');
       this.client = JSON.parse(this.User);
       console.log(this.client);
-      this.ClientId = this.ClientId.id;
       this.userRole = this.coachData.userRole;
-      this.ClientId = this.coachData.client.id;
+      this.ClientId = this.client.id;
       this.getPaymentsByClientId(this.ClientId);
 
     }
