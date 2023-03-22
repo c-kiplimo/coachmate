@@ -36,11 +36,14 @@ public class WalletResource {
     ResponseEntity<?> createPayment(@RequestBody PaymentRequest paymentRequest,
                                      @AuthenticationPrincipal User userDetails) {
         log.info("Request to create payment");
+        log.info("userDetails{}",userDetails.getId());
         try {
             Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
-            Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
-                    userDetails.getCoach().getOrganization().getId();
+            log.info("coach id {}",coachId);
+            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
+            log.info("org id {}",organizationId);
             Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
+            log.info("client id {}",coachId);
 
             if (organizationId != null) {
                 log.info("Request to create payment by organization");

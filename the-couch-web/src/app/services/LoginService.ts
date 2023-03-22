@@ -29,7 +29,7 @@ export class LoginService {
     // signUp service
     signUp(signupObject: any): Observable<any> {
         return this.http.post<any>(
-          this.baseURL+ 'registration',
+          this.baseURL+ '/api/coach',
           signupObject,
           { observe: 'response' }
         );

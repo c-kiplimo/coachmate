@@ -183,6 +183,7 @@ public class ContractService {
         notification.setContent(smsContent);
         notification.setCoach(coach);
         notification.setClient(client);
+        notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db

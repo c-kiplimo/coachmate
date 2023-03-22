@@ -43,7 +43,9 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
     private String reason;
-
+    @ManyToOne
+    @JoinColumn(name="settings_id")
+    NotificationSettings NotificationSettings;
 
     //Management details
     @CreationTimestamp

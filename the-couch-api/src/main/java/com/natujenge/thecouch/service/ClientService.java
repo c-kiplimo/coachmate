@@ -91,6 +91,7 @@ public class ClientService {
         client.setReason(clientRequest.getReason());
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
+        client.s
 
 
         client.setProfession(clientRequest.getProfession());

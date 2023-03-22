@@ -103,6 +103,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientBillingAccount.setCreatedBy(coach.getFullName());
         clientBillingAccount.setCoach(coach);
         clientBillingAccount.setClient(client);
+        clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
 
 
         // Calculate Balances
@@ -141,6 +142,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientBillingAccount.setCreatedBy(organization.getFullName());
         clientBillingAccount.setOrganization(organization);
         clientBillingAccount.setClient(client);
+        clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
         // Calculate Balances
         float paymentBalance = 0f;
         float walletBalance = 0f;
@@ -188,7 +190,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
         clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
-        clientWallet.setPaymentDate(LocalDateTime.now());
+        clientWallet.setCreatedAt(LocalDateTime.now());
 
 
 
@@ -287,7 +289,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
         clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
-        clientWallet.setPaymentDate(LocalDateTime.now());
+        clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setClient(client);
         clientWallet.setOrganization(organization);
         // mngmnt
@@ -358,7 +360,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
         clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
-        clientWallet.setPaymentDate(LocalDateTime.now());
+        clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setClient(client1);
         clientWallet.setOrganization(client1.getCoach().getOrganization());
         // mngmnt
@@ -402,6 +404,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setContent(smsContent);
         notification.setCoach(client.getCoach());
         notification.setClient(client);
+        notification.setSendReason("PAYMENT RECEIVED");
         notification.setCreatedBy(client.getCoach().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
@@ -428,6 +431,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientBillingAccount.setOrganization(client1.getCoach().getOrganization());
         clientBillingAccount.setAmountBilled(amountBilled);
         clientBillingAccount.setCreatedBy(client1.getFullName());
+        clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
         // save new record
         ClientBillingAccount clientBillingAccount1 = clientBillingAccountRepository.save(clientBillingAccount);
         log.info("Client Billing Account successfully saved");
@@ -463,7 +467,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         log.info("Get all Payments by Coach id {}", coachId);
 
         page = page - 1;
-        Pageable pageable = PageRequest.of(page, perPage);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
 
         Page<ClientWalletDto> walletPage;
 

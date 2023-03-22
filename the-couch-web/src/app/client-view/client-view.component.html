@@ -249,24 +249,24 @@
         <thead>
           <th colspan="1">Date Paid</th>
           <th colspan="1">Paid at</th>
-          <th colspan="1">Amount</th>
-          <th colspan="1">Balance</th>
+          <th colspan="1">Amount Deposited</th>
+          <th colspan="1">Wallet Balance</th>
           <th colspan="1">Payment ref</th>
           <th colspan="1">Actions</th>
         </thead> 
         <tbody>
           <tr *ngFor="let payment of payments | keyvalue" >
               <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.createdAt | date : "MMM d, y hh "}} </td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.createdAt | date : " hh:mm a" }}</td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.LastUpdatedAt| date : " hh:mm a" }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.amountDeposited}}</td>
               <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
               <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.extPaymentRef }}</td>
               <td *ngIf="payment.value.walletBalance != 0">
                   <button
                     class="btn btn-success"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewPaymentModal"
-                    (click)="viewPayment(payment.value)"
+                    data-bs-target="#paymentModal"
+                    (click)="viewPayment(payment)"
                   >
                     view
                   </button>
@@ -565,33 +565,41 @@ aria-hidden="true"
       <span>{{ payment.extPaymentRef }}</span>
     </div>
     <div class="d-flex justify-content-between">
+      <p>Client:</p>
+      <span>{{ payment.client.firstName | titlecase}}</span>
+    </div>
+    <div class="d-flex justify-content-between">
+      <p>Coach:</p>
+      <span>{{ payment.coach.businessName}}</span>
+    </div>
+    <div class="d-flex justify-content-between">
+      <p>Payment Currency:</p>
+      <span>{{ payment.paymentCurrency}}</span>
+    </div>
+    <div class="d-flex justify-content-between">
       <p>Mode:</p>
-      <span>Manual</span>
+      <span>{{ payment.modeOfPayment}}</span>
     </div>
     <div class="d-flex justify-content-between">
-      <p>Amount:</p>
-      <span>{{ payment.amount }}</span>
+      <p>Amount Paid:</p>
+      <span>{{ payment.amountDeposited }}</span>
     </div>
     <div class="d-flex justify-content-between">
-      <p>Balance After:</p>
-      <span>{{ payment.balanceAfter }}</span>
-    </div>
-
-    <div class="d-flex justify-content-between">
-      <p>Narration:</p>
-      <span>{{ payment.narration }}</span>
+      <p>Wallet Balance:</p>
+      <span>{{ payment.walletBalance}}</span>
     </div>
     <div class="d-flex justify-content-between">
       <p>Payment Date:</p>
-      <span>{{ payment.paidAt }}</span>
+      <span>{{ payment.createdAt | date : "MMM d, y hh "}}</span>
     </div>
     <div class="d-flex justify-content-between">
-      <p>Over Payment:</p>
-      <span>{{ payment.overPayment }}</span>
-    </div>
+      <p>Payment Time:</p>
+      <span>{{ payment.payment.value.LastUpdatedAt| date : " hh:mm a"}}</span>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" >
+    <button type="button" class="btn btn-secondary" 
+    data-bs-dismiss="modal"
+    >
       Close
     </button>
   </div>

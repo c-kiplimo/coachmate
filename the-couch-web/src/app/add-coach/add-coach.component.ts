@@ -41,16 +41,19 @@ export class AddCoachComponent implements OnInit {
   OrgSession: any;
   orgData: any;
   toastrService: any;
+  coachSessionData:any;
+  userRole: any;
+  coachData: any;
 
   
   constructor(private LoginService: LoginService, private router: Router, toastrService: ToastrService
     ) { }
 
   ngOnInit(): void {
-    this.SessionData = sessionStorage.getItem('user'); 
-    this.Data = JSON.parse(this.SessionData);
-    console.log(this.Data);
-
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
     this.OrgSession = sessionStorage.getItem('Organization'); 
     this.orgData = JSON.parse(this.OrgSession);
     console.log(this.orgData);
@@ -74,7 +77,9 @@ export class AddCoachComponent implements OnInit {
 
     signUp() {
       this.errorMessage = '';
-
+console.log(this.orgData.id)
+console.log(this.orgData.orgName)
+console.log("form data here",this.formData)
       this.formData.orgIdId = this.orgData.id;
       this.formData.businessName = this.orgData.orgName;
 
