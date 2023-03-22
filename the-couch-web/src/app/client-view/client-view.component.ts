@@ -182,7 +182,7 @@ coachingCategory: any;
   
       });
       this.getClientSessions() 
-      this.getNotifications()
+      this.getNotificationsByClientId(this.clientId);
       this.getPaymentsByClientId(this.clientId);
   }
   this.addsessionForm = this.formbuilder.group({
@@ -214,18 +214,17 @@ coachingCategory: any;
       }
       );
   }
-  getNotifications(): void {
-    this.searching = true;
-    this.notifications = [];
+  getNotificationsByClientId(id: any){
     const options = {
-       sessionId: this.sessionId,
-       coachId :this.coachData.id,
-       clientId: this.clientId,
       page: 1,
-      per_page: 10,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      client_id: id,
     };
 
-    this.ClientService.getAllNotifications(options).subscribe((res: any) => {
+    this.loading = true;
+    this.ClientService.getNotificationsbyClientId(options).subscribe((res: any) => {
       this.notifications = res.body;
       console.log('notification ni', this.notifications);
       this.searching = false;
@@ -244,7 +243,7 @@ coachingCategory: any;
     this.ClientService.getPaymentsByClientId(options).subscribe(
       (response) => {
         this.loading = false;
-        this.payments = response.body;
+        this.payments = response.body.data;
         console.log('payments', this.payments);
       }, (error) => {
         console.log(error);

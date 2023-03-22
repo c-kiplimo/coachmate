@@ -145,8 +145,8 @@ public class SessionResource {
         }
 
         //GET ORGANIZATION SESSIONS
-    @GetMapping(path = "getorgSessions/{id}")
-    ResponseEntity<?> getOrgSessions(@PathVariable("id") Long orgId,
+    @GetMapping(path = "/getorgSessions/{orgId}")
+    ResponseEntity<?> getOrgSessions(@PathVariable("orgId") Long orgId,
                                      @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization sessions", orgId);
 

@@ -243,21 +243,6 @@ public class SessionService {
         }
     }
 
-//    @Scheduled(cron = "0 20 05 * * ?")
-//    public void sendUpcomingSessionReminderToClient() {
-//        log.debug("Request to send upcoming session reminder");
-//        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
-//        for (Session session : sessions) {
-//            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//            }
-//        }
-//    }
-
-
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);
     }

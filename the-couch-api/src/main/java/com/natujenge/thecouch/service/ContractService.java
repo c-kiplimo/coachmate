@@ -187,8 +187,8 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoach(coach);
-        notification.setClient(client);
+        notification.setCoachId(client.getCoach().getId());
+        notification.setClientId(client.getId());
         notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());

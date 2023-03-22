@@ -48,7 +48,8 @@ export class SessionsComponent implements OnInit {
   sessions: any;
   page: number = 1;
   clientId: any;
-  id: any;
+  id!: number;
+  orgId!: number;
   constructor(private apiService: ClientService, private router: Router,private activatedRoute: ActivatedRoute) {}
 
   
@@ -61,11 +62,13 @@ export class SessionsComponent implements OnInit {
 
  
     if(this.userRole == 'ORGANIZATION'){
+      this.orgId = this.coachData.id;
+      console.log('organization id =>', this.orgId);
+      console.log('user role=>', this.userRole);
+      console.log('coach data=>', this.coachData);
     this.OrgData = sessionStorage.getItem('Organization');
-    this.orgSession = JSON.parse(this.OrgData);
-    console.log(this.orgSession);
 
-    this.getAllOrgSessions(this.orgSession.id);
+    this.getAllOrgSessions();
       
     } else if(this.userRole == 'COACH'){
       this.getAllSessions();
@@ -95,16 +98,16 @@ export class SessionsComponent implements OnInit {
       );
   }
 
-  getAllOrgSessions(id: any) {
+  getAllOrgSessions() {
     this.loading = true;
     window.scroll(0, 0);
     this.page = 1;
     const options = {
       page: 1,
-      id: id,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
+      orgId: this.orgId
     };
     this.apiService.getOrgSessions(options).subscribe(
       (response: any) => {

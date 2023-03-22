@@ -255,8 +255,9 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoach(coach);
-        notification.setClient(client);
+        notification.setSendReason("PAYMENT RECEIVED");
+        notification.setCoachId(client.getCoach().getId());
+        notification.setClientId(client.getId());
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
 
@@ -330,8 +331,9 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoach(client.getCoach());
-        notification.setClient(client);
+        notification.setSendReason("PAYMENT RECEIVED");
+        notification.setCoachId(client.getCoach().getId());
+        notification.setClientId(client.getId());
         notification.setCreatedBy(client.getCoach().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
@@ -408,8 +410,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoach(client.getCoach());
-        notification.setClient(client);
+        notification.setCoachId(client.getCoach().getId());
+        notification.setClientId(client.getId());
         notification.setSendReason("PAYMENT RECEIVED");
         notification.setCreatedBy(client.getCoach().getFullName());
         //TO DO: add logic to save notification to db

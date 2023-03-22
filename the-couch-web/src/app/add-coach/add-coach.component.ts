@@ -14,10 +14,8 @@ import {
   styleUrls: ['./add-coach.component.css']
 })
 export class AddCoachComponent implements OnInit {
-
-
   formData = {
-    userRole: 'COACH',
+    userRole: 'ORGANIZATION',
     firstName: '',
     lastName: '',
     businessName: '',
@@ -44,22 +42,26 @@ export class AddCoachComponent implements OnInit {
   coachSessionData:any;
   userRole: any;
   coachData: any;
+  orgId: any;
 
   
   constructor(private LoginService: LoginService, private router: Router, toastrService: ToastrService
     ) { }
-
-  ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
-    this.OrgSession = sessionStorage.getItem('Organization'); 
-    this.orgData = JSON.parse(this.OrgSession);
-    console.log(this.orgData);
-
-
-  }
+    ngOnInit(): void {
+      this.coachSessionData = sessionStorage.getItem('user'); 
+      this.coachData = JSON.parse(this.coachSessionData);
+      console.log(this.coachData);
+      this.userRole = this.coachData.userRole;
+      console.log(this.userRole);
+      this.orgId = this.coachData.id;
+      console.log('organization id =>', this.orgId);
+      console.log('user role=>', this.userRole);
+      console.log('coach data=>', this.coachData);
+  
+      if(this.userRole == 'ORGANIZATION'){
+    
+      }
+    }
     
     validateEmail(): void {
       /\S+@\S+\.\S+/.test(this.formData.email)
