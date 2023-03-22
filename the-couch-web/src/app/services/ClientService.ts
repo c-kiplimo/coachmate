@@ -259,6 +259,12 @@ export class ClientService {
       observe: 'response'
     })
   }
+  filterByClientNameAndDate(options:any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByClientNameAndDate`, {
+      params: options,
+      observe: 'response'
+    })
+  }
   getPaymentsByClientIdAndCoachId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByClientIdAndCoachId`, {
       params: options,

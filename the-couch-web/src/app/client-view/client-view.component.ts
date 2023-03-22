@@ -183,7 +183,7 @@ coachingCategory: any;
       });
       this.getClientSessions() 
       this.getNotifications()
-      this. getPaymentsByUser()
+      this.getPaymentsByClientId(this.clientId);
   }
   this.addsessionForm = this.formbuilder.group({
     sessionDate: '',
@@ -231,22 +231,25 @@ coachingCategory: any;
       this.searching = false;
     });
   }
-  getPaymentsByUser(){
-    this.loading = true;
-    this.payments = [];
+  getPaymentsByClientId(id: any){
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
+      client_id: id,
     };
-    this.ClientService.getPaymentsByUser(options).subscribe((res: any) => {
-      this.payments = res.body.data;
-      console.log('payments ni', this.payments);
-      this.loading = false;
-    }
-    );
 
+    this.loading = true;
+    this.ClientService.getPaymentsByClientId(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.payments = response.body;
+        console.log('payments', this.payments);
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
   onContractChange(event: any) {
     console.log(event.target.value);

@@ -26,6 +26,7 @@ public class ClientWallet {
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
+    private String clientWalletNumber;
     private String extPaymentRef;
     public String description;
 

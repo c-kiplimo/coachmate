@@ -363,6 +363,12 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setClient(client1);
         clientWallet.setOrganization(client1.getCoach().getOrganization());
+        // clientWallet Number Generation
+        int randNo = (int) ((Math.random() * (99 - 1)) + 1);
+        String clientWalletL = String.format("%05d", randNo);
+        String clientWalletNo = "PAY" + client1.getCoach().getBusinessName().substring(0, 2) +
+                client1.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientWalletL;
+        clientWallet.setClientWalletNumber(clientWalletNo);
         // mngmnt
         clientWallet.setCreatedBy(client1.getFullName());
         // Update Payment Details based on balance on clientWallet;

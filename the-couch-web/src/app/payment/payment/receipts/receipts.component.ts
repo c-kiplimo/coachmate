@@ -89,6 +89,25 @@ payment: any;
       }
     )
   }
+  filterByClientNameAndDate() {
+    window.scroll(0, 0);
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      search: this.filters.searchItem,
+  
+    };
+    console.log('options', options);
+    this.ClientService.filterByClientNameAndDate(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.payments = response.body;
+        console.log('payments', this.payments);
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
   getPaymentsByClientId(id: any){
     const options = {
       page: 1,

@@ -28,6 +28,7 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
 import { FeedbackComponent } from './feedback/feedback.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
 
 
 const routes: Routes = [
@@ -96,7 +97,7 @@ const routes: Routes = [
   },
   {
     path:'payment',
-    component:AccountSummaryComponent
+    component:ReceiptsComponent
  },
   {
     path:'feedback1',
