@@ -3,9 +3,8 @@ import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { faEyeDropper } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { param } from 'jquery';
+
 
 
 @Injectable({
@@ -14,11 +13,6 @@ import { param } from 'jquery';
 
 
 export class ClientService {
-  getFiltered: any;
-  getFilteredSessions(options: { page: number; per_page: number; status: any; search: any; period: string; balance: any; }) {
-    throw new Error('Method not implemented.');
-  }
-
 
   baseURL: string = environment.apiURL + '/api/';
   deleteClient: any;
@@ -26,9 +20,6 @@ export class ClientService {
   constructor(private http: HttpClient,
     private toastr: ToastrService) {
 
-  }
-  getContract(id: any): Observable<any> {
-    return this.http.get<any>(this.baseURL + 'contracts/' + id, { observe: 'response' });
   }
 
   getClient(options: any): Observable<any> {
@@ -38,21 +29,12 @@ export class ClientService {
         observe: 'response',
       })
   }
-  getOneClient(id: number): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/clients/' + id, {
-      observe: 'response',
-    });
-  }
   getOneSession(id: number): Observable<any> {
     return this.http.get<any>(this.baseURL + '/sessions/' + id, {
       observe: 'response',
     });
   }
 
-  //client status
-  // ACTIVE,
-  // SUSPENDED,
-  // CLOSED
   addClient(client: any): Observable<any> {
     console.log(client)
     return this.http.post(`${this.baseURL}clients`, client,
@@ -84,11 +66,6 @@ export class ClientService {
     console.log("client id here", id)
     return this.http.put(`${this.baseURL}clients/${id}`, clientToBeUpdated)
   }
-  //service to change client status
-
-
-
-
 
   changeClient(clientId: any, status: any, statusForm: any): Observable<any> {
     let options = {
@@ -103,21 +80,21 @@ export class ClientService {
       });
 
   }
-  changeSession(coachId: any, data: any): Observable<any> {
-    console.log("change session status reached")
-    console.log("client id", coachId)
-    console.log("data status", data.status)
-    return this.http.put<any>(
-      this.baseURL + 'sessions/change-status/' + coachId + "?status=" + data.status,
-      {
-        observe: 'response',
-      }
-    );
+  getOneClient(id: number): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/clients/' + id, {
+      observe: 'response',
+    });
+  }
+  getClientContracts(clientId: any): Observable<any> {
+    console.log("Get Contracts reached!");
+    return this.http.get(`${this.baseURL}contracts/byClient/` + clientId, { observe: 'response' })
   }
 
-
-
+  getClientByEmail(email: any): Observable<any> {
+    return this.http.post(`${this.baseURL}clients/getClientByEmail`, email, { observe: 'response' });
+  }
   // Get all Contracts
+
   getContracts(): Observable<any> {
     return this.http.get(`${this.baseURL}contracts`, { observe: 'response' })
   }
@@ -126,6 +103,20 @@ export class ClientService {
     return this.http.get(`${this.baseURL}contracts/byClient/` + clientId, { observe: 'response' })
 
   }
+  // Get one contract by id
+  getContract(id: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + 'contracts/' + id, { observe: 'response' });
+  }
+    // change contract status
+    changeContractStatus(contractId: any, data: any): Observable<any> {
+
+      return this.http.put<any>(
+        this.baseURL + 'contracts/changeContractStatus/' + contractId + "?status=" + data.status,
+        {
+          observe: 'response',
+        }
+      );
+    }
   getSessions(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}sessions`,
       {
@@ -142,16 +133,6 @@ export class ClientService {
   addSession(session: any, params: any): Observable<any> {
     console.log(session);
     return this.http.post(`${this.baseURL}sessions`, session, { params: params })
-    //   .pipe(
-    //     tap(response => {
-    //       this.toastr.success('Session created successfully');
-    //     }),
-    //     catchError(error => {
-    //       console.error('Session not added:', error);
-    //       this.toastr.error(error.error, 'Maximum sessions reached contact coach');
-    //       throw error;
-    //     })
-    //   );
   }
   editSession(data: any, id: any): Observable<any> {
     console.log("edit session reached")
@@ -166,8 +147,11 @@ export class ClientService {
     return this.http.delete(this.baseURL + `/sessions/` + id,);
   }
 
-  getOrgSessions(id: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions/getorgSessions/` + id, { observe: 'response' });
+  getOrgSessions(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}sessions/getorgSessions/`, 
+    { params: options,
+      observe: 'response' 
+    });
   }
 
 
@@ -176,16 +160,24 @@ export class ClientService {
     console.log("Get Sessions reached!");
     return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId, { observe: 'response' })
   }
-
-  getClientContracts(clientId: any): Observable<any> {
-    console.log("Get Contracts reached!");
-    return this.http.get(`${this.baseURL}contracts/byClient/` + clientId, { observe: 'response' })
+  changeSession(coachId: any, data: any): Observable<any> {
+    console.log("change session status reached")
+    console.log("client id", coachId)
+    console.log("data status", data.status)
+    return this.http.put<any>(
+      this.baseURL + 'sessions/change-status/' + coachId + "?status=" + data.status,
+      {
+        observe: 'response',
+      }
+    );
   }
-
-  getClientByEmail(email: any): Observable<any> {
-    return this.http.post(`${this.baseURL}clients/getClientByEmail`, email, { observe: 'response' });
+  getFeedback(params: any): Observable<any> {
+    return this.http.get(`${this.baseURL}feedback/get-by-session-id`, {
+      params: params,
+      observe: 'response'
+    })
   }
-
+  
 
   //ORGANIZATION SERVICES
   getOrganization(data: any): Observable<any> {
@@ -205,12 +197,6 @@ export class ClientService {
     return this.http.get(`${this.baseURL}contracts/getOrgContracts/` + id, { observe: 'response' });
   }
 
-  getFeedback(params: any): Observable<any> {
-    return this.http.get(`${this.baseURL}feedback/get-by-session-id`, {
-      params: params,
-      observe: 'response'
-    })
-  }
   getOrgFeedbacks(id: any): Observable<any> {
     return this.http.get(`${this.baseURL}feedback/getOrgFeedbacks/` + id);
   }
@@ -272,6 +258,12 @@ export class ClientService {
   }
   getPaymentsByClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filter-by-client-id`, {
+      params: options,
+      observe: 'response'
+    })
+  }
+  filterByClientNameAndDate(options:any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterByClientNameAndDate`, {
       params: options,
       observe: 'response'
     })
@@ -440,20 +432,7 @@ export class ClientService {
       }
     );
   }
-  // change contract status
-  changeContractStatus(contractId: any, data: any): Observable<any> {
 
-    return this.http.put<any>(
-      this.baseURL + 'contracts/changeContractStatus/' + contractId + "?status=" + data.status,
-      {
-        observe: 'response',
-      }
-    );
-  }
 }
-// {
-//     headers: {
-//         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
-//       }
-// })
+
 

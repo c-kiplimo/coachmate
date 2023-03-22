@@ -1,0 +1,104 @@
+
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card card-table d-flex justify-content-center align-items-center">
+          <div>
+    
+            <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
+            height: 100px; padding-top: 0%; margin-top: 0%;">
+          
+      </div>
+          <h3>Confirm and Set Password</h3>
+          <form>
+            <p>{{errorMessage}}</p>
+            <div class="mb-3 col-md-12 form-group">
+                <label for="Password">Password *</label>
+                <div class="input-group">
+                  <input
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    [ngClass]="passwordInvalid ? 'input-error' : ''"
+                    [(ngModel)]="formData.password"
+                    required
+                    name="password"
+                    type="password"
+                    class="form-control border-end-0 border"
+                    id="exampleInputPassword"
+                    placeholder="Enter Password"
+                  />
+                  <span class="input-group-append">
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="!fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeSlashIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div class="mb-3 col-md-12 form-group">
+                <label for="Password">Confirm Password *</label>
+                <div class="input-group">
+                  <input
+                    [type]="fieldTextType ? 'text' : 'password'"
+                    [ngClass]="passwordInvalid ? 'input-error' : ''"
+                    [(ngModel)]="formData.passwordConfirm"
+                    required
+                    name="password"
+                    type="password"
+                    class="form-control border-end-0 border"
+                    id="exampleInputPassword"
+                    placeholder="Enter Password"
+                  />
+                  <span class="input-group-append">
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                    <span
+                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
+                      *ngIf="!fieldTextType"
+                    >
+                      <fa-icon
+                        [icon]="eyeSlashIcon"
+                        (click)="toggleFieldTextType()"
+                      ></fa-icon>
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+        
+            <div class="text-center">
+            <button
+              type="submit"
+              (click)="validatePassword()"
+              [disabled]="!formData.password || !formData.passwordConfirm"
+              class="btn btn-success mb-3 mt-2 p-2 text-center">
+              Submit
+            </button>
+        </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

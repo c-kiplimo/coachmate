@@ -6,16 +6,89 @@
 /* You can add global styles to this file, and also import other style files */
 /* You can add global styles to this file, and also import other style files */
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap'); */
-/* 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-} */
-/* 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+html{
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  overflow-x: hidden;
+
+}
 body {
+  background-color: #f1f1f4!important;
+  scroll-behavior: smooth !important;
+  letter-spacing: 0.5px;
+  font-size: 1.0em;
+  font-family: 'Roboto', sans-serif!important;
     position: relative;
-    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+}
+input,
+select,
+textarea {
+  border: 2px solid #e1e1e1 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-clip: padding-box !important;
+  color: #5f6063 !important;
+}
+
+::-ms-reveal {
+  display: none;
+}
+
+input:active,
+input:focus,
+input:hover,
+select:active,
+select:focus,
+select:hover,
+textarea:active,
+textarea:focus,
+textarea:hover {
+  border: 2px solid #003d4c !important;
+}
+
+input[type='checkbox'] {
+  z-index: 100;
+}
+
+img::selection {
+  background-color: transparent !important;
+}
+
+* img {
+  user-drag: none !important;
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-drag: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #80868b99 !important;
+  opacity: 1;
+  font-family: 'Montserrat', sans-serif !important;
+  /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #80868b99 !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #80868b99 !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.outlet {
+  padding: 50px 0;
+  min-height: calc(100vh - 40px);
 }
 
 .card {
@@ -35,9 +108,9 @@ body {
 
 .card-body {
     padding: 1rem 1.5rem; 
-} */
+} 
 
-/* .card-table {
+.card-table {
   padding: 20px 30px;
   border-radius: 8px!important;
   border: 1px solid #f1f1f1!important;
@@ -47,7 +120,7 @@ body {
 .card-table .title {
     font-weight: 600;
     color: #5f6063;
-} */
+} 
 
 /* // ************************
 // GLOBAL SPINNER STYLING
@@ -474,4 +547,11 @@ footer{
   font-size: 0.8rem;
   font-weight: 200;
   letter-spacing: 1px;
+}
+
+
+.tabs-section {
+  border-bottom: 1px solid #f1f1f1;
+
+  
 }

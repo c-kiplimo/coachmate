@@ -10,11 +10,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./add-client-page.component.css'],
 })
 export class AddClientPageComponent implements OnInit {
-
   firstName: any;
   lastName: any;
   coachData: any;
-  couchSessionData: any;
   Org: any;
   orgData: any;
   userRole: any;
@@ -42,25 +40,30 @@ export class AddClientPageComponent implements OnInit {
     coachId: '',
 
   };
+  orgId: any;
+  coachSessionData: any;
 
   constructor(
     private ClientService: ClientService,
     private router: Router,
     private formbuilder: FormBuilder,
-    private toastrService: ToastrService
+    private toastrService: ToastrService  
   ) {}
 
   ngOnInit(): void {
-     this.couchSessionData = sessionStorage.getItem('user');
-     this.coachData = JSON.parse(this.couchSessionData)
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+    this.orgId = this.coachData.id;
+    console.log('user role=>', this.orgId);
+    console.log('user role=>', this.userRole);
+    console.log('coach data=>', this.coachData);
 
-    this.Org = sessionStorage.getItem('Organization');
-    this.orgData = JSON.parse(this.Org);
-    console.log(this.orgData);
-    this.getOrgCoaches(this.orgData.id);
+    if(this.userRole == 'ORGANIZATION'){
+      this.getOrgCoaches(this.orgId);
+    }
 
 
 
@@ -68,7 +71,7 @@ export class AddClientPageComponent implements OnInit {
 
   getOrgCoaches(id: any) {
     const data = {
-      OrgId: id,
+      orgId: this.orgId,
     }
     this.ClientService.getOrgCoaches(data).subscribe(
       (response: any) => {

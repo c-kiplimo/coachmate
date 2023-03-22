@@ -341,4 +341,7 @@ public class AccountStatementService {
                     statementPage.getTotalElements());
         }
     }
+
+    public void updateAccountStatementByOrganization(Organization organization, Client client, float amountIn, float amountBilled, float paymentBalance) {
+    }
 }

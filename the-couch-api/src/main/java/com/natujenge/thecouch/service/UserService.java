@@ -37,6 +37,26 @@ public class UserService implements UserDetailsService {
     @Autowired
     ConfirmationTokenService confirmationTokenService;
 
+    public void enableAppUser(String email) {
+
+        // Request UserDto rather than all details
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+
+        user.setEnabled(true);
+
+    }
+
+
+    public void confirmCoach(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        // Set details
+        user.setPassword(encodedPassword);
+        enableAppUser(user.getMsisdn());
+    }
+
+
     public List<Object> signupUser(User user) {
         log.info("Signing up User");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
@@ -100,7 +120,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(user.getPassword());
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy(UserRole.CLIENT);
+        user.setCreatedBy("Test");
 
 
         // save the User in the database
@@ -129,13 +149,46 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public void enableAppUser(String email) {
 
-        // Request UserDto rather than all details
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+    // Coach as user
+    public List<Object> signupCoachAsUser(User user,String msisdn) {
+        log.info("Signing up coach as user");
+        boolean userEmailExists = userRepository.findByEmail(user.getEmail())
+                .isPresent();
 
-        user.setEnabled(true);
+        if (userEmailExists) {
+            throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
+        }
+
+        // Set details
+        user.setContentStatus(ContentStatus.ACTIVE);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedBy(user.getMsisdn());
+
+
+        // save the User in the database
+        User user1 = userRepository.save(user);
+        log.info("Coach User saved");
+
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(60*24),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        log.info("Confirmation token generated");
+
+        List<Object> response = new ArrayList<>();
+        response.add(user1.getId());
+        response.add(token);
+
+        return response;
 
     }
 

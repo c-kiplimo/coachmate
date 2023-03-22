@@ -23,6 +23,7 @@ public class Client {
 
     @Id
     private Long id;
+    private String clientNumber;
     private String fullName;
     private String firstName;
     private String lastName;
@@ -43,7 +44,9 @@ public class Client {
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
     private String reason;
-
+    @ManyToOne
+    @JoinColumn(name="settings_id")
+    NotificationSettings NotificationSettings;
 
     //Management details
     @CreationTimestamp

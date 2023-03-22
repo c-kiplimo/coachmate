@@ -13,6 +13,7 @@ public class SessionRequest {
     public String name;
     public SessionType sessionType;
     public String notes;
+    public String sessionNumber;
     public LocalDate sessionDate;
     public SessionVenue sessionVenue;
     public PaymentCurrency paymentCurrency;

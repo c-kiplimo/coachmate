@@ -18,7 +18,14 @@ public interface NotificationDto {
     public int getUnits() ;
     public float getCost();
     public CoachView getCoach();
+    public CoachView getCoachId();
     public ClientView getClient();
+
+    public ClientView getClientId();
+    public sessionView getSession();
+    public ContractView getContract();
+    public ContractView getContractId();
+
     public PaymentView getPayment();
 
     // baker details to send client
@@ -43,5 +50,9 @@ public interface NotificationDto {
     public interface PaymentView {
         public Long getId();
         public Float getAmount();
+    }
+    public interface ContractView {
+        public Long getId();
+        public String getCoachingTopic();
     }
 }

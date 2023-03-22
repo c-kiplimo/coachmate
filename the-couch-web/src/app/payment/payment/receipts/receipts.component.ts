@@ -60,9 +60,8 @@ payment: any;
       this.User = sessionStorage.getItem('user');
       this.client = JSON.parse(this.User);
       console.log(this.client);
-      this.ClientId = this.ClientId.id;
       this.userRole = this.coachData.userRole;
-      this.ClientId = this.coachData.client.id;
+      this.ClientId = this.client.id;
       this.getPaymentsByClientId(this.ClientId);
 
     }
@@ -81,6 +80,25 @@ payment: any;
       orgId: this.coachData.organization.id,
     };
     this.ClientService.getPaymentsByOrgId(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.payments = response.body;
+        console.log('payments', this.payments);
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
+  filterByClientNameAndDate() {
+    window.scroll(0, 0);
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      search: this.filters.searchItem,
+  
+    };
+    console.log('options', options);
+    this.ClientService.filterByClientNameAndDate(options).subscribe(
       (response) => {
         this.loading = false;
         this.payments = response.body;

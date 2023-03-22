@@ -1,0 +1,89 @@
+import { Component, OnInit } from '@angular/core';
+import {
+  faChevronLeft,
+  faEye,
+  faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons';
+
+import { LoginService } from '../services/LoginService';
+import { Router, ActivatedRoute } from '@angular/router';
+
+
+@Component({
+  selector: 'app-coach-confirm',
+  templateUrl: './coach-confirm.component.html',
+  styleUrls: ['./coach-confirm.component.css']
+})
+export class CoachConfirmComponent implements OnInit {
+
+  formData = {
+    password: '',
+    passwordConfirm: '',
+    id: '',
+    token: '',
+  };
+
+  passwordInvalid = false;
+  errorMessage = '';
+  fieldTextType!: boolean;
+  eyeIcon = faEye;
+  eyeSlashIcon = faEyeSlash;
+  backIcon = faChevronLeft;
+
+  constructor(
+    private LoginService: LoginService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
+
+  id: any;
+  token: any;
+  ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    console.log(this.id);
+    this.token = this.activatedRoute.snapshot.paramMap.get('token');
+    console.log(this.token);
+  }
+
+  validatePassword() {
+    console.log(this.formData)
+    if (this.formData.password === this.formData.passwordConfirm) {
+      this.passwordInvalid = false;
+      this.errorMessage="";
+      this.confirmAndUpdatePassword();
+    } else {
+      this.passwordInvalid = true;
+      this.errorMessage="Passwords do not match";
+    }
+  }
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+  confirmAndUpdatePassword() {
+    this.errorMessage = '';
+    console.log(this.formData)
+    const data = this.formData;
+    data.id = this.id;
+    data.token = this.token;
+
+    this.passwordInvalid = false;
+    this.LoginService.confirmAndUpdateCoachPassword(this.formData).subscribe({
+      next: (response) => {
+        console.log(response);
+     
+        // if (response.error) {
+        //   this.errorMessage = response.message;
+        // } else {
+         
+          this.router.navigate(['/signin']);
+  
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+
+}
