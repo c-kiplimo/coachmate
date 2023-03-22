@@ -2,6 +2,7 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
+import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
@@ -71,5 +72,10 @@ public class OrganizationService {
     public Optional<Organization> getOrganizationBySuperCoachId(Long superCoachId) {
     return organizationRepository.findBySuperCoachId(superCoachId);
 
+    }
+
+    public Organization findOrganizationById(Long id) {
+        return organizationRepository.findOrganizationById(id)
+                .orElseThrow(() -> new UserNotFoundException("Organization by id " + id + " not found"));
     }
 }
