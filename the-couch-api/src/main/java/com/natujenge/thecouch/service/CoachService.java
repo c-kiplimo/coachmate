@@ -2,16 +2,17 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.Organization;
-import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +23,17 @@ public class CoachService {
     private final CoachRepository coachRepository;
     private final OrganizationRepository organizationRepository;
     private final RegistrationService registrationService;
+    private final UserRepository userRepository;
     private final UserService userService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     //     constructor
-    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, RegistrationService registrationService, UserRepository userRepository, RegistrationService registrationService1, UserService userService) {
+    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, RegistrationService registrationService, UserRepository userRepository, RegistrationService registrationService1, UserRepository userRepository1, UserService userService) {
         this.coachRepository = coachRepository;
         this.organizationRepository = organizationRepository;
         this.registrationService = registrationService1;
+        this.userRepository = userRepository1;
         this.userService = userService;
     }
 
@@ -51,7 +56,7 @@ public class CoachService {
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String coachL = String.format("%05d", randNo);
-        String coachNo = coach.getBusinessName().substring(0, 2) +
+        String coachNo = coach.getLastName().substring(0, 2) +
                 coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
         coach.setCoachNumber(coachNo);
         registrationService.registerCoachAsUser(coach, msisdn);
@@ -69,5 +74,29 @@ public class CoachService {
 
     public List<Coach> getCoachByOrganizationId(Long organizationId) {
         return coachRepository.findByOrganizationId(organizationId);
+    }
+
+    public Optional<User> confirmCoachTokenAndUpdatePassword(CoachRequest coachRequest) {
+
+            Optional<User> userOptional = userRepository.findById(coachRequest.getId());
+            if (userOptional.isEmpty()) {
+                throw new IllegalStateException("Coach User Not Found!!");
+            }
+
+            String TokenConfirm = registrationService.confirmToken(coachRequest.getToken());
+            if (!TokenConfirm.isEmpty()) {
+                User user = userOptional.get();
+
+                //Encode Password
+                String encodedPassword = passwordEncoder.encode(coachRequest.getPassword());
+                user.setPassword(encodedPassword);
+
+                user = userRepository.save(user);
+
+                log.info("Password Updated Successfully");
+                return Optional.of(user);
+            }
+            return userOptional;
+
     }
 }

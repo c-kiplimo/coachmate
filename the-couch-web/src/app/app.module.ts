@@ -58,6 +58,7 @@ import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
 
 
 
@@ -98,6 +99,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
       SupportComponent,
       TermsAndConditionsPageComponent,
       SettingsComponent,
+      CoachConfirmComponent,
 
 
   ],

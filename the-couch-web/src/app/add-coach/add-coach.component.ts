@@ -15,15 +15,10 @@ import {
 })
 export class AddCoachComponent implements OnInit {
   formData = {
-    userRole: 'ORGANIZATION',
     firstName: '',
     lastName: '',
-    businessName: '',
     msisdn: '',
     email: '',
-    password: '',
-    passwordConfirm: '',
-    orgIdId: '',
   };
 
   fieldTextType!: boolean;
@@ -39,87 +34,75 @@ export class AddCoachComponent implements OnInit {
   OrgSession: any;
   orgData: any;
   toastrService: any;
-  coachSessionData:any;
+  coachSessionData: any;
   userRole: any;
   coachData: any;
   orgId: any;
 
-  
+
   constructor(private LoginService: LoginService, private router: Router, toastrService: ToastrService
-    ) { }
-    ngOnInit(): void {
-      this.coachSessionData = sessionStorage.getItem('user'); 
-      this.coachData = JSON.parse(this.coachSessionData);
-      console.log(this.coachData);
-      this.userRole = this.coachData.userRole;
-      console.log(this.userRole);
-      this.orgId = this.coachData.id;
-      console.log('organization id =>', this.orgId);
-      console.log('user role=>', this.userRole);
-      console.log('coach data=>', this.coachData);
-  
-      if(this.userRole == 'ORGANIZATION'){
-    
-      }
-    }
-    
-    validateEmail(): void {
-      /\S+@\S+\.\S+/.test(this.formData.email)
-        ? ((this.emailInvalid = false), this.validatePassword())
-        : (this.emailInvalid = true);
-    }
-    validatePassword() {
-      if (this.formData.password === this.formData.passwordConfirm) {
-        this.passwordInvalid = false;
-        this.signUp();
-      } else {
-        this.passwordInvalid = true;
-      }
-    }
+  ) { }
+  ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user');
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+    this.orgId = this.coachData.id;
+    console.log('organization id =>', this.orgId);
+    console.log('user role=>', this.userRole);
+    console.log('coach data=>', this.coachData);
 
-    signUp() {
-      this.errorMessage = '';
-console.log(this.orgData.id)
-console.log(this.orgData.orgName)
-console.log("form data here",this.formData)
-      this.formData.orgIdId = this.orgData.id;
-      this.formData.businessName = this.orgData.orgName;
+    if (this.userRole == 'ORGANIZATION') {
 
-      console.log(this.formData)
-      this.registrationSuccess = false;
-      this.LoginService.signUp(this.formData).subscribe({
-        next: (response) => {
-          console.log(response);
+    }
+  }
+  validateEmail(email: any) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+
+  signUp() {
+    this.errorMessage = '';
+    this.orgId = this.coachData.id;
+    console.log('organization id =>', this.orgId);
+    console.log("form data here", this.formData)
+    console.log(this.formData)
+    this.registrationSuccess = false;
+    this.LoginService.signUp(this.formData).subscribe({
+      next: (response) => {
+        console.log(response);
+        console.log('here');
+
+
+        if (response.body.error) {
+          this.errorMessage = response.body.message;
           console.log('here');
-  
-          
-          if (response.body.error) {
-            this.errorMessage = response.body.message;
-            console.log('here');
-          } else {
-            this.registrationSuccess = true;
-            this.router.navigate(['registration/confirm']);
-            this.toastrService.success(
-             'Confirm account',
-             'Registration successfull!'
-            );
-  
-            console.log('here');
-          }
-        },
-        error: (error: any) => {
-          // console.log(error);
-          this.errorMessage = error.error.message ?? error.error.error.message;
-          // this.toastrService.error('Please retry', 'Registration failled!');
-        },
-      });
-    }
+        } else {
+          this.registrationSuccess = true;
+          this.toastrService.success(
+            'Confirm account',
+            'Registration successfull!'
+          );
+          this.router.navigate(['dashboard']);
 
-    toggleFieldTextType() {
-      this.fieldTextType = !this.fieldTextType;
-    }
+          console.log('here');
+        }
+      },
+      error: (error: any) => {
+        // console.log(error);
+        this.errorMessage = error.error.message ?? error.error.error.message;
+        // this.toastrService.error('Please retry', 'Registration failled!');
+      },
+    });
+  }
 
-  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+
+
 
 }
 

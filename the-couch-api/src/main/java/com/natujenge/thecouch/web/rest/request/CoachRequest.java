@@ -7,6 +7,9 @@ public class CoachRequest {
         private String lastName;
         private String msisdn;
         private String email;
+    private String password;
+    private String token;
+    private Long id;
 
     }
 

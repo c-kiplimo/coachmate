@@ -87,6 +87,21 @@ public class RegistrationResource {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    //api to confirm coach and update password
+    @PostMapping(path = "/confirmCoachToken")
+    ResponseEntity<?> updateAndConfirmCoachToken(@RequestBody CoachRequest coachRequest){
+        //log.info("Request to confirm coach token and update password");
+        try {
+            Optional<User> updateCoach;
+            updateCoach = coachService.confirmCoachTokenAndUpdatePassword(coachRequest);
+
+            return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
+        } catch (Exception e) {
+            //log.error("Error while Confirming Coach and Updating Coach password", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(path = "reset")
     public ResponseEntity<?> reset(@RequestParam("msisdn") String msisdn) {
         try{

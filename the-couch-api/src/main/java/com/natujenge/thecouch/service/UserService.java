@@ -163,7 +163,7 @@ public class UserService implements UserDetailsService {
         // Set details
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy(msisdn);
+        user.setCreatedBy(user.getMsisdn());
 
 
         // save the User in the database

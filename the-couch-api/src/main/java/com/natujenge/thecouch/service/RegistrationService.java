@@ -167,13 +167,15 @@ public class RegistrationService {
         String token = (String) response.get(1);
         //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
 
-        User savedUser = (User) response.get(0);
+
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Coach Account Creation";
-        String content = "Hello " + savedUser.getFirstName() + ", use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmclient/"+token;
-        notificationServiceHTTPClient.sendEmail(savedUser.getEmail() ,subject, content, false);
-        notificationServiceHTTPClient.sendSMS(savedUser.getMsisdn(),content,"COACH-1234");
+        String content = "Hello " + coach.getFirstName() + ", use this link to confirm your account and set your password," +
+                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
+        notificationServiceHTTPClient.sendEmail(coach.getEmailAddress() ,subject, content, false);
+        notificationServiceHTTPClient.sendSMS(coach.getMsisdn(),content,"COACH-1234");
+        log.info(content);
+        log.info("Coach registered");
 
     }
 

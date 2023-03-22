@@ -49,6 +49,7 @@ public class User implements UserDetails {
 
 
     // Role of creator, current default assignment ADMIN
+
     private String createdBy;
     private String lastUpdatedBy;
 
