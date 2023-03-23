@@ -6,14 +6,10 @@ import com.natujenge.thecouch.domain.enums.*;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
-import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.util.NotificationUtil;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
-import com.natujenge.thecouch.web.rest.request.NotificationRequest;
-import com.natujenge.thecouch.web.rest.request.SessionRequest;
 
 
 import lombok.Data;
@@ -22,9 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import java.util.*;
 
 @Service

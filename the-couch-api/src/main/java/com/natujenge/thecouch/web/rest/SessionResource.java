@@ -100,6 +100,7 @@ public class SessionResource {
             // check if the number of sessions has been exceeded
             Contract contract = contractService.getContract(contractId);
             List<Session> sessions = sessionService.getSessionsByContract(contractId);
+            log.info("sessions {}" , sessions);
             int sessionCount = sessions.size();
             if (sessionCount >= contract.getNoOfSessions()) {
                 return new ResponseEntity<>(new RestResponse(false, "Cannot create session: maximum number of sessions has been reached"), HttpStatus.BAD_REQUEST);

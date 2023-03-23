@@ -42,10 +42,10 @@ public class Session {
     private String feedback;
 
     // includes date and time
-    private LocalDate sessionDate;
-    private String sessionDuration;
-    private String sessionStartTime;
-    private String sessionEndTime;
+//    private LocalDate sessionDate;
+//    private String sessionDuration;
+//    private String sessionStartTime;
+//    private String sessionEndTime;
 
 
     @Enumerated(EnumType.STRING)
@@ -67,6 +67,10 @@ public class Session {
     private String lastUpdatedBy;
 
     // Relations
+    @ManyToOne
+    @JoinColumn(name = "session_schedules_id")
+    SessionSchedules sessionSchedules;
+
     @ManyToOne
     @JoinColumn(name="client_id")
     Client client;

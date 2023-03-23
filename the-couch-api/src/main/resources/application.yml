@@ -14,6 +14,7 @@ spring:
 #    username: boniface
 #    password: boniface
 
+
   jpa:
     hibernate:
       ddl-auto: update

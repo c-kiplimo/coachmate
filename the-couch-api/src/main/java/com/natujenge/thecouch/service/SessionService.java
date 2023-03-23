@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 
+
 @Service
 @Slf4j
 @Transactional
@@ -40,6 +41,8 @@ public class SessionService {
     ContractRepository contractRepository;
     @Autowired
     OrganizationRepository organizationRepository;
+    @Autowired
+    SessionSchedulesRepository sessionSchedulesRepository;
     @Autowired
     private NotificationServiceHTTPClient notificationServiceHTTPClient;
 
@@ -86,8 +89,10 @@ public class SessionService {
     //CREATE NEW SESSION
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId, coachId);
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId, coachId);
+        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
+
 
         if (optionalClient.isEmpty()) {
             log.warn("Client with id {} not found", clientId);
@@ -98,6 +103,10 @@ public class SessionService {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
+        if(optionalSessionSchedules.isEmpty()){
+            log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
+            throw new IllegalArgumentException("Session Slot no found!");
+        }
         Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
 
         // Client
@@ -106,12 +115,15 @@ public class SessionService {
         Coach coach = client.getCoach();
         // Contract
         Contract contract = optionalContract.get();
+        //Session slot
+        SessionSchedules sessionSchedules = optionalSessionSchedules.get();
 
-        // New Sessions enter the confirmed state
-        sessionRequest.setSessionStatus(SessionStatus.CONFIRMED);
+        // New Sessions enter the new state
+        sessionRequest.setSessionStatus(SessionStatus.NEW);
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
+        sessionRequest.setSessionSchedules(sessionSchedules);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
         if (optionalOrganization.isPresent()) {
@@ -156,17 +168,8 @@ public class SessionService {
                 session.setNotes(sessionRequest.getNotes());
             }
 
-            if (sessionRequest.getSessionDate() != null) {
-                session.setSessionDate(sessionRequest.getSessionDate());
-            }
-            if (sessionRequest.getSessionDuration() != null && session.getSessionDuration().length() > 0) {
-                session.setSessionDuration(sessionRequest.getSessionDuration());
-            }
-            if (sessionRequest.getSessionStartTime() != null) {
-                session.setSessionStartTime(sessionRequest.getSessionStartTime());
-            }
-            if (sessionRequest.getSessionEndTime() != null) {
-                session.setSessionEndTime(sessionRequest.getSessionEndTime());
+            if (sessionRequest.getSessionSchedules() != null) {
+                session.setSessionSchedules(sessionRequest.getSessionSchedules());
             }
             if (sessionRequest.getSessionVenue() != null) {
                 session.setSessionVenue(sessionRequest.getSessionVenue());
@@ -212,7 +215,8 @@ public class SessionService {
     @Scheduled(cron = "0 0 6 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
-        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+        //List<Session> sessions = sessionSchedulesRepository.findAllBySessionDate(LocalDate.now());
+        List<Session> sessions = sessionRepository.findAllBysessionSchedules(LocalDate.now());
 
         for (Session session : sessions) {
             String smsContent;
@@ -234,6 +238,7 @@ public class SessionService {
             // sendEmail
             String clientEmail = session.getClient().getEmail();
             notificationServiceHTTPClient.sendEmail(clientEmail, "SESSION DUE TODAY", smsContentClient, false);
+
         }
     }
 

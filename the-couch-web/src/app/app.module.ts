@@ -56,8 +56,10 @@ import { PaymentModule } from './payment/payment.module';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
+import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 
@@ -97,7 +99,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
       FeedbackComponent,
       SupportComponent,
       TermsAndConditionsPageComponent,
+      AddAvailableSlotsComponent,
       SettingsComponent,
+
 
 
   ],
