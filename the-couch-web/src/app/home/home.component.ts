@@ -49,9 +49,9 @@ export class HomeComponent implements OnInit {
         if (response.error) {
           console.log(response.body.message);
         } else {
+          this.contactForm.reset();
           this.toastrService.success(
-            'Thank you for the Message',
-            'We will get back to you shortly'
+            'Message received, we will get back to you shortly'
           );
         }
       },

@@ -1,17 +1,4 @@
-<div class="row">
-  <div class="col-5">
-        <h3></h3>
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
+<app-user></app-user>
 <h2 style="text-align: center ;" class="" >Receipts</h2>
 <div class="row">
 <div  class="col-3">
@@ -39,7 +26,6 @@
       <th>Ref No.</th>
       <th>Amount In</th>
       <th>Payed By</th>
-      <th>Description</th>
       <th>modeOfPayment</th>
       
       <th>walletBalance</th>
@@ -47,12 +33,11 @@
       <th>Actions</th>
 
     </tr>
-    <tr *ngFor="let payment of payments.data">
+    <tr *ngFor="let payment of payments.data" >
       <td>{{ payment.id}}</td>
       <td>{{ payment.extPaymentRef}}</td>
       <td>{{ payment.amountDeposited}}</td>
       <td>{{ payment.client.firstName }}</td>
-      <td>{{ payment.description}}</td>
       <td>{{ payment.modeOfPayment}}</td>
       <td>{{ payment.walletBalance}}</td>
       <td>{{ payment.createdAt | date: "MMM d y" }}</td>
@@ -97,7 +82,7 @@
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">payment amount</span>
-              <span class="value">{{ payment.paymentAmount }}</span>
+              <span class="value">{{ payment.amountBilled }}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>

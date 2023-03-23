@@ -135,7 +135,7 @@ public class ClientResource {
 
     @PutMapping(path = "/change-status/{id}") // change status active or suspend
     ResponseEntity<?> updateClientStatus(@RequestBody ChangeStatusRequest statusRequest,
-                                     @RequestParam("status") String clientStatus,
+                                     @RequestParam("status") ClientStatus clientStatus,
                                      @PathVariable Long id,
                                      @AuthenticationPrincipal User userDetails) {
         try{
@@ -248,6 +248,7 @@ public class ClientResource {
         }
     }
 
+
     @PostMapping(path = "/getClientByEmail")
     ResponseEntity<?> getClientByEmail(@RequestBody ClientRequest clientRequest,
                                        @AuthenticationPrincipal User userDetails) {
@@ -261,6 +262,7 @@ public class ClientResource {
                     "Client could not be fetched"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         }
+
 
 
 

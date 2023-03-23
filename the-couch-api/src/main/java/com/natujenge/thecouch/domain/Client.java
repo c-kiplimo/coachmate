@@ -30,9 +30,9 @@ public class Client {
     private String password;
     @Enumerated(EnumType.STRING)
     private ClientType clientType;
-    private  String msisdn;
-
-    @Column(name="email_address", unique = true)
+    @Column(unique = true)
+    private String msisdn;
+    @Column(unique = true)
     private String email;
     private  String physicalAddress;
     private  String profession;

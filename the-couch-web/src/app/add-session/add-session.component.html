@@ -1,121 +1,76 @@
+<app-user></app-user>
 
-    <div class="row">
-      <div class="col-5">
-      </div>
-      <div class="col-5">
-        
-          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-          height: 100px; padding-top: 0%; margin-top: 0%;">
-        
-    </div>
-      <div class="col-2">
-            <app-user></app-user>
-      </div>
-    </div>
-    
-    <div class="container mb-5">
-      <div class="row justify-content-center">
-   
-        <div class="col-md-8">
-          <div class="card card-table d-flex justify-content-center align-items-center">
-            <div class="">
-              <h1 class="text-center mb-3">Add session</h1>
+<div class="container mb-5">
+  <div class="row justify-content-center">
+
+    <div class="col-md-8">
+      <div class="card card-table d-flex justify-content-center align-items-center">
+        <div class="">
+          <h1 class="text-center mb-3">Add session</h1>
+        </div>
+        <form>
+          <div class="row p-2">
+
+            <div class="mb-3 col-md-6">
+              <label for="sessionname">Select Contract *</label>
+              <select [(ngModel)]="selectedContract" class="form-select" formControlName="selectedContract"
+                id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
+                <option *ngFor="let contract of contracts" [value]="contract.id">
+                  {{contract.coachingTopic}}-{{contract.client.fullName}}</option>
+              </select>
+
             </div>
-            <form>
-              <div class="row p-2">
+            <div class="mb-3 col-md-6">
 
-                <div class="mb-3 col-md-6">
-                  <label for="sessionname">Select Contract</label>
-                  <select [(ngModel)]="selectedContract"
-                  class="form-select" 
-                  formControlName="selectedContract" 
-                  id="inputGroupSelect01" 
-                  (change)="onContractChange($event)"
-                  name="type" >
-                    <option *ngFor="let contract of contracts" [value]="contract.id">{{contract.coachingTopic}}-{{contract.client.fullName}}</option>
-                  </select>                  
-               
-                </div>
-                <div class="mb-3 col-md-6">
-          
-                  <label class="form-group-text" for="clientType">Session Type</label>
-                <select 
-                  class="form-select" 
-                  name="sessionType" 
-                  [(ngModel)]="formData.sessionType"> 
-                  <option value="INDIVIDUAL">INDIVIDUAL</option>
-                  <option value="GROUP">GROUP</option>
-                  <option value="OTHER">OTHER</option>
+              <label class="form-group-text" for="clientType">Session Type *</label>
+              <select class="form-select" name="sessionType" [(ngModel)]="formData.sessionType">
+                <option value="INDIVIDUAL">INDIVIDUAL</option>
+                <option value="GROUP">GROUP</option>
+              </select>
+            </div>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="sessionname">Session Name *</label>
+                <input [(ngModel)]="formData.name" type="text" class="form-control" id="name"
+                  placeholder="Enter Session Name" name="name">
+
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-group-text" for="clientType">Session Venue *</label>
+                <select class="form-select" id="inputGroupSelect01" name="sessionVenue"
+                  [(ngModel)]="formData.sessionVenue">
+                  >
+                  <option value="VIRTUAL">VIRTUAL</option>
+                  <option value="PHYSICAL">PHYSICAL</option>
                 </select>
               </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="sessionname">Session Name</label>
-                  <input 
-                  [(ngModel)]="formData.name" 
-                  
-                  type="text" 
-                  class="form-control" 
-                  id="name"
-                  placeholder="Enter Session Name" 
-                  name="name" 
-                 >
-               
-                </div>
-                <div class="mb-3 col-md-6" >
-                  <label class="form-group-text" for="clientType">Session Venue</label>
-                  <select class="form-select" 
-                      id="inputGroupSelect01" 
-                      name="sessionVenue" 
-                      [(ngModel)]="formData.sessionVenue">
-                     >
-                      <option value="VIRTUAL">VIRTUAL</option>
-                      <option value="PHYSICAL">PHYSICAL</option>
-                    </select>
-                      </div>
-                      </div>
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Session Details</label>
-                  <input type="text" 
-                  class="form-control" 
-                  [(ngModel)]="formData.sessionDetails"
-                  id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="sessionDetails" 
-                 >
-                
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <p>Available Slots</p>
-                  <ul>
-                    <li *ngFor="let availableSlot of coachSlots" (click)="selectedSessionSlot(availableSlot)">
-                      <p *ngIf="availableSlot.booked == false">
-                        {{ availableSlot.sessionDate }}
-                        {{ availableSlot.startTime }} -
-                        {{ availableSlot.endTime }}
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-           
+            </div>
 
-                <button 
-                type="submit" 
-                (click)="addSession()"
-                class="btn btn-signup mb-3 mt-2 p-2 text-center"
-                >Create Session</button>
+            <div class="row p-2">
+              <div class=" mb-3 col-md-6 ">
+                <label for="inputlastname">Session Details</label>
+                <input type="text" class="form-control" [(ngModel)]="formData.sessionDetails" id="inputEmail4"
+                  placeholder="Enter Session Description" name="sessionDetails">
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <p>Available Slots</p>
+                <ul>
+                  <li *ngFor="let availableSlot of coachSlots" (click)="selectedSessionSlot(availableSlot)">
+                    <p *ngIf="availableSlot.booked == false">
+                      {{ availableSlot.sessionDate }}
+                      {{ availableSlot.startTime }} -
+                      {{ availableSlot.endTime }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+
+            <button type="submit" (click)="addSession()"
+              [disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionVenue || !formData.sessionType"
+              class="btn btn-signup mb-3 mt-2 p-2 text-center">Create Session</button>
           </div>
-       
-        
-      
-    
-    
-  
-      
-            
-        
-    

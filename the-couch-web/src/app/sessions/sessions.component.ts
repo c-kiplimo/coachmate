@@ -24,15 +24,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class SessionsComponent implements OnInit {
   filterIcon!: IconProp;
   rightIcon!: IconProp;
-goToItem(arg0: string,arg1: any) {
-throw new Error('Method not implemented.');
-}
   searchIcon!: IconProp;
-session: any;
-back() {
-throw new Error('Method not implemented.');
-}
-
+  session: any;
   loading = true;
   itemsPerPage = 20;
   filters: any = {
@@ -43,25 +36,22 @@ throw new Error('Method not implemented.');
   currentTab!: string;
   totalLength!: number;
   noOfSessions: any;
-  page!: number;
   backIcon!: IconProp;
   addIcon!: IconProp;
-salesData: any;
-
+  salesData: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
-
   OrgData: any;
   orgSession: any;
-
   User: any;
-
-
-  constructor(private apiService: ClientService, private router: Router) {}
-
   sessions: any;
+  page: number = 1;
+  clientId: any;
+  id: any;
+  constructor(private apiService: ClientService, private router: Router,private activatedRoute: ActivatedRoute) {}
 
+  
   ngOnInit(): void { 
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
@@ -80,55 +70,46 @@ salesData: any;
     } else if(this.userRole == 'COACH'){
       this.getAllSessions();
     } else if(this.userRole == 'CLIENT'){
-     
       this.User = JSON.parse(sessionStorage.getItem('user') as any);
       console.log(this.User);
-      const email = {
-        email: this.User.email
-      }
-      this.apiService.getClientByEmail(email).subscribe(
-        (response: any) => {
-          console.log(response);
-          this.getClientSessions(response[0].id);
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
+      this.clientId = this.User.id
+      console.log("client id",this.clientId)
+      this.id = this.clientId
+      this.getClientSessions() 
     }
   }
 
-  
-
-
-  
-  getClientSessions(id: any) {
-
-    this.apiService.getClientSessions(id).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.sessions = response.body;
-        console.log(this.sessions.body);
+  getClientSessions() {
+    console.log("client id",this.clientId)
+    this.loading = true;
+    this.apiService.getClientSessions(this.clientId)
+      .subscribe((data: any) => {
+        this.sessions = data.body;
         this.loading = false;
+        console.log("client sessions gotten here",this.sessions)
       },
       (error: any) => {
         console.log(error);
+        this.loading = false;
       }
-    );
+      );
   }
 
   getAllOrgSessions(id: any) {
     this.loading = true;
+    window.scroll(0, 0);
+    this.page = 1;
     const options = {
       page: 1,
+      id: id,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    this.apiService.getOrgSessions(id).subscribe(
+    this.apiService.getOrgSessions(options).subscribe(
       (response: any) => {
-        console.log(response);
         this.sessions = response;
+        console.log("org sessions gotten here",this.sessions)
         this.loading = false;
       },
       (error: any) => {
@@ -149,8 +130,8 @@ salesData: any;
     };
     this.apiService.getSessions(options).subscribe(
       (response: any) => {
-        console.log(response.body.data);
         this.sessions = response.body.data;
+        console.log("all sessions gotten here",this.sessions)
         this.loading = false;
       },
       (error: any) => {
@@ -199,16 +180,4 @@ salesData: any;
 
 
   }
-  toggleTab(tab: string): void {
-    this.currentTab = tab;
-    // this.filters.period = tab;
-    this.getFilteredSessions(1, tab);
-  }
-  getFilteredSessions(arg0: number, tab: string) {
-    throw new Error('Method not implemented.');
-  }
-
-  toggleFilters(): void {
-    this.filterOptions = !this.filterOptions;
-}
 }

@@ -77,6 +77,9 @@ export class SidnavComponent implements OnInit {
     }
     
   }
+  reload() {
+    location.reload();
+  }
   constructor(public router: Router) {}
 
   toggleCollapse(): void {

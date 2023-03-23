@@ -1,14 +1,17 @@
 package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.ClientWallet;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
-
+@Repository
 public interface ClientWalletRepository extends PagingAndSortingRepository<ClientWallet,Long>,
         QuerydslPredicateExecutor<ClientWallet> {
 
@@ -21,7 +24,9 @@ public interface ClientWalletRepository extends PagingAndSortingRepository<Clien
     Page<ClientWalletDto> findAllByClient_id(Long clientId, Pageable pageable);
 
     Page<ClientWalletDto> findByOrganizationIdAndClientId(Long organizationId, Long clientId, Pageable pageable);
+    Page<ClientWalletDto> findAllByCoach_idAndCreatedAtBetween(Long coachId, LocalDateTime minusMonths, LocalDateTime now, Pageable pageable);
 
+    Page<ClientWalletDto> findAllByOrganization_idAndCreatedAtBetween(Long organizationId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
 
-    void findAllByClient_idAndCoach_id(Long id, Long id1);
+    Page<ClientWalletDto> findAllByClient_idAndCreatedAtBetween(Long clientId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
 }

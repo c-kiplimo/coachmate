@@ -44,6 +44,7 @@ public class NotificationHelper {
     // send upcoming session reminder to client and coach
     public static void sendUpcomingSessionReminderToClient(Session session){
         String smsContent;
+
         smsContent = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
                 " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
                 + session.getSessionSchedules().getStartTime() + "to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
@@ -61,9 +62,11 @@ public class NotificationHelper {
     }
     public static void sendUpcomingSessionReminderToCoach(Session session){
     String smsContent;
+
         smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
                 " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
                 + session.getSessionSchedules().getStartTime() + " to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
+
         // SHORTCODE
         String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS;
         String referenceId = "C-23342";

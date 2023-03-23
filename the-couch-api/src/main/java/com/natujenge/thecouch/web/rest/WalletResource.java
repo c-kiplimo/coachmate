@@ -8,8 +8,10 @@ import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 @RestController
 @Slf4j
@@ -52,12 +55,12 @@ public class WalletResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("Request all payments");
         try {
-            Long organizationId = (userDetails.getCoach().getId() == null) ? userDetails.getOrganization().getId() :
-                    null;
-            Long coachId = (userDetails.getOrganization().getId() == null) ? userDetails.getCoach().getId() :
-                    null;
-            Long clientId = (userDetails.getClient().getId() == null) ? userDetails.getCoach().getId() :
-                    null;
+            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+            Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
+                    userDetails.getCoach().getOrganization().getId();
+            Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
+
+
 
             ListResponse listResponse;
             if (organizationId != null) {
@@ -129,4 +132,94 @@ public class WalletResource {
         }
 
     }
+
+
+    @GetMapping("/filterReceipts")
+    public ResponseEntity<ListResponse> filterByClientNameAndDate(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int perPage) {
+
+        log.info("Request receipts");
+        try {
+            ListResponse listResponse = walletService.filterByClientNameAndDate(page, perPage,name, date);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        }
+        catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    //  get payments by coach id and statement period
+    @GetMapping("/filterByCoachIdAndStatementPeriod")
+    public ResponseEntity<?> filterByCoachIdAndStatementPeriod(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
+
+    ) {
+        try {
+            Long coachId = userDetails.getCoach().getId();
+            log.info("Request to get account statement by coach Id {} and statement period {}", coachId, statementPeriod);
+            ListResponse listResponse = walletService.getPaymentsByCoachIdAndStatementPeriod(page,perPage, coachId, statementPeriod);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //  get payments by client id and statement period
+    @GetMapping("/filterByClientIdAndStatementPeriod")
+    public ResponseEntity<?> filterByClientIdAndStatementPeriod(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
+
+    ) {
+        try {
+            Long clientId = userDetails.getClient().getId();
+            log.info("Request to get account statement by client Id {} and statement period {}", clientId, statementPeriod);
+            ListResponse listResponse = walletService.getPaymentsByClientIdAndStatementPeriod(page,perPage, clientId, statementPeriod);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //  get payments by organization id and statement period
+    @GetMapping("/filterByOrganizationIdAndStatementPeriod")
+    public ResponseEntity<?> filterByOrganizationIdAndStatementPeriod(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
+
+    ) {
+        try {
+            Long organizationId = userDetails.getOrganization().getId();
+            log.info("Request to get account statement by organization Id {} and statement period {}", organizationId, statementPeriod);
+            ListResponse listResponse = walletService.getPaymentsByOrganizationIdAndStatementPeriod(page,perPage, organizationId, statementPeriod);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+
 }

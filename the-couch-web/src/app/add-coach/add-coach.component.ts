@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/LoginService';
 import { Router } from '@angular/router';
-// import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import {
   faChevronLeft,
   faEye,
@@ -40,9 +40,11 @@ export class AddCoachComponent implements OnInit {
   Data: any;
   OrgSession: any;
   orgData: any;
+  toastrService: any;
 
   
-  constructor(private LoginService: LoginService, private router: Router) { }
+  constructor(private LoginService: LoginService, private router: Router, toastrService: ToastrService
+    ) { }
 
   ngOnInit(): void {
     this.SessionData = sessionStorage.getItem('user'); 
@@ -90,10 +92,10 @@ export class AddCoachComponent implements OnInit {
           } else {
             this.registrationSuccess = true;
             this.router.navigate(['registration/confirm']);
-            // this.toastrService.success(
-            //   'Confirm account',
-            //   'Registration successfull!'
-            // );
+            this.toastrService.success(
+             'Confirm account',
+             'Registration successfull!'
+            );
   
             console.log('here');
           }

@@ -83,13 +83,13 @@
     overflow-y: scroll;
 }
 .badge-warning {
-    background-color: yellow !important;
+    background-color: rgb(87, 87, 85);
   }
   .badge-success {
-    background-color: green !important;
+    background-color: green ;
   }
   .badge-danger {
-    background-color: red !important;
+    background-color: red;
   }
   @media only screen and (max-width: 600px) {
     .col-6 {

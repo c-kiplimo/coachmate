@@ -21,6 +21,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
 
 
     Page<SessionDto> findAllByCoach_id(Long id, Pageable pageable);
+    Optional<Session> findByIdAndCoach_id(Long id, Long coachId);
 
     Optional<Session> findSessionByIdAndCoachId(Long sessionId, Long coachId);
 
@@ -37,4 +38,7 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     List<Session> findSessionByContractId(Long contractId);
 
     List<Session> findAllBysessionSchedules(LocalDate date);
+
+    Optional<SessionDto> findByIdAndCoachId(Long sessionId, Long coachId);
+
 }

@@ -14,4 +14,5 @@ public interface NotificationSettingsRepository extends JpaRepository<Notificati
 //    Optional<NotificationSettingsDto> findAllByCoachId(Long coachId);
 
     Optional<NotificationSettings> findByCoachId(Long coachId);
+
 }

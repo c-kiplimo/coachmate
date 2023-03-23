@@ -1,0 +1,57 @@
+package com.natujenge.thecouch.domain;
+
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+
+@Table(name = "tbl_sessionResources")
+@Data
+@Entity
+public class Attachments {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String  FileName;
+    private String  FileType;
+    private Long  FileSize;
+    private  byte[]  FileContent;
+
+
+    private String link;
+    private String  linkUrl;
+    private byte[]  file;
+
+    // Management
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    private String createdBy;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdatedAt;
+    private String lastUpdatedBy;
+
+
+    @OneToOne
+    @JoinColumn(name = "session_id")
+    Session session;
+
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    Coach coach;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "org_id_id")
+    Organization organization;
+
+}

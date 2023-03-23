@@ -1,17 +1,4 @@
-<div class="row">
-  <div class="col-5">
-        <h3>Dashboard</h3>
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
+<app-user></app-user>
 
 <button type="button" class="btn btn-primary" [routerLink]="['/addAvailableSlots']">Add Slots</button>
 
@@ -78,9 +65,11 @@
 </div> -->
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
+          <!-- <h6 class="card-title">Sessions Created</h6>
+          <h3 class="card-text fw-bold">{{numberOfSessions}}</h3> -->
           <h6 class="card-title">Sessions Success Rate</h6>
           <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
-          <!-- <button type="button" routerLink="/addSession" class="btn addbtn"><i class="fa fa-plus"></i> Add Session</button> -->
+          <button type="button" routerLink="/addSession" class="btn addbtn"><i class="fa fa-plus"></i> Add Session</button>
           
         </div>
     </div>
@@ -117,14 +106,20 @@
   </div>
 </div>
 
-    <div class="col-3 card text-center top-cards" >
-        <div class="card-body">
+        <!-- <div class="card-body">
           <h6 class="card-title">Sessions Created</h6>
           <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
         
           
-        </div>
-    </div>
+        </div> -->
+        <div class="col-3 card text-center top-cards" >
+          <div class="card-body">
+            <h6 class="card-title">Sessions Success Rate</h6>
+            <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
+            <button type="button" routerLink="/addSession" class="btn addbtn"><i class="fa fa-plus"></i> Add Session</button>
+            
+          </div>
+      </div>
     <div class="col-3 card text-center top-cards" >
         <div class="card-body">
           <h6 class="card-title">Number of Clients</h6>
@@ -137,7 +132,7 @@
         <div class="card-body">
           <h6 class="card-title">Number of Contracts</h6>
           <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-        
+          <button type="button" routerLink="/contract" class="btn addbtn"><i class="fa fa-plus"></i> Create Contract</button>
           
         </div>
     </div>
@@ -201,7 +196,7 @@
                       <span class="value">
                       <span
                       class="badge"
-                      [ngClass]="getClass(session)"
+                      [ngClass]="getClass(sessions)"
                       >{{ session.sessionStatus }}</span> 
                       
                     </span>
@@ -243,7 +238,7 @@
                 <td>{{ contract.noOfSessions }}</td>
                 <td>{{ contract.client.fullName }}</td>
                 <td class="text-center">
-                  <button type="button"  class="btn btn-sm btn-success"routerLink="/contractDetail/{{contract.id}}" >View</button>
+                  <button type="button"  class="btn btn-sm btn-success"  (click)="navigateToTerms(contract.id)" >View</button>
 
               </tr>
             </tbody>

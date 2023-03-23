@@ -1,17 +1,5 @@
-<div class="row">
-  <div class="col-5">
-  </div>
-  <div class="col-5">
-    
-      <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
-      height: 100px; padding-top: 0%; margin-top: 0%;">
-    
-</div>
-  <div class="col-2">
-        <app-user></app-user>
-  </div>
-</div>
-
+<app-user></app-user>
+<br>
 <div class="row">
   <div class="col-3"></div>
   <div class="col-6">
@@ -111,6 +99,13 @@
       sessions
     </button>
     <button
+    class="btn btn-tabs"
+    (click)="toggleTab('contracts')"
+    [ngClass]="{ 'active-tab': currentTab === 'contracts' }"
+  >
+    contracts
+  </button>
+    <button
       class="btn btn-tabs"
       (click)="toggleTab('payments')"
       [ngClass]="{ 'active-tab': currentTab === 'payments' }"
@@ -126,6 +121,17 @@
     </button>
   </div>
   <div *ngIf="currentTab === 'sessions'" >
+        <!-- add session button -->
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-success"
+            *ngIf="!loading"
+            data-bs-toggle="modal"
+            data-bs-target="#sessionModal"
+          >
+            Add Session
+          </button>
+      </div>
     <div class="row list-container container  " >
       <table class="table" >
         <thead>
@@ -142,7 +148,7 @@
           </tr>
         </thead>
     
-        <tbody  class="list-container">
+        <tbody>
           <tr *ngFor="let session of sessions">
             <th scope="row">{{ session.id }}</th>
             <td>{{ session.name }}</td>
@@ -168,30 +174,78 @@
         No sessions Found.
       </p>
     </div>
-    <!-- add session button -->
+  </div>
+  <div *ngIf="currentTab === 'contracts'" >
+    <!-- add contract button -->
     <div class="d-flex justify-content-end">
       <button
-        class="btn btn-primary"
         *ngIf="!loading"
+        class="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#addsessionModal"
+        data-bs-target="#addContractModal"
+      
       >
-        Add Session
+        Add contract
       </button>
   </div>
+<div class="row list-container container  " >
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Coaching Category</th>
+        <th scope="col">Client</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">No Of Sessions</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contract of contracts">
+        <th scope="row">{{ contract.id}}</th>
+        <td>{{ contract.coachingTopic }}</td>
+        <td>{{ contract.coachingCategory }}</td>
+        <td>{{ contract.client.fullName }}</td>
+        <td>{{ contract.startDate | date : "MMM d, y" }}</td>
+        <td>{{ contract.endDate | date : "MMM d, y" }}</td>
+        <td>{{ contract.noOfSessions }}</td>
+        <td class="actions">
+          <i
+          (click)="navigateToTerms(contract.id)"
+            class="fa-solid fa-arrow-up-right-from-square"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+    <div class="donut multi"></div>
   </div>
-  <div class="d-none d-md-block">
-    <div class="text-end mt-2" *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <button class="btn btn-refresh" (click)="getPayments()">
+  <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
+    No contracts Found.
+  </p>
+</div>
+</div>
+
+    <!-- <div class="text-end mt-2 d-none d-md-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <button class="btn btn-refresh" >
         <fa-icon [icon]="refreshIcon"></fa-icon>
         Refresh
       </button>
-    </div>
-    <div *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
-
+      <button
+      class="btn btn-refresh me-2"
+      data-bs-toggle="modal"
+      data-bs-target="#paymentReminderModal"
+    >
+      <fa-icon [icon]="alertIcon"></fa-icon>
+      Remind
+    </button>
+    </div> -->
+    <div   class="d-none d-lg-block"
+    *ngIf="currentTab === 'payments'" [@fadeIn]>
+      <div class="row list-container container  " >
       <table class="table">
         <thead>
           <th colspan="1">Date Paid</th>
@@ -199,51 +253,37 @@
           <th colspan="1">Amount</th>
           <th colspan="1">Balance</th>
           <th colspan="1">Payment ref</th>
-          <th colspan="1">Description</th>
           <th colspan="1">Actions</th>
-        </thead>
-
-        <tbody *ngIf="payments?.length" [@fadeIn]>
-          <tr *ngFor="let payment of payments">
-            <td>{{ payment.session.sessionAmount }}</td>
-            <td>{{ payment.amount }}</td>
-            <td>{{ payment.balanceAfter }}</td>
-            <td>{{ payment.paidAt | date : "MMM d, y hh:mm a" }}</td>
-            <td>{{ payment.extPaymentRef }}</td>
-            <td>{{ payment.narration }}</td>
-            <td>
-              <span class="d-flex justify-content-around">
-                <button
-                  class="btn btn-view"
-                 
-                >
-                  view
-                </button>
-                <button
-              class="btn btn-view"
-              data-bs-toggle="modal"
-              data-bs-target="#editPaymentModal"
-              (click)="viewPayment(payment)"
-              (click)="goToItem('payment', payment)"
-            >
-            <fa-icon [icon]="editIcon"></fa-icon>
-              edit
-            </button>
-              </span>
-            </td>
+        </thead> 
+        <tbody>
+          <tr *ngFor="let payment of payments | keyvalue" >
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.createdAt | date : "MMM d, y hh "}} </td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.createdAt | date : " hh:mm a" }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.extPaymentRef }}</td>
+              <td *ngIf="payment.value.walletBalance != 0">
+                  <button
+                    class="btn btn-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewPaymentModal"
+                    (click)="viewPayment(payment.value)"
+                  >
+                    view
+                  </button>
+              </td>
           </tr>
         </tbody>
       </table>
-      <p class="text-muted mt-5" *ngIf="!loadingClient && !sessions.length">
+      <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+      <p class="text-muted mt-5" *ngIf="!loadingClient && !payments.length">
         No Payments Found.
       </p>
+      </div>  
     </div>
-    <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-      <div class="donut multi"></div>
-    </div>
-  </div> 
-
-  <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
+  <!-- <div class="show-ms" *ngIf="currentTab === 'payments'" [@fadeIn]>
     <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
       <div class="donut multi"></div>
     </div>
@@ -255,14 +295,13 @@
     >
       <div class="d-flex justify-content-between mb-1">
         <div>
-          <h6>{{ payment.narration | titlecase }}</h6>
+          <h6>{{ payment.description | titlecase  }}</h6>
           <p class="mb-1">
             <fa-icon class="me-2" [icon]="userIcon"></fa-icon>
-            Amount: {{ payment.session.sessionDuration }}
+            Amount: {{ payment.amountDeposited }}
           </p>
-          <p class="mb-1">Paid:{{ payment.amount }}</p>
+          <p class="mb-1">Paid:{{ payment.amountDeposited }}</p>
         </div>
-
         <div>
           <span>
             <fa-icon class="me-2" [icon]="calendarIcon"></fa-icon>
@@ -278,225 +317,110 @@
             }"
           >
             <span *ngIf="payment.balanceAfter > '0'">
-              Bal: {{ payment.balanceAfter }}
+              Bal:{{ payment.walletBalance }}
             </span>
           </p>
         </div>
       </div>
       <div class="d-flex justify-content-between mb-3">
-        <h4>{{ payment.session.name }}</h4>
-        <span>{{ payment.amount }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
+        <h4>Amount In</h4>
+        <span>{{ payment.amountDeposited }} <fa-icon [icon]="rightIcon"> </fa-icon> </span>
         
       </div>
 
       <span>{{ payment.narration }}</span>
-      <h6>Paid On: {{ payment.paidAt | date: "MMM d, y " }}</h6>
+      <h6>Paid On: {{ payment.createdAt| date : "MMM d, y hh "}}</h6>
     </div>
     <p class="text-muted mt-5" *ngIf="!payments?.length">
       No payments found.
     </p>
 
-  </div>
+  </div> -->
+  <div
+      class="d-none d-lg-block"
+      *ngIf="currentTab === 'notifications'"
+      [@fadeIn]
+    >
+    <div class="row list-container container ">
+      <table class="table">
+        <thead>
+          <th coslpan="1">Notification Reason</th>
+          <th coslpan="1">Notification Date</th>
+          <th coslpan="1">Notification Mode</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let notification of notifications">
+            <td>{{ notification.id }}</td>
+            <td>{{ notification.createdAt | date : "MMM d, y " }}</td>
+            <td>{{ notification.notificationMode }}</td>
+            <td>
+              <button
+                class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#notificationModal"
+                (click)="viewNotification(notification)"
+              >
+                view
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
+      <p class="text-muted mt-5" *ngIf="!notifications?.length">
+        No notifications found.
+      </p>
+    </div>
+    </div>
+    </div>
 </div>
 </div>
-<!-- add session modal -->
-<div>
+
+<!-- suspend client modal -->
 <div
-class="modal fade"
-id="addsessionModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
+  class="modal fade bd-example-modal-lg"
+  id="suspendclientModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
 >
-<div class="modal-dialog modal-xl">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" >Create session</h1>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" >
+          Suspend Client
+        </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
-
-  </div>
-</div>
-  <div class="container mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card card-table d-flex justify-content-center align-items-center">
-          <div class="">
-            <h1 class="text-center mb-3">Add session</h1>
-          </div>
-          <form [formGroup]="addSessionForm" >
-            <div class="row p-2">
-              <div class="mb-3 col-md-6">
-              <label for="clientId" class="form-label">Select Client</label>
-              <select class="form-select" aria-label="Default select example"
-              formControlName="clientId">
-                <option selected>Select Client you want to create a session for</option>
-               
-
-               <!--Loop through clients and form options-->
-                <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}</option>
-
-              </select>
-              
-              </div>
-              <div class="mb-3 col-md-6">
-                <label for="sessionname">Select Contract</label>
-                <select 
-                class="form-select" 
-                id="inputGroupSelect01" 
-                name="type" 
-                (change)="onContractChange($event)"
-                [(ngModel)]="addSessionForm.contractId"> 
-                <option *ngFor="let contract of contracts" value="{{contract.id}}">{{contract.coachingTopic}}</option>
-              </select>
-              </div>
-            </div>
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                <label for="sessionname">Session Name</label>
-                <input 
-                type="text" 
-                class="form-control" 
-                id="sessionname" 
-                placeholder="Enter Session Name" 
-                name="name" 
-                [(ngModel)]="addSessionForm.name">
-             
-              </div>
-              <div class="mb-3 col-md-6" >
-                <div class="form-group-prepend">
-                  <label class="form-group-text" for="clientType">Session Type</label>
-                </div>
-                <select 
-                  class="form-select" 
-                  id="inputGroupSelect01" 
-                  name="type" 
-                  [(ngModel)]="addSessionForm.sessionType"> 
-                  <option value="INDIVIDUAL">INDIVIDUAL</option>
-                  <option value="GROUP">GROUP</option>
-                  <option value="OTHER">OTHER</option>
-                </select>
-              </div>
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                <label for="inputlastname">Session Details</label>
-                <input type="text" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Enter Session Description" 
-                name="details" 
-                [(ngModel)]="addSessionForm.sessionDetails" >
-              
-              </div>
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">Session Date</label>
-                <input type="date" 
-                variant="success" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Date" 
-                name="session_date" 
-                [(ngModel)]="addSessionForm.sessionDate" >
-                
-              </div>
-            </div>
-            <div class="row p-2">
-                <div class="mb-3 col-md-6">
-                  <label for="inputEmail4">From</label>
-                  <input type="time" 
-                  class="form-control" 
-                  id="inputEmail4" 
-                  placeholder="Time" 
-                  name="session_time_from" 
-                  [(ngModel)]="addSessionForm.sessionStartTime" >
-                  
-                  </div>
-              <div class="mb-3 col-md-6">
-                <label for="inputEmail4">To</label>
-                <input type="time" 
-                class="form-control" 
-                id="inputEmail4" 
-                placeholder="Time" 
-                name="session_time_to" 
-                [(ngModel)]="addSessionForm.sessionEndTime" >
-                
-              </div>
-
-            </div>
-            <div class="row p-2">
-              <div class=" mb-3 col-md-6 ">
-                  <label class="form-group-text" for="clientType">Session Venue</label>
-              <select class="form-select" 
-                  id="inputGroupSelect01" 
-                  name="session_venue" 
-                  [(ngModel)]="addSessionForm.sessionVenue">
-                  <option value="VIRTUAL">VIRTUAL</option>
-                  <option value="PHYSICAL">PHYSICAL</option>
-                </select>
-                  </div>
-                  <div class="mb-3 col-md-6">
-                    <label for="inputEmail4">Session Goals</label>
-                    <input 
-                    type="email" class="form-control" 
-                    id="inputEmail4" placeholder="Goals" 
-                    name="goals" [(ngModel)]="addSessionForm.goals">
-                  </div>
-                  <div class="text-center">
-              <button 
-              type="submit" (click)="addSession()"
-              class="btn btn-signup mb-3 mt-2 p-2 text-center"
-              >Create Session</button>
-              
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <p class="">
+            Are you sure you want to suspend
+            <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
+          </p>
+          
         </div>
-        </div>
-
-            </div>
-          </form>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+        type="button"
+        class="btn btn-add"
+        (click)=" changeClientStatus()"
+      >
+        Submit
+      </button>
       </div>
     </div>
   </div>
-</div>
-</div>
-</div>
-<!-- suspend client modal -->
-<div class="modal fade" id="suspendclientModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Suspend Client</h5>
-           
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    </button>
-  </div>
-  <div class="modal-body" >
-    <div class="d-flex justify-content-between">
-      <p class="">
-        Are you sure you want to suspend
-        <span class="fw-bold">{{ clients.firstName + " " + clients.lastName }}</span>?
-      </p>
-      
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-add"
-      (click)=" changeClientStatus()"
-    >
-      Submit
-    </button>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-      Close
-    </button>
-  </div>
-</div>
-</div>
 </div>
 
 <!-- Close client modal -->
@@ -620,7 +544,7 @@ aria-hidden="true"
 <!-- Payment View modal -->
 <div
 class="modal fade"
-id="payementModal"
+id="paymentModal"
 tabindex="-1"
 aria-labelledby="exampleModalLabel"
 aria-hidden="true"
@@ -679,57 +603,53 @@ aria-hidden="true"
 
 <!-- Notification details modal -->
 <div
-class="modal fade"
-id="notificationModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
+  class="modal fade"
+  id="notificationModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
 >
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Notification Details
-    </h1>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Notification Details
+        </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body" *ngIf="notification">
-    <div class="d-flex justify-content-between">
-      <p>Notification Subject:</p>
-      <span>{{ notification.subject }}</span>
-    </div>
-    <div class="d-flex justify-content-between">
-      <p>Reason</p>
-      <span>{{ notification.sendReason }}</span>
-    </div>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+        <div class="modal-body" *ngIf="notification">
+        <div class="d-flex justify-content-between">
+          <p>Destination</p>
+          <span>{{ notification.destinationAddress }}</span>
+        </div>
 
-    <div class="d-flex justify-content-between">
-      <p>Source Address</p>
-      <span>{{ notification.srcAddress }}</span>
+        <div class="d-flex justify-content-between">
+          <p>Source Address</p>
+          <span>{{ notification.sourceAddress}}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <p>Sent on:</p>
+          <span>{{ notification.createdAt | date : "MMM d, y " }}</span>
+        </div>
+        <div class="d-flex-column">
+          <p>Content:</p>
+          <span>{{ notification.content }}</span>
+        </div>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
-    <div class="d-flex justify-content-between">
-      <p>Sent at:</p>
-      <span>{{ notification.sentAt }}</span>
-    </div>
-    <div class="d-flex-column">
-      <p>Content:</p>
-      <span>{{ notification.content }}</span>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" >
-      Close
-    </button>
   </div>
 </div>
-</div>
-</div> 
 <!-- Edit Client Modal -->
 <div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-x1">
@@ -807,4 +727,293 @@ aria-hidden="true"
     </div>
   </div>
 </div>
+
+ <!-- Modal for additing a session -->
+ <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Session</h5>
+        <button type="button" class="close"class="btn-close btn-close-white"
+        data-bs-dismiss="modal"
+        aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+              <label for="sessionname">Session Name *</label>
+              <input 
+              [(ngModel)]="addSessionForm.name" 
+              
+              type="text" 
+              class="form-control" 
+              id="name"
+              placeholder="Enter Session Name" 
+              name="name" 
+             >
+           
+            </div>
+            <div class="mb-3 col-md-6" >
+              <div class="form-group-prepend">
+                <label class="form-group-text" for="clientType">Session Type *</label>
+              </div>
+              <select 
+                class="form-select" 
+                id="inputGroupSelect01" 
+                name="sessionType" 
+                [(ngModel)]="addSessionForm.sessionType"> 
+                <option value="INDIVIDUAL">INDIVIDUAL</option>
+                <option value="GROUP">GROUP</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row p-2">
+              <div class="mb-3 col-md-6">
+                <label for="inputEmail4">From *</label>
+                <input type="time" 
+                class="form-control" 
+                id="inputEmail4" 
+                placeholder="Time" 
+                name="sessionStartTime" 
+                [(ngModel)]="addSessionForm.sessionStartTime" >
+                
+                </div>
+            <div class="mb-3 col-md-6">
+              <label for="inputEmail4">To *</label>
+              <input type="time" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Time" 
+              name="sessionEndTime"
+              [(ngModel)]="addSessionForm.sessionEndTime"
+              >
+              
+            </div>
+
+          </div>
+          <div class="row p-2">
+            <div class=" mb-3 col-md-6 ">
+                <label class="form-group-text" for="clientType">Session Venue *</label>
+            <select class="form-select" 
+                id="inputGroupSelect01" 
+                name="sessionVenue" 
+                [(ngModel)]="addSessionForm.sessionVenue">
+                <option value="VIRTUAL">VIRTUAL</option>
+                <option value="PHYSICAL">PHYSICAL</option>
+              </select>
+                </div>
+            <div class="mb-3 col-md-6">
+              <label for="sessionname">Select Contract *</label>
+              <select [(ngModel)]="selectedContract"
+              class="form-select" 
+              formControlName="selectedContract" 
+              id="inputGroupSelect01" 
+              (change)="onContractChange($event)"
+              name="type" >
+                <option *ngFor="let contract of contracts" [value]="contract.id">{{contract.coachingTopic}}-{{contract.client.fullName}}</option>
+              </select>  
+            </div>
+          </div>
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="inputEmail4">Session Date *</label>
+              <input type="date" 
+              variant="success" 
+              class="form-control" 
+              id="inputEmail4" 
+              placeholder="Date" 
+              name="sessionDate" 
+              [(ngModel)]="addSessionForm.sessionDate"
+            >
+              
+            </div>
+          </div>
+          </form>
+          </div>
+                  <div class="modal-footer">
+                    <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success"(click)="addSession()"
+                    [disabled]="!addSessionForm.name || !addSessionForm.sessionType || !addSessionForm.sessionStartTime || !addSessionForm.sessionEndTime || !addSessionForm.sessionVenue || !addSessionForm.sessionDate"
+                    >Add Session</button>
+                  </div>
+                </div>
+              </div>
+      </div>
+
+
+
+                      
+<!-- modal for adding contract -->
+<div class="modal" id="addContractModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Contract</h5>
+        <button type="button" class="close"class="btn-close btn-close-white"
+        data-bs-dismiss="modal"
+        aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="contractForm" class="col-10">
+          <div class="mb-3 mt-3 description">
+            <h3 for="coachingTopic" class="form-label">Coaching Title *</h3>
+            <input
+              type="text"
+              class="form-control"
+              id="nucoachingTopicmber"
+              placeholder="Enter the coaching topic"
+              formControlName="coachingTopic"
+              required="true"
+            />
+          </div>
+          <br>
+          <div class="row">
+          <div class="col-6 input-group-prepend">
+            <label for="coachingCategory" class="form-label">Coaching Category *</label>
+            <select class="form-select" aria-label="Default select example"
+            formControlName="coachingCategory"
+            required="true">
+              <option selected>Contract Category</option>
+              <option value="INDIVIDUAL">INDIVIDUAL</option>
+              <option value="CORPORATE">CORPORATE</option>
+             
+            </select>
+          </div>
+        </div>
+        <br>
+          <h3>Schedule & Fees</h3>
+          <div class="row">
+            <div class="col">
+              <label for="number" class="form-label">Start Date *</label>
+              <input
+                type="date"
+                class="form-control"
+                placeholder="date"
+                formControlName="startDate"
+                required="true"
+              />
+            </div>
+            <div class="col">
+              <label for="number" class="form-label">End Date *</label>
+              <input
+                type="date"
+                class="form-control"
+                placeholder="date"
+                formControlName="endDate"
+                required="true"
+              />
+            </div>
+          </div>
+          
+          <div class="mb-3 mt-3">
+            <div class="row">
+              <div *ngIf="contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'" class="col-6"
+            
+              >
+            <label for="number" class="form-label"
+              >Individual Fees Per Session *</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter the fee to be paid in USD"
+              formControlName="individualFeesPerSession"
+              required="true"
+            />
+            </div>
+            <div *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'"class="col-6"
+            
+            >
+            <label for="number" class="form-label">Group Fees Per Session *</label>
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter the fee to be paid in USD"
+              formControlName="groupFeesPerSession"
+              required="true"
+            />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+            <label for="number" class="form-label">No. of Sessions: *</label>
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter number of Sessions"
+              formControlName="noOfSessions"
+              required="true"
+            />
+            </div>
+          </div>
+          </div>
+          <section>
+            <br>
+            <h3>Coaching Goals *</h3>
+            <br>
+            <div class="row mb-3">
+              <div class="col-12"></div>
+              
+                <div class="row">
+                <div class="col-6">
+                  <input [(ngModel)]="Objectives.objective"
+                  type="text"
+                  class="form-control"
+                  placeholder="Add Objective"
+                  formControlName="objectives"
+                  required="true"
+                />
+                </div>
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="addObjective()"
+                  >
+                    <i class="fa-solid fa-user-plus"></i>Add objective
+                  </button>
+                </div>
+               
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <div class="mb-3">
+                  <ol>
+                    <li *ngFor="let obj of objectives; index as i">{{ obj }} <i 
+                      (click)="removeObjective(i)" role="button"
+                      class="fa-solid fa-trash-can p-1"></i></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+
+          <div class="modal-footer">
+            <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success"(click)="addContract()"  
+            [disabled]="!contractForm.valid">
+            Add contract</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+                      
+
+                          
+                  
 
