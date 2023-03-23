@@ -22,6 +22,7 @@ public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String contractNumber;
     private CoachingCategory coachingCategory;
     private String coachingTopic;
     private LocalDate startDate;

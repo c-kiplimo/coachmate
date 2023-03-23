@@ -31,7 +31,7 @@ public class NotificationService {
     }
 
     public Notification getNotificationById(long id, Long coachId) {
-        log.info("Get Notification of id {}",id);
+        log.info("Get Notification of id {}", id);
         Optional<Notification> notification = notificationRepository.findById(id);
 
         if (notification.isPresent()) {
@@ -40,6 +40,7 @@ public class NotificationService {
             throw new IllegalStateException("Notification with " + id + " not found ");
         }
     }
+
     public void createNotificationOnContractCreation(NotificationRequest notificationRequest, Contract contract, Coach coach) {
         log.info("Creating new notification");
         Notification notification = new Notification();
@@ -76,19 +77,20 @@ public class NotificationService {
 
     public void createNotificationByCoachId(NotificationRequest notificationRequest, long coachId) {
     }
-// get notification by session and coach id
+
+    // get notification by session and coach id
     public ListResponse filterBySessionIdAndCoachId(int page, int perPage, Long sessionId, Long coachId) {
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
         // Check if session exists
-        Optional<SessionDto> optionalNotification = sessionRepository.findByIdAndCoachId(sessionId,coachId);
-        if (optionalNotification.isEmpty()){
+        Optional<SessionDto> optionalNotification = sessionRepository.findByIdAndCoachId(sessionId, coachId);
+        if (optionalNotification.isEmpty()) {
             throw new IllegalArgumentException("session not Found");
         }
 
-        Page<NotificationDto> notificationPage =  notificationRepository.findBySessionId(
+        Page<NotificationDto> notificationPage = notificationRepository.findBySessionId(
                 sessionId,
                 pageable
         );
@@ -96,19 +98,34 @@ public class NotificationService {
         return new ListResponse(notificationPage.getContent(), notificationPage.getTotalPages(), notificationPage.getNumberOfElements(),
                 notificationPage.getTotalElements());
     }
+
     //get notification by client and coach id
     public ListResponse filterByClientIdAndCoachId(int page, int perPage, Long clientId, Long coachId) {
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<NotificationDto> paymentPage =  notificationRepository.findByClientIdAndCoachId(
+        Page<NotificationDto> notificationPage = notificationRepository.findByClientIdAndCoachId(
                 coachId,
                 clientId,
                 pageable
         );
         log.info("Notification Found!");
-        return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
-                paymentPage.getTotalElements());
+        return new ListResponse(notificationPage.getContent(), notificationPage.getTotalPages(), notificationPage.getNumberOfElements(),
+                notificationPage.getTotalElements());
+    }
+
+    public ListResponse filterByClientId(int page, int perPage, Long clientId) {
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<NotificationDto> notificationPage = notificationRepository.findByClientId(
+                clientId,
+                pageable
+        );
+        log.info("Notification Found!");
+        return new ListResponse(notificationPage.getContent(), notificationPage.getTotalPages(), notificationPage.getNumberOfElements(),
+                notificationPage.getTotalElements());
     }
 }

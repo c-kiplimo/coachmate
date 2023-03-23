@@ -29,6 +29,7 @@ public class Session {
     private String name;
 
     private Long orgId;
+    private String sessionNumber;
 
     @Enumerated(EnumType.STRING)
     private SessionType sessionType;

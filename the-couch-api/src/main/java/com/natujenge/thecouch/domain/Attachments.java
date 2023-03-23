@@ -18,6 +18,7 @@ public class Attachments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String  FileName;
+    private String  attachmentNumber;
     private String  FileType;
     private Long  FileSize;
     private  byte[]  FileContent;

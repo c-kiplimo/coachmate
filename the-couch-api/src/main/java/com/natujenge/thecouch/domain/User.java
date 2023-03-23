@@ -49,7 +49,8 @@ public class User implements UserDetails {
 
 
     // Role of creator, current default assignment ADMIN
-    private UserRole createdBy;
+
+    private String createdBy;
     private String lastUpdatedBy;
 
 
@@ -111,6 +112,15 @@ public class User implements UserDetails {
         this.username = email;
         this.msisdn = msisdn;
         this.password = password;
+        this.userRole = userRole;
+    }
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole){
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = email;
+        this.msisdn = msisdn;
         this.userRole = userRole;
     }
 

@@ -126,6 +126,12 @@ public class SessionService {
         sessionRequest.setSessionSchedules(sessionSchedules);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
+        // session Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String sessionL = String.format("%05d", randNo);
+        String sessionNo = client.getCoach().getBusinessName().substring(0, 2) +
+                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
+        sessionRequest.setSessionNumber(sessionNo);
         if (optionalOrganization.isPresent()) {
             sessionRequest.setOrgId(optionalOrganization.get().getId());
         }
@@ -242,21 +248,6 @@ public class SessionService {
             }
 
     }
-
-//    @Scheduled(cron = "0 20 05 * * ?")
-//    public void sendUpcomingSessionReminderToClient() {
-//        log.debug("Request to send upcoming session reminder");
-//        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
-//        for (Session session : sessions) {
-//            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//            }
-//        }
-//    }
-
 
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);

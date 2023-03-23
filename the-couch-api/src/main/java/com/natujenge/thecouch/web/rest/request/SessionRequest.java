@@ -14,7 +14,12 @@ public class SessionRequest {
     public String name;
     public SessionType sessionType;
     public String notes;
+
     public SessionSchedules sessionSchedules;
+
+    public String sessionNumber;
+    public LocalDate sessionDate;
+
     public SessionVenue sessionVenue;
     public PaymentCurrency paymentCurrency;
     public Float amountPaid;

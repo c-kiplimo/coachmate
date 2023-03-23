@@ -51,5 +51,8 @@ public class CoachingObjective {
     @ManyToOne
     @JoinColumn(name="coach_id")
     Coach coach;
+    @ManyToOne
+    @JoinColumn(name="organization_id")
+    Organization organization;
 
 }

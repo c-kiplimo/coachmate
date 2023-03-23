@@ -18,6 +18,7 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String  feedbackNumber;
 
     private Integer understandingScore;
     private Integer emotionalIntelligenceScore;

@@ -12,6 +12,7 @@ public interface ClientWalletDto {
     Long getId();
 
     String getExtPaymentRef();
+    String getClientWalletNumber();
 
     Float getAmountDeposited();
 
