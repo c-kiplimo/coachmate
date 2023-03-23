@@ -325,7 +325,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         Page<ClientWalletDto> receiptPage = null;
         if (name != null && date != null ) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(date.atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()))), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if(name !=null){
@@ -335,7 +335,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         if(date !=null){
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.createdAt.eq(date.atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage=walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
