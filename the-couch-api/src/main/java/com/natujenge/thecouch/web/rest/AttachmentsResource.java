@@ -55,6 +55,12 @@ public class AttachmentsResource {
                     attachment.setFileType(files.getContentType());
                     attachment.setFileSize(files.getSize());
                     attachment.setFileContent(files.getBytes());
+                // attachment Number Generation
+                int randNo = (int) ((Math.random() * (99999 - 1)) + 1);
+                String attachmentL = String.format("%05d", randNo);
+                String attachmentNo = attachment.getCoach().getBusinessName().substring(0, 2) +
+                        attachment.getClient().getFirstName().charAt(0) + attachment.getSession().getName().charAt(0) + "-" + attachmentL;
+                attachment.setAttachmentNumber(attachmentNo);
                     attachmentsRepository.save(attachment);
 //                }
 

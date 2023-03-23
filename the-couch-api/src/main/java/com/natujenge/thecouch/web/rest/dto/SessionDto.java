@@ -11,6 +11,7 @@ public interface SessionDto {
     Long getId();
     Long getCoachId();
     String getName();
+    String getSessionNumber();
     SessionType getSessionType();
     SessionStatus getSessionStatus();
     String getNotes();

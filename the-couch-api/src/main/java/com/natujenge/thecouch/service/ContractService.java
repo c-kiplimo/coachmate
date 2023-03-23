@@ -108,6 +108,12 @@ public class ContractService {
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
         contract.setContractStatus(ContractStatus.ONGOING);
+        // contract Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String contractL = String.format("%05d", randNo);
+        String contractNo = client.getCoach().getBusinessName().substring(0, 2) +
+                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + contractL;
+        contract.setContractNumber(contractNo);
 
 
 
@@ -185,8 +191,9 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoach(coach);
-        notification.setClient(client);
+        notification.setCoachId(client.getCoach().getId());
+        notification.setClientId(client.getId());
+        notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db

@@ -12,4 +12,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     Page<NotificationDto> findBySessionId(Long sessionId, Pageable pageable);
 
     Page<NotificationDto> findByClientIdAndCoachId(Long coachId, Long clientId, Pageable pageable);
+
+    Page<NotificationDto> findByClientId(Long clientId, Pageable pageable);
 }

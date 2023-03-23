@@ -26,6 +26,7 @@ public class ClientWallet {
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
+    private String clientWalletNumber;
     private String extPaymentRef;
     public String description;
 
@@ -39,7 +40,7 @@ public class ClientWallet {
     // Management Details
     @CreationTimestamp
     @Column(nullable = false,name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false,name = "created_by")
     private String createdBy;
@@ -61,6 +62,4 @@ public class ClientWallet {
     @JoinColumn(name="organization_id")
     Organization organization;
 
-    public void setPaymentDate(LocalDateTime now) {
-    }
 }

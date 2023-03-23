@@ -81,7 +81,7 @@ public class NotificationResource {
         }
     }
     // Get Notifications by client id and coach id order by desc
-    @GetMapping("/filter-by-client-id")
+    @GetMapping("/filter-by-client-id and-coach-id")
     public ResponseEntity<?> filterNotificationsByClientIdAndCoachId(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
@@ -115,7 +115,7 @@ public class NotificationResource {
 
     // Filter notifications by sessionId
     @GetMapping("/filter-by-session-id")
-    public ResponseEntity<?> filterPaymentsByOrderIdAndBakerId(
+    public ResponseEntity<?> filterNotificationsBySessionIdAndCoachId(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
             @AuthenticationPrincipal User userDetails,
@@ -133,6 +133,28 @@ public class NotificationResource {
                     perPage,
                     sessionId,
                     coachId
+            );
+            //LATER add HTTP headers
+            return ResponseEntity.ok().body(notifications);
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "An Error occurred, contact admin"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    // Filter notifications by clientId
+    @GetMapping("/filter-by-client-id")
+    public ResponseEntity<?> filterNotificationsByClientId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "client_id",required = false) Long clientId) {
+        try {
+            log.info("client id {}",clientId);
+            ListResponse notifications = notificationService.filterByClientId(
+                    page,
+                    perPage,
+                    clientId
             );
             //LATER add HTTP headers
             return ResponseEntity.ok().body(notifications);

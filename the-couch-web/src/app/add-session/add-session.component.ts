@@ -202,7 +202,7 @@ closeModal() {
   getContracts() {
     this.sessionService.getContracts().subscribe((res:any) => {
       console.log(res);
-      this.contracts = res; });
+      this.contracts = res.body; });
   }
 
 

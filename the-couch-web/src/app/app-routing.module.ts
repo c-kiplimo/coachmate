@@ -28,6 +28,8 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
 import { FeedbackComponent } from './feedback/feedback.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
+import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
 
 
 const routes: Routes = [
@@ -96,7 +98,7 @@ const routes: Routes = [
   },
   {
     path:'payment',
-    component:AccountSummaryComponent
+    component:ReceiptsComponent
  },
   {
     path:'feedback1',
@@ -121,6 +123,10 @@ const routes: Routes = [
       path: 'confirmclient/:id/:token',
       component: ClientConfirmComponent
   },
+  {
+    path: 'confirmcoach/:id/:token',
+    component: CoachConfirmComponent
+},
   {
     path: 'addCoach',
     component: AddCoachComponent

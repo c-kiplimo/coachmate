@@ -1,10 +1,13 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Client;
+import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.service.ClientService;
 
+import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
@@ -64,8 +67,12 @@ public class ClientResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("request to add new client");
         try {
-            Client newClient = clientService.addNewClient(clientRequest.getCoachId(),
+            Coach coach = userDetails.getCoach();
+            Organization organization = userDetails.getOrganization();
+
+            Client newClient = clientService.addNewClient(coach,organization,
                     clientRequest);
+
             if (newClient != null) {
                 ClientRequest response = modelMapper.map(newClient, ClientRequest.class);
                 return new ResponseEntity<>(response, HttpStatus.OK);
