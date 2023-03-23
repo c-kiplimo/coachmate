@@ -68,6 +68,10 @@
             </div>
         <div class="session-details" [@fadeIn] >
           <div class="d-flex justify-content-between main-detail">
+            <span class="title">Session Ref:</span>
+            <span class="value">{{ sessions.sessionNumber}}</span>
+          </div>
+          <div class="d-flex justify-content-between main-detail">
             <span class="title">Session name:</span>
             <span class="value">{{ sessions.name }}</span>
           </div>
@@ -113,7 +117,6 @@
     </div>
   </div>
   <div class="card details-card">
-    <div class="card card-table">
       <div class="tabs-section">
       <button  *ngIf="this.userRole == 'COACH'" 
 
@@ -215,7 +218,6 @@
           No attachment Found.
         </p>
       </div>
-  </div>
   </div>
 </div>
 <!-- Notification details modal -->

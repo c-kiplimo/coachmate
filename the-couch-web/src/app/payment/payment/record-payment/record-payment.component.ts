@@ -10,6 +10,9 @@ import { ClientService } from 'src/app/services/ClientService';
 })
 export class RecordPaymentComponent implements OnInit {
   clients: any;
+  clientId: any;
+  orgId: any;
+  coachId: any;
   modesOfPayment ='';
   coachSessionData!: any;
   coachData: any;
@@ -62,6 +65,8 @@ export class RecordPaymentComponent implements OnInit {
  } else if(this.userRole == 'ORGANIZATION'){
   this.getUserOrg();
     this.getOrgClients()
+ } else if(this.userRole == 'CLIENT'){
+  this.getUserClient();
  }
   
 
@@ -69,22 +74,30 @@ export class RecordPaymentComponent implements OnInit {
   getUser() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
+    this.coachId = this.User.coach.id;
   }
   getUserOrg() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
-  
-  
+    this.orgId = this.User.org.id;
+  }
+  getUserClient() {
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.User);
+    this.clientId = this.User.id;
+
   }
 
   recordPayment() {
     console.log(this.paymentForm);
 
     const data = this.paymentForm;
-    data.coachId = this.coachData.coach.id;
-    data.orgIdId = this.coachData.coach.orgIdId;
     if(this.userRole == 'CLIENT'){
-      data.clientId = this.coachData.client.id;
+      data.clientId = this.clientId;  
+    } else if(this.userRole == 'COACH'){
+      data.coachId = this.coachId;
+    } else if(this.userRole == 'ORGANIZATION'){
+      data.orgIdId = this.orgId;
     }
 
 

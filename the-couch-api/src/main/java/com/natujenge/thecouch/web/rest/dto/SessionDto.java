@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest.dto;
 
+import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.enums.*;
 import lombok.Data;
 import org.hibernate.type.StringNVarcharType;
@@ -11,13 +12,13 @@ public interface SessionDto {
     Long getId();
     Long getCoachId();
     String getName();
+    String getSessionNumber();
     SessionType getSessionType();
     SessionStatus getSessionStatus();
     String getNotes();
     String getFeedback();
-    LocalDate getSessionDate();
-    String getSessionStartTime();
-    String getSessionEndTime();
+    SessionSchedules getSessionSchedules();
+
     SessionVenue getSessionVenue();
     PaymentCurrency getPaymentCurrency();
     String getAmountPaid();

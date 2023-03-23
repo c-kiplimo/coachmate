@@ -55,20 +55,21 @@ export class AddSessionComponent implements OnInit {
     
   ];
 
+  coachSlots: any;
+
+
   contracts: any;
   createSessionClientId: any;
   selectedContract: any;
 
 
   formData = {
-    sessionDate: '',
-    sessionStartTime: '',
+    sessionSchedules: {},
     sessionDuration: '',
     sessionType: '',
     sessionVenue: '',
     name:'',
     sessionDetails:'',
-    sessionEndTime:'',
     attachments:'',
     notes:'',
     feedback:'',
@@ -78,6 +79,8 @@ export class AddSessionComponent implements OnInit {
     sessionBalance:'',
 
   };
+
+  
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
@@ -111,28 +114,15 @@ export class AddSessionComponent implements OnInit {
     
   }
   ngOnInit(): void {
-    
-    this.clientService.getContracts().subscribe(
-      data => {
-        this.contracts = data;
-        console.log("contracts here")
-        console.log(data)
-      },
-      error => {
-        console.log(error);
-      }
-    );
-    this.getContracts();
-    this.user = JSON.parse(sessionStorage.getItem('user') || '{}');
-    this.getClients();
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
-
     
-  
+    this.getCoachSlots();
+    this.getContracts();
+    //this.user = JSON.parse(sessionStorage.getItem('user') as any);
+    this.getClients();
 
-    
   }
  
   onContractChange(event: any) {
@@ -182,7 +172,8 @@ closeModal() {
    const params = {
       clientId: this.selectedContract.client.id,
       
-      contractId: this.createSessionClientId
+      contractId: this.createSessionClientId,
+      sessionScheduleId: this.formData.sessionSchedules,
    };
 
    console.log(params);
@@ -199,16 +190,27 @@ closeModal() {
   
   }
 
+
   getContracts() {
     this.sessionService.getContracts().subscribe((res:any) => {
       console.log(res);
-      this.contracts = res; });
+      this.contracts = res.body; });
   }
 
 
+  getCoachSlots() {
+    const coachId = this.coachData.coach.id;
+    this.apiService.getCoachSlots(coachId).subscribe({
+      next: (response) => {
+        this.coachSlots = response.body;
+      }
+    });
+  }
 
-
-
+  selectedSessionSlot(slot: any) {
+    console.log(slot);
+    this.formData.sessionSchedules = slot;
+  }
 
 }
 

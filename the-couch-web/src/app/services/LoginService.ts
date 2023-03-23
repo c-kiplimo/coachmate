@@ -29,7 +29,7 @@ export class LoginService {
     // signUp service
     signUp(signupObject: any): Observable<any> {
         return this.http.post<any>(
-          this.baseURL+ 'registration',
+          this.baseURL+ 'coach',
           signupObject,
           { observe: 'response' }
         );
@@ -43,5 +43,13 @@ export class LoginService {
           { observe: 'response' }
         );
       }
+        //Update Password and complete coach registration
+        confirmAndUpdateCoachPassword(signupObject: any): Observable<any> {
+          return this.http.post<any>(
+            this.baseURL+ 'registration/confirmCoachToken',
+            signupObject,
+            { observe: 'response' }
+          );
+        }
 }
 

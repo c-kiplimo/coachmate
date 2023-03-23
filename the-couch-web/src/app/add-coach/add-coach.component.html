@@ -1,191 +1,99 @@
-
-        <app-user></app-user>
+<app-user></app-user>
 <div class="container mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div
-          class="card card-table d-flex justify-content-center align-items-center"
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div
+        class="card card-table d-flex justify-content-center align-items-center"
+      >
+        <div class="">
+          <h1 class="text-center mb-3">Add a Coach</h1>
+
+          <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+        </div>
+
+        <form
+          *ngIf="!registrationSuccess"
+          #registrationForm="ngForm"
+          ngNativeValidate
         >
-          <div class="">
-            <h1 class="text-center mb-3">Add a Coach</h1>
- 
-            <div class="alert alert-danger" *ngIf="errorMessage">
-              {{ errorMessage }}
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="fullname">Coach First Name *</label>
+              <input
+                [(ngModel)]="formData.firstName"
+                name="firstName"
+                type="text"
+                class="form-control"
+                placeholder="Enter User First Name"
+                id="firstame"
+                required
+              />
+            </div>
+            <div class="mb-3 col">
+              <label for="fullname">Coach Last Name *</label>
+              <input
+                [(ngModel)]="formData.lastName"
+                name="lastName"
+                type="text"
+                placeholder="Enter User Last Name"
+                class="form-control"
+                id="lastName"
+                required
+              />
             </div>
           </div>
-      
-          <form
-            *ngIf="!registrationSuccess"
-            #registrationForm="ngForm"
-            (ngSubmit)="validateEmail()"
-            ngNativeValidate
+
+          <div class="row p-2">
+            <div class="mb-3 col-md-6">
+              <label for="email">
+                Email address *
+                <small class="redText ms-2" *ngIf="emailInvalid">
+                  Invalid Email
+                </small>
+              </label>
+              <input
+                [ngClass]="emailInvalid ? 'input-error' : ''"
+                [(ngModel)]="formData.email"
+                name="email"
+                type="email"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter User Email Address"
+                required
+              />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="phonenumber" class="form-label">Phone Number *</label>
+              <input
+                [(ngModel)]="formData.msisdn"
+                name="msisdn"
+                type="text"
+                class="form-control"
+                required
+                placeholder="eg. 0700123456"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-success mb-3 mt-2 p-2"
+            [disabled]="
+              !formData.email ||
+              !formData.msisdn ||
+              !formData.firstName ||
+              !formData.lastName
+            "
+            (click)=" signUp()"
           >
-            <div class="row p-2">
-           
-  
-              <div class="mb-3 col-md-6">
-                <label for="fullname">Coach First Name *</label>
-                <input
-                  [(ngModel)]="formData.firstName"
-                  name="firstName"
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter User First Name"
-                  id="firstame"
-                  required
-                />
-              </div>
-              <div class="mb-3 col">
-                <label for="fullname">Coach Last Name *</label>
-                <input
-                  [(ngModel)]="formData.lastName"
-                  
-                  name="lastName"
-                  type="text"
-                  placeholder="Enter User Last Name"
-                  class="form-control"
-                  id="lastName"
-                  required
-                />
-              </div>
-            </div>
-        
-            <div class="row p-2">
-              <div class="mb-3 col-md-6">
-                <label for="email"
-                  >Email address *
-                  <small class="redText ms-2" *ngIf="emailInvalid">
-                    Invalid Email</small
-                  >
-                </label>
-                <input
-                  [ngClass]="emailInvalid ? 'input-error' : ''"
-                  [(ngModel)]="formData.email"
-                  name="email"
-                  type="email"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter User Email Address"
-                  required
-                />
-              </div>
-              <div class="mb-3 col-md-6">
-                <label for="phonenumber" class="form-label">Phone Number *</label>
-                <input
-                  [(ngModel)]="formData.msisdn"
-                  name="msisdn"
-                  type="text"
-                  class="form-control"
-                  required
-                  placeholder="eg. 0700123456"
-                  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-                />
-              </div>
-            </div>
-  
-            <div class="row p-2">
-              <div class="mb-3 col-md-6 form-group">
-                <label for="Password">Password *</label>
-                <div class="input-group">
-                  <input
-                    [type]="fieldTextType ? 'text' : 'password'"
-                    [ngClass]="passwordInvalid ? 'input-error' : ''"
-                    [(ngModel)]="formData.password"
-                    required
-                    name="password"
-                    type="password"
-                    class="form-control border-end-0 border"
-                    id="exampleInputPassword"
-                    placeholder="Enter Password"
-                  />
-                  <span class="input-group-append">
-                    <span
-                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                      *ngIf="fieldTextType"
-                    >
-                      <fa-icon
-                        [icon]="eyeIcon"
-                        (click)="toggleFieldTextType()"
-                      ></fa-icon>
-                    </span>
-                    <span
-                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                      *ngIf="!fieldTextType"
-                    >
-                      <fa-icon
-                        [icon]="eyeSlashIcon"
-                        (click)="toggleFieldTextType()"
-                      ></fa-icon>
-                    </span>
-                  </span>
-                </div>
-              </div>
-              <div class="mb-3 col-md-6 form-group">
-                <label for="Password">
-                  Confirm Password *
-                  <small class="redText ms-2" *ngIf="passwordInvalid">
-                    Passwords don't match</small
-                  ></label
-                >
-                <div class="input-group">
-                  <input
-                    [type]="fieldTextType ? 'text' : 'password'"
-                    [ngClass]="passwordInvalid ? 'input-error' : ''"
-                    [(ngModel)]="formData.passwordConfirm"
-                    (ngModelChange)="passwordInvalid = false"
-                    required
-                    name="password"
-                    type="password"
-                    class="form-control border-end-0 border"
-                    id="exampleInputPassword1"
-                    placeholder="Confirm Password"
-                  />
-                  <span class="input-group-append">
-                    <span
-                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                      *ngIf="fieldTextType"
-                    >
-                      <fa-icon
-                        [icon]="eyeIcon"
-                        (click)="toggleFieldTextType()"
-                      ></fa-icon>
-                    </span>
-                    <span
-                      class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                      *ngIf="!fieldTextType"
-                    >
-                      <fa-icon
-                        [icon]="eyeSlashIcon"
-                        (click)="toggleFieldTextType()"
-                      ></fa-icon>
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-  
-            <!-- <div>
-          <input type="checkbox" /><span
-            >I have read the terms and conditions</span
-          >
-        </div> -->
-            <button
-              type="submit"
-              class="btn btn-success mb-3 mt-2 p-2"
-              [disabled]="
-                !formData.password ||
-                !formData.email ||
-                !formData.msisdn ||
-                !formData.firstName ||
-                !formData.lastName
-              "
-            >
-              SUBMIT
-            </button>
-          </form>
-        </div>
+            SUBMIT
+          </button>
+        </form>
       </div>
     </div>
   </div>
-  
+</div>

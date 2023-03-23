@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 
+
 @Service
 @Slf4j
 @Transactional
@@ -40,6 +41,8 @@ public class SessionService {
     ContractRepository contractRepository;
     @Autowired
     OrganizationRepository organizationRepository;
+    @Autowired
+    SessionSchedulesRepository sessionSchedulesRepository;
     @Autowired
     private NotificationServiceHTTPClient notificationServiceHTTPClient;
 
@@ -86,8 +89,10 @@ public class SessionService {
     //CREATE NEW SESSION
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId, coachId);
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId, coachId);
+
+        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
 
         if (optionalClient.isEmpty()) {
             log.warn("Client with id {} not found", clientId);
@@ -98,6 +103,10 @@ public class SessionService {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
+        if(optionalSessionSchedules.isEmpty()){
+            log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
+            throw new IllegalArgumentException("Session Slot no found!");
+        }
         Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
 
         // Client
@@ -106,14 +115,23 @@ public class SessionService {
         Coach coach = client.getCoach();
         // Contract
         Contract contract = optionalContract.get();
+        //Session slot
+        SessionSchedules sessionSchedules = optionalSessionSchedules.get();
 
-        // New Sessions enter the confirmed state
-        sessionRequest.setSessionStatus(SessionStatus.CONFIRMED);
+        // New Sessions enter the new state
+        sessionRequest.setSessionStatus(SessionStatus.NEW);
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
+        sessionRequest.setSessionSchedules(sessionSchedules);
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
+        // session Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String sessionL = String.format("%05d", randNo);
+        String sessionNo = client.getCoach().getBusinessName().substring(0, 2) +
+                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
+        sessionRequest.setSessionNumber(sessionNo);
         if (optionalOrganization.isPresent()) {
             sessionRequest.setOrgId(optionalOrganization.get().getId());
         }
@@ -156,17 +174,8 @@ public class SessionService {
                 session.setNotes(sessionRequest.getNotes());
             }
 
-            if (sessionRequest.getSessionDate() != null) {
-                session.setSessionDate(sessionRequest.getSessionDate());
-            }
-            if (sessionRequest.getSessionDuration() != null && session.getSessionDuration().length() > 0) {
-                session.setSessionDuration(sessionRequest.getSessionDuration());
-            }
-            if (sessionRequest.getSessionStartTime() != null) {
-                session.setSessionStartTime(sessionRequest.getSessionStartTime());
-            }
-            if (sessionRequest.getSessionEndTime() != null) {
-                session.setSessionEndTime(sessionRequest.getSessionEndTime());
+            if (sessionRequest.getSessionSchedules() != null) {
+                session.setSessionSchedules(sessionRequest.getSessionSchedules());
             }
             if (sessionRequest.getSessionVenue() != null) {
                 session.setSessionVenue(sessionRequest.getSessionVenue());
@@ -212,45 +221,33 @@ public class SessionService {
     @Scheduled(cron = "0 0 6 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
-        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
+        //List<Session> sessions = sessionSchedulesRepository.findAllBySessionDate(LocalDate.now());
+        List<Session> sessions = sessionRepository.findAllBysessionSchedules(LocalDate.now());
 
         for (Session session : sessions) {
             String smsContent;
-            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + " " + session.getName() + " " + " with " +
-                    " " + " client: " + " " + session.getClient().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at "
-                    + " " + session.getSessionStartTime() + " " + " to " + " " + session.getSessionEndTime() + "\n See you there!";
+
+            smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
+                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+                    + session.getSessionSchedules().getStartTime() + " to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
             String smsContentClient;
-            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" + " " + session.getName() + " " + "with " + " " +
-                    " coach: " + " " + session.getCoach().getFullName() + "\n The session will be " + " " + session.getSessionVenue() + " " + " at " + " "
-                    + session.getSessionStartTime() + " " + "to " + " " + session.getSessionEndTime() + "\n See you there!";
-            //send notification to coach
-            NotificationHelper.sendUpcomingSessionReminderToCoach(session);
-            // sendEmail
-            String email = session.getCoach().getEmailAddress();
-            notificationServiceHTTPClient.sendEmail(email, "SESSION DUE TODAY", smsContent, false);
-            log.info("Email sent");
-            //send notification to client
-            NotificationHelper.sendUpcomingSessionReminderToClient(session);
-            // sendEmail
-            String clientEmail = session.getClient().getEmail();
-            notificationServiceHTTPClient.sendEmail(clientEmail, "SESSION DUE TODAY", smsContentClient, false);
-        }
+            smsContentClient = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
+                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+                    + session.getSessionSchedules().getStartTime() + "to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
+                //send notification to coach
+                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+                // sendEmail
+              String email =  session.getCoach().getEmailAddress();
+                notificationServiceHTTPClient.sendEmail(email,"SESSION DUE TODAY",smsContent,false);
+                log.info("Email sent");
+                //send notification to client
+                NotificationHelper.sendUpcomingSessionReminderToClient(session);
+                // sendEmail
+                String clientEmail =  session.getClient().getEmail();
+                notificationServiceHTTPClient.sendEmail(clientEmail,"SESSION DUE TODAY", smsContentClient,false);
+            }
+
     }
-
-//    @Scheduled(cron = "0 20 05 * * ?")
-//    public void sendUpcomingSessionReminderToClient() {
-//        log.debug("Request to send upcoming session reminder");
-//        List<Session> sessions = sessionRepository.findSessionBySessionDate(LocalDate.now());
-//        for (Session session : sessions) {
-//            if (session.getSessionStatus().equals(SessionStatus.CONFIRMED)) {
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//                //send notification to client
-//                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-//            }
-//        }
-//    }
-
 
     public List<Session> getSessionByOrgId(Long orgId) {
         return sessionRepository.findSessionByOrgId(orgId);
@@ -270,7 +267,7 @@ public class SessionService {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
                     .and(qSession.name.containsIgnoreCase(sessionName))
-                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -288,7 +285,7 @@ public class SessionService {
         if (clientName != null && date != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());
@@ -297,7 +294,7 @@ public class SessionService {
         if (sessionName != null && date != null) {
             QSession qSession = QSession.session;
             sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName)
-                    .and(qSession.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
+                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
             log.info("This is a list of sessions found {}", sessionPage.getContent());
             return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                     sessionPage.getTotalElements());

@@ -60,6 +60,12 @@ public class FeedbackService {
         feedback.setClient(client.get());
         feedback.setSession(session.get());
         feedback.setCoach(coach.get());
+        // feedback Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String feedbackL = String.format("%05d", randNo);
+        String feedbackNo = feedback.getCoach().getBusinessName().substring(0, 2) +
+                feedback.getClient().getFirstName().charAt(0) + feedback.getSession().getName().charAt(0) + "-" + feedbackL;
+        feedback.setFeedbackNumber(feedbackNo);
 
         feedback.setAvailabilityScore(feedbackReq.getAvailabilityScore());
         feedback.setClarificationScore(feedbackReq.getClarificationScore());

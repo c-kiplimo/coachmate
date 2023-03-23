@@ -7,17 +7,23 @@
           class="form-control search-bar text-muted mt-3"
           name="customer"
           [(ngModel)]="filters.searchItem"
-          placeholder="Name, Phone or Email"
+          placeholder=" Client Name and Date '2000-10-31'"
           autocomplete="off"
         />
       </div>
 <div class="col-2">
-<button class="btn button-filter  search-bar" >
+<button class="btn button-filter  search-bar" (click)="filterByClientNameAndDate()" (click)="getPaymentsByClientId(this.ClientId)" (click)="getPaymentsByOrgId()"   >
         <i class="fa fa-search" aria-hidden="true"></i>
         Search
       </button>
 </div>
-<div class="col-7"></div>
+<div class="col-5">
+</div>
+<div class="col-2">
+  <button type="button"routerLink="/record-payment" class="btn btn-success"
+  *ngIf="this.userRole != 'CLIENT'">
+    <i class="fa-solid fa-user-plus"></i>Add Payment
+  </button>
 </div>
 <div class="mt-3" style="overflow-x:auto;">
   <table>
@@ -29,7 +35,7 @@
       <th>modeOfPayment</th>
       
       <th>walletBalance</th>
-      <th>Created At</th>
+      <th>Created On</th>
       <th>Actions</th>
 
     </tr>
