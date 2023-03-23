@@ -3,6 +3,7 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.SessionSchedulesService;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.ListResourceBundle;
 
 @RestController
 @Slf4j
@@ -25,7 +27,7 @@ public class SessionSchedulesResource {
     public ResponseEntity<?> findSessionSchedulesByCoachId (@PathVariable("coachId") Long coachId,
                                                             @AuthenticationPrincipal User userDetails) {
         try {
-            List<SessionSchedules> sessionSchedules = (List<SessionSchedules>) sessionSchedulesService.findSessionSchedulesByCoachId(coachId);
+            List<SessionSchedules> sessionSchedules = sessionSchedulesService.findSessionSchedulesByCoachId(coachId);
             return new ResponseEntity<>(sessionSchedules, HttpStatus.OK);
 
         } catch (Exception e) {

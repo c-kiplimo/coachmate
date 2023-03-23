@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.repository;
 
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -14,7 +15,11 @@ import java.util.Optional;
 public interface SessionSchedulesRepository extends PagingAndSortingRepository<SessionSchedules, Long>, QuerydslPredicateExecutor<SessionSchedules> {
     List<SessionSchedules> findAll();
 
+    Optional<SessionSchedules> findAllByCoach(Long id);
     Optional<SessionSchedules> findAllByCoachId(Long id);
 
     List<SessionSchedules> findAllBySessionDate(LocalDate date);
+
+    List<SessionSchedules> findByCoach(Coach coach);
+
 }

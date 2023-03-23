@@ -9,7 +9,7 @@ import { ApiService } from '../services/ApiService';
 export class AddAvailableSlotsComponent implements OnInit {
 
   slot = {
-    day: '',
+    sessionDate: '',
     startTime: '',
     endTime: '',
   };
@@ -40,6 +40,7 @@ export class AddAvailableSlotsComponent implements OnInit {
     this.apiService.addSlot(this.slot, options).subscribe({
       next: (response) => {
         console.log(response);
+        this.getCoachSlots();
       }
     });
 
@@ -49,11 +50,20 @@ export class AddAvailableSlotsComponent implements OnInit {
     const coachId = this.coachData.coach.id;
     this.apiService.getCoachSlots(coachId).subscribe({
       next: (response) => {
-        console.log(response);
-        this.coachSlots = response;
+        this.coachSlots = response.body;
       }
     });
   }
+
+  deleteSlot(slotId: any) {
+    // this.apiService.deleteSlot(slotId).subscribe({
+    //   next: (response) => {
+    //     console.log(response);
+    //     this.getCoachSlots();
+    //   }
+    // });
+  }
+
 
 
 }
