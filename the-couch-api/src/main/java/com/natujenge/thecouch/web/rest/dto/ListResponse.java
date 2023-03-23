@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest.dto;
 
+import com.natujenge.thecouch.domain.SessionSchedules;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ public class ListResponse {
     private int totalItemsInPage;
     private long totalElements;
 
-    public ListResponse() {
+    public ListResponse(SessionSchedules sessionSchedules) {
 
     }
 
