@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-5">
+    <h3>Add Your Available Session Slots</h3>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Session Date</th>
+          <th scope="col">Start Time</th>
+          <th scope="col">End Time</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let slot of coachSlots">
+          <td>{{slot.sessionDate}}</td>
+          <td>{{slot.startTime}}</td>
+          <td>{{slot.endTime}}</td>
+          <td><button type="button" class="btn btn-danger" (click)="deleteSlot(slot)">Delete</button></td>
+        </tr>
+      </tbody>
+      </table>
+
+  </div>
+</div>
+
+<div class="row justify-content-center">
+
+  <div class="col-md-12">
+    <div class="justify-content-center">
+      <div class="">
+        <h1 class="text-center">Add Slots</h1>
+      </div>
+      <form>
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <label for="inputEmail4">Session Date</label>
+                <input type="date" variant="success" [(ngModel)]="slot.sessionDate" name="sessionDate" class="form-control" id="inputEmail4" placeholder="Date"
+                  name="sessionDate">
+      
+              </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-md-5">
+              <label for="inputEmail4">Start Time</label>
+              <input type="time" variant="success"  [(ngModel)]="slot.startTime" name="startTime" class="form-control" id="inputEmail4" placeholder="Date"
+                name="sessionDate">
+    
+            </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+            <label for="inputEmail4">End Time</label>
+            <input type="time" variant="success"  [(ngModel)]="slot.endTime" name="endTime" class="form-control" id="inputEmail4" placeholder="Date"
+              name="sessionDate">
+  
+          </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <button type="submit" (click)="addSlot()" class="btn btn-success">Add Slot</button>
+        </div>
+  </div>
+
+      </form>
+    </div>
+  </div>
+</div>

@@ -199,6 +199,21 @@ export class ApiService {
     );
   }
 
+
+
+  //COACH SESSION SLOTS
+  addSlot(slot: any, options: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + '/sessionSchedules', slot, {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  getCoachSlots(coachId: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/sessionSchedules/byCoachId/' + coachId, {
+      observe: 'response',
+    });
+  }
 }
 
 // {
