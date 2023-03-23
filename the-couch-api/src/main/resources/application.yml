@@ -10,13 +10,12 @@ spring:
     username: root
     password: N@tujengeroot
 
-  #  password: ninja
+
+#    url: jdbc:mysql://localhost:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+#    username: boniface
+#    password: boniface
 
 
-#
-#   url: jdbc:mysql://localhost:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-#   username: root
-#  password: ninja
 
 
   jpa:
