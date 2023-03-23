@@ -7,6 +7,7 @@ import { ReceiptsComponent } from './payment/receipts/receipts.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/shared/shared.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -21,6 +22,7 @@ import { SharedModule } from 'src/shared/shared.module';
   imports: [
     CommonModule,
     FormsModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
     RouterModule.forChild([
         { path: 'receipts', component: ReceiptsComponent },

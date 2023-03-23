@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { ParseSourceFile } from '@angular/compiler';
 
 @Component({
   selector: 'app-receipts',
@@ -23,6 +24,7 @@ import jsPDF from 'jspdf';
 export class ReceiptsComponent implements OnInit {
 payments: any = [];
 loadingpayment: any;
+coachId: any;
 loading = false;
 itemsPerPage = 20;
 filters: any = {
@@ -34,6 +36,8 @@ coachData: any;
 userRole: any;
 ClientId: any;
 payment: any;
+  client: any;
+  User: any;
 
   constructor(
     private ClientService: ClientService,
@@ -48,27 +52,43 @@ payment: any;
     console.log(this.userRole);
 
     if(this.userRole == 'COACH'){
+      this.coachId = this.coachData.coach.id;
       this.getPaymentsByCoachId();
     } else if(this.userRole == 'CLIENT'){
-     // this.getUser();
+   
+      this.userRole = this.coachData.userRole;
+      this.User = sessionStorage.getItem('user');
+      this.client = JSON.parse(this.User);
+      console.log(this.client);
+      this.ClientId = this.ClientId.id;
+      this.userRole = this.coachData.userRole;
+      this.ClientId = this.coachData.client.id;
+      this.getPaymentsByClientId(this.ClientId);
 
-     const email = {
-      email: this.coachData.email
     }
-    this.ClientService.getClientByEmail(email).subscribe(
-      (response: any) => {
-        console.log(response);
-       this.ClientId = response[0].id;
-        
-
-      this.getPaymentsByClientId(response[0].id);
-      },
-      (error: any) => {
+    else if(this.userRole == 'ORGANIZATION'){
+      console.log('ORGANIZATION');
+      this.getPaymentsByOrgId();
+    }
+  }
+  getPaymentsByOrgId() {
+    window.scroll(0, 0);
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      orgId: this.coachData.organization.id,
+    };
+    this.ClientService.getPaymentsByOrgId(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.payments = response.body;
+        console.log('payments', this.payments);
+      }, (error) => {
         console.log(error);
       }
-    );
-
-    }
+    )
   }
   getPaymentsByClientId(id: any){
     const options = {
@@ -92,28 +112,34 @@ payment: any;
   }
 
   getPaymentsByCoachId(){
+    window.scroll(0, 0);
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
       status: this.filters.status,
       search: this.filters.searchItem,
       coachId: this.coachData.coach.id,
+      
     };
 
     this.loading = true;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
+      
+    
       (response) => {
-        this.loading = false;
-        this.payments = response.body;
-        console.log('payments', this.payments);
+        if(response.body.extPaymentRef!==null){
+          this.loading = false;
+          this.payments = response.body;
+          console.log('payments', this.payments);
+        }
       }, (error) => {
         console.log(error);
       }
     )
-
-
-
   }
+  
+
+
   viewInvoice(payment: any): void {
     this.payment = payment;
     console.log(this.payment);

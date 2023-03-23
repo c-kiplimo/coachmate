@@ -30,7 +30,9 @@ public class User implements UserDetails {
     private String fullName;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String msisdn;
+    @Column(unique = true)
     private String email;
 
     // username and password are same

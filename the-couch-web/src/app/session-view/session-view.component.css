@@ -37,7 +37,7 @@
       }
     
       .badge-warning {
-        background-color: yellow !important;
+        background-color: rgb(70, 70, 66) !important;
       }
       .badge-success {
         background-color: green !important;

@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -24,8 +25,10 @@ public class ClientWallet {
     // updated on every payment
     Float walletBalance;
     Float amountDeposited;
+    Float amountBilled;
     private String extPaymentRef;
     public String description;
+
     @Enumerated(EnumType.STRING)
     private ModeOfPayment modeOfPayment;
 
@@ -36,13 +39,13 @@ public class ClientWallet {
     // Management Details
     @CreationTimestamp
     @Column(nullable = false,name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = false,name = "created_by")
     private String createdBy;
 
     @UpdateTimestamp
-    private LocalDateTime lastUpdatedAt;
+    private LocalDate lastUpdatedAt;
 
     private String lastUpdatedBy;
 
@@ -58,4 +61,6 @@ public class ClientWallet {
     @JoinColumn(name="organization_id")
     Organization organization;
 
+    public void setPaymentDate(LocalDateTime now) {
+    }
 }

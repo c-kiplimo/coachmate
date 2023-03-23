@@ -40,8 +40,7 @@ public class FeedbackService {
     public void addNewFeedBack(Long SessionId, Long coachId, Long orgIdId, Feedback feedbackReq) {
         Feedback feedback = new Feedback();
 
-        //GEt Client
-//        Optional<Client> client = clientRepository.findById(i);
+
 
         //GET SESSION
         Optional<Session> session = sessionRepository.findSessionById(SessionId);

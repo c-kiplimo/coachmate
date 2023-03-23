@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ClientService } from '../services/ClientService';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/ApiService';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-add-objective',
@@ -32,6 +33,7 @@ export class contractComponent implements OnInit{
     objective: ''
   };
 coachingCategory: any;
+  backIcon!: IconProp;
 
   constructor(private clientService : ClientService,
     private apiService:ApiService,
@@ -142,6 +144,12 @@ coachingCategory: any;
 
   removeObjective(index: number){
     this.objectives.splice(index, 1);
+  }
+  back() {
+    window.history.back();
+  }
+  reload() {
+    location.reload();
   }
 
 }

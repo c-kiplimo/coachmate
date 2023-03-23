@@ -14,7 +14,6 @@ import { UserComponent } from './user/user.component';
 import { ClientsComponent } from './clients/clients.component';
 
 import { AddClientPageComponent } from './add-client-page/add-client-page.component';
-import { AddCoachPageComponent } from './add-coach-page/add-coach-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SessionsComponent } from './sessions/sessions.component';
@@ -54,14 +53,13 @@ import { AddCoachComponent } from './add-coach/add-coach.component';
 import { GetPeriodPipe } from './pipes/get-period.pipe';
 import { HomeComponent } from './home/home.component';
 import { PaymentModule } from './payment/payment.module';
-import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
-import { RecordPaymentComponent } from './payment/payment/record-payment/record-payment.component';
-import { AccountStatementComponent } from './payment/payment/account-statement/account-statement.component';
-import { AccountSummaryComponent } from './payment/payment/account-summary/account-summary.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
+import { SettingsComponent } from './settings/settings.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 
@@ -78,7 +76,6 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
     BodyComponent,
     ClientsComponent,
     AddClientPageComponent,
-    AddCoachPageComponent,
     SignUpComponent,
     SignInComponent,
     SessionsComponent,
@@ -103,6 +100,8 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
       SupportComponent,
       TermsAndConditionsPageComponent,
       AddAvailableSlotsComponent,
+      SettingsComponent,
+
 
 
   ],
@@ -114,6 +113,7 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
     FontAwesomeModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    NgxPaginationModule,
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
@@ -128,6 +128,7 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
       timeOut: 5000, // 5 seconds
       closeButton: false,
       progressBar: false,
+      preventDuplicates: true,
     }),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

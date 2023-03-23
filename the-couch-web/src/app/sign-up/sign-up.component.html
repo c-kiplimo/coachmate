@@ -8,6 +8,8 @@
         class="card card-table d-flex justify-content-center align-items-center"
       >
         <div class="">
+          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 200px;
+          height: 100px; padding-top: 0%; margin-top: 0%;">
           <h1 class="text-center mb-3">Register</h1>
           <!-- <h6 class="mb-3">Register</h6> -->
           <!-- <button type="button" class="btn btn-primary mb-3">
@@ -110,24 +112,39 @@
                 required
                 placeholder="eg. 0700123456"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
+                
               />
+              
             </div>
           </div>
 
           <div class="row p-2">
             <div class="mb-3 col-md-6 form-group">
-              <label for="Password">Password *</label>
+              <label for="Password">Password *
+                <br>
+                <small class="redText ms-2" *ngIf="passwordInvalid">
+                  {{ passwordErrorMessage }}</small>
+              </label>
               <div class="input-group">
                 <input
-                  [type]="fieldTextType ? 'text' : 'password'"
-                  [ngClass]="passwordInvalid ? 'input-error' : ''"
-                  [(ngModel)]="formData.password"
-                  required
-                  name="password"
-                  type="password"
-                  class="form-control border-end-0 border"
-                  id="exampleInputPassword"
-                  placeholder="Enter Password"
+                (focus)="onPasswordFocus()"
+                (blur)="onPasswordBlur()"
+                #yourElement
+                [type]="fieldTextType ? 'text' : 'password'"
+                [ngClass]="
+                  passwordInvalid && formData.password.length
+                    ? 'input-error'
+                    : ''
+                "
+                [(ngModel)]="formData.password"
+                (ngModelChange)="validatePasswordRule()"
+                name="password"
+                type="password"
+                class="form-control border-end-0 border"
+                id="password"
+                placeholder="Password"
+                required
                 />
                 <span class="input-group-append">
                   <span
@@ -151,19 +168,23 @@
                 </span>
               </div>
             </div>
+        
             <div class="mb-3 col-md-6 form-group">
-              <label for="Password">
-                Confirm Password *
+              <label for="Password">Confirm Password *
+                <br>
                 <small class="redText ms-2" *ngIf="passwordInvalid">
-                  Passwords don't match</small
-                ></label
+                  {{ passwordErrorMessage }}</small>
+            </label
               >
               <div class="input-group">
+            
                 <input
                   [type]="fieldTextType ? 'text' : 'password'"
                   [ngClass]="passwordInvalid ? 'input-error' : ''"
                   [(ngModel)]="formData.passwordConfirm"
                   (ngModelChange)="passwordInvalid = false"
+                  (ngModelChange)="validatePasswordRule()"
+                  
                   required
                   name="password"
                   type="password"
@@ -194,12 +215,6 @@
               </div>
             </div>
           </div>
-
-          <!-- <div>
-        <input type="checkbox" /><span
-          >I have read the terms and conditions</span
-        >
-      </div> -->
           <button
             type="submit"
             class="btn btn-signup mb-3 mt-2 p-2"
@@ -217,8 +232,8 @@
         </form>
         <div>
           <span
-            >Proceed to Login
-            <a routerLink="/signin" href="">Login</a>
+            >
+            <a routerLink="/signin" href="">Proceed to Login</a>
           </span>
         </div>
       </div>

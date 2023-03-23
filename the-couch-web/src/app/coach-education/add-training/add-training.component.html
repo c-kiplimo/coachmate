@@ -1,7 +1,14 @@
+
 <div class="container mb-5">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card card-table d-flex justify-content-center align-items-center">
+          <div>
+    
+            <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 150px;
+            height: 100px; padding-top: 0%; margin-top: 0%;">
+          
+      </div>
           <div class="">
             <h1 class="text-center mb-3">Add training</h1>
           </div>
@@ -73,7 +80,7 @@
                       type="text"
                       class="form-control"
                       id="certificateUrl"
-                      required
+                     
                     />
                   </div>
                 <div class="mb-3 col-md-6 form-group">
@@ -87,14 +94,18 @@
                 </div>
 
             </div>
-            <div class="text-center">
-            <button
-              type="submit"
-              class="btn btn-signup mb-3 mt-2 p-2 text-center"
-              (click)="addTraining()"
-            >
-              ADD
-            </button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" routerLink='/education'>
+            Close
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            data-bs-dismiss="modal"
+            (click)="addTraining()"
+              [disabled]="addTrainingForm.invalid"
+          >ADD
+          </button>
         </div>
           </form>
         </div>

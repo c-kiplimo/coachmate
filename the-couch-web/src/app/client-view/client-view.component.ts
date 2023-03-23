@@ -1,14 +1,22 @@
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ClientService } from '../services/ClientService';
-import { ApiService } from '../services/ApiService';
-import { Component, HostListener, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { style, animate, transition, trigger } from '@angular/animations';
-import { id } from 'date-fns/locale';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import {
+  faBell,
+  faCaretDown,
+  faChevronLeft,
+  faChevronRight,
+  faPenSquare,
+  faPlus,
+  faRedo,
+  // faRefresh,
+} from '@fortawesome/free-solid-svg-icons';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { faCaretDown, faChevronLeft, faChevronRight, faPlus,faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { ApiService } from '../services/ApiService';
 
 @Component({
   selector: 'app-client-view',
@@ -27,46 +35,22 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 })
 
 export class ClientViewComponent implements OnInit {
+
   Clients!: [];
+  addsessionForm!:FormGroup;
+  payment: any;
+  addSessionForm:any={
+
+  }; 
   editedClient: any;
-editSession(_t92: any) {
-throw new Error('Method not implemented.');
-}
-userDetails: any;
-id: any;
-deleteSession(arg0: any,arg1: any) {
-throw new Error('Method not implemented.');
-}
-loading: boolean = false;
-goToItem(arg0: string,_t227: any) {
-throw new Error('Method not implemented.');
-}
-viewPayment(_t227: any) {
-throw new Error('Method not implemented.');
-}
-getPayments() {
-throw new Error('Method not implemented.');
-}
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+  alertIcon!: IconProp;
 userIcon!: IconProp;
 calendarIcon: IconProp = "function";
 clockIcon: IconProp = "function";
-getsession() {
-throw new Error('Method not implemented.');
-}
-  refreshIcon!: IconProp;
-getsessions(arg0: number) {
-throw new Error('Method not implemented.');
-}
-onContractChange($event: Event) {
-throw new Error('Method not implemented.');
-}
-addSession() {
-throw new Error('Method not implemented.');
-
-console.log("here")
-}
-
-contracts:any;
+contracts!:any [];
 suspendClientForm!: FormGroup;
 closeClientForm!: FormGroup;
 activateClientForm!: FormGroup;
@@ -83,11 +67,15 @@ searchTerm = '';
 lient: any;
 orders!: any;
 showHideMessage = true;
-payments!: any;
-notifications!: any;
+payments!: any [];
+notifications!: any[];
 notification!: any;
-payment!: any;
-currentTab = 'sessions';
+
+sessionType = [
+    
+];
+
+currentTab = 'sessions'; 
 searching = false;
 actions = ['Activate', 'Close', 'Suspend'];
 
@@ -98,7 +86,9 @@ totalLength: any;
 page: number = 1;
 itemsPerPage:number = 20;
 open = false;
-sessions:any = [];
+id: any;
+sessions!: any[];
+session: any;
 clients:any;
   console: any;
   filters: any = {
@@ -107,38 +97,77 @@ clients:any;
   };
   status: any;
 
+
+statusForm!:FormGroup;
 updateClient!: FormGroup;
-session: any;
 sessionDueDate: any;
 sessionStartTime: any;
 sessionDuration: any;
-addSessionForm: any;
-  @HostListener('document:click', ['$event']) onClick(event: any) {
-    // console.log(event.target.attributes.id.nodeValue);
-  
-    if (event.target.attributes && event.target.attributes.id) {
-      if (event.target.attributes.id.nodeValue === 'open') {
-        this.open = true;
-      }
-    } else {
-      this.open = false;
-    }
-  }
 
+loading:any;
+refreshIcon!: IconProp;
+createSessionClientId: any;
+selectedContract: any;
+sessionId: any;
+clientToBeUpdated!: any;
+  sessionModal: any;
+  contractId: any;
+  contract: any;
+  contractForm!: FormGroup;
+  numberOfClients!: number;
+  numberOfSessions!:number;
+  numberOfContracts!:number;
+  objectives: string[] = [];
+  //Add Objective Form
+  Objectives = {
+    objective: ''
+  };
+coachingCategory: any;
   constructor(
     private ClientService:ClientService,
-    private apiService:ClientService,
     private router:Router,
+    private http: HttpClient,
     private formbuilder: FormBuilder,
+    private toastrService: ToastrService,
+    private route: ActivatedRoute,
+    private apiService:ApiService,
     private activatedRoute: ActivatedRoute)
    { }
 
-  clientToBeUpdated!: any;
-  ngOnInit(): void {
-    this.clientId = this.activatedRoute.snapshot.params['id'];
-   
-    this.getClientData(this.clientId);
+  ngOnInit() {
 
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
+
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
+    this.userRole = this.coachData.userRole;
+    console.log(this.userRole);
+
+    if(this.userRole == 'COACH'){
+    this.sessionId = this.route.snapshot.params['sessionId'];
+    console.log(this.sessionId);
+    this.clientId = this.activatedRoute.snapshot.params['id'];
+    this.getClientData(this.clientId);
+    this.id = this.clientId
+    
+    this.getContracts(this.id);
+    this.contractForm = this.formbuilder.group(
+      {
+        coachingCategory:'',
+        coachingTopic:'',
+        clientId:'',
+        startDate:'',
+        endDate:'',
+        groupFeesPerSession:'',
+        individualFeesPerSession:'',
+        noOfSessions:'',
+        objectives:'',
+      }
+    );
     this.updateClient = this.formbuilder.group({
     
       firstName: ' ',
@@ -153,6 +182,21 @@ addSessionForm: any;
   
       });
       this.getClientSessions() 
+      this.getNotifications()
+      this. getPaymentsByUser()
+  }
+  this.addsessionForm = this.formbuilder.group({
+    sessionDate: '',
+    sessionStartTime: '',
+    sessionDuration: '',
+    sessionType: '',
+    sessionVenue: '',
+    name:'',
+    sessionDetails:'',
+    sessionEndTime:'',
+
+  });
+  
   }
   getClientSessions() {
     console.log("client id",this.clientId)
@@ -170,10 +214,108 @@ addSessionForm: any;
       }
       );
   }
+  getNotifications(): void {
+    this.searching = true;
+    this.notifications = [];
+    const options = {
+       sessionId: this.sessionId,
+       coachId :this.coachData.id,
+       clientId: this.clientId,
+      page: 1,
+      per_page: 10,
+    };
+
+    this.ClientService.getAllNotifications(options).subscribe((res: any) => {
+      this.notifications = res.body;
+      console.log('notification ni', this.notifications);
+      this.searching = false;
+    });
+  }
+  getPaymentsByUser(){
+    this.loading = true;
+    this.payments = [];
+    const options = {
+      page: 1,
+      per_page: this.itemsPerPage,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+    };
+    this.ClientService.getPaymentsByUser(options).subscribe((res: any) => {
+      this.payments = res.body.data;
+      console.log('payments ni', this.payments);
+      this.loading = false;
+    }
+    );
+
+  }
+  onContractChange(event: any) {
+    console.log(event.target.value);
+    this.createSessionClientId = event.target.value;
+
+    //get client details from contract id
+    this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
+    console.log(this.selectedContract);
+
+  }
+  addSession () {
+    console.log('add button clicked here')
+    console.log(this.addSessionForm);
+    const session = this.addSessionForm;
+    session.contractId = this.contractId;
+    if (this.selectedContract && this.selectedContract.client) {
+      this.addSessionForm.clientId = this.selectedContract.client.id;
+    }
+    if (typeof this.sessionType === "string") {
+      let stringValue = this.sessionType;
+      if(this.sessionType === 'INDIVIDUAL') {
+        session.sessionAmount = this.contract.individualFeesPerSession;
+      }
+      else
+      {session.sessionAmount = this.contract.groupFeesPerSession;}
+    }
+   console.log(this.addSessionForm);
+   console.log('add button clicked here')
+   const params = {
+      clientId: this.selectedContract.client.id,
+      
+      contractId: this.createSessionClientId
+   };
+
+   console.log(params);
+ 
+   this.ClientService.addSession(this.addSessionForm, params).subscribe((res:any) => {
+    console.log(res);
+    this.toastrService.success('Session added successfully');
+    setTimeout(() => {
+      location.reload();
+    }, 1000);
+    this.sessionModal.nativeElement.classList.remove('show');
+    this.sessionModal.nativeElement.style.display = 'none';
+  }, error => {
+    console.log(error);
+    this.toastrService.error(error.error, 'Maximum sessions reached contact coach');
+    this.sessionModal.nativeElement.classList.remove('show');
+    this.sessionModal.nativeElement.style.display = 'none';
+   
+  });
+  
+  }
 
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
+  }
+  navigateToTerms(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    if(this.userRole == 'COACH'){
+
+    this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT') {
+      this.router.navigate(['/terms', id]);
+    }
+
+
   }
   toggleTab(tab: string): void {
     this.currentTab = tab;
@@ -194,6 +336,12 @@ addSessionForm: any;
 
     });
   }
+  @ViewChild('modal', { static: false })
+modal!: ElementRef;
+closeModal() {
+  this.modal.nativeElement.style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
   
   getClass(Clients: any) {
     if (Clients.status === 'SUSPENDED') {
@@ -204,7 +352,17 @@ addSessionForm: any;
         return 'badge-danger';
     }
 }
-editClient(client:any){
+@ViewChild('editClientModal', { static: false })
+editClientModal!: ElementRef;
+@ViewChild('activateclientModal', { static: false })
+activateclientModal!: ElementRef;
+@ViewChild('addContractModal', { static: false })
+addContractModal!: ElementRef;
+@ViewChild('suspendclientModal', { static: false })
+suspendclientModal!: ElementRef;
+@ViewChild('closeclientModal', { static: false })
+closeclientModal!: ElementRef;
+  editClient(client:any){
   this.clientToBeUpdated = client;
 
   this.updateClient = this.formbuilder.group({
@@ -213,25 +371,35 @@ editClient(client:any){
     clientType: this.clientToBeUpdated.clientType,
     msisdn: this.clientToBeUpdated.msisdn,
     email: this.clientToBeUpdated.email,
-    physicalAddress: this.clientToBeUpdated.physicAddress,
+
+    physicalAddress: this.clientToBeUpdated.physicalAddress,
+
     profession: this.clientToBeUpdated.profession,
     paymentMode: this.clientToBeUpdated.paymentMode,
     reason: this.clientToBeUpdated.reason,
   });
 
 }
+
 updateClientDetails(id:any){
+  this.clientToBeUpdated = this.updateClient.value;
   console.log(this.clientToBeUpdated)
   console.log(id)  
   this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
     (data) => {
-      this.loading = false;
-      this.editedClient = data.body;
-      console.log(this.editedClient)
-      console.log('clients',this.editedClient)
+      console.log(data)
+      this.toastrService.success('updated!', 'Success!', { timeOut: 8000 });
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+      this.editClientModal.nativeElement.classList.remove('show');
+      this.editClientModal.nativeElement.style.display = 'none';
 
     }, (error) => {
       console.log(error)
+      this.toastrService.error('Error!', 'Error!', { timeOut: 8000 });
+      this.editClientModal.nativeElement.classList.remove('show');
+      this.editClientModal.nativeElement.style.display = 'none';
     }
   );
 }
@@ -255,109 +423,132 @@ updateClientDetails(id:any){
   changeClientStatus(){
     console.log(this.status);
     if(this.status === "ACTIVE") {
-      this.ClientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+      this.ClientService.changeClient(this.clientId, "ACTIVE",this.statusForm.value).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.activateclientModal.nativeElement.classList.remove('show');
+          this.activateclientModal.nativeElement.style.display = 'none';
+        
         }, (error) => {
           console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.activateclientModal.nativeElement.classList.remove('show');
+          this.activateclientModal.nativeElement.style.display = 'none';
         }
       );
     }
 
     if(this.status === "SUSPENDED") {
-      this.ClientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
+      this.ClientService.changeClient(this.clientId, "SUSPENDED",this.statusForm.value).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.suspendclientModal.nativeElement.classList.remove('show');
+          this.suspendclientModal.nativeElement.style.display = 'none';
         }, (error) => {
           console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.suspendclientModal.nativeElement.classList.remove('show');
+          this.suspendclientModal.nativeElement.style.display = 'none';
         }
       );
     }
 
     if(this.status === "CLOSED") {
-      this.ClientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
+      this.ClientService.changeClient(this.clientId, "CLOSED",this.statusForm.value).subscribe(
         (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
+          console.log(response);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.closeclientModal.nativeElement.classList.remove('show');
+          this.closeclientModal.nativeElement.style.display = 'none';
+        }, (error:any) => {
           console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.closeclientModal.nativeElement.classList.remove('show');
+          this.closeclientModal.nativeElement.style.display = 'none';
         }
       );
     }
+
   }
-  getClients(){
-    this.Clients = [];
-    this.loading = true;
-    window.scroll(0, 0);
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.loading = true;
-    this.ClientService.getClient(options).subscribe(
-      (response) => {
-        this.loading = false;
-        this.Clients = response.body.data;
-        console.log(response.body)
-        console.log('clients',this.Clients)
-        
-      }, (error) => {
-        console.log(error)
+
+
+  viewNotification(notification: any): void {
+    this.notification = notification;
+    console.log(this.notification);
+  }
+  goToItem(type: any, entityObj: any): void {
+    this.router.navigate([type, entityObj.id]);
+  }
+  viewPayment(payment: any): void {
+    this.payment = payment.value;
+    this.paymentId = this.payment.id;
+  }
+
+  getContracts(id: any) {
+    this.contracts = [];
+    this.ClientService.getContractsByClientId(id).subscribe((res:any) => {
+      console.log("client sessions here",res);
+      this.contracts = res.body; });
+  }
+  addContract(){
+    console.log('here');
+    console.log(this.contractForm.value);
+    var data = this.contractForm.value;
+    data.coachId = this.coachData.id;
+    data.objectives = this.objectives;
+    data.clientId = this.clientId;
+    console.log(data);
+    this.apiService.addNewContract(data).subscribe(
+      (response: any) => {
+        this.toastrService.success('Contract added!', 'Success!', { timeOut: 8000 });
+        setTimeout(() => {
+          location.reload();
+        }, 5000);
+        this.addContractModal.nativeElement.classList.remove('show');
+        this.addContractModal.nativeElement.style.display = 'none';
+      }, (error: any) => {
+        console.log(error);
+        this.toastrService.error('Contract not added!', 'Error!', { timeOut: 8000 });
+      setTimeout(() => {
+        location.reload();
+      }, 5000);
+      this.addContractModal.nativeElement.classList.remove('show');
+      this.addContractModal.nativeElement.style.display = 'none';
+      
       }
     )
   }
+  addObjective(){
+    
+    console.log(this.Objectives);
+    this.objectives.push(this.Objectives.objective);
+    console.log(this.objectives);
+    this.Objectives.objective = '';
+  }
 
+  removeObjective(index: number){
+    this.objectives.splice(index, 1);
+  }
+  back() {
+    window.history.back();
+  }
 
 }
 
 
+  // Get Notification for specific customer
 
-function getOrders(page: any, number: any, arg2: any) {
-  throw new Error('Function not implemented.');
-}
 
-function getPayments(arg0: any) {
-  throw new Error('Function not implemented.');
-}
 
-function getNotifications(arg0: any) {
-  throw new Error('Function not implemented.');
-}
-
-function newOrder() {
-  throw new Error('Function not implemented.');
-}
-
-function viewPayment(payment: any, any: any) {
-  throw new Error('Function not implemented.');
-}
-
-function editedClientDetails() {
-  throw new Error('Function not implemented.');
-}
-
-function updatePaymentDetails() {
-  throw new Error('Function not implemented.');
-}
-
-function suspendClient() {
-  throw new Error('Function not implemented.');
-}
-
-function closeClient() {
-  throw new Error('Function not implemented.');
-}
-
-function activateClient() {
-  throw new Error('Function not implemented.');
-}
-
-function back() {
-  throw new Error('Function not implemented.');
-}
-
-function viewNotification(notification: any, any: any) {
-  throw new Error('Function not implemented.');
-}
 

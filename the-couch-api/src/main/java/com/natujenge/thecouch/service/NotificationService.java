@@ -4,8 +4,16 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Notification;
 import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
+import com.natujenge.thecouch.web.rest.dto.NotificationDto;
+import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,12 +24,13 @@ import java.util.Optional;
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private SessionRepository sessionRepository;
 
     public NotificationService(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
 
-    public Notification getNotificationById(long id) {
+    public Notification getNotificationById(long id, Long coachId) {
         log.info("Get Notification of id {}",id);
         Optional<Notification> notification = notificationRepository.findById(id);
 
@@ -60,4 +69,46 @@ public class NotificationService {
     }
 
 
+    public Object getAllNotifications(int page, int perPage, Long coachId) {
+        return notificationRepository.findAll();
+    }
+
+
+    public void createNotificationByCoachId(NotificationRequest notificationRequest, long coachId) {
+    }
+// get notification by session and coach id
+    public ListResponse filterBySessionIdAndCoachId(int page, int perPage, Long sessionId, Long coachId) {
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        // Check if session exists
+        Optional<SessionDto> optionalNotification = sessionRepository.findByIdAndCoachId(sessionId,coachId);
+        if (optionalNotification.isEmpty()){
+            throw new IllegalArgumentException("session not Found");
+        }
+
+        Page<NotificationDto> notificationPage =  notificationRepository.findBySessionId(
+                sessionId,
+                pageable
+        );
+
+        return new ListResponse(notificationPage.getContent(), notificationPage.getTotalPages(), notificationPage.getNumberOfElements(),
+                notificationPage.getTotalElements());
+    }
+    //get notification by client and coach id
+    public ListResponse filterByClientIdAndCoachId(int page, int perPage, Long clientId, Long coachId) {
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<NotificationDto> paymentPage =  notificationRepository.findByClientIdAndCoachId(
+                coachId,
+                clientId,
+                pageable
+        );
+        log.info("Notification Found!");
+        return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                paymentPage.getTotalElements());
+    }
 }

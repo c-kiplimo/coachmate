@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.service.SessionService;
@@ -13,11 +14,13 @@ import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -216,6 +219,40 @@ public class SessionResource {
             log.error("Error", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/filterSessions")
+    public ResponseEntity<ListResponse> filterSessionsByClientNameAndSessionNameAndDate(
+            @RequestParam(required = false) String clientName,
+            @RequestParam(required = false) String sessionName,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int perPage) {
+
+        log.info("Request sessions");
+        try {
+            ListResponse listResponse = sessionService.filterSessionsByClientNameAndSessionNameAndDate(clientName, sessionName, date, page, perPage);
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        }
+        catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    @PutMapping(path = "/change-status/{id}") // change status active or suspend
+    ResponseEntity<?> updateSessionStatus(@RequestParam("status") SessionStatus sessionStatus,
+                                          @PathVariable Long id,
+                                          @AuthenticationPrincipal User userDetails) {
+        try{
+            log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus,userDetails.getCoach().getId());
+            sessionService.updateSessionStatus(id,userDetails.getCoach().getId(), sessionStatus);
+
+            return new ResponseEntity<>(new RestResponse(false, "Session status updated successfully"), HttpStatus.OK);
+        } catch (Exception e){
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Session status not updated, contact admin"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

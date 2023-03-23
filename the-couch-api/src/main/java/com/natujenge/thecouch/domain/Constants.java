@@ -26,7 +26,10 @@ public class Constants {
             "balance is $amountBilled." +
             " Thank you. $business_name";
 
-    public static final String FULL_ORDER_PAYMENT_TEMPLATE =  "Dear $client_name. We have received " +
+    public static final String DEFAULT_NEW_ORGANIZATION_COACH_CONTRACT_SMS_TEMPLATE = "Dear $coach_name. Your contract is starting  on $start_date to $end_date , has been created. Please login to your account to sign the contract. Thank you. $business_name";
+    public static final String DEFAULT_NEW_ORGANIZATION_CLIENT_CONTRACT_SMS_TEMPLATE = "Dear $client_name. Your contract is starting  on $start_date to $end_date , has been created. Please login to your account to sign the contract. Thank you. $business_name";
+
+    public static final String FULL_BILL_PAYMENT_TEMPLATE =  "Dear $client_name. We have received " +
             "your payment of amount $amountDeposited " +
             "Outstanding balance $amountBilled . Overpayment $walletBalance . Thank you. $business_name";
 

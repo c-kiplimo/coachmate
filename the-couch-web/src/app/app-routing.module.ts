@@ -29,6 +29,9 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
 
+import { SettingsComponent } from './settings/settings.component';
+
+
 
 const routes: Routes = [
   {
@@ -140,6 +143,10 @@ const routes: Routes = [
   {
     path: 'addAvailableSlots',
     component: AddAvailableSlotsComponent
+
+    path: 'settings',
+    component: SettingsComponent
+
   }
   
 ];

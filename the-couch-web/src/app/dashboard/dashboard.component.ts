@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   loading!: boolean;
 
   OrgCoaches: any;
-  numberofCoaches: any;
+  numberofCoaches!: number;
 
   Clients: any;
   OrgData: any;
@@ -57,8 +57,8 @@ Feedbacks: any;
   constructor(
     private clientService: ClientService,
     private CoachEducationService: CoachEducationService,
-    private route: Router,
-    private router:ActivatedRoute
+    private router: Router,
+    private route:ActivatedRoute
     ) {}
 
   ngOnInit(): void {
@@ -67,8 +67,8 @@ Feedbacks: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.getAllContracts();
-    this.router.params.subscribe((params: { [x: string]: any; }) => {
+  
+    this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
@@ -81,6 +81,9 @@ Feedbacks: any;
     this.getNoOfContracts();
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
+    this.getAllContracts();
+    window.scroll(0, 0);
+  
    
  
 
@@ -88,6 +91,9 @@ Feedbacks: any;
       console.log('ORGANIZATION');
       this.getUserOrg();
       this.getOrgClients();
+      window.scroll(0, 0);
+      
+      
 
       this.OrgData = sessionStorage.getItem('Organization');
       this.orgSession = JSON.parse(this.OrgData);
@@ -96,22 +102,29 @@ Feedbacks: any;
       this.getOrgContracts(this.orgSession.id);
       this.getAllOrgSessions(this.orgSession.id);
       this.getOrgFeedbacks(this.orgSession.id);
+      this.getOrgCoaches(this.orgSession.id);
      
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
-     
-      this.getClientByEmail();
+      this.getClientContracts(this.coachData.id);
+      this.getClientSessions(this.coachData.id);
+      window.scroll(0, 0);
       
     }
 
+    
+  }
+  
+  reload() {
+    location.reload();
   }
   getCoachFeedbacks(coachId: any) {
     this.loading = true;
     this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
+        this.Feedbacks = response.body;
         console.log(this.Feedbacks);
         let totalScore = 0;
 
@@ -133,7 +146,7 @@ Feedbacks: any;
     this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response;
+        this.Feedbacks = response.body;
         console.log(this.Feedbacks);
         let totalScore = 0;
 
@@ -149,9 +162,6 @@ Feedbacks: any;
 
   }
   // get all feedbacks overrall score and get a percentage
-
-
-
   getAllOrgSessions(id: any) {
 
     this.sessions = [];
@@ -170,15 +180,6 @@ Feedbacks: any;
         this.sessions = response;
         this.loading = false;
         this.numberOfSessions = this.sessions.length;
-
-    this.clientService.getSessions(options).subscribe(
-      (response: any) => {
-        console.log(response.body.data);
-        this.sessions = response.body.data;
-        this.loading = false;
-
-      })
-    ,
       (error: any) => {
         console.log(error);
       }
@@ -232,7 +233,7 @@ Feedbacks: any;
     this.clientService.getOrgContracts(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.contracts = response;
+        this.contracts = response.body;
         this.loading = false;
         this.numberOfContracts = this.contracts.length;
       },
@@ -254,7 +255,7 @@ Feedbacks: any;
     this.clientService.getOrgClients(id).subscribe(
       (response) => {
         this.loading = false;
-        this.Clients = response;
+        this.Clients = response.body;
         console.log(response)
         console.log('clients',this.Clients)
         this.numberOfClients = this.Clients.length;
@@ -270,7 +271,7 @@ Feedbacks: any;
 
   navigateToSessionView(id: any) {
     console.log(id);
-    this.route.navigate(['sessionView', id]);
+    this.router.navigate(['sessionView', id]);
   }
 
   getClients() {
@@ -293,6 +294,19 @@ Feedbacks: any;
       }
     );
   }
+  navigateToTerms(id: any) {
+    console.log("contractId on navigate",id);
+    this.contractId = id;
+    if(this.userRole == 'COACH'){
+
+    this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT'&& id.contractStatus==null) {
+      this.router.navigate(['/terms', id]);
+    }else(this.userRole == 'CLIENT'&& id.contractStatus=="SIGNED")
+    this.router.navigate(['/contractDetail', id]);
+
+
+  }
   getOrganization(id: any) {
     const data = {
       superCoachId: id,
@@ -300,10 +314,10 @@ Feedbacks: any;
     this.clientService.getOrganization(data).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
-        this.Organization = response;
-        this.orgName = this.Organization.orgName;
+        this.Organization = response.body;
+        console.log(this.Organization);
+        console.log('here Organization=>', response);
 
-        this.getOrgCoaches(this.Organization.id);
 
 
 
@@ -323,9 +337,10 @@ Feedbacks: any;
     }
     this.clientService.getOrgCoaches(data).subscribe(
       (response: any) => {
-        console.log('here Organization=>', response);
+        console.log('here Organization=> coaches', response);
         this.OrgCoaches = response;
         console.log(this.OrgCoaches);
+        console.log('here Organization=> coaches', response);
         this.numberofCoaches = this.OrgCoaches.length;
        
       },
@@ -338,10 +353,10 @@ Feedbacks: any;
     // const data = {
     //   clientId: id,
     // }
-    this.clientService.getClientContracts(id).subscribe(
+    this.clientService.getContractsByClientId(id).subscribe(
       (response: any) => {
         console.log('here contracts=>', response);
-        this.contracts = response;
+        this.contracts = response.body;
         console.log(this.contracts);
       
       },
@@ -355,7 +370,7 @@ Feedbacks: any;
     this.clientService.getContracts().subscribe(
       (response: any) => {
         
-        this.contracts = response;
+        this.contracts = response.body;
         console.log(this.contracts);
         this.numberOfContracts = this.contracts.length;
         console.log(this.numberOfContracts);
@@ -370,7 +385,7 @@ Feedbacks: any;
     this.clientService.getContracts().subscribe(
       (response: any) => {
         console.log(response);
-        this.contracts = response;
+        this.contracts = response.body;
         this.loading = false;
       },
       (error: any) => {
@@ -381,7 +396,7 @@ Feedbacks: any;
   navigateToContractDetail(id: any) {
     console.log("contractId on navigate",id);
     this.contractId = id;
-    this.route.navigate(['/contractDetail/' + id]);
+    this.router.navigate(['/contractDetail/' + id]);
 
 
   }
@@ -439,38 +454,21 @@ Feedbacks: any;
         console.log(error);
       }
     );
+  
   }
+  
 
-  getClass(session: any) {
-    if (session.status === 'SUSPENDED') {
+  getClass(sessions: any) {
+    if (sessions.status === 'CONDUCTED') {
         return 'badge-warning';
-    } else if (session.status === 'CONFIRMED') {
+    } else if (sessions.status === 'CONFIRMED') {
         return 'badge-success';
     }
-    else if (session.status === 'NEW'){
-      return 'badge-success'
-    }
-    else {
-        return 'badge-success';
-    }
+    else(sessions.status === 'CANCELLED') 
+    return 'badge-success';
+    
+   
 }
 
-  getClientByEmail() {
-    const email = {
-      email: this.User.email
-    }
-    this.clientService.getClientByEmail(email).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.clients = response;
-        this.numberOfClients = this.clients.length;
-        this.getClientSessions(response[0].id);
 
-        this.getClientContracts(response[0].id);
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
 }

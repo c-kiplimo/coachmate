@@ -3,6 +3,7 @@ import { ClientService } from '../services/ClientService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { HttpHeaders } from '@angular/common/http';
 import {
   faBell,
   faCaretDown,
@@ -16,6 +17,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ApiService } from '../services/ApiService';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-session-view',
@@ -34,29 +36,18 @@ import { ApiService } from '../services/ApiService';
 })
 export class sessionViewComponent implements OnInit {
   conductedSessionForm!: FormGroup<any>;
+  attachmentForm!: FormGroup;
   status!: string;
-
   orgId: any;
   organizationId: any;
   feedback: any;
-
-deleteSession() {
-throw new Error('Method not implemented.');
-}
-ConductedSession() {
-throw new Error('Method not implemented.');
-}
+  notification: any;
 addSessionForm: any;
+statusForm!:FormGroup;
 modalTitle: any;
-currentSessionName: any;
-currentdetails: any;
-currentSessionDate: any;
-currentsessionStartTime: any;
-currentsessionEndTime: any;
-currentsessionVenue: any;
-currentgoals: any;
-currentSession: any;
 feedbacks:any = [];
+attachmentss:any = [];
+attachment: any;
 coachId: any;
 loadingsession: any;
 client: any;
@@ -66,9 +57,7 @@ client: any;
   rightIcon = faChevronRight;
   backIcon = faChevronLeft;
   alertIcon = faBell;
-  notifications!: any;
-  notification!: any;
-  attachments!: any;
+  notifications!: any[];
   searching = false;
   currentTab = 'feedback';
   loadingOrder = false;
@@ -76,6 +65,7 @@ client: any;
   sessionTime: any;
   sessionType: any;
   editedsessionForm!: FormGroup;
+  feebackForm!: FormGroup<any>;
   loading = false;
   service: any;
   sessions:any;
@@ -90,95 +80,84 @@ client: any;
   confirmSessionForm: any;
   cancelSessionForm: any;
   deleteSessionForm: any;
-  toastrService: any;
-  sessionDate = '';
-  sessionStartTime = '';
-  sessionDuration = '';
-  selectedPaymentOption: any;
-  sessionAmount = '';
-  eventType = '';
-  open = false;
   coachSessionData: any;
   coachData: any;
   userRole: any;
   orgIdId: any;
   createdBy: any;
-
-  feebackForm: any;
-
-
-  @HostListener('document:click', ['$event']) onClick(event: any) {
-    // console.log(event.target.attributes.id.nodeValue);
-
-    if (event.target.attributes && event.target.attributes.id) {
-      if (event.target.attributes.id.nodeValue === 'open') {
-        this.open = true;
-      }
-    } else {
-      this.open = false;
-    }
-  }
+  links: string[] = [];
+  files: File[] = []; 
+    //Add Link Form
+    Links = {
+      link: ''
+    };
+  @ViewChild('attachmentModal', { static: false })
+attachmentModal!: ElementRef;
+  attachments: any;
+  User: any;
+  OrgData: any;
+  orgSession: any;
+  currentSession!: any;
   constructor(
     private clientService:ClientService,
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private formbuilder: FormBuilder,
-    private apiService:ApiService  ) {}
+    private apiService:ApiService,
+    private toastrService:ToastrService  ) {}
 
   ngOnInit() {
-
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
     if(this.userRole == 'COACH'){
-    this.sessionId = this.route.snapshot.params['sessionId'];
+      this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
     console.log(this.sessionId);
-
-    this.feebackForm = this.formbuilder.group({
-      understandingScore: [''],
-      emotionalIntelligenceScore: [''],
-      listeningSkillsScore: [''],
-      clarificationScore: [''],
-      availabilityScore: [''],
-      comments: ['']
-    });
-
+    this.userRole = this.coachData.userRole;
     }
-    if(this.userRole == 'COACH'){
-      this.sessionId = this.route.snapshot.params['sessionId'];
+   else if (this.userRole == 'ORGANIZATION') {
+    this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
+    this.userRole = this.coachData.userRole;
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.OrgData);
+      console.log(this.orgSession);
+      this.orgId = this.orgSession.id;
+    } else if (this.userRole == 'CLIENT') {
+      this.route.params.subscribe((params) => {this.sessionId = params['id'];
+    });
+      this.userRole = this.coachData.userRole;
       console.log(this.sessionId);
-      this.getFeedback();
+      this.User = sessionStorage.getItem('user');
+      this.client = JSON.parse(this.User);
+      console.log(this.client);
+      this.clientId = this.client.id;
     }
-
-   this.route.params.subscribe((params) => {
-
-      this.sessionId = params['id'];
+    this.feebackForm = this.formbuilder.group({
+      understandingScore: '',
+      emotionalIntelligenceScore: '',
+      listeningSkillsScore: '',
+      clarificationScore: '',
+      availabilityScore: '',
+      comments: '',
     });
+    this.attachmentForm = this.formbuilder.group({
+      links:'',
+      files: [[]],
+      
+    })
 
     this.getSession();
     this.getFeedback();
-
-
-    this.getNotifications();
-    this.confirmSessionForm = this.formbuilder.group({
-      narration: '',
-    });
-    this.cancelSessionForm = this.formbuilder.group({
-      narration: '',
-      isSendNotification: true,
-    });
-    this.conductedSessionForm = this.formbuilder.group({
-      deliveredOn: '',
-      narration: '',
-      isSendNotification: true,
-    });
-    this.deleteSessionForm = this.formbuilder.group({
-      narration: '',
-    });
+    this. getAttachment(); 
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -188,16 +167,8 @@ client: any;
       name:'',
       sessionDetails:'',
       sessionEndTime:'',
-      attachments:'',
-      notes:'',
-      feedback:'',
-      paymentCurrency:'',
-      amountPaid:'',
-      sessionAmount:'',
-      sessionBalance:'',
-
     });
-  
+      
   }
   
   //get feedback for session
@@ -216,7 +187,24 @@ client: any;
       }
     );
   }
-  setCurrectSession(session: any) {
+    //get attachment for session
+    getAttachment(){
+      const params = {
+        sessionId: this.sessionId,
+       
+      };
+      console.log("session id",params)
+      this.clientService.getAttachment(params).subscribe(
+        (res: any) => {
+          this.attachments = res.body;
+          console.log("attachment is here",this.attachments);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  editSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
   
@@ -227,75 +215,135 @@ client: any;
       sessionEndTime: this.currentSession.sessionEndTime,
       sessionType: this.currentSession.sessionType,
       sessionVenue: this.currentSession.sessionVenue,
+      sessionDetails: this.currentSession.sessionDetails,
+
       
     });
   }
+  @ViewChild('editsessionModal', { static: false })
+  editsessionModal!: ElementRef;
+  @ViewChild('addfeedbackModal', { static: false })
+  addfeedbackModal!: ElementRef;
+    editedSession(id: any) {
+      console.log(id);
+      this.currentSession = this.editedsessionForm.value;
+      console.log(this.currentSession);
+      console.log(this.editedsessionForm.value);
+      var data = this.editedsessionForm.value;
+      data.id = this.currentSession.id;
+      console.log(data);
+      this.clientService.editSession(data,id).subscribe(
+        (response: any) => {
+          this.toastrService.success('session updated!', 'Success!', { timeOut: 8000 });
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+  
+      }, (error) => {
+        console.log(error)
+        this.toastrService.success('session not updated!', 'Failed!', { timeOut: 8000 });
+        this.editsessionModal.nativeElement.classList.remove('show');
+        this.editsessionModal.nativeElement.style.display = 'none';
+      }
+    );
+    }
   viewComment(feedback: any): void {
     this.feedback = feedback;
     console.log(this.feedback);
   }
+@ViewChild('confirmsessionModal', { static: false })
+confirmsessionModal!: ElementRef;
+@ViewChild('conductedsessionModal', { static: false })
+conductedsessionModal!: ElementRef;
+@ViewChild('cancelsessionModal', { static: false })
+cancelsessionModal!: ElementRef;
   showStatus: any;
+  // CONFIRMED
+  // CANCELLED,  
+  // CONDUCTED
 
   statusState (currentstatus: any) {
     console.log(currentstatus);
-    if (currentstatus === 'ACTIVE') {
-      this.showStatus = "ACTIVATE";
-      this.status = "ACTIVE";
-    } else if (currentstatus === 'SUSPENDED') {
-      this.showStatus = "SUSPEND";
-      this.status = "SUSPENDED";
-    } else if (currentstatus === 'CLOSED') {
-      this.showStatus = "CLOSE";
-      this.status = "CLOSED";
+    if (currentstatus === 'CONFIRMED') {
+      this.showStatus = "CONFIRMED";
+      this.status = "CONFIRMED";
+    } else if (currentstatus === 'CANCELLED') {
+      this.showStatus = "CANCELLED";
+      this.status = "CANCELLED";
+    } else if (currentstatus === 'CONDUCTED') {
+      this.showStatus = "CONDUCTED";
+      this.status = "CONDUCTED";
     }
 
   }
-  changeClientStatus(){
+  changeSessionStatus(){
     console.log(this.status);
-    if(this.status === "ACTIVE") {
-      this.clientService.changeClientStatus(this.clientId, "ACTIVE").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
-
-    if(this.status === "SUSPENDED") {
-      this.clientService.changeClientStatus(this.clientId, "SUSPENDED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
-
-    if(this.status === "CLOSED") {
-      this.clientService.changeClientStatus(this.clientId, "CLOSED").subscribe(
-        (response) => {
-          this.router.navigate(['/clients']);
-        }, (error) => {
-          console.log(error)
-        }
-      );
-    }
+    let data = {
+       
+      status: this.status,
   }
-  editedSession() {
-    console.log(this.editedsessionForm.value);
-    this.loading = true;
-    var data = this.editedsessionForm.value;
-    data.id = this.currentSession.id;
-    console.log(data);
-    this.clientService.editSession(data).subscribe(
-      (response: any) => {
-        this.loading = false;
-        console.log(response);
-      }, (error: any) => {
-        console.log(error);
-      }
-    )
+  console.log(data);
+    if(this.status === "CONFIRMED") {
+      this.clientService.changeSession(this.sessionId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('session confirmed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('session not confirmed!', 'Failed!', { timeOut: 8000 });
+          this.confirmsessionModal.nativeElement.classList.remove('show');
+          this.confirmsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if(this.status === "CANCELLED") {
+      this.clientService.changeSession(this.sessionId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('cancelled successfully', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('cancelled failed', 'Failed!', { timeOut: 8000 });
+          this.cancelsessionModal.nativeElement.classList.remove('show');
+          this.cancelsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if(this.status === "CONDUCTED") {
+      this.clientService.changeSession(this.sessionId, data).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status changed successfully', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
+        
+        }, (error) => {
+          console.log(error)
+          this.toastrService.error('Status changed failed', 'Failed!', { timeOut: 8000 });
+          this.conductedsessionModal.nativeElement.classList.remove('show');
+          this.conductedsessionModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
   }
   getClass(session: any) {
     if (session.status === 'SUSPENDED') {
@@ -314,160 +362,125 @@ client: any;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,
+      clientId: this.clientId,
     
     };
+    console.log(params);
     console.log(this.feebackForm.value);
-    const data = this.feebackForm.value;
-
-    data.sessionId = this.sessionId;
-    
-    data.coachId = this.coachId;
-    data.clientId = this.clientId;
-    data.createdBy = this.createdBy;
-
-
-    this.clientService.addFeedback(data, params).subscribe(
+    this.clientService.addFeedback(this.feebackForm, params).subscribe(
       (response) => {
         console.log(response);
-        this.toastrService.success('Feedback Added Successfully');
-        this.feebackForm.nativeElement.classList.remove('show');
-        this.feebackForm.nativeElement.style.display = 'none';
-        this.getFeedback();
+        this.toastrService.success('Feedback added successfully', 'Success!', { timeOut: 8000 });
+        this.addfeedbackModal.nativeElement.classList.remove('show');
+        this.addfeedbackModal.nativeElement.style.display = 'none';
       },
       (error) => {
         console.log(error);
-        this.toastrService.error('Error in adding Feedback');
+        this.toastrService.error('Feedback not added', 'Failed!', { timeOut: 8000 });
       }
     );
   }
 
-
-
-
-  goToItem(type: any, entityObj: any): void {
-    this.router.navigate([type, entityObj.id]);
+  onFileSelected(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        this.files.push(files[i]);
+      }
+    }
   }
+  
+  addFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.addEventListener('change', (event: Event) => {
+      const files = (event.target as HTMLInputElement).files;
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          this.files.push(files[i]);
+        }
+      }
+    });
+    input.click();
+    console.log(this.files);
+  }
+  
+  
+  removeFile(index: number) {
+    this.files.splice(index, 1);
+  }
+  
+
+  addLink(){
+  
+    console.log(this.Links);
+    this.links.push(this.Links.link);
+    console.log(this.links);
+    this.Links.link = '';
+    console.log(this.Links);
+  }
+
+  removeLink(index: number){
+    this.links.splice(index, 1);
+  }
+  addAttachment() {
+    const boundary = '-------------------------' + Math.random().toString(16).substring(2);
+    const headers = new HttpHeaders({
+      'Content-Type': 'multipart/form-data; boundary=' + boundary
+    });
+    const formData = this.attachmentForm.value;
+    formData.links = this.links;
+    formData.files = this.files;
+    const params = {
+      sessionId: this.sessionId,
+      coachId: this.coachId,
+    };
+    formData.sessionId = this.sessionId;
+    formData.coachId = this.coachId;
+    formData.clientId = this.clientId;
+    formData.createdBy = this.createdBy;
+    console.log(formData);
+    console.log(this.files);
+    // Send formData to backend using a service or API
+    this.clientService.addAttachment(formData, params,headers ).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
+        this.attachmentModal.nativeElement.classList.remove('show');
+        this.attachmentModal.nativeElement.style.display = 'none';
+      },
+      (error) => {
+        console.log(error);
+        this.toastrService.error('Attachment not added', 'Failed!', { timeOut: 8000 });
+      }
+    );
+  }
+  
+
+
+
+
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
   
   getSession() {
     this.loading = true;
-
     this.clientService.getOneSession(this.sessionId).subscribe((res: any) => {
-      
-      this.loading = false;
+      console.log("sessionId", this.sessionId);
       this.sessions = res.body;
       console.log(this.sessions);
-    
-      
-      this.clientId = this.sessions.client.id;
-      this.orgIdId = this.sessions.orgId;
-      console.log("org id",this.orgIdId);
-      this.coachId = this.sessions.coach.id;
-      console.log("coach id",this.coachId);
-      this.createdBy = this.sessions.client.fullName;
-      this.getNotifications();
+      this.loading = false;
    
      
     });
 
    
   }
-
-
-  navigateToSessionView(id: any) {
-    console.log(id);
-    this.router.navigate(['sessionView', id]);
-  }
-  getNotifications(navigate?: boolean): void {
-    this.searching = true;
-    this.notifications = [];
-    const options = {
-      page: 1,
-      per_page: 10,
-    };
-
-    // this.service.getNotificationsbyOrderId(options).subscribe((res: any) => {
-    //   this.notifications = res.body.data;
-    //   console.log('notification ni', this.notifications);
-    //   this.searching = false;
-    // });
-  }
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);
-  }
- //session Actions functions
- confirmSession() {
-  const options = {
-    status: 'CONFIRMED',
-  };
-  console.log(this.confirmSessionForm.value);
-  this.service
-    .orderAction(this.sessionId, this.confirmSessionForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order confirmed!', 'Info!');
-        this.confirmSessionForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
-
-cancelSession() {
-  const options = {
-    status: 'CANCELLED',
-  };
-  this.service
-    .orderAction(this.sessionId, this.cancelSessionForm.value, options)
-    .subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order status is cancelled!', 'Info!');
-        this.cancelSessionForm.reset();
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err: { message: any; }) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order status was not updated, try again',
-          'Failed!'
-        );
-      },
-    });
-}
-
-
-  sendReminder() {
-    this.service.paymentReminder(this.sessionId).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.toastrService.info('Order reminder was sent!', 'Info!');
-        setTimeout(() => {
-          location.reload();
-        }, 5);
-      },
-      error: (err:any) => {
-        console.log('error->', err.message);
-        this.toastrService.error(
-          'Order reminder not sent, try again',
-          'Failed!'
-        );
-      },
-    });
   }
   back() {
     window.history.back();
