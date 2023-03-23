@@ -62,33 +62,28 @@
                       </div>
                       </div>
               <div class="row p-2">
-
-                <div class=" mb-3 col-md-6 ">
-                  <label for="inputlastname">Session Details</label>
-                  <input type="text" 
+                  <div class="mb-3 col-md-6">
+                    <label for="inputEmail4">From *</label>
+                    <input type="time" 
+                    class="form-control" 
+                    id="inputEmail4" 
+                    placeholder="Time" 
+                    name="sessionStartTime" 
+                    [(ngModel)]="formData.sessionStartTime" >
+                    
+                    </div>
+                <div class="mb-3 col-md-6">
+                  <label for="inputEmail4">To *</label>
+                  <input  type="time" 
                   class="form-control" 
-                  [(ngModel)]="formData.sessionDetails"
                   id="inputEmail4" 
-                  placeholder="Enter Session Description" 
-                  name="sessionDetails" 
-                 >
-                
+                  placeholder="Time" 
+                  name="sessionEndTime"
+                  [(ngModel)]="formData.sessionEndTime"
+                  >
+                  
                 </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <p>Available Slots</p>
-                  <ul>
-                    <li *ngFor="let availableSlot of coachSlots" (click)="selectedSessionSlot(availableSlot)">
-                      <p *ngIf="availableSlot.booked == false">
-                        {{ availableSlot.sessionDate }}
-                        {{ availableSlot.startTime }} -
-                        {{ availableSlot.endTime }}
-                      </p>
-                    </li>
-                  </ul>
-
-                </div>
+  
               </div>
               <div class="row p-2">
                 <!-- <div class=" mb-3 col-md-6 ">
@@ -115,7 +110,6 @@
                   
                 </div>
               </div>
-
 
                 <button 
                 type="submit" 
