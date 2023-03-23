@@ -152,4 +152,41 @@ public class ContractResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+    @PostMapping("/organization-coach")
+    public ResponseEntity<?> createOrganizationAndCoachContract(
+            @RequestBody ContractRequest contractRequest,
+            @AuthenticationPrincipal User userDetails
+    ) {
+        try {
+            Long organizationId = userDetails.getOrganization().getId();
+            log.info("Request to add new Contract by Organization of id {}",organizationId);
+
+            // Later return contract DTO
+            Contract contract = contractService.createOrganizationAndCoachContract(organizationId,contractRequest);
+            return new ResponseEntity<>(contract, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/organization-client")
+    public ResponseEntity<?> createOrganizationAndClientContract(
+            @RequestBody ContractRequest contractRequest,
+            @AuthenticationPrincipal User userDetails
+    ) {
+        try {
+            Long organizationId = userDetails.getOrganization().getId();
+            log.info("Request to add new Contract by Organization of id {}",organizationId);
+
+            // Later return contract DTO
+            Contract contract = contractService.createContract(organizationId,contractRequest);
+            return new ResponseEntity<>(contract, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

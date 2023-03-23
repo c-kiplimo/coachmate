@@ -17,6 +17,7 @@ public class ContractRequest {
     public float groupFeesPerSession;
     public int noOfSessions;
     public long clientId;
+    public  long coachId;
     public String coachingTopic;
 
 
