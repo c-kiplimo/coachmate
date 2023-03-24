@@ -1,11 +1,7 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.ClientBillingAccount;
-import com.natujenge.thecouch.domain.ClientWallet;
-import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
-import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

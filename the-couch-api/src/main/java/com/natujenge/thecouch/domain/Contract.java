@@ -29,7 +29,7 @@ public class Contract {
     private LocalDate endDate;
 
 
-    private     Float individualFeesPerSession;
+    private Float individualFeesPerSession;
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;

@@ -301,12 +301,12 @@ public class ContractService {
     }
     public Contract createOrganizationAndCoachContract(Long organizationId,ContractRequest contractRequest) {
 
-        // Get Client
+        // Get Coach
 
-        Coach coach = coachRepository.findById(contractRequest.getCoachId()).orElseThrow(() -> new UserNotFoundException("Coach by id " + contractRequest.getClientId()
+        Coach coach = coachRepository.findById(contractRequest.getCoachId()).orElseThrow(() -> new UserNotFoundException("Coach by id " + contractRequest.coachId
                 + " not found"));
 
-        // Get Coach
+        // Get organization
         Organization organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
@@ -362,7 +362,7 @@ public class ContractService {
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
         String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
         String referenceId = contract1.getId().toString();
-        String msisdn = contract1.getClient().getMsisdn();
+        String msisdn = contract1.getCoach().getMsisdn();
 
         log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
 

@@ -12,12 +12,18 @@ public interface SessionDto {
     Long getId();
     Long getCoachId();
     String getName();
+    String getSessionDate();
+    LocalDate getSessionDuration();
+    String getSessionStartTime();
+    String getSessionEndTime();
     String getSessionNumber();
     SessionType getSessionType();
     SessionStatus getSessionStatus();
     String getNotes();
     String getFeedback();
+
     SessionSchedules getSessionSchedules();
+
 
     SessionVenue getSessionVenue();
     PaymentCurrency getPaymentCurrency();
@@ -34,6 +40,7 @@ public interface SessionDto {
         ClientType getClientType();
 
         String getMsisdn() ;
+
     }
     interface CoachView{
         Long getId();

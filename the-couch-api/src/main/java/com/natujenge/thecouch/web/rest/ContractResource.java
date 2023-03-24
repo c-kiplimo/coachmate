@@ -155,7 +155,7 @@ public class ContractResource {
 
 
 
-    @PostMapping("/organization-coach")
+    @PostMapping("/organization-coach-contract")
     public ResponseEntity<?> createOrganizationAndCoachContract(
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails
@@ -172,7 +172,7 @@ public class ContractResource {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/organization-client")
+    @PostMapping("/organization-client-contract")
     public ResponseEntity<?> createOrganizationAndClientContract(
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails

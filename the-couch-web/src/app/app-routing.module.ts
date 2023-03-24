@@ -19,7 +19,6 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
 import { FeebackFormComponent } from './feeback-form/feeback-form.component';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
-
 import { AddCoachComponent } from './add-coach/add-coach.component';
 import { SupportComponent } from './support/support.component';
 import { HomeComponent } from './home/home.component';
@@ -42,7 +41,7 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent

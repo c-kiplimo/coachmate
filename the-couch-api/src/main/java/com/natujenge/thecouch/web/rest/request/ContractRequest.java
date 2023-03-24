@@ -18,6 +18,7 @@ public class ContractRequest {
     public int noOfSessions;
     public long clientId;
     public  long coachId;
+    public long organizationId;
     public String coachingTopic;
 
 
