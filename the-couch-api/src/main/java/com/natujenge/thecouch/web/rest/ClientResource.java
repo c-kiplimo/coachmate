@@ -16,6 +16,7 @@ import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -80,7 +81,7 @@ public class ClientResource {
                 return new ResponseEntity<>(new RestResponse(true,
                         "Client not created"), HttpStatus.OK);
             }
-        } catch (Exception e) {
+        }  catch (Exception e) {
             log.error("Error ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);

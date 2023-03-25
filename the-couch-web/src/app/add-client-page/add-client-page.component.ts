@@ -76,7 +76,7 @@ export class AddClientPageComponent implements OnInit {
     this.ClientService.getOrgCoaches(data).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
-        this.OrgCoaches = response;
+        this.OrgCoaches = response.body.data;
         console.log(this.OrgCoaches);
       },
       (error: any) => {

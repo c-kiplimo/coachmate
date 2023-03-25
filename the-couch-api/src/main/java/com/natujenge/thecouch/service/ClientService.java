@@ -65,11 +65,21 @@ public class ClientService {
     }
 
 
+    // check if client exists
+    public boolean doesClientExistByEmailAddress(String emailAddress){
+        Optional<Client> client = clientRepository.findClientByEmail(emailAddress);
+        return client.isPresent();
+    }
+
 
     // create client
     public Client addNewClient(Coach coach,Organization organization, ClientRequest clientRequest) {
         log.info("add a new client to database");
 
+        // Check if client already exists
+        if(doesClientExistByEmailAddress(clientRequest.getEmail())){
+            throw new IllegalStateException("Client with provided email already exists");
+        }
         Client client = new Client();
 
         if(coach != null){

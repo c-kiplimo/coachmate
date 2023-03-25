@@ -73,7 +73,7 @@ public class CoachService {
 
 
     public List<Coach> getCoachByOrganizationId(Long organizationId) {
-        return coachRepository.findByOrganizationId(organizationId);
+        return coachRepository.findAllByOrganizationId(organizationId);
     }
 
     public Optional<User> confirmCoachTokenAndUpdatePassword(CoachRequest coachRequest) {

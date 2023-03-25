@@ -73,8 +73,7 @@ public class RegistrationService {
                 coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 coach.setMsisdn(registrationRequest.getMsisdn());
                 coach.setEmailAddress(registrationRequest.getEmail());
-                coach.setOrganization(registrationRequest.getOrganization());
-
+                coach.setCreatedBy("SELF-REGISTRATION");
 
                 coachRepository.save(coach);
 
@@ -103,6 +102,10 @@ public class RegistrationService {
             case ORGANIZATION: {
                 //CREATE A ORGANIZATION
 
+                // todo:
+                Organization newOrganization = null;
+                // create user and link organization
+
                 List<Object> response = userService.signupUser(
                         new User(
                                 registrationRequest.getFirstName(),
@@ -110,6 +113,7 @@ public class RegistrationService {
                                 registrationRequest.getEmail(),
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
+                                newOrganization,
                                 UserRole.ORGANIZATION
 
                         )

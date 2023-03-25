@@ -102,8 +102,20 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
 
-        this.organization = organization;
     }
+    public User(String firstName, String lastName, String email, String msisdn, String password,
+                Organization organization, UserRole userRole){
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = email;
+        this.msisdn = msisdn;
+        this.password = password;
+        this.organization = organization;
+        this.userRole = userRole;
+    }
+
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
@@ -114,6 +126,8 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
     }
+
+
     public User(String firstName, String lastName, String email, String msisdn, UserRole userRole){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
@@ -123,6 +137,7 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

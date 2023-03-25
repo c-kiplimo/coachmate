@@ -70,7 +70,7 @@ export class AddCoachComponent implements OnInit {
     console.log("form data here", this.formData)
     console.log(this.formData)
     this.registrationSuccess = false;
-    this.LoginService.signUp(this.formData).subscribe({
+    this.LoginService.registerCoach(this.formData).subscribe({
       next: (response) => {
         console.log(response);
         console.log('here');
