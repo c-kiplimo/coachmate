@@ -39,7 +39,7 @@ public class CoachService {
 
     // create coach by organization
     public void   addNewCoachByOrganization(Organization organization, String msisdn,CoachRequest coachRequest) {
-        log.info("add a new coach to database");
+        log.info("add a new coach to database by organization", coachRequest.getOrganization());
 
         Optional<User>  optionalUser = userService.findByMsisdn(coachRequest.getMsisdn());
         if (optionalUser.isPresent()){
@@ -47,7 +47,7 @@ public class CoachService {
         }
 
         Coach coach = new Coach();
-        coach.setOrganization(organization);
+        coach.setOrganization(coachRequest.getOrganization());
         coach.setFirstName(coachRequest.getFirstName());
         coach.setLastName(coachRequest.getLastName());
         coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
@@ -59,6 +59,9 @@ public class CoachService {
         String coachNo = coach.getLastName().substring(0, 2) +
                 coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
         coach.setCoachNumber(coachNo);
+        // save coach
+        coachRepository.save(coach);
+
         registrationService.registerCoachAsUser(coach, msisdn);
 
         log.info("coach registered successfully");

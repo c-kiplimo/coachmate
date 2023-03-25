@@ -101,11 +101,21 @@ public class RegistrationService {
             }
             case ORGANIZATION: {
                 //CREATE A ORGANIZATION
+                organization = new Organization();
+                organization.setOrgName(registrationRequest.getBusinessName());
+                organization.setEmail(registrationRequest.getEmail());
+                organization.setMsisdn(registrationRequest.getMsisdn());
+                organization.setFirstName(registrationRequest.getFirstName());
+                organization.setSecondName(registrationRequest.getLastName());
+                organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                organization.setCreatedBy("SELF-REGISTRATION");
+                organizationRepository.save(organization);
+                log.info("Organization registered");
 
-                // todo:
-                Organization newOrganization = null;
+
+
+
                 // create user and link organization
-
                 List<Object> response = userService.signupUser(
                         new User(
                                 registrationRequest.getFirstName(),
@@ -113,8 +123,9 @@ public class RegistrationService {
                                 registrationRequest.getEmail(),
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
-                                newOrganization,
-                                UserRole.ORGANIZATION
+                                UserRole.ORGANIZATION,
+                                organization
+
 
                         )
                 );
@@ -129,9 +140,10 @@ public class RegistrationService {
                     organization.setSecondName(registrationRequest.getLastName());
                     organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                     organization.setSuperCoachId(user.getId());
+                    organization.setId(user.getOrganization().getId());
 
                     organizationService.addNewOrganization(organization);
-                    log.info("Organization registered");
+                    log.info("Organization registered by super coach");
 
                     // Sending Confirmation Token
                     String token = (String) response.get(1);
@@ -163,6 +175,7 @@ public class RegistrationService {
                         coach.getLastName(),
                         coach.getEmailAddress(),
                         coach.getMsisdn(),
+                        coach.getOrganization(),
                         UserRole.COACH
                 ), msisdn
         );
@@ -175,7 +188,7 @@ public class RegistrationService {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Coach Account Creation";
         String content = "Hello " + coach.getFirstName() + ", use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
+                " http://localhost:4200/confirmcoach/"+response.get(0)+"/"+token;
         notificationServiceHTTPClient.sendEmail(coach.getEmailAddress() ,subject, content, false);
         notificationServiceHTTPClient.sendSMS(coach.getMsisdn(),content,"COACH-1234");
         log.info(content);
