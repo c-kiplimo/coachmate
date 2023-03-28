@@ -72,7 +72,7 @@ public class ClientResource {
             Organization organization = userDetails.getOrganization();
 
             Client newClient = clientService.addNewClient(coach,organization,
-                    clientRequest);
+                    clientRequest, userDetails.getMsisdn());
 
             if (newClient != null) {
                 ClientRequest response = modelMapper.map(newClient, ClientRequest.class);
@@ -94,7 +94,7 @@ public class ClientResource {
                                     @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization clients");
         try{
-            List<Client> listResponse = clientService.getClientByOrgId(OrgId);
+            List<Client> listResponse = clientService.getClientByOrgId(userDetails.getOrganization().getId());
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

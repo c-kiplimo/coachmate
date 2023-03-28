@@ -80,7 +80,7 @@ public class ContractService {
         return contractRepository.findAllByClientId(clientId);
     }
 
-    public Contract createContract(Long coachId,ContractRequest contractRequest) {
+    public Contract createContract(Long coachId,Long organizationId ,ContractRequest contractRequest) {
 
         // Get Client
 
@@ -89,6 +89,8 @@ public class ContractService {
 
         // Get Coach
         Coach coach = coachService.findCoachById(coachId);
+        // Get Organization
+        Organization organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
 
@@ -122,6 +124,7 @@ public class ContractService {
         log.info("Coach: "+coach.toString());
         contract.setClient(client);
         contract.setCoach(coach);
+        contract.setOrganization(organization);
         if(coach.getOrganization()!=null){
             contract.setOrganization(coach.getOrganization());
         }
@@ -185,6 +188,7 @@ public class ContractService {
         notification.setContent(smsContent);
         notification.setCoachId(client.getCoach().getId());
         notification.setClientId(client.getId());
+        notification.setOrganizationId(client.getOrganization().getId());
         notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());

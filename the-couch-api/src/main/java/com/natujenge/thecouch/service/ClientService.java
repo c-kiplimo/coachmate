@@ -73,7 +73,7 @@ public class ClientService {
 
 
     // create client
-    public Client addNewClient(Coach coach,Organization organization, ClientRequest clientRequest) {
+    public Client addNewClient(Coach coach,Organization organization, ClientRequest clientRequest,String msisdn) {
         log.info("add a new client to database");
 
         // Check if client already exists
@@ -101,11 +101,12 @@ public class ClientService {
         client.setReason(clientRequest.getReason());
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
+
+
         // client Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String clientL = String.format("%05d", randNo);
-        String clientNo = client.getCoach().getBusinessName().substring(0, 2) +
-                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientL;
+        String clientNo =  client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientL;
         client.setClientNumber(clientNo);
 
 
@@ -129,6 +130,7 @@ public class ClientService {
 
         clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
+        clientWallet.setCreatedBy(msisdn);
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -143,6 +145,7 @@ public class ClientService {
         }
         clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
+        clientBillingAccount.setCreatedBy(msisdn);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         log.info("Client Billing Account created Successfully!");
         return saveClient;
@@ -422,9 +425,7 @@ public class ClientService {
 
     public List<Client> getClientByOrgId(Long orgId) {
 
-        Optional<Organization> optionalOrganization = organizationRepository.getOrganizationBySuperCoachId(orgId);
-
-        return clientRepository.findClientByOrganization(optionalOrganization.get());
+        return clientRepository.getByOrganizationId(orgId);
     }
 
 

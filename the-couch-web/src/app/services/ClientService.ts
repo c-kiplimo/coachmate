@@ -147,8 +147,8 @@ export class ClientService {
     return this.http.delete(this.baseURL + `/sessions/` + id,);
   }
 
-  getOrgSessions(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions/getorgSessions/`, 
+  getOrgSessions(options: any,id:any): Observable<any> {
+    return this.http.get(`${this.baseURL}sessions/getorgSessions/`+id, 
     { params: options,
       observe: 'response' 
     });

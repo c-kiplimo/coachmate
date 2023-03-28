@@ -56,7 +56,7 @@ export class AddClientPageComponent implements OnInit {
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.orgId = this.coachData.id;
+    this.orgId = this.coachData.organization.id;
     console.log('user role=>', this.orgId);
     console.log('user role=>', this.userRole);
     console.log('coach data=>', this.coachData);
@@ -70,13 +70,13 @@ export class AddClientPageComponent implements OnInit {
   }
 
   getOrgCoaches(id: any) {
-    const data = {
+    const options = {
       orgId: this.orgId,
     }
-    this.ClientService.getOrgCoaches(data).subscribe(
+    this.ClientService.getOrgCoaches(options).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
-        this.OrgCoaches = response.body.data;
+        this.OrgCoaches = response;
         console.log(this.OrgCoaches);
       },
       (error: any) => {
@@ -85,7 +85,7 @@ export class AddClientPageComponent implements OnInit {
     );
   }
 
-  selectedClient(event: any) {
+  selectedCoach(event: any) {
     console.log(event.target.value);
     this.selectedCoachId = event.target.value;
   }
@@ -101,9 +101,9 @@ export class AddClientPageComponent implements OnInit {
    
     
   if(this.userRole == 'ORGANIZATION'){
-    details.org_id_id = this.orgData.id;
-    details.coach_id = this.selectedCoachId;
-    details.coachId = this.selectedCoachId;
+    // details.org_id_id = this.orgData.id;
+    // details.coach_id = this.selectedCoachId;
+    // details.coachId = this.selectedCoachId;
 
   } else if (this.userRole == 'COACH'){
     details.org_id_id = this.coachData.coach.orgIdId;

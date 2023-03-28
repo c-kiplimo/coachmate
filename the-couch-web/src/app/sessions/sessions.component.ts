@@ -62,7 +62,7 @@ export class SessionsComponent implements OnInit {
 
  
     if(this.userRole == 'ORGANIZATION'){
-      this.orgId = this.coachData.id;
+      this.orgId = this.coachData.organization.id;
       console.log('organization id =>', this.orgId);
       console.log('user role=>', this.userRole);
       console.log('coach data=>', this.coachData);
@@ -109,7 +109,7 @@ export class SessionsComponent implements OnInit {
       search: this.filters.searchItem,
       orgId: this.orgId
     };
-    this.apiService.getOrgSessions(options).subscribe(
+    this.apiService.getOrgSessions(options,this.orgId).subscribe(
       (response: any) => {
         this.sessions = response;
         console.log("org sessions gotten here",this.sessions)

@@ -101,21 +101,9 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
-
-    }
-    public User(String firstName, String lastName, String email, String msisdn, String password,
-                Organization organization, UserRole userRole){
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.password = password;
         this.organization = organization;
-        this.userRole = userRole;
-    }
 
+    }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
@@ -128,7 +116,7 @@ public class User implements UserDetails {
     }
 
 
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -136,19 +124,8 @@ public class User implements UserDetails {
         this.username = email;
         this.msisdn = msisdn;
         this.userRole = userRole;
-    }
-
-    public User(String firstName, String lastName, String emailAddress, String msisdn, Organization organization, UserRole coach) {
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = emailAddress;
-        this.username = emailAddress;
-        this.msisdn = msisdn;
         this.organization = organization;
-        this.userRole = userRole;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

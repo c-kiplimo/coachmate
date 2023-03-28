@@ -9,6 +9,7 @@ import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import lombok.AllArgsConstructor;
@@ -60,13 +61,11 @@ public class RegistrationService {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
         }
 
-        Coach coach;
-        Organization organization;
 
         switch (registrationRequest.getUserRole()) {
             case COACH: {
                 // CREATE Coach
-                coach = new Coach();
+                Coach coach = new Coach();
                 coach.setBusinessName(registrationRequest.getBusinessName());
                 coach.setFirstName(registrationRequest.getFirstName());
                 coach.setLastName(registrationRequest.getLastName());
@@ -75,7 +74,7 @@ public class RegistrationService {
                 coach.setEmailAddress(registrationRequest.getEmail());
                 coach.setCreatedBy("SELF-REGISTRATION");
 
-                coachRepository.save(coach);
+                Coach savedCoach = coachRepository.save(coach);
 
                 log.info("Coach registered");
                 List<Object> response = userService.signupUser(
@@ -86,7 +85,7 @@ public class RegistrationService {
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
                                 UserRole.COACH,
-                                coach
+                                savedCoach
 
                         )
                 );
@@ -99,9 +98,11 @@ public class RegistrationService {
                 }
                 break;
             }
+
+
             case ORGANIZATION: {
                 //CREATE A ORGANIZATION
-                organization = new Organization();
+                Organization organization = new Organization();
                 organization.setOrgName(registrationRequest.getBusinessName());
                 organization.setEmail(registrationRequest.getEmail());
                 organization.setMsisdn(registrationRequest.getMsisdn());
@@ -109,7 +110,7 @@ public class RegistrationService {
                 organization.setSecondName(registrationRequest.getLastName());
                 organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 organization.setCreatedBy("SELF-REGISTRATION");
-                organizationRepository.save(organization);
+                Organization registeredOrg = organizationRepository.save(organization);
                 log.info("Organization registered");
 
 
@@ -124,30 +125,19 @@ public class RegistrationService {
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
                                 UserRole.ORGANIZATION,
-                                organization
+                                registeredOrg
 
 
                         )
                 );
                 try {
                     User user = (User) response.get(0);
-
-                    organization = new Organization();
-                    organization.setOrgName(registrationRequest.getBusinessName());
-                    organization.setEmail(registrationRequest.getEmail());
-                    organization.setMsisdn(registrationRequest.getMsisdn());
-                    organization.setFirstName(registrationRequest.getFirstName());
-                    organization.setSecondName(registrationRequest.getLastName());
-                    organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
-                    organization.setSuperCoachId(user.getId());
-                    organization.setId(user.getOrganization().getId());
-
                     organizationService.addNewOrganization(organization);
                     log.info("Organization registered by super coach");
 
                     // Sending Confirmation Token
                     String token = (String) response.get(1);
-                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", user);
                 } catch (Exception e){
                     log.info("Error while sending confirmation token: ", e);
                 }
@@ -160,23 +150,23 @@ public class RegistrationService {
     }
 
     //Register Coach as user
-    public void registerCoachAsUser(Coach coach,String msisdn) {
+    public void registerCoachAsUser(CoachRequest coachRequest,Organization organization, String msisdn) {
         log.info("Registering a coach as user");
-        boolean isValidEmail = emailValidator.test(coach.getEmailAddress());
+        boolean isValidEmail = emailValidator.test(coachRequest.getEmail());
 
         if(!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coach.getEmailAddress()));
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coachRequest.getEmail()));
         }
 
         //Create Coach User
         List<Object> response = userService.signupCoachAsUser(
                 new User(
-                        coach.getFirstName(),
-                        coach.getLastName(),
-                        coach.getEmailAddress(),
-                        coach.getMsisdn(),
-                        coach.getOrganization(),
-                        UserRole.COACH
+                        coachRequest.getFirstName(),
+                        coachRequest.getLastName(),
+                        coachRequest.getEmail(),
+                        coachRequest.getMsisdn(),
+                        UserRole.COACH,
+                        organization
                 ), msisdn
         );
 
@@ -187,10 +177,10 @@ public class RegistrationService {
 
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Coach Account Creation";
-        String content = "Hello " + coach.getFirstName() + ", use this link to confirm your account and set your password," +
+        String content = "Hello " + coachRequest.getFirstName() + ", use this link to confirm your account and set your password," +
                 " http://localhost:4200/confirmcoach/"+response.get(0)+"/"+token;
-        notificationServiceHTTPClient.sendEmail(coach.getEmailAddress() ,subject, content, false);
-        notificationServiceHTTPClient.sendSMS(coach.getMsisdn(),content,"COACH-1234");
+        notificationServiceHTTPClient.sendEmail(coachRequest.getEmail() ,subject, content, false);
+        notificationServiceHTTPClient.sendSMS(coachRequest.getMsisdn(),content,"COACH-1234");
         log.info(content);
         log.info("Coach registered");
 
@@ -229,6 +219,7 @@ public class RegistrationService {
         notificationServiceHTTPClient.sendSMS(clientRequest.getMsisdn(), subject, content, String.valueOf(false));
 
     }
+
     // Confirm token
     @Transactional
     public String confirmToken(String token){

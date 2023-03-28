@@ -32,4 +32,6 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
     List<Client> findClientByOrganization(Organization orgId);
 
     Optional<Client> findClientByEmail(String emailAddress);
+
+    List<Client> getByOrganizationId(Long orgId);
 }

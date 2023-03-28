@@ -100,8 +100,7 @@ getOrgClients(){
   this.ClientService.getOrgClients(id).subscribe(
     (response) => {
       this.loading = false;
-      this.Clients = response;
-      console.log(response)
+      this.Clients = response.body;
       console.log('clients',this.Clients)
 
     }, (error) => {

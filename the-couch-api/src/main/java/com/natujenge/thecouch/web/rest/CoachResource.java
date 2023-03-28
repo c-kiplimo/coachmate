@@ -37,7 +37,7 @@ public class CoachResource {
 
         try {
             Organization organization = userDetails.getOrganization();
-            log.info("request to add new coach by organization");
+            log.info("request to add new coach by organization{}",organization.getId());
             coachService.addNewCoachByOrganization(organization, userDetails.getMsisdn(),
                     coachRequest);
 
