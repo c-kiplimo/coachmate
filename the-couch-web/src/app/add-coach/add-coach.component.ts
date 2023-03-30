@@ -73,28 +73,15 @@ export class AddCoachComponent implements OnInit {
     this.LoginService.registerCoach(this.formData).subscribe({
       next: (response) => {
         console.log(response);
-        console.log('here');
-
-
-        if (response.body.error) {
-          this.errorMessage = response.body.message;
-          console.log('here');
-        } else {
-          this.registrationSuccess = true;
-          this.toastrService.success(
-            'Confirm account',
-            'Registration successfull!'
-          );
-          this.router.navigate(['dashboard']);
-
-          console.log('here');
-        }
+        this.registrationSuccess = true;
+        this.toastrService.success('Coach added successfully');
+        this.router.navigate(['/dashboard']);
       },
-      error: (error: any) => {
-        // console.log(error);
-        this.errorMessage = error.error.message ?? error.error.error.message;
-        // this.toastrService.error('Please retry', 'Registration failled!');
-      },
+      error: (error) => {
+        console.log(error);
+        this.errorMessage = error.error.message;
+        this.toastrService.error(this.errorMessage);
+      }
     });
   }
 

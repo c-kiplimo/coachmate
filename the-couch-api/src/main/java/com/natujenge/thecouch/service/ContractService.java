@@ -90,7 +90,7 @@ public class ContractService {
         // Get Coach
         Coach coach = coachService.findCoachById(coachId);
         // Get Organization
-        Organization organization = organizationService.findOrganizationById(organizationId);
+        Optional<Organization> organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
 
@@ -124,7 +124,7 @@ public class ContractService {
         log.info("Coach: "+coach.toString());
         contract.setClient(client);
         contract.setCoach(coach);
-        contract.setOrganization(organization);
+        contract.setOrganization(organization.orElse(null));
         if(coach.getOrganization()!=null){
             contract.setOrganization(coach.getOrganization());
         }
@@ -188,7 +188,10 @@ public class ContractService {
         notification.setContent(smsContent);
         notification.setCoachId(client.getCoach().getId());
         notification.setClientId(client.getId());
-        notification.setOrganizationId(client.getOrganization().getId());
+        // if coach is part of an organization, set the organization id
+        if (client.getOrganization() != null) {
+            notification.setOrganizationId(client.getOrganization().getId());
+        }
         notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
         notification.setCreatedBy(coach.getFullName());
@@ -311,7 +314,7 @@ public class ContractService {
                 + " not found"));
 
         // Get organization
-        Organization organization = organizationService.findOrganizationById(organizationId);
+        Optional<Organization> organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
 
@@ -323,7 +326,7 @@ public class ContractService {
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
         contract.setCoach(coach);
-        contract.setOrganization(organization);
+        contract.setOrganization(organization.get());
         if(coach.getOrganization()!=null){
             contract.setOrganization(coach.getOrganization());
         }
@@ -344,7 +347,7 @@ public class ContractService {
             coachingObjective.setCreatedBy(coach.getFullName());
             coachingObjective.setLastUpdatedBy(coach.getFullName());
 
-            coachingObjective.setOrganization(organization);
+            coachingObjective.setOrganization(organization.get());
             coachingObjective.setContract(contract1);
             coachingObjective.setCoach(coach);
 
@@ -385,10 +388,10 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setOrganizationId(organization.getId());
+        notification.setOrganizationId(organization.get().getId());
         notification.setCoachId(coach.getId());
         notification.setContract(contract1);
-        notification.setCreatedBy(organization.getFullName());
+        notification.setCreatedBy(organization.get().getFullName());
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);
@@ -404,7 +407,7 @@ public class ContractService {
                 + " not found"));
 
         // Get Coach
-        Organization organization = organizationService.findOrganizationById(organizationId);
+        Optional<Organization> organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
         Contract contract = new Contract();
         if(client.getOrganization()!=null){
@@ -454,10 +457,10 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setOrganizationId(organization.getId());
+        notification.setOrganizationId(organization.get().getId());
         notification.setClientId(client.getId());
         notification.setContract(contract1);
-        notification.setCreatedBy(organization.getFullName());
+        notification.setCreatedBy(organization.get().getFullName());
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);

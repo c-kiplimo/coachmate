@@ -52,8 +52,7 @@ export class SettingsComponent implements OnInit {
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.orgId = this.coachData.organization.id;
-    console.log("organization id",this.orgId);
+
 
 
     this.coachEmail=  this.coachData.email;
@@ -62,15 +61,17 @@ export class SettingsComponent implements OnInit {
   
     if(this.userRole == 'COACH'){
     this.getUser();
-    this.fullNames= this.user.coachData.fullName;
+    this.fullNames= this.coachData.fullName;
     } else if(this.userRole == 'ORGANIZATION'){
       this.OrgData = sessionStorage.getItem('Organization');
+      this.orgId = this.coachData.organization.id;
+      console.log("organization id",this.orgId);
       this.fullNames= this.coachData.organization.fullName;
      
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
-      this.fullNames = this.user.coachData.fullName;
+      this.fullNames = this.coachData.fullName;
       
     }
     this.notificationForm = this.formbuilder.group({

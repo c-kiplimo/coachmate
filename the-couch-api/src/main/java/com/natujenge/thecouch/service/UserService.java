@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        //user.setCreatedBy(UserRole.ADMIN);
+
 
 
         // save the User in the database

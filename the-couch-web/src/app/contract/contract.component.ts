@@ -53,8 +53,7 @@ coachingCategory: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.organizationId = this.coachData.organization.id;
-    console.log("organization id",this.organizationId);
+
     if(this.userRole == 'COACH'){
       this.getClients();
       this.coachId = this.coachData.id;
@@ -64,6 +63,8 @@ coachingCategory: any;
   
       } else if(this.userRole == 'ORGANIZATION'){
         console.log('ORGANIZATION');
+        this.organizationId = this.coachData.organization.id;
+        console.log("organization id",this.organizationId);
         this.getOrgClients();
         this.getOrgCoaches(this.organizationId);
        
@@ -93,7 +94,7 @@ coachingCategory: any;
     this.clientService.getClient(options).subscribe(
       (response: any) => {
         console.log(response.body)
-        this.clients = response.body;
+        this.clients = response.body.data;
         this.numberOfClients = this.clients.length;
         console.log(this.numberOfClients)
       }, (error: any) => {
@@ -157,7 +158,7 @@ coachingCategory: any;
     console.log(this.contractForm.value);
     var data = this.contractForm.value;
     data.coachId = this.coachId
-    data.organizationId = this.coachData.organization.id;
+    data.organizationId = this.organizationId
     data.objectives = this.objectives;
     console.log(data);
     this.apiService.addNewContract(data).subscribe(

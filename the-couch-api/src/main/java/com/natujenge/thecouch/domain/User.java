@@ -126,6 +126,16 @@ public class User implements UserDetails {
         this.userRole = userRole;
         this.organization = organization;
     }
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Client client){
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = email;
+        this.msisdn = msisdn;
+        this.userRole = userRole;
+        this.client = client;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -56,13 +56,13 @@ export class AddClientPageComponent implements OnInit {
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.orgId = this.coachData.organization.id;
-    console.log('user role=>', this.orgId);
     console.log('user role=>', this.userRole);
     console.log('coach data=>', this.coachData);
 
     if(this.userRole == 'ORGANIZATION'){
       this.getOrgCoaches(this.orgId);
+      this.orgId = this.coachData.organization.id;
+      console.log('user role=>', this.orgId);
     }
 
 

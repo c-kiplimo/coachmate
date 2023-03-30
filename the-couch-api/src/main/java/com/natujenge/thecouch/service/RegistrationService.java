@@ -9,6 +9,7 @@ import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
+import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
@@ -187,7 +188,7 @@ public class RegistrationService {
     }
 
     //Register Client as user
-    public void registerClientAsUser(Client clientRequest) {
+    public void registerClientAsUser(ClientRequest clientRequest, Client saveClient) {
         log.info("Registering a Client as User");
         boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
 
@@ -202,8 +203,8 @@ public class RegistrationService {
                         clientRequest.getLastName(),
                         clientRequest.getEmail(),
                         clientRequest.getMsisdn(),
-                        clientRequest.getPassword(),
-                        UserRole.CLIENT
+                        UserRole.CLIENT,
+                        saveClient
                 )
         );
 

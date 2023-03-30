@@ -62,12 +62,12 @@ Feedbacks: any;
     ) {}
 
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachSessionData = sessionStorage.getItem('user');
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    this.orgId = this.coachData.organization.id;
+   
   
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
@@ -89,6 +89,7 @@ Feedbacks: any;
  
 
     } else if(this.userRole == 'ORGANIZATION'){
+      this.orgId = this.coachData.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getOrgClients();

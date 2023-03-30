@@ -115,7 +115,7 @@ public class ClientService {
 
         Client saveClient = clientRepository.save(client);
 
-        registrationService.registerClientAsUser(saveClient);
+        registrationService.registerClientAsUser(clientRequest, saveClient);
 
         // Create client wallet
         ClientWallet clientWallet = new ClientWallet();

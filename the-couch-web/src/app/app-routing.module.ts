@@ -30,6 +30,7 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
 import { SettingsComponent } from './settings/settings.component';
 import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
+import { CoachViewComponent } from './coach-view/coach-view.component';
 
 
 const routes: Routes = [
@@ -86,6 +87,10 @@ const routes: Routes = [
   {
     path: 'clientView/:id',
     component: ClientViewComponent
+  },
+  {
+    path: 'coachView/:id',
+    component: CoachViewComponent
   },
   {
     path: 'contracts',
