@@ -60,6 +60,7 @@ import { AddAvailableSlotsComponent } from './add-available-slots/add-available-
 import { SettingsComponent } from './settings/settings.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
+import { CoachViewComponent } from './coach-view/coach-view.component';
 
 
 
@@ -102,6 +103,7 @@ import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
       AddAvailableSlotsComponent,
       SettingsComponent,
       CoachConfirmComponent,
+      CoachViewComponent,
 
 
   ],

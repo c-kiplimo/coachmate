@@ -33,8 +33,6 @@ export class FeedbackComponent implements OnInit {
 
     if(this.userRole == 'ORGANIZATION'){
       this.OrgData = sessionStorage.getItem('Organization');
-      this.orgSession = JSON.parse(this.OrgData);
-      console.log(this.orgSession);
 
     
   } else if (this.userRole == 'COACH') {
@@ -52,7 +50,7 @@ export class FeedbackComponent implements OnInit {
     this.apiService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
-        this.feedbacks = response;
+        this.feedbacks = response.body;
         console.log(this.feedbacks);
         this.loading = false;
       }
@@ -66,7 +64,7 @@ export class FeedbackComponent implements OnInit {
     this.apiService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
-        this.feedbacks = response;
+        this.feedbacks = response.body;
         console.log(this.feedbacks);
         this.loading = false;
       }

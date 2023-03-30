@@ -93,32 +93,10 @@ export class contractViewComponent implements OnInit {
   getUserOrg() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
-    this.getOrganization(this.User.id);
+    this.Organization = JSON.parse(sessionStorage.getItem('Organization') as any);
 
   }
-  getOrganization(id: any) {
-    const data = {
-      superCoachId: id,
-    }
-    this.clientService.getOrganization(data).subscribe(
-      (response: any) => {
-        console.log('here Organization=>', response);
-        this.Organization = response;
-        this.orgName = this.Organization.orgName;
 
-        this.getOrgCoaches(this.Organization.id);
-
-
-
-        sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
-        
-
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
   getOrgCoaches(id: any) {
     const data = {
       OrgId: id,
