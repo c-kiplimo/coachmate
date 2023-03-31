@@ -69,6 +69,11 @@ navDataforOrg: [
         label: 'Clients'
     },
     {
+        routeLink: 'coaches',
+        icon: 'fal fa-users',
+        label: 'Coaches'
+    },
+    {
         routeLink: 'contracts',
         icon: 'fa-solid fa-file-contract',
         label: 'Contracts'

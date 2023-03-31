@@ -31,6 +31,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
 import { CoachViewComponent } from './coach-view/coach-view.component';
+import { CoachesComponent } from './coaches/coaches.component';
 
 
 const routes: Routes = [
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'clients',
     component: ClientsComponent
+  },
+  {
+    path:'coaches',
+    component:CoachesComponent
   },
   {
     path: 'addclient',
