@@ -84,10 +84,6 @@ Feedbacks: any;
     this.getCoachFeedbacks(this.coachData.coach.id);
     this.getAllContracts();
     window.scroll(0, 0);
-  
-   
- 
-
     } else if(this.userRole == 'ORGANIZATION'){
       this.orgId = this.coachData.organization.id;
       console.log('ORGANIZATION');

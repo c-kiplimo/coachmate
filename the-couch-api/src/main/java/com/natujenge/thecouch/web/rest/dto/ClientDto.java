@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public interface ClientDto {
     Long getId();
+    String getClientNumber();
     String getPaymentMode();
     String getClientType();
     String getFirstName();

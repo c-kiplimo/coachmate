@@ -45,8 +45,6 @@ public class CoachService {
           throw new IllegalArgumentException("User already exists!");
         }
 
-        registrationService.registerCoachAsUser(coachRequest,organization, msisdn);
-
         Coach coach = new Coach();
         coach.setFirstName(coachRequest.getFirstName());
         coach.setLastName(coachRequest.getLastName());
@@ -63,7 +61,8 @@ public class CoachService {
                 coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
         coach.setCoachNumber(coachNo);
         // save coach
-        coachRepository.save(coach);
+        Coach savedCoach = coachRepository.save(coach);
+        registrationService.registerCoachAsUser(coachRequest,organization,savedCoach);
 
 
 

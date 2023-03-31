@@ -12,6 +12,7 @@ public class ClientRequest {
     private String msisdn;
     private String email;
     private String physicalAddress;
+    private String clientNumber;
     private String profession;
     private PaymentMode paymentMode;
     private String reason;

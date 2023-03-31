@@ -150,8 +150,8 @@ public class RegistrationService {
 
     }
 
-    //Register Coach as user
-    public void registerCoachAsUser(CoachRequest coachRequest,Organization organization, String msisdn) {
+    //Register org Coach as user
+    public void registerCoachAsUser(CoachRequest coachRequest,Organization organization, Coach savedCoach) {
         log.info("Registering a coach as user");
         boolean isValidEmail = emailValidator.test(coachRequest.getEmail());
 
@@ -167,8 +167,9 @@ public class RegistrationService {
                         coachRequest.getEmail(),
                         coachRequest.getMsisdn(),
                         UserRole.COACH,
-                        organization
-                ), msisdn
+                        organization,
+                        savedCoach
+                )
         );
 
         //SEnding Confirmation token
@@ -187,8 +188,9 @@ public class RegistrationService {
 
     }
 
+
     //Register Client as user
-    public void registerClientAsUser(ClientRequest clientRequest, Client saveClient) {
+    public void registerClientAsUser(ClientRequest clientRequest,Organization organization, Coach coach , Client saveClient) {
         log.info("Registering a Client as User");
         boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
 
@@ -204,6 +206,8 @@ public class RegistrationService {
                         clientRequest.getEmail(),
                         clientRequest.getMsisdn(),
                         UserRole.CLIENT,
+                        organization,
+                        coach,
                         saveClient
                 )
         );

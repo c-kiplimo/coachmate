@@ -75,7 +75,7 @@ export class AddCoachComponent implements OnInit {
         console.log(response);
         this.registrationSuccess = true;
         this.toastrService.success('Coach added successfully');
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['']);
       },
       error: (error) => {
         console.log(error);

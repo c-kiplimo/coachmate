@@ -115,8 +115,8 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
 
-
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization){
+// org coach user
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -125,8 +125,10 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
+        this.coach = coach;
     }
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Client client){
+    // org client user
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -134,6 +136,8 @@ public class User implements UserDetails {
         this.username = email;
         this.msisdn = msisdn;
         this.userRole = userRole;
+        this.organization = organization;
+        this.coach = coach;
         this.client = client;
     }
 

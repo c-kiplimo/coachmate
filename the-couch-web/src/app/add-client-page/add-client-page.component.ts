@@ -60,9 +60,9 @@ export class AddClientPageComponent implements OnInit {
     console.log('coach data=>', this.coachData);
 
     if(this.userRole == 'ORGANIZATION'){
-      this.getOrgCoaches(this.orgId);
       this.orgId = this.coachData.organization.id;
-      console.log('user role=>', this.orgId);
+      this.getOrgCoaches(this.orgId);
+      console.log('org id=>', this.orgId);
     }
 
 
