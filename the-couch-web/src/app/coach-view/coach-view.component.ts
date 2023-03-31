@@ -1,40 +1,19 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ClientService } from '../services/ClientService';
-import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { ToastrService } from 'ngx-toastr';
-import {
-  faBell,
-  faCaretDown,
-  faChevronLeft,
-  faChevronRight,
-  faPenSquare,
-  faPlus,
-  faRedo,
-  // faRefresh,
-} from '@fortawesome/free-solid-svg-icons';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCaretDown, faPlus, faPenSquare, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../services/ApiService';
+import { ClientService } from '../services/ClientService';
 
 @Component({
-  selector: 'app-client-view',
-  templateUrl: './client-view.component.html',
-  styleUrls: ['./client-view.component.css',
-  ],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        // :enter is alias to 'void => *'
-        style({ opacity: 0 }),
-        animate(600, style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
+  selector: 'app-coach-view',
+  templateUrl: './coach-view.component.html',
+  styleUrls: ['./coach-view.component.css']
 })
-
-export class ClientViewComponent implements OnInit {
+export class CoachViewComponent implements OnInit {
 
   Clients!: [];
   addsessionForm!: FormGroup;
@@ -119,6 +98,7 @@ export class ClientViewComponent implements OnInit {
     objective: ''
   };
   coachingCategory: any;
+coaches: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,

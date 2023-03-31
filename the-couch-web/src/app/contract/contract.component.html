@@ -42,7 +42,7 @@
         
           <!--Render the create client button if no clients are found-->
           
-          <div *ngIf="clients.length === 0" >
+          <div *ngIf="!clients" >
             <button class="btn btn-success" routerLink="/addclient">
             Create Client
             </button>

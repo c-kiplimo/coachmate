@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
@@ -77,24 +78,36 @@ public class ContractResource {
         }
     }
 
-    // Create contract
     @PostMapping
     public ResponseEntity<?> createContract(
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails
-            ) {
+    ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
-            log.info("Request to add new Contract by Coach of id {}",coachId);
+            log.info("adding contract");
+            Long coachId = null;
+            Long organizationId = null;
+
+            if (userDetails.getCoach() != null) {
+                coachId = userDetails.getCoach().getId();
+                log.info("coach id {}", coachId);
+            }
+
+            if (userDetails.getOrganization() != null) {
+                organizationId = userDetails.getOrganization().getId();
+                log.info("org id {}", organizationId);
+            }
 
             // Later return contract DTO
-            Contract contract = contractService.createContract(coachId,contractRequest);
+            Contract contract = contractService.createContract(coachId, organizationId, contractRequest);
             return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<?> updateContractStatus(
 
@@ -179,10 +192,11 @@ public class ContractResource {
     ) {
         try {
             Long organizationId = userDetails.getOrganization().getId();
+            Long coachId = userDetails.getCoach().getId();
             log.info("Request to add new Contract by Organization of id {}",organizationId);
 
             // Later return contract DTO
-            Contract contract = contractService.createContract(organizationId,contractRequest);
+            Contract contract = contractService.createContract(coachId,organizationId,contractRequest);
             return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {

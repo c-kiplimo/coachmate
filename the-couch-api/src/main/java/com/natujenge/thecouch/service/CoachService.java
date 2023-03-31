@@ -1,12 +1,11 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
-import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,8 @@ public class CoachService {
     }
 
     // create coach by organization
-    public void   addNewCoachByOrganization(Organization organization, String msisdn,CoachRequest coachRequest) {
-        log.info("add a new coach to database");
+    public void   addNewCoachByOrganization(Organization organization, String msisdn, CoachRequest coachRequest) {
+        log.info("add a new coach to database by organization{}",organization.getId());
 
         Optional<User>  optionalUser = userService.findByMsisdn(coachRequest.getMsisdn());
         if (optionalUser.isPresent()){
@@ -47,19 +46,25 @@ public class CoachService {
         }
 
         Coach coach = new Coach();
-        coach.setOrganization(organization);
         coach.setFirstName(coachRequest.getFirstName());
         coach.setLastName(coachRequest.getLastName());
         coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
         coach.setMsisdn(coachRequest.getMsisdn());
         coach.setEmailAddress(coachRequest.getEmail());
+        coach.setCreatedBy(msisdn);
+        coach.setOrganization(organization);
+
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String coachL = String.format("%05d", randNo);
         String coachNo = coach.getLastName().substring(0, 2) +
                 coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
         coach.setCoachNumber(coachNo);
-        registrationService.registerCoachAsUser(coach, msisdn);
+        // save coach
+        Coach savedCoach = coachRepository.save(coach);
+        registrationService.registerCoachAsUser(coachRequest,organization,savedCoach);
+
+
 
         log.info("coach registered successfully");
 
@@ -73,7 +78,7 @@ public class CoachService {
 
 
     public List<Coach> getCoachByOrganizationId(Long organizationId) {
-        return coachRepository.findByOrganizationId(organizationId);
+        return coachRepository.findAllByOrganizationId(organizationId);
     }
 
     public Optional<User> confirmCoachTokenAndUpdatePassword(CoachRequest coachRequest) {

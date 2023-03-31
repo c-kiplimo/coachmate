@@ -1,25 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ClientService } from '../services/ClientService';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { style, animate, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { ClientService } from '../services/ClientService';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.css'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        // :enter is alias to 'void => *'
-        style({ opacity: 0 }),
-        animate(600, style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
+  selector: 'app-coaches',
+  templateUrl: './coaches.component.html',
+  styleUrls: ['./coaches.component.css']
 })
-export class ClientsComponent implements OnInit {
+export class CoachesComponent implements OnInit {
+
   clientId: any;
   editedClient: any;  
 salesData: any;
@@ -32,6 +23,9 @@ salesData: any;
   
 
   updateClient!: FormGroup;
+OrgCoaches: any;
+  orgId: any;
+  numberofCoaches: any;
 
   constructor(private ClientService: ClientService, 
     private router: Router,
@@ -57,7 +51,10 @@ salesData: any;
     if(this.userRole == 'COACH'){
        this.getClients();
     }else if(this.userRole == 'ORGANIZATION'){
+      this.orgId = this.coachData.organization.id;
+      console.log('ORGANIZATION');
       this.getOrgClients();
+      this.getOrgCoaches(this.orgId);
 
     }
 
@@ -107,6 +104,24 @@ getOrgClients(){
       console.log(error)
     }
   )
+}
+getOrgCoaches(id: any) {
+  const data = {
+    orgId: id,
+  }
+  this.ClientService.getOrgCoaches(data).subscribe(
+    (response: any) => {
+      console.log('here Organization=> coaches', response);
+      this.OrgCoaches = response;
+      console.log(this.OrgCoaches);
+      console.log('here Organization=> coaches', response);
+      this.numberofCoaches = this.OrgCoaches.length;
+     
+    },
+    (error: any) => {
+      console.log(error);
+    }
+  );
 }
   
   getClients(){
@@ -207,3 +222,4 @@ editClientModal!: ElementRef;
   }
   
 }
+

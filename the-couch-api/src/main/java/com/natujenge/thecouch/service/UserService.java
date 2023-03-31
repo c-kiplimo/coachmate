@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.service;
 
+import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.ConfirmationToken;
 import com.natujenge.thecouch.domain.Constants;
 import com.natujenge.thecouch.domain.User;
@@ -74,7 +75,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         user.setContentStatus(ContentStatus.ACTIVE);
         user.setCreatedAt(LocalDateTime.now());
-        //user.setCreatedBy(UserRole.ADMIN);
+
 
 
         // save the User in the database
@@ -151,7 +152,7 @@ public class UserService implements UserDetailsService {
 
 
     // Coach as user
-    public List<Object> signupCoachAsUser(User user,String msisdn) {
+    public List<Object> signupCoachAsUser(User user ) {
         log.info("Signing up coach as user");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
                 .isPresent();

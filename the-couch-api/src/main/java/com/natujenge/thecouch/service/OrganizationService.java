@@ -74,8 +74,7 @@ public class OrganizationService {
 
     }
 
-    public Organization findOrganizationById(Long id) {
-        return organizationRepository.findOrganizationById(id)
-                .orElseThrow(() -> new UserNotFoundException("Organization by id " + id + " not found"));
+    public  Optional<Organization> findOrganizationById(Long id) {
+        return organizationRepository.findOrganizationById(id);
     }
 }

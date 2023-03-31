@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit {
   saveChanges = true;
   message: string = 'NEW CONTRACT';
   businessName!: any;
+  fullNames!: any;
   NotificationSettings: any;
   coachPhoneNumber:any;
   coachEmail:any;
@@ -37,6 +38,7 @@ export class SettingsComponent implements OnInit {
   OrgData: any;
   orgSession: any;
   User: any;
+  orgId: any;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -44,51 +46,46 @@ export class SettingsComponent implements OnInit {
     private http: HttpClient,
     private toastrService: ToastrService
   ) {}
-
   ngOnInit(): void {
-    this.user =  JSON.parse(
-      sessionStorage.getItem('user') || '{}'
-    );
-    this.NotificationSettings = JSON.parse(
-      sessionStorage.getItem('notificationSettings') || '{}'
-    );
-    this.coachEmail=  this.user.email; 
-    this.coachPhoneNumber= this.user.msisdn;
-    this.businessName= this.user.coach.businessName;
-    this.notificationForm = this.NotificationSettings;
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
 
- 
-    if(this.userRole == 'ORGANIZATION'){
-    this.OrgData = sessionStorage.getItem('Organization');
-    this.orgSession = JSON.parse(this.OrgData);
-    console.log(this.orgSession);
 
 
+    this.coachEmail=  this.coachData.email;
+    this.coachPhoneNumber= this.coachData.msisdn;
+    this.notificationForm = this.NotificationSettings;
+  
+    if(this.userRole == 'COACH'){
+    this.getUser();
+    this.fullNames= this.coachData.fullName;
+    } else if(this.userRole == 'ORGANIZATION'){
+      this.OrgData = sessionStorage.getItem('Organization');
+      this.orgId = this.coachData.organization.id;
+      console.log("organization id",this.orgId);
+      this.fullNames= this.coachData.organization.fullName;
+     
+    }else if(this.userRole == 'CLIENT') {
+      console.log('not coach');
+      this.getUser();
+      this.fullNames = this.coachData.fullName;
       
-    } else if(this.userRole == 'COACH'){
-     
-    } else if(this.userRole == 'CLIENT'){
-     
-      this.User = JSON.parse(sessionStorage.getItem('user') as any);
-      console.log(this.User);
-      const email = {
-        email: this.User.email
-      }
-      this.service.getClientByEmail(email).subscribe(
-        (response: any) => {
-          console.log(response);
-         
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
     }
+    this.notificationForm = this.formbuilder.group({
+      notificationMode: [''],
+      notificationEnable: [''],
+    });
+
+
+
+    
+  }
+  getUser() {
+    this.User = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.User);
   }
   viewTemplate(template: any): void {
     this.template = template;

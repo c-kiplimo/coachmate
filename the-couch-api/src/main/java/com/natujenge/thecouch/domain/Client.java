@@ -64,7 +64,7 @@ public class Client {
     private Coach coach;
 
     @ManyToOne
-    @JoinColumn(name = "org_id_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
 

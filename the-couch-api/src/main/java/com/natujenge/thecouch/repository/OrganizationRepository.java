@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.repository;
 
+import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Organization;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,7 +19,6 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
 
     Optional<Organization> getOrganizationBySuperCoachId(Long coachId);
 
-
-
     Optional<Organization> findOrganizationById(Long id);
+
 }

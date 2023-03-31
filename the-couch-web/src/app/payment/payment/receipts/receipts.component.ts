@@ -24,6 +24,7 @@ import { ParseSourceFile } from '@angular/compiler';
 export class ReceiptsComponent implements OnInit {
 payments: any = [];
 loadingpayment: any;
+statementPeriod!: string;
 coachId: any;
 loading = false;
 itemsPerPage = 20;
@@ -67,7 +68,7 @@ payment: any;
     }
     else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
-      this.getPaymentsByOrgId();
+      // this.getPaymentsByOrgId();
     }
   }
   getPaymentsByOrgId() {
@@ -79,6 +80,7 @@ payment: any;
       search: this.filters.searchItem,
       orgId: this.coachData.organization.id,
     };
+    console.log('orgId', options);
     this.ClientService.getPaymentsByOrgId(options).subscribe(
       (response) => {
         this.loading = false;
@@ -191,6 +193,112 @@ payment: any;
         PDF.save('invoice.pdf');
       }
     );
+  }
+      // get payment by client id and selected period
+      getPaymentsByCoachIdAndSelectedPeriod(){
+        window.scroll(0, 0);
+        const options = {
+          page: 1,
+          per_page: this.itemsPerPage,
+          status: this.filters.status,
+          search: this.filters.searchItem,
+          coachId: this.coachData.coach.id,
+          statementPeriod: this.statementPeriod,
+        };
+        this.loading = true;
+        this.ClientService.getPaymentsByCoachIdAndSelectedPeriod(options).subscribe(
+          (response) => {
+            this.loading = false;
+            this.payments = response.body.data;
+            console.log('Account statement by client and selected period', this.payments);
+          }, (error) => {
+            console.log(error);
+          }
+        )
+      }
+      // get payment by client id and selected period
+      getPaymentsByClientIdAndSelectedPeriod(id: any){
+        window.scroll(0, 0);
+        const options = {
+          page: 1,
+          per_page: this.itemsPerPage,
+          status: this.filters.status,
+          search: this.filters.searchItem,
+          client_id: id,
+          statementPeriod: this.statementPeriod,
+        };
+        this.loading = true;
+        this.ClientService.getPaymentsByClientIdAndSelectedPeriod(options).subscribe(
+          (response) => {
+            this.loading = false;
+            this.payments = response.body.data;
+            console.log('Account statement by client and selected period', this.payments);
+          }, (error) => {
+            console.log(error);
+          }
+        )
+      }
+      // get payment by org id and selected period
+      getPaymentsByOrgIdAndSelectedPeriod(){
+        window.scroll(0, 0);
+        const options = {
+          page: 1,
+          per_page: this.itemsPerPage,
+          status: this.filters.status,
+          search: this.filters.searchItem,
+          org_id: this.coachData.organization.id,
+          statementPeriod: this.statementPeriod,
+        };
+        this.loading = true;
+        this.ClientService.getPaymentsByOrgIdAndSelectedPeriod(options).subscribe(
+          (response) => {
+            this.loading = false;
+            this.payments = response.body.data;
+            console.log('Account statement by org and selected period', this.payments);
+          }, (error) => {
+            console.log(error);
+          }
+        )
+      }
+
+
+  applyFilter() {
+    switch (this.statementPeriod) {
+      case 'PerMonth':
+        // apply filter for 1 month
+        if (this.coachData.coach) {
+          this.getPaymentsByCoachIdAndSelectedPeriod();
+        } else if (this.coachData.organization) {
+          this.getPaymentsByOrgIdAndSelectedPeriod();
+        } else if (this.coachData.client) {
+          this.getPaymentsByClientIdAndSelectedPeriod(this.coachData.client.id);
+        }
+        break;
+      case 'Per6Months':
+        // apply filter for 6 months
+        if (this.coachData.coach) {
+        this.getPaymentsByCoachIdAndSelectedPeriod();
+        } else if (this.coachData.organization) {
+          this. getPaymentsByOrgIdAndSelectedPeriod();
+        } else if (this.coachData.client) {
+          this.getPaymentsByClientIdAndSelectedPeriod(this.coachData.client.id);
+        }
+        break;
+      case 'PerYear':
+        // apply filter for 1 year
+        if (this.coachData.coach) {
+        this.getPaymentsByCoachIdAndSelectedPeriod();
+        } else if (this.coachData.organization) {
+          this. getPaymentsByOrgIdAndSelectedPeriod();
+        } else if (this.coachData.client) {
+          this.getPaymentsByClientIdAndSelectedPeriod(this.coachData.client.id);
+        }
+        break;
+      default:
+        // no filter applied
+  
+        break;
+    }
   }
 
 

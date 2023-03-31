@@ -57,7 +57,7 @@ public class OrganizationResource {
     }
 
     //GET ORGANIZATION BY SUPER COACH ID
-    @GetMapping(path = "getOrganizationBySuperCoachId")
+    @GetMapping(path = "/getOrganizationBySuperCoachId")
     ResponseEntity<?> getOrganizationBySuperCoachId(@RequestParam("superCoachId") Long superCoachId,
                                              @AuthenticationPrincipal User userDetails) {
     log.info("REQUEST TO GET ORGANIZATION BY SUPER COACH {}", superCoachId);
@@ -93,8 +93,8 @@ public class OrganizationResource {
     }
 
     //GET ALL COACHES IN ORG
-    @GetMapping(path = "getCoachesByOrgId")
-    ResponseEntity<?> getCoachesByOrgId(@RequestParam("OrgId") Long organizationId,
+    @GetMapping(path = "/getCoachesByOrgId")
+    ResponseEntity<?> getCoachesByOrgId(@RequestParam("orgId") Long organizationId,
                                         @AuthenticationPrincipal User userDetails){
         log.info("Request to getCoachesByOrgId {}", organizationId);
 
@@ -109,7 +109,7 @@ public class OrganizationResource {
 
     }
 
-    @DeleteMapping(path = "{superCoachId}/{id}")
+    @DeleteMapping(path = "/{superCoachId}/{id}")
     ResponseEntity<?> deleteOrganization(@PathVariable("id") Long id,
                                          @PathVariable("superCoachId") Long superCoachId,
                                          @AuthenticationPrincipal User userDetails) {

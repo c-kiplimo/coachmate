@@ -2,10 +2,10 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CoachResource {
 
     private final CoachService coachService;
+    private final OrganizationRepository organizationRepository;
 
-    public CoachResource(CoachService coachService) {
+    public CoachResource(CoachService coachService, OrganizationRepository organizationRepository) {
         this.coachService = coachService;
+        this.organizationRepository = organizationRepository;
     }
 
 
@@ -35,7 +37,7 @@ public class CoachResource {
 
         try {
             Organization organization = userDetails.getOrganization();
-            log.info("request to add new coach by organization");
+            log.info("request to add new coach by organization{}",organization.getId());
             coachService.addNewCoachByOrganization(organization, userDetails.getMsisdn(),
                     coachRequest);
 
