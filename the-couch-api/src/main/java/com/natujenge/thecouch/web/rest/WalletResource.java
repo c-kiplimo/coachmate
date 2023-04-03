@@ -99,6 +99,7 @@ public class WalletResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     // Get all payments based on logged-in user
     @GetMapping
     ResponseEntity<?> getAllPayments(@RequestParam("per_page") int perPage,
@@ -188,13 +189,12 @@ public class WalletResource {
     @GetMapping("/filterReceipts")
     public ResponseEntity<ListResponse> filterByClientNameAndDate(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int perPage) {
 
         log.info("Request receipts");
         try {
-            ListResponse listResponse = walletService.filterByClientNameAndDate(page, perPage,name, date);
+            ListResponse listResponse = walletService.filterByClientNameAndDate(page, perPage,name);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         }

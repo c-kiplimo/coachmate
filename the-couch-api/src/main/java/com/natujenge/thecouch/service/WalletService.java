@@ -533,7 +533,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
     }
-    public ListResponse filterByClientNameAndDate(int page, int perPage, String name ,LocalDate date) {
+    public ListResponse filterByClientNameAndDate(int page, int perPage, String name) {
 
 
 
@@ -544,19 +544,9 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
 
         Page<ClientWalletDto> receiptPage = null;
-        if (name != null && date != null ) {
-            QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
-            return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
-        }
         if(name !=null){
             QClientWallet qClientWallet = QClientWallet.clientWallet;
             receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name),q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
-            return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
-        }
-        if(date !=null){
-            QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage= (Page<ClientWalletDto>) walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
