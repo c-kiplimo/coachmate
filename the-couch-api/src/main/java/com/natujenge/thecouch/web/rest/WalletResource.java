@@ -187,7 +187,7 @@ public class WalletResource {
 
 
     @GetMapping("/filterReceipts")
-    public ResponseEntity<ListResponse> filterByClientNameAndDate(
+    public ResponseEntity<ListResponse> filterByClientName(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int perPage) {
