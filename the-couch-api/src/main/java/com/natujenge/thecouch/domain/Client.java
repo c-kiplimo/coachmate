@@ -2,8 +2,7 @@ package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
-import com.natujenge.thecouch.domain.enums.PaymentMode;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
+import com.natujenge.thecouch.domain.enums.PaymentModeSubscription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,7 +38,7 @@ public class Client {
     private  String profession;
 
     @Enumerated(EnumType.STRING)
-    private PaymentMode paymentMode;
+    private PaymentModeSubscription paymentMode;
 
     @Enumerated(EnumType.STRING)
     private ClientStatus status;

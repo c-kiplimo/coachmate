@@ -1,6 +1,6 @@
 package com.natujenge.thecouch.util;
 
-import com.natujenge.thecouch.domain.Constants;
+import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;

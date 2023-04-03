@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.service.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.natujenge.thecouch.domain.Constants;
+import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
