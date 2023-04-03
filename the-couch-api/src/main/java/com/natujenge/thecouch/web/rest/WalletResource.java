@@ -119,7 +119,7 @@ public class WalletResource {
                 listResponse = walletService.getPaymentsByOrganizationId
                         (page, perPage, organizationId);
             } else if (coachId != null) {
-                listResponse = walletService.getPaymentsByCoachId
+                listResponse = walletService.getCoachTransactions
                         (page, perPage, coachId);
             } else {
                 listResponse = walletService.getPaymentsByClientId
@@ -194,7 +194,7 @@ public class WalletResource {
 
         log.info("Request receipts");
         try {
-            ListResponse listResponse = walletService.filterByClientNameAndDate(page, perPage,name);
+            ListResponse listResponse = walletService.filterByClientName(page, perPage,name);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         }

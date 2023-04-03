@@ -29,9 +29,8 @@ import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 @Slf4j
 @Service
 public class WalletService {
@@ -40,6 +39,8 @@ public class WalletService {
     ClientWalletRepository clientWalletRepository;
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    ClientBillingAccountService clientBillingAccountService;
     @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
     @Autowired
@@ -533,7 +534,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
     }
-    public ListResponse filterByClientNameAndDate(int page, int perPage, String name) {
+    public ListResponse filterByClientName(int page, int perPage, String name) {
 
 
 
@@ -663,5 +664,22 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                     paymentPage.getTotalElements());
         }
     }
+    public ListResponse getCoachTransactions(int page, int perPage, Long coachId) {
+        List<Object> transactions = new ArrayList<>();
+
+        // get payments by coach id
+        ListResponse payments = getPaymentsByCoachId(page, perPage, coachId);
+        transactions.addAll(payments.getData());
+
+        // get billing accounts by coach id
+        ListResponse billingAccounts = clientBillingAccountService.getBillingAccountByCoachId(page, perPage, coachId);
+        transactions.addAll(billingAccounts.getData());
+
+        return new ListResponse(transactions,
+                Math.max(payments.getTotalPages(), billingAccounts.getTotalPages()),
+                payments.getTotalItemsInPage() + billingAccounts.getTotalItemsInPage(),
+                payments.getTotalElements() + billingAccounts.getTotalElements());
+    }
+
 
 }
