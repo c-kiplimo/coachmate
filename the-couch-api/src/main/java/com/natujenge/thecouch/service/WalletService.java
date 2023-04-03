@@ -681,5 +681,21 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                 payments.getTotalElements() + billingAccounts.getTotalElements());
     }
 
+    public ListResponse getClientTransactions(int page, int perPage, Long clientId) {
+        List<Object> transactions = new ArrayList<>();
+
+        // get payments by coach id
+        ListResponse payments = getPaymentsByClientId(page, perPage, clientId);
+        transactions.addAll(payments.getData());
+
+        // get billing accounts by coach id
+        ListResponse billingAccounts = clientBillingAccountService.getBillingAccountByClientId(page, perPage, coachId);
+        transactions.addAll(billingAccounts.getData());
+
+        return new ListResponse(transactions,
+                Math.max(payments.getTotalPages(), billingAccounts.getTotalPages()),
+                payments.getTotalItemsInPage() + billingAccounts.getTotalItemsInPage(),
+                payments.getTotalElements() + billingAccounts.getTotalElements());
+    }
 
 }

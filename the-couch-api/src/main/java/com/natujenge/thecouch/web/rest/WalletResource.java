@@ -122,7 +122,7 @@ public class WalletResource {
                 listResponse = walletService.getCoachTransactions
                         (page, perPage, coachId);
             } else {
-                listResponse = walletService.getPaymentsByClientId
+                listResponse = walletService.getClientTransactions
                         (page, perPage, clientId);
             }
 
