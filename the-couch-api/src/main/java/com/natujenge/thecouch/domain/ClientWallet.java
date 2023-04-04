@@ -2,6 +2,7 @@ package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.ModeOfPayment;
 import com.natujenge.thecouch.domain.enums.PaymentCurrency;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class ClientWallet {
                     .IDENTITY)
     Long id;
     // updated on every payment
+    Float walletBalanceBefore;
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
@@ -47,6 +49,8 @@ public class ClientWallet {
 
     @UpdateTimestamp
     private LocalDate lastUpdatedAt;
+    @Enumerated(EnumType.STRING)
+    private StatementPeriod statementPeriod;
 
     private String lastUpdatedBy;
 

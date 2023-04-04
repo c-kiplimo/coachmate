@@ -206,10 +206,12 @@ public class WalletResource {
     }
 
     //  get payments by coach id and statement period
-    @GetMapping("/filterByCoachIdAndStatementPeriod")
+    @GetMapping("/filterByCoachIdAndClientAndStatementPeriod")
     public ResponseEntity<?> filterByCoachIdAndStatementPeriod(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
+            @RequestParam(name = "search",required = false) String search,
+            @RequestParam(name = "clientName",required = false) String clientName,
             @AuthenticationPrincipal User userDetails,
             @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
 
@@ -217,7 +219,7 @@ public class WalletResource {
         try {
             Long coachId = userDetails.getCoach().getId();
             log.info("Request to get account statement by coach Id {} and statement period {}", coachId, statementPeriod);
-            ListResponse listResponse = walletService.getPaymentsByCoachIdAndStatementPeriod(page,perPage, coachId, statementPeriod);
+            ListResponse listResponse = walletService.getPaymentsByCoachIdAndStatementPeriod(page,perPage, coachId,search,clientName, statementPeriod);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -232,7 +234,6 @@ public class WalletResource {
     public ResponseEntity<?> filterByClientIdAndStatementPeriod(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
-            @RequestParam("search") String search,
             @AuthenticationPrincipal User userDetails,
             @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
 
@@ -250,10 +251,12 @@ public class WalletResource {
         }
     }
     //  get payments by organization id and statement period
-    @GetMapping("/filterByOrganizationIdAndStatementPeriod")
+    @GetMapping("/filterByOrganizationIdAndClientAndStatementPeriod")
     public ResponseEntity<?> filterByOrganizationIdAndStatementPeriod(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
+            @RequestParam(name="search", required=false) String search,
+            @RequestParam(name = "clientName",required = false) String clientName,
             @AuthenticationPrincipal User userDetails,
             @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
 
@@ -261,7 +264,7 @@ public class WalletResource {
         try {
             Long organizationId = userDetails.getOrganization().getId();
             log.info("Request to get account statement by organization Id {} and statement period {}", organizationId, statementPeriod);
-            ListResponse listResponse = walletService.getPaymentsByOrganizationIdAndStatementPeriod(page,perPage, organizationId, statementPeriod);
+            ListResponse listResponse = walletService.getPaymentsByOrganizationIdAndClientAndStatementPeriod(page,perPage,organizationId, search,clientName, statementPeriod);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         } catch (Exception e) {

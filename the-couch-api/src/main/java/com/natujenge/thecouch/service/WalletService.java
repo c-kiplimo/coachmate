@@ -29,6 +29,7 @@ import java.time.LocalDate;
 
 import java.time.LocalDateTime;
 
+import java.time.LocalTime;
 import java.util.*;
 
 @Slf4j
@@ -73,14 +74,13 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return optionalClientWallet.get();
     }
 
-
-    // updates the wallet entry with the provided wallet balance
-    public void updateWalletBalance(ClientWallet clientWallet, float paymentBalance, String coachName) {
+    public void updateWalletBalance(ClientWallet clientWallet, Float paymentBalance, String coachName) {
+        Float previousBalance = clientWallet.getWalletBalance();
+        clientWallet.setWalletBalanceBefore(previousBalance);
         clientWallet.setWalletBalance(paymentBalance);
         clientWallet.setLastUpdatedBy(coachName);
         clientWalletRepository.save(clientWallet);
         log.info("client wallet updated!");
-
     }
 
     public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance,float amountIn) {
@@ -555,7 +555,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     }
 
     //     Get all payments by coach Id and statement period
-    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId,StatementPeriod statementPeriod) {
+    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId,String search,String clientName,StatementPeriod statementPeriod) {
         log.info("Get account statement by coach Id{} and statement period{}", coachId, statementPeriod);
 
 
@@ -563,106 +563,400 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage;
-        // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
-            paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(),pageable);
+        Page<ClientWalletDto> paymentPage = null;
+
+        if (statementPeriod != null && clientName !=null && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
-            paymentPage=clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }  if (statementPeriod != null && clientName !=null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
-            paymentPage= clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now(),pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }  if (clientName !=null && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName).
+                            and(qClientWallet.client.email.containsIgnoreCase(search)).
+                            and(qClientWallet.client.firstName.containsIgnoreCase(search)).
+                            and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else {
-            paymentPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }if (statementPeriod != null  && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         }
+
+        if(statementPeriod != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+
+
+        if ( clientName !=null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName)
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+        if ( search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.email.containsIgnoreCase
+                            (search).
+                            and(qClientWallet.client.firstName.containsIgnoreCase(search)).
+                            and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+        return new ListResponse(paymentPage.getContent(),
+                paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                paymentPage.getTotalElements());
     }
     // Get all payments by organization Id and statement period
-    public ListResponse getPaymentsByOrganizationIdAndStatementPeriod(int page, int perPage, Long organizationId, StatementPeriod statementPeriod) {
+    public ListResponse getPaymentsByOrganizationIdAndClientAndStatementPeriod(int page, int perPage, Long organizationId,String search,String clientName,StatementPeriod statementPeriod) {
         log.info("Get account statement by organization Id{} and statement period{}", organizationId, statementPeriod);
 
-        page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page, perPage, sort);
-        // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
-                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
-            return new ListResponse(paymentPage.getContent(),
-                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
-                    paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage=clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
-                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
-                    paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage= clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
-                    paymentPage.getTotalElements());
-        } else {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
-                    paymentPage.getTotalElements());
-        }
-    }
-    // Get all payments by client Id and statement period
-    public ListResponse getPaymentsByClientIdAndStatementPeriod(int page, int perPage, Long clientId, StatementPeriod statementPeriod) {
-        log.info("Get account statement by client Id{} and statement period{}", clientId, statementPeriod);
 
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
-        // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
-                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
+
+        Page<ClientWalletDto> paymentPage = null;
+
+        if (statementPeriod != null && clientName !=null && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage=clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
-                    LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }  if (statementPeriod != null && clientName !=null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage= clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }  if (clientName !=null && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName).
+                            and(qClientWallet.client.email.containsIgnoreCase(search)).
+                            and(qClientWallet.client.firstName.containsIgnoreCase(search)).
+                            and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else {
-            Page<ClientWalletDto> paymentPage;
-            paymentPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+        }if (statementPeriod != null  && search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                                    .and(qClientWallet.client.email.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.firstName.containsIgnoreCase(search))
+                                    .and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         }
+
+        if(statementPeriod != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+
+
+        if ( clientName !=null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName)
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+        if ( search != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            paymentPage = clientWalletRepository.findBy(qClientWallet.client.email.containsIgnoreCase
+                                    (search).
+                            and(qClientWallet.client.firstName.containsIgnoreCase(search)).
+                            and(qClientWallet.client.lastName.containsIgnoreCase(search))
+                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+        return new ListResponse(paymentPage.getContent(),
+                paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                paymentPage.getTotalElements());
+    }
+    // Get all payments by client Id and statement period
+    public ListResponse getPaymentsByClientIdAndStatementPeriod(int page, int perPage, Long clientId,StatementPeriod statementPeriod) {
+        log.info("Get account statement by client Id{} and statement period{}", clientId, statementPeriod);
+
+
+        page = page - 1;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page, perPage, sort);
+
+        Page<ClientWalletDto> paymentPage = null;
+        if(statementPeriod != null) {
+            QClientWallet qClientWallet = QClientWallet.clientWallet;
+            switch (statementPeriod) {
+                case PER_YEAR:
+                    LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate1Year))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_6_MONTHS:
+                    LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDate6Months))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                case PER_MONTH:
+                    LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
+                    paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
+                                    .and(qClientWallet.createdAt.after(startDateMonth))
+                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    break;
+                default:
+                    break;
+            }
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                    paymentPage.getTotalElements());
+        }
+        return new ListResponse(paymentPage.getContent(),
+                paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
+                paymentPage.getTotalElements());
     }
 
 
