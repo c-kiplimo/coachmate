@@ -119,10 +119,10 @@ public class WalletResource {
                 listResponse = walletService.getPaymentsByOrganizationId
                         (page, perPage, organizationId);
             } else if (coachId != null) {
-                listResponse = walletService.getCoachTransactions
+                listResponse = walletService.getPaymentsByCoachId
                         (page, perPage, coachId);
             } else {
-                listResponse = walletService.getClientTransactions
+                listResponse = walletService.getPaymentsByClientId
                         (page, perPage, clientId);
             }
 
@@ -232,6 +232,7 @@ public class WalletResource {
     public ResponseEntity<?> filterByClientIdAndStatementPeriod(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
+            @RequestParam("search") String search,
             @AuthenticationPrincipal User userDetails,
             @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
 
