@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/settings")
+@RequestMapping("/api/notification-settings")
 public class NotificationSettingsResource {
     @Autowired
     private ModelMapper modelMapper;

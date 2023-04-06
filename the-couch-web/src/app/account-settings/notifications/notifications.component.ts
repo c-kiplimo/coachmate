@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationsService } from "../../../services/notifications.service";
-import { BakersService } from "../../../services/bakers.service";
+import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { ClientService } from 'src/app/services/ClientService';
+import { CoachService } from 'src/app/services/CoachService';
 
 
 @Component({
@@ -21,8 +22,8 @@ export class NotificationsComponent implements OnInit {
   selectedOption = '';
 
   constructor(
-    private notificationsService: NotificationsService,
-    private bakersService: BakersService,
+    private notificationsService: ClientService,
+    private coachService: CoachService,
     private http: HttpClient,
     private toastrService: ToastrService
   ) { }
@@ -45,7 +46,7 @@ export class NotificationsComponent implements OnInit {
     // console.log(this.notificationDetails.bakerNotificationMode);
     window.scroll(0, 0);
 
-    this.bakersService.saveSettings(this.notificationDetails).subscribe({
+    this.coachService.saveSettings(this.notificationDetails).subscribe({
       next: (res: any) => {
         // console.log('here', res.body);
         const data = res.body;

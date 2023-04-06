@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NotificationsService } from "../../../services/notifications.service";
-import { BakersService } from "../../../services/bakers.service";
+
+import { ClientService } from 'src/app/services/ClientService';
+import { CoachService } from 'src/app/services/CoachService';
 
 @Component({
   selector: 'app-initial-setup',
   templateUrl: './initial-setup.component.html',
-  styleUrls: ['./initial-setup.component.scss', '../../../auth/login/login.component.scss'],
+  styleUrls: ['./initial-setup.component.scss', ],
   animations: [
     trigger('fadeIn', [
       transition(':enter', [
@@ -67,8 +68,8 @@ export class InitialSetupComponent implements OnInit {
   optionFilled = false;
 
   constructor(
-    private notificationsService: NotificationsService,
-    private bakersService: BakersService,
+    private notificationsService: ClientService,
+    private coachService: CoachService,
     private router: Router
   ) { }
 
@@ -155,7 +156,7 @@ export class InitialSetupComponent implements OnInit {
     this.uploadFail = false;
     this.uploadSuccess = false;
 
-    this.bakersService.uploadLogo(this.currentThumbnailUpload).subscribe(
+    this.coachService.uploadLogo(this.currentThumbnailUpload).subscribe(
       (res: any) => {
         // console.log(res);
         if (res.body ?.status === 'SUCCESS') {
@@ -231,7 +232,7 @@ export class InitialSetupComponent implements OnInit {
     this.submitSuccess = false;
     this.submitFail = false;
 
-    this.bakersService.onboardBaker(this.setupDetails).subscribe(
+    this.coachService.onboardBaker(this.setupDetails).subscribe(
       (res: any) => {
         console.log(res);
 

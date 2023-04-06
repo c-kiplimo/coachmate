@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { style, animate, transition, trigger } from '@angular/animations';
-import { BakersService } from "../../../services/bakers.service";
-import { AuthService } from "../../../services/auth.service";
+import { ClientService } from 'src/app/services/ClientService';
+import { CoachService } from 'src/app/services/CoachService';
+import { LoginService } from 'src/app/services/LoginService';
+
 
 @Component({
   selector: 'app-payments',
@@ -45,8 +47,9 @@ export class PaymentsComponent implements OnInit {
   ];
 
   constructor(
-    private bakersService: BakersService,
-    private authService: AuthService
+  private login: LoginService,
+  private coachService: CoachService,
+  private notificationsService: ClientService,
 
   ) { }
 
@@ -70,7 +73,7 @@ export class PaymentsComponent implements OnInit {
 
   savePaymentSettings(): void {
     this.isSaving = true;
-    this.bakersService.editPaymentDetails(this.paymentDetails).subscribe(
+    this.coachService.editPaymentDetails(this.paymentDetails).subscribe(
       (res: any) => {
         // console.log('saveProfileSettings', res);
         this.isSaving = false;
@@ -92,7 +95,7 @@ export class PaymentsComponent implements OnInit {
   }
 
   getAccount(): void {
-    this.authService.getAccount().subscribe(
+    this.login.getAccount().subscribe(
       (response: any) => {
         // console.log(response);
         // console.log('here');

@@ -12,12 +12,18 @@ import { environment } from 'src/environments/environment';
 
 
 export class LoginService {
+ 
+
 
     baseURL: string = environment.apiURL + '/api/';
     constructor(private http: HttpClient) {
 
     }
-
+    getAccount(): Observable<any> {
+      return this.http.get<any>(
+        this.baseURL + '/account', { observe: 'response' }
+      );
+    }
 
     // login service
     login(user: any) {

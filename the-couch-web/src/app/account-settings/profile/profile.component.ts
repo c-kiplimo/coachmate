@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { style, animate, transition, trigger } from '@angular/animations';
-
-import { NotificationsService } from "../../../services/notifications.service";
-import { BakersService } from "../../../services/bakers.service";
 import { ToastrService } from 'ngx-toastr';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from "../../../services/auth.service";
+import { CoachService } from 'src/app/services/CoachService';
+import { LoginService } from 'src/app/services/LoginService';
+import { ClientService } from 'src/app/services/ClientService';
 
 @Component({
   selector: 'app-profile',
@@ -55,11 +54,11 @@ export class ProfileComponent implements OnInit {
 
 
   constructor(
-    private notificationsService: NotificationsService,
-    private bakersService: BakersService,
+    private notificationsService: ClientService,
+    private login: LoginService,
     private http: HttpClient,
     private toastrService: ToastrService,
-    private authService: AuthService
+    private coachService: CoachService
   ) { }
 
   ngOnInit(): void {
@@ -82,7 +81,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getLogo(): void {
-    this.bakersService.getLogo().subscribe(
+    this.coachService.getLogo().subscribe(
       (res: any) => {
         // console.log(res);
         const reader = new FileReader();
@@ -118,7 +117,7 @@ export class ProfileComponent implements OnInit {
     this.isSaving = true;
     window.scroll(0, 0);
 
-    this.bakersService.editBakerProfile(this.bakerProfile).subscribe(
+    this.coachService.editBakerProfile(this.bakerProfile).subscribe(
       (res: any) => {
         // console.log('saveProfileSettings', res);
         this.saveLocationDetails();
@@ -131,7 +130,7 @@ export class ProfileComponent implements OnInit {
   }
 
   saveLocationDetails(): void {
-    this.bakersService.editLocationDetails(this.locationDetails).subscribe(
+    this.coachService.editLocationDetails(this.locationDetails).subscribe(
       (res: any) => {
         // console.log('saveLocationDetails', res);
         if (this.logoDetails.logo) {
@@ -157,7 +156,7 @@ export class ProfileComponent implements OnInit {
 
   saveLogoDetails(): void {
 
-    this.bakersService.editBakerLogo(this.logoDetails).subscribe(
+    this.coachService.editBakerLogo(this.logoDetails).subscribe(
       (res: any) => {
         // console.log('saveLogoDetails', res);
         this.isSaving = false;
@@ -231,7 +230,7 @@ export class ProfileComponent implements OnInit {
     this.uploadFail = false;
     this.uploadSuccess = false;
 
-    this.bakersService.uploadLogo(this.currentThumbnailUpload).subscribe(
+    this.coachService.uploadLogo(this.currentThumbnailUpload).subscribe(
       (res: any) => {
         // console.log(res);
         if (res.body ?.status === 'SUCCESS') {
@@ -273,7 +272,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getAccount(): void {
-    this.authService.getAccount().subscribe(
+    this.login.getAccount().subscribe(
       (response: any) => {
         // console.log(response);
         // console.log('here');

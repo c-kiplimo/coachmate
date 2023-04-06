@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationsService } from "../../../services/notifications.service";
 import { style, animate, transition, trigger } from '@angular/animations';
-
-import { BakersService } from "../../../services/bakers.service";
 import { ToastrService } from 'ngx-toastr';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from "../../../services/auth.service";
+import { CoachService } from 'src/app/services/CoachService';
+import { ClientService } from 'src/app/services/ClientService';
+import { LoginService } from 'src/app/services/LoginService';
 
 @Component({
   selector: 'app-templates',
@@ -42,11 +41,11 @@ export class TemplatesComponent implements OnInit {
   saveSuccess = false;
 
   constructor(
-    private notificationsService: NotificationsService,
-    private bakersService: BakersService,
+    private notificationsService: ClientService,
+    private coachService: CoachService,
     private http: HttpClient,
     private toastrService: ToastrService,
-    private authService: AuthService
+    private login: LoginService,
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +67,7 @@ export class TemplatesComponent implements OnInit {
   saveSettings(): void {
     this.isSaving = true;
 
-    this.bakersService.saveSettings(this.notificationDetails).subscribe({
+    this.coachService.saveSettings(this.notificationDetails).subscribe({
       next: (res: any) => {
         // console.log('here', res.body);
         this.isSaving = false;
@@ -95,7 +94,7 @@ export class TemplatesComponent implements OnInit {
   }
 
   getAccount(): void {
-    this.authService.getAccount().subscribe(
+    this.login.getAccount().subscribe(
       (response: any) => {
         // console.log(response);
         // console.log('here');
