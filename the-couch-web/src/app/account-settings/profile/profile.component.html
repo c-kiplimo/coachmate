@@ -1,0 +1,143 @@
+<div class="container-fluid mt-3 mb-5">
+  <div class="sticky-top mb-3">
+    <div class="d-flex justify-content-between page-title p-3">
+      <a class="back-navigation" (click)="back()">
+        <i class="fas fa-chevron-left pe-3 pt-1 back-icon"></i>
+        Company profile
+      </a>
+
+    </div>
+  </div>
+
+  <div class="container customer-details">
+    <div class="card card-table">
+
+      <div class="alert alert-success" *ngIf="saveSuccess" [@fadeIn]>
+        <span>Profile changes saved succesfully</span>
+      </div>
+
+      <div class="d-flex justify-content-end border-0" *ngIf="!editingSettings" [@fadeIn]>
+        <button class="btn btn-add" (click)="toggleEditingSettings()" [disabled]="disableButton">
+          Edit
+        </button>
+      </div>
+
+      <div class="donut-wrapper" *ngIf="isSaving" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+
+
+      <div class="logo">
+
+        <div class="current-image-holder" *ngIf="!editingSettings" [@fadeIn]>
+          <img class="current-logo" [src]="!logo ? 'assets/images/user.png' : logo" alt="logo">
+          <div>
+            <span class="d-block"> {{!user.baker?.bakerSettings?.logo || editingSettings ? 'Upload your business' : 'Business'}} logo</span>
+            <small class="text-muted">This will be essential for invoices and receipts</small>
+          </div>
+
+        </div>
+
+        <div *ngIf="editingSettings" [@fadeIn]>
+
+          <div class="d-flex">
+            <div class="me-5">
+              <div class="image-holder">
+
+                <div class="custom-file-div text-center">
+                  <div class="image-container" *ngIf="imageSrc">
+                    <img [src]="imageSrc">
+                  </div>
+
+                  <div class="wrap" [@fadeIn]>
+                    <input type="file" class="custom-file-input" (change)="onThumbnailChange($event)" accept=".png, .jpg, .jpeg" id="uploadfile" name="file">
+                  </div>
+                </div>
+
+                <span><i class="fas fa-camera"></i></span>
+              </div>
+            </div>
+
+            <div class="">
+              <div class="image-meta-data" *ngIf="thumbnailName" [@fadeIn]>
+                <h5 class="sub-section-title">Image details</h5>
+                <div class="">
+                  <span class="d-block">{{thumbnailName}}</span>
+                  <small><strong>{{currentThumbnailUpload?.size >= 1000000 ? (currentThumbnailUpload?.size  / 1000000 | number : '1.2-2' ) + ' MB' : (currentThumbnailUpload?.size  / 1000 | number : '1.2-2') + ' kb'}} </strong></small>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <span *ngIf="wrongFileFormat || fileTooLarge" class="uploading-message d-block my-2" [ngClass]="{'redText':wrongFileFormat || fileTooLarge}" [innerHTML]="message"></span>
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">Business name</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.businessName}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="bakerProfile.businessName" type="text" class="form-control select-dropdown" name="businessName" [disabled]="isSaving" />
+      </div>
+
+      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">First name</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.firstName}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="bakerProfile.firstName" type="text" class="form-control select-dropdown" name="firstName" [disabled]="isSaving" />
+      </div>
+
+      <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">Last name</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.lastName}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="bakerProfile.lastName" type="text" class="form-control select-dropdown" name="lastName" [disabled]="isSaving" />
+      </div>
+
+      <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title" for="displayName">Phone number</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.msisdn}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="bakerProfile.msisdn" type="text" class="form-control select-dropdown" name="phonenumber" [disabled]="isSaving" />
+      </div>
+
+      <div class="d-flex justify-content-between border-0" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title" for="displayName">Email</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.emailAddress}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="bakerProfile.emailAddress" type="text" class="form-control select-dropdown" name="email" [disabled]="isSaving" />
+      </div>
+
+      <h6 class="section-title my-3">Location details</h6>
+
+      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">Area / County</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerLocation?.county}}</span>
+        <select class="form-select" name="county" [(ngModel)]="locationDetails.county" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+          <option [value]="county.name" *ngFor="let county of counties;index as i">{{county.name | titlecase}}</option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">Physical address</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerLocation?.physicalAddress}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.physicalAddress" type="text" class="form-control select-dropdown" name="physicalAddress" [disabled]="isSaving" />
+      </div>
+
+      <div class="d-flex justify-content-between border-0" [ngClass]="{'flex-column-sm':editingSettings}">
+        <span class="title">Postal address</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerLocation?.postalAddress}}</span>
+        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.postalAddress" type="text" class="form-control select-dropdown" name="postalAddress" [disabled]="isSaving" />
+      </div>
+
+
+      <div class="d-flex justify-content-end border-0 mt-3" *ngIf="editingSettings" [@fadeIn]>
+        <button class="btn btn-back" (click)="toggleEditingSettings()" [disabled]="disableButton || isSaving">
+          Cancel
+        </button>
+
+        <button class="btn btn-add ms-2" (click)="saveProfileSettings()" [disabled]="disableButton || isSaving">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -188,6 +188,28 @@ public class UserService implements UserDetailsService {
         return response;
 
     }
+    public void updateUser(User registeredUser) {
+        Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserByUsername(registeredUser.getUsername()));
+
+        if(optionalUser.isEmpty()){
+            throw new IllegalStateException("User with username " + registeredUser.getUsername() + " not found!");
+        }
+
+        User user = optionalUser.get();
+        user.setNotificationSettings(registeredUser.getNotificationSettings());
+        //check if the user is a coach
+        if(user.getCoach() != null){
+            user.setCoach(registeredUser.getCoach());
+        }
+        if(user.getOrganization() != null){
+            user.setOrganization(registeredUser.getOrganization());
+        }
+        user.setFirstName(registeredUser.getFirstName());
+        user.setCoach(registeredUser.getCoach());
+
+        userRepository.save(user);
+        log.info("User Updated Successfully");
+    }
 
     public Optional<User> findByEmail(String email) {
         log.info("Request to find user with email : {}", email);

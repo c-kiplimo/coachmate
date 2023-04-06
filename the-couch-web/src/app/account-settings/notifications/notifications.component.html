@@ -1,0 +1,62 @@
+<div class="container-fluid mt-3 mb-5">
+  <div class="sticky-top mb-3">
+    <div class="d-flex justify-content-between page-title p-3">
+      <a class="back-navigation" (click)="back()">
+        <i class="fas fa-chevron-left pe-3 pt-1 back-icon"></i>
+        Notifications
+      </a>
+
+    </div>
+  </div>
+
+  <div class="container customer-details">
+    <div class="card card-table">
+
+      <form>
+        <div class="d-flex justify-content-between border-0">
+          <div>
+            <span class="mode-title mb-3">Allow sending of notifications</span>
+            <small class="text-muted">This system allows you to send SMS & emails to your clients for different order management scenarios</small>
+          </div>
+          <label class="switch">
+            <input type="checkbox" [checked]="notificationDetails.notificationEnable" [(ngModel)]="notificationDetails.notificationEnable" (click)="toggleEnableSettings()" name="enable" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+      </form>
+    </div>
+
+
+    <div class="card card-table notification-modes">
+
+      <div class="border-bottom pb-3 mt-2 mb-3">
+        <span class="mode-title">Notification types allowed</span>
+      </div>
+
+      <div class="d-flex justify-content-between" (click)="selectNotificationMode('SMS_EMAIL')">
+        <div>
+          <span class="mode-title">Both SMS & Emails</span>
+          <small class="text-muted">Notifications will be sent via both Email & SMS</small>
+        </div>
+        <span class="checkbox-border" [ngClass]="{'inactive-checkbox':!notificationDetails.notificationEnable}">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':selectedOption === 'SMS_EMAIL'}"></span>
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-between border-0" (click)="selectNotificationMode('SMS')">
+        <div>
+          <span class="mode-title">SMS</span>
+          <small class="text-muted">Only SMS notifications will be allowed</small>
+        </div>
+
+        <span class="checkbox-border" [ngClass]="{'inactive-checkbox':!notificationDetails.notificationEnable}">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':selectedOption === 'SMS'}"></span>
+        </span>
+      </div>
+    </div>
+
+
+
+
+  </div>

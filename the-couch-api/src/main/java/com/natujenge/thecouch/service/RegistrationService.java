@@ -1,7 +1,8 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.ContentStatus;
+import com.natujenge.thecouch.config.Constants;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
@@ -9,10 +10,7 @@ import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
-import com.natujenge.thecouch.web.rest.request.ClientRequest;
-import com.natujenge.thecouch.web.rest.request.CoachRequest;
-import com.natujenge.thecouch.web.rest.request.ForgotPassword;
-import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
+import com.natujenge.thecouch.web.rest.request.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,7 @@ public class RegistrationService {
     private final UserService userService;
 
     private final OrganizationService organizationService;
+    private final NotificationSettingsService notificationSettingsService;
     private EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
 
@@ -90,6 +89,51 @@ public class RegistrationService {
 
                         )
                 );
+                // Create Default NotificationSettings for Every User
+                // Generate default Templates for all TemplateTypes
+                log.info("Creating Default Settings for User");
+
+                // Defaults for All
+                NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
+                notificationSettingsRequest.setNotificationMode(NotificationMode.SMS);
+                notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
+                notificationSettingsRequest.setNotificationMode(NotificationMode.SMS_EMAIL);
+                notificationSettingsRequest.setNotificationEnable(true);
+                notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
+                notificationSettingsRequest.setEmailDisplayName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                notificationSettingsRequest.setMsisdn(registrationRequest.getMsisdn());
+                notificationSettingsRequest.setTillNumber("DEFAULT");
+                notificationSettingsRequest.setAccountNumber(registrationRequest.getMsisdn());
+                notificationSettingsRequest.setDepositPercentage(30F);
+
+                notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
+                notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
+                notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE);
+                notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
+                notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
+                notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
+                notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
+                notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
+
+                notificationSettingsRequest.setNewContractEnable(true);
+                notificationSettingsRequest.setPartialBillPaymentEnable(true);
+                notificationSettingsRequest.setFullBillPaymentEnable(true);
+                notificationSettingsRequest.setCancelSessionEnable(true);
+                notificationSettingsRequest.setConductedSessionEnable(true);
+                notificationSettingsRequest.setRescheduleSessionEnable(true);
+                notificationSettingsRequest.setPaymentReminderEnable(true);
+
+
+                NotificationSettings notificationSettings = notificationSettingsService.
+                        addNewSettings(notificationSettingsRequest,registrationRequest.getFirstName(),registrationRequest.getId());
+
+                log.info("Notifications Saved Successfully");
+                // Update User
+                User registeredUser = (User) response.get(0);
+                registeredUser.setNotificationSettings(notificationSettings);
+                registeredUser.setCoach(savedCoach);
+                userService.updateUser(registeredUser);
+
                 try {
                     // Sending Confirmation Token
                     String token = (String) response.get(1);
@@ -115,8 +159,6 @@ public class RegistrationService {
                 log.info("Organization registered");
 
 
-
-
                 // create user and link organization
                 List<Object> response = userService.signupUser(
                         new User(
@@ -135,6 +177,51 @@ public class RegistrationService {
                     User user = (User) response.get(0);
                     organizationService.addNewOrganization(organization);
                     log.info("Organization registered by super coach");
+                    // Create Default NotificationSettings for Every User
+                    // Generate default Templates for all TemplateTypes
+                    log.info("Creating Default Settings for User");
+
+                    // Defaults for All
+                    NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
+                    notificationSettingsRequest.setNotificationMode(NotificationMode.SMS);
+                    notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
+                    notificationSettingsRequest.setNotificationMode(NotificationMode.SMS_EMAIL);
+                    notificationSettingsRequest.setNotificationEnable(true);
+                    notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
+                    notificationSettingsRequest.setEmailDisplayName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                    notificationSettingsRequest.setMsisdn(registrationRequest.getMsisdn());
+                    notificationSettingsRequest.setTillNumber("DEFAULT");
+                    notificationSettingsRequest.setAccountNumber(registrationRequest.getMsisdn());
+                    notificationSettingsRequest.setDepositPercentage(30F);
+
+                    notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
+                    notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
+                    notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE);
+                    notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
+                    notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
+                    notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
+                    notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
+                    notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
+
+                    notificationSettingsRequest.setNewContractEnable(true);
+                    notificationSettingsRequest.setPartialBillPaymentEnable(true);
+                    notificationSettingsRequest.setFullBillPaymentEnable(true);
+                    notificationSettingsRequest.setCancelSessionEnable(true);
+                    notificationSettingsRequest.setConductedSessionEnable(true);
+                    notificationSettingsRequest.setRescheduleSessionEnable(true);
+                    notificationSettingsRequest.setPaymentReminderEnable(true);
+
+
+                    NotificationSettings notificationSettings = notificationSettingsService.
+                            addNewSettings(notificationSettingsRequest,registrationRequest.getFirstName(),registrationRequest.getId());
+
+                    log.info("Notifications Saved Successfully");
+                    // Update User
+                    User registeredUser = (User) response.get(0);
+                    registeredUser.setNotificationSettings(notificationSettings);
+                    registeredUser.setOrganization(registeredOrg);
+                    userService.updateUser(registeredUser);
+
 
                     // Sending Confirmation Token
                     String token = (String) response.get(1);
@@ -171,6 +258,50 @@ public class RegistrationService {
                         savedCoach
                 )
         );
+        // Create Default NotificationSettings for Every User
+        // Generate default Templates for all TemplateTypes
+        log.info("Creating Default Settings for User");
+
+        // Defaults for All
+        NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
+        notificationSettingsRequest.setNotificationMode(NotificationMode.SMS);
+        notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
+        notificationSettingsRequest.setNotificationMode(NotificationMode.SMS_EMAIL);
+        notificationSettingsRequest.setNotificationEnable(true);
+        notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
+        notificationSettingsRequest.setEmailDisplayName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
+        notificationSettingsRequest.setMsisdn(coachRequest.getMsisdn());
+        notificationSettingsRequest.setTillNumber("DEFAULT");
+        notificationSettingsRequest.setAccountNumber(coachRequest.getMsisdn());
+        notificationSettingsRequest.setDepositPercentage(30F);
+
+        notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
+        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
+        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE);
+        notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
+        notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
+        notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
+
+        notificationSettingsRequest.setNewContractEnable(true);
+        notificationSettingsRequest.setPartialBillPaymentEnable(true);
+        notificationSettingsRequest.setFullBillPaymentEnable(true);
+        notificationSettingsRequest.setCancelSessionEnable(true);
+        notificationSettingsRequest.setConductedSessionEnable(true);
+        notificationSettingsRequest.setRescheduleSessionEnable(true);
+        notificationSettingsRequest.setPaymentReminderEnable(true);
+
+
+        NotificationSettings notificationSettings = notificationSettingsService.
+                addNewSettings(notificationSettingsRequest,coachRequest.getFirstName(),coachRequest.getId());
+
+        log.info("Notifications Saved Successfully");
+        // Update User
+        User registeredUser = (User) response.get(0);
+        registeredUser.setNotificationSettings(notificationSettings);
+        registeredUser.setCoach(savedCoach);
+        userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);

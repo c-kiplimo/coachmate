@@ -10,13 +10,8 @@ import java.util.Objects;
 import java.util.Optional;
 import com.natujenge.thecouch.repository.NotificationSettingsRepository;
 import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.web.rest.dto.NotificationSettingsDto;
 import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
-import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean;
 
 @Slf4j
 @Service
@@ -33,11 +28,11 @@ public class NotificationSettingsService {
         this.userService = userService;
     }
 
-//    public Optional<NotificationSettingsDto> getAllNotifications(Long coachId) {
-//        log.info("Getting Notifications Settings");
-//        // Get All Notifications By coachId
-//        return notificationSettingsRepository.findAllByCoachId(coachId);
-//    }
+    public Optional<NotificationSettings> getAllNotifications(Long coachId) {
+        log.info("Getting Notifications Settings");
+        // Get All Notifications By coachId
+        return notificationSettingsRepository.findByCoachId(coachId);
+    }
 
 
     public NotificationSettings updateSettings(NotificationSettingsRequest notificationSettingsRequest, Long coachId, String coachName) {

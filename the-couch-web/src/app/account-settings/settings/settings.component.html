@@ -1,0 +1,56 @@
+<div class="container-fluid mt-3 mb-5">
+  <div class="sticky-top mb-3">
+    <div class="d-flex justify-content-between page-title p-3">
+      <a class="back-navigation">
+        More
+      </a>
+
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="settings-card">
+      <div class="settings-item" [routerLink]="'/account-settings/profile'">
+        <span class="title">Company profile</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+      <div class="settings-item" [routerLink]="'/account-settings/payments'">
+        <span class="title">My payment methods</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+
+      <div class="settings-item" [routerLink]="'/account-settings/notification'">
+        <span class="title">Notification permissions</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+
+      <div class="settings-item" [routerLink]="'/account-settings/templates'">
+        <span class="title">Notification templates</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+
+      <div class="settings-item" [routerLink]="'/wallet'">
+        <span class="title">My wallet</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <div class="settings-item" [routerLink]="'/contact'">
+        <span class="title">Feedback</span>
+        <span class="icon"><i class="fas fa-envelope"></i></span>
+      </div>
+
+      <!-- <div class="settings-item" [routerLink]="'/contact'">
+        <span class="title">Subscription</span>
+        <span class="icon"><i class="fas fa-envelope"></i></span>
+      </div> -->
+      <div class="settings-item" (click)="logOut()" [routerLink]="'/login'">
+        <span class="title">Log out</span>
+        <span class="icon"><i class="fas fa-sign-out"></i></span>
+      </div>
+    </div>
+
+  </div>
+</div>

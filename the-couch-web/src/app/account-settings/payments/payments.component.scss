@@ -1,0 +1,11 @@
+.deposit-percentage{
+  position: absolute;
+  top:20px;
+  right: 20px;
+}
+
+@media (max-width:760px){
+  .deposit-percentage{
+    top:50px!important;
+  }
+}

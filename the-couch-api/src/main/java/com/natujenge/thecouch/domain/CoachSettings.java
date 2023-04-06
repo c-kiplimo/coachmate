@@ -45,18 +45,6 @@ public class CoachSettings {
     @Column(name="deposit_percentage", columnDefinition = "float default 0")
     private float depositPercentage;
 
-    // email and sms templates
-    private String newContractSmsTemplate;
-    private String partialBillPaymentSmsTemplate;
-    private String organizationCoachContractSmsTemplate;
-    private String organizationClientContractSmsTemplate;
-    private String fullBillPaymentSmsTemplate;
-    private String paymentReminderSmsTemplate;
-    private String cancelSessionSmsTemplate;
-    private String rescheduleSessionSmsTemplate;
-    private String conductedSessionSmsTemplate;
-
-    // contract image/pdf with terms
 
     // coach
     @ManyToOne

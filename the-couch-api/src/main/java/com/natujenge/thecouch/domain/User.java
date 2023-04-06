@@ -58,6 +58,10 @@ public class User implements UserDetails {
     private UserRole userRole;
 
     // Object Relationships
+    @ManyToOne
+    @JoinColumn(name="notification_settings_id")
+    NotificationSettings notificationSettings;
+
 
     @ManyToOne
     @JoinColumn(name="client_id")

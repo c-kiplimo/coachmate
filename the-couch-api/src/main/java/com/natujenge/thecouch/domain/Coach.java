@@ -26,6 +26,9 @@ public class Coach implements Serializable {
 @ManyToOne
 @JoinColumn(name = "organization_id")
     private Organization organization;
+    @ManyToOne
+    @JoinColumn(name="settings_id")
+    NotificationSettings notificationSettings;
 
     private String businessName;
     private String fullName;

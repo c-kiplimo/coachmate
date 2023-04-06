@@ -1,0 +1,22 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss'],
+})
+export class SettingsComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+    window.scroll(0, 0);
+  }
+
+  logOut(): void {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('businessName');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('notificationSettings');
+  }
+}

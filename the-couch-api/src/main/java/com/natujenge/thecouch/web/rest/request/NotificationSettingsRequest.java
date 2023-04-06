@@ -7,7 +7,7 @@ import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 
 public class NotificationSettingsRequest {
     // General Settings
-    private NotificationMode NotificationMode;
+    private NotificationMode notificationMode;
     private String smsDisplayName;
     private String emailDisplayName;
     private boolean notificationEnable;
@@ -17,6 +17,7 @@ public class NotificationSettingsRequest {
     private String tillNumber;
     private String accountNumber;
     private Float depositPercentage;
+
 
     // Session Settings
     private SessionTemplateType sessionTemplateType;
@@ -35,6 +36,7 @@ public class NotificationSettingsRequest {
     private boolean fullBillPaymentEnable;
     private boolean cancelSessionEnable;
     private boolean conductedSessionEnable;
+    private boolean paymentReminderEnable;
 
     // Include General Enable Field for all notifications
 }

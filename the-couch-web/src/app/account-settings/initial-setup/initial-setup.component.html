@@ -1,0 +1,250 @@
+  <div class="container login-page" [@fadeIn]>
+
+    <div class="col-md-9 col-lg-6">
+
+      <div class="card card-table">
+        <div>
+
+          <div class="wizard-heading">
+
+            <h3 class="text-start mb-2" *ngIf="step < 4">Account setup</h3>
+
+            <div class="d-flex justify-content-between mb-3" *ngIf="step !== 4">
+              <span class="steps-text">Step {{step}} of 3</span>
+              <span class="skip-text" (click)="navigateWizardSteps('next')" *ngIf="step < 3">Skip <i class="fas fa-long-arrow-alt-right"></i></span>
+            </div>
+          </div>
+
+          <div class="alert alert-danger" *ngIf="errorMessage" [@fadeIn]>
+            {{ errorMessage }}
+          </div>
+
+          <div class="content logo-container" *ngIf="step === 1" [@fadeIn]>
+            <small class="text-muted d-block mb-2">These details will be essential for invoices & receipts.</small>
+            <h4 class="section-title mb-2">Select logo </h4>
+            <!-- <small class="text-muted d-block mb-4">Choose image or drag and drop a file to upload</small> -->
+
+
+
+            <div class="d-flex">
+              <div class="me-5">
+                <div class="image-holder">
+
+
+                  <div class="custom-file-div text-center">
+
+
+
+                    <div class="image-container" *ngIf="imageSrc">
+                      <img [src]="imageSrc">
+                    </div>
+
+                    <div class="wrap" [@fadeIn]>
+                      <input type="file" class="custom-file-input" (change)="onThumbnailChange($event)" accept=".png, .jpg, .jpeg" id="uploadfile" name="file">
+                    </div>
+                  </div>
+
+
+                  <span><i class="fas fa-camera"></i></span>
+
+
+                </div>
+              </div>
+              <div class="">
+                <div class="image-meta-data" *ngIf="thumbnailName" [@fadeIn]>
+                  <h5 class="sub-section-title">Image details</h5>
+                  <div class="">
+                    <span class="d-block">{{thumbnailName}}</span>
+                    <small><strong>{{currentThumbnailUpload?.size >= 1000000 ? (currentThumbnailUpload?.size  / 1000000 | number : '1.2-2' ) + ' MB' : (currentThumbnailUpload?.size  / 1000 | number : '1.2-2') + ' kb'}} </strong></small>
+                  </div>
+                </div>
+              </div>
+
+              <span *ngIf="wrongFileFormat || fileTooLarge" class="uploading-message d-block my-2" [ngClass]="{'redText':wrongFileFormat || fileTooLarge}" [innerHTML]="message"></span>
+            </div>
+
+
+            <!-- </div>
+
+          <div class="content location-details-container" *ngIf="step === 2" [@fadeIn]> -->
+            <h4 class="section-title mt-4 mb-1">Location details</h4>
+
+            <div class="form-group mb-3">
+              <label for="location">Area / County</label>
+              <select class="form-select" name="county" [(ngModel)]="setupDetails.county">
+                <option [value]="county.name" *ngFor="let county of counties;index as i">{{county.name | titlecase}}</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="location">Physical address</label>
+              <input [(ngModel)]="setupDetails.physicalAddress" name="physicalAddress" type="text" class="form-control" id="physicalAddress" placeholder="eg: westlands" />
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="location">Postal address</label>
+              <input [(ngModel)]="setupDetails.postalAddress" name="postalAddress" type="text" class="form-control" id="postalAddress" placeholder="eg: 00200-1237" />
+            </div>
+
+            <!-- <div class="form-group mb-3">
+              <label for="location">Postal code</label>
+              <input [(ngModel)]="setupDetails.postalCode" name="postalCode" type="text" class="form-control" id="postalCode" placeholder="eg: 1018" />
+            </div> -->
+          </div>
+
+          <div class="content payment-details-container" *ngIf="step === 2" [@fadeIn]>
+            <h4 class="section-title mb-1">Payment details</h4>
+            <small class="text-muted d-block mb-1">What is your preferred mode of payment?</small>
+            <small class="text-muted d-block mb-4">This information will be used while sending SMS notifications to your clients for order payments</small>
+
+
+            <!-- <div class="mb-3 border-bottom">
+              <div class="add-option" (click)="selectPaymentOption(option)" *ngFor="let option of paymentOptions;index as i">
+                <span class="title">{{replaceUnderScoreSymbols(option) | titlecase}}</span>
+                <span class="checkbox-border">
+                  <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':option === setupDetails.paymentType}"></span>
+                </span>
+              </div>
+            </div> -->
+
+            <div class="form-group mb-3">
+              <label for="option">Payment mode</label>
+              <select class="form-select" name="option" [(ngModel)]="setupDetails.paymentType" (change)="selectPaymentOption()">
+                <option value="MPESA">Mpesa</option>
+                <option value="CASH">Cash</option>
+              </select>
+            </div>
+
+            <div *ngIf="setupDetails.paymentType === 'MPESA'">
+              <div class="form-group mb-3">
+                <label for="mpesaOption">Mpesa option</label>
+                <select class="form-select" name="mpesaOption" [(ngModel)]="setupDetails.mpesaPaymentType" (change)="selectPaymentOption()">
+                  <option [value]="option.value" *ngFor="let option of paymentOptions">{{option.name}}</option>
+                </select>
+              </div>
+
+              <div class="form-group" *ngIf="setupDetails.mpesaPaymentType === 'BUY_GOODS'" [@fadeIn]>
+                <label for="email">Till number</label>
+                <input [(ngModel)]="setupDetails.tillNumber" (ngModelChange)="!setupDetails.tillNumber ? optionFilled = false : optionFilled = true;" name="tillNumber" type="text" class="form-control" id="tillNumber" aria-describedby="tillNumber"
+                  placeholder="eg 5156299" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+              </div>
+
+              <div class="form-group" *ngIf="setupDetails.mpesaPaymentType === 'SEND_MONEY' || setupDetails.mpesaPaymentType === 'POCHI_LA_BIASHARA'" [@fadeIn]>
+                <label for="email">Phone number</label>
+                <input [(ngModel)]="setupDetails.msisdn" (ngModelChange)="!setupDetails.msisdn ? optionFilled = false : optionFilled = true;" name="msisdn" type="text" class="form-control" id="msisdn" aria-describedby="msisdn"
+                  placeholder="eg 254703******" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+              </div>
+
+              <div *ngIf="setupDetails.mpesaPaymentType === 'PAY_BILL'">
+                <div class="form-group mb-3">
+                  <label for="email">Paybill number</label>
+                  <input [(ngModel)]="setupDetails.businessNumber" (ngModelChange)="!setupDetails.businessNumber || !setupDetails.accountNumber ? optionFilled = false : optionFilled = true;" name="businessNumber" type="text" class="form-control"
+                    id="businessNumber" aria-describedby="businessNumber" placeholder="eg 5165149" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Account number</label>
+                  <input [(ngModel)]="setupDetails.accountNumber" (ngModelChange)="!setupDetails.accountNumber || !setupDetails.businessNumber ? optionFilled = false : optionFilled = true;" name="accountNumber" type="text" class="form-control"
+                    id="accountNumber" aria-describedby="accountNumber" placeholder="eg  07299******" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+                </div>
+              </div>
+            </div>
+
+            <div class="percentage-details-container">
+              <h4 class="section-title mb-1 mt-4">Deposit percentage</h4>
+              <!-- <small class="text-muted d-block mb-2">What is your preferred deposit percentage?</small> -->
+
+              <div class="form-group">
+                <label for="email">Percentage</label>
+                <div class="d-flex">
+                  <input [(ngModel)]="setupDetails.depositPercentage" (ngModelChange)="percentageValidation(setupDetails.depositPercentage)" name="depositPercentage" type="text" class="form-control" id="depositPercentage"
+                    aria-describedby="depositPercentage" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+                  <span class="percentage-symbol">%</span>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+
+          <div class="content notification-templates-container" *ngIf="step === 3" [@fadeIn]>
+
+            <h4 class="section-title mb-1">Notification templates</h4>
+            <small class="text-muted d-block mb-1"> Almost done! Check out these message templates, they will be used to send SMS notifications to your clients for orders under different scenarios.</small>
+            <small class="redText d-block mb-4"><i>NOTE: Careful not to delete words starting with '$'</i></small>
+
+
+
+
+            <div class="form-group">
+              <label for="Template">New order template <span class="template-reset-action" (click)="resetTemplate('newOrderTemplate')">reset</span></label>
+              <textarea name="newOrderTemplate" class="form-control" id="newOrderTemplate" aria-describedby="newOrderTemplate" rows="4" [(ngModel)]="setupDetails.newOrderTemplate">
+              </textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="Template">Partial payment template <span class="template-reset-action" (click)="resetTemplate('partialOrderPaymentTemplate')">reset</span></label>
+              <textarea name="partialOrderPaymentTemplate" class="form-control" id="partialOrderPaymentTemplate" aria-describedby="partialOrderPaymentTemplate" rows="4" [(ngModel)]="setupDetails.partialOrderPaymentTemplate">
+              </textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="Template">Full payment template <span class="template-reset-action" (click)="resetTemplate('fullOrderPaymentTemplate')">reset</span></label>
+              <textarea name="fullOrderPaymentTemplate" class="form-control" id="fullOrderPaymentTemplate" aria-describedby="fullOrderPaymentTemplate" rows="4" [(ngModel)]="setupDetails.fullOrderPaymentTemplate">
+              </textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="Template">Payment reminder template <span class="template-reset-action" (click)="resetTemplate('paymentReminderTemplate')">reset</span></label>
+              <textarea name="paymentReminderTemplate" class="form-control" id="paymentReminderTemplate" aria-describedby="paymentReminderTemplate" rows="4" [(ngModel)]="setupDetails.paymentReminderTemplate">
+              </textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="Template">Delivered order template <span class="template-reset-action" (click)="resetTemplate('deliverOrderTemplate')">reset</span></label>
+              <textarea name="deliverOrderTemplate" class="form-control" id="deliverOrderTemplate" aria-describedby="deliverOrderTemplate" rows="4" [(ngModel)]="setupDetails.deliverOrderTemplate">
+              </textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="Template">Cancel order template <span class="template-reset-action" (click)="resetTemplate('cancelOrderTemplate')">reset</span></label>
+              <textarea name="cancelOrderTemplate" class="form-control" id="cancelOrderTemplate" aria-describedby="cancelOrderTemplate" rows="4" [(ngModel)]="setupDetails.cancelOrderTemplate">
+              </textarea>
+            </div>
+
+          </div>
+
+          <div class="content setup-complete-container" *ngIf="submitFail || submitSuccess" [@fadeIn]>
+            <div *ngIf="submitSuccess" [@fadeIn]>
+              <img src="assets/images/confetti.png" id="confetti" alt="confetti">
+              <h2>Congratulations {{bakerObject?.baker?.businessName}}! </h2>
+              <span class="description"> You're all set to proceed to your dashboard.</span>
+            </div>
+
+            <div *ngIf="submitFail" [@fadeIn]>
+              <img src="assets/images/failed.png" id="confetti" alt="failed">
+              <h2 class="redText">Submit failed! </h2>
+              <span class="description"> Something went wrong. <br>
+                Please note this can
+              </span>
+            </div>
+          </div>
+
+
+          <div class="navigation-buttons">
+            <button class="btn btn-back" (click)="navigateWizardSteps('back')" *ngIf="step > 1 && step < 4" [@fadeIn] [disabled]="submittingDetails"> Back </button>
+            <button class="btn btn-next" (click)="navigateWizardSteps('next')" *ngIf="step < 3" [@fadeIn]> Next </button>
+            <!-- [disabled]="step === 1 && (wrongFileFormat || uploadFail || !currentThumbnailUpload || !setupDetails.physicalAddress || !setupDetails.postalAddress) ||
+             (step === 2 && setupDetails.paymentType === 'MPESA' && !optionFilled) || (step === 2 && !setupDetails.depositPercentage) " -->
+            <button class="btn btn-next" (click)="submitBakerDetails()" *ngIf="step === 3" [@fadeIn]
+              [disabled]="submittingDetails || (step === 3 && (!setupDetails.newOrderTemplate || !setupDetails.partialOrderPaymentTemplate || !setupDetails.fullOrderPaymentTemplate || !setupDetails.deliverOrderTemplate || !setupDetails.cancelOrderTemplate))">
+              {{submittingDetails ? 'Submitting ...' : 'Submit'}} </button>
+            <button class="btn btn-next" (click)="submitBakerDetails()" *ngIf="submitFail" [@fadeIn] [disabled]="submittingDetails"> Try again </button>
+            <button class="btn btn-next" [routerLink]="'/dashboard'" *ngIf="submitSuccess" [@fadeIn]> Proceed </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
