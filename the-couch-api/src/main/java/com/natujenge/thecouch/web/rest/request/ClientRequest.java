@@ -20,7 +20,7 @@ public class ClientRequest {
     private String token;
     private Long id;
     private Long coachId;
-    private Long orgIdId;
+    private Long organizationId;
     private String createdBy;
 
 }
