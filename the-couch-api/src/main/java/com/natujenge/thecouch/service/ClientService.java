@@ -81,6 +81,7 @@ public class ClientService {
             throw new IllegalStateException("Client with provided email already exists");
         }
         Client client = new Client();
+        log.info("creating new client started");
 
         if(coach != null){
             client.setCreatedBy(coach.getFullName());
@@ -88,6 +89,12 @@ public class ClientService {
         }
         if(organization != null){
             client.setOrganization(organization);
+            Optional<Coach> assignedCoach = coachRepository.findCoachById(clientRequest.getCoachId());
+            if(assignedCoach.isPresent()){
+                Coach coach1 = assignedCoach.get();
+                client.setCoach(coach1);
+            }
+
         }
 
         client.setFirstName(clientRequest.getFirstName());
@@ -103,6 +110,7 @@ public class ClientService {
         client.setCreatedAt(LocalDateTime.now());
 
 
+
         // client Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String clientL = String.format("%05d", randNo);
@@ -111,12 +119,16 @@ public class ClientService {
 
 
         client.setProfession(clientRequest.getProfession());
+        log.info("saving client to client repo");
 
 
         Client saveClient = clientRepository.save(client);
+        log.info(" client saved");
+        log.info("registering client as user begins");
+
 
         registrationService.registerClientAsUser(clientRequest, organization,coach, saveClient);
-
+log.info("client registered as user now creating wallet");
         // Create client wallet
         ClientWallet clientWallet = new ClientWallet();
 

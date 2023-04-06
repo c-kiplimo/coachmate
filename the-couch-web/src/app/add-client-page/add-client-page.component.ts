@@ -101,9 +101,9 @@ export class AddClientPageComponent implements OnInit {
    
     
   if(this.userRole == 'ORGANIZATION'){
-    // details.org_id_id = this.orgData.id;
-    // details.coach_id = this.selectedCoachId;
-    // details.coachId = this.selectedCoachId;
+    details.org_id_id = this.orgId
+    details.coach_id = this.selectedCoachId;
+    details.coachId = this.selectedCoachId;
 
   } else if (this.userRole == 'COACH'){
     details.org_id_id = this.coachData.coach.orgIdId;

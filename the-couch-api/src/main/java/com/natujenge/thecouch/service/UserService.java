@@ -131,7 +131,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
                 user
         );
 
@@ -174,7 +174,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(60*24),
+                LocalDateTime.now().plusMinutes(60*48),
                 user
         );
 

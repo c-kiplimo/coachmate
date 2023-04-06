@@ -88,7 +88,12 @@ public class ContractService {
                 + " not found"));
 
         // Get Coach
-        Coach coach = coachService.findCoachById(coachId);
+        Optional<Coach> coach1 = coachService.findCoachById(coachId);
+        Coach coach = null;
+        if (coach1.isPresent()) {
+            coach = coach1.get();
+        }
+
         // Get Organization
         Optional<Organization> organization = organizationService.findOrganizationById(organizationId);
         // Save Contract
@@ -110,26 +115,27 @@ public class ContractService {
         contract.setContractNumber(contractNo);
 
 
-
-
-        Float  amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)?
-                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions():
+        Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL) ?
+                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions() :
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-        log.info("Amount Due:{} ",amountDue);
+        log.info("Amount Due:{} ", amountDue);
         contract.setAmountDue(amountDue);
-        clientBillingAccountService.updateBillingAccount(amountDue,coach,client);
-        log.info("Amount Due:{} ",amountDue);
-        log.info("Contract: "+contract.toString());
-        log.info("Client: "+client.toString());
-        log.info("Coach: "+coach.toString());
+        clientBillingAccountService.updateBillingAccount(amountDue, coach, client);
+        log.info("Amount Due:{} ", amountDue);
+        log.info("Contract: " + contract.toString());
+        log.info("Client: " + client.toString());
+        log.info("Coach: " + coach.toString());
         contract.setClient(client);
+
         contract.setCoach(coach);
+
+
         contract.setOrganization(organization.orElse(null));
-        if(coach.getOrganization()!=null){
+        if (coach.getOrganization() != null) {
             contract.setOrganization(coach.getOrganization());
         }
 
-        log.info("Contract: "+contract.toString());
+        log.info("Contract: " + contract.toString());
         //check client wallet balance
 
         Contract contract1 = contractRepository.save(contract);
@@ -138,12 +144,11 @@ public class ContractService {
         // save Objectives
         List<CoachingObjective> coachingObjectives = new ArrayList<>();
 
-        for (String objective:
-             objectives) {
+        for (String objective :
+                objectives) {
             CoachingObjective coachingObjective = new CoachingObjective();
             coachingObjective.setObjective(objective);
             coachingObjective.setCreatedBy(coach.getFullName());
-            coachingObjective.setLastUpdatedBy(coach.getFullName());
 
             coachingObjective.setClient(client);
             coachingObjective.setContract(contract1);
@@ -157,8 +162,8 @@ public class ContractService {
         Map<String, Object> replacementVariables = new HashMap<>();
         replacementVariables.put("client_name", contract1.getClient().getFullName());
         replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
-        replacementVariables.put("start_date",contract1.getStartDate());
-        replacementVariables.put("end_date",contract1.getEndDate());
+        replacementVariables.put("start_date", contract1.getStartDate());
+        replacementVariables.put("end_date", contract1.getEndDate());
         replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
 
         String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
@@ -176,7 +181,7 @@ public class ContractService {
         log.info("sms sent ");
 
         // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(),"Contract Created",smsContent,false);
+        notificationServiceHTTPClient.sendEmail(client.getEmail(), "Contract Created", smsContent, false);
         log.info("Email sent");
 
 
@@ -194,7 +199,6 @@ public class ContractService {
         }
         notification.setSendReason("New Contract Created");
         notification.setContract(contract1);
-        notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
 
         notificationRepository.save(notification);

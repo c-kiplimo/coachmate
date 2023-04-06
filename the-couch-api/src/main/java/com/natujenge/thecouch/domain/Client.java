@@ -3,6 +3,9 @@ package com.natujenge.thecouch.domain;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ClientType;
 import com.natujenge.thecouch.domain.enums.PaymentModeSubscription;
+
+import com.natujenge.thecouch.domain.enums.PaymentMode;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +14,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Setter
+@Data
 @NoArgsConstructor
 @Table(name = "tbl_clients")
 @Entity
@@ -96,4 +101,5 @@ public class Client {
                 ", organization=" + organization +
                 '}';
     }
+
 }
