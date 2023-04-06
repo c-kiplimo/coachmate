@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.service;
 
+import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.*;
 
@@ -8,7 +9,6 @@ import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ContractDto;
-import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 
 

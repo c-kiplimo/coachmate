@@ -1,11 +1,8 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.ConfirmationToken;
-import com.natujenge.thecouch.domain.Constants;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
