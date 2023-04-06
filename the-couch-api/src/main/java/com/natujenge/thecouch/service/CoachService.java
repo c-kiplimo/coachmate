@@ -2,7 +2,6 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -71,9 +70,8 @@ public class CoachService {
     }
 
     //SHOW - one coach
-    public Coach findCoachById(long id) {
-        return coachRepository.findCoachById(id)
-                .orElseThrow(() -> new UserNotFoundException("Coach by id " + id + " not found"));
+    public Optional<Coach> findCoachById(long id) {
+        return coachRepository.findCoachById(id);
     }
 
 

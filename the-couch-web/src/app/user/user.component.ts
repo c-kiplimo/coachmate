@@ -30,9 +30,14 @@ backIcon: any;
     if(this.User.userRole == 'COACH'){
    
       this.businessName = this.User.coach.businessName;
-  } else {
+  }
+  if(this.User.userRole != 'COACH'){
+   
     this.businessName = this.User.fullName.substring(0, 8);
-  };
+}
+   else {
+    this.businessName = this.User.fullName.substring(0, 8);
+  }
   }
 
   logOut() {

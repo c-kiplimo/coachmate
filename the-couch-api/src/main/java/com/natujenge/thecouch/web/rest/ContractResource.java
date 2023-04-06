@@ -85,18 +85,10 @@ public class ContractResource {
     ) {
         try {
             log.info("adding contract");
-            Long coachId = null;
-            Long organizationId = null;
-
-            if (userDetails.getCoach() != null) {
-                coachId = userDetails.getCoach().getId();
-                log.info("coach id {}", coachId);
-            }
-
-            if (userDetails.getOrganization() != null) {
-                organizationId = userDetails.getOrganization().getId();
-                log.info("org id {}", organizationId);
-            }
+            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+            log.info("coach id {}",coachId);
+            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
+            log.info("org id {}",organizationId);
 
             // Later return contract DTO
             Contract contract = contractService.createContract(coachId, organizationId, contractRequest);
