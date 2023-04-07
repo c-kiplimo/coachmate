@@ -45,7 +45,7 @@ public class ClientBillingAccountService {
         clientBillingAccountRepository.save(clientBillingAccount);
     }
    
-    public void updateBillingAccount(float amountBilled, Coach coach, Client client) {
+    public void updateBillingAccount(float amountBilled,Coach coach,Client client) {
         // CHECK wallet balance
         // Update contract payment status and amountDue
         // Get wallet balance should check the last record on dB by client
@@ -82,6 +82,45 @@ public class ClientBillingAccountService {
             clientBillingAccount.setAmountBilled(amountBilled);
         }
 log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
+        clientBillingAccountRepository.save(clientBillingAccount);
+    }
+    public void updateOrganizationAndClientBillingAccount(float amountBilled,Organization organization,Client client) {
+        // CHECK wallet balance
+        // Update contract payment status and amountDue
+        // Get wallet balance should check the last record on dB by client
+
+
+
+        ClientWallet clientWallet =  walletService.getClientWalletRecentRecord(organization.getId(),
+                client.getId());
+
+
+        float walletBalance = (clientWallet.getWalletBalance() != null)?clientWallet.getWalletBalance():
+                0f;
+        // retrieve recent billing account record
+
+        // new client Billing Account record
+        ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
+        clientBillingAccount.setCreatedBy(organization.getFullName());
+        clientBillingAccount.setOrganization(organization);
+        clientBillingAccount.setClient(client);
+
+        float paymentBalance;
+        if (walletBalance >= amountBilled){
+            paymentBalance = walletBalance - amountBilled;
+            walletService.updateWalletBalance(clientWallet, paymentBalance,organization.getFullName());
+            clientBillingAccount.setAmountBilled(0f);
+
+        } else if (walletBalance < amountBilled && walletBalance > 0f) {
+            paymentBalance = amountBilled-walletBalance;
+            walletService.updateWalletBalance(clientWallet, 0f,organization.getFullName());
+            clientBillingAccount.setAmountBilled(paymentBalance);
+            log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
+
+        }else{
+            clientBillingAccount.setAmountBilled(amountBilled);
+        }
+        log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
         clientBillingAccountRepository.save(clientBillingAccount);
     }
 

@@ -2,12 +2,10 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,7 +72,12 @@ public class OrganizationService {
 
     }
 
-    public  Optional<Organization> findOrganizationById(Long id) {
-        return organizationRepository.findOrganizationById(id);
+    public Organization findOrganizationById(Long id) {
+        Organization organization = organizationRepository.findOrganizationById(id);
+        if (organization == null) {
+            throw new IllegalArgumentException("Organization not found");
+        }
+        return organization;
     }
+
 }

@@ -48,8 +48,9 @@ public class WalletResource {
             if (organizationId != null) {
                 log.info("Request to create payment by organization");
                 try {
+                    log.info("request to create payment");
                     ClientWallet wallet = walletService.createPaymentByOrganization(paymentRequest,
-                            userDetails.getCoach().getOrganization());
+                            userDetails.getOrganization());
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());

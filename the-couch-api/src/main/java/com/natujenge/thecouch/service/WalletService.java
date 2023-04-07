@@ -73,6 +73,20 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
         return optionalClientWallet.get();
     }
+    public ClientWallet getClientWalletRecentRecordByOrganization(long organizationId, long clientId) {
+        log.info("Get client wallet recent record for organization id {} and client id {}", organizationId, clientId);
+        // obtain latest payment Record
+        Optional<ClientWallet> optionalClientWallet = clientWalletRepository.
+                findFirstByOrganizationIdAndClientIdOrderByIdDesc(
+                        organizationId, clientId);
+
+        if (optionalClientWallet.isEmpty()) {
+            throw new IllegalArgumentException("Specified wallet does not exist!!!");
+
+        }
+
+        return optionalClientWallet.get();
+    }
 
     public void updateWalletBalance(ClientWallet clientWallet, Float paymentBalance, String coachName) {
         Float previousBalance = clientWallet.getWalletBalance();
@@ -271,74 +285,101 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     }
     // create payment by organization
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
+        try {
+            // Obtain Client associated with wallet
+            Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId()
+                    ,organization.getId());
+            if(clientOptional.isEmpty()){
+                throw new IllegalArgumentException("Client not found!");
+            }
+            Client client = clientOptional.get();
 
-        // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
-        if(clientOptional.isEmpty()){
-            throw new IllegalArgumentException("Client not found!");
+ log.info("Client {} ",client);
+            log.info("Client {} ",paymentRequest.getClientId());
+
+    // obtain previous payment Record
+    Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecordByOrganization(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
+
+            float prevWalletBalance;
+            if(previousWalletRecord.get().getWalletBalance().equals(null)){
+                prevWalletBalance = 0;
+            }else {
+                prevWalletBalance = previousWalletRecord.get().getWalletBalance();
+            }
+
+            ClientWallet clientWallet = new ClientWallet();
+            clientWallet.setAmountDeposited(paymentRequest.getAmount());
+
+            clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
+            clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
+            clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
+            clientWallet.setCreatedAt(LocalDateTime.now());
+
+
+
+            clientWallet.setClient(client);
+            clientWallet.setOrganization(organization);
+
+            // mngmnt
+            clientWallet.setCreatedBy(organization.getFullName());
+            Optional<Organization> org = Optional.ofNullable(client.getOrganization());
+            if(org.isPresent()) {
+                clientWallet.setOrganization(client.getOrganization());
+            }
+            // Update Payment Details based on balance on clientWallet;
+            float walletBalance = prevWalletBalance + paymentRequest.getAmount();
+
+
+            // update billing account
+            // return walletBalance
+            Float walletBalanceAfter = updateBillingAccountOnPaymentByOrganization(
+                    organization,client,walletBalance,paymentRequest.getAmount());
+            clientWallet.setWalletBalance(walletBalanceAfter);
+
+            //update account statement
+
+
+
+
+            // save wallet
+            ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
+            log.info("Wallet successfully saved");
+            log.info("Prep to send sms");
+            Map<String, Object> replacementVariables = new HashMap<>();
+            replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
+            replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
+            replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
+            replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+            String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
+            //replacement to get content
+            String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
+            String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from  settings
+            String referenceId = clientWallet1.getId().toString();
+            String msisdn = clientWallet1.getClient().getMsisdn();
+            log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
+            //send sms
+            notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
+            log.info("sms sent ");
+            // sendEmail
+            notificationServiceHTTPClient.sendEmail(client.getEmail(), "PAYMENT RECEIVED", smsContent, false);
+            log.info("Email sent");
+            //create notification object and send it
+            Notification notification = new Notification();
+            notification.setNotificationMode(NotificationMode.SMS);
+            notification.setDestinationAddress(msisdn);
+            notification.setSourceAddress(sourceAddress);
+            notification.setContent(smsContent);
+            notification.setSendReason("PAYMENT RECEIVED");
+            notification.setCoachId(client.getCoach().getId());
+            notification.setClientId(client.getId());
+            notification.setCreatedBy(client.getCoach().getFullName());
+            //TO DO: add logic to save notification to db
+            notificationRepository.save(notification);
+            return clientWallet1;
+        }catch (Exception e){
+            log.error("An error occurred  {}", e.getMessage());
+            throw e;
         }
-        Client client = clientOptional.get();
-        // obtain previous payment Record
-        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrgId(), paymentRequest.getClientId()));
-        float prevWalletBalance;
-        if(previousWalletRecord.get().getWalletBalance().equals(null)){
-            prevWalletBalance = 0;
-        }else {
-            prevWalletBalance = previousWalletRecord.get().getWalletBalance();
-        }
-        ClientWallet clientWallet = new ClientWallet();
-        clientWallet.setAmountDeposited(paymentRequest.getAmount());
-        clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
-        clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
-        clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
-        clientWallet.setCreatedAt(LocalDateTime.now());
-        clientWallet.setClient(client);
-        clientWallet.setOrganization(organization);
-        // mngmnt
-        clientWallet.setCreatedBy(organization.getFullName());
-        // Update Payment Details based on balance on clientWallet;
-        float walletBalance = prevWalletBalance + paymentRequest.getAmount();
-        // update billing account
-        // return walletBalance
-        Float walletBalanceAfter = updateBillingAccountOnPaymentByOrganization(
-                organization,client,walletBalance,paymentRequest.getAmount());
-        clientWallet.setWalletBalance(walletBalanceAfter);
-        //update account statement
-        // save wallet
-        ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
-        log.info("Wallet successfully saved");
-        log.info("Prep to send sms");
-        Map<String, Object> replacementVariables = new HashMap<>();
-        replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
-        replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
-        replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name",clientWallet1.getClient().getCoach().getBusinessName());
-        String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
-        //replacement to get content
-        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from  settings
-        String referenceId = clientWallet1.getId().toString();
-        String msisdn = clientWallet1.getClient().getMsisdn();
-        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
-        //send sms
-        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-        log.info("sms sent ");
-        // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(),"PAYMENT RECEIVED",smsContent,false);
-        log.info("Email sent");
-        //create notification object and send it
-        Notification notification = new Notification();
-        notification.setNotificationMode(NotificationMode.SMS);
-        notification.setDestinationAddress(msisdn);
-        notification.setSourceAddress(sourceAddress);
-        notification.setContent(smsContent);
-        notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCoachId(client.getCoach().getId());
-        notification.setClientId(client.getId());
-        notification.setCreatedBy(client.getCoach().getFullName());
-        //TO DO: add logic to save notification to db
-        notificationRepository.save(notification);
-        return clientWallet1;
         // Map to Dto and return
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
     }
@@ -351,7 +392,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         Client client1 = clientOptional.get();
         // obtain previous payment Record
-        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrgId(), paymentRequest.getClientId()));
+        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
         if(previousWalletRecord.get().getWalletBalance().equals(null)){
             prevWalletBalance = 0;
