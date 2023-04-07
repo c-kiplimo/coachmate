@@ -97,8 +97,10 @@ public class ContractResource {
                 log.info("org id {}", organizationId);
                 if (Objects.equals(contractRequest.getCoachId(), null)) {
                     contract = contractService.createOrganizationAndCoachContract(organizationId, contractRequest);
+                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
                 } else {
                     contract = contractService.createOrganizationAndClientContract(organizationId, contractRequest);
+                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
                 }
             }
 

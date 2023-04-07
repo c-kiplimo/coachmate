@@ -321,15 +321,34 @@ public class ContractService {
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
-        contract.setCoach(coach);
-        if (coach.getOrganization() != null) {
-            contract.setOrganization(coach.getOrganization());
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String contractL = String.format("%05d", randNo);
+        String contractNo = coach.getOrganization().getOrgName().substring(0, 2) +
+                coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + contractL;
+        contract.setContractNumber(contractNo);
+        Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL) ?
+                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions() :
+                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
+        log.info("Amount Due:{} ", amountDue);
+        contract.setAmountDue(amountDue);
+        clientBillingAccountService.updateOrganizationAndClientBillingAccount(amountDue, organization, coach);
+        log.info("Amount Due:{} ", amountDue);
+        log.info("Contract: " + contract.toString());
+        log.info("Client: " + coach.toString());
+
+        contract.setClient(client);
+        contract.setContractNumber(contractNo);
+        contract.setContractStatus(ContractStatus.ONGOING);
+
+        if (client.getOrganization() != null) {
+            contract.setOrganization(client.getOrganization());
         }
+
 
         log.info("Contract: " + contract.toString());
         //check client wallet balance
-
         Contract contract1 = contractRepository.save(contract);
+        log.info("Contract has been saved");
 
         List<String> objectives = contractRequest.getObjectives();
         // save Objectives
@@ -339,10 +358,12 @@ public class ContractService {
                 objectives) {
             CoachingObjective coachingObjective = new CoachingObjective();
             coachingObjective.setObjective(objective);
-            coachingObjective.setCreatedBy(coach.getFullName());
-            coachingObjective.setLastUpdatedBy(coach.getFullName());
+            coachingObjective.setCreatedBy(organization.getFullName());
+            coachingObjective.setLastUpdatedBy(organization.getFullName());
+
+            coachingObjective.setClient(client);
             coachingObjective.setContract(contract1);
-            coachingObjective.setCoach(coach);
+            coachingObjective.setOrganization(organization);
 
             coachingObjectives.add(coachingObjective);
         }
@@ -393,8 +414,8 @@ public class ContractService {
     }
 
     public Contract createOrganizationAndClientContract(Long organizationId, ContractRequest contractRequest) {
-        try {
 
+log.info("Organization with id {} ",organizationId);
 
             // Get Client
 
@@ -440,6 +461,7 @@ public class ContractService {
             log.info("Contract: " + contract.toString());
             //check client wallet balance
             Contract contract1 = contractRepository.save(contract);
+            log.info("Contract has been saved");
 
             List<String> objectives = contractRequest.getObjectives();
             // save Objectives
@@ -451,6 +473,8 @@ public class ContractService {
                 coachingObjective.setObjective(objective);
                 coachingObjective.setCreatedBy(organization.getFullName());
                 coachingObjective.setLastUpdatedBy(organization.getFullName());
+
+                coachingObjective.setClient(client);
                 coachingObjective.setContract(contract1);
                 coachingObjective.setOrganization(organization);
 
@@ -462,7 +486,7 @@ public class ContractService {
             replacementVariables.put("client_name", contract1.getClient().getFullName());
             replacementVariables.put("start_date", contract1.getStartDate());
             replacementVariables.put("end_date", contract1.getEndDate());
-            replacementVariables.put("business_name", contract1.getClient().getCoach().getBusinessName());
+            replacementVariables.put("org_name", contract1.getClient().getOrganization().getOrgName());
 
             String smsTemplate = Constants.DEFAULT_NEW_ORGANIZATION_CLIENT_CONTRACT_SMS_TEMPLATE;
 
@@ -471,6 +495,7 @@ public class ContractService {
             String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
             String referenceId = contract1.getId().toString();
             String msisdn = contract1.getClient().getMsisdn();
+            String email =contract1.getClient().getEmail();
 
             log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
 
@@ -498,10 +523,7 @@ public class ContractService {
             notificationRepository.save(notification);
             log.info("Notification saved");
             return contract1;
-        } catch (Exception e) {
-            log.error("An error occurred  {}", e.getMessage());
-            throw e;
-        }
+
 
     }
 }

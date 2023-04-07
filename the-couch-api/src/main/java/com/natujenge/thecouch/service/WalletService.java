@@ -298,15 +298,17 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
             log.info("Client {} ",paymentRequest.getClientId());
 
     // obtain previous payment Record
-    Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecordByOrganization(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
-
+            Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecordByOrganization(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
             float prevWalletBalance;
-            if(previousWalletRecord.get().getWalletBalance().equals(null)){
+            if (previousWalletRecord.isPresent()) {
+                if (previousWalletRecord.get().getWalletBalance() != null) {
+                    prevWalletBalance = previousWalletRecord.get().getWalletBalance();
+                } else {
+                    prevWalletBalance = 0;
+                }
+            } else {
                 prevWalletBalance = 0;
-            }else {
-                prevWalletBalance = previousWalletRecord.get().getWalletBalance();
             }
-
             ClientWallet clientWallet = new ClientWallet();
             clientWallet.setAmountDeposited(paymentRequest.getAmount());
 
