@@ -1,17 +1,14 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.ClientWallet;
-import com.natujenge.thecouch.domain.Payment;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.WalletService;
-import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.service.ClientWalletService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
 
 @RestController
 @Slf4j
@@ -27,7 +23,7 @@ import java.time.LocalDate;
 public class WalletResource {
 
     @Autowired
-    WalletService walletService;
+    ClientWalletService walletService;
 
 
 

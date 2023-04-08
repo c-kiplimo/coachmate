@@ -13,7 +13,6 @@ import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.ClientBillingAccount;
-import com.natujenge.thecouch.domain.AccountStatement;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +22,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-
-import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 
-import java.time.LocalTime;
 import java.util.*;
 
 @Slf4j
 @Service
-public class WalletService {
+public class ClientWalletService {
 
     @Autowired
     ClientWalletRepository clientWalletRepository;
@@ -73,6 +67,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
         return optionalClientWallet.get();
     }
+
     public ClientWallet getClientWalletRecentRecordByOrganization(long organizationId, long clientId) {
         log.info("Get client wallet recent record for organization id {} and client id {}", organizationId, clientId);
         // obtain latest payment Record

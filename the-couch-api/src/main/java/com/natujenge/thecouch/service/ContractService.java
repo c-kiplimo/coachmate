@@ -59,6 +59,8 @@ public class ContractService {
 
     @Autowired
     ContractObjectiveRepository contractObjectiveRepository;
+    @Autowired
+    CoachBillingAccountService coachBillingAccountService;
 
     public List<Contract> getContracts(Long coachId) {
         return contractRepository.findAllByCoachId(coachId);
@@ -331,17 +333,17 @@ public class ContractService {
                 contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
         log.info("Amount Due:{} ", amountDue);
         contract.setAmountDue(amountDue);
-        clientBillingAccountService.updateOrganizationAndClientBillingAccount(amountDue, organization, coach);
+        coachBillingAccountService.updateOrganizationAndCoachBillingAccount(amountDue, organization, coach);
         log.info("Amount Due:{} ", amountDue);
         log.info("Contract: " + contract.toString());
-        log.info("Client: " + coach.toString());
+        log.info("Coach: " + coach.toString());
 
-        contract.setClient(client);
+        contract.setCoach(coach);
         contract.setContractNumber(contractNo);
         contract.setContractStatus(ContractStatus.ONGOING);
 
-        if (client.getOrganization() != null) {
-            contract.setOrganization(client.getOrganization());
+        if (coach.getOrganization() != null) {
+            contract.setOrganization(coach.getOrganization());
         }
 
 
@@ -361,7 +363,7 @@ public class ContractService {
             coachingObjective.setCreatedBy(organization.getFullName());
             coachingObjective.setLastUpdatedBy(organization.getFullName());
 
-            coachingObjective.setClient(client);
+            coachingObjective.setCoach(coach);
             coachingObjective.setContract(contract1);
             coachingObjective.setOrganization(organization);
 

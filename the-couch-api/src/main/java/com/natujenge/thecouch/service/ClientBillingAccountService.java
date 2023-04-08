@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class ClientBillingAccountService {
 
     @Autowired
-    WalletService walletService;
+    ClientWalletService walletService;
     @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
     // Get all billingAccounts by coach Id
@@ -123,45 +123,7 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
         log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
         clientBillingAccountRepository.save(clientBillingAccount);
     }
-    public void updateOrganizationAndCoachBillingAccount(float amountBilled,Organization organization,Coach coach) {
-        // CHECK wallet balance
-        // Update contract payment status and amountDue
-        // Get wallet balance should check the last record on dB by client
 
-
-
-        ClientWallet clientWallet =  walletService.getClientWalletRecentRecordByOrganization(organization.getId(),
-                client.getId());
-
-
-        float walletBalance = (clientWallet.getWalletBalance() != null)?clientWallet.getWalletBalance():
-                0f;
-        // retrieve recent billing account record
-
-        // new client Billing Account record
-        ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        clientBillingAccount.setCreatedBy(organization.getFullName());
-        clientBillingAccount.setOrganization(organization);
-        clientBillingAccount.setClient(client);
-
-        float paymentBalance;
-        if (walletBalance >= amountBilled){
-            paymentBalance = walletBalance - amountBilled;
-            walletService.updateWalletBalance(clientWallet, paymentBalance,organization.getFullName());
-            clientBillingAccount.setAmountBilled(0f);
-
-        } else if (walletBalance < amountBilled && walletBalance > 0f) {
-            paymentBalance = amountBilled-walletBalance;
-            walletService.updateWalletBalance(clientWallet, 0f,organization.getFullName());
-            clientBillingAccount.setAmountBilled(paymentBalance);
-            log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
-
-        }else{
-            clientBillingAccount.setAmountBilled(amountBilled);
-        }
-        log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
-        clientBillingAccountRepository.save(clientBillingAccount);
-    }
     public ListResponse getBillingAccountByOrganizationId(int perPage, int page, Long organizationId) {
         log.info("Get all billing accounts by organization id {}", organizationId);
 
