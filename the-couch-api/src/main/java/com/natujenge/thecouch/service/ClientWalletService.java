@@ -281,7 +281,6 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     // create payment by organization
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
         try {
-            // Obtain Client associated with wallet
             Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId()
                     ,organization.getId());
             if(clientOptional.isEmpty()){
@@ -289,21 +288,16 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
             }
             Client client = clientOptional.get();
 
- log.info("Client {} ",client);
-            log.info("Client {} ",paymentRequest.getClientId());
 
-    // obtain previous payment Record
+            // obtain previous payment Record
             Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecordByOrganization(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
             float prevWalletBalance;
-            if (previousWalletRecord.isPresent()) {
-                if (previousWalletRecord.get().getWalletBalance() != null) {
-                    prevWalletBalance = previousWalletRecord.get().getWalletBalance();
-                } else {
-                    prevWalletBalance = 0;
-                }
-            } else {
+            if(previousWalletRecord.get().getWalletBalance().equals(null)){
                 prevWalletBalance = 0;
+            }else {
+                prevWalletBalance = previousWalletRecord.get().getWalletBalance();
             }
+
             ClientWallet clientWallet = new ClientWallet();
             clientWallet.setAmountDeposited(paymentRequest.getAmount());
 
