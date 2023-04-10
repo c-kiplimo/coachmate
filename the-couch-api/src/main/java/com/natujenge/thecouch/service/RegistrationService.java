@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.service;
-
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
@@ -129,11 +128,10 @@ public class RegistrationService {
                         addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
-                // Update User
-//                User registeredUser = (User) response.get(0);
-//                registeredUser.setNotificationSettings(notificationSettings);
-//                registeredUser.setCoach(savedCoach);
-//                userService.updateUser(registeredUser);
+                User registeredUser = (User) response.get(0);
+                registeredUser.setNotificationSettings(notificationSettings);
+                registeredUser.setCoach(savedCoach);
+                userService.updateUser(registeredUser);
 
                 try {
                     // Sending Confirmation Token
@@ -218,12 +216,12 @@ public class RegistrationService {
                             addNewSettings(notificationSettingsRequest);
 
                     log.info("Notifications Saved Successfully");
-//                    // Update User
-//                    User registeredUser = (User) response.get(0);
-//                    log.info("User to be updated: " + registeredUser.getUsername());
-//                    registeredUser.setNotificationSettings(notificationSettings);
-//                    registeredUser.setOrganization(registeredOrg);
-//                    userService.updateUser(registeredUser);
+                    // Update User
+                    User registeredUser = (User) response.get(0);
+                    log.info("User to be updated: " + registeredUser.getUsername());
+                    registeredUser.setNotificationSettings(notificationSettings);
+                    registeredUser.setOrganization(registeredOrg);
+                    userService.updateUser(registeredUser);
 
 
                     // Sending Confirmation Token
@@ -302,11 +300,11 @@ public class RegistrationService {
                 addNewSettings(notificationSettingsRequest);
 
         log.info("Notifications Saved Successfully");
-//        // Update User
-//        User registeredUser = (User) response.get(0);
-//        registeredUser.setNotificationSettings(notificationSettings);
-//        registeredUser.setCoach(savedCoach);
-//        userService.updateUser(registeredUser);
+        // Update User
+        User registeredUser = (User) response.get(0);
+        registeredUser.setNotificationSettings(notificationSettings);
+        registeredUser.setCoach(savedCoach);
+        userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);

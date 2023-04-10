@@ -29,7 +29,7 @@ public class Coach implements Serializable {
 @JoinColumn(name = "organization_id")
     private Organization organization;
     @ManyToOne
-    @JoinColumn(name="settings_id")
+    @JoinColumn(name="notification_settings_id")
     NotificationSettings notificationSettings;
 
     private String businessName;
