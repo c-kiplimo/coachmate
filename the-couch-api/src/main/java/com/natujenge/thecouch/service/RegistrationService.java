@@ -122,17 +122,18 @@ public class RegistrationService {
                 notificationSettingsRequest.setConductedSessionEnable(true);
                 notificationSettingsRequest.setRescheduleSessionEnable(true);
                 notificationSettingsRequest.setPaymentReminderEnable(true);
+                notificationSettingsRequest.setCoach(savedCoach);
 
 
                 NotificationSettings notificationSettings = notificationSettingsService.
-                        addNewSettings(notificationSettingsRequest,registrationRequest.getFirstName(),registrationRequest.getId());
+                        addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
                 // Update User
-                User registeredUser = (User) response.get(0);
-                registeredUser.setNotificationSettings(notificationSettings);
-                registeredUser.setCoach(savedCoach);
-                userService.updateUser(registeredUser);
+//                User registeredUser = (User) response.get(0);
+//                registeredUser.setNotificationSettings(notificationSettings);
+//                registeredUser.setCoach(savedCoach);
+//                userService.updateUser(registeredUser);
 
                 try {
                     // Sending Confirmation Token
@@ -210,17 +211,19 @@ public class RegistrationService {
                     notificationSettingsRequest.setConductedSessionEnable(true);
                     notificationSettingsRequest.setRescheduleSessionEnable(true);
                     notificationSettingsRequest.setPaymentReminderEnable(true);
+                    notificationSettingsRequest.setOrganization(registeredOrg);
 
 
                     NotificationSettings notificationSettings = notificationSettingsService.
-                            addNewSettings(notificationSettingsRequest,registrationRequest.getFirstName(),registrationRequest.getId());
+                            addNewSettings(notificationSettingsRequest);
 
                     log.info("Notifications Saved Successfully");
-                    // Update User
-                    User registeredUser = (User) response.get(0);
-                    registeredUser.setNotificationSettings(notificationSettings);
-                    registeredUser.setOrganization(registeredOrg);
-                    userService.updateUser(registeredUser);
+//                    // Update User
+//                    User registeredUser = (User) response.get(0);
+//                    log.info("User to be updated: " + registeredUser.getUsername());
+//                    registeredUser.setNotificationSettings(notificationSettings);
+//                    registeredUser.setOrganization(registeredOrg);
+//                    userService.updateUser(registeredUser);
 
 
                     // Sending Confirmation Token
@@ -291,17 +294,19 @@ public class RegistrationService {
         notificationSettingsRequest.setConductedSessionEnable(true);
         notificationSettingsRequest.setRescheduleSessionEnable(true);
         notificationSettingsRequest.setPaymentReminderEnable(true);
+        notificationSettingsRequest.setCoach(savedCoach);
+        notificationSettingsRequest.setOrganization(savedCoach.getOrganization());
 
 
         NotificationSettings notificationSettings = notificationSettingsService.
-                addNewSettings(notificationSettingsRequest,coachRequest.getFirstName(),coachRequest.getId());
+                addNewSettings(notificationSettingsRequest);
 
         log.info("Notifications Saved Successfully");
-        // Update User
-        User registeredUser = (User) response.get(0);
-        registeredUser.setNotificationSettings(notificationSettings);
-        registeredUser.setCoach(savedCoach);
-        userService.updateUser(registeredUser);
+//        // Update User
+//        User registeredUser = (User) response.get(0);
+//        registeredUser.setNotificationSettings(notificationSettings);
+//        registeredUser.setCoach(savedCoach);
+//        userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);

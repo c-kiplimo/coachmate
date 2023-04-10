@@ -52,7 +52,7 @@ public class AttachmentService {
                     attachment.setFileSize(file.getSize());
                     attachment.setFileContent(file.getBytes());
                     // Attachment Number Generation
-                    int randNo = (int) ((Math.random() * (99999 - 1)) + 1);
+                    int randNo = (int) ((Math.random() * (999 - 1)) + 1);
                     String attachmentL = String.format("%05d", randNo);
                     String attachmentNo = attachment.getSession().getName().charAt(0) + "-" + attachmentL;
                     attachment.setAttachmentNumber(attachmentNo);

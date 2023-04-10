@@ -70,6 +70,9 @@ public class NotificationSettings {
     @ManyToOne
     @JoinColumn(name="coach_id")
     Coach coach;
+    @ManyToOne
+    @JoinColumn(name="organization_id")
+    Organization organization;
 
     // Management fields
     @CreationTimestamp

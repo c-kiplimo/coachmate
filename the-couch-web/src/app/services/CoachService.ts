@@ -36,7 +36,7 @@ export class CoachService {
     return this.httpClient.post<any>(this.baseURL + '/bakers/onboard', bakerDeatils, { observe: 'response' });
   }
 
-  editBakerProfile(bakerProfile: any): Observable<any> {
+  editcoachProfile(bakerProfile: any): Observable<any> {
     return this.httpClient.put<any>(this.baseURL + '/bakers/' + bakerProfile.id, bakerProfile, { observe: 'response' });
   }
 
@@ -44,7 +44,7 @@ export class CoachService {
     return this.httpClient.post<any>(this.baseURL + '/locations', locationDetails, { observe: 'response' });
   }
 
-  editBakerLogo(logo: any): Observable<any> {
+  editcoachLogo(logo: any): Observable<any> {
     return this.httpClient.post<any>(this.baseURL + '/baker-settings', logo, { observe: 'response' });
   }
 

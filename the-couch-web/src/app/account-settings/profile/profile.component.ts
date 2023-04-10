@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
   userNotificationSettings: any;
   notificationForm: any;
   backIcon = faChevronLeft;
-  bakerProfile: any = {};
+  coachProfile: any = {};
   filename = '';
   locationDetails: any = {};
   logoDetails: any = {};
@@ -49,10 +49,6 @@ export class ProfileComponent implements OnInit {
   saveSuccess = false;
   logo: any;
 
-  counties = [{ "id": 30, "name": "BARINGO" }, { "id": 36, "name": "BOMET" }, { "id": 39, "name": "BUNGOMA" }, { "id": 40, "name": "BUSIA" }, { "id": 28, "name": "ELGEYO/MARAKWET" }, { "id": 14, "name": "EMBU" }, { "id": 7, "name": "GARISSA" }, { "id": 43, "name": "HOMA BAY" }, { "id": 11, "name": "ISIOLO" }, { "id": 34, "name": "KAJIADO" }, { "id": 37, "name": "KAKAMEGA" }, { "id": 35, "name": "KERICHO" }, { "id": 22, "name": "KIAMBU" }, { "id": 3, "name": "KILIFI" }, { "id": 20, "name": "KIRINYAGA" }, { "id": 45, "name": "KISII" }, { "id": 42, "name": "KISUMU" }, { "id": 15, "name": "KITUI" }, { "id": 2, "name": "KWALE" }, { "id": 31, "name": "LAIKIPIA" }, { "id": 5, "name": "LAMU" }, { "id": 16, "name": "MACHAKOS" }, { "id": 17, "name": "MAKUENI" }, { "id": 9, "name": "MANDERA" }, { "id": 10, "name": "MARSABIT" }, { "id": 12, "name": "MERU" }, { "id": 44, "name": "MIGORI" }, { "id": 1, "name": "MOMBASA" }, { "id": 21, "name": "MURANG'A" }, { "id": 47, "name": "NAIROBI" }, { "id": 32, "name": "NAKURU" }, { "id": 29, "name": "NANDI" }, { "id": 33, "name": "NAROK" }, { "id": 46, "name": "NYAMIRA" }, { "id": 18, "name": "NYANDARUA" }, { "id": 19, "name": "NYERI" }, { "id": 25, "name": "SAMBURU" }, { "id": 41, "name": "SIAYA" }, { "id": 6, "name": "TAITA TAVETA" }, { "id": 4, "name": "TANA RIVER" }, { "id": 13, "name": "THARAKA-NITHI" }, { "id": 26, "name": "TRANS NZOIA" }, { "id": 23, "name": "TURKANA" }, { "id": 27, "name": "UASIN GISHU" }, { "id": 38, "name": "VIHIGA" }, { "id": 8, "name": "WAJIR" }, { "id": 24, "name": "WEST POKOT" }];
-
-
-
   constructor(
     private notificationsService: ClientService,
     private login: LoginService,
@@ -71,13 +67,9 @@ export class ProfileComponent implements OnInit {
 
     this.setFields();
 
-    if (this.user.baker ?.bakerSettings ?.logo) {
+    if (this.user.coach ?.notificationSettings ?.logo) {
       this.getLogo();
     }
-
-    // this.notificationForm = JSON.parse(
-    //   sessionStorage.getItem('notificationSettings') || '{}'
-    // );
   }
 
   getLogo(): void {
@@ -93,20 +85,15 @@ export class ProfileComponent implements OnInit {
   }
 
   setFields(): void {
-    this.bakerProfile = JSON.parse(JSON.stringify(this.user.baker));
-    delete this.bakerProfile.bakerNotificationSettings;
-    delete this.bakerProfile.bakerSettings;
-    delete this.bakerProfile.defaultBakerLocation;
-    delete this.bakerProfile.defaultBakerPaymentDetails;
-    delete this.bakerProfile.subscription;
-    delete this.bakerProfile.wallet;
-
-    this.locationDetails = JSON.parse(JSON.stringify(this.user.baker.defaultBakerLocation));
-    if (!this.locationDetails) {
-      this.locationDetails = {};
-      this.locationDetails.county = 'NAIROBI';
-    }
-    this.logoDetails = JSON.parse(JSON.stringify(this.user.baker.bakerSettings));
+    this.coachProfile = JSON.parse(JSON.stringify(this.user.coach));
+    delete this.coachProfile.coachNotificationSettings;
+    delete this.coachProfile.coachSettings;
+    delete this.coachProfile.defaultcoachLocation;
+    delete this.coachProfile.defaultcoachPaymentDetails;
+    delete this.coachProfile.subscription;
+    delete this.coachProfile.wallet;
+    this.locationDetails = JSON.parse(JSON.stringify(this.user.coach.defaultcoachLocation));
+    this.logoDetails = JSON.parse(JSON.stringify(this.user.coach.coachSettings));
     if(!this.logoDetails){
       this.logoDetails={};
     }
@@ -117,10 +104,9 @@ export class ProfileComponent implements OnInit {
     this.isSaving = true;
     window.scroll(0, 0);
 
-    this.coachService.editBakerProfile(this.bakerProfile).subscribe(
+    this.coachService.editcoachProfile(this.coachProfile).subscribe(
       (res: any) => {
-        // console.log('saveProfileSettings', res);
-        this.saveLocationDetails();
+
       },
       (error: any) => {
         console.log(error);
@@ -128,35 +114,9 @@ export class ProfileComponent implements OnInit {
       }
     )
   }
-
-  saveLocationDetails(): void {
-    this.coachService.editLocationDetails(this.locationDetails).subscribe(
-      (res: any) => {
-        // console.log('saveLocationDetails', res);
-        if (this.logoDetails.logo) {
-          this.saveLogoDetails();
-        }else{
-          this.isSaving = false;
-          this.saveSuccess = true;
-          this.editingSettings = false;
-
-          this.getAccount();
-
-          setTimeout(() => {
-            this.saveSuccess = false;
-          }, 2000);
-        }
-      },
-      (error: any) => {
-        console.log(error);
-
-      }
-    )
-  }
-
   saveLogoDetails(): void {
 
-    this.coachService.editBakerLogo(this.logoDetails).subscribe(
+    this.coachService.editcoachLogo(this.logoDetails).subscribe(
       (res: any) => {
         // console.log('saveLogoDetails', res);
         this.isSaving = false;
@@ -278,9 +238,9 @@ export class ProfileComponent implements OnInit {
         // console.log('here');
 
         sessionStorage.setItem('businessName', response.body.firstName);
-        sessionStorage.setItem('bakerStatus', response.body.baker.status);
+        sessionStorage.setItem('coachStatus', response.body.coach.status);
         sessionStorage.setItem('user', JSON.stringify(response.body));
-        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.bakerNotificationSettings))
+        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.coachNotificationSettings))
 
         setTimeout(() => {
           location.reload();

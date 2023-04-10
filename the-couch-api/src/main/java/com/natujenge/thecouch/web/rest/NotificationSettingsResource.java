@@ -60,7 +60,7 @@ public class NotificationSettingsResource {
             log.info("Request to create notification settings by coach with id {}",coachId);
 
 
-            notificationSettingsService.addNewSettings(notificationSettingsRequest,coachName, coachId);
+            notificationSettingsService.addNewSettings(notificationSettingsRequest);
 
             return new ResponseEntity<>(new RestResponse(false,"Settings added successfully"),
                     HttpStatus.CREATED);

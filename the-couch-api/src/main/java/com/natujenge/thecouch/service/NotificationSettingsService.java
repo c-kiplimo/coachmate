@@ -18,13 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class NotificationSettingsService {
     private final NotificationSettingsRepository notificationSettingsRepository;
-    private final CoachService coachService;
 
     private final UserService userService;
 
-    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, CoachService coachService, UserService userService) {
+    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, UserService userService) {
         this.notificationSettingsRepository = notificationSettingsRepository;
-        this.coachService = coachService;
         this.userService = userService;
     }
 
@@ -162,16 +160,10 @@ public class NotificationSettingsService {
 
     }
 
-    public NotificationSettings addNewSettings(NotificationSettingsRequest notificationSettingsRequest,
-                                               String fullName, Long coachId) {
+    public NotificationSettings addNewSettings(NotificationSettingsRequest notificationSettingsRequest){
 
-        log.info("Creating Notifications for coach with Id {}", coachId);
 
-        // Get coach
-        FastList<Object> OptionalCoach = null;
-        if (OptionalCoach.isEmpty()) {
-            throw new IllegalArgumentException("Coach with Id " + coachId + " does not Exist");
-        }
+
 
             NotificationSettings notificationSettings = new NotificationSettings();
             notificationSettings.setNotificationMode(notificationSettingsRequest.getNotificationMode());
@@ -198,13 +190,24 @@ public class NotificationSettingsService {
             notificationSettings.setFullBillPaymentEnable(notificationSettingsRequest.isFullBillPaymentEnable());
             notificationSettings.setCancelSessionEnable(notificationSettingsRequest.isCancelSessionEnable());
             notificationSettings.setConductedSessionEnable(notificationSettingsRequest.isConductedSessionEnable());
-
-            // relations
-            Coach coach = new Coach();
-            notificationSettings.setCoach(coach);
             notificationSettings.setCreatedAt(LocalDateTime.now());
-            notificationSettings.setCreatedBy(fullName);
 
+              notificationSettings.setLastUpdatedAt(LocalDateTime.now());
+
+             if (notificationSettingsRequest.getCoach() != null) {
+                 notificationSettings.setCoach(notificationSettingsRequest.getCoach());
+                 notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
+                 notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
+                 if (notificationSettingsRequest.getCoach().getOrganization() != null) {
+                     notificationSettings.setOrganization(notificationSettingsRequest.getCoach().getOrganization());
+                 }
+             }else{
+                 notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
+                    notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+                    notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+
+             }
+log.info("Notification Settings Created Successfully");
             // TODO: Link to User (Not Necessary) -> Default way of adding notifications is during registration
             return notificationSettingsRepository.save(notificationSettings);
         }

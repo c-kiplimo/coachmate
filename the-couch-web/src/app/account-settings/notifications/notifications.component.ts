@@ -37,9 +37,6 @@ export class NotificationsComponent implements OnInit {
 
     this.notificationDetails = JSON.parse(JSON.stringify(this.userNotificationSettings));
     this.selectedOption = this.notificationDetails.bakerNotificationMode;
-
-    // console.log(this.notificationDetails);
-
   }
 
   saveSettings(): void {

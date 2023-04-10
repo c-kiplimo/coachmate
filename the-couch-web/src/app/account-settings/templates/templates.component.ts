@@ -27,18 +27,23 @@ export class TemplatesComponent implements OnInit {
   userNotificationSettings: any;
   notificationDetails: any;
   backIcon = faChevronLeft;
-  orderTemplateTypes = [
-    'NEW_ORDER ',
-    'PARTIAL_ORDER_PAYMENT',
-    'FULL_ORDER_PAYMENT',
-    'CANCEL_ORDER',
-    'DELIVER_ORDER',
+  templateTypes = [
+    'NEW_CONTRACT ',
+    'PARTIAL_BILL_PAYMENT',
+    'FULL_BILL_PAYMENT',
+    'CANCEL_SESSION',
+    'DELIVER_SESSION',
+    'RESCHEDULE_SESSION',
+    'PAYMENT_REMINDER',
+
   ];
 
   editingSettings = false;
   isSaving = false;
   disableButton = false;
   saveSuccess = false;
+  coachSessionData: any;
+  coachData: any;
 
   constructor(
     private notificationsService: ClientService,
@@ -51,7 +56,9 @@ export class TemplatesComponent implements OnInit {
   ngOnInit(): void {
 
     window.scroll(0, 0);
-
+    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachData = JSON.parse(this.coachSessionData);
+    console.log(this.coachData);
     this.user = JSON.parse(
       sessionStorage.getItem('user') || '{}'
     );
@@ -61,7 +68,8 @@ export class TemplatesComponent implements OnInit {
   }
 
   setFields(): void {
-    this.notificationDetails = JSON.parse(JSON.stringify(this.user.baker.bakerNotificationSettings));
+    this.notificationDetails = JSON.parse(JSON.stringify(this.user.coach.notificationSettings));
+    console.log(this.notificationDetails);
   }
 
   saveSettings(): void {
@@ -90,7 +98,7 @@ export class TemplatesComponent implements OnInit {
   }
 
   resetTemplate(template: string): void {
-    this.notificationDetails[template] = this.user.baker.bakerNotificationSettings[template];
+    this.notificationDetails[template] = this.user.coach.notificationSettings[template];
   }
 
   getAccount(): void {
@@ -100,9 +108,9 @@ export class TemplatesComponent implements OnInit {
         // console.log('here');
 
         sessionStorage.setItem('businessName', response.body.firstName);
-        sessionStorage.setItem('bakerStatus', response.body.baker.status);
+        sessionStorage.setItem('coachStatus', response.body.coach.status);
         sessionStorage.setItem('user', JSON.stringify(response.body));
-        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.bakerNotificationSettings))
+        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.notificationSettings))
 
         setTimeout(() => {
           location.reload();

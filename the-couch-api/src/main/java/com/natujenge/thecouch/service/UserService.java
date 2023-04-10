@@ -189,6 +189,7 @@ public class UserService implements UserDetailsService {
 
     }
     public void updateUser(User registeredUser) {
+        log.info("Request to update user : {}", registeredUser.getFirstName());
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserByUsername(registeredUser.getUsername()));
 
         if(optionalUser.isEmpty()){

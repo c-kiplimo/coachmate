@@ -51,7 +51,7 @@ public class CoachSettings {
     @JoinColumn(name="coach_id")
     Coach coach;
 
-    // orgenization
+    // organization
     @ManyToOne
     @JoinColumn(name="organization_id")
     Organization organization;

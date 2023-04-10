@@ -9,21 +9,6 @@ import java.util.Arrays;
 @Data
 @Entity
 public class Attachments {
-
-    @Column(name = "filename", length = 50)
-    private String filename;
-    @Column(name = "original_name", length = 100)
-    private String originalName;
-    @Column(name = "mime_type", length = 100)
-    private String mimeType;
-    //    @Lob
-//    private byte[] data;
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column(nullable = false)
-    private String createdBy;
-    private LocalDateTime lastUpdatedAt;
-    private String lastUpdatedBy;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +23,12 @@ public class Attachments {
     private String  linkUrl;
     private byte[]  file;
 
-
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String createdBy;
+    private LocalDateTime lastUpdatedAt;
+    private String lastUpdatedBy;
 
     @ManyToOne
     @JoinColumn(name = "session_id")
@@ -55,22 +45,6 @@ public class Attachments {
     @ManyToOne
     @JoinColumn(name = "org_id_id")
     Organization organization;
-    @Override public String toString() {
-        return "Attachments{" +
-                "id=" + id +
-                ", FileName='" + FileName + '\'' +
-                ", attachmentNumber='" + attachmentNumber + '\'' +
-                ", FileType='" + FileType + '\'' +
-                ", FileSize=" + FileSize +
-                ", FileContent=" + Arrays.toString(FileContent) +
-                ", link='" + link + '\'' +
-                ", linkUrl='" + linkUrl + '\'' +
-                ", file=" + Arrays.toString(file) +
-                ", session=" + session +
-                ", coach=" + coach +
-                ", client=" + client +
-                ", organization=" + organization +
-                '}';
-    }
+
 
 }
