@@ -35,8 +35,6 @@ public class ClientWalletService {
     @Autowired
     NotificationRepository notificationRepository;
     @Autowired
-    ClientBillingAccountService clientBillingAccountService;
-    @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
     @Autowired
     ClientRepository clientRepository;
@@ -53,35 +51,29 @@ public class ClientWalletService {
     ModelMapper modelMapper;
 
     // Obtain the recent wallet account for the given client
-    public ClientWallet getClientWalletRecentRecord(long coachId, long clientId) {
-log.info("Get client wallet recent record for coach id {} and client id {}", coachId, clientId);
-        // obtain latest payment Record
-        Optional<ClientWallet> optionalClientWallet = clientWalletRepository.
-                findFirstByCoachIdAndClientIdOrderByIdDesc(
-                        coachId, clientId);
-
-        if (optionalClientWallet.isEmpty()) {
-            throw new IllegalArgumentException("Specified wallet does not exist!!!");
-
-        }
-
-        return optionalClientWallet.get();
-    }
-
-    public ClientWallet getClientWalletRecentRecordByOrganization(long organizationId, long clientId) {
+    public ClientWallet getClientWalletRecentRecord_(long organizationId, long clientId) {
         log.info("Get client wallet recent record for organization id {} and client id {}", organizationId, clientId);
+
+        Optional<ClientWallet> optionalClientWallet = clientWalletRepository
+                .findFirstByOrganizationIdAndClientIdOrderByIdDesc(organizationId, clientId);
+
+        return optionalClientWallet.orElseThrow(() -> new IllegalArgumentException("Specified wallet does not exist!!!"));
+    }
+
+    public ClientWallet getClientWalletRecentRecord(long coachId, long clientId) {
+        log.info("Get client wallet recent record for organization id {} and client id {}", coachId, clientId);
         // obtain latest payment Record
-        Optional<ClientWallet> optionalClientWallet = clientWalletRepository.
-                findFirstByOrganizationIdAndClientIdOrderByIdDesc(
-                        organizationId, clientId);
+        Optional<ClientWallet> optionalClientWallet = clientWalletRepository
+                .findFirstByCoachIdAndClientIdOrderByIdDesc(coachId, clientId);
 
         if (optionalClientWallet.isEmpty()) {
             throw new IllegalArgumentException("Specified wallet does not exist!!!");
-
         }
 
         return optionalClientWallet.get();
     }
+
+
 
     public void updateWalletBalance(ClientWallet clientWallet, Float paymentBalance, String coachName) {
         Float previousBalance = clientWallet.getWalletBalance();
@@ -281,16 +273,14 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     // create payment by organization
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
         try {
-            Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId()
-                    ,organization.getId());
-            if(clientOptional.isEmpty()){
+            Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId(), organization.getId());
+            if (clientOptional.isEmpty()) {
                 throw new IllegalArgumentException("Client not found!");
             }
             Client client = clientOptional.get();
 
-
-            // obtain previous payment Record
-            Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecordByOrganization(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
+            // obtain previous payment record
+            Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord_(paymentRequest.getCoachId(), paymentRequest.getClientId()));
             float prevWalletBalance;
             if(previousWalletRecord.get().getWalletBalance().equals(null)){
                 prevWalletBalance = 0;
@@ -300,61 +290,56 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
             ClientWallet clientWallet = new ClientWallet();
             clientWallet.setAmountDeposited(paymentRequest.getAmount());
-
             clientWallet.setPaymentCurrency(paymentRequest.getPaymentCurrency());
             clientWallet.setModeOfPayment(paymentRequest.getModeOfPayment());
             clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
             clientWallet.setCreatedAt(LocalDateTime.now());
-
-
-
             clientWallet.setClient(client);
             clientWallet.setOrganization(organization);
 
             // mngmnt
             clientWallet.setCreatedBy(organization.getFullName());
             Optional<Organization> org = Optional.ofNullable(client.getOrganization());
-            if(org.isPresent()) {
+            if (org.isPresent()) {
                 clientWallet.setOrganization(client.getOrganization());
             }
+
             // Update Payment Details based on balance on clientWallet;
             float walletBalance = prevWalletBalance + paymentRequest.getAmount();
 
-
-            // update billing account
-            // return walletBalance
+            // update billing account and return wallet balance
             Float walletBalanceAfter = updateBillingAccountOnPaymentByOrganization(
-                    organization,client,walletBalance,paymentRequest.getAmount());
+                    organization, client, walletBalance, paymentRequest.getAmount());
             clientWallet.setWalletBalance(walletBalanceAfter);
 
-            //update account statement
-
-
-
+            // update account statement
 
             // save wallet
             ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
             log.info("Wallet successfully saved");
-            log.info("Prep to send sms");
+
+            // prepare variables for SMS message
             Map<String, Object> replacementVariables = new HashMap<>();
             replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
             replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
             replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
             replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+
             String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
-            //replacement to get content
             String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-            String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from  settings
+            String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from settings
             String referenceId = clientWallet1.getId().toString();
             String msisdn = clientWallet1.getClient().getMsisdn();
-            log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
-            //send sms
+
+            // send SMS message to client
             notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-            log.info("sms sent ");
-            // sendEmail
+            log.info("SMS message sent");
+
+            // send email to client
             notificationServiceHTTPClient.sendEmail(client.getEmail(), "PAYMENT RECEIVED", smsContent, false);
             log.info("Email sent");
-            //create notification object and send it
+
+            // create and save notification object
             Notification notification = new Notification();
             notification.setNotificationMode(NotificationMode.SMS);
             notification.setDestinationAddress(msisdn);

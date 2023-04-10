@@ -91,7 +91,7 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
 
 
 
-        ClientWallet clientWallet =  walletService.getClientWalletRecentRecordByOrganization(organization.getId(),
+        ClientWallet clientWallet =  walletService.getClientWalletRecentRecord(organization.getId(),
                 client.getId());
 
 
