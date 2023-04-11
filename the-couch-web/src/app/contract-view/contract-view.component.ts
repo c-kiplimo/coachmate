@@ -109,7 +109,7 @@ export class contractViewComponent implements OnInit {
     this.clientService.getOrgContracts(id).subscribe(
       (response: any) => {
         console.log(response);
-        this.contracts = response.body.data;
+        this.contracts = response.body;
         this.loading = false;
       },
       (error: any) => {

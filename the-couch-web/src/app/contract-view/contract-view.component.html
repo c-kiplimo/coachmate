@@ -30,7 +30,7 @@
           <td>{{ contract.coachingTopic }}</td>
           <td>{{ contract.coachingCategory }}</td>
           <td>{{ contract.contractStatus}}</td>
-          <td>{{ contract.client.fullName }}</td>
+          <td>{{  contract.coachingTopic }}</td>
           <td>{{ contract.startDate | date : "MMM d, y" }}</td>
           <td>{{ contract.endDate | date : "MMM d, y" }}</td>
           <td>{{ contract.noOfSessions }}</td>
@@ -46,7 +46,7 @@
   <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
-  <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
+  <p class="text-muted mt-5" *ngIf="!loading && contracts.length == 0">
     No contracts Found.
   </p>
 </div>
