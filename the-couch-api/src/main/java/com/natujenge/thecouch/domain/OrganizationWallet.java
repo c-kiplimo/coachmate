@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "tbl_coach_wallet")
-public class CoachWallet {
+@Table(name = "tbl_organization_wallet")
+public class OrganizationWallet {
     @Id
     @GeneratedValue(strategy = GenerationType
             .IDENTITY)
@@ -28,7 +28,7 @@ public class CoachWallet {
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
-    private String coachWalletNumber;
+    private String organizationWalletNumber;
     private String extPaymentRef;
     public String description;
 

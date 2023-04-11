@@ -1,8 +1,5 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.ModeOfPayment;
-import com.natujenge.thecouch.domain.enums.PaymentCurrency;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,34 +7,20 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "tbl_coach_wallet")
-public class CoachWallet {
+@Table(name = "tbl_organization_billing_account")
+public class OrganizationBillingAccount {
     @Id
     @GeneratedValue(strategy = GenerationType
             .IDENTITY)
     Long id;
-    // updated on every payment
-    Float walletBalanceBefore;
-    Float walletBalance;
-    Float amountDeposited;
+
     Float amountBilled;
-    private String coachWalletNumber;
-    private String extPaymentRef;
-    public String description;
-
-    @Enumerated(EnumType.STRING)
-    private ModeOfPayment modeOfPayment;
-
-    @Enumerated(EnumType.STRING)
-    private PaymentCurrency paymentCurrency;
-
 
     // Management Details
     @CreationTimestamp
@@ -48,9 +31,7 @@ public class CoachWallet {
     private String createdBy;
 
     @UpdateTimestamp
-    private LocalDate lastUpdatedAt;
-    @Enumerated(EnumType.STRING)
-    private StatementPeriod statementPeriod;
+    private LocalDateTime lastUpdatedAt;
 
     private String lastUpdatedBy;
 
