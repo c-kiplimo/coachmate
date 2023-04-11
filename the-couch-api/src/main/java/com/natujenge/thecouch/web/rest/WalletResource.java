@@ -34,6 +34,7 @@ public class WalletResource {
         log.info("Request to create payment");
         log.info("userDetails{}",userDetails.getId());
         try {
+            log.info("Logged in user {} ",userDetails);
             Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
             log.info("coach id {}",coachId);
             Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
@@ -50,7 +51,8 @@ public class WalletResource {
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());
-                    return ResponseEntity.created(uri).body(wallet);
+                    return  ResponseEntity.ok().body(wallet);
+                    //return ResponseEntity.created(uri).body(wallet);
 
                 } catch (Exception e) {
                     log.error("Error ", e);

@@ -273,6 +273,7 @@ public class ClientWalletService {
     // create payment by organization
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
         try {
+            log.info("Organization");
             Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId(), organization.getId());
             if (clientOptional.isEmpty()) {
                 throw new IllegalArgumentException("Client not found!");
@@ -280,7 +281,7 @@ public class ClientWalletService {
             Client client = clientOptional.get();
 
             // obtain previous payment record
-            Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord_(paymentRequest.getCoachId(), paymentRequest.getClientId()));
+            Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord_(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
             float prevWalletBalance;
             if(previousWalletRecord.get().getWalletBalance().equals(null)){
                 prevWalletBalance = 0;
@@ -323,7 +324,7 @@ public class ClientWalletService {
             replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
             replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
             replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-            replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+            replacementVariables.put("organization_name", clientWallet1.getClient().getOrganization().getOrgName());
 
             String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
             String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -346,9 +347,9 @@ public class ClientWalletService {
             notification.setSourceAddress(sourceAddress);
             notification.setContent(smsContent);
             notification.setSendReason("PAYMENT RECEIVED");
-            notification.setCoachId(client.getCoach().getId());
+            notification.setOrganizationId(client.getOrganization().getId());
             notification.setClientId(client.getId());
-            notification.setCreatedBy(client.getCoach().getFullName());
+            notification.setCreatedBy(client.getOrganization().getFullName());
             //TO DO: add logic to save notification to db
             notificationRepository.save(notification);
             return clientWallet1;
