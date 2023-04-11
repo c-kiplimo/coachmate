@@ -51,8 +51,7 @@ public class WalletResource {
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());
-                    return  ResponseEntity.ok().body(wallet);
-                    //return ResponseEntity.created(uri).body(wallet);
+                    return ResponseEntity.created(uri).body(wallet);
 
                 } catch (Exception e) {
                     log.error("Error ", e);
