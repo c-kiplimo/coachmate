@@ -1,17 +1,10 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
-import ke.natujenge.baked.domain.BakerNotificationSettings;
-import ke.natujenge.baked.domain.enums.BakerStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
+import com.natujenge.thecouch.domain.enums.CoachStatus;
 import java.time.LocalDateTime;
 
 
-public class BakerDTO {
+public class CoachDTO {
 
     private Long id;
     private String businessName;
@@ -20,19 +13,19 @@ public class BakerDTO {
     private String fullName;
     private String msisdn;
     private String emailAddress;
-    private BakerStatus status;
+    private CoachStatus status;
     private boolean onboarded;
     private String reason;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-    private BakerNotificationSettingsDTO bakerNotificationSettings;
-    private BakerLocationDTO defaultBakerLocation;
-    private BakerPaymentDetailsDTO defaultBakerPaymentDetails;
-    private BakerSettingsDTO bakerSettings;
-    private BakerSubscriptionDTO subscription;
-    private BakerWalletDTO wallet;
+    private NotificationSettingsDTO notificationSettings;
+
+    private CoachPaymentDetailsDTO defaultCoachPaymentDetails;
+    private CoachSettingsDTO coachSettings;
+    private CoachSubscriptionDTO subscription;
+    private CoachWalletDTO wallet;
 
     public Long getId() {
         return id;
@@ -90,11 +83,11 @@ public class BakerDTO {
         this.emailAddress = emailAddress;
     }
 
-    public BakerStatus getStatus() {
+    public CoachStatus   getStatus() {
         return status;
     }
 
-    public void setStatus(BakerStatus status) {
+        public void setStatus(CoachStatus status) {
         this.status = status;
     }
 
@@ -146,51 +139,44 @@ public class BakerDTO {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public BakerNotificationSettingsDTO getBakerNotificationSettings() {
-        return bakerNotificationSettings;
+    public NotificationSettingsDTO getNotificationSettings() {
+        return notificationSettings;
     }
 
-    public void setBakerNotificationSettings(BakerNotificationSettingsDTO bakerNotificationSettings) {
-        this.bakerNotificationSettings = bakerNotificationSettings;
+    public void setNotificationSettings(NotificationSettingsDTO notificationSettings) {
+        this.notificationSettings = notificationSettings;
     }
 
-    public BakerLocationDTO getDefaultBakerLocation() {
-        return defaultBakerLocation;
+
+    public CoachPaymentDetailsDTO getDefaultPaymentDetails() {
+        return defaultCoachPaymentDetails;
     }
 
-    public void setDefaultBakerLocation(BakerLocationDTO defaultBakerLocation) {
-        this.defaultBakerLocation = defaultBakerLocation;
+    public void setDefaultBakerPaymentDetails(CoachPaymentDetailsDTO defaultBakerPaymentDetails) {
+        this.defaultCoachPaymentDetails = defaultBakerPaymentDetails;
     }
 
-    public BakerPaymentDetailsDTO getDefaultBakerPaymentDetails() {
-        return defaultBakerPaymentDetails;
+    public CoachSettingsDTO getCoachSettings() {
+        return coachSettings;
     }
 
-    public void setDefaultBakerPaymentDetails(BakerPaymentDetailsDTO defaultBakerPaymentDetails) {
-        this.defaultBakerPaymentDetails = defaultBakerPaymentDetails;
+    public void setBakerSettings(CoachSettingsDTO coachSettings) {
+        this.coachSettings = coachSettings;
     }
 
-    public BakerSettingsDTO getBakerSettings() {
-        return bakerSettings;
-    }
-
-    public void setBakerSettings(BakerSettingsDTO bakerSettings) {
-        this.bakerSettings = bakerSettings;
-    }
-
-    public BakerSubscriptionDTO getSubscription() {
+    public CoachSubscriptionDTO getSubscription() {
         return subscription;
     }
 
-    public void setSubscription(BakerSubscriptionDTO subscription) {
+    public void setSubscription(CoachSubscriptionDTO subscription) {
         this.subscription = subscription;
     }
 
-    public BakerWalletDTO getWallet() {
+    public CoachWalletDTO getWallet() {
         return wallet;
     }
 
-    public void setWallet(BakerWalletDTO wallet) {
+    public void setWallet(CoachWalletDTO wallet) {
         this.wallet = wallet;
     }
 
@@ -210,10 +196,9 @@ public class BakerDTO {
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
-                ", bakerNotificationSettings=" + bakerNotificationSettings +
-                ", defaultBakerLocation=" + defaultBakerLocation +
-                ", defaultBakerPaymentDetails=" + defaultBakerPaymentDetails +
-                ", bakerSettings=" + bakerSettings +
+                ", NotificationSettings=" + notificationSettings +
+                ", defaultCoachPaymentDetails=" + defaultCoachPaymentDetails +
+                ", coachSettings=" + coachSettings +
                 ", subscription=" + subscription +
                 ", wallet=" + wallet +
                 '}';

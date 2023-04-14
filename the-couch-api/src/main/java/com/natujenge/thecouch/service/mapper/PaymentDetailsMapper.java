@@ -1,13 +1,14 @@
-package ke.natujenge.baked.service.mapper;
+package com.natujenge.thecouch.service.mapper;
 
-import ke.natujenge.baked.domain.BakerPaymentDetails;
-import ke.natujenge.baked.service.dto.BakerPaymentDetailsDTO;
+
+import com.natujenge.thecouch.service.dto.PaymentDetailsDTO;
+import com.natujenge.thecouch.domain.PaymentDetails;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface BakerPaymentDetailsMapper extends EntityMapper<BakerPaymentDetailsDTO, BakerPaymentDetails>{
+public interface PaymentDetailsMapper extends EntityMapper<PaymentDetailsDTO, PaymentDetails>{
 
-    @Mapping(target = "baker", source = "baker")
-    BakerPaymentDetailsDTO toDto(BakerPaymentDetails b);
+    @Mapping(target = "coach", source = "coach")
+    PaymentDetailsDTO toDto(PaymentDetails b);
 }

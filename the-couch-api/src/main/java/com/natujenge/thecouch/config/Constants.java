@@ -45,5 +45,5 @@ public class Constants {
     public static final String DEFAULT_PAYMENT_REMINDER_TEMPLATE =  "Dear $client_name. You have an outstanding" +
             "balance of $amountBilled. Thank you. $business_name";
 
-
+    public static final String UPLOADS_FOLDER ="/apps/uploads";
 }

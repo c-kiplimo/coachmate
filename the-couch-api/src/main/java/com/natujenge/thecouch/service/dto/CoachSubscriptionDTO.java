@@ -1,8 +1,8 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
 import java.time.LocalDateTime;
 
-public class BakerSubscriptionDTO {
+public class CoachSubscriptionDTO {
     private Long id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -10,7 +10,7 @@ public class BakerSubscriptionDTO {
     private Long bakerId;
     private Long planId;
     private String planName;
-    private BakerDTO  baker;
+    private CoachDTO  coach;
 
     public Long getId() {
         return id;
@@ -60,12 +60,13 @@ public class BakerSubscriptionDTO {
         this.planName = planName;
     }
 
-    public BakerDTO getBaker() {
-        return baker;
+    public CoachDTO getCoach() {
+        return coach;
     }
 
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+
+    public void setCoach(CoachDTO coach) {
+        this.coach = coach;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class BakerSubscriptionDTO {
                 ", bakerId=" + bakerId +
                 ", planId=" + planId +
                 ", planName=" + planName +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 '}';
     }
 }

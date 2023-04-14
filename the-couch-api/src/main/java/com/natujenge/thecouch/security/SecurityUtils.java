@@ -1,6 +1,6 @@
-package ke.natujenge.baked.security;
+package com.natujenge.thecouch.security;
 
-import ke.natujenge.baked.domain.User;
+import com.natujenge.thecouch.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,12 +35,12 @@ public class SecurityUtils {
         return null;
     }
 
-    public static Long getCurrentBakerId(){
+    public static Long getCurrentCoachId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return null;
         } else if (authentication.getPrincipal() instanceof User) {
-            return ((User) authentication.getPrincipal()).getBaker().getId();
+            return ((User) authentication.getPrincipal()).getCoach().getId();
         }
 
         return null;

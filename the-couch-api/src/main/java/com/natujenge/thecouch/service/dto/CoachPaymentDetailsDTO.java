@@ -1,17 +1,11 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
-import ke.natujenge.baked.domain.Baker;
-import ke.natujenge.baked.domain.enums.MPesaPaymentType;
-import ke.natujenge.baked.domain.enums.PaymentType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.*;
+import com.natujenge.thecouch.domain.enums.PaymentType;
+import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
 import java.time.LocalDateTime;
 
-public class BakerPaymentDetailsDTO {
+public class CoachPaymentDetailsDTO {
     private Long id;
     private PaymentType paymentType;
     private MPesaPaymentType mpesaPaymentType;
@@ -23,7 +17,7 @@ public class BakerPaymentDetailsDTO {
     private String businessNumber; //pay bill
     private String accountNumber; // bank & pay bill
     private float depositPercentage;
-    private BakerDTO baker;
+    private CoachDTO coach;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
@@ -117,12 +111,12 @@ public class BakerPaymentDetailsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public BakerDTO getBaker() {
-        return baker;
+    public CoachDTO getBaker() {
+        return coach;
     }
 
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+    public void setBaker(CoachDTO baker) {
+        this.coach = coach;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -171,7 +165,7 @@ public class BakerPaymentDetailsDTO {
                 ", businessNumber='" + businessNumber + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", depositPercentage=" + depositPercentage +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +

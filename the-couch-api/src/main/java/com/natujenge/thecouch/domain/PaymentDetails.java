@@ -1,24 +1,20 @@
-package ke.natujenge.baked.domain;
+package com.natujenge.thecouch.domain;
 
-import ke.natujenge.baked.domain.enums.MPesaPaymentType;
-import ke.natujenge.baked.domain.enums.PaymentType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
+import com .natujenge.thecouch.domain.enums.PaymentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Table(name = "tbl_baker_payment_details")
+@Table(name = "tbl_payment_details")
 @Entity
-public class BakerPaymentDetails {
+public class PaymentDetails {
     @SequenceGenerator(
-            name = "baker_payment_details_sequence",
-            sequenceName = "baker_payment_details_sequence",
+            name = "payment_details_sequence",
+            sequenceName = "payment_details_sequence",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "baker_payment_details_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "payment_details_sequence")
     @Id
     private Long id;
     @Enumerated(EnumType.STRING)
@@ -36,9 +32,9 @@ public class BakerPaymentDetails {
     @ManyToOne // Baker could have one or multiple payment details
     @JoinColumn(
             nullable = false,
-            name = "baker_id"
+            name = "coach_id"
     )
-    private Baker baker;
+    private Coach coach;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -135,12 +131,12 @@ public class BakerPaymentDetails {
         this.depositPercentage = depositPercentage;
     }
 
-    public Baker getBaker() {
-        return baker;
+    public Coach getCoach() {
+        return coach;
     }
 
-    public void setBaker(Baker baker) {
-        this.baker = baker;
+    public void setBaker(Coach coach) {
+        this.coach = coach;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -189,7 +185,7 @@ public class BakerPaymentDetails {
                 ", businessNumber='" + businessNumber + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", depositPercentage=" + depositPercentage +
-                ", baker=" + baker +
+                ", coach =" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +

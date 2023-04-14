@@ -1,11 +1,13 @@
 package com.natujenge.thecouch.web.rest;
-
+import com.natujenge.thecouch.web.rest.errors.BadRequestException;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
+import com.natujenge.thecouch.service.dto.CoachDTO;
+import com.natujenge.thecouch.service.dto.OnBoardCoachDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +51,17 @@ public class CoachResource {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @PostMapping("/onboard")
+    public ResponseEntity<CoachDTO> onBoardCoach(@RequestBody OnBoardCoachDTO onBoardCoachDTO) {
+        log.info("REST Request to onboard Coach: {}", onBoardCoachDTO);
+
+        if (onBoardCoachDTO.getCoachId() == null) {
+            throw new BadRequestException("Invalid Request. Coach Id is Mandatory");
+        }
+
+        CoachDTO result = coachService.onBoard(onBoardCoachDTO);
+
+        return ResponseEntity.ok().body(result);
     }
 }

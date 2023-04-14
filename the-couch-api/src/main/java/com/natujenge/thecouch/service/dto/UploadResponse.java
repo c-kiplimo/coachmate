@@ -1,4 +1,4 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
 public class UploadResponse {
     private String filename;

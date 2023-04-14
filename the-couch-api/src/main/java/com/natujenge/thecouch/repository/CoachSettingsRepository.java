@@ -1,11 +1,11 @@
-package ke.natujenge.baked.repository;
+package com.natujenge.thecouch.repository;
 
-import ke.natujenge.baked.domain.BakerSettings;
+import com.natujenge.thecouch.domain.CoachSettings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BakerSettingsRepository extends JpaRepository<BakerSettings, Long> {
-    BakerSettings findByBakerId(Long bakerId);
-    BakerSettings findTopByBakerId(Long bakerId);
+public interface CoachSettingsRepository extends JpaRepository<CoachSettings, Long> {
+    CoachSettings findByCoachId(Long coachId);
+    CoachSettings findTopByCoachId(Long coachId);
 }

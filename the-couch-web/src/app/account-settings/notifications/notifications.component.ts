@@ -40,12 +40,10 @@ export class NotificationsComponent implements OnInit {
   }
 
   saveSettings(): void {
-    // console.log(this.notificationDetails.bakerNotificationMode);
     window.scroll(0, 0);
 
     this.coachService.saveSettings(this.notificationDetails).subscribe({
       next: (res: any) => {
-        // console.log('here', res.body);
         const data = res.body;
         this.toastrService.success('Settings saved!', 'Success!');
 

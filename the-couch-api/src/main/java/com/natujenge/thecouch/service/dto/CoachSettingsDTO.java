@@ -1,12 +1,12 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
 import java.time.LocalDateTime;
 
-public class BakerSettingsDTO {
+public class CoachSettingsDTO {
 
     private Long id;
     private String logo;
-    private BakerDTO baker;
+    private CoachDTO coach;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
@@ -28,12 +28,12 @@ public class BakerSettingsDTO {
         this.logo = logo;
     }
 
-    public BakerDTO getBaker() {
-        return baker;
+    public CoachDTO getCoach() {
+        return coach;
     }
 
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+    public void setCoach(CoachDTO baker) {
+        this.coach = coach;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -73,7 +73,7 @@ public class BakerSettingsDTO {
         return "BakerSettings{" +
                 "id=" + id +
                 ", logo='" + logo + '\'' +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +

@@ -1,10 +1,7 @@
-package ke.natujenge.baked.service.dto;
-
-import ke.natujenge.baked.domain.enums.BakerNotificationMode;
-import ke.natujenge.baked.domain.enums.NotificationSendStatus;
-import ke.natujenge.baked.domain.enums.NotificationType;
-import ke.natujenge.baked.domain.enums.OrderStatus;
-
+package com.natujenge.thecouch.service.dto;
+import com.natujenge.thecouch.domain.enums.NotificationSendStatus;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.NotificationType;
 import java.time.LocalDateTime;
 
 
@@ -17,7 +14,7 @@ public class NotificationDTO {
     private String dstAddress;
     private String content;
     private LocalDateTime sentAt;
-    private BakerNotificationMode notificationMode;
+    private NotificationMode notificationMode;
     private NotificationSendStatus sendStatus;
     private String sendReason;
     private LocalDateTime deliveredAt;
@@ -38,13 +35,6 @@ public class NotificationDTO {
     private Long orderId;
     private Long paymentId;
     private Long walletStatementId;
-
-//    private Baker baker;
-//    private Customer customer;
-//    private Order order;
-//    private Payment payment;
-//
-//    private WalletStatementDTO walletStatement;
 
 
     public Long getId() {
@@ -103,11 +93,11 @@ public class NotificationDTO {
         this.sentAt = sentAt;
     }
 
-    public BakerNotificationMode getNotificationMode() {
+    public NotificationMode getNotificationMode() {
         return notificationMode;
     }
 
-    public void setNotificationMode(BakerNotificationMode notificationMode) {
+    public void setNotificationMode(NotificationMode notificationMode) {
         this.notificationMode = notificationMode;
     }
 

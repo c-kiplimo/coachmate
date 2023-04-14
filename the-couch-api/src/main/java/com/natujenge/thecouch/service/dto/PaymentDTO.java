@@ -1,10 +1,7 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
-import ke.natujenge.baked.domain.Baker;
-import ke.natujenge.baked.domain.Customer;
-import ke.natujenge.baked.domain.enums.ModeOfPayment;
-import ke.natujenge.baked.domain.enums.PaymentType;
-
+import com .natujenge.thecouch.domain.enums.ModeOfPayment;
+import com.natujenge.thecouch.domain.enums.PaymentType;
 import java.time.LocalDateTime;
 
 public class PaymentDTO {
@@ -20,9 +17,7 @@ public class PaymentDTO {
     private String narration;
     private String paidOn;
     private String trxMessage;
-    private OrderDTO order;
-    private CustomerDTO customer;
-    private BakerDTO baker;
+    private CoachDTO coach;
     private LocalDateTime paidAt;
     private LocalDateTime createdAt;
     private String createdBy;
@@ -117,28 +112,12 @@ public class PaymentDTO {
         this.trxMessage = trxMessage;
     }
 
-    public OrderDTO getOrder() {
-        return order;
+    public CoachDTO getCoach() {
+        return coach;
     }
 
-    public void setOrder(OrderDTO order) {
-        this.order = order;
-    }
-
-    public CustomerDTO getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerDTO customer) {
-        this.customer = customer;
-    }
-
-    public BakerDTO getBaker() {
-        return baker;
-    }
-
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+    public void setCoach(CoachDTO coach) {
+        this.coach = coach;
     }
 
     public LocalDateTime getPaidAt() {
@@ -195,9 +174,7 @@ public class PaymentDTO {
                 ", narration='" + narration + '\'' +
                 ", paidOn='" + paidOn + '\'' +
                 ", trxMessage='" + trxMessage + '\'' +
-                ", order=" + order +
-                ", customer=" + customer +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 ", paidAt=" + paidAt +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +

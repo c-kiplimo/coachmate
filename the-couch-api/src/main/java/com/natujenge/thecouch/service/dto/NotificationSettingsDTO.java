@@ -1,16 +1,20 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
+import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.NotificationSettings;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.PaymentType;
+import com.natujenge.thecouch.domain.enums.SessionTemplateType;
+import lombok.Data;
 
-import ke.natujenge.baked.domain.enums.BakerNotificationMode;
-import ke.natujenge.baked.domain.enums.OrderTemplateType;
-import ke.natujenge.baked.domain.enums.PaymentType;
 
 import java.time.LocalDateTime;
-
-public class BakerNotificationSettingsDTO {
+@Data
+public class NotificationSettingsDTO {
 
     private Long id;
 
-    private BakerNotificationMode bakerNotificationMode;
+    private NotificationMode notificationMode;
 
     private String smsDisplayName;
     private String emailDisplayName;
@@ -21,22 +25,9 @@ public class BakerNotificationSettingsDTO {
     private String tillNumber;
     private String accountNumber;
     private Float depositPercentage;
-    private OrderTemplateType orderTemplateType;
-    private String newOrderTemplate;
-    private String partialOrderPaymentTemplate;
-    private String fullOrderPaymentTemplate;
-    private String cancelOrderTemplate;
-    private String deliverOrderTemplate;
-    private String paymentReminderTemplate;
-
-    private boolean newOrderEnable;
-    private boolean partialOrderPaymentEnable;
-    private boolean fullOrderPaymentEnable;
-    private boolean cancelOrderEnable;
-    private boolean deliverOrderEnable;
     private int paymentDue;
 
-    BakerDTO baker;
+    CoachDTO coach;
 
     private LocalDateTime createdAt;
 
@@ -52,12 +43,12 @@ public class BakerNotificationSettingsDTO {
         this.id = id;
     }
 
-    public BakerNotificationMode getBakerNotificationMode() {
-        return bakerNotificationMode;
+    public NotificationMode getNotificationMode() {
+        return notificationMode;
     }
 
-    public void setBakerNotificationMode(BakerNotificationMode bakerNotificationMode) {
-        this.bakerNotificationMode = bakerNotificationMode;
+    public void setBakerNotificationMode(NotificationMode notificationMode) {
+        this.notificationMode = notificationMode;
     }
 
     public String getSmsDisplayName() {
@@ -124,108 +115,12 @@ public class BakerNotificationSettingsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public OrderTemplateType getOrderTemplateType() {
-        return orderTemplateType;
+    public  CoachDTO getCoach() {
+        return coach;
     }
 
-    public void setOrderTemplateType(OrderTemplateType orderTemplateType) {
-        this.orderTemplateType = orderTemplateType;
-    }
-
-    public String getNewOrderTemplate() {
-        return newOrderTemplate;
-    }
-
-    public void setNewOrderTemplate(String newOrderTemplate) {
-        this.newOrderTemplate = newOrderTemplate;
-    }
-
-    public String getPartialOrderPaymentTemplate() {
-        return partialOrderPaymentTemplate;
-    }
-
-    public void setPartialOrderPaymentTemplate(String partialOrderPaymentTemplate) {
-        this.partialOrderPaymentTemplate = partialOrderPaymentTemplate;
-    }
-
-    public String getFullOrderPaymentTemplate() {
-        return fullOrderPaymentTemplate;
-    }
-
-    public void setFullOrderPaymentTemplate(String fullOrderPaymentTemplate) {
-        this.fullOrderPaymentTemplate = fullOrderPaymentTemplate;
-    }
-
-    public String getCancelOrderTemplate() {
-        return cancelOrderTemplate;
-    }
-
-    public void setCancelOrderTemplate(String cancelOrderTemplate) {
-        this.cancelOrderTemplate = cancelOrderTemplate;
-    }
-
-    public String getDeliverOrderTemplate() {
-        return deliverOrderTemplate;
-    }
-
-    public void setDeliverOrderTemplate(String deliverOrderTemplate) {
-        this.deliverOrderTemplate = deliverOrderTemplate;
-    }
-
-    public String getPaymentReminderTemplate() {
-        return paymentReminderTemplate;
-    }
-
-    public void setPaymentReminderTemplate(String paymentReminderTemplate) {
-        this.paymentReminderTemplate = paymentReminderTemplate;
-    }
-
-    public boolean isNewOrderEnable() {
-        return newOrderEnable;
-    }
-
-    public void setNewOrderEnable(boolean newOrderEnable) {
-        this.newOrderEnable = newOrderEnable;
-    }
-
-    public boolean isPartialOrderPaymentEnable() {
-        return partialOrderPaymentEnable;
-    }
-
-    public void setPartialOrderPaymentEnable(boolean partialOrderPaymentEnable) {
-        this.partialOrderPaymentEnable = partialOrderPaymentEnable;
-    }
-
-    public boolean isFullOrderPaymentEnable() {
-        return fullOrderPaymentEnable;
-    }
-
-    public void setFullOrderPaymentEnable(boolean fullOrderPaymentEnable) {
-        this.fullOrderPaymentEnable = fullOrderPaymentEnable;
-    }
-
-    public boolean isCancelOrderEnable() {
-        return cancelOrderEnable;
-    }
-
-    public void setCancelOrderEnable(boolean cancelOrderEnable) {
-        this.cancelOrderEnable = cancelOrderEnable;
-    }
-
-    public boolean isDeliverOrderEnable() {
-        return deliverOrderEnable;
-    }
-
-    public void setDeliverOrderEnable(boolean deliverOrderEnable) {
-        this.deliverOrderEnable = deliverOrderEnable;
-    }
-
-    public BakerDTO getBaker() {
-        return baker;
-    }
-
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+    public void setCoach(CoachDTO coach) {
+        this.coach = coach;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -268,11 +163,32 @@ public class BakerNotificationSettingsDTO {
         this.paymentDue = paymentDue;
     }
 
+    Organization organization;
+    // Session Settings
+    private SessionTemplateType sessionTemplateType;
+
+    private String newContractTemplate;
+    private String partialBillPaymentTemplate;
+    private String fullBillPaymentTemplate;
+    private String cancelSessionTemplate;
+    private String conductedSessionTemplate;
+    private String rescheduleSessionTemplate;
+    private String paymentReminderTemplate;
+
+    private boolean newContractEnable;
+    private boolean rescheduleSessionEnable;
+    private boolean partialBillPaymentEnable;
+    private boolean fullBillPaymentEnable;
+    private boolean cancelSessionEnable;
+    private boolean conductedSessionEnable;
+    private boolean paymentReminderEnable;
+    NotificationSettings notificationSettings;
+
     @Override
     public String toString() {
         return "BakerNotificationSettingsDTO{" +
                 "id=" + id +
-                ", bakerNotificationMode=" + bakerNotificationMode +
+                ", bakerNotificationMode=" + notificationMode +
                 ", smsDisplayName='" + smsDisplayName + '\'' +
                 ", emailDisplayName='" + emailDisplayName + '\'' +
                 ", notificationEnable=" + notificationEnable +
@@ -281,20 +197,8 @@ public class BakerNotificationSettingsDTO {
                 ", tillNumber='" + tillNumber + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", depositPercentage=" + depositPercentage +
-                ", orderTemplateType=" + orderTemplateType +
-                ", newOrderTemplate='" + newOrderTemplate + '\'' +
-                ", partialOrderPaymentTemplate='" + partialOrderPaymentTemplate + '\'' +
-                ", fullOrderPaymentTemplate='" + fullOrderPaymentTemplate + '\'' +
-                ", cancelOrderTemplate='" + cancelOrderTemplate + '\'' +
-                ", deliverOrderTemplate='" + deliverOrderTemplate + '\'' +
-                ", paymentReminderTemplate='" + paymentReminderTemplate + '\'' +
-                ", newOrderEnable=" + newOrderEnable +
-                ", partialOrderPaymentEnable=" + partialOrderPaymentEnable +
-                ", fullOrderPaymentEnable=" + fullOrderPaymentEnable +
-                ", cancelOrderEnable=" + cancelOrderEnable +
-                ", deliverOrderEnable=" + deliverOrderEnable +
                 ", paymentDue=" + paymentDue +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +

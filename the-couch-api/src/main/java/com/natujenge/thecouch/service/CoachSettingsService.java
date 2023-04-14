@@ -1,12 +1,11 @@
-package ke.natujenge.baked.service;
+package com.natujenge.thecouch.service;
 
-import ke.natujenge.baked.domain.BakerPaymentDetails;
-import ke.natujenge.baked.domain.BakerSettings;
-import ke.natujenge.baked.repository.BakerSettingsRepository;
-import ke.natujenge.baked.security.SecurityUtils;
-import ke.natujenge.baked.service.dto.BakerPaymentDetailsDTO;
-import ke.natujenge.baked.service.dto.BakerSettingsDTO;
-import ke.natujenge.baked.service.mapper.BakerSettingsMapper;
+import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
+import com.natujenge.thecouch.service.mapper.CoachMapper;
+import com.natujenge.thecouch.security.SecurityUtils;
+import com.natujenge.thecouch.domain.CoachSettings;
+import com.natujenge.thecouch.service.mapper.CoachSettingsMapper;
+import com.natujenge.thecouch.repository.CoachSettingsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,40 +13,40 @@ import java.time.LocalDateTime;
 
 @Service
 @Slf4j
-public class BakerSettingsService {
-    private final BakerSettingsRepository bakerSettingsRepository;
-    private final BakerSettingsMapper bakerSettingsMapper;
+public class CoachSettingsService {
+    private final CoachSettingsRepository coachSettingsRepository;
+    private final CoachSettingsMapper coachSettingsMapper;
 
-    public BakerSettingsService(BakerSettingsRepository bakerSettingsRepository, BakerSettingsMapper bakerSettingsMapper) {
-        this.bakerSettingsRepository = bakerSettingsRepository;
-        this.bakerSettingsMapper = bakerSettingsMapper;
+    public CoachSettingsService(CoachSettingsRepository coachSettingsRepository, CoachSettingsMapper coachSettingsMapper) {
+        this.coachSettingsRepository = coachSettingsRepository;
+        this.coachSettingsMapper = coachSettingsMapper;
     }
 
-    public BakerSettingsDTO save(BakerSettingsDTO bakerSettingsDTO){
-        log.info("Request to save BakerSettings: {}", bakerSettingsDTO);
-        if (bakerSettingsDTO.getId() == null){
-            bakerSettingsDTO.setCreatedAt(LocalDateTime.now());
-            bakerSettingsDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+    public CoachSettingsDTO save(CoachSettingsDTO coachSettingsDTO){
+        log.info("Request to save BakerSettings: {}", coachSettingsDTO);
+        if (coachSettingsDTO.getId() == null){
+            coachSettingsDTO.setCreatedAt(LocalDateTime.now());
+            coachSettingsDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
         } else {
-            bakerSettingsDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
-            bakerSettingsDTO.setLastUpdatedAt(LocalDateTime.now());
+            coachSettingsDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+            coachSettingsDTO.setLastUpdatedAt(LocalDateTime.now());
         }
 
-        BakerSettings bakerPaymentDetails = bakerSettingsMapper.toEntity(bakerSettingsDTO);
-        bakerPaymentDetails= bakerSettingsRepository.save(bakerPaymentDetails);
+        CoachSettings coachPaymentDetails = coachSettingsMapper.toEntity(coachSettingsDTO);
+        coachPaymentDetails= coachSettingsRepository.save(coachPaymentDetails);
 
-        return bakerSettingsMapper.toDto(bakerPaymentDetails);
+        return coachSettingsMapper.toDto(coachPaymentDetails);
     }
 
-    public BakerSettingsDTO findByBakerId(Long bakerId){
-        log.info("Request to find baker settings by bakerId:{}", bakerId);
+    public CoachSettingsDTO findByCoachId(Long coachId){
+        log.info("Request to find coach settings by coachId:{}", coachId);
 
-        return bakerSettingsMapper.toDto(bakerSettingsRepository.findByBakerId(bakerId));
+        return coachSettingsMapper.toDto(coachSettingsRepository.findByCoachId(coachId));
     }
 
-    public BakerSettingsDTO findTopByBakerId(Long bakerId){
-        log.info("Request to find top baker settings by bakerId:{}", bakerId);
+    public CoachSettingsDTO findTopByCoachId(Long coachId){
+        log.info("Request to find top coach settings by coachId:{}", coachId);
 
-        return bakerSettingsMapper.toDto(bakerSettingsRepository.findTopByBakerId(bakerId));
+        return coachSettingsMapper.toDto(coachSettingsRepository.findTopByCoachId(coachId));
     }
 }

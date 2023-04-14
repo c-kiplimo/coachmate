@@ -1,10 +1,8 @@
-package ke.natujenge.baked.service.dto;
-
-import ke.natujenge.baked.domain.enums.MPesaPaymentType;
-import ke.natujenge.baked.domain.enums.PaymentType;
-
-public class OnBoardBakerDTO {
-    private Long bakerId;
+package com.natujenge.thecouch.service.dto;
+import com.natujenge.thecouch.domain.enums.PaymentType;
+import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
+public class OnBoardCoachDTO {
+    private Long coachId;
     private String depositPercentage;
     private String newOrderTemplate;
     private String partialOrderPaymentTemplate;
@@ -25,12 +23,12 @@ public class OnBoardBakerDTO {
     private String businessNumber;
     private String accountNumber;
 
-    public Long getBakerId() {
-        return bakerId;
+    public Long getCoachId() {
+        return coachId;
     }
 
-    public void setBakerId(Long bakerId) {
-        this.bakerId = bakerId;
+    public void setCoachId(Long coachId) {
+        this.coachId = coachId;
     }
 
     public String getDepositPercentage() {
@@ -164,7 +162,7 @@ public class OnBoardBakerDTO {
     @Override
     public String toString() {
         return "OnBoardBakerDTO{" +
-                "bakerId=" + bakerId +
+                "coachId=" + coachId +
                 ", depositPercentage='" + depositPercentage + '\'' +
                 ", newOrderTemplate='" + newOrderTemplate + '\'' +
                 ", partialOrderPaymentTemplate='" + partialOrderPaymentTemplate + '\'' +

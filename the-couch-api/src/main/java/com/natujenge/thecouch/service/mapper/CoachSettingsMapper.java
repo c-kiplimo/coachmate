@@ -1,13 +1,13 @@
-package ke.natujenge.baked.service.mapper;
+package com.natujenge.thecouch.service.mapper;
 
-import ke.natujenge.baked.domain.BakerSettings;
-import ke.natujenge.baked.service.dto.BakerSettingsDTO;
+import com.natujenge.thecouch.domain.CoachSettings;
+import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface BakerSettingsMapper extends EntityMapper<BakerSettingsDTO, BakerSettings>{
+public interface CoachSettingsMapper extends EntityMapper<CoachSettingsDTO, CoachSettings>{
 
-    @Mapping(target = "baker", source = "baker")
-    BakerSettingsDTO toDto(BakerSettings b);
+    @Mapping(target = "coach", source = "coach")
+    CoachSettingsDTO toDto(CoachSettings b);
 }

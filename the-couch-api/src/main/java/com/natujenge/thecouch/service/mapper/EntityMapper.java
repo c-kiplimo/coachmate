@@ -1,4 +1,4 @@
-package ke.natujenge.baked.service.mapper;
+package com.natujenge.thecouch.service.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.MappingTarget;

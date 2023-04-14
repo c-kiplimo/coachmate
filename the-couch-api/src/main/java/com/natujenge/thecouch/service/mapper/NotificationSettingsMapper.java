@@ -1,13 +1,14 @@
-package ke.natujenge.baked.service.mapper;
+package com.natujenge.thecouch.service.mapper;
 
-import ke.natujenge.baked.domain.BakerNotificationSettings;
-import ke.natujenge.baked.service.dto.BakerNotificationSettingsDTO;
+
+import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
+import com.natujenge.thecouch.domain.NotificationSettings;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface BakerNotificationSettingsMapper extends EntityMapper<BakerNotificationSettingsDTO, BakerNotificationSettings>{
+public interface NotificationSettingsMapper extends EntityMapper<NotificationSettingsDTO, NotificationSettings>{
 
-    @Mapping(target = "baker", source = "baker")
-    BakerNotificationSettingsDTO toDto(BakerNotificationSettings b);
+    @Mapping(target = "coach", source = "coach")
+    NotificationSettingsDTO toDto(NotificationSettings b);
 }

@@ -1,6 +1,4 @@
-package ke.natujenge.baked.domain;
-
-import lombok.*;
+package com.natujenge.thecouch.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,24 +7,24 @@ import java.time.LocalDateTime;
     * Logo: Image? Link to logo?
  */
 
-@Table(name = "tbl_baker_settings")
+@Table(name = "tbl_coach_settings")
 @Entity
-public class BakerSettings {
+public class CoachSettings {
     @SequenceGenerator(
-            name = "baker_settings_sequence",
-            sequenceName = "baker_settings_sequence",
+            name = "coach_settings_sequence",
+            sequenceName = "coach_settings_sequence",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "baker_settings_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "coach_settings_sequence")
     @Id
     private Long id;
     private String logo;
-    @OneToOne // Baker could have one or multiple locations
+    @OneToOne
     @JoinColumn(
             nullable = false,
-            name = "baker_id"
+            name = "coach_id"
     )
-    private Baker baker;
+    private Coach coach;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -51,12 +49,12 @@ public class BakerSettings {
         this.logo = logo;
     }
 
-    public Baker getBaker() {
-        return baker;
+    public Coach getCoach() {
+        return coach;
     }
 
-    public void setBaker(Baker baker) {
-        this.baker = baker;
+    public void setBaker(Coach coach) {
+        this.coach = coach;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -96,7 +94,7 @@ public class BakerSettings {
         return "BakerSettings{" +
                 "id=" + id +
                 ", logo='" + logo + '\'' +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +

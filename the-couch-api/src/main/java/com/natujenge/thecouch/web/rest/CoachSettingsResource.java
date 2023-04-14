@@ -1,11 +1,11 @@
-package ke.natujenge.baked.web.rest;
+package com.natujenge.thecouch.web.rest;
 
-import ke.natujenge.baked.security.SecurityUtils;
-import ke.natujenge.baked.service.BakerLocationService;
-import ke.natujenge.baked.service.BakerSettingsService;
-import ke.natujenge.baked.service.dto.BakerDTO;
-import ke.natujenge.baked.service.dto.BakerSettingsDTO;
-import ke.natujenge.baked.service.util.FileUtil;
+
+import com.natujenge.thecouch.security.SecurityUtils;
+import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
+import com.natujenge.thecouch.service.dto.CoachDTO;
+import com.natujenge.thecouch.util.FileUtil;
+import com.natujenge.thecouch.service.CoachSettingsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,34 +16,34 @@ import java.net.URISyntaxException;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class BakerSettingsResource {
+public class CoachSettingsResource {
 
-    private final BakerSettingsService bakerSettingsService;
+    private final CoachSettingsService coachSettingsService;
 
-    public BakerSettingsResource(BakerSettingsService bakerSettingsService) {
-        this.bakerSettingsService = bakerSettingsService;
+    public CoachSettingsResource(CoachSettingsService coachSettingsService) {
+        this.coachSettingsService = coachSettingsService;
     }
 
-    @PostMapping("/baker-settings")
-    public ResponseEntity<BakerSettingsDTO> saveSettings(@RequestBody BakerSettingsDTO bakerSettingsDTO) throws URISyntaxException {
-        log.info("REST Request to save BakerSettings: {}", bakerSettingsDTO);
-        if (bakerSettingsDTO.getBaker() == null){
-            BakerDTO bakerDTO = new BakerDTO();
-            bakerDTO.setId(SecurityUtils.getCurrentBakerId());
-            bakerSettingsDTO.setBaker(bakerDTO);
+    @PostMapping("/coach-settings")
+    public ResponseEntity<CoachSettingsDTO> saveSettings(@RequestBody CoachSettingsDTO coachSettingsDTO) throws URISyntaxException {
+        log.info("REST Request to save BakerSettings: {}", coachSettingsDTO);
+        if (coachSettingsDTO.getBaker() == null){
+            CoachDTO coachDTO = new CoachDTO();
+            coachDTO.setId(SecurityUtils.getCurrentCoachId());
+            coachSettingsDTO.setBaker(coachDTO);
         }
-        BakerSettingsDTO result = bakerSettingsService.save(bakerSettingsDTO);
+            CoachSettingsDTO result = coachSettingsService.save(coachSettingsDTO);
 
 
         return ResponseEntity.created(new URI("/api/baker-settings/"+result.getId())).body(result);
     }
 
-    @GetMapping("/baker-settings/logo")
+    @GetMapping("/coach-settings/logo")
     public ResponseEntity<byte[]> getLogo() {
         log.info("REST Request to get Baker Logo");
 
         byte[] logoBytes = null;
-        BakerSettingsDTO result = bakerSettingsService.findTopByBakerId(SecurityUtils.getCurrentBakerId());
+            CoachSettingsDTO result = coachSettingsService.findTopByCoachId(SecurityUtils.getCurrentCoachId());
 
         if (result != null && result.getLogo() != null){
             logoBytes = FileUtil.getImage(result.getLogo(), log);

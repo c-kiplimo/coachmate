@@ -1,7 +1,8 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
-import com.zaxxer.hikari.util.FastList;
+import com.natujenge.thecouch.security.SecurityUtils;
+import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
+import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,12 @@ public class NotificationSettingsService {
     private final NotificationSettingsRepository notificationSettingsRepository;
 
     private final UserService userService;
+    private final NotificationSettingsMapper notificationSettingsMapper;
 
-    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, UserService userService) {
+    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
         this.notificationSettingsRepository = notificationSettingsRepository;
         this.userService = userService;
+        this.notificationSettingsMapper = notificationSettingsMapper;
     }
 
     public Optional<NotificationSettings> getAllNotifications(Long coachId) {
@@ -159,7 +162,21 @@ public class NotificationSettingsService {
         return notificationSettingsRepository.save(NotificationSettings);
 
     }
+    public NotificationSettingsDTO save(NotificationSettingsDTO notificationSettingsDTO){
+        log.info("Request to save BakerNotificationSettings : {}", notificationSettingsDTO);
+        if (notificationSettingsDTO.getId() == null){
+            notificationSettingsDTO.setCreatedAt(LocalDateTime.now());
+            notificationSettingsDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+        } else {
+            notificationSettingsDTO.setLastUpdatedAt(LocalDateTime.now());
+            notificationSettingsDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+        }
 
+        NotificationSettings notificationSettings = notificationSettingsMapper.toEntity(notificationSettingsDTO);
+        notificationSettings= notificationSettingsRepository.save(notificationSettings);
+
+        return notificationSettingsMapper.toDto(notificationSettings);
+    }
     public NotificationSettings addNewSettings(NotificationSettingsRequest notificationSettingsRequest){
 
 
@@ -215,5 +232,9 @@ log.info("Notification Settings Created Successfully");
     public Optional<NotificationSettings> getNotification(Long coachId) {
         return notificationSettingsRepository.findByCoachId(coachId);
     }
-    
+
+    public Optional<NotificationSettingsDTO> findByCoachId(Long coachId) {
+        log.info("Request to find notification settings by coachId: {}", coachId);
+        return notificationSettingsRepository.findByCoachId(coachId).map(notificationSettingsMapper::toDto);
+    }
 }

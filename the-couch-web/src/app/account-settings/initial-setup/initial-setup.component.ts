@@ -59,13 +59,13 @@ export class InitialSetupComponent implements OnInit {
     paymentType: 'MPESA',
     mpesaPaymentType: 'BUY_GOODS'
   };
-  counties = [{ "id": 30, "name": "BARINGO" }, { "id": 36, "name": "BOMET" }, { "id": 39, "name": "BUNGOMA" }, { "id": 40, "name": "BUSIA" }, { "id": 28, "name": "ELGEYO/MARAKWET" }, { "id": 14, "name": "EMBU" }, { "id": 7, "name": "GARISSA" }, { "id": 43, "name": "HOMA BAY" }, { "id": 11, "name": "ISIOLO" }, { "id": 34, "name": "KAJIADO" }, { "id": 37, "name": "KAKAMEGA" }, { "id": 35, "name": "KERICHO" }, { "id": 22, "name": "KIAMBU" }, { "id": 3, "name": "KILIFI" }, { "id": 20, "name": "KIRINYAGA" }, { "id": 45, "name": "KISII" }, { "id": 42, "name": "KISUMU" }, { "id": 15, "name": "KITUI" }, { "id": 2, "name": "KWALE" }, { "id": 31, "name": "LAIKIPIA" }, { "id": 5, "name": "LAMU" }, { "id": 16, "name": "MACHAKOS" }, { "id": 17, "name": "MAKUENI" }, { "id": 9, "name": "MANDERA" }, { "id": 10, "name": "MARSABIT" }, { "id": 12, "name": "MERU" }, { "id": 44, "name": "MIGORI" }, { "id": 1, "name": "MOMBASA" }, { "id": 21, "name": "MURANG'A" }, { "id": 47, "name": "NAIROBI" }, { "id": 32, "name": "NAKURU" }, { "id": 29, "name": "NANDI" }, { "id": 33, "name": "NAROK" }, { "id": 46, "name": "NYAMIRA" }, { "id": 18, "name": "NYANDARUA" }, { "id": 19, "name": "NYERI" }, { "id": 25, "name": "SAMBURU" }, { "id": 41, "name": "SIAYA" }, { "id": 6, "name": "TAITA TAVETA" }, { "id": 4, "name": "TANA RIVER" }, { "id": 13, "name": "THARAKA-NITHI" }, { "id": 26, "name": "TRANS NZOIA" }, { "id": 23, "name": "TURKANA" }, { "id": 27, "name": "UASIN GISHU" }, { "id": 38, "name": "VIHIGA" }, { "id": 8, "name": "WAJIR" }, { "id": 24, "name": "WEST POKOT" }];
-  settingsObject: any;
+  notificationTemplates: any = [];
   bakerObject: any;
   submittingDetails = false;
   submitSuccess = false;
   submitFail = false;
   optionFilled = false;
+  settingsObject: any;
 
   constructor(
     private notificationsService: ClientService,
@@ -204,23 +204,18 @@ export class InitialSetupComponent implements OnInit {
   }
 
   insertTextForTemplates(text: string): void {
-    // const textArea = document.getElementById("id") as HTMLElement;
-    //
-    // // will get the value of the text area
-    // let x = $('#text1').val();
-    //
-    // // setting the updated value in the text area
-    // $('#text1').val(x.slice(0, curPos) + text_to_insert + x.slice(curPos));
   }
 
   getNotificationTemplates(): void {
     this.settingsObject = JSON.parse(sessionStorage.getItem('notificationSettings') || '{}');
-    this.setupDetails.newOrderTemplate = this.settingsObject.newOrderTemplate;
-    this.setupDetails.partialOrderPaymentTemplate = this.settingsObject.partialOrderPaymentTemplate;
-    this.setupDetails.fullOrderPaymentTemplate = this.settingsObject.fullOrderPaymentTemplate;
-    this.setupDetails.deliverOrderTemplate = this.settingsObject.deliverOrderTemplate;
-    this.setupDetails.cancelOrderTemplate = this.settingsObject.cancelOrderTemplate;
     this.setupDetails.paymentReminderTemplate = this.settingsObject.paymentReminderTemplate;
+    this.setupDetails.paymentConfirmationTemplate = this.settingsObject.paymentConfirmationTemplate;
+    this.setupDetails.fullBillPaymentTemplate = this.settingsObject.fullBillPaymentTemplate;
+    this.setupDetails.partialBillPaymentTemplate = this.settingsObject.partialBillPaymentTemplate;
+    this.setupDetails.cancelSessionTemplate = this.settingsObject.cancelSessionTemplate;
+    this.setupDetails.sessionReminderTemplate = this.settingsObject.sessionReminderTemplate;
+    this.setupDetails.sessionConfirmationTemplate = this.settingsObject.sessionConfirmationTemplate;
+
   }
 
   resetTemplate(template: string): void {

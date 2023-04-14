@@ -1,47 +1,40 @@
-package ke.natujenge.baked.service.util;
+package com.natujenge.thecouch.util;
 
-import ke.natujenge.baked.service.dto.*;
+import com.natujenge.thecouch.domain.NotificationSettings;
+import com.natujenge.thecouch.domain.enums.SessionTemplateType;
+import com.natujenge.thecouch.service.dto.*;
+public class OnBoardCoachUtil {
+    public static NotificationSettingsDTO extractNotificationSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO, NotificationSettingsDTO notificationSettingsDTO){
+        notificationSettingsDTO.setTillNumber(onBoardCoachDTO.getTillNumber());
+        notificationSettingsDTO.setNewContractTemplate(onBoardCoachDTO.getNewOrderTemplate());
+        notificationSettingsDTO.setPartialBillPaymentTemplate(onBoardCoachDTO.getPartialOrderPaymentTemplate());
+        notificationSettingsDTO.setFullBillPaymentTemplate(onBoardCoachDTO.getFullOrderPaymentTemplate());
+        notificationSettingsDTO.setConductedSessionTemplate(onBoardCoachDTO.getDeliverOrderTemplate());
+        notificationSettingsDTO.setCancelSessionTemplate(onBoardCoachDTO.getCancelOrderTemplate());
+        notificationSettingsDTO.setCoach(coachDTO);
 
-public class OnBoardBakerUtil {
-
-    public static BakerNotificationSettingsDTO extractNotificationSettings(OnBoardBakerDTO onBoardBakerDTO, BakerDTO bakerDTO, BakerNotificationSettingsDTO bakerNotificationSettingsDTO){
-        bakerNotificationSettingsDTO.setTillNumber(onBoardBakerDTO.getTillNumber());
-        bakerNotificationSettingsDTO.setNewOrderTemplate(onBoardBakerDTO.getNewOrderTemplate());
-        bakerNotificationSettingsDTO.setPartialOrderPaymentTemplate(onBoardBakerDTO.getPartialOrderPaymentTemplate());
-        bakerNotificationSettingsDTO.setFullOrderPaymentTemplate(onBoardBakerDTO.getFullOrderPaymentTemplate());
-        bakerNotificationSettingsDTO.setDeliverOrderTemplate(onBoardBakerDTO.getDeliverOrderTemplate());
-        bakerNotificationSettingsDTO.setCancelOrderTemplate(onBoardBakerDTO.getCancelOrderTemplate());
-        bakerNotificationSettingsDTO.setBaker(bakerDTO);
-
-        return bakerNotificationSettingsDTO;
+        return notificationSettingsDTO;
     }
 
-    public static BakerLocationDTO extractLocationData(OnBoardBakerDTO onBoardBakerDTO, BakerDTO bakerDTO,BakerLocationDTO bakerLocationDTO){
-        bakerLocationDTO.setCounty(onBoardBakerDTO.getCounty());
-        bakerLocationDTO.setPhysicalAddress(onBoardBakerDTO.getPhysicalAddress());
-        bakerLocationDTO.setPostalAddress(onBoardBakerDTO.getPostalAddress());
-        bakerLocationDTO.setBaker(bakerDTO);
+    public static PaymentDetailsDTO extractPaymentData(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO, PaymentDetailsDTO paymentDetailsDTO){
+        paymentDetailsDTO.setAccountName(onBoardCoachDTO.getAccountNumber());
 
-        return bakerLocationDTO;
+        paymentDetailsDTO.setPaymentType(onBoardCoachDTO.getPaymentType());
+        paymentDetailsDTO.setMpesaPaymentType(onBoardCoachDTO.getMpesaPaymentType());
+        paymentDetailsDTO.setTillNumber(onBoardCoachDTO.getTillNumber());
+        paymentDetailsDTO.setAccountNumber(onBoardCoachDTO.getAccountNumber());
+        paymentDetailsDTO.setMsisdn(onBoardCoachDTO.getMsisdn());
+        paymentDetailsDTO.setBusinessNumber(onBoardCoachDTO.getBusinessNumber());
+        paymentDetailsDTO.setCoach(coachDTO);
+
+        return paymentDetailsDTO;
     }
 
-    public static BakerPaymentDetailsDTO extractPaymentData(OnBoardBakerDTO onBoardBakerDTO, BakerDTO bakerDTO, BakerPaymentDetailsDTO bakerPaymentDetailsDTO){
-        bakerPaymentDetailsDTO.setPaymentType(onBoardBakerDTO.getPaymentType());
-        bakerPaymentDetailsDTO.setMpesaPaymentType(onBoardBakerDTO.getMpesaPaymentType());
-        bakerPaymentDetailsDTO.setTillNumber(onBoardBakerDTO.getTillNumber());
-        bakerPaymentDetailsDTO.setAccountNumber(onBoardBakerDTO.getAccountNumber());
-        bakerPaymentDetailsDTO.setMsisdn(onBoardBakerDTO.getMsisdn());
-        bakerPaymentDetailsDTO.setBusinessNumber(onBoardBakerDTO.getBusinessNumber());
-        bakerPaymentDetailsDTO.setBaker(bakerDTO);
+    public static CoachSettingsDTO extractSettingsData(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO, CoachSettingsDTO coachSettingsDTO){
+        coachSettingsDTO.setLogo(onBoardCoachDTO.getFilename());
+        coachSettingsDTO.setCoach(coachDTO);
 
-        return bakerPaymentDetailsDTO;
-    }
-
-    public static BakerSettingsDTO extractSettingsData(OnBoardBakerDTO onBoardBakerDTO, BakerDTO bakerDTO, BakerSettingsDTO bakerSettingsDTO){
-        bakerSettingsDTO.setLogo(onBoardBakerDTO.getFilename());
-        bakerSettingsDTO.setBaker(bakerDTO);
-
-        return bakerSettingsDTO;
+        return coachSettingsDTO;
     }
 }
 

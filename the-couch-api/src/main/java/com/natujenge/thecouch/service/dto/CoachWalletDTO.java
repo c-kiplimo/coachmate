@@ -1,13 +1,9 @@
-package ke.natujenge.baked.service.dto;
+package com.natujenge.thecouch.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ke.natujenge.baked.domain.Baker;
-import ke.natujenge.baked.domain.enums.WalletStatus;
-
-import javax.persistence.*;
+import com.natujenge.thecouch.domain.enums.WalletStatus;
 import java.time.LocalDateTime;
 
-public class BakerWalletDTO {
+public class CoachWalletDTO {
 
     private Long id;
     private float currentBalance;
@@ -21,7 +17,7 @@ public class BakerWalletDTO {
     private String code;
     private Long bakerId;
 
-    private BakerDTO baker;
+    private CoachDTO coach;
 
     public Long getId() {
         return id;
@@ -111,12 +107,12 @@ public class BakerWalletDTO {
         this.bakerId = bakerId;
     }
 
-    public BakerDTO getBaker() {
-        return baker;
+    public CoachDTO getCoach() {
+        return coach;
     }
 
-    public void setBaker(BakerDTO baker) {
-        this.baker = baker;
+    public void setBaker(CoachDTO coach) {
+        this.coach = coach;
     }
 
     @Override
@@ -132,7 +128,7 @@ public class BakerWalletDTO {
                 ", lastTrxTime='" + lastTrxTime + '\'' +
                 ", lastTrxId=" + lastTrxId +
                 ", bakerId=" + bakerId +
-                ", baker=" + baker +
+                ", coach=" + coach +
                 '}';
     }
 }

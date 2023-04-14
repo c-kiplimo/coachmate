@@ -248,7 +248,6 @@ export class ProfileComponent implements OnInit {
 
       },
       (error: any) => {
-        // console.log(error);
 
       }
     )
