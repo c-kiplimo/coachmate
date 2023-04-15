@@ -20,6 +20,12 @@ public class ClientBillingAccountService {
     @Autowired
     ClientWalletService walletService;
     @Autowired
+    OrganizationWalletService organizationWalletService;
+    @Autowired
+    OrganizationBillingAccountService organizationBillingAccountService;
+    @Autowired
+    CoachWalletService coachWalletService;
+    @Autowired
     ClientBillingAccountRepository clientBillingAccountRepository;
     // Get all billingAccounts by coach Id
     public ListResponse getBillingAccountByCoachId(int page, int perPage, Long coachId) {
@@ -44,50 +50,49 @@ public class ClientBillingAccountService {
 
         clientBillingAccountRepository.save(clientBillingAccount);
     }
-   
-    public void updateBillingAccount(float amountBilled,Coach coach,Client client) {
-        // CHECK wallet balance
-        // Update contract payment status and amountDue
-        // Get wallet balance should check the last record on dB by client
 
-        
+    public void updateBillingAccount(float amountBilled, Coach coach, Client client) {
+        // Retrieve client's most recent wallet record
+        ClientWallet clientWallet = walletService.getClientWalletRecentRecord(coach.getId(), client.getId());
 
-        ClientWallet clientWallet =  walletService.getClientWalletRecentRecord(coach.getId(),
-                client.getId());
+        // Retrieve coach's most recent wallet record
 
 
-        float walletBalance = (clientWallet.getWalletBalance() != null)?clientWallet.getWalletBalance():
-                0f;
-        // retrieve recent billing account record
+        // Get client's wallet balance
+        float clientWalletBalance = (clientWallet.getWalletBalance() != null) ? clientWallet.getWalletBalance() : 0f;
 
-        // new client Billing Account record
+
+
+
+        // Determine payment balance and update client's wallet balance
+        float paymentBalance;
+        if (clientWalletBalance >= amountBilled) {
+            paymentBalance = clientWalletBalance - amountBilled;
+            walletService.updateWalletBalance(clientWallet, paymentBalance, coach.getFullName());
+        } else {
+            paymentBalance = amountBilled - clientWalletBalance;
+            walletService.updateWalletBalance(clientWallet, 0f, coach.getFullName());
+        }
+
+        // Update coach's wallet balance with the amount billed
+
+
+        // Create new client billing account record
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setCreatedBy(coach.getFullName());
         clientBillingAccount.setCoach(coach);
         clientBillingAccount.setClient(client);
+        clientBillingAccount.setAmountBilled(amountBilled);
 
-        float paymentBalance;
-        if (walletBalance >= amountBilled){
-            paymentBalance = walletBalance - amountBilled;
-            walletService.updateWalletBalance(clientWallet, paymentBalance,coach.getFullName());
-            clientBillingAccount.setAmountBilled(0f);
-
-        } else if (walletBalance < amountBilled && walletBalance > 0f) {
-            paymentBalance = amountBilled-walletBalance;
-            walletService.updateWalletBalance(clientWallet, 0f,coach.getFullName());
-            clientBillingAccount.setAmountBilled(paymentBalance);
-            log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
-
-        }else{
-            clientBillingAccount.setAmountBilled(amountBilled);
-        }
-log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
+        // Save client billing account record
         clientBillingAccountRepository.save(clientBillingAccount);
     }
+
     public void updateOrganizationAndClientBillingAccount(float amountBilled,Organization organization,Client client) {
         // CHECK wallet balance
         // Update contract payment status and amountDue
         // Get wallet balance should check the last record on dB by client
+       // Retrieve coach's most recent wallet record
 
 
 
@@ -95,32 +100,29 @@ log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
                 client.getId());
 
 
-        float walletBalance = (clientWallet.getWalletBalance() != null)?clientWallet.getWalletBalance():
+        float clientWalletBalance = (clientWallet.getWalletBalance() != null)?clientWallet.getWalletBalance():
                 0f;
-        // retrieve recent billing account record
+         // retrieve recent billing account record
 
         // new client Billing Account record
+
+        float paymentBalance;
+        if (clientWalletBalance >= amountBilled) {
+            paymentBalance = clientWalletBalance - amountBilled;
+            walletService.updateWalletBalance(clientWallet, paymentBalance, organization.getFullName());
+        } else {
+            paymentBalance = amountBilled - clientWalletBalance;
+            walletService.updateWalletBalance(clientWallet, 0f, organization.getFullName());
+        }
+
+        // Create new client billing account recordtbl_coach_billing_accountm
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setCreatedBy(organization.getFullName());
         clientBillingAccount.setOrganization(organization);
         clientBillingAccount.setClient(client);
+        clientBillingAccount.setAmountBilled(amountBilled);
 
-        float paymentBalance;
-        if (walletBalance >= amountBilled){
-            paymentBalance = walletBalance - amountBilled;
-            walletService.updateWalletBalance(clientWallet, paymentBalance,organization.getFullName());
-            clientBillingAccount.setAmountBilled(0f);
-
-        } else if (walletBalance < amountBilled && walletBalance > 0f) {
-            paymentBalance = amountBilled-walletBalance;
-            walletService.updateWalletBalance(clientWallet, 0f,organization.getFullName());
-            clientBillingAccount.setAmountBilled(paymentBalance);
-            log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
-
-        }else{
-            clientBillingAccount.setAmountBilled(amountBilled);
-        }
-        log.info("amount billed:{}",clientBillingAccount.getAmountBilled());
+        // Save client billing account record
         clientBillingAccountRepository.save(clientBillingAccount);
     }
 

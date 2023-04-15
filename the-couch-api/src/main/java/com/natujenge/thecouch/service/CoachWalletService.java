@@ -28,6 +28,19 @@ public class CoachWalletService {
 
         return optionalCoachWallet.get();
     }
+    public CoachWallet getWalletRecentRecord( long coachId) {
+        log.info("Get coach wallet recent record for organization id {} and coach id {}", coachId);
+        // obtain latest payment Record
+        Optional<CoachWallet> optionalCoachWallet = coachWalletRepository.
+                findFirstByCoachIdOrderByIdDesc(coachId);
+
+        if (optionalCoachWallet.isEmpty()) {
+            throw new IllegalArgumentException("Specified wallet does not exist!!!");
+
+        }
+
+        return optionalCoachWallet.get();
+    }
     public void updateWalletBalance(CoachWallet coachWallet, Float paymentBalance, String orgName) {
         Float previousBalance = coachWallet.getWalletBalance();
         coachWallet.setWalletBalanceBefore(previousBalance);

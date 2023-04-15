@@ -3,9 +3,7 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
-import com.natujenge.thecouch.repository.CoachRepository;
-import com.natujenge.thecouch.repository.OrganizationRepository;
-import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
@@ -43,9 +41,17 @@ public class RegistrationService {
     PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OrganizationWalletRepository organizationWalletRepository;
+    @Autowired
+    OrganizationBillingAccountService organizationBillingAccountService;
 
     @Autowired
     CoachRepository coachRepository;
+    @Autowired
+    CoachWalletRepository coachWalletRepository;
+    @Autowired
+    CoachBillingAccountService coachBillingAccountService;
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -97,6 +103,22 @@ public class RegistrationService {
                 } catch (Exception e) {
                     log.info("Error while sending confirmation token: ", e);
                 }
+                // Create CoachWallet
+                CoachWallet coachWallet = new CoachWallet();
+                coachWallet.setCoach(savedCoach);
+                coachWallet.setWalletBalance(0f);
+                coachWallet.setCreatedBy(registrationRequest.getMsisdn());
+                coachWalletRepository.save(coachWallet);
+                log.info("Coach Wallet created Successfully!");
+
+                // Create CoachBillingAccount
+                CoachBillingAccount coachBillingAccount = new CoachBillingAccount();
+                coachBillingAccount.setCoach(savedCoach);
+                coachBillingAccount.setAmountBilled(0f);
+                coachBillingAccount.setCreatedBy(registrationRequest.getMsisdn());
+                coachBillingAccountService.createBillingAccount(coachBillingAccount);
+                log.info("Coach Billing Account created Successfully!");
+
                 break;
             }
 
@@ -142,6 +164,21 @@ public class RegistrationService {
                 } catch (Exception e){
                     log.info("Error while sending confirmation token: ", e);
                 }
+                OrganizationWallet organizationWallet = new OrganizationWallet();
+
+                organizationWallet.setOrganization(organization);
+                organizationWallet.setWalletBalance(Float.valueOf(0));
+                organizationWallet.setCreatedBy(organization.getFullName());
+                organizationWalletRepository.save(organizationWallet);
+                log.info("Organization Wallet created Successfully!");
+
+                // Create client Billing Account
+                OrganizationBillingAccount organizationBillingAccount = new OrganizationBillingAccount();
+
+                organizationBillingAccount.setAmountBilled((float) 0);
+                organizationBillingAccount.setCreatedBy(organization.getFullName());
+                organizationBillingAccountService.createBillingAccount(organizationBillingAccount);
+                log.info("Organiation Billing Account created Successfully!");
                 break;
             }
             default:
