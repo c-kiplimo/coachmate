@@ -151,6 +151,25 @@ public class WalletResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/filterByOrgId")
+    public ResponseEntity<?> filterByOrgId(
+            @RequestParam("per_page") int perPage,
+            @RequestParam("page") int page,
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "organizationId") Long organizationId
+    ) {
+        try {
+            log.info("Request to get payments by organization Id");
+            ListResponse listResponse = walletService.getPaymentsByOrganizationId(page, perPage, organizationId);
+
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     // Get payments by client id and coach id order by desc

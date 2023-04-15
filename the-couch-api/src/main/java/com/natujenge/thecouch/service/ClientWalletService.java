@@ -548,6 +548,7 @@ public class ClientWalletService {
                 walletPage.getTotalElements());
     }
 
+
     // Get all payments by organization Id
     public ListResponse getPaymentsByClientId(int page, int perPage, Long clientId) {
         log.info("Get all Payments by Client id {}", clientId);
