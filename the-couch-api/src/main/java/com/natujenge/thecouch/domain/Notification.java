@@ -30,11 +30,11 @@ public class Notification {
     private String sourceAddress;
     private String destinationAddress;
     private String content;
-    private LocalDateTime sentAt;
     private Long coachId;
-    private Long organizationId;
     private Long clientId;
+    private Long organizationId;
 
+    private LocalDateTime sentAt;
     @Enumerated(EnumType.STRING)
     private NotificationMode notificationMode;
 
@@ -63,6 +63,15 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private  Contract contract;
+    @ManyToOne
+    @JoinColumn(name ="client_id")
+    private Client client;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
 
 

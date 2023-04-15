@@ -25,7 +25,7 @@ export class CoachService {
 
     formData.append('file', logo);
 
-    const req = new HttpRequest('POST', this.baseURL + '/bakers/logo', formData, {
+    const req = new HttpRequest('POST', this.baseURL + '/coach/logo', formData, {
       reportProgress: true
     });
 
@@ -33,11 +33,11 @@ export class CoachService {
   }
 
   onboardBaker(bakerDeatils: any): Observable<any> {
-    return this.httpClient.post<any>(this.baseURL + '/bakers/onboard', bakerDeatils, { observe: 'response' });
+    return this.httpClient.post<any>(this.baseURL + '/coach/onboard', bakerDeatils, { observe: 'response' });
   }
 
   editcoachProfile(bakerProfile: any): Observable<any> {
-    return this.httpClient.put<any>(this.baseURL + '/bakers/' + bakerProfile.id, bakerProfile, { observe: 'response' });
+    return this.httpClient.put<any>(this.baseURL + '/coach/' + bakerProfile.id, bakerProfile, { observe: 'response' });
   }
 
   editLocationDetails(locationDetails: any): Observable<any> {
@@ -45,7 +45,7 @@ export class CoachService {
   }
 
   editcoachLogo(logo: any): Observable<any> {
-    return this.httpClient.post<any>(this.baseURL + '/baker-settings', logo, { observe: 'response' });
+    return this.httpClient.post<any>(this.baseURL + '/coach-settings', logo, { observe: 'response' });
   }
 
   editPaymentDetails(paymentDetails: any): Observable<any> {
@@ -53,7 +53,7 @@ export class CoachService {
   }
 
   getLogo(): Observable<any> {
-    return this.httpClient.get<any>(this.baseURL + '/baker-settings/logo', { observe: 'response', responseType: 'blob' as 'json' });
+    return this.httpClient.get<any>(this.baseURL + '/coach-settings/logo', { observe: 'response', responseType: 'blob' as 'json' });
   }
 
 

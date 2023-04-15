@@ -13,41 +13,46 @@ import java.time.LocalDateTime;
 public class NotificationSettingsDTO {
 
     private Long id;
-
+    private String filename;
     private NotificationMode notificationMode;
-
     private String smsDisplayName;
     private String emailDisplayName;
     private boolean notificationEnable;
-
     private PaymentType paymentType;
     private String msisdn;
     private String tillNumber;
     private String accountNumber;
     private Float depositPercentage;
     private int paymentDue;
-
     CoachDTO coach;
-
     private LocalDateTime createdAt;
-
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    Organization organization;
+    // Session Settings
+    private SessionTemplateType sessionTemplateType;
+    private String newContractTemplate;
+    private String partialBillPaymentTemplate;
+    private String fullBillPaymentTemplate;
+    private String cancelSessionTemplate;
+    private String conductedSessionTemplate;
+    private String rescheduleSessionTemplate;
+    private String paymentReminderTemplate;
+    private boolean newContractEnable;
+    private boolean rescheduleSessionEnable;
+    private boolean partialBillPaymentEnable;
+    private boolean fullBillPaymentEnable;
+    private boolean cancelSessionEnable;
+    private boolean conductedSessionEnable;
+    private boolean paymentReminderEnable;
+    NotificationSettings notificationSettings;
 
     public NotificationMode getNotificationMode() {
         return notificationMode;
     }
 
-    public void setBakerNotificationMode(NotificationMode notificationMode) {
+    public void setNotificationMode(NotificationMode notificationMode) {
         this.notificationMode = notificationMode;
     }
 
@@ -115,7 +120,15 @@ public class NotificationSettingsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public  CoachDTO getCoach() {
+    public int getPaymentDue() {
+        return paymentDue;
+    }
+
+    public void setPaymentDue(int paymentDue) {
+        this.paymentDue = paymentDue;
+    }
+
+    public CoachDTO getCoach() {
         return coach;
     }
 
@@ -155,40 +168,147 @@ public class NotificationSettingsDTO {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public int getPaymentDue() {
-        return paymentDue;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setPaymentDue(int paymentDue) {
-        this.paymentDue = paymentDue;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
-    Organization organization;
-    // Session Settings
-    private SessionTemplateType sessionTemplateType;
+    public SessionTemplateType getSessionTemplateType() {
+        return sessionTemplateType;
+    }
 
-    private String newContractTemplate;
-    private String partialBillPaymentTemplate;
-    private String fullBillPaymentTemplate;
-    private String cancelSessionTemplate;
-    private String conductedSessionTemplate;
-    private String rescheduleSessionTemplate;
-    private String paymentReminderTemplate;
+    public void setSessionTemplateType(SessionTemplateType sessionTemplateType) {
+        this.sessionTemplateType = sessionTemplateType;
+    }
 
-    private boolean newContractEnable;
-    private boolean rescheduleSessionEnable;
-    private boolean partialBillPaymentEnable;
-    private boolean fullBillPaymentEnable;
-    private boolean cancelSessionEnable;
-    private boolean conductedSessionEnable;
-    private boolean paymentReminderEnable;
-    NotificationSettings notificationSettings;
+    public String getNewContractTemplate() {
+        return newContractTemplate;
+    }
+
+    public void setNewContractTemplate(String newContractTemplate) {
+        this.newContractTemplate = newContractTemplate;
+    }
+
+    public String getPartialBillPaymentTemplate() {
+        return partialBillPaymentTemplate;
+    }
+
+    public void setPartialBillPaymentTemplate(String partialBillPaymentTemplate) {
+        this.partialBillPaymentTemplate = partialBillPaymentTemplate;
+    }
+
+    public String getFullBillPaymentTemplate() {
+        return fullBillPaymentTemplate;
+    }
+
+    public void setFullBillPaymentTemplate(String fullBillPaymentTemplate) {
+        this.fullBillPaymentTemplate = fullBillPaymentTemplate;
+    }
+
+    public String getCancelSessionTemplate() {
+        return cancelSessionTemplate;
+    }
+
+    public void setCancelSessionTemplate(String cancelSessionTemplate) {
+        this.cancelSessionTemplate = cancelSessionTemplate;
+    }
+
+    public String getConductedSessionTemplate() {
+        return conductedSessionTemplate;
+    }
+
+    public void setConductedSessionTemplate(String conductedSessionTemplate) {
+        this.conductedSessionTemplate = conductedSessionTemplate;
+    }
+
+    public String getRescheduleSessionTemplate() {
+        return rescheduleSessionTemplate;
+    }
+
+    public void setRescheduleSessionTemplate(String rescheduleSessionTemplate) {
+        this.rescheduleSessionTemplate = rescheduleSessionTemplate;
+    }
+
+    public String getPaymentReminderTemplate() {
+        return paymentReminderTemplate;
+    }
+
+    public void setPaymentReminderTemplate(String paymentReminderTemplate) {
+        this.paymentReminderTemplate = paymentReminderTemplate;
+    }
+
+    public boolean isNewContractEnable() {
+        return newContractEnable;
+    }
+
+    public void setNewContractEnable(boolean newContractEnable) {
+        this.newContractEnable = newContractEnable;
+    }
+
+    public boolean isRescheduleSessionEnable() {
+        return rescheduleSessionEnable;
+    }
+
+    public void setRescheduleSessionEnable(boolean rescheduleSessionEnable) {
+        this.rescheduleSessionEnable = rescheduleSessionEnable;
+    }
+
+    public boolean isPartialBillPaymentEnable() {
+        return partialBillPaymentEnable;
+    }
+
+    public void setPartialBillPaymentEnable(boolean partialBillPaymentEnable) {
+        this.partialBillPaymentEnable = partialBillPaymentEnable;
+    }
+
+    public boolean isFullBillPaymentEnable() {
+        return fullBillPaymentEnable;
+    }
+
+    public void setFullBillPaymentEnable(boolean fullBillPaymentEnable) {
+        this.fullBillPaymentEnable = fullBillPaymentEnable;
+    }
+
+    public boolean isCancelSessionEnable() {
+        return cancelSessionEnable;
+    }
+
+    public void setCancelSessionEnable(boolean cancelSessionEnable) {
+        this.cancelSessionEnable = cancelSessionEnable;
+    }
+
+    public boolean isConductedSessionEnable() {
+        return conductedSessionEnable;
+    }
+
+    public void setConductedSessionEnable(boolean conductedSessionEnable) {
+        this.conductedSessionEnable = conductedSessionEnable;
+    }
+
+    public boolean isPaymentReminderEnable() {
+        return paymentReminderEnable;
+    }
+
+    public void setPaymentReminderEnable(boolean paymentReminderEnable) {
+        this.paymentReminderEnable = paymentReminderEnable;
+    }
+
+    public NotificationSettings getNotificationSettings() {
+        return notificationSettings;
+    }
+
+    public void setNotificationSettings(NotificationSettings notificationSettings) {
+        this.notificationSettings = notificationSettings;
+    }
 
     @Override
     public String toString() {
-        return "BakerNotificationSettingsDTO{" +
+        return "NotificationSettingsDTO{" +
                 "id=" + id +
-                ", bakerNotificationMode=" + notificationMode +
+                ", notificationMode=" + notificationMode +
                 ", smsDisplayName='" + smsDisplayName + '\'' +
                 ", emailDisplayName='" + emailDisplayName + '\'' +
                 ", notificationEnable=" + notificationEnable +
@@ -203,6 +323,23 @@ public class NotificationSettingsDTO {
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                ", organization=" + organization +
+                ", sessionTemplateType=" + sessionTemplateType +
+                ", newContractTemplate='" + newContractTemplate + '\'' +
+                ", partialBillPaymentTemplate='" + partialBillPaymentTemplate + '\'' +
+                ", fullBillPaymentTemplate='" + fullBillPaymentTemplate + '\'' +
+                ", cancelSessionTemplate='" + cancelSessionTemplate + '\'' +
+                ", conductedSessionTemplate='" + conductedSessionTemplate + '\'' +
+                ", rescheduleSessionTemplate='" + rescheduleSessionTemplate + '\'' +
+                ", paymentReminderTemplate='" + paymentReminderTemplate + '\'' +
+                ", newContractEnable=" + newContractEnable +
+                ", rescheduleSessionEnable=" + rescheduleSessionEnable +
+                ", partialBillPaymentEnable=" + partialBillPaymentEnable +
+                ", fullBillPaymentEnable=" + fullBillPaymentEnable +
+                ", cancelSessionEnable=" + cancelSessionEnable +
+                ", conductedSessionEnable=" + conductedSessionEnable +
+                ", paymentReminderEnable=" + paymentReminderEnable +
+                ", notificationSettings=" + notificationSettings +
                 '}';
     }
 }

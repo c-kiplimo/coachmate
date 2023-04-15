@@ -111,11 +111,11 @@ public class CoachPaymentDetailsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public CoachDTO getBaker() {
+    public CoachDTO getCoach() {
         return coach;
     }
 
-    public void setBaker(CoachDTO baker) {
+    public void setCoach(CoachDTO coach) {
         this.coach = coach;
     }
 
@@ -153,7 +153,7 @@ public class CoachPaymentDetailsDTO {
 
     @Override
     public String toString() {
-        return "BakerPaymentDetailsDTO{" +
+        return "CoachPaymentDetailsDTO{" +
                 "id=" + id +
                 ", paymentType=" + paymentType +
                 ", mpesaPaymentType=" + mpesaPaymentType +

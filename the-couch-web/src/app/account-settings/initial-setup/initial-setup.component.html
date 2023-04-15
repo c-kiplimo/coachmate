@@ -67,14 +67,6 @@
             <!-- </div>
 
           <div class="content location-details-container" *ngIf="step === 2" [@fadeIn]> -->
-            <h4 class="section-title mt-4 mb-1">Location details</h4>
-
-            <div class="form-group mb-3">
-              <label for="location">Area / County</label>
-              <select class="form-select" name="county" [(ngModel)]="setupDetails.county">
-                <option [value]="county.name" *ngFor="let county of counties;index as i">{{county.name | titlecase}}</option>
-              </select>
-            </div>
 
             <div class="form-group mb-3">
               <label for="location">Physical address</label>

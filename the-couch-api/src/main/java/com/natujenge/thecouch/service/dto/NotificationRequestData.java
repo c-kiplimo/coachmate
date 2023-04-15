@@ -7,12 +7,14 @@ import lombok.Setter;
 @Setter
 public class NotificationRequestData {
     private String businessName;
-    private String bakerMsisdn;
-    private String bakerEmail;
-    private Long bakerId;
+    private String coachMsisdn;
+    private String coachEmail;
+    private Long coachId;
     private String message;
     private String subject;
-    private Long orderId;
-    private Long paymentId;
-    private Long customerId;
+    private String organizationName;
+    private Long organizationId;
+    private String clientMsisdn;
+    private String clientEmail;
+    private Long clientId;
 }

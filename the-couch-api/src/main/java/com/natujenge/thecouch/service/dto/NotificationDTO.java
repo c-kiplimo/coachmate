@@ -1,57 +1,62 @@
 package com.natujenge.thecouch.service.dto;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationSendStatus;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.NotificationType;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
 public class NotificationDTO {
 
     private Long id;
-    private NotificationType type;
     private String subject;
-    private String srcAddress;
-    private String dstAddress;
+    private String sourceAddress;
+    private String destinationAddress;
     private String content;
     private LocalDateTime sentAt;
-    private NotificationMode notificationMode;
-    private NotificationSendStatus sendStatus;
-    private String sendReason;
-    private LocalDateTime deliveredAt;
-    private String deliveryStatus;
-    private Integer units;
-    private Float cost;
-    private String currency;
 
+    @Enumerated(EnumType.STRING)
+    private NotificationMode notificationMode;
+
+    @Enumerated(EnumType.STRING)
+    private SessionStatus sendStatus;
+    private String sendReason;
+
+    private String paymentCurrency;
+
+    // Management fields
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private String createdBy;
 
+    @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
 
     private String lastUpdatedBy;
-    private Long bakerId;
-    private Long customerId;
-    private Long orderId;
-    private Long paymentId;
-    private Long walletStatementId;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public NotificationType getType() {
-        return type;
-    }
-
-    public void setType(NotificationType type) {
-        this.type = type;
-    }
+    @ManyToOne
+    @JoinColumn(name = "session_id")
+    private Session session;
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
+    @ManyToOne
+    @JoinColumn(name ="client_id")
+    private Client client;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
     public String getSubject() {
         return subject;
@@ -61,20 +66,20 @@ public class NotificationDTO {
         this.subject = subject;
     }
 
-    public String getSrcAddress() {
-        return srcAddress;
+    public String getSourceAddress() {
+        return sourceAddress;
     }
 
-    public void setSrcAddress(String srcAddress) {
-        this.srcAddress = srcAddress;
+    public void setSourceAddress(String sourceAddress) {
+        this.sourceAddress = sourceAddress;
     }
 
-    public String getDstAddress() {
-        return dstAddress;
+    public String getDestinationAddress() {
+        return destinationAddress;
     }
 
-    public void setDstAddress(String dstAddress) {
-        this.dstAddress = dstAddress;
+    public void setDestinationAddress(String destinationAddress) {
+        this.destinationAddress = destinationAddress;
     }
 
     public String getContent() {
@@ -101,11 +106,11 @@ public class NotificationDTO {
         this.notificationMode = notificationMode;
     }
 
-    public NotificationSendStatus getSendStatus() {
+    public SessionStatus getSendStatus() {
         return sendStatus;
     }
 
-    public void setSendStatus(NotificationSendStatus sendStatus) {
+    public void setSendStatus(SessionStatus sendStatus) {
         this.sendStatus = sendStatus;
     }
 
@@ -117,44 +122,12 @@ public class NotificationDTO {
         this.sendReason = sendReason;
     }
 
-    public LocalDateTime getDeliveredAt() {
-        return deliveredAt;
+    public String getPaymentCurrency() {
+        return paymentCurrency;
     }
 
-    public void setDeliveredAt(LocalDateTime deliveredAt) {
-        this.deliveredAt = deliveredAt;
-    }
-
-    public String getDeliveryStatus() {
-        return deliveryStatus;
-    }
-
-    public void setDeliveryStatus(String deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
-    }
-
-    public Integer getUnits() {
-        return units;
-    }
-
-    public void setUnits(Integer units) {
-        this.units = units;
-    }
-
-    public Float getCost() {
-        return cost;
-    }
-
-    public void setCost(Float cost) {
-        this.cost = cost;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setPaymentCurrency(String paymentCurrency) {
+        this.paymentCurrency = paymentCurrency;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -189,44 +162,44 @@ public class NotificationDTO {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public Long getBakerId() {
-        return bakerId;
+    public Session getSession() {
+        return session;
     }
 
-    public void setBakerId(Long bakerId) {
-        this.bakerId = bakerId;
+    public void setSession(Session session) {
+        this.session = session;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Client getClient() {
+        return client;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public Long getPaymentId() {
-        return paymentId;
+    public Coach getCoach() {
+        return coach;
     }
 
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
+    public void setCoach(Coach coach) {
+        this.coach = coach;
     }
 
-    public Long getWalletStatementId() {
-        return walletStatementId;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setWalletStatementId(Long walletStatementId) {
-        this.walletStatementId = walletStatementId;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     @Override
@@ -234,28 +207,23 @@ public class NotificationDTO {
         return "NotificationDTO{" +
                 "id=" + id +
                 ", subject='" + subject + '\'' +
-                ", type='" + type + '\'' +
-                ", srcAddress='" + srcAddress + '\'' +
-                ", dstAddress='" + dstAddress + '\'' +
+                ", sourceAddress='" + sourceAddress + '\'' +
+                ", destinationAddress='" + destinationAddress + '\'' +
                 ", content='" + content + '\'' +
                 ", sentAt=" + sentAt +
                 ", notificationMode=" + notificationMode +
                 ", sendStatus=" + sendStatus +
                 ", sendReason='" + sendReason + '\'' +
-                ", deliveredAt=" + deliveredAt +
-                ", deliveryStatus='" + deliveryStatus + '\'' +
-                ", units=" + units +
-                ", cost=" + cost +
-                ", currency='" + currency + '\'' +
+                ", paymentCurrency='" + paymentCurrency + '\'' +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
-                ", bakerId=" + bakerId +
-                ", customerId=" + customerId +
-                ", orderId=" + orderId +
-                ", paymentId=" + paymentId +
-                ", walletStatementId=" + walletStatementId +
+                ", session=" + session +
+                ", contract=" + contract +
+                ", client=" + client +
+                ", coach=" + coach +
+                ", organization=" + organization +
                 '}';
     }
 }

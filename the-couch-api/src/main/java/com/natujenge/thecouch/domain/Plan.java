@@ -1,10 +1,8 @@
-package ke.natujenge.baked.domain;
+package com.natujenge.thecouch.domain;
 
-import ke.natujenge.baked.domain.enums.PlanType;
-
+import com.natujenge.thecouch.domain.enums.PlanType;
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_plans")

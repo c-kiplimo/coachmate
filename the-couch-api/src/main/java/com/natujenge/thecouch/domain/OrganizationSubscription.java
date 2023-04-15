@@ -2,9 +2,10 @@ package com.natujenge.thecouch.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-@Table(name = "tbl_coach_subscription")
+
+@Table(name = "tbl_organization_subscription")
 @Entity
-public class CoachSubscription {
+public class OrganizationSubscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,8 +15,8 @@ public class CoachSubscription {
     private LocalDateTime endDate;
 
     @ManyToOne
-    @JoinColumn(name = "coach_id")
-    private Coach coach;
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
     @ManyToOne
     @JoinColumn(name = "plan_id")
@@ -37,12 +38,12 @@ public class CoachSubscription {
         this.endDate = endDate;
     }
 
-    public Coach getCoach() {
-        return coach;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setCoach(Coach coach) {
-        this.coach = coach;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public Plan getPlan() {
@@ -55,11 +56,11 @@ public class CoachSubscription {
 
     @Override
     public String toString() {
-        return "CoachSubscription{" +
+        return "OrganizationSubscription{" +
                 "id=" + id +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", coach=" + coach +
+                ", organization=" + organization +
                 ", plan=" + plan +
                 '}';
     }

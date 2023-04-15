@@ -1,24 +1,22 @@
 package com.natujenge.thecouch.service.dto;
 
+import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.Plan;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class CoachSubscriptionDTO {
     private Long id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
-    private Long bakerId;
+    private Long coachId;
     private Long planId;
     private String planName;
-    private CoachDTO  coach;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Long organizationId;
+    private String organizationName;
+    private CoachDTO coach;
 
     public LocalDateTime getStartDate() {
         return startDate;
@@ -36,12 +34,12 @@ public class CoachSubscriptionDTO {
         this.endDate = endDate;
     }
 
-    public Long getBakerId() {
-        return bakerId;
+    public Long getCoachId() {
+        return coachId;
     }
 
-    public void setBakerId(Long bakerId) {
-        this.bakerId = bakerId;
+    public void setCoachId(Long coachId) {
+        this.coachId = coachId;
     }
 
     public Long getPlanId() {
@@ -60,10 +58,21 @@ public class CoachSubscriptionDTO {
         this.planName = planName;
     }
 
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
     public CoachDTO getCoach() {
         return coach;
     }
-
 
     public void setCoach(CoachDTO coach) {
         this.coach = coach;
@@ -71,13 +80,15 @@ public class CoachSubscriptionDTO {
 
     @Override
     public String toString() {
-        return "BakerSubscriptionDTO{" +
+        return "CoachSubscriptionDTO{" +
                 "id=" + id +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
-                ", bakerId=" + bakerId +
+                ", coachId=" + coachId +
                 ", planId=" + planId +
-                ", planName=" + planName +
+                ", planName='" + planName + '\'' +
+                ", organizationId=" + organizationId +
+                ", organizationName='" + organizationName + '\'' +
                 ", coach=" + coach +
                 '}';
     }

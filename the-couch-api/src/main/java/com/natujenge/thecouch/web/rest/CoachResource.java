@@ -1,4 +1,7 @@
 package com.natujenge.thecouch.web.rest;
+import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.service.dto.UploadResponse;
+import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.web.rest.errors.BadRequestException;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
@@ -12,10 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "/api/coach")
@@ -24,10 +27,12 @@ public class CoachResource {
 
     private final CoachService coachService;
     private final OrganizationRepository organizationRepository;
+    private final CoachRepository coachRepository;
 
-    public CoachResource(CoachService coachService, OrganizationRepository organizationRepository) {
+    public CoachResource(CoachService coachService, OrganizationRepository organizationRepository, CoachRepository coachRepository) {
         this.coachService = coachService;
         this.organizationRepository = organizationRepository;
+        this.coachRepository = coachRepository;
     }
 
 
@@ -63,5 +68,26 @@ public class CoachResource {
         CoachDTO result = coachService.onBoard(onBoardCoachDTO);
 
         return ResponseEntity.ok().body(result);
+    }
+    @PutMapping(path ="{id}")
+    ResponseEntity<CoachDTO> updateCoach(@RequestBody CoachDTO coachDTO, @PathVariable Long id){
+        log.info("Request to update baker with id : {}", id);
+
+        if (!Objects.equals(coachDTO.getId(), id)){
+            throw  new BadRequestException("ID is not valid");
+        }
+
+        if (!coachRepository.existsById(id)){
+            throw  new BadRequestException("Baker with id "+id+" does not exists");
+        }
+        coachDTO.setFullName(coachDTO.getFirstName()+" "+coachDTO.getLastName());
+
+        CoachDTO result = coachService.save(coachDTO);
+        return ResponseEntity.ok().body(result);
+    }
+    @PostMapping("/logo")
+    public ResponseEntity<UploadResponse> uploadLogo(@RequestParam(value = "file") MultipartFile file){
+        log.info("REST Request to upload coach Logo");
+        return ResponseEntity.ok().body(FileUtil.uploadFile(file, log));
     }
 }

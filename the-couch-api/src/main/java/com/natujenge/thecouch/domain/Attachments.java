@@ -3,7 +3,6 @@ package com.natujenge.thecouch.domain;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @Table(name = "tbl_sessionResources")
 @Data
@@ -34,17 +33,6 @@ public class Attachments {
     @JoinColumn(name = "session_id")
     Session session;
 
-    @ManyToOne
-    @JoinColumn(name = "coach_id")
-    Coach coach;
-
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    Client client;
-
-    @ManyToOne
-    @JoinColumn(name = "org_id_id")
-    Organization organization;
 
 
 }

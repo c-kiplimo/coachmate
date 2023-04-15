@@ -33,15 +33,14 @@ public class Payment {
     private String narration;
 
     @ManyToOne
-    @JoinColumn(name = "session_id")
-    private Session session;
-    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
-
     @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach coach;
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
 
     private LocalDateTime paidAt;
     @CreationTimestamp

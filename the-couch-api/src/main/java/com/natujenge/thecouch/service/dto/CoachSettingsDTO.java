@@ -6,19 +6,12 @@ public class CoachSettingsDTO {
 
     private Long id;
     private String logo;
+    private String logoUrl;
     private CoachDTO coach;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getLogo() {
         return logo;
@@ -28,11 +21,19 @@ public class CoachSettingsDTO {
         this.logo = logo;
     }
 
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
     public CoachDTO getCoach() {
         return coach;
     }
 
-    public void setCoach(CoachDTO baker) {
+    public void setCoach(CoachDTO coach) {
         this.coach = coach;
     }
 
@@ -70,14 +71,20 @@ public class CoachSettingsDTO {
 
     @Override
     public String toString() {
-        return "BakerSettings{" +
+        return "CoachSettingsDTO{" +
                 "id=" + id +
                 ", logo='" + logo + '\'' +
+                ", logoUrl='" + logoUrl + '\'' +
                 ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+
+        return id;
     }
 }

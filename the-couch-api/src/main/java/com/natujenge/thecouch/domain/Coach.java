@@ -24,13 +24,6 @@ public class Coach implements Serializable {
 
     @Id
     private Long id;
-    @Nullable
-@ManyToOne
-@JoinColumn(name = "organization_id")
-    private Organization organization;
-    @ManyToOne
-    @JoinColumn(name="notification_settings_id")
-    NotificationSettings notificationSettings;
 
     private String businessName;
     private String fullName;
@@ -42,7 +35,16 @@ public class Coach implements Serializable {
     private String emailAddress;
     @Enumerated(EnumType.STRING)
     private CoachStatus status;
+    private boolean onboarded;
     private String reason;
+    @Nullable
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
+    @ManyToOne
+    @JoinColumn(name="notification_settings_id")
+    NotificationSettings notificationSettings;
+
 
     // management Details
     @CreationTimestamp

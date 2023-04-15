@@ -6,11 +6,20 @@ import com.natujenge.thecouch.service.dto.*;
 public class OnBoardCoachUtil {
     public static NotificationSettingsDTO extractNotificationSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO, NotificationSettingsDTO notificationSettingsDTO){
         notificationSettingsDTO.setTillNumber(onBoardCoachDTO.getTillNumber());
-        notificationSettingsDTO.setNewContractTemplate(onBoardCoachDTO.getNewOrderTemplate());
-        notificationSettingsDTO.setPartialBillPaymentTemplate(onBoardCoachDTO.getPartialOrderPaymentTemplate());
-        notificationSettingsDTO.setFullBillPaymentTemplate(onBoardCoachDTO.getFullOrderPaymentTemplate());
-        notificationSettingsDTO.setConductedSessionTemplate(onBoardCoachDTO.getDeliverOrderTemplate());
-        notificationSettingsDTO.setCancelSessionTemplate(onBoardCoachDTO.getCancelOrderTemplate());
+        notificationSettingsDTO.setNewContractTemplate(onBoardCoachDTO.getNewContractTemplate());
+        notificationSettingsDTO.setPartialBillPaymentTemplate(onBoardCoachDTO.getPartialBillPaymentTemplate());
+        notificationSettingsDTO.setFullBillPaymentTemplate(onBoardCoachDTO.getFullBillPaymentTemplate());
+        notificationSettingsDTO.setConductedSessionTemplate(onBoardCoachDTO.getConductedSessionTemplate());
+        notificationSettingsDTO.setCancelSessionTemplate(onBoardCoachDTO.getCancelSessionTemplate());
+        notificationSettingsDTO.setRescheduleSessionTemplate(onBoardCoachDTO.getRescheduleSessionTemplate());
+        notificationSettingsDTO.setPaymentReminderTemplate(onBoardCoachDTO.getPaymentReminderTemplate());
+        notificationSettingsDTO.setNewContractEnable(onBoardCoachDTO.isNewContractEnable());
+        notificationSettingsDTO.setPartialBillPaymentEnable(onBoardCoachDTO.isPartialBillPaymentEnable());
+        notificationSettingsDTO.setFullBillPaymentEnable(onBoardCoachDTO.isFullBillPaymentEnable());
+        notificationSettingsDTO.setConductedSessionEnable(onBoardCoachDTO.isConductedSessionEnable());
+        notificationSettingsDTO.setCancelSessionEnable(onBoardCoachDTO.isCancelSessionEnable());
+        notificationSettingsDTO.setRescheduleSessionEnable(onBoardCoachDTO.isRescheduleSessionEnable());
+        notificationSettingsDTO.setPaymentReminderEnable(onBoardCoachDTO.isPaymentReminderEnable());
         notificationSettingsDTO.setCoach(coachDTO);
 
         return notificationSettingsDTO;

@@ -29,12 +29,18 @@ public class PaymentDetails {
     private String businessNumber;
     private String accountNumber;
     private float depositPercentage;
-    @ManyToOne // Baker could have one or multiple payment details
+    @ManyToOne
     @JoinColumn(
             nullable = false,
             name = "coach_id"
     )
     private Coach coach;
+    @ManyToOne
+    @JoinColumn(
+            nullable = false,
+            name = "organization_id"
+    )
+    private Organization organization;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

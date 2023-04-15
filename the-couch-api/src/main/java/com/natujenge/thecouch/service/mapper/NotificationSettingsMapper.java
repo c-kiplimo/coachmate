@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface NotificationSettingsMapper extends EntityMapper<NotificationSettingsDTO, NotificationSettings>{
 
-    @Mapping(target = "coach", source = "coach")
+    @Mapping(target = "coach", source = "notificationSettings")
     NotificationSettingsDTO toDto(NotificationSettings b);
 }

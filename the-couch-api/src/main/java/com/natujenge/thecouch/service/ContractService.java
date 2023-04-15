@@ -106,7 +106,7 @@ public class ContractService {
         contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
         contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
         contract.setNoOfSessions(contractRequest.getNoOfSessions());
-        contract.setContractStatus(ContractStatus.ONGOING);
+        contract.setContractStatus(ContractStatus.NEW);
         // contract Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String contractL = String.format("%05d", randNo);
@@ -270,7 +270,7 @@ public class ContractService {
         } else if (Objects.equals(contractStatus, "SIGN")){
             contract1.setContractStatus(ContractStatus.SIGNED);
         }
-        else if (contract1.getContractStatus() == ContractStatus.ONGOING){
+        else if (contract1.getContractStatus() == ContractStatus.NEW){
             contract1.setContractStatus(ContractStatus.FINISHED);
         }
         else{
@@ -300,9 +300,9 @@ public class ContractService {
             contract1.setContractStatus(ContractStatus.SIGNED);
         }else if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.SIGNED){
             throw new IllegalStateException("Contract is signed");
-        }else if (contract1.getContractStatus() == ContractStatus.ONGOING && contractStatus == ContractStatus.SIGNED){
+        }else if (contract1.getContractStatus() == ContractStatus.NEW && contractStatus == ContractStatus.SIGNED){
             contract1.setContractStatus(ContractStatus.SIGNED);
-        }else if (contract1.getContractStatus() == ContractStatus.ONGOING && contractStatus == ContractStatus.FINISHED){
+        }else if (contract1.getContractStatus() == ContractStatus.NEW && contractStatus == ContractStatus.FINISHED){
             contract1.setContractStatus(ContractStatus.FINISHED);
         }
         else{

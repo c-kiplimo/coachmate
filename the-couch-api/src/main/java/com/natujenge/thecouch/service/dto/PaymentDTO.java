@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.service.dto;
 
+import com.natujenge.thecouch.domain.Organization;
 import com .natujenge.thecouch.domain.enums.ModeOfPayment;
 import com.natujenge.thecouch.domain.enums.PaymentType;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class PaymentDTO {
     private String paidOn;
     private String trxMessage;
     private CoachDTO coach;
+    private OrganizationDTO organization;
     private LocalDateTime paidAt;
     private LocalDateTime createdAt;
     private String createdBy;

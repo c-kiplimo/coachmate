@@ -1,4 +1,4 @@
-package ke.natujenge.baked.domain.enums;
+package com.natujenge.thecouch.domain.enums;
 
 public enum TransactionEntry {
     DEBIT, CREDIT

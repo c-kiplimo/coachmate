@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static com.natujenge.thecouch.domain.QCoachSubscription.coachSubscription;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -26,21 +28,21 @@ public class CoachSettingsResource {
 
     @PostMapping("/coach-settings")
     public ResponseEntity<CoachSettingsDTO> saveSettings(@RequestBody CoachSettingsDTO coachSettingsDTO) throws URISyntaxException {
-        log.info("REST Request to save BakerSettings: {}", coachSettingsDTO);
-        if (coachSettingsDTO.getBaker() == null){
-            CoachDTO coachDTO = new CoachDTO();
+        log.info("REST Request to save CoachSettings: {}", coachSettingsDTO);
+        if (coachSettingsDTO.getCoach() == null){
+            CoachDTO coachDTO = new CoachDTO(coachSubscription);
             coachDTO.setId(SecurityUtils.getCurrentCoachId());
-            coachSettingsDTO.setBaker(coachDTO);
+            coachSettingsDTO.setCoach(coachDTO);
         }
             CoachSettingsDTO result = coachSettingsService.save(coachSettingsDTO);
 
 
-        return ResponseEntity.created(new URI("/api/baker-settings/"+result.getId())).body(result);
+        return ResponseEntity.created(new URI("/api/coach-settings/"+result.getId())).body(result);
     }
 
     @GetMapping("/coach-settings/logo")
     public ResponseEntity<byte[]> getLogo() {
-        log.info("REST Request to get Baker Logo");
+        log.info("REST Request to get Coach Logo");
 
         byte[] logoBytes = null;
             CoachSettingsDTO result = coachSettingsService.findTopByCoachId(SecurityUtils.getCurrentCoachId());
