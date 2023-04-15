@@ -5,6 +5,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ParseSourceFile } from '@angular/compiler';
+import { th } from 'date-fns/locale';
 
 @Component({
   selector: 'app-receipts',
@@ -26,6 +27,7 @@ payments: any = [];
 loadingpayment: any;
 statementPeriod!: string;
 coachId: any;
+organizationId : any;
 loading = false;
 itemsPerPage = 20;
 filters: any = {
@@ -34,6 +36,7 @@ filters: any = {
 };
 coachSessionData: any;
 coachData: any;
+organizationData: any;
 userRole: any;
 ClientId: any;
 payment: any;
@@ -67,11 +70,11 @@ payment: any;
 
     }
     else if(this.userRole == 'ORGANIZATION'){
-      console.log('ORGANIZATION');
-      // this.getPaymentsByOrgId();
+      this.organizationId= this.organizationData.organization.id;
+      this.getPaymentsByOrganizationId();
     }
   }
-  getPaymentsByOrgId() {
+  getPaymentsByOrganizationId() {
     window.scroll(0, 0);
     const options = {
       page: 1,
@@ -81,7 +84,7 @@ payment: any;
       orgId: this.coachData.organization.id,
     };
     console.log('orgId', options);
-    this.ClientService.getPaymentsByOrgId(options).subscribe(
+    this.ClientService.getPaymentsByOrganizationId(options).subscribe(
       (response) => {
         this.loading = false;
         this.payments = response.body;

@@ -274,7 +274,7 @@ export class ClientService {
       observe: 'response'
     })
   }
-  getPaymentsByOrgId(options: any): Observable<any> {
+  getPaymentsByOrganizationId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByOrgId`, {
       params: options,
       observe: 'response'
