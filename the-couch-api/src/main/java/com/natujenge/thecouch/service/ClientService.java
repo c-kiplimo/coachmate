@@ -87,6 +87,7 @@ public class ClientService {
             client.setCoach(coach);
         }
         if (organization != null) {
+            client.setCreatedBy(organization.getFullName());
             client.setOrganization(organization);
         }
 

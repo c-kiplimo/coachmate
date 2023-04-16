@@ -184,6 +184,52 @@ public class ClientWalletService {
 
 
     }
+    private float updateBillingAccountOnPaymentByClient_(Client client, float clientBalance, Float amount) {
+        // obtain recent record on billing account
+        Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
+                findByClientIdOrderByIdDesc(client.getId());
+        if (optionalClientBillingAccount.isEmpty()) {
+            throw new IllegalArgumentException("Client Billing Account not found!");
+        }
+        OrganizationWallet organizationWallet = organizationWalletService.getWalletRecentRecord(client.getOrganization().getId());
+        CoachWallet coachWallet = coachWalletService.getWalletRecentRecord(client.getCoach().getId());
+        ClientBillingAccount clientBillingAccountPrevious = optionalClientBillingAccount.get();
+        float amountBilled = (clientBillingAccountPrevious.getAmountBilled() != null) ?
+                clientBillingAccountPrevious.getAmountBilled() :
+                0f;
+        // new client Billing Account record
+        ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
+        clientBillingAccount.setClient(client);
+        clientBillingAccount.setCoach(client.getCoach());
+        clientBillingAccount.setOrganization(client.getCoach().getOrganization());
+        clientBillingAccount.setAmountBilled(amountBilled);
+        clientBillingAccount.setCreatedBy(client.getFullName());
+        clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
+        // save new record
+        float organizationWalletBalance = (organizationWallet.getWalletBalance() != null) ? organizationWallet.getWalletBalance() : 0f;
+        // Calculate Balances
+        float paymentBalance =0f;
+        float walletBalance = 0f;
+        if (clientBalance >= amountBilled){
+            paymentBalance = clientBalance - amountBilled;
+            walletBalance = paymentBalance;
+            clientBillingAccount.setAmountBilled(0f);
+            /// add to Coach Wallet
+            float organizationWalletNewBalance = organizationWalletBalance + amountBilled;
+            organizationWalletService.updateWalletBalance(organizationWallet, organizationWalletNewBalance);
+        } else if (clientBalance < amountBilled && clientBalance > 0f) {
+            paymentBalance = amountBilled - clientBalance;
+            walletBalance = 0f;
+            clientBillingAccount.setAmountBilled(paymentBalance);
+            float organizationWalletNewBalance = organizationWalletBalance + clientBalance;
+            organizationWalletService.updateWalletBalance(organizationWallet, organizationWalletNewBalance);
+        }
+        //accountStatementService.updateAccountStatement(coach, client,amountIn,amountBilled,paymentBalance);
+        clientBillingAccountRepository.save(clientBillingAccount);
+        return walletBalance ;
+
+
+    }
 
     // update billing account on payment by organization
     public float updateBillingAccountOnPaymentByOrganization(Organization organization , Client client, float clientBalance,float amountIn) {
@@ -461,14 +507,22 @@ public class ClientWalletService {
                 client1.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientWalletL;
         clientWallet.setClientWalletNumber(clientWalletNo);
         // mngmnt
-        clientWallet.setCreatedBy(client1.getFullName());
+
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
         // update billing account
         // return walletBalance
+        if(client.getCreatedBy()==client.getCoach().getFullName()){
         Float walletBalanceAfter = updateBillingAccountOnPaymentByClient(
                client1,walletBalance,paymentRequest.getAmount());
-        clientWallet.setWalletBalance(walletBalanceAfter);
+            clientWallet.setWalletBalance(walletBalanceAfter);
+        }else {
+            Float walletBalanceAfter = updateBillingAccountOnPaymentByClient_(
+                    client1,walletBalance,paymentRequest.getAmount());
+            clientWallet.setWalletBalance(walletBalanceAfter);
+        }
+
+
         //update account statement
         // save wallet
         ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
