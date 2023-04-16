@@ -1,6 +1,4 @@
 package com.natujenge.thecouch.service.dto;
-
-import com.natujenge.thecouch.domain.QCoachSubscription;
 import com.natujenge.thecouch.domain.enums.CoachStatus;
 import java.time.LocalDateTime;
 
@@ -21,15 +19,13 @@ public class CoachDTO {
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-    private NotificationSettingsDTO notificationSettings;
 
-    private CoachPaymentDetailsDTO defaultCoachPaymentDetails;
-    private CoachSettingsDTO coachSettings;
-    private CoachSubscriptionDTO subscription;
-    private CoachWalletDTO wallet;
-    private CoachSubscriptionDTO coachSubscription;
+    public Long getId() {
+        return id;
+    }
 
-    public CoachDTO(QCoachSubscription coachSubscription) {
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBusinessName() {
@@ -135,85 +131,5 @@ public class CoachDTO {
     public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
-
-    public NotificationSettingsDTO getNotificationSettings() {
-        return notificationSettings;
-    }
-
-    public void setNotificationSettings(NotificationSettingsDTO notificationSettings) {
-        this.notificationSettings = notificationSettings;
-    }
-
-    public CoachPaymentDetailsDTO getDefaultCoachPaymentDetails() {
-        return defaultCoachPaymentDetails;
-    }
-
-    public void setDefaultCoachPaymentDetails(CoachPaymentDetailsDTO defaultCoachPaymentDetails) {
-        this.defaultCoachPaymentDetails = defaultCoachPaymentDetails;
-    }
-
-    public CoachSettingsDTO getCoachSettings() {
-        return coachSettings;
-    }
-
-    public void setCoachSettings(CoachSettingsDTO coachSettings) {
-        this.coachSettings = coachSettings;
-    }
-
-    public CoachSubscriptionDTO getSubscription() {
-        return subscription;
-    }
-
-    public void setSubscription(CoachSubscriptionDTO subscription) {
-        this.subscription = subscription;
-    }
-
-    public CoachWalletDTO getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(CoachWalletDTO wallet) {
-        this.wallet = wallet;
-    }
-
-    public CoachSubscriptionDTO getCoachSubscription() {
-        return coachSubscription;
-    }
-
-    public void setCoachSubscription(CoachSubscriptionDTO coachSubscription) {
-        this.coachSubscription = coachSubscription;
-    }
-
-    @Override
-    public String toString() {
-        return "CoachDTO{" +
-                "id=" + id +
-                ", businessName='" + businessName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", msisdn='" + msisdn + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", status=" + status +
-                ", onboarded=" + onboarded +
-                ", reason='" + reason + '\'' +
-                ", createdAt=" + createdAt +
-                ", createdBy='" + createdBy + '\'' +
-                ", lastUpdatedAt=" + lastUpdatedAt +
-                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
-                ", notificationSettings=" + notificationSettings +
-                ", defaultCoachPaymentDetails=" + defaultCoachPaymentDetails +
-                ", coachSettings=" + coachSettings +
-                ", subscription=" + subscription +
-                ", wallet=" + wallet +
-                ", coachSubscription=" + coachSubscription +
-                '}';
-    }
-
-    public void setId(Long currentCoachId) {
-    }
-
-    public Object getId() {
-        return id;
-    }
 }
+

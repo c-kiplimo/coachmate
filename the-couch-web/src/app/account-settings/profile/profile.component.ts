@@ -92,8 +92,8 @@ export class ProfileComponent implements OnInit {
     delete this.coachProfile.defaultcoachPaymentDetails;
     delete this.coachProfile.subscription;
     delete this.coachProfile.wallet;
-    this.locationDetails = JSON.parse(JSON.stringify(this.user.coach.defaultcoachLocation));
-    this.logoDetails = JSON.parse(JSON.stringify(this.user.coach.coachSettings));
+    
+    this.logoDetails = ""; // JSON.parse(JSON.stringify(this.user.coach.coachSettings));
     if(!this.logoDetails){
       this.logoDetails={};
     }

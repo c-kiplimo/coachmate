@@ -68,7 +68,9 @@ export class TemplatesComponent implements OnInit {
   }
 
   setFields(): void {
-    this.notificationDetails = JSON.parse(JSON.stringify(this.user.coach.notificationSettings));
+    this.notificationDetails = JSON.parse(
+      sessionStorage.getItem('notificationSettings') || '{}'
+    );
     console.log(this.notificationDetails);
   }
 
@@ -83,6 +85,7 @@ export class TemplatesComponent implements OnInit {
         this.editingSettings = false;
         window.scroll(0, 0);
 
+        sessionStorage.setItem('notificationSettings', JSON.stringify(this.notificationDetails));
         this.getAccount();
 
         setTimeout(() => {
@@ -104,13 +107,13 @@ export class TemplatesComponent implements OnInit {
   getAccount(): void {
     this.login.getAccount().subscribe(
       (response: any) => {
-        // console.log(response);
+        console.log(response);
         // console.log('here');
 
         sessionStorage.setItem('businessName', response.body.firstName);
         sessionStorage.setItem('coachStatus', response.body.coach.status);
         sessionStorage.setItem('user', JSON.stringify(response.body));
-        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.notificationSettings))
+        sessionStorage.setItem('notificationSettings', JSON.stringify(response.body.notificationSettings));
 
         setTimeout(() => {
           location.reload();

@@ -10,18 +10,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "tbl_contract_templates")
 @Entity
-public class ContractTemplates {
-    @SequenceGenerator(
-            name = "contract_templates_sequence",
-            sequenceName = "contract_templates_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contract_templates_sequence")
+public class ContractTemplate {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
+    @Column(length = 5000, columnDefinition = "text")
     private String servicesTemplate;
+    @Column(length = 5000, columnDefinition = "text")
     private String practiceTemplate;
+    @Column(length = 5000, columnDefinition = "text")
     private String terms_and_conditionsTemplate;
+    @Column(length = 5000, columnDefinition = "text")
     private String privacyPolicyTemplate;
+    @Column(length = 5000, columnDefinition = "text")
     private String notesTemplate;
     @ManyToOne
     @JoinColumn(name="coach_id")

@@ -2,20 +2,15 @@ package com.natujenge.thecouch.service;
 
 
 
-import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.domain.Organization;
-import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.repository.CoachRepository;
-import com.natujenge.thecouch.repository.OrganizationRepository;
-import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
-import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.repository.NotificationSettingsRepository;
+import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +27,7 @@ public class CoachService {
 
     private final CoachRepository coachRepository;
     private final OrganizationRepository organizationRepository;
+    private final ContractTemplatesRepository contractTemplatesRepository;
     private final RegistrationService registrationService;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -45,9 +41,10 @@ public class CoachService {
     PasswordEncoder passwordEncoder;
 
     //     constructor
-    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, RegistrationService registrationService, UserRepository userRepository, CoachSettingsService coachSettingsService, UserService userService, NotificationSettingsService notificationSettingsService, PaymentDetailsService paymentDetailsService, CoachMapper coachMapper, NotificationSettingsMapper notificationSettingsMapper, NotificationSettingsRepository notificationSettingsRepository) {
+    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, ContractTemplatesRepository contractTemplatesRepository, RegistrationService registrationService, UserRepository userRepository, CoachSettingsService coachSettingsService, UserService userService, NotificationSettingsService notificationSettingsService, PaymentDetailsService paymentDetailsService, CoachMapper coachMapper, NotificationSettingsMapper notificationSettingsMapper, NotificationSettingsRepository notificationSettingsRepository) {
         this.coachRepository = coachRepository;
         this.organizationRepository = organizationRepository;
+        this.contractTemplatesRepository = contractTemplatesRepository;
         this.registrationService = registrationService;
         this.userRepository = userRepository;
         this.userService = userService;
@@ -127,14 +124,14 @@ public class CoachService {
 
     }
     public Optional<CoachDTO> findOne(Long id) {
-        log.info("Request to get Baker by id: {}", id);
+        log.info("Request to get Coach by id: {}", id);
         return coachRepository.findById(id).map(coachMapper::toDto);
     }
 
     public CoachDTO onBoard(OnBoardCoachDTO onBoardCoachDTO){
         Optional<CoachDTO> coachDTOOptional = findOne(onBoardCoachDTO.getCoachId());
         if (coachDTOOptional.isEmpty()){
-            throw new IllegalStateException("Baker with Id " + onBoardCoachDTO.getCoachId() + " does not exist");
+            throw new IllegalStateException("Coach with Id " + onBoardCoachDTO.getCoachId() + " does not exist");
         }
 
         CoachDTO coachDTO = coachDTOOptional.get();
@@ -175,6 +172,7 @@ public class CoachService {
         if (coachSettingsDTO == null){
             coachSettingsDTO = new CoachSettingsDTO();
         }
+
         coachSettingsDTO.setLogo(onBoardCoachDTO.getFilename());
         coachSettingsDTO.setCoach(coachDTO);
         coachSettingsService.save(coachSettingsDTO);
@@ -198,5 +196,15 @@ public class CoachService {
         }
         PaymentDetailsDTO paymentDetailsDTO = OnBoardCoachUtil.extractPaymentData(onBoardCoachDTO, coachDTO, savedPaymentDetailsDTO);
         paymentDetailsService.save(paymentDetailsDTO);
+    }
+
+    public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
+        ContractTemplate contractTemplate = new ContractTemplate();
+        contractTemplate.setCoach(contractTemplatesRequest.getCoach());
+        contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
+        contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
+        contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());
+        contractTemplate.setTerms_and_conditionsTemplate(contractTemplatesRequest.getTerms_and_conditionsTemplate());
+        return contractTemplatesRepository.save(contractTemplate);
     }
 }

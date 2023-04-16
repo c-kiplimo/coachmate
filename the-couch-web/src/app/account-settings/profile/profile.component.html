@@ -68,43 +68,43 @@
 
       <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Business name</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.businessName}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.businessName}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.businessName" type="text" class="form-control select-dropdown" name="businessName" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">First name</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.firstName}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.firstName}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.firstName" type="text" class="form-control select-dropdown" name="firstName" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Last name</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.lastName}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.lastName}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.lastName" type="text" class="form-control select-dropdown" name="lastName" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title" for="displayName">Phone number</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.msisdn}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.msisdn}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.msisdn" type="text" class="form-control select-dropdown" name="phonenumber" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between border-0" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title" for="displayName">Email</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.emailAddress}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.emailAddress}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.emailAddress" type="text" class="form-control select-dropdown" name="email" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Physical address</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.defaultcoachLocation?.physicalAddress}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.defaultcoachLocation?.physicalAddress}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.physicalAddress" type="text" class="form-control select-dropdown" name="physicalAddress" [disabled]="isSaving" />
       </div>
 
       <div class="d-flex justify-content-between border-0" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Postal address</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.coach.defaultcoachLocation?.postalAddress}}</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.defaultcoachLocation?.postalAddress}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.postalAddress" type="text" class="form-control select-dropdown" name="postalAddress" [disabled]="isSaving" />
       </div>
 

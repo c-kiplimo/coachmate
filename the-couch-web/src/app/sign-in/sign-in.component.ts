@@ -65,6 +65,8 @@ export class SignInComponent implements OnInit {
           sessionStorage.setItem('token', this.token);
           sessionStorage.setItem('businessName', this.businessName);
           sessionStorage.setItem('user', JSON.stringify(data.user));
+          sessionStorage.setItem('notificationSettings', JSON.stringify(data.user.notificationSettings));
+          
           this.router.navigate(['dashboard']);
 
           // setTimeout(() => {

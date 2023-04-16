@@ -1,7 +1,4 @@
 package com.natujenge.thecouch.service.dto;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.PaymentType;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
@@ -13,7 +10,7 @@ import java.time.LocalDateTime;
 public class NotificationSettingsDTO {
 
     private Long id;
-    private String filename;
+    private String fileName;
     private NotificationMode notificationMode;
     private String smsDisplayName;
     private String emailDisplayName;
@@ -23,13 +20,15 @@ public class NotificationSettingsDTO {
     private String tillNumber;
     private String accountNumber;
     private Float depositPercentage;
-    private int paymentDue;
-    CoachDTO coach;
+
+    // coach
+    private CoachDTO coach;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-    Organization organization;
+    private OrganizationDTO organization;
+
     // Session Settings
     private SessionTemplateType sessionTemplateType;
     private String newContractTemplate;
@@ -46,7 +45,22 @@ public class NotificationSettingsDTO {
     private boolean cancelSessionEnable;
     private boolean conductedSessionEnable;
     private boolean paymentReminderEnable;
-    NotificationSettings notificationSettings;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public NotificationMode getNotificationMode() {
         return notificationMode;
@@ -120,20 +134,20 @@ public class NotificationSettingsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public int getPaymentDue() {
-        return paymentDue;
-    }
-
-    public void setPaymentDue(int paymentDue) {
-        this.paymentDue = paymentDue;
-    }
-
     public CoachDTO getCoach() {
         return coach;
     }
 
     public void setCoach(CoachDTO coach) {
         this.coach = coach;
+    }
+
+    public OrganizationDTO getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -168,13 +182,7 @@ public class NotificationSettingsDTO {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public Organization getOrganization() {
-        return organization;
-    }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
 
     public SessionTemplateType getSessionTemplateType() {
         return sessionTemplateType;
@@ -294,52 +302,5 @@ public class NotificationSettingsDTO {
 
     public void setPaymentReminderEnable(boolean paymentReminderEnable) {
         this.paymentReminderEnable = paymentReminderEnable;
-    }
-
-    public NotificationSettings getNotificationSettings() {
-        return notificationSettings;
-    }
-
-    public void setNotificationSettings(NotificationSettings notificationSettings) {
-        this.notificationSettings = notificationSettings;
-    }
-
-    @Override
-    public String toString() {
-        return "NotificationSettingsDTO{" +
-                "id=" + id +
-                ", notificationMode=" + notificationMode +
-                ", smsDisplayName='" + smsDisplayName + '\'' +
-                ", emailDisplayName='" + emailDisplayName + '\'' +
-                ", notificationEnable=" + notificationEnable +
-                ", paymentType=" + paymentType +
-                ", msisdn='" + msisdn + '\'' +
-                ", tillNumber='" + tillNumber + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", depositPercentage=" + depositPercentage +
-                ", paymentDue=" + paymentDue +
-                ", coach=" + coach +
-                ", createdAt=" + createdAt +
-                ", createdBy='" + createdBy + '\'' +
-                ", lastUpdatedAt=" + lastUpdatedAt +
-                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
-                ", organization=" + organization +
-                ", sessionTemplateType=" + sessionTemplateType +
-                ", newContractTemplate='" + newContractTemplate + '\'' +
-                ", partialBillPaymentTemplate='" + partialBillPaymentTemplate + '\'' +
-                ", fullBillPaymentTemplate='" + fullBillPaymentTemplate + '\'' +
-                ", cancelSessionTemplate='" + cancelSessionTemplate + '\'' +
-                ", conductedSessionTemplate='" + conductedSessionTemplate + '\'' +
-                ", rescheduleSessionTemplate='" + rescheduleSessionTemplate + '\'' +
-                ", paymentReminderTemplate='" + paymentReminderTemplate + '\'' +
-                ", newContractEnable=" + newContractEnable +
-                ", rescheduleSessionEnable=" + rescheduleSessionEnable +
-                ", partialBillPaymentEnable=" + partialBillPaymentEnable +
-                ", fullBillPaymentEnable=" + fullBillPaymentEnable +
-                ", cancelSessionEnable=" + cancelSessionEnable +
-                ", conductedSessionEnable=" + conductedSessionEnable +
-                ", paymentReminderEnable=" + paymentReminderEnable +
-                ", notificationSettings=" + notificationSettings +
-                '}';
     }
 }

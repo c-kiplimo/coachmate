@@ -31,13 +31,11 @@ public class PaymentDetails {
     private float depositPercentage;
     @ManyToOne
     @JoinColumn(
-            nullable = false,
             name = "coach_id"
     )
     private Coach coach;
     @ManyToOne
     @JoinColumn(
-            nullable = false,
             name = "organization_id"
     )
     private Organization organization;
@@ -175,6 +173,18 @@ public class PaymentDetails {
 
     public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    public void setCoach(Coach coach) {
+        this.coach = coach;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     @Override

@@ -44,6 +44,9 @@ public class Coach implements Serializable {
     @ManyToOne
     @JoinColumn(name="notification_settings_id")
     NotificationSettings notificationSettings;
+    @ManyToOne
+    @JoinColumn(name="contract_template_id")
+    ContractTemplate contractTemplate;
 
 
     // management Details

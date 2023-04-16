@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface CoachMapper extends EntityMapper<CoachDTO, Coach>{
 
-    @Mapping(target = "notificationSettings", source = "notificationSettings")
     CoachDTO toDto(Coach b);
 
     default Coach fromId(Long id) {

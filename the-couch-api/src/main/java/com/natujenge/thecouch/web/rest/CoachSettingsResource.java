@@ -30,7 +30,7 @@ public class CoachSettingsResource {
     public ResponseEntity<CoachSettingsDTO> saveSettings(@RequestBody CoachSettingsDTO coachSettingsDTO) throws URISyntaxException {
         log.info("REST Request to save CoachSettings: {}", coachSettingsDTO);
         if (coachSettingsDTO.getCoach() == null){
-            CoachDTO coachDTO = new CoachDTO(coachSubscription);
+            CoachDTO coachDTO = new CoachDTO();
             coachDTO.setId(SecurityUtils.getCurrentCoachId());
             coachSettingsDTO.setCoach(coachDTO);
         }

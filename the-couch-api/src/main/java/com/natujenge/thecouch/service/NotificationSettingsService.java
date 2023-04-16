@@ -1,14 +1,18 @@
 package com.natujenge.thecouch.service;
 
+import com.natujenge.thecouch.domain.ContractTemplate;
+import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
+import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+
 import com.natujenge.thecouch.repository.NotificationSettingsRepository;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
@@ -19,12 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class NotificationSettingsService {
     private final NotificationSettingsRepository notificationSettingsRepository;
+    private final ContractTemplatesRepository contractTemplatesRepository;
 
     private final UserService userService;
     private final NotificationSettingsMapper notificationSettingsMapper;
 
-    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
+    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, ContractTemplatesRepository contractTemplatesRepository, UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
         this.notificationSettingsRepository = notificationSettingsRepository;
+        this.contractTemplatesRepository = contractTemplatesRepository;
         this.userService = userService;
         this.notificationSettingsMapper = notificationSettingsMapper;
     }
@@ -90,7 +96,6 @@ public class NotificationSettingsService {
                         notificationSettingsRequest.getAccountNumber())) {
             NotificationSettings.setAccountNumber(notificationSettingsRequest.getAccountNumber());
         }
-
 
 
         // contract settings
@@ -162,9 +167,10 @@ public class NotificationSettingsService {
         return notificationSettingsRepository.save(NotificationSettings);
 
     }
-    public NotificationSettingsDTO save(NotificationSettingsDTO notificationSettingsDTO){
+
+    public NotificationSettingsDTO save(NotificationSettingsDTO notificationSettingsDTO) {
         log.info("Request to save BakerNotificationSettings : {}", notificationSettingsDTO);
-        if (notificationSettingsDTO.getId() == null){
+        if (notificationSettingsDTO.getId() == null) {
             notificationSettingsDTO.setCreatedAt(LocalDateTime.now());
             notificationSettingsDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
         } else {
@@ -173,61 +179,67 @@ public class NotificationSettingsService {
         }
 
         NotificationSettings notificationSettings = notificationSettingsMapper.toEntity(notificationSettingsDTO);
-        notificationSettings= notificationSettingsRepository.save(notificationSettings);
+        notificationSettings = notificationSettingsRepository.save(notificationSettings);
 
         return notificationSettingsMapper.toDto(notificationSettings);
     }
-    public NotificationSettings addNewSettings(NotificationSettingsRequest notificationSettingsRequest){
+    public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
+        ContractTemplate contractTemplate = new ContractTemplate();
+        contractTemplate.setCoach(contractTemplatesRequest.getCoach());
+        contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
+        contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
+        contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());
+        contractTemplate.setTerms_and_conditionsTemplate(contractTemplatesRequest.getTerms_and_conditionsTemplate());
+        return contractTemplatesRepository.save(contractTemplate);
+    }
+
+    public NotificationSettings addNewSettings(NotificationSettingsRequest notificationSettingsRequest) {
 
 
+        NotificationSettings notificationSettings = new NotificationSettings();
+        notificationSettings.setNotificationMode(notificationSettingsRequest.getNotificationMode());
+        notificationSettings.setSmsDisplayName(notificationSettingsRequest.getSmsDisplayName());
+        notificationSettings.setEmailDisplayName(notificationSettingsRequest.getEmailDisplayName());
+        notificationSettings.setNotificationEnable(notificationSettingsRequest.isNotificationEnable());
+        notificationSettings.setMsisdn(notificationSettingsRequest.getMsisdn());
+        notificationSettings.setTillNumber(notificationSettingsRequest.getTillNumber());
+        notificationSettings.setAccountNumber(notificationSettingsRequest.getAccountNumber());
+        notificationSettings.setSessionTemplateType(notificationSettingsRequest.getSessionTemplateType());
 
+        // Templates
+        notificationSettings.setNewContractTemplate(notificationSettingsRequest.getNewContractTemplate());
+        notificationSettings.setPartialBillPaymentTemplate(
+                notificationSettingsRequest.getPartialBillPaymentTemplate());
+        notificationSettings.setFullBillPaymentTemplate(notificationSettingsRequest.getFullBillPaymentTemplate());
+        notificationSettings.setCancelSessionTemplate(notificationSettingsRequest.getCancelSessionTemplate());
+        notificationSettings.setConductedSessionTemplate(notificationSettingsRequest.getConductedSessionTemplate());
+        notificationSettings.setPaymentReminderTemplate((notificationSettingsRequest.getPaymentReminderTemplate()));
 
-            NotificationSettings notificationSettings = new NotificationSettings();
-            notificationSettings.setNotificationMode(notificationSettingsRequest.getNotificationMode());
-            notificationSettings.setSmsDisplayName(notificationSettingsRequest.getSmsDisplayName());
-            notificationSettings.setEmailDisplayName(notificationSettingsRequest.getEmailDisplayName());
-            notificationSettings.setNotificationEnable(notificationSettingsRequest.isNotificationEnable());
-            notificationSettings.setMsisdn(notificationSettingsRequest.getMsisdn());
-            notificationSettings.setTillNumber(notificationSettingsRequest.getTillNumber());
-            notificationSettings.setAccountNumber(notificationSettingsRequest.getAccountNumber());
-            notificationSettings.setSessionTemplateType(notificationSettingsRequest.getSessionTemplateType());
+        // Enable
+        notificationSettings.setNewContractEnable(notificationSettingsRequest.isNewContractEnable());
+        notificationSettings.setPartialBillPaymentEnable(notificationSettingsRequest.isPartialBillPaymentEnable());
+        notificationSettings.setFullBillPaymentEnable(notificationSettingsRequest.isFullBillPaymentEnable());
+        notificationSettings.setCancelSessionEnable(notificationSettingsRequest.isCancelSessionEnable());
+        notificationSettings.setConductedSessionEnable(notificationSettingsRequest.isConductedSessionEnable());
+        notificationSettings.setCreatedAt(LocalDateTime.now());
+        notificationSettings.setLastUpdatedAt(LocalDateTime.now());
 
-            // Templates
-            notificationSettings.setNewContractTemplate(notificationSettingsRequest.getNewContractTemplate());
-            notificationSettings.setPartialBillPaymentTemplate(
-                    notificationSettingsRequest.getPartialBillPaymentTemplate());
-            notificationSettings.setFullBillPaymentTemplate(notificationSettingsRequest.getFullBillPaymentTemplate());
-            notificationSettings.setCancelSessionTemplate(notificationSettingsRequest.getCancelSessionTemplate());
-            notificationSettings.setConductedSessionTemplate(notificationSettingsRequest.getConductedSessionTemplate());
-            notificationSettings.setPaymentReminderTemplate((notificationSettingsRequest.getPaymentReminderTemplate()));
+        if (notificationSettingsRequest.getCoach() != null) {
+            notificationSettings.setCoach(notificationSettingsRequest.getCoach());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
+            if (notificationSettingsRequest.getCoach().getOrganization() != null) {
+                notificationSettings.setOrganization(notificationSettingsRequest.getCoach().getOrganization());
+            }
+        } else {
+            notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
 
-            // Enable
-            notificationSettings.setNewContractEnable(notificationSettingsRequest.isNewContractEnable());
-            notificationSettings.setPartialBillPaymentEnable(notificationSettingsRequest.isPartialBillPaymentEnable());
-            notificationSettings.setFullBillPaymentEnable(notificationSettingsRequest.isFullBillPaymentEnable());
-            notificationSettings.setCancelSessionEnable(notificationSettingsRequest.isCancelSessionEnable());
-            notificationSettings.setConductedSessionEnable(notificationSettingsRequest.isConductedSessionEnable());
-            notificationSettings.setCreatedAt(LocalDateTime.now());
-
-              notificationSettings.setLastUpdatedAt(LocalDateTime.now());
-
-             if (notificationSettingsRequest.getCoach() != null) {
-                 notificationSettings.setCoach(notificationSettingsRequest.getCoach());
-                 notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
-                 notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
-                 if (notificationSettingsRequest.getCoach().getOrganization() != null) {
-                     notificationSettings.setOrganization(notificationSettingsRequest.getCoach().getOrganization());
-                 }
-             }else{
-                 notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
-                    notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
-                    notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
-
-             }
-log.info("Notification Settings Created Successfully");
-            // TODO: Link to User (Not Necessary) -> Default way of adding notifications is during registration
-            return notificationSettingsRepository.save(notificationSettings);
         }
+        log.info("Notification Settings Created Successfully");
+        return notificationSettingsRepository.save(notificationSettings);
+    }
 
     public Optional<NotificationSettings> getNotification(Long coachId) {
         return notificationSettingsRepository.findByCoachId(coachId);

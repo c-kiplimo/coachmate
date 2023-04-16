@@ -63,6 +63,10 @@ public class User implements UserDetails {
     @JoinColumn(name="notification_settings_id")
     NotificationSettings notificationSettings;
 
+    @ManyToOne
+    @JoinColumn(name="contract_template_id")
+    ContractTemplate contractTemplate;
+
 
     @ManyToOne
     @JoinColumn(name="client_id")

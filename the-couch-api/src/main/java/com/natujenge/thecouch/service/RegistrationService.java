@@ -13,7 +13,6 @@ import com.natujenge.thecouch.web.rest.request.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +71,12 @@ public class RegistrationService {
                 coach.setMsisdn(registrationRequest.getMsisdn());
                 coach.setEmailAddress(registrationRequest.getEmail());
                 coach.setCreatedBy("SELF-REGISTRATION");
-
+                // coach Number Generation
+                int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+                String coachL = String.format("%05d", randNo);
+                String coachNo = coach.getLastName().substring(0, 2) +
+                        coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+                coach.setCoachNumber(coachNo);
                 Coach savedCoach = coachRepository.save(coach);
 
                 log.info("Coach registered");
@@ -128,10 +132,23 @@ public class RegistrationService {
                         addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
+               // set contract templates
+                ContractTemplatesRequest contractTemplatesRequest = new ContractTemplatesRequest();
+                contractTemplatesRequest.setServicesTemplate(Constants.DEFAULT_SERVICES_TEMPLATE);
+                contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
+                contractTemplatesRequest.setPracticeTemplate(Constants.DEFAULT_PRACTICE_TEMPLATE);
+                contractTemplatesRequest.setTerms_and_conditionsTemplate(Constants.DEFAULT_TERMS_AND_CONDITIONS_TEMPLATE);
+                contractTemplatesRequest.setCoach(savedCoach);
+                ContractTemplate contractTemplate =notificationSettingsService.addContractTemplates(contractTemplatesRequest);
+                log.info("Contract Templates Saved Successfully");
                 User registeredUser = (User) response.get(0);
                 registeredUser.setNotificationSettings(notificationSettings);
+                registeredUser.setContractTemplate(contractTemplate);
                 registeredUser.setCoach(savedCoach);
                 userService.updateUser(registeredUser);
+
+
+                log.info("Coach Updated Successfully");
 
                 try {
                     // Sending Confirmation Token

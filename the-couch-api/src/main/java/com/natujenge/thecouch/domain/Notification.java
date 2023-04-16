@@ -56,32 +56,11 @@ public class Notification {
 
     private String lastUpdatedBy;
 
-
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private  Contract contract;
-    @ManyToOne
-    @JoinColumn(name ="client_id")
-    private Client client;
-    @ManyToOne
-    @JoinColumn(name = "coach_id")
-    private Coach coach;
-    @ManyToOne
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
-
-
-
-
-
-
-    /*
-     * The notifications table will be used as part of service billing - more work to be done in the second sprint.
-     * Notification service should be able to send back the delivery status back to the API service for updating
-     * of the database object.
-     */
 
 }

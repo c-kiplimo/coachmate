@@ -1,7 +1,6 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
-import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.domain.CoachSettings;
 import com.natujenge.thecouch.service.mapper.CoachSettingsMapper;
@@ -44,9 +43,11 @@ public class CoachSettingsService {
         return coachSettingsMapper.toDto(coachSettingsRepository.findByCoachId(coachId));
     }
 
+
     public CoachSettingsDTO findTopByCoachId(Long coachId){
         log.info("Request to find top coach settings by coachId:{}", coachId);
 
         return coachSettingsMapper.toDto(coachSettingsRepository.findTopByCoachId(coachId));
     }
+
 }

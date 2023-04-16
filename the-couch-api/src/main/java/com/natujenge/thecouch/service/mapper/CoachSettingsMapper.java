@@ -8,6 +8,5 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface CoachSettingsMapper extends EntityMapper<CoachSettingsDTO, CoachSettings>{
 
-    @Mapping(target = "coach", source = "coach")
     CoachSettingsDTO toDto(CoachSettings b);
 }

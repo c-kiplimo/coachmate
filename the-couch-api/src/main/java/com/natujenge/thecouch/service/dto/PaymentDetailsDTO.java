@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.service.dto;
 
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
 import com.natujenge.thecouch.domain.enums.PaymentType;
 import lombok.Data;
@@ -18,12 +19,14 @@ public class PaymentDetailsDTO {
     private String businessNumber; //pay bill
     private String accountNumber; // bank & pay bill
     private float depositPercentage;
+
     private CoachDTO coach;
     private OrganizationDTO organization;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
 
 
 }

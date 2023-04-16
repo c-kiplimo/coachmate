@@ -17,7 +17,6 @@ public class CoachPaymentDetailsDTO {
     private String businessNumber; //pay bill
     private String accountNumber; // bank & pay bill
     private float depositPercentage;
-    private CoachDTO coach;
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
@@ -111,14 +110,6 @@ public class CoachPaymentDetailsDTO {
         this.depositPercentage = depositPercentage;
     }
 
-    public CoachDTO getCoach() {
-        return coach;
-    }
-
-    public void setCoach(CoachDTO coach) {
-        this.coach = coach;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -165,7 +156,6 @@ public class CoachPaymentDetailsDTO {
                 ", businessNumber='" + businessNumber + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", depositPercentage=" + depositPercentage +
-                ", coach=" + coach +
                 ", createdAt=" + createdAt +
                 ", createdBy='" + createdBy + '\'' +
                 ", lastUpdatedAt=" + lastUpdatedAt +
