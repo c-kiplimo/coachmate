@@ -1,5 +1,8 @@
 package com.natujenge.thecouch.service.dto;
 
+import lombok.Data;
+
+@Data
 public class UploadResponse {
     private String filename;
     private String originalName;
