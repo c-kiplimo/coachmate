@@ -3,68 +3,102 @@ package com.natujenge.thecouch.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.enums.PaymentMethod;
-import lombok.*;
+/*
+    * Logo: Image? Link to logo?
+ */
 
-@Data
 @Table(name = "tbl_coach_settings")
 @Entity
 public class CoachSettings {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "coach_settings_sequence",
+            sequenceName = "coach_settings_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "coach_settings_sequence")
     @Id
     private Long id;
     private String logo;
-    @Enumerated(EnumType.STRING)
-    @Column(name="business_notification_mode", length=10)
-    private NotificationMode notificationMode;
+    @OneToOne
+    @JoinColumn(
+            nullable = false,
+            name = "coach_id"
+    )
+    private Coach coach;
 
-    @Column(name="sms_display_name", length=50)
-    private String smsDisplayName;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String createdBy;
+    private LocalDateTime lastUpdatedAt;
+    private String lastUpdatedBy;
 
-    @Column(name="email_display_name", length=50)
-    private String emailDisplayName;
+    public Long getId() {
+        return id;
+    }
 
-    @Column(name="notification_enable")
-    private boolean notificationEnable;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // payment settings
-    @Enumerated(EnumType.STRING)
-    @Column(name="payment_method",length = 10)
-    private PaymentMethod paymentMethod;
+    public String getLogo() {
+        return logo;
+    }
 
-    @Column(name="msisdn",length = 15)
-    private String msisdn;
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
-    @Column(name="till_number",length = 15)
-    private String tillNumber;
+    public Coach getCoach() {
+        return coach;
+    }
 
-    @Column(name="account_number",length = 25)
-    private String accountNumber;
+    public void setBaker(Coach coach) {
+        this.coach = coach;
+    }
 
-    @Column(name="deposit_percentage", columnDefinition = "float default 0")
-    private float depositPercentage;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    // email and sms templates
-    private String newContractSmsTemplate;
-    private String partialBillPaymentSmsTemplate;
-    private String organizationCoachContractSmsTemplate;
-    private String organizationClientContractSmsTemplate;
-    private String fullBillPaymentSmsTemplate;
-    private String paymentReminderSmsTemplate;
-    private String cancelSessionSmsTemplate;
-    private String rescheduleSessionSmsTemplate;
-    private String conductedSessionSmsTemplate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    // contract image/pdf with terms
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-    // coach
-    @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
-    // orgenization
-    @ManyToOne
-    @JoinColumn(name="organization_id")
-    Organization organization;
+    public LocalDateTime getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public void setLastUpdatedBy(String lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "BakerSettings{" +
+                "id=" + id +
+                ", logo='" + logo + '\'' +
+                ", coach=" + coach +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                '}';
+    }
 }

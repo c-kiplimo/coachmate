@@ -1,0 +1,90 @@
+<div class="container-fluid mt-3 mb-5">
+  <app-user></app-user>
+
+  <div class="container">
+
+    <div class="card card-table">
+
+      <div class="content notification-templates-container">
+
+        <div class="alert alert-success" *ngIf="saveSuccess" [@fadeIn]>
+          <span>Notification template changes saved succesfully</span>
+        </div>
+
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-add ms-4" *ngIf="!editingSettings" [@fadeIn] (click)="toggleEditingSettings()" [disabled]="disableButton">
+            Edit
+          </button>
+        </div>
+
+        <small class="text-muted d-block mb-1">These message templates will be used to send SMS notifications to your clients under different scenarios.</small>
+        <small class="redText d-block mb-4"><i>NOTE: Careful not to delete words starting with '$'</i></small>
+
+
+        <div class="donut-wrapper" *ngIf="isSaving" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+
+        <div class="form-group">
+          <span class="title">New contract template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('newOrderTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.newContractTemplate}}</span>
+          <textarea name="newContractTemplate" class="form-control" id="newContractTemplate" aria-describedby="newContractTemplate" rows="4" [(ngModel)]="notificationDetails.newContractTemplate" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <span class="title">Partial payment template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('partialOrderPaymentTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.partialBillPaymentTemplate}}</span>
+          <textarea name="partialOrderPaymentTemplate" class="form-control" id="partialOrderPaymentTemplate" aria-describedby="partialOrderPaymentTemplate" rows="4" [(ngModel)]="notificationDetails.partialBillPaymentTemplate" *ngIf="editingSettings"
+            [@fadeIn] [disabled]="isSaving">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <span class="title">Full payment template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('fullOrderPaymentTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.partialBillPaymentTemplate}}</span>
+          <textarea name="fullOrderPaymentTemplate" class="form-control" id="fullBIllPaymentTemplate" aria-describedby="fullOrderPaymentTemplate" rows="4" [(ngModel)]="notificationDetails.partialBillPaymentTemplate" *ngIf="editingSettings" [@fadeIn]
+            [disabled]="isSaving">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <span class="title">Payment reminder template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('paymentReminderTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.paymentReminderTemplate}}</span>
+          <textarea name="paymentReminderTemplate" class="form-control" id="paymentReminderTemplate" aria-describedby="paymentReminderTemplate" rows="4" [(ngModel)]="notificationDetails.paymentReminderTemplate" *ngIf="editingSettings" [@fadeIn]
+            [disabled]="isSaving">
+          </textarea>
+        </div>
+
+
+        <div class="form-group">
+          <span class="title">Delivered order template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('deliverOrderTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.conducetedSessionTemplate}}</span>
+
+          <textarea name="deliverOrderTemplate" class="form-control" id="deliverOrderTemplate" aria-describedby="deliverOrderTemplate" rows="4" [(ngModel)]="notificationDetails.conducetedSessionTemplate" *ngIf="editingSettings" [@fadeIn]
+            [disabled]="isSaving">
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <span class="title">Cancel order template <span class="template-reset-action" *ngIf="editingSettings" (click)="resetTemplate('cancelOrderTemplate')">reset</span></span>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{notificationDetails?.cancelSessionTemplate}}</span>
+          <textarea name="cancelOrderTemplate" class="form-control" id="cancelOrderTemplate" aria-describedby="cancelOrderTemplate" rows="4" [(ngModel)]="notificationDetails.cancelSessionTemplate" *ngIf="editingSettings" [@fadeIn]
+            [disabled]="isSaving">
+          </textarea>
+        </div>
+
+
+        <div class="d-flex justify-content-end border-0 mt-3" *ngIf="editingSettings" [@fadeIn]>
+          <button class="btn btn-back" (click)="toggleEditingSettings()" [disabled]="disableButton || isSaving">
+            Cancel
+          </button>
+          <button class="btn btn-add ms-2" (click)="saveSettings()" [disabled]="disableButton || isSaving">
+            Save changes
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>

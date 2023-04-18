@@ -4,11 +4,20 @@ import { ClientService } from '../services/ClientService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../services/ApiService';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
+import { style, animate, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-add-objective',
   templateUrl: './contract.component.html',
-  styleUrls: ['./contract.component.css']
+  styleUrls: ['./contract.component.css'],
+  animations:[
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(600, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class contractComponent implements OnInit{
   contractForm!: FormGroup;
@@ -39,6 +48,13 @@ coachingCategory: any;
   OrgCoaches: any;
   numberofCoaches: any;
   coachId: any;
+  editingSettings = false;
+  isSaving = false;
+  disableButton = false;
+  saveSuccess = false;
+contractTemplates: any;
+  user: any;
+  contractTemplate: any;
 
   constructor(private clientService : ClientService,
     private apiService:ApiService,
@@ -50,6 +66,10 @@ coachingCategory: any;
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
+    this.user = this.coachData;
+    console.log(this.user);
+    this.contractTemplates = this.user.contractTemplate;
+    console.log(this.contractTemplates);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
@@ -83,6 +103,25 @@ coachingCategory: any;
       }
     );
     this.coachingCategory=this.contractForm
+  }
+  resetTemplate(template: string): void {
+    this.contractTemplates[template] = this.user.coach.contractTemplates[template];
+  }
+
+  setFields(): void {
+    this.contractTemplate = JSON.parse(
+      sessionStorage.getItem('contractTemplate') || '{}'
+    );
+    console.log(this.contractTemplate);
+  }
+  toggleEditingSettings(): void {
+    this.editingSettings = !this.editingSettings;
+    this.disableButton = true;
+    this.setFields();
+
+    setTimeout(() => {
+      this.disableButton = false;
+    }, 2000);
   }
   getClients(){
     const options = {

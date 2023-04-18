@@ -111,10 +111,10 @@ public class NotificationServiceHTTPClient {
 //                "/registration/confirm?token="+token;
         String smsContent;
         if (Objects.equals(action, "RESET")){
-            smsContent = "Hello " + user.getFullName()+",\n Use this code to RESET" +
+            smsContent = "Hello " + user.getFirstName() +
                     " your password: " + token + "\nYou can Ignore this If you didn't Initiate this action";
         }else{
-            smsContent = "Hello " + user.getFullName()+",\n Use this code to confirm" +
+            smsContent = "Hello " + user.getFirstName() +
                     " your phone number: " + token + "\nYou can Ignore this If you didn't Initiate this action";
         }
 

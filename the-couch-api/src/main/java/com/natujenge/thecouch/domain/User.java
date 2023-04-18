@@ -18,6 +18,7 @@ import java.util.Collections;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
@@ -58,6 +59,14 @@ public class User implements UserDetails {
     private UserRole userRole;
 
     // Object Relationships
+    @ManyToOne
+    @JoinColumn(name="notification_settings_id")
+    NotificationSettings notificationSettings;
+
+    @ManyToOne
+    @JoinColumn(name="contract_template_id")
+    ContractTemplate contractTemplate;
+
 
     @ManyToOne
     @JoinColumn(name="client_id")

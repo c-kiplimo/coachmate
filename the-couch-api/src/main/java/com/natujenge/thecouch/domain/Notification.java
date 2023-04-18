@@ -30,11 +30,11 @@ public class Notification {
     private String sourceAddress;
     private String destinationAddress;
     private String content;
-    private LocalDateTime sentAt;
     private Long coachId;
-    private Long organizationId;
     private Long clientId;
+    private Long organizationId;
 
+    private LocalDateTime sentAt;
     @Enumerated(EnumType.STRING)
     private NotificationMode notificationMode;
 
@@ -56,23 +56,11 @@ public class Notification {
 
     private String lastUpdatedBy;
 
-
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private  Contract contract;
-
-
-
-
-
-
-    /*
-     * The notifications table will be used as part of service billing - more work to be done in the second sprint.
-     * Notification service should be able to send back the delivery status back to the API service for updating
-     * of the database object.
-     */
 
 }

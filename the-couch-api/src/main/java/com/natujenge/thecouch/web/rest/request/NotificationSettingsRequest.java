@@ -1,4 +1,7 @@
 package com.natujenge.thecouch.web.rest.request;
+import com.natujenge.thecouch.domain.Coach;
+import com.natujenge.thecouch.domain.NotificationSettings;
+import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import lombok.Data;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
@@ -7,10 +10,11 @@ import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 
 public class NotificationSettingsRequest {
     // General Settings
-    private NotificationMode NotificationMode;
+    private NotificationMode notificationMode;
     private String smsDisplayName;
     private String emailDisplayName;
     private boolean notificationEnable;
+
 
     // payment settings
     private String msisdn;
@@ -18,6 +22,8 @@ public class NotificationSettingsRequest {
     private String accountNumber;
     private Float depositPercentage;
 
+    Coach coach;
+    Organization organization;
     // Session Settings
     private SessionTemplateType sessionTemplateType;
 
@@ -35,6 +41,8 @@ public class NotificationSettingsRequest {
     private boolean fullBillPaymentEnable;
     private boolean cancelSessionEnable;
     private boolean conductedSessionEnable;
+    private boolean paymentReminderEnable;
+    NotificationSettings notificationSettings;
 
     // Include General Enable Field for all notifications
 }

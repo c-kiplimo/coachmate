@@ -1,0 +1,30 @@
+.form-group {
+  margin-bottom: 30px;
+
+  .title{
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .description{
+    color: #80868b;
+  }
+}
+
+.title {
+  display: block;
+  position: relative;
+
+  .template-reset-action {
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    font-weight: 400;
+    color: #80868b;
+    cursor: pointer;
+
+    &:hover {
+      color: #5f6063;
+    }
+  }
+}
