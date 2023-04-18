@@ -96,18 +96,6 @@
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="coachProfile.emailAddress" type="text" class="form-control select-dropdown" name="email" [disabled]="isSaving" />
       </div>
 
-      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
-        <span class="title">Physical address</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.defaultcoachLocation?.physicalAddress}}</span>
-        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.physicalAddress" type="text" class="form-control select-dropdown" name="physicalAddress" [disabled]="isSaving" />
-      </div>
-
-      <div class="d-flex justify-content-between border-0" [ngClass]="{'flex-column-sm':editingSettings}">
-        <span class="title">Postal address</span>
-        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{user.coach.defaultcoachLocation?.postalAddress}}</span>
-        <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="locationDetails.postalAddress" type="text" class="form-control select-dropdown" name="postalAddress" [disabled]="isSaving" />
-      </div>
-
 
       <div class="d-flex justify-content-end border-0 mt-3" *ngIf="editingSettings" [@fadeIn]>
         <button class="btn btn-back" (click)="toggleEditingSettings()" [disabled]="disableButton || isSaving">

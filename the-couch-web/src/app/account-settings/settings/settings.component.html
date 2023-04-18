@@ -4,7 +4,7 @@
 
     <div class="settings-card">
       <div class="settings-item" [routerLink]="'/account-settings/profile'">
-        <span class="title">Company profile</span>
+        <span class="title">Business profile</span>
         <span class="icon"><i class="fas fa-angle-right"></i></span>
       </div>
       <div class="settings-item" [routerLink]="'/account-settings/payments'">
@@ -22,6 +22,11 @@
         <span class="icon"><i class="fas fa-angle-right"></i></span>
       </div>
 
+      <div class="settings-item"[routerLink]="['/addAvailableSlots']" >
+        <span class="title">Set Availability</span>
+        <span class="icon"><i class="fas fa-angle-right"></i></span>
+      </div>
+
       <div class="settings-item" [routerLink]="'/wallet'">
         <span class="title">My wallet</span>
         <span class="icon"><i class="fas fa-angle-right"></i></span>
@@ -33,8 +38,8 @@
         <span class="title">Feedback</span>
         <span class="icon"><i class="fas fa-envelope"></i></span>
       </div>
-
-      <!-- <div class="settings-item" [routerLink]="'/contact'">
+<!-- 
+      <div class="settings-item" [routerLink]="'/contact'">
         <span class="title">Subscription</span>
         <span class="icon"><i class="fas fa-envelope"></i></span>
       </div> -->
