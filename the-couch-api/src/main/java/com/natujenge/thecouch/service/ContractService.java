@@ -130,6 +130,9 @@ public class ContractService {
         contract.setClient(client);
 
         contract.setCoach(coach);
+
+
+
         if (coach.getOrganization() != null) {
             contract.setOrganization(coach.getOrganization());
         }

@@ -8,12 +8,11 @@ import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.CoachWalletRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
+
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
