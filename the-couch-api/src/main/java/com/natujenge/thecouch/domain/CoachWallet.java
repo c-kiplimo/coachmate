@@ -17,18 +17,18 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "tbl_client_wallet")
-public class ClientWallet {
+@Table(name = "tbl_coach_wallet")
+public class CoachWallet {
     @Id
     @GeneratedValue(strategy = GenerationType
-                    .IDENTITY)
+            .IDENTITY)
     Long id;
     // updated on every payment
     Float walletBalanceBefore;
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
-    private String clientWalletNumber;
+    private String coachWalletNumber;
     private String extPaymentRef;
     public String description;
 

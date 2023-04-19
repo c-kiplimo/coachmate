@@ -16,6 +16,7 @@ public interface ClientWalletRepository extends PagingAndSortingRepository<Clien
         QuerydslPredicateExecutor<ClientWallet> {
 
     Optional<ClientWallet> findFirstByCoachIdAndClientIdOrderByIdDesc(long coachId, long clientId);
+    Optional<ClientWallet> findFirstByOrganizationIdAndClientIdOrderByIdDesc(long organizationId, long clientId);
 
     Page<ClientWalletDto> findAllByOrganization_id(Long organizationId, Pageable pageable);
 

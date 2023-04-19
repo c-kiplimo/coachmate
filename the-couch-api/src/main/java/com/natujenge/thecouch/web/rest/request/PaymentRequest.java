@@ -19,7 +19,7 @@ public class PaymentRequest {
     public PaymentCurrency paymentCurrency;
     public Long clientId;
     public Long coachId;
-    public Long orgId;
+    public Long organizationId;
     Coach coach;
     Client client;
     Organization organization;

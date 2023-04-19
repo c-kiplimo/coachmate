@@ -8,6 +8,12 @@ import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
+import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.exception.UserNotFoundException;
+import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.repository.CoachWalletRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
@@ -38,6 +44,10 @@ public class CoachService {
     private final NotificationSettingsMapper notificationSettingsMapper;
     private final NotificationSettingsRepository notificationSettingsRepository;
     @Autowired
+    CoachWalletRepository coachWalletRepository;
+    @Autowired
+    CoachBillingAccountService coachBillingAccountService;
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     //     constructor
@@ -57,7 +67,7 @@ public class CoachService {
     }
 
     // create coach by organization
-    public void   addNewCoachByOrganization(Organization organization, String msisdn, CoachRequest coachRequest) {
+    public Coach   addNewCoachByOrganization(Organization organization, String msisdn, CoachRequest coachRequest) {
         log.info("add a new coach to database by organization{}",organization.getId());
 
         Optional<User>  optionalUser = userService.findByMsisdn(coachRequest.getMsisdn());
@@ -77,16 +87,41 @@ public class CoachService {
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String coachL = String.format("%05d", randNo);
-        String coachNo = coach.getLastName().substring(0, 2) +
-                coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+        String coachNo =  coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
         coach.setCoachNumber(coachNo);
-        // save coach
+
+
+
         Coach savedCoach = coachRepository.save(coach);
-        registrationService.registerCoachAsUser(coachRequest,organization,savedCoach);
+
+        registrationService.registerCoachAsUser(coachRequest, organization, savedCoach);
+
+        // Create client wallet
+        CoachWallet coachWallet = new CoachWallet();
 
 
+        if(organization != null){
+            coachWallet.setOrganization(organization);
+        }
 
-        log.info("coach registered successfully");
+        coachWallet.setCoach(savedCoach);
+        coachWallet.setWalletBalance(Float.valueOf(0));
+        coachWallet.setCreatedBy(msisdn);
+        coachWalletRepository.save(coachWallet);
+        log.info("Client Wallet created Successfully!");
+
+        // Create client Billing Account
+        CoachBillingAccount coachBillingAccount = new CoachBillingAccount();
+
+        if(organization != null){
+            coachBillingAccount.setOrganization(organization);
+        }
+        coachBillingAccount.setCoach(savedCoach);
+        coachBillingAccount.setAmountBilled((float) 0);
+        coachBillingAccount.setCreatedBy(msisdn);
+        coachBillingAccountService.createBillingAccount(coachBillingAccount);
+        log.info("Client Billing Account created Successfully!");
+        return savedCoach;
 
     }
 

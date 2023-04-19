@@ -17,6 +17,8 @@ public interface ClientWalletDto {
     Float getAmountDeposited();
 
     Float getWalletBalance();
+    Float getWalletBalanceBefore();
+    Float getAmountBilled();
 
     ModeOfPayment getModeOfPayment();
 

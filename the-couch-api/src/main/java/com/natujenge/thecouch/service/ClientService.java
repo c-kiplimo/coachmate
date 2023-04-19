@@ -73,21 +73,22 @@ public class ClientService {
 
 
     // create client
-    public Client addNewClient(Coach coach,Organization organization, ClientRequest clientRequest,String msisdn) {
+    public Client addNewClient(Coach coach, Organization organization, ClientRequest clientRequest, String msisdn) {
         log.info("add a new client to database");
 
         // Check if client already exists
-        if(doesClientExistByEmailAddress(clientRequest.getEmail())){
+        if (doesClientExistByEmailAddress(clientRequest.getEmail())) {
             throw new IllegalStateException("Client with provided email already exists");
         }
         Client client = new Client();
         log.info("creating new client started");
 
-        if(coach != null){
+        if (coach != null) {
             client.setCreatedBy(coach.getFullName());
             client.setCoach(coach);
         }
-        if(organization != null){
+        if (organization != null) {
+            client.setCreatedBy(organization.getFullName());
             client.setOrganization(organization);
             Optional<Coach> assignedCoach = coachRepository.findCoachById(clientRequest.getCoachId());
             if(assignedCoach.isPresent()){
@@ -99,7 +100,7 @@ public class ClientService {
 
         client.setFirstName(clientRequest.getFirstName());
         client.setLastName(clientRequest.getLastName());
-        client.setFullName(clientRequest.getFirstName()+' '+clientRequest.getLastName());
+        client.setFullName(clientRequest.getFirstName() + ' ' + clientRequest.getLastName());
         client.setClientType(clientRequest.getClientType());
         client.setMsisdn(clientRequest.getMsisdn());
         client.setEmail(clientRequest.getEmail());
@@ -109,50 +110,48 @@ public class ClientService {
         client.setPaymentMode(clientRequest.getPaymentMode());
         client.setCreatedAt(LocalDateTime.now());
 
-
-
         // client Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String clientL = String.format("%05d", randNo);
-        String clientNo =  client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientL;
+        String clientNo = client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientL;
         client.setClientNumber(clientNo);
 
-
         client.setProfession(clientRequest.getProfession());
-        log.info("saving client to client repo");
-
 
         Client saveClient = clientRepository.save(client);
         log.info(" client saved");
         log.info("registering client as user begins");
 
 
-        registrationService.registerClientAsUser(clientRequest, organization,coach, saveClient);
+        registrationService.registerClientAsUser(clientRequest, organization, coach, saveClient);
 log.info("client registered as user now creating wallet");
+        log.info("Client registered is {}",saveClient);
+
         // Create client wallet
         ClientWallet clientWallet = new ClientWallet();
 
-        if(coach != null){
+        if (coach != null) {
             clientWallet.setCreatedBy(coach.getFullName());
             clientWallet.setCoach(coach);
         }
-        if(organization != null){
+        if (organization != null) {
+            clientWallet.setCreatedBy(organization.getFullName());
             clientWallet.setOrganization(organization);
         }
 
         clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
-        clientWallet.setCreatedBy(msisdn);
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
         // Create client Billing Account
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        if(coach != null){
+        if (coach != null) {
             clientBillingAccount.setCreatedBy(coach.getFullName());
             clientBillingAccount.setCoach(coach);
         }
-        if(organization != null){
+        if (organization != null) {
+            clientBillingAccount.setCreatedBy(organization.getFullName());
             clientBillingAccount.setOrganization(organization);
         }
         clientBillingAccount.setClient(saveClient);
@@ -161,8 +160,8 @@ log.info("client registered as user now creating wallet");
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         log.info("Client Billing Account created Successfully!");
         return saveClient;
-
     }
+
 
     // Get all clients
     public ListResponse getAllClients(int page, int perPage, String clientName,
