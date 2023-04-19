@@ -1,8 +1,7 @@
 package com.natujenge.thecouch.domain.enums;
 
 public enum StatementPeriod {
-    PerWeek,
-    PerMonth,
-    Per6Months,
-    PerYear
+    PER_MONTH,
+    PER_6_MONTHS,
+    PER_YEAR
 }

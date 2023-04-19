@@ -1,13 +1,12 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
-import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.repository.OrganizationWalletRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +25,10 @@ public class OrganizationService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    OrganizationWalletRepository organizationWalletRepository;
+    @Autowired
+    OrganizationBillingAccountService organizationBillingAccountService;
 
     public OrganizationService(OrganizationRepository organizationRepository) {
         this.organizationRepository = organizationRepository;
@@ -41,7 +44,27 @@ public class OrganizationService {
 
         }
 
-         return organizationRepository.save(organization);
+        Organization savedOrganization = organizationRepository.save(organization);
+
+
+        // Create client wallet
+        OrganizationWallet organizationWallet = new OrganizationWallet();
+
+        organizationWallet.setOrganization(organization);
+        organizationWallet.setWalletBalance(Float.valueOf(0));
+        organizationWallet.setCreatedBy(organization.getFullName());
+        organizationWalletRepository.save(organizationWallet);
+        log.info("Organization Wallet created Successfully!");
+
+        // Create client Billing Account
+        OrganizationBillingAccount organizationBillingAccount = new OrganizationBillingAccount();
+
+        organizationBillingAccount.setAmountBilled((float) 0);
+        organizationBillingAccount.setCreatedBy(organization.getFullName());
+        organizationBillingAccountService.createBillingAccount(organizationBillingAccount);
+        log.info("Organiation Billing Account created Successfully!");
+        return savedOrganization;
+
 
     }
 
@@ -74,7 +97,12 @@ public class OrganizationService {
 
     }
 
-    public  Optional<Organization> findOrganizationById(Long id) {
-        return organizationRepository.findOrganizationById(id);
+    public Organization findOrganizationById(Long id) {
+        Organization organization = organizationRepository.findOrganizationById(id);
+        if (organization == null) {
+            throw new IllegalArgumentException("Organization not found");
+        }
+        return organization;
     }
+
 }

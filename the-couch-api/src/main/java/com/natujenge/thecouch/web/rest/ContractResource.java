@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @Slf4j
@@ -85,19 +86,36 @@ public class ContractResource {
     ) {
         try {
             log.info("adding contract");
-            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
-            log.info("coach id {}",coachId);
-            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
-            log.info("org id {}",organizationId);
+            Contract contract = null;
 
-            // Later return contract DTO
-            Contract contract = contractService.createContract(coachId, organizationId, contractRequest);
+            if (userDetails.getCoach() != null) {
+                Long coachId = userDetails.getCoach().getId();
+                log.info("coach id {}", coachId);
+                contract = contractService.createContract(coachId, contractRequest);
+            } else if (userDetails.getOrganization() != null) {
+                Long organizationId = userDetails.getOrganization().getId();
+                log.info("org id {}", organizationId);
+                if (Objects.equals(contractRequest.getCoachId(), null)) {
+                    contract = contractService.createOrganizationAndCoachContract(organizationId, contractRequest);
+                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
+                } else {
+                    contract = contractService.createOrganizationAndClientContract(organizationId, contractRequest);
+                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
+                }
+            }
+
+            if (contract == null) {
+                return new ResponseEntity<>("Unable to determine user role", HttpStatus.BAD_REQUEST);
+            }
+
             return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
 
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
@@ -155,44 +173,6 @@ public class ContractResource {
         }catch (Exception e){
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-
-    @PostMapping("/organization-coach-contract")
-    public ResponseEntity<?> createOrganizationAndCoachContract(
-            @RequestBody ContractRequest contractRequest,
-            @AuthenticationPrincipal User userDetails
-    ) {
-        try {
-            Long organizationId = userDetails.getOrganization().getId();
-            log.info("Request to add new Contract by Organization of id {}",organizationId);
-
-            // Later return contract DTO
-            Contract contract = contractService.createOrganizationAndCoachContract(organizationId,contractRequest);
-            return new ResponseEntity<>(contract, HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @PostMapping("/organization-client-contract")
-    public ResponseEntity<?> createOrganizationAndClientContract(
-            @RequestBody ContractRequest contractRequest,
-            @AuthenticationPrincipal User userDetails
-    ) {
-        try {
-            Long organizationId = userDetails.getOrganization().getId();
-            Long coachId = userDetails.getCoach().getId();
-            log.info("Request to add new Contract by Organization of id {}",organizationId);
-
-            // Later return contract DTO
-            Contract contract = contractService.createContract(coachId,organizationId,contractRequest);
-            return new ResponseEntity<>(contract, HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

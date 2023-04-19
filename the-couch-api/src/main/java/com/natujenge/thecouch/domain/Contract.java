@@ -45,8 +45,7 @@ public class Contract {
     @Nullable
     @ManyToOne
     @JoinColumn(name="organization_id")
-
- private Organization organization;
+    Organization organization;
 
     // relations
     @ManyToOne
