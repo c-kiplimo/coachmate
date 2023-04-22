@@ -33,9 +33,13 @@ public class Contract {
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;
+    @Column(length = 5000, columnDefinition = "text")
     private String services;
+    @Column(length = 5000, columnDefinition = "text")
     private String practice;
+    @Column(length = 5000, columnDefinition = "text")
     private String terms_and_conditions;
+    @Column(length = 5000, columnDefinition = "text")
     private String note;
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
