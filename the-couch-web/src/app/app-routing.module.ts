@@ -35,14 +35,14 @@ import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
 
 const routes: Routes = [
   {
-    path:'home',
+    path:'',
    component:HomeComponent
   },
   {
     path: 'dashboard',
     component: DashboardComponent
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent

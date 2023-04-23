@@ -381,8 +381,8 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setOrganization(organization);
-        notification.setCoach(coach);
+        notification.setOrganizationId(organizationId);
+        notification.setCoachId(coach.getId());
         notification.setContract(contract1);
         notification.setCreatedBy(organization.getFullName());
         //TO DO: add logic to save notification to db
@@ -450,8 +450,8 @@ public class ContractService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setOrganization(organization);
-        notification.setClient(client);
+        notification.setOrganizationId(organizationId);
+        notification.setClientId(client.getId());
         notification.setContract(contract1);
         notification.setCreatedBy(organization.getFullName());
         //TO DO: add logic to save notification to db

@@ -1,7 +1,7 @@
 export const navbarData = {
     navDataforCoach: [
     {
-        routeLink: '',
+        routeLink: 'dashboard',
         icon: 'fal fa-home',
         label: 'Dashboard'
     },
@@ -54,7 +54,7 @@ export const navbarData = {
 ],
 navDataforOrg: [
     {
-        routeLink: '',
+        routeLink: 'dashboard',
         icon: 'fal fa-home',
         label: 'Dashboard'
     },
@@ -96,7 +96,7 @@ navDataforOrg: [
 ],
 navDataforClient: [
     {
-        routeLink: '',
+        routeLink: 'dashboard',
         icon: 'fal fa-home',
         label: 'Dashboard'
     },
