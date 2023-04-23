@@ -20,6 +20,10 @@ public class ContractRequest {
     public  long coachId;
     public long organizationId;
     public String coachingTopic;
+    private String services;
+    private String practice;
+    private String terms_and_conditions;
+    private String note;
 
 
     public List<String> objectives;

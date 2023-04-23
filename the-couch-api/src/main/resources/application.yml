@@ -11,9 +11,9 @@ spring:
 #    password: N@tujengeroot
 
 
-    url: jdbc:mysql://172.18.0.2:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
     username: root
-    password: root
+    password: pass
 
 
 

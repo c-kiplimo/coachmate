@@ -1,6 +1,6 @@
 package com.natujenge.thecouch.domain.enums;
 
-public enum PaymentMode {
+public enum PaymentModeSubscription {
     PREPAY,
     POSTPAY
 }

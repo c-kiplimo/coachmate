@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/settings")
+@RequestMapping("/api/notification-settings")
 public class NotificationSettingsResource {
     @Autowired
     private ModelMapper modelMapper;
@@ -36,16 +36,16 @@ public class NotificationSettingsResource {
             log.info("Request to update notification settings by coach with id {}",coachId);
 
 
-            NotificationSettings NotificationSettings = notificationSettingsService.updateSettings
+            NotificationSettings notificationSettings = notificationSettingsService.updateSettings
                     (notificationSettingsRequest,coachId,coachName);
             // map notification settings to the NotificationRequest and return object.
 
-            NotificationSettingsRequest response = modelMapper.map(NotificationSettings.class,
+            NotificationSettingsRequest response = modelMapper.map(notificationSettings,
                     NotificationSettingsRequest.class);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch(Exception e){
-            return new ResponseEntity<>(new RestResponse(true,"Error Occurred! Contact Admin"),
+            return new ResponseEntity<>(new RestResponse(true,"Error Occurred while updating settings"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,12 +60,12 @@ public class NotificationSettingsResource {
             log.info("Request to create notification settings by coach with id {}",coachId);
 
 
-            notificationSettingsService.addNewSettings(notificationSettingsRequest,coachName, coachId);
+            notificationSettingsService.addNewSettings(notificationSettingsRequest);
 
             return new ResponseEntity<>(new RestResponse(false,"Settings added successfully"),
                     HttpStatus.CREATED);
         } catch(Exception e){
-            return new ResponseEntity<>(new RestResponse(true,"Error Occurred! Contact Admin"),
+            return new ResponseEntity<>(new RestResponse(true,"Error Occurred! when adding settings"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

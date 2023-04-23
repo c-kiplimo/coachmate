@@ -50,6 +50,7 @@ payment: any;
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
+    console.log(this.coachSessionData)
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;

@@ -13,6 +13,7 @@ import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.ClientBillingAccount;
+import com.natujenge.thecouch.config.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

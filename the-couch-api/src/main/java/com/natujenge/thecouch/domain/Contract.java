@@ -33,6 +33,14 @@ public class Contract {
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;
+    @Column(length = 5000, columnDefinition = "text")
+    private String services;
+    @Column(length = 5000, columnDefinition = "text")
+    private String practice;
+    @Column(length = 5000, columnDefinition = "text")
+    private String terms_and_conditions;
+    @Column(length = 5000, columnDefinition = "text")
+    private String note;
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
     @Enumerated(EnumType.STRING)
@@ -56,6 +64,7 @@ public class Contract {
     public String toString() {
         return "Contract{" +
                 "id=" + id +
+                ", contractNumber='" + contractNumber + '\'' +
                 ", coachingCategory=" + coachingCategory +
                 ", coachingTopic='" + coachingTopic + '\'' +
                 ", startDate=" + startDate +
@@ -64,6 +73,12 @@ public class Contract {
                 ", groupFeesPerSession=" + groupFeesPerSession +
                 ", noOfSessions=" + noOfSessions +
                 ", amountDue=" + amountDue +
+                ", services='" + services + '\'' +
+                ", practice='" + practice + '\'' +
+                ", terms_and_conditions='" + terms_and_conditions + '\'' +
+                ", note='" + note + '\'' +
+                ", contractStatus=" + contractStatus +
+                ", paymentStatus=" + paymentStatus +
                 ", organization=" + organization +
                 ", client=" + client +
                 ", coach=" + coach +

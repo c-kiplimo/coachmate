@@ -1,11 +1,8 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.ConfirmationToken;
-import com.natujenge.thecouch.domain.Constants;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -135,7 +131,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
                 user
         );
 
@@ -178,7 +174,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(60*24),
+                LocalDateTime.now().plusMinutes(60*48),
                 user
         );
 
@@ -191,6 +187,29 @@ public class UserService implements UserDetailsService {
 
         return response;
 
+    }
+    public void updateUser(User registeredUser) {
+        log.info("Request to update user : {}", registeredUser.getFirstName());
+        Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserByUsername(registeredUser.getUsername()));
+
+        if(optionalUser.isEmpty()){
+            throw new IllegalStateException("User with username " + registeredUser.getUsername() + " not found!");
+        }
+
+        User user = optionalUser.get();
+        user.setNotificationSettings(registeredUser.getNotificationSettings());
+        //check if the user is a coach
+        if(user.getCoach() != null){
+            user.setCoach(registeredUser.getCoach());
+        }
+        if(user.getOrganization() != null){
+            user.setOrganization(registeredUser.getOrganization());
+        }
+        user.setFirstName(registeredUser.getFirstName());
+        user.setCoach(registeredUser.getCoach());
+
+        userRepository.save(user);
+        log.info("User Updated Successfully");
     }
 
     public Optional<User> findByEmail(String email) {

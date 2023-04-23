@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.natujenge.thecouch.domain.Constants;
+import com.natujenge.thecouch.config.Constants;
 public class NotificationUtil {
     private static final String TEMPLATE_REGEX = "\\$\\w+";
 

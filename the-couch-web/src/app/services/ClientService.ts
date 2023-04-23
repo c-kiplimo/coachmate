@@ -398,7 +398,7 @@ export class ClientService {
 
   getNotificationsbySessionId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-session-id',
+      this.baseURL + 'notification/filter-by-session-id',
       {
         params: options,
         observe: 'response',
@@ -407,7 +407,7 @@ export class ClientService {
   }
   getNotificationsbyCoachId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-coach-id',
+      this.baseURL + 'notification/filter-by-coach-id',
       {
         params: options,
         observe: 'response',
@@ -416,7 +416,7 @@ export class ClientService {
   }
   getNotificationsbyClientId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-client-id',
+      this.baseURL + 'notification/filter-by-client-id',
       {
         params: options,
         observe: 'response',

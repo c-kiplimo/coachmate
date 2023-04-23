@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Function;
 
-import static com.natujenge.thecouch.domain.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
-import static com.natujenge.thecouch.domain.Constants.SIGNING_KEY;
+import static com.natujenge.thecouch.config.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
+import static com.natujenge.thecouch.config.Constants.SIGNING_KEY;
 
 @Component
 @Slf4j
