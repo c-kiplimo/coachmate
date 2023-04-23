@@ -16,6 +16,7 @@ import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -71,7 +72,7 @@ public class ClientResource {
             Organization organization = userDetails.getOrganization();
 
             Client newClient = clientService.addNewClient(coach,organization,
-                    clientRequest);
+                    clientRequest, userDetails.getMsisdn());
 
             if (newClient != null) {
                 ClientRequest response = modelMapper.map(newClient, ClientRequest.class);
@@ -80,7 +81,7 @@ public class ClientResource {
                 return new ResponseEntity<>(new RestResponse(true,
                         "Client not created"), HttpStatus.OK);
             }
-        } catch (Exception e) {
+        }  catch (Exception e) {
             log.error("Error ", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +94,7 @@ public class ClientResource {
                                     @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization clients");
         try{
-            List<Client> listResponse = clientService.getClientByOrgId(OrgId);
+            List<Client> listResponse = clientService.getClientByOrgId(userDetails.getOrganization().getId());
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

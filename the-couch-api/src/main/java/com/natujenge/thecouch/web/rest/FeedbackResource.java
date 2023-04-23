@@ -25,22 +25,21 @@ public class FeedbackResource {
     FeedbackService feedBackService;
 
     // create feedback
-    @PostMapping(value = "/upload")
-    ResponseEntity<?> createNewFeedBack(@RequestBody Feedback feedback,
-                                        @RequestParam(name = "sessionId",required = false) Long sessionId,
-                                        @RequestParam(name = "coachId", required = false) Long coachId,
-
-                                        @RequestParam(name = "orgIdId", required = false) Long orgIdId,
-
-                                        @AuthenticationPrincipal User userDetails) {
-        log.info("request to create feedback");
+    @PostMapping(value = "/feedback")
+    public ResponseEntity<?> createNewFeedback(@RequestBody Feedback feedback,
+                                               @RequestParam(name = "sessionId") Long sessionId,
+                                               @RequestParam(name = "coachId", required = false) Long coachId,
+                                               @RequestParam(name = "orgId", required = false) Long orgId,
+                                               @AuthenticationPrincipal User userDetails) {
+        log.info("Request to create feedback");
         try {
-            feedBackService.addNewFeedBack(sessionId, coachId, orgIdId, feedback);
-            return new ResponseEntity<>(new RestResponse(false,"FeedBack Received Successfully"), HttpStatus.CREATED);
+            feedBackService.addNewFeedBack(sessionId, coachId, orgId, feedback);
+            return new ResponseEntity<>(new RestResponse(false, "Feedback received successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // get feedback by session_id
     @GetMapping("/get-by-session-id")
@@ -100,14 +99,14 @@ public class FeedbackResource {
     }
 
     //Get ORg FeedBack
-    @GetMapping(path = "getOrgFeedbacks/{id}")
+    @GetMapping(path = "/getOrgFeedbacks/{id}")
     ResponseEntity<?> getOrgFeedbacks(
     @AuthenticationPrincipal User userDetails,
-    @RequestParam(name = "orgIdId", required = false) Long orgIdId
+    @PathVariable("id") Long orgId
     ){
         log.error("Request to get ORG Feedbacks");
         try{
-            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(orgIdId);
+            List<FeedbackDto> listResponse = feedBackService.getOrgFeedback(orgId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);
@@ -117,7 +116,7 @@ public class FeedbackResource {
     }
 
     //GET COACH FEEDBACKS
-    @GetMapping(path = "getCoachFeedbacks/{id}")
+    @GetMapping(path = "/getCoachFeedbacks/{id}")
     ResponseEntity<?> getCoachFeedbacks(@PathVariable("id") Long coachId) {
         log.error("Request to get COACH Feedbacks");
         try{

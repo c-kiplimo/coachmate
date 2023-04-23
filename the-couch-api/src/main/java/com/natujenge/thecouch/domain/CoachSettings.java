@@ -2,12 +2,13 @@ package com.natujenge.thecouch.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import lombok.*;
 
-@Data
+/*
+    * Logo: Image? Link to logo?
+ */
+
 @Table(name = "tbl_coach_settings")
 @Entity
-
 public class CoachSettings {
     @SequenceGenerator(
             name = "coach_settings_sequence",
@@ -17,8 +18,7 @@ public class CoachSettings {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "coach_settings_sequence")
     @Id
     private Long id;
-    private String logo; // TODO: Discuss Appropriate Object to use
-    // table >> notification_settings TODO: Review Table relationships
+    private String logo;
     @OneToOne
     @JoinColumn(
             nullable = false,
@@ -32,4 +32,73 @@ public class CoachSettings {
     private String createdBy;
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public Coach getCoach() {
+        return coach;
+    }
+
+    public void setBaker(Coach coach) {
+        this.coach = coach;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public void setLastUpdatedBy(String lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "BakerSettings{" +
+                "id=" + id +
+                ", logo='" + logo + '\'' +
+                ", coach=" + coach +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                '}';
+    }
 }

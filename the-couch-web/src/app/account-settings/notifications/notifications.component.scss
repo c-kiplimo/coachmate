@@ -1,0 +1,49 @@
+.d-flex {
+  div:first-child {
+    max-width: 70%;
+  }
+}
+
+.mode-title {
+  font-size: 1rem;
+  color: #3c4043;
+  font-weight: 600;
+  display: block;
+}
+
+.notification-modes {
+  .checkbox-border {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5D5FEF;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+
+    .checkbox-circle {
+      display: inline-block;
+      height: 14px;
+      width: 14px;
+      border-radius: 50%;
+      position: relative;
+      top: -14%;
+      left: 10%;
+      background-color: #fff;
+    }
+
+    .active-checkbox-circle {
+      background-color: #5D5FEF;
+    }
+  }
+}
+
+.inactive-checkbox {
+  border: 2px solid #e1e1e1!important;
+
+  .checkbox-circle,.active-checkbox-circle {
+    background-color: #e1e1e1!important;
+  }
+}

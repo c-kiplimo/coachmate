@@ -47,7 +47,7 @@ export class RecordPaymentComponent implements OnInit {
     sendNotification: true,
 
     coachId: '',
-    orgIdId: '',
+    organizationId: '',
   }
   
 
@@ -79,7 +79,7 @@ export class RecordPaymentComponent implements OnInit {
   getUserOrg() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
-    this.orgId = this.User.org.id;
+    this.orgId = this.User.organization.id;
   }
   getUserClient() {
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
@@ -97,7 +97,7 @@ export class RecordPaymentComponent implements OnInit {
     } else if(this.userRole == 'COACH'){
       data.coachId = this.coachId;
     } else if(this.userRole == 'ORGANIZATION'){
-      data.orgIdId = this.orgId;
+      data.organizationId = this.orgId;
     }
 
 
@@ -144,7 +144,7 @@ export class RecordPaymentComponent implements OnInit {
     this.clientService.getOrgClients(id).subscribe(
       (response) => {
         this.loading = false;
-        this.clients = response;
+        this.clients = response.body;
         console.log(response)
         console.log('clients',this.clients)
   

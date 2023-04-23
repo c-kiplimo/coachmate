@@ -19,7 +19,6 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
 import { FeebackFormComponent } from './feeback-form/feeback-form.component';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
-
 import { AddCoachComponent } from './add-coach/add-coach.component';
 import { SupportComponent } from './support/support.component';
 import { HomeComponent } from './home/home.component';
@@ -28,9 +27,16 @@ import { AccountSummaryComponent } from './payment/payment/account-summary/accou
 import { FeedbackComponent } from './feedback/feedback.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
-import { SettingsComponent } from './settings/settings.component';
+import { SettingsComponent } from './account-settings/settings/settings.component';
 import { ReceiptsComponent } from './payment/payment/receipts/receipts.component';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
+import { CoachViewComponent } from './coach-view/coach-view.component';
+import { CoachesComponent } from './coaches/coaches.component';
+import { NotificationsComponent } from './account-settings/notifications/notifications.component';
+import { PaymentsComponent } from './account-settings/payments/payments.component';
+import { ProfileComponent } from './account-settings/profile/profile.component';
+import { TemplatesComponent } from './account-settings/templates/templates.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 
 const routes: Routes = [
@@ -42,10 +48,14 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent
   },
-  // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'clients',
     component: ClientsComponent
+  },
+  {
+    path:'coaches',
+    component:CoachesComponent
   },
   {
     path: 'addclient',
@@ -87,6 +97,10 @@ const routes: Routes = [
   {
     path: 'clientView/:id',
     component: ClientViewComponent
+  },
+  {
+    path: 'coachView/:id',
+    component: CoachViewComponent
   },
   {
     path: 'contracts',
@@ -148,10 +162,13 @@ const routes: Routes = [
     path: 'addAvailableSlots',
     component: AddAvailableSlotsComponent
   },
-  {
-    path: 'settings',
-    component: SettingsComponent
-  }
+  { path: 'settings', component: SettingsComponent },
+  { path: 'contact', component: ContactUsComponent },
+  { path: 'account-settings/profile', component: ProfileComponent },
+  { path: 'account-settings/notification', component: NotificationsComponent },
+  { path: 'account-settings/templates', component: TemplatesComponent },
+  { path: 'account-settings/payments', component: PaymentsComponent },
+
   
 ];
 

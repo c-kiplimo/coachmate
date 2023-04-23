@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  // ClientService: any;
   clients: any;
   User: any;
   Organization: any;
@@ -39,6 +38,7 @@ export class DashboardComponent implements OnInit {
 
   contractId: any;
   loading!: boolean;
+  orgId!: number;
 
   OrgCoaches: any;
   numberofCoaches!: number;
@@ -62,11 +62,12 @@ Feedbacks: any;
     ) {}
 
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachSessionData = sessionStorage.getItem('user');
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+   
   
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
@@ -83,13 +84,10 @@ Feedbacks: any;
     this.getCoachFeedbacks(this.coachData.coach.id);
     this.getAllContracts();
     window.scroll(0, 0);
-  
-   
- 
-
     } else if(this.userRole == 'ORGANIZATION'){
+      this.orgId = this.coachData.organization.id;
       console.log('ORGANIZATION');
-      this.getUserOrg();
+      // this.getUserOrg();
       this.getOrgClients();
       window.scroll(0, 0);
       
@@ -99,10 +97,10 @@ Feedbacks: any;
       this.orgSession = JSON.parse(this.OrgData);
       console.log(this.orgSession);
       
-      this.getOrgContracts(this.orgSession.id);
-      this.getAllOrgSessions(this.orgSession.id);
-      this.getOrgFeedbacks(this.orgSession.id);
-      this.getOrgCoaches(this.orgSession.id);
+      this.getOrgContracts(this.orgId);
+      this.getAllOrgSessions(this.orgId);
+      this.getOrgFeedbacks(this.orgId);
+      this.getOrgCoaches(this.orgId);
      
     }else if(this.userRole == 'CLIENT') {
       console.log('not coach');
@@ -174,7 +172,7 @@ Feedbacks: any;
       search: this.filters.searchItem,
     };
 
-    this.clientService.getOrgSessions(id).subscribe(
+    this.clientService.getOrgSessions(options,id).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response;
@@ -307,33 +305,33 @@ Feedbacks: any;
 
 
   }
-  getOrganization(id: any) {
-    const data = {
-      superCoachId: id,
-    }
-    this.clientService.getOrganization(data).subscribe(
-      (response: any) => {
-        console.log('here Organization=>', response);
-        this.Organization = response.body;
-        console.log(this.Organization);
-        console.log('here Organization=>', response);
+  // getOrganization(id: any) {
+  //   const data = {
+  //     superCoachId: id,
+  //   }
+  //   this.clientService.getOrganization(data).subscribe(
+  //     (response: any) => {
+  //       console.log('here Organization=>', response);
+  //       this.Organization = response.body;
+  //       console.log(this.Organization);
+  //       console.log('here Organization=>', response);
 
 
 
 
-        sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
+  //       sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
         
 
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+  //     },
+  //     (error: any) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
   getOrgCoaches(id: any) {
     const data = {
-      OrgId: id,
+      orgId: id,
     }
     this.clientService.getOrgCoaches(data).subscribe(
       (response: any) => {
@@ -406,12 +404,12 @@ Feedbacks: any;
     this.User = JSON.parse(sessionStorage.getItem('user') as any);
     console.log(this.User);
   }
-  getUserOrg() {
-    this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.User);
-    this.getOrganization(this.User.id);
+  // getUserOrg() {
+  //   this.User = JSON.parse(sessionStorage.getItem('user') as any);
+  //   console.log(this.User);
+  //   this.getOrganization(this.User.id);
 
-  }
+  // }
 
 
   getCoachEducation(id: any) {

@@ -19,4 +19,6 @@ public interface CoachRepository extends PagingAndSortingRepository<Coach,Long>,
 
     List<Coach> findByOrganizationId(Long organizationId);
 
+    List<Coach> findAllByOrganizationId(Long organizationId);
+
 }

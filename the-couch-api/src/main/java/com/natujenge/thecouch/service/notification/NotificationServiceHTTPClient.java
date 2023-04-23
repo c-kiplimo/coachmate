@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.service.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.natujenge.thecouch.domain.Constants;
+import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -111,10 +111,10 @@ public class NotificationServiceHTTPClient {
 //                "/registration/confirm?token="+token;
         String smsContent;
         if (Objects.equals(action, "RESET")){
-            smsContent = "Hello " + user.getFullName()+",\n Use this code to RESET" +
+            smsContent = "Hello " + user.getFirstName() +
                     " your password: " + token + "\nYou can Ignore this If you didn't Initiate this action";
         }else{
-            smsContent = "Hello " + user.getFullName()+",\n Use this code to confirm" +
+            smsContent = "Hello " + user.getFirstName() +
                     " your phone number: " + token + "\nYou can Ignore this If you didn't Initiate this action";
         }
 

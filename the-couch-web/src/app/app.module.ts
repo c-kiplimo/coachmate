@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './sidnav/sidnav.component';
-
+import{ContactUsComponent} from './contact-us/contact-us.component';
 
 import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -42,7 +42,6 @@ import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.componen
 import { ToastrModule } from 'ngx-toastr';
 import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
-
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { CoachEducationService } from './services/CoachEducationService';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
@@ -57,9 +56,16 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
 import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
-import { SettingsComponent } from './settings/settings.component';
+import { SettingsComponent } from './account-settings/settings/settings.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
+import { CoachViewComponent } from './coach-view/coach-view.component';
+import { CoachesComponent } from './coaches/coaches.component';
+import { NotificationsComponent } from './account-settings/notifications/notifications.component';
+import { InitialSetupComponent } from './account-settings/initial-setup/initial-setup.component';
+import { TemplatesComponent } from './account-settings/templates/templates.component';
+import { ProfileComponent } from './account-settings/profile/profile.component';
+import { PaymentsComponent } from './account-settings/payments/payments.component';
 
 
 
@@ -83,9 +89,13 @@ import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
     SchedulesComponent,
     contractComponent,
     ClientViewComponent,
-
+    ContactUsComponent,
     FeebackFormComponent,
-
+    InitialSetupComponent,
+    TemplatesComponent,
+    ProfileComponent,
+    PaymentsComponent,
+    NotificationsComponent,
     AddTrainingComponent,
     ForgotPaswordComponent,
     ConfirmedViewComponent,
@@ -102,6 +112,9 @@ import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
       AddAvailableSlotsComponent,
       SettingsComponent,
       CoachConfirmComponent,
+      CoachViewComponent,
+      CoachesComponent,
+      NotificationsComponent
 
 
   ],

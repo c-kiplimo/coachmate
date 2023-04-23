@@ -37,52 +37,51 @@ public class FeedbackService {
         this.organizationRepository = organizationRepository;
     }
 
-    public void addNewFeedBack(Long SessionId, Long coachId, Long orgIdId, Feedback feedbackReq) {
+    public void addNewFeedBack(Long sessionId, Long coachId, Long orgId, Feedback feedbackReq) {
         Feedback feedback = new Feedback();
 
-
-
-        //GET SESSION
-        Optional<Session> session = sessionRepository.findSessionById(SessionId);
-
+        // Get session
+        Optional<Session> session = sessionRepository.findSessionById(sessionId);
         Optional<Client> client = clientRepository.findById(session.get().getClient().getId());
 
-        Optional<Coach> coach = coachRepository.getCoachById(coachId);
-
-        if(orgIdId != null) {
-            Optional<Organization> organization = organizationRepository.findById(orgIdId);
-
-            if(organization.isPresent()){
-                feedback.setOrganization(organization.get());
-            }
+        // Set coach or organization based on ID present
+        if (coachId != null) {
+            Optional<Coach> coach = coachRepository.getCoachById(coachId);
+            feedback.setCoach(coach.get());
+        } else if (orgId != null) {
+            Optional<Organization> organization = organizationRepository.findById(orgId);
+            feedback.setOrganization(organization.get());
         }
 
         feedback.setClient(client.get());
         feedback.setSession(session.get());
-        feedback.setCoach(coach.get());
-        // feedback Number Generation
+
+        // Generate feedback number
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String feedbackL = String.format("%05d", randNo);
         String feedbackNo = feedback.getCoach().getBusinessName().substring(0, 2) +
                 feedback.getClient().getFirstName().charAt(0) + feedback.getSession().getName().charAt(0) + "-" + feedbackL;
         feedback.setFeedbackNumber(feedbackNo);
 
+        // Set feedback scores and compute overall score
         feedback.setAvailabilityScore(feedbackReq.getAvailabilityScore());
         feedback.setClarificationScore(feedbackReq.getClarificationScore());
         feedback.setEmotionalIntelligenceScore(feedbackReq.getEmotionalIntelligenceScore());
         feedback.setListeningSkillsScore(feedbackReq.getListeningSkillsScore());
         feedback.setComments(feedbackReq.getComments());
         feedback.setUnderstandingScore(feedbackReq.getUnderstandingScore());
-        // compute overall score
-        Integer totalScore = feedbackReq.getAvailabilityScore()+feedbackReq.getClarificationScore()+
-                feedbackReq.getEmotionalIntelligenceScore()+ feedbackReq.getListeningSkillsScore()+
+        Integer totalScore = feedbackReq.getAvailabilityScore() + feedbackReq.getClarificationScore() +
+                feedbackReq.getEmotionalIntelligenceScore() + feedbackReq.getListeningSkillsScore() +
                 feedbackReq.getUnderstandingScore();
         feedback.setOverallScore(totalScore);
+
+        // Save feedback to database
         feedback.setCreatedBy(feedback.getCreatedBy());
         feedbackRepository.save(feedback);
 
-        log.info("FeedBack Saved!");
+        log.info("Feedback Saved!");
     }
+
 
     public List<FeedbackDto> getFeedbackBySessionId(Long sessionId) {
         log.info("Request to get feedback by session id: {} and coachId : {}", sessionId);

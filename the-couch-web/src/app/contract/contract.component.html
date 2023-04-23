@@ -27,7 +27,6 @@
             <option selected>Contract Category</option>
             <option value="INDIVIDUAL">INDIVIDUAL</option>
             <option value="CORPORATE">CORPORATE</option>
-           
           </select>
         </div>
         <div class="col-6 input-group-prepend">
@@ -42,7 +41,7 @@
         
           <!--Render the create client button if no clients are found-->
           
-          <div *ngIf="clients.length === 0" >
+          <div *ngIf="!clients" >
             <button class="btn btn-success" routerLink="/addclient">
             Create Client
             </button>
@@ -85,6 +84,8 @@
           <label for="number" class="form-label"
             >Individual Fees Per Session</label
           >
+
+          
           <input
             type="number"
             class="form-control"
@@ -162,6 +163,11 @@
             </div>
           </div>
         </section>
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-add ms-4" *ngIf="!editingSettings" [@fadeIn] (click)="toggleEditingSettings()" [disabled]="disableButton">
+            Edit
+          </button>
+        </div>
         <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false" aria-controls="collapseService">
           <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
@@ -170,15 +176,11 @@
         <div class="row">
           <div class="col-10">
        
-              The Coach and Client agree to engage in a coaching engagement through
-              in-person, email or virtual meetings as agreed by both parties. The
-              Coach will be available to the Client by email, Zoom or phone in
-              between scheduled meetings as defined by the Coach. The Coach may also
-              be available for additional time, on the Client’s request during the
-              term of this contract (engaging in other Client-related services
-              outside of coaching hours to review goals, read reports, etc.). Time
-              outside the agreed bracket as outlined will be at the rate of USD 50
-              for every 30-minute time block.
+            <div class="form-group">
+              <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.servicesTemplate}}</span>
+              <textarea name="newContractTemplate" class="form-control" id="newContractTemplate" aria-describedby="newContractTemplate" rows="4" [(ngModel)]="contractTemplates.newContractTemplate" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+              </textarea>
+            </div>
             
           </div>
           </div>
@@ -194,26 +196,12 @@
             <div class="card card-body">
           <div class="row">
             <div class="col-10">
-          <ol>
-            <li>
-              Coaching fees are payable in full before each coaching session.
-            </li>
-            <li>
-              That both the Coach and the Client strictly adhere to the agreed
-              schedule (unless otherwise by mutual agreement or due to
-              acceptable unforeseen emergencies).
-            </li>
-            <li>
-              The coaching sessions will take place in a predetermined location
-              agreeable to both parties
-            </li>
-            <li>
-              The Client bears the cost for any calls lasting more than 10
-              minutes if the Client so prefers telephone communication.
-              Otherwise, the Coach uses internet-based voice communication such
-              as Zoom or Skype.
-            </li>
-          </ol>
+              <div class="form-group">
+                <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.terms_and_conditionsTemplate
+                }}</span>
+                <textarea name="newContractTemplate" class="form-control" id="newContractTemplate" aria-describedby="newContractTemplate" rows="4" [(ngModel)]="contractTemplates.newContractTemplate" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+                </textarea>
+              </div>
           </div>
           </div>
           </div>
@@ -226,68 +214,11 @@
             <br />
             <div class="collapse" id="collapsePractice">
               <div class="card card-body">
-            <p>I, the Client:</p>
-        
-          <ol>
-            <li>
-              Fully understand and agree that I am fully responsible for my
-              physical, mental and emotional well-being during my coaching
-              sessions, including my choices and decisions. I am aware that I
-              can choose to discontinue coaching by giving a 14 days’ notice.
-            </li>
-            <li>
-              Understand that Coaching is partnership (defined as an alliance,
-              not a legal business partnership) between the Coach and the
-              Client. That it is a thought-provoking and creative process that
-              inspires the Client to maximize personal and professional
-              potential.
-            </li>
-            <li>
-              Understand that Coaching is a Professional–Client relationship I
-              have with my Coach that is designed to facilitate the
-              creation/development of personal, professional or business goals
-              and to develop and carry out a strategy/plan for achieving those
-              goals.
-            </li>
-            <li>
-              Understand that coaching is a comprehensive process that may
-              involve all areas of my life, including work, finances, health,
-              relationships, education and recreation. I acknowledge that
-              deciding how to handle these issues, incorporate coaching into
-              those areas, and implement my choices is exclusively my
-              responsibility.
-            </li>
-            <li>
-              Understand that coaching does not involve the diagnosis or
-              treatment of mental disorders. I understand that coaching is not a
-              substitute for counselling, psychotherapy, psychoanalysis, mental
-              health care or substance abuse treatment and I will not use it in
-              place of any form of diagnosis, treatment or therapy.
-            </li>
-            <li>
-              Understand that information will be held in confidence — unless I
-              expressly state otherwise in writing — except as required by law.
-            </li>
-            <li>
-              Understand that certain topics may be anonymously and
-              hypothetically shared with other coaching professionals purely for
-              training purposes, improvement of coaching practice/ methodology
-              or advancement of the coaching industry
-            </li>
-            <li>
-              Understand that coaching is not to be used as a substitute for
-              professional advice by legal, medical, financial, business,
-              spiritual or other qualified professionals. I will seek
-              independent professional guidance for legal, medical, financial,
-              business, spiritual or other matters.
-            </li>
-            <li>
-              Understand that all decisions in these areas are exclusively mine
-              and I acknowledge that my decisions and my actions regarding them
-              are my sole responsibility.
-            </li>
-            <li>Agree to honor my scheduled session times [see Schedule].</li>
-          </ol>
+                <div class="form-group">
+                  <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.practiceTemplate}}</span>
+                  <textarea name="newContractTemplate" class="form-control" id="newContractTemplate" aria-describedby="newContractTemplate" rows="4" [(ngModel)]="contractTemplates.newContractTemplate" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+                  </textarea>
+                </div>
           </div>
           </div>
           </div>

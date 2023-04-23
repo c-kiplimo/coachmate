@@ -18,6 +18,7 @@ import java.util.Collections;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
@@ -58,6 +59,14 @@ public class User implements UserDetails {
     private UserRole userRole;
 
     // Object Relationships
+    @ManyToOne
+    @JoinColumn(name="notification_settings_id")
+    NotificationSettings notificationSettings;
+
+    @ManyToOne
+    @JoinColumn(name="contract_template_id")
+    ContractTemplate contractTemplate;
+
 
     @ManyToOne
     @JoinColumn(name="client_id")
@@ -101,8 +110,8 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
-
         this.organization = organization;
+
     }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
         this.fullName = firstName + ' '+lastName;
@@ -114,7 +123,9 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
     }
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole){
+
+// org coach user
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -122,6 +133,21 @@ public class User implements UserDetails {
         this.username = email;
         this.msisdn = msisdn;
         this.userRole = userRole;
+        this.organization = organization;
+        this.coach = coach;
+    }
+    // org client user
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
+        this.fullName = firstName + ' '+lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = email;
+        this.msisdn = msisdn;
+        this.userRole = userRole;
+        this.organization = organization;
+        this.coach = coach;
+        this.client = client;
     }
 
     @Override

@@ -12,12 +12,18 @@ import { environment } from 'src/environments/environment';
 
 
 export class LoginService {
+ 
+
 
     baseURL: string = environment.apiURL + '/api/';
     constructor(private http: HttpClient) {
 
     }
-
+    getAccount(): Observable<any> {
+      return this.http.get<any>(
+        this.baseURL + '/account', { observe: 'response' }
+      );
+    }
 
     // login service
     login(user: any) {
@@ -29,11 +35,22 @@ export class LoginService {
     // signUp service
     signUp(signupObject: any): Observable<any> {
         return this.http.post<any>(
-          this.baseURL+ 'coach',
+          this.baseURL+ 'registration',
           signupObject,
           { observe: 'response' }
         );
       }
+
+
+    // register coach
+    // signUp service
+    registerCoach(signupObject: any): Observable<any> {
+      return this.http.post<any>(
+        this.baseURL+ 'coach',
+        signupObject,
+        { observe: 'response' }
+      );
+    }
 
       //Update Password and complete client registration
       confirmAndUpdateClientPassword(signupObject: any): Observable<any> {

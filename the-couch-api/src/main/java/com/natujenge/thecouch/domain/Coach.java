@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.CoachStatus;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@Data
 @NoArgsConstructor
 @Table(name = "tbl_coaches")
 @Entity
@@ -22,10 +24,6 @@ public class Coach implements Serializable {
 
     @Id
     private Long id;
-    @Nullable
-@ManyToOne
-@JoinColumn(name = "organization_id")
-    private Organization organization;
 
     private String businessName;
     private String fullName;
@@ -37,7 +35,19 @@ public class Coach implements Serializable {
     private String emailAddress;
     @Enumerated(EnumType.STRING)
     private CoachStatus status;
+    private boolean onboarded;
     private String reason;
+    @Nullable
+    @ManyToOne
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
+    @ManyToOne
+    @JoinColumn(name="notification_settings_id")
+    NotificationSettings notificationSettings;
+    @ManyToOne
+    @JoinColumn(name="contract_template_id")
+    ContractTemplate contractTemplate;
+
 
     // management Details
     @CreationTimestamp
@@ -47,27 +57,6 @@ public class Coach implements Serializable {
     @UpdateTimestamp
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
-
-    @Override
-    public String toString() {
-        return "Coach{" +
-                "id=" + id +
-                ", organization=" + organization +
-                ", businessName='" + businessName + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", msisdn='" + msisdn + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", status=" + status +
-                ", reason='" + reason + '\'' +
-                ", reason='" + reason + '\'' +
-                ", createdAt=" + createdAt +
-                ", createdBy='" + createdBy + '\'' +
-                ", lastUpdatedAt=" + lastUpdatedAt +
-                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
-                '}';
-    }
 
 
 }

@@ -4,5 +4,5 @@ public enum NotificationMode {
     SMS,
     EMAIL,
     SMS_EMAIL,
-    NONE
+
 }

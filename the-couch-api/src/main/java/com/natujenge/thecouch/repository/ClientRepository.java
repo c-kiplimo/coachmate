@@ -23,6 +23,7 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
     // Single customer by id and coachId
     Optional<ClientDto> findByCoachIdAndId(Long coachId, Long id);
     Optional<Client> findByIdAndCoachId(Long id, Long coachId);
+    Optional<Client> findByIdAndOrganizationId(Long id, Long orgId);
     boolean existsByIdAndCoachId(Long id,Long coachId);
 
     Optional<Client> findClientByIdAndCoachId(Long clientId, Long coachId);
@@ -30,4 +31,8 @@ public interface ClientRepository extends PagingAndSortingRepository<Client,Long
     List<Client> findByEmail(String email);
 
     List<Client> findClientByOrganization(Organization orgId);
+
+    Optional<Client> findClientByEmail(String emailAddress);
+
+    List<Client> getByOrganizationId(Long orgId);
 }

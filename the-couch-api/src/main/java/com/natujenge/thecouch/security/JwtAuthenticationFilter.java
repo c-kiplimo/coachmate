@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.natujenge.thecouch.domain.Constants.HEADER_STRING;
-import static com.natujenge.thecouch.domain.Constants.TOKEN_PREFIX;
+import static com.natujenge.thecouch.config.Constants.HEADER_STRING;
+import static com.natujenge.thecouch.config.Constants.TOKEN_PREFIX;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

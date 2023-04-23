@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.service;
 
+import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
@@ -13,7 +14,6 @@ import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.ClientBillingAccount;
-import com.natujenge.thecouch.domain.AccountStatement;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.math.BigInteger;
 
 import java.time.LocalDate;
 
@@ -278,7 +276,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         Client client = clientOptional.get();
         // obtain previous payment Record
-        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrgId(), paymentRequest.getClientId()));
+        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
         if(previousWalletRecord.get().getWalletBalance().equals(null)){
             prevWalletBalance = 0;
@@ -350,7 +348,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         Client client1 = clientOptional.get();
         // obtain previous payment Record
-        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrgId(), paymentRequest.getClientId()));
+        Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
         if(previousWalletRecord.get().getWalletBalance().equals(null)){
             prevWalletBalance = 0;
@@ -546,7 +544,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         Page<ClientWalletDto> receiptPage = null;
         if (name != null && date != null ) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()))), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if(name !=null){
@@ -556,7 +554,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         if(date !=null){
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage= (Page<ClientWalletDto>) walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
@@ -574,19 +572,19 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
         Page<ClientWalletDto> paymentPage;
         // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
+        if (statementPeriod == StatementPeriod.PER_MONTH) {
             paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
                     LocalDateTime.now().minusMonths(1), LocalDateTime.now(),pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
+        } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
             paymentPage=clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
+        } else if (statementPeriod == StatementPeriod.PER_YEAR) {
             paymentPage= clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(),pageable);
             return new ListResponse( paymentPage.getContent(),
@@ -607,21 +605,21 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
         // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
+        if (statementPeriod == StatementPeriod.PER_MONTH) {
             Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
+        } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
             Page<ClientWalletDto> paymentPage;
             paymentPage=clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
+        } else if (statementPeriod == StatementPeriod.PER_YEAR) {
             Page<ClientWalletDto> paymentPage;
             paymentPage= clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
@@ -644,21 +642,21 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
         // GET BY STATEMENT PERIOD
-        if (statementPeriod == StatementPeriod.PerMonth) {
+        if (statementPeriod == StatementPeriod.PER_MONTH) {
             Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.Per6Months) {
+        } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
             Page<ClientWalletDto> paymentPage;
             paymentPage=clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse( paymentPage.getContent(),
                     paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
-        } else if (statementPeriod == StatementPeriod.PerYear) {
+        } else if (statementPeriod == StatementPeriod.PER_YEAR) {
             Page<ClientWalletDto> paymentPage;
             paymentPage= clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);

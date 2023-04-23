@@ -147,8 +147,8 @@ export class ClientService {
     return this.http.delete(this.baseURL + `/sessions/` + id,);
   }
 
-  getOrgSessions(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions/getorgSessions/`, 
+  getOrgSessions(options: any,id:any): Observable<any> {
+    return this.http.get(`${this.baseURL}sessions/getorgSessions/`+id, 
     { params: options,
       observe: 'response' 
     });
@@ -198,7 +198,7 @@ export class ClientService {
   }
 
   getOrgFeedbacks(id: any): Observable<any> {
-    return this.http.get(`${this.baseURL}feedback/getOrgFeedbacks/` + id);
+    return this.http.get(`${this.baseURL}feedback/getOrgFeedbacks/` + id, { observe: 'response' });
   }
 
   getCoachFeedbacks(id: any): Observable<any> {
@@ -274,7 +274,7 @@ export class ClientService {
       observe: 'response'
     })
   }
-  getPaymentsByOrgId(options: any): Observable<any> {
+  getPaymentsByOrganizationId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByOrgId`, {
       params: options,
       observe: 'response'
@@ -398,7 +398,7 @@ export class ClientService {
 
   getNotificationsbySessionId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-session-id',
+      this.baseURL + 'notification/filter-by-session-id',
       {
         params: options,
         observe: 'response',
@@ -407,7 +407,7 @@ export class ClientService {
   }
   getNotificationsbyCoachId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-coach-id',
+      this.baseURL + 'notification/filter-by-coach-id',
       {
         params: options,
         observe: 'response',
@@ -416,7 +416,7 @@ export class ClientService {
   }
   getNotificationsbyClientId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification/filter-by-client-id',
+      this.baseURL + 'notification/filter-by-client-id',
       {
         params: options,
         observe: 'response',

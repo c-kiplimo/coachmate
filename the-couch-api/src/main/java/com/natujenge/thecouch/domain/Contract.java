@@ -29,10 +29,14 @@ public class Contract {
     private LocalDate endDate;
 
 
-    private     Float individualFeesPerSession;
+    private Float individualFeesPerSession;
     private Float groupFeesPerSession;
     private Integer noOfSessions;
     private Float amountDue;
+    private String services;
+    private String practice;
+    private String terms_and_conditions;
+    private String note;
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
     @Enumerated(EnumType.STRING)
@@ -41,8 +45,7 @@ public class Contract {
     @Nullable
     @ManyToOne
     @JoinColumn(name="organization_id")
-
- private Organization organization;
+    Organization organization;
 
     // relations
     @ManyToOne
@@ -57,6 +60,7 @@ public class Contract {
     public String toString() {
         return "Contract{" +
                 "id=" + id +
+                ", contractNumber='" + contractNumber + '\'' +
                 ", coachingCategory=" + coachingCategory +
                 ", coachingTopic='" + coachingTopic + '\'' +
                 ", startDate=" + startDate +
@@ -65,6 +69,12 @@ public class Contract {
                 ", groupFeesPerSession=" + groupFeesPerSession +
                 ", noOfSessions=" + noOfSessions +
                 ", amountDue=" + amountDue +
+                ", services='" + services + '\'' +
+                ", practice='" + practice + '\'' +
+                ", terms_and_conditions='" + terms_and_conditions + '\'' +
+                ", note='" + note + '\'' +
+                ", contractStatus=" + contractStatus +
+                ", paymentStatus=" + paymentStatus +
                 ", organization=" + organization +
                 ", client=" + client +
                 ", coach=" + coach +
