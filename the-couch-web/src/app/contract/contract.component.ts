@@ -100,6 +100,11 @@ contractTemplates: any;
         individualFeesPerSession:'',
         noOfSessions:'',
         objectives:'',
+        service:'',
+        practice:'',
+        note:'',
+        terms_and_conditions:'',
+     
       }
     );
     this.coachingCategory=this.contractForm
@@ -193,12 +198,18 @@ contractTemplates: any;
     )
   }
   addContract(){
+    this.contractTemplates = this.user.contractTemplate;
+    console.log(this.contractTemplates);
     console.log('here');
     console.log(this.contractForm.value);
     var data = this.contractForm.value;
     data.coachId = this.coachId
     data.organizationId = this.organizationId
     data.objectives = this.objectives;
+    data.service = this.contractTemplates.serviceTemplate;
+    data.practice = this.contractTemplates.practiceTemplate;
+    data.note = this.contractTemplates.noteTemplate;
+    data.terms_and_conditions = this.contractTemplates.terms_and_conditionsTemplate;
     console.log(data);
     this.apiService.addNewContract(data).subscribe(
       (response: any) => {

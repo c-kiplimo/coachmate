@@ -17,14 +17,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_notifications")
 public class Notification {
-    @Id
-    @SequenceGenerator(
-            name = "notification_sequence",
-            sequenceName = "notification_sequence",
-            allocationSize = 1
-    )
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "notification_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
     private String subject;
     private String sourceAddress;
@@ -48,7 +43,7 @@ public class Notification {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+
     private String createdBy;
 
     @UpdateTimestamp
