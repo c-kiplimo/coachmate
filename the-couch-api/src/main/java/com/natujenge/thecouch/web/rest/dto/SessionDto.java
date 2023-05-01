@@ -13,7 +13,7 @@ public interface SessionDto {
     Long getCoachId();
     String getName();
     String getSessionDate();
-    LocalDate getSessionDuration();
+//    LocalDate getSessionDuration();
     String getSessionStartTime();
     String getSessionEndTime();
     String getSessionNumber();

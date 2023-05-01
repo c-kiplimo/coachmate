@@ -9,10 +9,7 @@ import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -47,6 +44,9 @@ public class SessionService {
     private NotificationServiceHTTPClient notificationServiceHTTPClient;
 
     @Autowired
+    SessionSchedulesService sessionSchedulesService;
+
+    @Autowired
     CoachRepository coachRepository;
 
     // GetAllSessions
@@ -56,15 +56,8 @@ public class SessionService {
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
         Page<SessionDto> sessionPage;
-        if (search != null && !search.isEmpty()) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.coach.id.eq(id).
-                            andAnyOf(qSession.name.containsIgnoreCase(search).
-                                    or(qSession.notes.containsIgnoreCase(search))),
-                    q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-        } else {
-            sessionPage = sessionRepository.findAllByCoach_id(id, pageable);
-        }
+
+            sessionPage = sessionRepository.findAllByCoachId(id, pageable);
 
         return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
                 sessionPage.getTotalElements());
@@ -141,6 +134,7 @@ public class SessionService {
         }
 
         try {
+            sessionSchedulesService.updateBookedStateToTrue(sessionSchedules.getId());
             return sessionRepository.save(sessionRequest);
         } catch (Exception e) {
             log.error("Error occurred ", e);
@@ -347,5 +341,41 @@ public class SessionService {
         }
 
         log.info("Session with id {} changed status to {}", id, sessionStatus);
+    }
+
+    //CREATE EXAMPLE
+    private Session createExample(String search, String status, Long coachId) {
+        Session sessionExample = new Session();
+        Session session = new Session();
+        Client client = new Client();
+
+        if(search != null && !search.isEmpty()) {
+            sessionExample.setClient(client);
+            sessionExample.setName(search);
+            if (search.contains("@")) {
+                sessionExample.getClient().getEmail();
+            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+                sessionExample.getClient().getMsisdn();
+            } else {
+                sessionExample.getName();
+            }
+        }
+        if(status != null && !status.isEmpty()) {
+            sessionExample.setSessionStatus(SessionStatus.valueOf(status));
+        }
+
+        return sessionExample;
+    }
+
+    public Page<SessionDto> filter(String search, String status, Long coachId, Pageable pageable) {
+    Session session = createExample(search, status, coachId);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreNullValues();
+        Example<Session> example = Example.of(session, matcher);
+
+        return sessionRepository.findAll(example, pageable);
     }
 }

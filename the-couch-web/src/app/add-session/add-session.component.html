@@ -56,21 +56,21 @@
             </div>
             <div class="row">
               <div class="col">
-                <p>Available Slots</p>
-                <ul>
-                  <li *ngFor="let availableSlot of coachSlots" (click)="selectedSessionSlot(availableSlot)">
-                    <p *ngIf="availableSlot.booked == false">
-                      {{ availableSlot.sessionDate }}
-                      {{ availableSlot.startTime }} -
-                      {{ availableSlot.endTime }}
-                    </p>
-                  </li>
-                </ul>
+                <p>Available Slots *</p>
+                <div class="form-check" *ngFor="let availableSlot of coachSlots"
+                  (click)="selectedSessionSlot(availableSlot)">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    {{ availableSlot.sessionDate }}
+                    {{ availableSlot.startTime }} -
+                    {{ availableSlot.endTime }}
+                  </label>
+                </div>
               </div>
             </div>
 
 
             <button type="submit" (click)="addSession()"
-              [disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionVenue || !formData.sessionType"
+              [disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionVenue || !formData.sessionType || !formData.sessionSchedules"
               class="btn btn-signup mb-3 mt-2 p-2 text-center">Create Session</button>
           </div>

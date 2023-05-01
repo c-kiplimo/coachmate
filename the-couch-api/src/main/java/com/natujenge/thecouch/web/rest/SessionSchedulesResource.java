@@ -25,9 +25,10 @@ public class SessionSchedulesResource {
     //Get by coach id
     @GetMapping("/byCoachId/{coachId}")
     public ResponseEntity<?> findSessionSchedulesByCoachId (@PathVariable("coachId") Long coachId,
+                                                            @RequestParam(name = "status", required = false) Boolean status,
                                                             @AuthenticationPrincipal User userDetails) {
         try {
-            List<SessionSchedules> sessionSchedules = sessionSchedulesService.findSessionSchedulesByCoachId(coachId);
+            List<SessionSchedules> sessionSchedules = sessionSchedulesService.findSessionSchedulesByCoachId(coachId, status);
             return new ResponseEntity<>(sessionSchedules, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -51,4 +52,13 @@ public class SessionSchedulesResource {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //DELETE
+    @DeleteMapping
+    ResponseEntity delete(@RequestParam(name = "id") Long id, @RequestParam(name = "coachId") Long coachId) {
+        SessionSchedules deleteSessionSchedule = sessionSchedulesService.delete(id, coachId);
+        return new ResponseEntity(deleteSessionSchedule, HttpStatus.OK);
+    }
+
+
 }

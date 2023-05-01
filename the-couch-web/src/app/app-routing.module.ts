@@ -168,6 +168,7 @@ const routes: Routes = [
   { path: 'account-settings/notification', component: NotificationsComponent },
   { path: 'account-settings/templates', component: TemplatesComponent },
   { path: 'account-settings/payments', component: PaymentsComponent },
+  { path: 'AccountSummaryComponent', component: AccountSummaryComponent },
 
   
 ];

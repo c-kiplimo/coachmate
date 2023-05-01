@@ -209,8 +209,16 @@ export class ApiService {
     });
   }
 
-  getCoachSlots(coachId: any): Observable<any> {
+  getCoachSlots(coachId: any, options: any): Observable<any> {
     return this.http.get<any>(this.baseURL + '/sessionSchedules/byCoachId/' + coachId, {
+      params: options, 
+      observe: 'response',
+    });
+  }
+
+  deleteSlot(options: any): Observable<any> {
+    return this.http.delete<any>(this.baseURL + '/sessionSchedules', {
+      params: options,
       observe: 'response',
     });
   }

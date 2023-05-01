@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.SessionSchedulesRepository;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +24,17 @@ public class SessionSchedulesService {
     CoachRepository coachRepository;
 
     //Get all schedule by coach id
-    public List<SessionSchedules> findSessionSchedulesByCoachId(Long id) {
-        log.debug("Request to get SessionSchedules : {} by coach id {}", id);
+    public List<SessionSchedules> findSessionSchedulesByCoachId(Long id, Boolean status) {
+        log.debug("Request to get SessionSchedules : {} by coach id {}", id, status);
 
         Optional<Coach> optionalCoach = coachRepository.findCoachById(id);
-        log.info("Request to get session schedule");
-        return sessionSchedulesRepository.findByCoach(optionalCoach.get());
-
-
-
+        if(status == null) {
+            log.info("Request to get session schedule");
+            return sessionSchedulesRepository.findByCoach(optionalCoach.get());
+        } else {
+            log.info("Request to get session schedule");
+            return sessionSchedulesRepository.findByCoachAndBooked(optionalCoach.get(), status);
+        }
     }
 
     //Create session schedule
@@ -58,5 +59,37 @@ public class SessionSchedulesService {
             log.error("Error occurred ", e);
             throw new IllegalArgumentException(e.getMessage());
         }
+    }
+
+    public SessionSchedules delete(Long id, Long coachId) {
+    boolean exist = sessionSchedulesRepository.existsByIdAndCoachId(id, coachId);
+    if(!exist) {
+        throw new IllegalStateException("Schedule Not Found");
+    }
+    sessionSchedulesRepository.deleteById(id);
+    return null;
+    }
+
+    //UPDATE SCHEDULE TO BOOKED
+    public Optional<SessionSchedules> updateBookedStateToTrue(Long id) {
+        Optional<SessionSchedules> sessionSchedules = Optional.ofNullable(sessionSchedulesRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Schedule Not Found")));
+
+        SessionSchedules sessionSchedules1 = sessionSchedules.get();
+        sessionSchedules1.setBooked(true);
+
+        sessionSchedules1 = sessionSchedulesRepository.save(sessionSchedules1);
+        return Optional.of(sessionSchedules1);
+    }
+    //UPDATE SCHEDULE TO UNBOOKED
+    public Optional<SessionSchedules> updateBookedStateToFalse(Long id) {
+        Optional<SessionSchedules> sessionSchedules = Optional.ofNullable(sessionSchedulesRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Schedule Not Found")));
+
+        SessionSchedules sessionSchedules1 = sessionSchedules.get();
+        sessionSchedules1.setBooked(false);
+
+        sessionSchedules1 = sessionSchedulesRepository.save(sessionSchedules1);
+        return Optional.of(sessionSchedules1);
     }
 }

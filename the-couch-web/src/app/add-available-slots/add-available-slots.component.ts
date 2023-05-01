@@ -48,21 +48,31 @@ export class AddAvailableSlotsComponent implements OnInit {
 
   getCoachSlots() {
     const coachId = this.coachData.coach.id;
-    this.apiService.getCoachSlots(coachId).subscribe({
+    const options = {
+    };
+    this.apiService.getCoachSlots(coachId, options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
       }
     });
   }
 
-  deleteSlot(slotId: any) {
-    // this.apiService.deleteSlot(slotId).subscribe({
-    //   next: (response) => {
-    //     console.log(response);
-    //     this.getCoachSlots();
-    //   }
-    // });
+  deleteSlot(slot: any) {
+    if(slot.booked === false) {
+    const options = {
+      coachId: this.coachData.coach.id,
+      id: slot.id,
+    };
+    this.apiService.deleteSlot(options).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.getCoachSlots();
+      }
+    });
+  } else {
+    alert('Cannot delete booked slot');
   }
+}
 
 
 

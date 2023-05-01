@@ -199,8 +199,11 @@ closeModal() {
 
 
   getCoachSlots() {
+    const options = {
+      status: false,
+    };
     const coachId = this.coachData.coach.id;
-    this.apiService.getCoachSlots(coachId).subscribe({
+    this.apiService.getCoachSlots(coachId, options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
       }

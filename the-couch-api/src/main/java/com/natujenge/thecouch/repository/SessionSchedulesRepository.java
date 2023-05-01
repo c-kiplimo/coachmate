@@ -2,7 +2,6 @@ package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.SessionSchedules;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -21,5 +20,9 @@ public interface SessionSchedulesRepository extends PagingAndSortingRepository<S
     List<SessionSchedules> findAllBySessionDate(LocalDate date);
 
     List<SessionSchedules> findByCoach(Coach coach);
+
+    boolean existsByIdAndCoachId(Long id, Long coachId);
+
+    List<SessionSchedules> findByCoachAndBooked(Coach coach, Boolean status);
 
 }

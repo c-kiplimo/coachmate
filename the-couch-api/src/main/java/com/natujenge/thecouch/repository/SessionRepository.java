@@ -3,6 +3,7 @@ package com.natujenge.thecouch.repository;
 import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -40,5 +41,9 @@ public interface SessionRepository extends PagingAndSortingRepository<Session,Lo
     List<Session> findAllBysessionSchedules(LocalDate date);
 
     Optional<SessionDto> findByIdAndCoachId(Long sessionId, Long coachId);
+
+    Page<SessionDto> findAll(Example<Session> example, Pageable pageable);
+
+    Page<SessionDto> findAllByCoachId(Long id, Pageable pageable);
 
 }
