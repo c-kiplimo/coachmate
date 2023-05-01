@@ -233,9 +233,8 @@ export class SchedulesComponent implements OnInit {
     this.events = [];
     sessions.forEach((session: any) => {
       const event = {
-        //start: startOfDay(new Date(session.sessionSchedules.sessionDate), 1),
-        start: addHours(startOfDay(new Date(session.sessionSchedules.sessionDate)), 2),
-        end: addHours(new Date(session.sessionSchedules.sessionDate), 2),
+        start: new Date(`${session.sessionSchedules.sessionDate}T${session.sessionSchedules.startTime}`),
+        end: new Date(`${session.sessionSchedules.sessionDate}T${session.sessionSchedules.endTime}`),
         title: session.name + " with " + session.client.fullName,
         color: { ...colors['green'] },
         actions: this.actions,
@@ -247,7 +246,7 @@ export class SchedulesComponent implements OnInit {
         // draggable: true,
       };
       this.events.push(event);
-      this.view = CalendarView.Month;
+      this.view = CalendarView.Week;
       this.refresh.next();
     });
     console.log(this.events);
