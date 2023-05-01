@@ -1,3 +1,4 @@
+import { MbscModule } from '@mobiscroll/angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -118,7 +119,8 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
 
 
   ],
-  imports: [
+  imports: [  
+    MbscModule, 
     BrowserModule,
     CoachEducationModule,
     ReactiveFormsModule,

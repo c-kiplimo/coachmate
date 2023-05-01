@@ -21,6 +21,7 @@
     "@fortawesome/angular-fontawesome": "^0.10.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@mobiscroll/angular": "https://npm.mobiscroll.com/@mobiscroll/angular-ivy-trial/-/angular-ivy-trial-5.23.2.tgz",
     "all": "^0.0.0",
     "angular-calendar": "^0.30.1",
     "angularx-flatpickr": "^7.0.0",

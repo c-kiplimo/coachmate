@@ -24,10 +24,10 @@
             ],
             "styles": [
               "node_modules/angular-calendar/css/angular-calendar.css",
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/@mobiscroll/angular/dist/css/mobiscroll.min.css"
             ],
-            "scripts": [
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -68,7 +68,7 @@
             "browserTarget": "couching-manager-web:build:development",
             "proxyConfig": "proxy.conf.json",
             "port": 4200
-        },
+          },
           "configurations": {
             "production": {
               "browserTarget": "couching-manager-web:build:production"

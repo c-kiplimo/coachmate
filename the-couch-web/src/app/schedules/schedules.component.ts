@@ -27,6 +27,8 @@ import {
 import { EventColor } from 'calendar-utils';
 import { ClientService } from '../services/ClientService';
 
+import { setOptions, MbscDatepicker  } from '@mobiscroll/angular';
+
 const colors: Record<string, EventColor> = {
   red: {
     primary: '#ff3333',
@@ -68,9 +70,9 @@ export class SchedulesComponent implements OnInit {
 
   modalData:
     | {
-        action: String;
-        event: CalendarEvent;
-      }
+      action: String;
+      event: CalendarEvent;
+    }
     | undefined;
 
   actions: CalendarEventAction[] = [
@@ -93,51 +95,50 @@ export class SchedulesComponent implements OnInit {
 
   refresh = new Subject<void>();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: '',
-      color: { ...colors['red'] },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: '',
-      color: { ...colors['red'] },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: '',
-      color: { ...colors['blue'] },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors['yellow'] },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      // draggable: true,
-    },
-  ];
+  events: CalendarEvent[] = [];
+    // {
+    //   start: subDays(startOfDay(new Date()), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'erere',
+    //   color: { ...colors['red'] },
+    //   actions: this.actions,
+    //   allDay: true,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true,
+    //   },
+    //   draggable: true,
+    // },
+    // {
+    //   start: startOfDay(new Date()),
+    //   title: 'Hellow',
+    //   color: { ...colors['red'] },
+    //   actions: this.actions,
+    // },
+    // {
+    //   start: subDays(endOfMonth(new Date()), 3),
+    //   end: addDays(endOfMonth(new Date()), 3),
+    //   title: 'Hello',
+    //   color: { ...colors['blue'] },
+    //   allDay: true,
+    // },
+  //   {
+  //     start: addHours(startOfDay(new Date()), 2),
+  //     end: addHours(new Date(), 2),
+  //     title: 'A draggable and resizable event',
+  //     color: { ...colors['yellow'] },
+  //     actions: this.actions,
+  //     resizable: {
+  //       beforeStart: true,
+  //       afterEnd: true,
+  //     }
+  //   },
+  // ];
 
   activeDayIsOpen: boolean = true;
   modal: any;
 
-  constructor(private restApiService: ClientService) {}
+  constructor(private restApiService: ClientService) { }
 
   ngOnInit(): void {
     this.getSessions();
@@ -219,24 +220,26 @@ export class SchedulesComponent implements OnInit {
     this.restApiService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response);
-        this.sessions = response;
-        this.setCalendarEvents();
+        this.sessions = response.body.data;
+        this.setCalendarEvents(this.sessions);
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
-  setCalendarEvents() {
+  setCalendarEvents(sessions: any) {
     console.log('here');
     this.events = [];
-    this.sessions.forEach((session: any) => {
+    sessions.forEach((session: any) => {
       const event = {
-        start: startOfDay(new Date(session.sessionStartTime)),
-        title: session.name,
-        color: { ...colors['red'] },
+        //start: startOfDay(new Date(session.sessionSchedules.sessionDate), 1),
+        start: addHours(startOfDay(new Date(session.sessionSchedules.sessionDate)), 2),
+        end: addHours(new Date(session.sessionSchedules.sessionDate), 2),
+        title: session.name + " with " + session.client.fullName,
+        color: { ...colors['green'] },
         actions: this.actions,
-        allDay: true,
+        allDay: false,
         resizable: {
           beforeStart: true,
           afterEnd: true,
