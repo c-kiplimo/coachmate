@@ -1,23 +1,13 @@
-
 <div class="row">
-    <div class="col-4">
-      <i class="fa-solid fa-backward" style="font-size: 35px;"(click)="back()"></i>
-    </div>
-    <div class="col-4 text-center">
-      <!-- <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="width: 150px; height: 100px; padding-top: 0%; margin-top: 0%;"> -->
-    </div>
-    <div class="col-4 text-right">
-     <div class="row">
-        <div class="col-8"></div>
-        <div class="col-2">
-          <i class="fa-solid fa-user-circle" style="font-size: 35px;"></i>
-          <h6>{{businessName}} <span class="profile-img"></span></h6>
-        </div>
-        <div class="col-2">
-          <button class="btn btn-outline-dark" routerLink="/signin" (click)="logOut()">
-            Logout
-          </button>
-        </div>
-      </div>
-     </div>
-    </div>
+  <div class="col-8"></div>
+  <div class="col-2">
+
+  </div>
+  <div class="col-2">
+        <i class="fa-solid fa-user-circle" style="font-size: 35px;"></i>
+    <h6>{{businessName}} <span class="profile-img"></span></h6>
+    <button class="btn btn-outline-dark" routerLink="/signin" (click)="logOut()">
+      Logout
+    </button>
+  </div>
+</div>
