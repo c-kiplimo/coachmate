@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Feedback;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.web.rest.dto.FeedbackDto;

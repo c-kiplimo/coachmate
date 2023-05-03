@@ -1,7 +1,5 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.ClientService;
@@ -13,14 +11,10 @@ import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import com.natujenge.thecouch.service.ResponseService;
-import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;

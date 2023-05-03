@@ -1,28 +1,22 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.service.ContractService;
 import com.natujenge.thecouch.service.SessionService;
-import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.util.List;

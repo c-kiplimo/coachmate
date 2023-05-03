@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.SessionSchedulesRepository;

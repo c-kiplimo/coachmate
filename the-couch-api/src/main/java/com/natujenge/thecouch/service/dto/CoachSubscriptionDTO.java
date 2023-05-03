@@ -1,10 +1,5 @@
 package com.natujenge.thecouch.service.dto;
 
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.Organization;
-import com.natujenge.thecouch.domain.Plan;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class CoachSubscriptionDTO {

@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.CoachService;

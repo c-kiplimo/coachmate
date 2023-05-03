@@ -1,13 +1,10 @@
 package com.natujenge.thecouch.web.rest.request;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.ModeOfPayment;
 import com.natujenge.thecouch.domain.enums.PaymentCurrency;
 import com.natujenge.thecouch.service.ClientBillingAccountService;
 import lombok.Data;
-import org.springframework.boot.convert.DataSizeUnit;
 
 @Data
 public class PaymentRequest {

@@ -1,17 +1,11 @@
 package com.natujenge.thecouch.service.dto;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.OrganizationSubscription;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 @Data

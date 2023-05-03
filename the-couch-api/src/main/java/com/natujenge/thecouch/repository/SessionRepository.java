@@ -1,13 +1,11 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

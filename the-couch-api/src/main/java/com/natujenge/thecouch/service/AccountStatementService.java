@@ -1,15 +1,8 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.natujenge.thecouch.repository.AccountStatementRepository;
 import java.time.LocalDateTime;

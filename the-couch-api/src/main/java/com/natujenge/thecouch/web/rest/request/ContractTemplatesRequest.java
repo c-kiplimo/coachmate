@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.web.rest.request;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Organization;
 import lombok.Data;
 

@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.domain.Client;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.web.rest.dto.ClientDto;
 import org.springframework.data.domain.Page;

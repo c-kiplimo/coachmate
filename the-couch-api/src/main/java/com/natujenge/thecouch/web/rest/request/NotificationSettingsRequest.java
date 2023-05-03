@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.web.rest.request;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.enums.NotificationMode;

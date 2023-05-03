@@ -1,8 +1,5 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

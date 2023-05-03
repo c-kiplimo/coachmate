@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Notification;
 import com.natujenge.thecouch.repository.NotificationRepository;

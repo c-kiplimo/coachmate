@@ -1,8 +1,5 @@
 package com.natujenge.thecouch.web.rest.dto;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Session;
-
 public interface FeedbackDto {
     Integer getUnderstandingScore();
 
