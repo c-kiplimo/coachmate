@@ -27,7 +27,10 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String businessName;
-    private String addedBy; //user - coach id
+
+    @ManyToMany
+    @JoinColumn(name="addedBy")
+    User addedBy; //user - coach id
     @Column(unique = true)
     private String msisdn;
     @Column(unique = true)
@@ -52,6 +55,7 @@ public class User implements UserDetails {
     private PaymentModeSubscription paymentMode;
     private  String profession;
     private  String physicalAddress;
+    private String clientNumber;
 
 
     //COACH DETAILS
@@ -94,7 +98,7 @@ public class User implements UserDetails {
 
     // User Registration Constructor
     public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
-                Coach coach) {
+                ) {
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -129,7 +133,7 @@ public class User implements UserDetails {
     }
 
 // org coach user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization ){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -140,7 +144,7 @@ public class User implements UserDetails {
         this.organization = organization;
     }
     // org client user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization ){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
