@@ -195,14 +195,14 @@ public class UserService implements UserDetailsService {
         return client.isPresent();
     }
 
-    public User addNewClient(User userDetails, Optional<Organization> organization, ClientRequest clientRequest, String msisdn) {
+    public User addNewClient(User userDetails,Organization organization, ClientRequest clientRequest, String msisdn) {
         log.info("add a new client");
         // Check if client already exists
         if (doesUserExistByEmailAddress(clientRequest.getEmail())) {
             throw new IllegalStateException("Client with provided email already exists");
         }
 
-        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization, saveClient);
+        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization);
         log.info("creating new client started");
 
         if (userDetails != null) {
@@ -210,7 +210,7 @@ public class UserService implements UserDetailsService {
             user.setAddedBy(userDetails);
         }
         if (organization != null) {
-            user.setCreatedBy(organization.get().getOrgName());
+            user.setCreatedBy(organization.getOrgName());
             user.setOrganization(organization);
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
             if(assignedCoach.isPresent()){
@@ -253,11 +253,11 @@ public class UserService implements UserDetailsService {
         ClientWallet clientWallet = new ClientWallet();
 
         if (organization != null) {
-            clientWallet.setCreatedBy(organization.get().getOrgName());
-            clientWallet.setOrganization(organization.get());
+            clientWallet.setCreatedBy(organization.getOrgName());
+            clientWallet.setOrganization(organization);
         }
 
-        clientWallet.setUser(saveClient);
+        clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
@@ -266,10 +266,10 @@ public class UserService implements UserDetailsService {
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
 
         if (organization != null) {
-            clientBillingAccount.setCreatedBy(organization.get().getOrgName());
-            clientBillingAccount.setOrganization(organization.get());
+            clientBillingAccount.setCreatedBy(organization.getOrgName());
+            clientBillingAccount.setOrganization(organization);
         }
-        clientBillingAccount.setUser(saveClient);
+        clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccount.setCreatedBy(msisdn);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
