@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.config.Constants;
+import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.*;
@@ -10,12 +11,12 @@ import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.request.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class RegistrationService {
+    private final static String USER_EXISTS = "Email %s Taken!";
     private final static String USER_NOT_FOUND_MSG = "user %s not found!";
     private final static String EMAIL_NOT_VALID = "EMAIL %s IS NOT VALID";
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
@@ -34,24 +36,19 @@ public class RegistrationService {
     private EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    OrganizationWalletRepository organizationWalletRepository;
-    @Autowired
-    OrganizationBillingAccountService organizationBillingAccountService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
-    @Autowired
-    CoachWalletRepository coachWalletRepository;
-    @Autowired
-    CoachBillingAccountService coachBillingAccountService;
+    private final OrganizationWalletRepository organizationWalletRepository;
 
-    @Autowired
-    OrganizationRepository organizationRepository;
+    private final OrganizationBillingAccountService organizationBillingAccountService;
+
+    private final CoachRepository coachRepository;
+
+    private final CoachWalletRepository coachWalletRepository;
+    private final CoachBillingAccountService coachBillingAccountService;
+
+    private final OrganizationRepository organizationRepository;
 
 
     // Register User
@@ -59,23 +56,21 @@ public class RegistrationService {
         log.info("Registering new User");
         boolean isValidEmail = emailValidator.test(registrationRequest.getEmail());
 
-
         // Exception handling logic here
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
         }
 
-
         switch (registrationRequest.getUserRole()) {
             case COACH: {
                 // CREATE Coach
-                Coach coach = new Coach();
+                User coach = new User();
                 coach.setBusinessName(registrationRequest.getBusinessName());
                 coach.setFirstName(registrationRequest.getFirstName());
                 coach.setLastName(registrationRequest.getLastName());
                 coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 coach.setMsisdn(registrationRequest.getMsisdn());
-                coach.setEmailAddress(registrationRequest.getEmail());
+                coach.setEmail(registrationRequest.getEmail());
                 coach.setCreatedBy("SELF-REGISTRATION");
                 // coach Number Generation
                 int randNo = (int) ((Math.random() * (999 - 1)) + 1);
@@ -83,21 +78,40 @@ public class RegistrationService {
                 String coachNo = coach.getLastName().substring(0, 2) +
                         coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
                 coach.setCoachNumber(coachNo);
-                Coach savedCoach = coachRepository.save(coach);
 
-                log.info("Coach registered");
-                List<Object> response = userService.signupUser(
-                        new User(
-                                registrationRequest.getFirstName(),
-                                registrationRequest.getLastName(),
-                                registrationRequest.getEmail(),
-                                registrationRequest.getMsisdn(),
-                                registrationRequest.getPassword(),
-                                UserRole.COACH,
-                                savedCoach
+                // Encode Password > from spring boot
+                String encodedPassword = passwordEncoder.encode(registrationRequest.getPassword());
 
-                        )
+                // Set details
+                coach.setPassword(encodedPassword);
+                coach.setContentStatus(ContentStatus.ACTIVE);
+                coach.setCreatedAt(LocalDateTime.now());
+
+
+
+                // save the User in the database
+                User savedCoach = userRepository.save(coach);
+
+                log.info("User saved");
+
+                // Generate a Random 6 digit OTP - 0 - 999999
+                int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+                String token = String.format("%06d", randomOTP);
+
+                ConfirmationToken confirmationToken = new ConfirmationToken(
+                        token,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                        coach
                 );
+
+                confirmationTokenService.saveConfirmationToken(confirmationToken);
+                log.info("Confirmation token generated");
+
+                List<Object> response = new ArrayList<>();
+                response.add(savedCoach);
+                response.add(token);
+
                 // Create Default NotificationSettings for Every User
                 // Generate default Templates for all TemplateTypes
                 log.info("Creating Default Settings for User");
@@ -131,7 +145,7 @@ public class RegistrationService {
                 notificationSettingsRequest.setConductedSessionEnable(true);
                 notificationSettingsRequest.setRescheduleSessionEnable(true);
                 notificationSettingsRequest.setPaymentReminderEnable(true);
-                notificationSettingsRequest.setCoach(savedCoach);
+                notificationSettingsRequest.setUser(savedCoach);
 
 
                 NotificationSettings notificationSettings = notificationSettingsService.
@@ -144,13 +158,12 @@ public class RegistrationService {
                 contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
                 contractTemplatesRequest.setPracticeTemplate(Constants.DEFAULT_PRACTICE_TEMPLATE);
                 contractTemplatesRequest.setTerms_and_conditionsTemplate(Constants.DEFAULT_TERMS_AND_CONDITIONS_TEMPLATE);
-                contractTemplatesRequest.setCoach(savedCoach);
+                contractTemplatesRequest.setUser(savedCoach);
                 ContractTemplate contractTemplate =notificationSettingsService.addContractTemplates(contractTemplatesRequest);
                 log.info("Contract Templates Saved Successfully");
                 User registeredUser = (User) response.get(0);
                 registeredUser.setNotificationSettings(notificationSettings);
                 registeredUser.setContractTemplate(contractTemplate);
-                registeredUser.setCoach(savedCoach);
                 userService.updateUser(registeredUser);
 
 
@@ -158,14 +171,14 @@ public class RegistrationService {
 
                 try {
                     // Sending Confirmation Token
-                    String token = (String) response.get(1);
-                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+                    String token1 = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token1, "CONFIRM", (User) response.get(0));
                 } catch (Exception e) {
                     log.info("Error while sending confirmation token: ", e);
                 }
                 // Create CoachWallet
                 CoachWallet coachWallet = new CoachWallet();
-                coachWallet.setCoach(savedCoach);
+                coachWallet.setUser(savedCoach);
                 coachWallet.setWalletBalance(0f);
                 coachWallet.setCreatedBy(registrationRequest.getMsisdn());
                 coachWalletRepository.save(coachWallet);
@@ -189,16 +202,13 @@ public class RegistrationService {
                 organization.setOrgName(registrationRequest.getBusinessName());
                 organization.setEmail(registrationRequest.getEmail());
                 organization.setMsisdn(registrationRequest.getMsisdn());
-                organization.setFirstName(registrationRequest.getFirstName());
-                organization.setSecondName(registrationRequest.getLastName());
-                organization.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 organization.setCreatedBy("SELF-REGISTRATION");
                 Organization registeredOrg = organizationRepository.save(organization);
                 log.info("Organization registered");
 
 
                 // create user and link organization
-                List<Object> response = userService.signupUser(
+                List<Object> response = signupUser(
                         new User(
                                 registrationRequest.getFirstName(),
                                 registrationRequest.getLastName(),
@@ -206,9 +216,7 @@ public class RegistrationService {
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
                                 UserRole.ORGANIZATION,
-                                registeredOrg
-
-
+                                registeredOrg.getUser()
                         )
                 );
                 try {
@@ -259,7 +267,7 @@ public class RegistrationService {
                     User registeredUser = (User) response.get(0);
                     log.info("User to be updated: " + registeredUser.getUsername());
                     registeredUser.setNotificationSettings(notificationSettings);
-                    registeredUser.setOrganization(registeredOrg);
+                    registeredUser.setOrganization(Optional.of(registeredOrg));
                     userService.updateUser(registeredUser);
 
 
@@ -273,7 +281,7 @@ public class RegistrationService {
 
                 organizationWallet.setOrganization(organization);
                 organizationWallet.setWalletBalance(Float.valueOf(0));
-                organizationWallet.setCreatedBy(organization.getFullName());
+                organizationWallet.setCreatedBy(organization.getOrgName());
                 organizationWalletRepository.save(organizationWallet);
                 log.info("Organization Wallet created Successfully!");
 
@@ -281,7 +289,7 @@ public class RegistrationService {
                 OrganizationBillingAccount organizationBillingAccount = new OrganizationBillingAccount();
 
                 organizationBillingAccount.setAmountBilled((float) 0);
-                organizationBillingAccount.setCreatedBy(organization.getFullName());
+                organizationBillingAccount.setCreatedBy(organization.getOrgName());
                 organizationBillingAccountService.createBillingAccount(organizationBillingAccount);
                 log.info("Organiation Billing Account created Successfully!");
                 break;
@@ -292,14 +300,75 @@ public class RegistrationService {
 
     }
 
+    public List<Object> signupUser(User user) {
+        log.info("Signing up User");
+        boolean userEmailExists = userRepository.findByEmail(user.getEmail())
+                .isPresent();
+
+        if (userEmailExists) {
+            throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
+        }
+
+
+        // Encode Password > from spring boot
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        // Set details
+        user.setPassword(encodedPassword);
+        user.setContentStatus(ContentStatus.ACTIVE);
+        user.setCreatedAt(LocalDateTime.now());
+
+
+
+        // save the User in the database
+        User user1 = userRepository.save(user);
+        log.info("User saved");
+
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        log.info("Confirmation token generated");
+
+        List<Object> response = new ArrayList<>();
+        response.add(user1);
+        response.add(token);
+
+        return response;
+
+    }
+
     //Register org Coach as user
-    public void registerCoachAsUser(CoachRequest coachRequest,Organization organization, Coach savedCoach) {
+    public void registerCoachAsUser(CoachRequest coachRequest, Organization organization, User savedCoach) {
         log.info("Registering a coach as user");
         boolean isValidEmail = emailValidator.test(coachRequest.getEmail());
 
         if(!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID, coachRequest.getEmail()));
         }
+
+        User coach = new User();
+        coach.setFirstName(coachRequest.getFirstName());
+        coach.setLastName(coachRequest.getLastName());
+        coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
+        coach.setMsisdn(coachRequest.getMsisdn());
+        coach.setEmail(coachRequest.getEmail());
+        coach.setCreatedBy(coach.getFullName());
+        coach.setOrganization(Optional.ofNullable(organization));
+
+        // coach Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String coachL = String.format("%05d", randNo);
+        String coachNo =  coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+        coach.setCoachNumber(coachNo);
 
         //Create Coach User
         List<Object> response = userService.signupCoachAsUser(
@@ -309,10 +378,39 @@ public class RegistrationService {
                         coachRequest.getEmail(),
                         coachRequest.getMsisdn(),
                         UserRole.COACH,
-                        organization,
-                        savedCoach
+                        Optional.ofNullable(organization)
                 )
         );
+
+       // User savedCoach = coachRepository.save(coach);
+
+        // Create client wallet
+        CoachWallet coachWallet = new CoachWallet();
+
+
+        if(organization != null){
+            coachWallet.setOrganization(organization);
+        }
+
+        coachWallet.setUser(savedCoach);
+        coachWallet.setWalletBalance(Float.valueOf(0));
+       // coachWallet.setCreatedBy();
+        coachWalletRepository.save(coachWallet);
+        log.info("Client Wallet created Successfully!");
+
+        // Create client Billing Account
+        CoachBillingAccount coachBillingAccount = new CoachBillingAccount();
+
+        if(organization != null){
+            coachBillingAccount.setOrganization(organization);
+        }
+        coachBillingAccount.setCoach(savedCoach);
+        coachBillingAccount.setAmountBilled((float) 0);
+        //coachBillingAccount.setCreatedBy(msisdn);
+        coachBillingAccountService.createBillingAccount(coachBillingAccount);
+        log.info("Client Billing Account created Successfully!");
+       // return savedCoach;
+
         // Create Default NotificationSettings for Every User
         // Generate default Templates for all TemplateTypes
         log.info("Creating Default Settings for User");
@@ -347,7 +445,7 @@ public class RegistrationService {
         notificationSettingsRequest.setRescheduleSessionEnable(true);
         notificationSettingsRequest.setPaymentReminderEnable(true);
         notificationSettingsRequest.setCoach(savedCoach);
-        notificationSettingsRequest.setOrganization(savedCoach.getOrganization());
+        notificationSettingsRequest.setOrganization(savedCoach.getOrganization().get());
 
 
         NotificationSettings notificationSettings = notificationSettingsService.
@@ -357,7 +455,7 @@ public class RegistrationService {
         // Update User
         User registeredUser = (User) response.get(0);
         registeredUser.setNotificationSettings(notificationSettings);
-        registeredUser.setCoach(savedCoach);
+       // registeredUser.setCoach(savedCoach);
         userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
@@ -378,7 +476,7 @@ public class RegistrationService {
 
 
     //Register Client as user
-    public void registerClientAsUser(ClientRequest clientRequest,Organization organization, Coach coach , Client saveClient) {
+    public void registerClientAsUser(ClientRequest clientRequest, Optional<Organization> organization, User saveClient) {
         log.info("Registering a Client as User");
         boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
 
@@ -394,9 +492,7 @@ public class RegistrationService {
                         clientRequest.getEmail(),
                         clientRequest.getMsisdn(),
                         UserRole.CLIENT,
-                        organization,
-                        coach,
-                        saveClient
+                        organization
                 )
         );
 

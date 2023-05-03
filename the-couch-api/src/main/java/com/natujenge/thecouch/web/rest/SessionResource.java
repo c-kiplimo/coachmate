@@ -199,7 +199,6 @@ public class SessionResource {
             log.error("Error ", e);
             return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
     @PutMapping(path = "/change-status/{id}") // change status active or suspend
     ResponseEntity<?> updateSessionStatus(@RequestParam("status") SessionStatus sessionStatus,

@@ -1,4 +1,5 @@
 package com.natujenge.thecouch.web.rest.request;
+
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
@@ -23,6 +24,8 @@ public class NotificationSettingsRequest {
 
     private User coach;
     private Organization organization;
+
+
     // Session Settings
     private SessionTemplateType sessionTemplateType;
 

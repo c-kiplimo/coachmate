@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -27,9 +28,10 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String businessName;
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User addedBy; //user - coach id
+
+    @ManyToMany
+    @JoinColumn(name="addedBy")
+    User addedBy; //user - coach id
     @Column(unique = true)
     private String msisdn;
     @Column(unique = true)
@@ -54,12 +56,14 @@ public class User implements UserDetails {
     private PaymentModeSubscription paymentMode;
     private  String profession;
     private  String physicalAddress;
+    private String clientNumber;
 
 
     //COACH DETAILS
     @Enumerated(EnumType.STRING)
     private CoachStatus coachStatus;
     private boolean onboarded; //COACH ADDED BY ORGANIZATION
+    private String coachNumber;
 
     //FOR ONBOARDED COACH AND ALL CLIENTS
     private String reason;
@@ -80,7 +84,7 @@ public class User implements UserDetails {
     // Object Relationships
     @ManyToOne
     @JoinColumn(name="org_id")
-    Organization organization;
+    Optional<Organization> organization;
 
     @ManyToOne
     @JoinColumn(name="notification_settings_id")
@@ -95,21 +99,9 @@ public class User implements UserDetails {
     private Boolean enabled = false;
 
     // User Registration Constructor
-
-    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
-                Organization organization) {
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.password = password;
-        this.userRole = userRole;
-        this.organization = organization;
-    }
-    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
-        this.fullName = firstName + ' '+lastName;
+    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
+                User savedCoach) {
+        this.fullName = firstName + ' ' + lastName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -118,20 +110,20 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
     }
-
-// org coach user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole password, UserRole userRole,
+                Optional<Organization> organization) {
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = email;
         this.msisdn = msisdn;
+        this.password = String.valueOf(password);
         this.userRole = userRole;
         this.organization = organization;
     }
     // org client user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Optional<Organization> organization ){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -37,11 +37,7 @@ public class ClientBillingAccount {
 
     @OneToOne
     @JoinColumn(name="user_id")
-    User client;
-
-    @OneToOne
-    @JoinColumn(name="user_id")
-    User coach;
+    User user;
 
     @OneToOne
     @JoinColumn(name="organization_id")

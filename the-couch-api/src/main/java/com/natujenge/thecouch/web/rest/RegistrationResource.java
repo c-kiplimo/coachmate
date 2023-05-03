@@ -2,6 +2,7 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.RegistrationService;
@@ -26,9 +27,10 @@ import java.util.Optional;
 @Slf4j
 public class RegistrationResource {
     private final RegistrationService registrationService;
-    private final ClientService clientService;
+   // private final ClientService clientService;
     private final CoachService coachService;
     private final ResponseService responseService;
+    private final UserRepository userRepository;
 
 
     @PostMapping
@@ -87,7 +89,7 @@ public class RegistrationResource {
         //log.info("Request to confirm coach token and update password");
         try {
             Optional<User> updateCoach;
-            updateCoach = coachService.confirmCoachTokenAndUpdatePassword(coachRequest);
+            updateCoach = userRepository.confirmCoachTokenAndUpdatePassword(coachRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
