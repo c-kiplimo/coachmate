@@ -3,6 +3,7 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.OrgStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
@@ -203,6 +204,8 @@ public class RegistrationService {
                 organization.setEmail(registrationRequest.getEmail());
                 organization.setMsisdn(registrationRequest.getMsisdn());
                 organization.setCreatedBy("SELF-REGISTRATION");
+                organization.setStatus(OrgStatus.NEW);
+                organization.setCreatedAt(LocalDateTime.now());
                 Organization registeredOrg = organizationRepository.save(organization);
                 log.info("Organization registered");
 

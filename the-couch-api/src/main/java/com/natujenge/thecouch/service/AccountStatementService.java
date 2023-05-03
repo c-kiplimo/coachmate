@@ -18,7 +18,7 @@ public class AccountStatementService {
     private StatementPeriod statementPeriod;
 
     // update account statement
-    public void updateAccountStatement(Coach coach, Client client, float amountIn, float walletBalance,
+    public void updateAccountStatement(User coach, User client, float amountIn, float walletBalance,
                                        float amountBilled) {
         log.info("Update account statement for client {} by coach {}", client.getId(), coach.getId());
 
@@ -37,7 +37,7 @@ public class AccountStatementService {
         log.info("account statement saved");
     }
 
-    public void updateAccountStatementByOrganization(Organization organization, Client client, float amountIn, float amountBilled, float paymentBalance) {
+    public void updateAccountStatementByOrganization(Organization organization, User client, float amountIn, float amountBilled, float paymentBalance) {
     }
 }
     // Get account statement by organization Id

@@ -221,7 +221,7 @@ public class UserService implements UserDetailsService {
         }
         if (organization != null) {
             user.setCreatedBy(organization.get().getOrgName());
-            user.setOrganization(organization);
+            user.setOrganization(organization.get());
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
             if (assignedCoach.isPresent()) {
                 User coach1 = assignedCoach.get();
@@ -328,7 +328,7 @@ public class UserService implements UserDetailsService {
 
     public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
         ContractTemplate contractTemplate = new ContractTemplate();
-        contractTemplate.setUser(contractTemplatesRequest.getUser());
+        contractTemplate.setCoach(contractTemplatesRequest.getCoach());
         contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
         contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
         contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());

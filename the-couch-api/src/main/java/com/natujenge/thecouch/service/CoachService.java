@@ -155,35 +155,35 @@ public class CoachService {
             return userOptional;
 
     }
-    public Optional<CoachDTO> findOne(Long id) {
-        log.info("Request to get Coach by id: {}", id);
-        return coachRepository.findById(id).map(coachMapper::toDto);
-    }
+//    public Optional<CoachDTO> findOne(Long id) {
+//        log.info("Request to get Coach by id: {}", id);
+//        return coachRepository.findById(id).map(coachMapper::toDto);
+//    }
 
-    public CoachDTO onBoard(OnBoardCoachDTO onBoardCoachDTO){
-        Optional<CoachDTO> coachDTOOptional = findOne(onBoardCoachDTO.getCoachId());
-        if (coachDTOOptional.isEmpty()){
-            throw new IllegalStateException("Coach with Id " + onBoardCoachDTO.getCoachId() + " does not exist");
-        }
-
-        CoachDTO coachDTO = coachDTOOptional.get();
-
-        //Save settings
-        saveSettings(onBoardCoachDTO, coachDTO);
-
-        //Save Notifications
-        saveNotificationSettings(onBoardCoachDTO, coachDTO);
-
-        //Save payment Details
-        savePaymentDetails(onBoardCoachDTO,coachDTO);
-
-
-
-        coachDTO.setOnboarded(true);
-        save(coachDTO);
-
-        return coachDTO;
-    }
+//    public CoachDTO onBoard(OnBoardCoachDTO onBoardCoachDTO){
+//        Optional<CoachDTO> coachDTOOptional = findOne(onBoardCoachDTO.getCoachId());
+//        if (coachDTOOptional.isEmpty()){
+//            throw new IllegalStateException("Coach with Id " + onBoardCoachDTO.getCoachId() + " does not exist");
+//        }
+//
+//        CoachDTO coachDTO = coachDTOOptional.get();
+//
+//        //Save settings
+//        saveSettings(onBoardCoachDTO, coachDTO);
+//
+//        //Save Notifications
+//        saveNotificationSettings(onBoardCoachDTO, coachDTO);
+//
+//        //Save payment Details
+//        savePaymentDetails(onBoardCoachDTO,coachDTO);
+//
+//
+//
+//        coachDTO.setOnboarded(true);
+//        save(coachDTO);
+//
+//        return coachDTO;
+//    }
 //    @Transactional
 //    public CoachDTO save(CoachDTO coachDTO){
 //        if (coachDTO.getId()== null){

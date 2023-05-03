@@ -2,6 +2,7 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Notification;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.NotificationRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
@@ -40,7 +41,7 @@ public class NotificationService {
         }
     }
 
-    public void createNotificationOnContractCreation(NotificationRequest notificationRequest, Contract contract, Coach coach) {
+    public void createNotificationOnContractCreation(NotificationRequest notificationRequest, Contract contract, User coach) {
         log.info("Creating new notification");
         Notification notification = new Notification();
         notification.setNotificationMode(notificationRequest.getNotificationMode());

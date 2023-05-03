@@ -38,12 +38,13 @@ public class AccountStatement {
     private String lastUpdatedBy;
 
     @OneToOne
-    @JoinColumn(name="client_id")
-    Client client;
+    @JoinColumn(name="coach_id")
+    User coach;
 
     @OneToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @JoinColumn(name="client_id")
+    User client;
+
 
     @OneToOne
     @JoinColumn(name="organization_id")

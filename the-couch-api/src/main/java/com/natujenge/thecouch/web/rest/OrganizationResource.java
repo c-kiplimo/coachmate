@@ -2,14 +2,12 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.OrganizationService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,24 +22,22 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping(path="/api/organizations")
 public class OrganizationResource {
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private final OrganizationService organizationService;
     private final UserService userService;
 
-    private final CoachService coachService;
-    public OrganizationResource(ModelMapper modelMapper, OrganizationService organizationService,
-                                UserService userService, CoachService coachService) {
+    private final UserService userService;
+
+    public OrganizationResource(ModelMapper modelMapper, OrganizationService organizationService, UserService userService) {
         this.modelMapper = modelMapper;
         this.organizationService = organizationService;
         this.userService = userService;
-        this.coachService = coachService;
     }
 
     @PostMapping
     ResponseEntity<?> addOrganization(@RequestBody Organization organization,
                                       @AuthenticationPrincipal User userDetails) {
-        log.info("Request to create a Organization", organization);
+        log.info("Request to create a Organization {}", organization);
 
         try {
             Organization newOrganization = organizationService.addNewOrganization(organization);

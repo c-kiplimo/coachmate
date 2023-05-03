@@ -39,7 +39,7 @@ public class Organization {
     private String lastUpdatedBy;
 
     //Relations
-    @OneToMany
+    @ManyToOne
     private User user;
 
     //Relations
