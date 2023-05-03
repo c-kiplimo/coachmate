@@ -341,7 +341,7 @@ public class SessionService {
     }
 
     //CREATE EXAMPLE
-    private Session createExample(String search, String status, Long coachId) {
+   /* private Session createExample(String search, String status, Long coachId) {
         Session sessionExample = new Session();
         Session session = new Session();
         User client = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization, saveClient);
@@ -375,4 +375,5 @@ public class SessionService {
 
         return sessionRepository.findAll(example, pageable);
     }
+*/
 }

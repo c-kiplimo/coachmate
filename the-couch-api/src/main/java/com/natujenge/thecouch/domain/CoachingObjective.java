@@ -41,7 +41,7 @@ public class CoachingObjective {
 
     // Relations
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="client_id")
     User client;
 
     @ManyToOne
@@ -49,7 +49,7 @@ public class CoachingObjective {
     Contract contract;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="coach_id")
     User coach;
     @ManyToOne
     @JoinColumn(name="organization_id")

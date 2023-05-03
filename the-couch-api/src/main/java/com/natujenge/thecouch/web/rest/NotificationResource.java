@@ -35,7 +35,7 @@ public class NotificationResource {
          */
 
         try{
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.info("Requesting all notifications by coach with id {}",coachId);
 
             return new ResponseEntity<>(notificationService.getAllNotifications(page, perPage,coachId), HttpStatus.OK);
@@ -56,7 +56,7 @@ public class NotificationResource {
          * Get notification by notificationId
          */
         try{
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.info("Requesting notification of id {} by coach of id {}", id,coachId);
             return new ResponseEntity<>(notificationService.getNotificationById(id,coachId),HttpStatus.OK);
         }catch (Exception e){
@@ -69,7 +69,7 @@ public class NotificationResource {
                                                 @AuthenticationPrincipal User userDetails) {
 
         try{
-            long coachId = userDetails.getCoach().getId();
+            long coachId = userDetails.getId();
             log.info("Request to add new notification by coach with id {}",coachId);
 
             // convert DTO to entity
@@ -89,7 +89,7 @@ public class NotificationResource {
             @RequestParam(name = "client_id",required = false) Long clientId
     ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.debug(
                     "REST request to filter notifications given, coach id : {}, client id  : {}",
                     clientId,
@@ -122,9 +122,9 @@ public class NotificationResource {
             @RequestParam(name = "session_id",required = false) Long sessionId
     ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.debug(
-                    "REST request to filter notifications given, coach id : {}, session id  : {}",
+                    "REST request to filter notifications given, coach id : {}",
                     coachId
             );
             log.info("Coach id {}, session id {}",coachId,sessionId);

@@ -15,7 +15,7 @@ public class CoachSubscription {
 
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    private Coach coach;
+    private User coach;
     @ManyToOne
     @JoinColumn(name = "organization_id")
     private Organization organization;
@@ -40,11 +40,11 @@ public class CoachSubscription {
         this.endDate = endDate;
     }
 
-    public Coach getCoach() {
+    public User getCoach() {
         return coach;
     }
 
-    public void setCoach(Coach coach) {
+    public void setCoach(User coach) {
         this.coach = coach;
     }
 
