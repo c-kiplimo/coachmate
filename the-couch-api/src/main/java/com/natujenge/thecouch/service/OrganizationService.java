@@ -7,7 +7,6 @@ import com.natujenge.thecouch.repository.OrganizationWalletRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,26 +22,21 @@ public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    OrganizationWalletRepository organizationWalletRepository;
-    @Autowired
-    OrganizationBillingAccountService organizationBillingAccountService;
+    private final UserRepository userRepository;
+    private final OrganizationWalletRepository organizationWalletRepository;
 
-    public OrganizationService(OrganizationRepository organizationRepository) {
+    private final OrganizationBillingAccountService organizationBillingAccountService;
+
+    public OrganizationService(OrganizationRepository organizationRepository, UserRepository userRepository, OrganizationWalletRepository organizationWalletRepository, OrganizationBillingAccountService organizationBillingAccountService) {
         this.organizationRepository = organizationRepository;
+        this.userRepository = userRepository;
+        this.organizationWalletRepository = organizationWalletRepository;
+        this.organizationBillingAccountService = organizationBillingAccountService;
     }
 
     public Organization addNewOrganization(Organization organization){
         log.info("Add a new organization request {}", organization );
 
-        if(organization.getId() == null) {
-            organization.setStatus(OrgStatus.NEW);
-            organization.setCreatedAt(LocalDateTime.now());
-            organization.setCreatedBy(organization.getFullName());
-
-        }
 
         Organization savedOrganization = organizationRepository.save(organization);
 
@@ -52,7 +46,7 @@ public class OrganizationService {
 
         organizationWallet.setOrganization(organization);
         organizationWallet.setWalletBalance(Float.valueOf(0));
-        organizationWallet.setCreatedBy(organization.getFullName());
+        organizationWallet.setCreatedBy(organization.getOrgName());
         organizationWalletRepository.save(organizationWallet);
         log.info("Organization Wallet created Successfully!");
 
@@ -60,7 +54,7 @@ public class OrganizationService {
         OrganizationBillingAccount organizationBillingAccount = new OrganizationBillingAccount();
 
         organizationBillingAccount.setAmountBilled((float) 0);
-        organizationBillingAccount.setCreatedBy(organization.getFullName());
+        organizationBillingAccount.setCreatedBy(organization.getOrgName());
         organizationBillingAccountService.createBillingAccount(organizationBillingAccount);
         log.info("Organiation Billing Account created Successfully!");
         return savedOrganization;
