@@ -120,7 +120,7 @@ public class User implements UserDetails {
     }
 
 // org coach user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;

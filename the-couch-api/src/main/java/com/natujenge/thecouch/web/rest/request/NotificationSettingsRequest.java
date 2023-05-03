@@ -1,12 +1,12 @@
 package com.natujenge.thecouch.web.rest.request;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import lombok.Data;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 
 @Data
-
 public class NotificationSettingsRequest {
     // General Settings
     private NotificationMode notificationMode;
@@ -21,8 +21,8 @@ public class NotificationSettingsRequest {
     private String accountNumber;
     private Float depositPercentage;
 
-    Coach coach;
-    Organization organization;
+    private User coach;
+    private Organization organization;
     // Session Settings
     private SessionTemplateType sessionTemplateType;
 

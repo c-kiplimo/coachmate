@@ -233,8 +233,8 @@ public class NotificationSettingsService {
             }
         } else {
             notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
-            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
-            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getOrgName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getOrgName());
 
         }
         log.info("Notification Settings Created Successfully");

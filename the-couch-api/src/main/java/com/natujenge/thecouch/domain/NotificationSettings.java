@@ -67,7 +67,7 @@ public class NotificationSettings {
 
     @ManyToOne
     @JoinColumn(name="coach_id")
-    Coach coach;
+    User coach;
     @ManyToOne
     @JoinColumn(name="organization_id")
     Organization organization;
