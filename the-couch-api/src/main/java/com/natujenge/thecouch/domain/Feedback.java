@@ -44,11 +44,11 @@ public class Feedback {
     Session session;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "coach_id")
     User coach;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "client_id")
     User client;
 
     @ManyToOne
