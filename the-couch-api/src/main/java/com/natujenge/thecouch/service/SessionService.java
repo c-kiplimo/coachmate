@@ -27,27 +27,24 @@ import java.util.Objects;
 
 public class SessionService {
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    SessionRepository sessionRepository;
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    ContractRepository contractRepository;
-    @Autowired
-    OrganizationRepository organizationRepository;
-    @Autowired
-    SessionSchedulesRepository sessionSchedulesRepository;
-    @Autowired
-    private NotificationServiceHTTPClient notificationServiceHTTPClient;
-
-    @Autowired
-    SessionSchedulesService sessionSchedulesService;
-
-    @Autowired
-    CoachRepository coachRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private final SessionRepository sessionRepository;
+    private final ContractRepository contractRepository;
+    private final OrganizationRepository organizationRepository;
+    private final SessionSchedulesRepository sessionSchedulesRepository;
+    private final NotificationServiceHTTPClient notificationServiceHTTPClient;
+    private final SessionSchedulesService sessionSchedulesService;
+    private final UserRepository userRepository;
+    public SessionService(JdbcTemplate jdbcTemplate, SessionRepository sessionRepository, ContractRepository contractRepository, OrganizationRepository organizationRepository, SessionSchedulesRepository sessionSchedulesRepository, NotificationServiceHTTPClient notificationServiceHTTPClient, SessionSchedulesService sessionSchedulesService, UserRepository userRepository) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.sessionRepository = sessionRepository;
+        this.contractRepository = contractRepository;
+        this.organizationRepository = organizationRepository;
+        this.sessionSchedulesRepository = sessionSchedulesRepository;
+        this.notificationServiceHTTPClient = notificationServiceHTTPClient;
+        this.sessionSchedulesService = sessionSchedulesService;
+        this.userRepository = userRepository;
+    }
 
     // GetAllSessions
     public ListResponse getAllSessions(int page, int perPage, String search, Long id) {
@@ -66,7 +63,7 @@ public class SessionService {
 
     // Get Individual Sessions by id
     public Session findSessionByIdAndCoachId(Long id) {
-        log.debug("Request to get session : {} and coachId : {}", id);
+        log.debug("Request to get session : {} ", id);
 
         Optional<Session> sessionOptional = sessionRepository.findById(id);
         if (sessionOptional.isPresent()) {
@@ -83,7 +80,7 @@ public class SessionService {
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
 
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
+        Optional<User> optionalClient = userRepository.findByIdAndAddedById(clientId,coachId);
         Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
         Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
 
@@ -103,9 +100,9 @@ public class SessionService {
         Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
 
         // Client
-        Client client = optionalClient.get();
+        User client = optionalClient.get();
         // Coach
-        Coach coach = client.getCoach();
+        User coach = client.getAddedBy();
         // Contract
         Contract contract = optionalContract.get();
         //Session slot
@@ -122,7 +119,7 @@ public class SessionService {
         // session Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String sessionL = String.format("%05d", randNo);
-        String sessionNo = client.getCoach().getBusinessName().substring(0, 2) +
+        String sessionNo = client.getAddedBy().getBusinessName().substring(0, 2) +
                 client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
         sessionRequest.setSessionNumber(sessionNo);
         if (optionalOrganization.isPresent()) {
@@ -197,7 +194,7 @@ public class SessionService {
             throw new IllegalStateException("session doesn't exist");
 
         }
-        coachRepository.deleteById(id);
+        sessionRepository.deleteById(id);
     }
 
     public List<SessionDto> findSessionByClientId(Long clientId) {
@@ -231,7 +228,7 @@ public class SessionService {
                 //send notification to coach
                 NotificationHelper.sendUpcomingSessionReminderToCoach(session);
                 // sendEmail
-              String email =  session.getCoach().getEmailAddress();
+              String email =  session.getCoach().getEmail();
                 notificationServiceHTTPClient.sendEmail(email,"SESSION DUE TODAY",smsContent,false);
                 log.info("Email sent");
                 //send notification to client
@@ -347,7 +344,7 @@ public class SessionService {
     private Session createExample(String search, String status, Long coachId) {
         Session sessionExample = new Session();
         Session session = new Session();
-        Client client = new Client();
+        User client = new User();
 
         if(search != null && !search.isEmpty()) {
             sessionExample.setClient(client);

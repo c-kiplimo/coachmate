@@ -74,7 +74,7 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name="client_id")
-    Client client;
+    User client;
 
     @ManyToOne
     @JoinColumn(name="contract_id")
@@ -82,6 +82,6 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name="coach_id")
-    Coach coach;
+    User coach;
 
 }
