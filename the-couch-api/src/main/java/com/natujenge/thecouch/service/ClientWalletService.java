@@ -90,7 +90,7 @@ public class ClientWalletService {
     }
 
 
-    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance,float amountIn) {
+    public float updateBillingAccountOnPayment(User coach, User client, float clientBalance,float amountIn) {
 
         // obtain recent record on billing account
 
@@ -138,7 +138,7 @@ public class ClientWalletService {
         clientBillingAccountRepository.save(clientBillingAccount);
         return walletBalance ;
     }
-    private float updateBillingAccountOnPaymentByClient(Client client, float clientBalance, Float amount) {
+    private float updateBillingAccountOnPaymentByClient(User client, float clientBalance, Float amount) {
         // obtain recent record on billing account
         Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
                 findByClientIdOrderByIdDesc(client.getId());
