@@ -185,7 +185,7 @@ public class NotificationSettingsService {
     }
     public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
         ContractTemplate contractTemplate = new ContractTemplate();
-        contractTemplate.setUser(contractTemplatesRequest.getUser());
+        contractTemplate.setCoach(contractTemplatesRequest.getCoach());
         contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
         contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
         contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());
@@ -224,12 +224,12 @@ public class NotificationSettingsService {
         notificationSettings.setCreatedAt(LocalDateTime.now());
         notificationSettings.setLastUpdatedAt(LocalDateTime.now());
 
-        if (notificationSettingsRequest.getUser() != null) {
-            notificationSettings.setUser(notificationSettingsRequest.getUser());
-            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getUser().getFullName());
-            notificationSettings.setCreatedBy(notificationSettingsRequest.getUser().getFullName());
-            if (notificationSettingsRequest.getUser().getOrganization() != null) {
-                notificationSettings.setOrganization(notificationSettingsRequest.getUser().getOrganization().get());
+        if (notificationSettingsRequest.getCoach() != null) {
+            notificationSettings.setUser(notificationSettingsRequest.getCoach());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
+            if (notificationSettingsRequest.getCoach().getOrganization() != null) {
+                notificationSettings.setOrganization(notificationSettingsRequest.getCoach().getOrganization());
             }
         } else {
             notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());

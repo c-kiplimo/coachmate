@@ -3,7 +3,6 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.UserRepository;
-import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
@@ -75,7 +74,7 @@ public class RegistrationResource {
        // log.info("Request to confirm client token and update password");
         try {
             Optional<User> updateClient;
-            updateClient = userRepository.confirmClientTokenAndUpdatePassword(clientRequest);
+          //  updateClient = userRepository.confirmClientTokenAndUpdatePassword(clientRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
@@ -89,7 +88,7 @@ public class RegistrationResource {
         //log.info("Request to confirm coach token and update password");
         try {
             Optional<User> updateCoach;
-            updateCoach = userRepository.confirmCoachTokenAndUpdatePassword(coachRequest);
+           // updateCoach = userRepository.confirmCoachTokenAndUpdatePassword(coachRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
