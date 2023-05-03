@@ -51,7 +51,7 @@ public class SessionResource {
             @AuthenticationPrincipal User userDetails
     ){
         try {
-            ListResponse listResponse = sessionService.getAllSessions(page, perPage, search, userDetails.getCoach().getId());
+            ListResponse listResponse = sessionService.getAllSessions(page, perPage, search, userDetails.getId());
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class SessionResource {
                 return new ResponseEntity<>(new RestResponse(false, "Cannot create session: maximum number of sessions has been reached"), HttpStatus.BAD_REQUEST);
             }
 
-            Session sessionResponse = sessionService.createSession(userDetails.getCoach().getId(),clientId,contractId,session);
+            Session sessionResponse = sessionService.createSession(userDetails.getId(),clientId,contractId,session);
             return new ResponseEntity<>(new RestResponse(false,"Session Created Successfully"), HttpStatus.CREATED);
         } catch(Exception e) {
             log.error("Error", e);
@@ -123,10 +123,9 @@ public class SessionResource {
     public ResponseEntity<?> updateSession(@RequestBody Session session,
                                            @PathVariable("id") Long id,
                                            @AuthenticationPrincipal User userDetails){
-        Coach coach = userDetails.getCoach();
         try{
             log.info("Update Session request received");
-            Optional<Session> updatedSession = sessionService.updateSession(id,coach.getId(),session);
+            Optional<Session> updatedSession = sessionService.updateSession(id,userDetails.getId(),session);
             if (updatedSession.isEmpty()){
                 throw new NoSuchElementException();
             }
@@ -143,7 +142,7 @@ public class SessionResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable("id") Long id,
                                           @AuthenticationPrincipal User userDetails) {
-        sessionService.deleteSession(id,userDetails.getCoach().getId());
+        sessionService.deleteSession(id,userDetails.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -213,8 +212,8 @@ public class SessionResource {
                                           @PathVariable Long id,
                                           @AuthenticationPrincipal User userDetails) {
         try{
-            log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus,userDetails.getCoach().getId());
-            sessionService.updateSessionStatus(id,userDetails.getCoach().getId(), sessionStatus);
+            log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus,userDetails.getId());
+            sessionService.updateSessionStatus(id,userDetails.getId(), sessionStatus);
 
             return new ResponseEntity<>(new RestResponse(false, "Session status updated successfully"), HttpStatus.OK);
         } catch (Exception e){

@@ -8,6 +8,7 @@ import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.service.ClientService;
 
 import com.natujenge.thecouch.service.CoachService;
+import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ChangeStatusRequest;
@@ -36,10 +37,10 @@ public class ClientResource {
 
     @Autowired
     private ModelMapper modelMapper;
-    private final ClientService clientService;
+    private final UserService userService;
 
-    public ClientResource(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientResource(UserService userService) {
+        this.userService = userService;
     }
 
     //api to get all the clients
@@ -50,9 +51,9 @@ public class ClientResource {
                              @RequestParam(name="search",required = false) String search,
                              @AuthenticationPrincipal User userDetails) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.info("Request to get all clients of Coach with Id {}",coachId);
-            ListResponse listResponse = clientService.getAllClients(
+            ListResponse listResponse = userService.getAllClients(
                     page, perPage, search,clientStatus, coachId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
@@ -68,10 +69,9 @@ public class ClientResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("request to add new client");
         try {
-            Coach coach = userDetails.getCoach();
-            Organization organization = userDetails.getOrganization();
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
 
-            Client newClient = clientService.addNewClient(coach,organization,
+            Client newClient = userService.addNewClient(userDetails,organization,
                     clientRequest, userDetails.getMsisdn());
 
             if (newClient != null) {
@@ -94,7 +94,7 @@ public class ClientResource {
                                     @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization clients");
         try{
-            List<Client> listResponse = clientService.getClientByOrgId(userDetails.getOrganization().getId());
+            List<Client> listResponse = userService.getClientByOrgId(userDetails.getOrganization().getId());
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);
@@ -108,7 +108,7 @@ public class ClientResource {
     ResponseEntity<?> findById(@PathVariable("id") Long id,
                                @AuthenticationPrincipal User userDetails) {
         try{
-            Optional<Client> clientOptional = clientService.findById(id);
+            Optional<Client> clientOptional = userService.findById(id);
             if (clientOptional.isPresent()) {
                 return new ResponseEntity<>(clientOptional.get(), HttpStatus.OK);
             } else {
@@ -130,7 +130,7 @@ public class ClientResource {
         try{
             log.info("request to update client with id : {} by client of id {}", id,userDetails.getCoach().getId());
 
-            clientService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
+            userService.updateClient(id,userDetails.getCoach().getId(), clientRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "Client updated successfully"),
                     HttpStatus.OK);
@@ -149,7 +149,7 @@ public class ClientResource {
         try{
             log.info("request to change client status with id : {} to status {} by coach with id {}", id, clientStatus,
                     userDetails.getCoach().getId());
-            clientService.updateClientStatus(id,userDetails.getCoach().getId(), clientStatus,statusRequest);
+            userService.updateClientStatus(id,userDetails.getCoach().getId(), clientStatus,statusRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "Client status set to "+ clientStatus),
                     HttpStatus.OK);
@@ -168,7 +168,7 @@ public class ClientResource {
         try{
             log.info("request to close client with id : {} by coach with id {} ", id,userDetails.getCoach().getId());
 
-            clientService.closeClient(id,userDetails.getCoach().getId(),statusRequest);
+            userService.closeClient(id,userDetails.getCoach().getId(),statusRequest);
             return ResponseEntity.ok().body(new RestResponse(false,
                     "Client closed successfully"));
 
@@ -193,7 +193,7 @@ public class ClientResource {
                     name
             );
 
-            ListResponse client = clientService.filterByNameAndCoachId(
+            ListResponse client = userService.filterByNameAndCoachId(
                     page,
                     perPage,
                     userDetails.getCoach().getId(),
@@ -224,7 +224,7 @@ public class ClientResource {
                     id
             );
 
-            ListResponse client = clientService.filterByIdAndCoachId(
+            ListResponse client = userService.filterByIdAndCoachId(
                     page,
                     perPage,
                     userDetails.getCoach().getId(),
@@ -247,7 +247,7 @@ public class ClientResource {
     ResponseEntity<?> deleteClient(@PathVariable("id") Long id,
                                      @AuthenticationPrincipal User userDetails) {
         try{
-            clientService.deleteClient(id,userDetails.getCoach().getId());
+            userService.deleteClient(id,userDetails.getCoach().getId());
             return new ResponseEntity<>(new RestResponse(false, "Client Deleted Successfully"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e){
@@ -262,7 +262,7 @@ public class ClientResource {
                                        @AuthenticationPrincipal User userDetails) {
         log.info("Request to get client by email");
         try {
-           List<Client> client = clientService.findByEmail(clientRequest.getEmail());
+           List<Client> client = userService.findByEmail(clientRequest.getEmail());
            return ResponseEntity.ok().body(client);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

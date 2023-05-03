@@ -1,7 +1,6 @@
 
 package com.natujenge.thecouch.domain;
-
-        import com.natujenge.thecouch.domain.enums.OrgStatus;
+import com.natujenge.thecouch.domain.enums.OrgStatus;
         import lombok.Getter;
         import lombok.NoArgsConstructor;
         import lombok.Setter;
@@ -25,11 +24,6 @@ public class Organization {
     private String orgName;
     private String msisdn;
     private String email;
-    private String address; //remove
-    private String firstName;
-    private String secondName;
-    private String fullName;
-
     private Long superCoachId; //user id
 
     @Enumerated(EnumType.STRING)
@@ -46,8 +40,12 @@ public class Organization {
 
     //Relations
     @OneToMany
-    private List<Client> clients;
+    private User user;
 
-    @OneToMany
-    private List<Coach> coaches;
+    //Relations
+//    @OneToMany
+//    private List<Client> clients;
+//
+//    @OneToMany
+//    private List<Coach> coaches;
 }

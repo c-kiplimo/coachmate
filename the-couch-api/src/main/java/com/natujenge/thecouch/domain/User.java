@@ -1,7 +1,6 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.domain.enums.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,31 +13,59 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
 
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     private String fullName;
     private String firstName;
     private String lastName;
+    private String businessName;
+    private String addedBy; //user - coach id
     @Column(unique = true)
     private String msisdn;
     @Column(unique = true)
     private String email;
 
-    // username and password are same
-    private String username;
+    // LOGIN DETAILS
+    private String username; //email
     private String password;
+
+    @Enumerated(EnumType.STRING) //COACH, CLIENT, ORGANIZATION, ADMIN
+    private UserRole userRole;
+
+
+    //CLIENT DETAILS
+    @Enumerated(EnumType.STRING)
+    private ClientType clientType;
+
+    @Enumerated(EnumType.STRING)
+    private ClientStatus clientStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentModeSubscription paymentMode;
+    private  String profession;
+    private  String physicalAddress;
+
+
+    //COACH DETAILS
+    @Enumerated(EnumType.STRING)
+    private CoachStatus coachStatus;
+    private boolean onboarded; //COACH ADDED BY ORGANIZATION
+
+    //FOR ONBOARDED COACH AND ALL CLIENTS
+    private String reason;
+
+
+    private String createdBy; //full name
+    private String lastUpdatedBy; //full name
+
 
     // management fields
     @CreationTimestamp
@@ -48,17 +75,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private ContentStatus contentStatus;
 
-
-    // Role of creator, current default assignment ADMIN
-
-    private String createdBy;
-    private String lastUpdatedBy;
-
-
-    @Enumerated(EnumType.STRING) //
-    private UserRole userRole;
-
     // Object Relationships
+    @ManyToOne
+    @JoinColumn(name="org_id")
+    Organization organization;
+
     @ManyToOne
     @JoinColumn(name="notification_settings_id")
     NotificationSettings notificationSettings;
@@ -66,21 +87,6 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name="contract_template_id")
     ContractTemplate contractTemplate;
-
-
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    Client client;
-
-
-    @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
-
-    @ManyToOne
-    @JoinColumn(name="org_id")
-    Organization organization;
-
 
     // Access fields
     private Boolean locked = false;
@@ -97,7 +103,6 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
-        this.coach = coach;
 
     }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
@@ -111,7 +116,6 @@ public class User implements UserDetails {
         this.password = password;
         this.userRole = userRole;
         this.organization = organization;
-
     }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
         this.fullName = firstName + ' '+lastName;
@@ -134,7 +138,6 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
-        this.coach = coach;
     }
     // org client user
     public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
@@ -146,8 +149,6 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
-        this.coach = coach;
-        this.client = client;
     }
 
     @Override

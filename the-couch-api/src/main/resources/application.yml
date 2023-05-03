@@ -16,9 +16,6 @@ spring:
 #    password: ninja
 
 
-
-
-
   jpa:
     hibernate:
       ddl-auto: update

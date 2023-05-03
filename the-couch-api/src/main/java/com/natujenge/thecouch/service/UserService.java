@@ -198,15 +198,7 @@ public class UserService implements UserDetailsService {
 
         User user = optionalUser.get();
         user.setNotificationSettings(registeredUser.getNotificationSettings());
-        //check if the user is a coach
-        if(user.getCoach() != null){
-            user.setCoach(registeredUser.getCoach());
-        }
-        if(user.getOrganization() != null){
-            user.setOrganization(registeredUser.getOrganization());
-        }
         user.setFirstName(registeredUser.getFirstName());
-        user.setCoach(registeredUser.getCoach());
 
         userRepository.save(user);
         log.info("User Updated Successfully");

@@ -24,13 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import static org.springframework.util.StringUtils.hasLength;
-import com.natujenge.thecouch.domain.AccountStatement;
+
 @Service
 @Slf4j
 public class ClientService {
@@ -73,7 +72,7 @@ public class ClientService {
 
 
     // create client
-    public Client addNewClient(Coach coach, Organization organization, ClientRequest clientRequest, String msisdn) {
+    public Client addNewClient(User userDetails, Optional<Organization> organization, ClientRequest clientRequest, String msisdn) {
         log.info("add a new client to database");
 
         // Check if client already exists
@@ -83,9 +82,9 @@ public class ClientService {
         Client client = new Client();
         log.info("creating new client started");
 
-        if (coach != null) {
-            client.setCreatedBy(coach.getFullName());
-            client.setCoach(coach);
+        if (userDetails != null) {
+            client.setCreatedBy(userDetails.getFullName());
+            client.setCoach(userDetails);
         }
         if (organization != null) {
             client.setCreatedBy(organization.getFullName());
