@@ -1,10 +1,10 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.SessionSchedules;
-import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.SessionSchedulesRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,30 +16,32 @@ import java.util.Optional;
 @Transactional
 
 public class SessionSchedulesService {
-    @Autowired
-    SessionSchedulesRepository sessionSchedulesRepository;
+    private final SessionSchedulesRepository sessionSchedulesRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
+    private final UserRepository userRepository;
+    public SessionSchedulesService(SessionSchedulesRepository sessionSchedulesRepository, UserRepository userRepository) {
+        this.sessionSchedulesRepository = sessionSchedulesRepository;
+        this.userRepository = userRepository;
+    }
 
     //Get all schedule by coach id
     public List<SessionSchedules> findSessionSchedulesByCoachId(Long id, Boolean status) {
         log.debug("Request to get SessionSchedules : {} by coach id {}", id, status);
 
-        Optional<Coach> optionalCoach = coachRepository.findCoachById(id);
+        Optional<User> optionalCoach = userRepository.findById(id);
         if(status == null) {
             log.info("Request to get session schedule");
-            return sessionSchedulesRepository.findByCoach(optionalCoach.get());
+            return sessionSchedulesRepository.findAllByCoachId(id);
         } else {
             log.info("Request to get session schedule");
-            return sessionSchedulesRepository.findByCoachAndBooked(optionalCoach.get(), status);
+            return sessionSchedulesRepository.findAllByCoachIdAndBooked(optionalCoach.get(), status);
         }
     }
 
     //Create session schedule
     public SessionSchedules createSessionSchedule(Long coachId, SessionSchedules sessionSchedules) throws IllegalArgumentException{
         log.info("Creating a new session schedule");
-        Optional<Coach> optionalCoach = coachRepository.findCoachById(coachId);
+        Optional<User> optionalCoach = userRepository.findById(coachId);
 
         if(optionalCoach.isEmpty()){
             log.warn("Coach with id {} not found", coachId );

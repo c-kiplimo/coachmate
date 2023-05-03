@@ -68,6 +68,7 @@ public class NotificationSettings {
     @ManyToOne
     @JoinColumn(name="user_id")
     User user;
+    
     @ManyToOne
     @JoinColumn(name="organization_id")
     Organization organization;

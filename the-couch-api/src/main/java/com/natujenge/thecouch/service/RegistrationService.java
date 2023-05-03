@@ -444,7 +444,7 @@ public class RegistrationService {
         notificationSettingsRequest.setConductedSessionEnable(true);
         notificationSettingsRequest.setRescheduleSessionEnable(true);
         notificationSettingsRequest.setPaymentReminderEnable(true);
-        notificationSettingsRequest.setUser(savedCoach);
+        notificationSettingsRequest.setCoach(savedCoach);
         notificationSettingsRequest.setOrganization(savedCoach.getOrganization().get());
 
 

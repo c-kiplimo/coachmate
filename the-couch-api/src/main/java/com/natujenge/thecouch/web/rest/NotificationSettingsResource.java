@@ -31,8 +31,8 @@ public class NotificationSettingsResource {
             @AuthenticationPrincipal User userDetails) {
 
         try{
-            Long coachId = userDetails.getCoach().getId();
-            String coachName = userDetails.getCoach().getFullName();
+            Long coachId = userDetails.getId();
+            String coachName = userDetails.getFullName();
             log.info("Request to update notification settings by coach with id {}",coachId);
 
 
@@ -55,8 +55,8 @@ public class NotificationSettingsResource {
                                          @AuthenticationPrincipal User userDetails) {
         log.info("request to create notification");
         try{
-            Long coachId = userDetails.getCoach().getId();
-            String coachName = userDetails.getCoach().getFullName();
+            Long coachId = userDetails.getId();
+            String coachName = userDetails.getFullName();
             log.info("Request to create notification settings by coach with id {}",coachId);
 
 

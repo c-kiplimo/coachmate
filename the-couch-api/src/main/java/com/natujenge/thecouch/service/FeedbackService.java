@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.web.rest.dto.FeedbackDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,25 +13,27 @@ import java.util.Optional;
 @Slf4j
 public class FeedbackService {
 
-    @Autowired
-    SessionRepository sessionRepository;
 
-    @Autowired
-    ClientRepository clientRepository;
+   private final SessionRepository sessionRepository;
 
-    @Autowired
-    FeedbackRepository feedbackRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
+    private final ClientRepository clientRepository;
 
-    @Autowired
-    OrganizationRepository organizationRepository;
+
+  private final  FeedbackRepository feedbackRepository;
+
+
+    private final UserRepository userRepository;
+
+
+    private final OrganizationRepository organizationRepository;
 
     public FeedbackService(FeedbackRepository feedbackRepository, OrganizationRepository organizationRepository
-    , CoachRepository coachRepository, ClientRepository clientRepository) {
+    , CoachRepository coachRepository, SessionRepository sessionRepository, ClientRepository clientRepository, UserRepository userRepository) {
         this.feedbackRepository = feedbackRepository;
-        this.coachRepository = coachRepository;
+        this.sessionRepository = sessionRepository;
+        this.userRepository = userRepository;
+
         this.clientRepository = clientRepository;
         this.organizationRepository = organizationRepository;
     }
@@ -42,11 +43,11 @@ public class FeedbackService {
 
         // Get session
         Optional<Session> session = sessionRepository.findSessionById(sessionId);
-        Optional<Client> client = clientRepository.findById(session.get().getClient().getId());
+        Optional<User> client = userRepository.findById(session.get().getClient().getId());
 
         // Set coach or organization based on ID present
         if (coachId != null) {
-            Optional<Coach> coach = coachRepository.getCoachById(coachId);
+            Optional<User> coach = userRepository.findById(coachId);
             feedback.setCoach(coach.get());
         } else if (orgId != null) {
             Optional<Organization> organization = organizationRepository.findById(orgId);
@@ -110,7 +111,7 @@ public class FeedbackService {
     }
 
     public List<FeedbackDto> getCoachFeedback(Long coachId) {
-        Optional<Coach> optionalCoach = coachRepository.findCoachById(coachId);
+        Optional<User> optionalCoach = userRepository.findById(coachId);
         return feedbackRepository.findByCoach(optionalCoach.get());
     }
 }
