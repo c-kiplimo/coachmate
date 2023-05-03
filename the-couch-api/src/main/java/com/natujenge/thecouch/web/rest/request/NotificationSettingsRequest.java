@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.web.rest.request;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import lombok.Data;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
@@ -21,7 +22,7 @@ public class NotificationSettingsRequest {
     private String accountNumber;
     private Float depositPercentage;
 
-    Coach coach;
+    User user;
     Organization organization;
     // Session Settings
     private SessionTemplateType sessionTemplateType;

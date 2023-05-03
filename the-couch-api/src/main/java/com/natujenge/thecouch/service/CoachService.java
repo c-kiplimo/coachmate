@@ -91,7 +91,7 @@ public class CoachService {
 
 
 
-        Coach savedCoach = coachRepository.save(coach);
+        User savedCoach = coachRepository.save(coach);
 
         registrationService.registerCoachAsUser(coachRequest, organization, savedCoach);
 
@@ -130,9 +130,7 @@ public class CoachService {
     }
 
 
-    public List<Coach> getCoachByOrganizationId(Long organizationId) {
-        return coachRepository.findAllByOrganizationId(organizationId);
-    }
+
 
     public Optional<User> confirmCoachTokenAndUpdatePassword(CoachRequest coachRequest) {
 
