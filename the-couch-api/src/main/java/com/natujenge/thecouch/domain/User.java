@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String lastName;
     private String businessName;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name="addedBy")
     User addedBy; //user - coach id
     @Column(unique = true)
@@ -84,7 +84,7 @@ public class User implements UserDetails {
     // Object Relationships
     @ManyToOne
     @JoinColumn(name="org_id")
-    Optional<Organization> organization;
+    Organization organization;
 
     @ManyToOne
     @JoinColumn(name="notification_settings_id")
@@ -111,7 +111,7 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
     public User(String firstName, String lastName, String email, String msisdn, UserRole password, UserRole userRole,
-                Optional<Organization> organization) {
+                Organization organization) {
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -123,7 +123,7 @@ public class User implements UserDetails {
         this.organization = organization;
     }
     // org client user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Optional<Organization> organization ){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization ){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
