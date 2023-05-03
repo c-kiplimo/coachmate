@@ -27,7 +27,9 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String businessName;
-    private String addedBy; //user - coach id
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User addedBy; //user - coach id
     @Column(unique = true)
     private String msisdn;
     @Column(unique = true)
@@ -93,18 +95,7 @@ public class User implements UserDetails {
     private Boolean enabled = false;
 
     // User Registration Constructor
-    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
-                Coach coach) {
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.password = password;
-        this.userRole = userRole;
 
-    }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
                 Organization organization) {
         this.fullName = firstName + ' '+lastName;

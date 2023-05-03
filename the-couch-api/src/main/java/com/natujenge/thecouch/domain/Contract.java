@@ -53,12 +53,12 @@ public class Contract {
 
     // relations
     @ManyToOne
-    @JoinColumn(name="client_id")
-    Client client;
+    @JoinColumn(name="user_id")
+    User client;
 
     @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @JoinColumn(name="user_id")
+    User coach;
 
     @Override
     public String toString() {
