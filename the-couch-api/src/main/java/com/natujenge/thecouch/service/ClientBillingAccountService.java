@@ -117,15 +117,15 @@ public class ClientBillingAccountService {
         float paymentBalance;
         if (clientWalletBalance >= amountBilled) {
             paymentBalance = clientWalletBalance - amountBilled;
-            walletService.updateWalletBalance(clientWallet, paymentBalance, organization.getFullName());
+            walletService.updateWalletBalance(clientWallet, paymentBalance, organization.getOrgName());
         } else {
             paymentBalance = amountBilled - clientWalletBalance;
-            walletService.updateWalletBalance(clientWallet, 0f, organization.getFullName());
+            walletService.updateWalletBalance(clientWallet, 0f, organization.getOrgName());
         }
 
         // Create new client billing account recordtbl_coach_billing_accountm
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        clientBillingAccount.setCreatedBy(organization.getFullName());
+        clientBillingAccount.setCreatedBy(organization.getOrgName());
         clientBillingAccount.setOrganization(organization);
         clientBillingAccount.setClient(client);
         clientBillingAccount.setAmountBilled(amountBilled);
