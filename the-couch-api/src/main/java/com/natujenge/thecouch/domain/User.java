@@ -97,9 +97,9 @@ public class User implements UserDetails {
     private Boolean enabled = false;
 
     // User Registration Constructor
-    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
+    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole
                 ) {
-        this.fullName = firstName + ' '+lastName;
+        this.fullName = firstName + ' ' + lastName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -107,7 +107,6 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
-
     }
     public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
                 Organization organization) {
@@ -118,28 +117,6 @@ public class User implements UserDetails {
         this.username = email;
         this.msisdn = msisdn;
         this.password = password;
-        this.userRole = userRole;
-        this.organization = organization;
-    }
-    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.password = password;
-        this.userRole = userRole;
-    }
-
-// org coach user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization ){
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
     }

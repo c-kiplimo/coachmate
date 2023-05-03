@@ -30,7 +30,7 @@ public class ContractResource {
     @GetMapping
     public ResponseEntity<?> getContracts(@AuthenticationPrincipal User userDetails) {
         try{
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             List<Contract> contracts = contractService.getContracts(coachId);
             return new ResponseEntity<>(contracts, HttpStatus.OK);
 
@@ -88,8 +88,8 @@ public class ContractResource {
             log.info("adding contract");
             Contract contract = null;
 
-            if (userDetails.getCoach() != null) {
-                Long coachId = userDetails.getCoach().getId();
+            if (userDetails.getUserRole() == UserRole.COACH) {
+                Long coachId = userDetails.getId();
                 log.info("coach id {}", coachId);
                 contract = contractService.createContract(coachId, contractRequest);
             } else if (userDetails.getOrganization() != null) {
@@ -165,7 +165,7 @@ public class ContractResource {
                                             @AuthenticationPrincipal User userDetails){
 
         try{
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             contractService.deleteContract(coachId,contractId);
             return new ResponseEntity<>(new RestResponse(false,
                     "Contract Deleted Successfully"), HttpStatus.OK);

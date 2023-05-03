@@ -3,24 +3,30 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.repository.CoachBillingAccountRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class CoachBillingAccountService {
-    @Autowired
-    CoachBillingAccountRepository coachBillingAccountRepository;
 
-    @Autowired
-    OrganizationWalletService  organizationWalletService;
-    @Autowired
-    CoachWalletService coachWalletService;
+    private final CoachBillingAccountRepository coachBillingAccountRepository;
+
+
+    private final OrganizationWalletService  organizationWalletService;
+
+   private final  CoachWalletService coachWalletService;
+
+    public CoachBillingAccountService(CoachBillingAccountRepository coachBillingAccountRepository, OrganizationWalletService organizationWalletService, CoachWalletService coachWalletService) {
+        this.coachBillingAccountRepository = coachBillingAccountRepository;
+        this.organizationWalletService = organizationWalletService;
+        this.coachWalletService = coachWalletService;
+    }
+
     public void createBillingAccount(CoachBillingAccount coachBillingAccount) {
 
         coachBillingAccountRepository.save(coachBillingAccount);
     }
-    public void updateOrganizationAndCoachBillingAccount(float amountBilled, Organization organization, Coach coach) {
+    public void updateOrganizationAndCoachBillingAccount(float amountBilled, Organization organization, User coach) {
         // CHECK wallet balance
         // Update contract payment status and amountDue
         // Get wallet balance should check the last record on dB by client
@@ -40,17 +46,17 @@ public class CoachBillingAccountService {
         float paymentBalance;
         if (coachWalletBalance >= amountBilled) {
             paymentBalance = coachWalletBalance - amountBilled;
-            coachWalletService.updateWalletBalance(coachWallet, paymentBalance, organization.getFullName());
+            coachWalletService.updateWalletBalance(coachWallet, paymentBalance, organization.getOrgName());
         } else {
             paymentBalance = amountBilled - coachWalletBalance;
-            coachWalletService.updateWalletBalance(coachWallet, 0f, organization.getFullName());
+            coachWalletService.updateWalletBalance(coachWallet, 0f, organization.getOrgName());
         }
         float organizationWalletNewBalance = organizationWalletBalance + amountBilled;
         organizationWalletService.updateWalletBalance(organizationWallet, organizationWalletNewBalance);
 
         // Create new client billing account record
         CoachBillingAccount coachBillingAccount = new CoachBillingAccount();
-        coachBillingAccount.setCreatedBy(organization.getFullName());
+        coachBillingAccount.setCreatedBy(organization.getOrgName());
         coachBillingAccount.setOrganization(organization);
         coachBillingAccount.setCoach(coach);
         coachBillingAccount.setAmountBilled(amountBilled);
