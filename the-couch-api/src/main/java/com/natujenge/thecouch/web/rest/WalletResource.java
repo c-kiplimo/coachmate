@@ -35,11 +35,11 @@ public class WalletResource {
         log.info("userDetails{}",userDetails.getId());
         try {
             log.info("Logged in user {} ",userDetails);
-            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+            Long coachId = (userDetails == null) ? null : userDetails.getId();
             log.info("coach id {}",coachId);
             Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
             log.info("org id {}",organizationId);
-            Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
+            Long clientId = (userDetails == null) ? null : userDetails.getId();
             log.info("client id {}",coachId);
 
             if (organizationId != null) {
@@ -47,7 +47,7 @@ public class WalletResource {
                 try {
                     log.info("request to create payment");
                     ClientWallet wallet = walletService.createPaymentByOrganization(paymentRequest,
-                            userDetails.getOrganization());
+                            userDetails.getOrganization().get());
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());

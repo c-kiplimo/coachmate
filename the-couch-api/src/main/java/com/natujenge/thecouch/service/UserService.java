@@ -3,9 +3,9 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
+import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.UserRepository;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,51 +59,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<Object> signupUser(User user) {
-        log.info("Signing up User");
-        boolean userEmailExists = userRepository.findByEmail(user.getEmail())
-                .isPresent();
-
-        if (userEmailExists) {
-            throw new IllegalStateException(String.format(USER_EXISTS, user.getEmail()));
-        }
-
-
-        // Encode Password > from spring boot
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-
-        // Set details
-        user.setPassword(encodedPassword);
-        user.setContentStatus(ContentStatus.ACTIVE);
-        user.setCreatedAt(LocalDateTime.now());
-
-
-
-        // save the User in the database
-        User user1 = userRepository.save(user);
-        log.info("User saved");
-
-        // Generate a Random 6 digit OTP - 0 - 999999
-        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
-        String token = String.format("%06d", randomOTP);
-
-        ConfirmationToken confirmationToken = new ConfirmationToken(
-                token,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
-                user
-        );
-
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
-        log.info("Confirmation token generated");
-
-        List<Object> response = new ArrayList<>();
-        response.add(user1);
-        response.add(token);
-
-        return response;
-
-    }
 
     //Client as User
     public List<Object> signupClientAsUser(User user) {
@@ -247,7 +202,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Client with provided email already exists");
         }
 
-        User user = new User();
+        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization, saveClient);
         log.info("creating new client started");
 
         if (userDetails != null) {
@@ -320,5 +275,13 @@ public class UserService implements UserDetailsService {
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         log.info("Client Billing Account created Successfully!");
         return saveClient;
+    }
+
+    public List<User> getClientByOrgId(Long id, UserRole userRole) {
+        return userRepository.getUserByOrganisationAndUserRole(id, userRole);
+    }
+
+    public List<User> getCoachByOrganizationId(Long organizationId) {
+        return userRepository.findAllByOrganizationId(organizationId);
     }
 }

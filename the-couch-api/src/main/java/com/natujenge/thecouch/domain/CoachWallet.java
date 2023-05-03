@@ -55,12 +55,9 @@ public class CoachWallet {
     private String lastUpdatedBy;
 
     @OneToOne
-    @JoinColumn(name="client_id")
-    Client client;
+    @JoinColumn(name="user_id")
+    User user;
 
-    @OneToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
 
     @OneToOne
     @JoinColumn(name="organization_id")
