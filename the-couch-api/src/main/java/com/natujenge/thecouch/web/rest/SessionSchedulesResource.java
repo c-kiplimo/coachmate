@@ -3,23 +3,22 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.SessionSchedulesService;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.ListResourceBundle;
 
 @RestController
 @Slf4j
 @RequestMapping(path = "/api/sessionSchedules")
 public class SessionSchedulesResource {
-    @Autowired
-    SessionSchedulesService sessionSchedulesService;
+    private final SessionSchedulesService sessionSchedulesService;
+    public SessionSchedulesResource(SessionSchedulesService sessionSchedulesService) {
+        this.sessionSchedulesService = sessionSchedulesService;
+    }
 
     //Get by coach id
     @GetMapping("/byCoachId/{coachId}")

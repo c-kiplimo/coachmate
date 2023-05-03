@@ -11,7 +11,6 @@ import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.dto.SessionDto;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +28,13 @@ import static org.springframework.util.StringUtils.hasLength;
 @Slf4j
 @RequestMapping(path = "/api/sessions")
 public class SessionResource {
+    private final SessionService sessionService;
+    private final ContractService contractService;
 
-    @Autowired
-    SessionService sessionService;
-    @Autowired
-    ContractService contractService;
+    public SessionResource(SessionService sessionService, ContractService contractService) {
+        this.sessionService = sessionService;
+        this.contractService = contractService;
+    }
 
 
     //GET: /sessions
