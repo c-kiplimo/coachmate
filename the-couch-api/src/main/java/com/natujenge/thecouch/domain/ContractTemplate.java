@@ -25,10 +25,11 @@ public class ContractTemplate {
     @Column(length = 5000, columnDefinition = "text")
     private String notesTemplate;
     @ManyToOne
-    @JoinColumn(name="coach_id")
-    User user;
+    @JoinColumn(name = "user_id")
+    User coach;
+
     @ManyToOne
-    @JoinColumn(name="organization_id")
+    @JoinColumn(name = "organization_id")
     Organization organization;
 
 }

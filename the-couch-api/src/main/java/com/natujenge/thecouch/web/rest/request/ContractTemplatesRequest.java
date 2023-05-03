@@ -11,6 +11,7 @@ public class ContractTemplatesRequest {
     private String terms_and_conditionsTemplate;
     private String privacyPolicyTemplate;
     private String notesTemplate;
-    User user;
+    private User coach;
+
     Organization organization;
 }

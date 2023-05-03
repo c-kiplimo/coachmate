@@ -2,6 +2,7 @@ package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.Feedback;
 import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.web.rest.dto.FeedbackDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,5 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
     List<FeedbackDto> findByOrganization(Organization orgId);
 
 
-    List<FeedbackDto> findByCoach(Coach id);
+    List<FeedbackDto> findByCoach(User id);
 }
