@@ -124,7 +124,7 @@ public class NotificationResource {
         try {
             Long coachId = userDetails.getId();
             log.debug(
-                    "REST request to filter notifications given, coach id : {}, session id  : {}",
+                    "REST request to filter notifications given, coach id : {}",
                     coachId
             );
             log.info("Coach id {}, session id {}",coachId,sessionId);

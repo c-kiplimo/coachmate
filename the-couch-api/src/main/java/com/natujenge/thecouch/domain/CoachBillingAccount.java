@@ -36,11 +36,11 @@ public class CoachBillingAccount {
     private String lastUpdatedBy;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="client_id")
     User client;
 
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="coach_id")
     User coach;
 
     @OneToOne

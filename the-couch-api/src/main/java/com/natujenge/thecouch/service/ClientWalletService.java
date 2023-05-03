@@ -282,7 +282,7 @@ public class ClientWalletService {
 
 
 // create payment by coach
-    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, Coach coach) {
+    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, User coach) {
 
         // Obtain Client associated with wallet
         Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(paymentRequest.getClientId()
@@ -390,11 +390,11 @@ public class ClientWalletService {
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
         try {
             log.info("Organization");
-            Optional<Client> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId(), organization.getId());
+            Optional<User> clientOptional = clientRepository.findByIdAndOrganizationId(paymentRequest.getClientId(), organization.getId());
             if (clientOptional.isEmpty()) {
                 throw new IllegalArgumentException("Client not found!");
             }
-            Client client = clientOptional.get();
+            User client = clientOptional.get();
 
             // obtain previous payment record
             Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord_(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
@@ -477,7 +477,7 @@ public class ClientWalletService {
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
     }
     // create payment by client
-    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, Client client){
+    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, User client){
         // Obtain Client associated with wallet
         Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
         if(clientOptional.isEmpty()){

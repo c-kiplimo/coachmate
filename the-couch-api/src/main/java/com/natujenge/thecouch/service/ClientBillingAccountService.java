@@ -88,8 +88,8 @@ public class ClientBillingAccountService {
         // Create new client billing account record
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setCreatedBy(coach.getFullName());
-        clientBillingAccount.setCoach(coach);
-        clientBillingAccount.setClient(client);
+        clientBillingAccount.setUser(coach);
+        clientBillingAccount.setUser(client);
         clientBillingAccount.setAmountBilled(amountBilled);
 
         // Save client billing account record
@@ -127,7 +127,7 @@ public class ClientBillingAccountService {
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setCreatedBy(organization.getOrgName());
         clientBillingAccount.setOrganization(organization);
-        clientBillingAccount.setClient(client);
+        clientBillingAccount.setUser(client);
         clientBillingAccount.setAmountBilled(amountBilled);
 
         // Save client billing account record

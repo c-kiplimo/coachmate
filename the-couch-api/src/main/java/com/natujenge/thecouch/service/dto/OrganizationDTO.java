@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service.dto;
 
 import com.natujenge.thecouch.domain.OrganizationSubscription;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
 import lombok.Data;
 
@@ -38,8 +39,8 @@ public class OrganizationDTO {
     private String lastUpdatedBy;
 
     //Relations
-    private List<Client> clients;
+    private List<User> clients;
 
-    private List<Coach> coaches;
+    private List<User> coaches;
 
 }

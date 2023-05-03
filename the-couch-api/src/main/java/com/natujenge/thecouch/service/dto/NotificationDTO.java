@@ -50,10 +50,10 @@ public class NotificationDTO {
     private Contract contract;
     @ManyToOne
     @JoinColumn(name ="client_id")
-    private Client client;
+    private User client;
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    private Coach coach;
+    private User coach;
     @ManyToOne
     @JoinColumn(name = "organization_id")
     private Organization organization;
@@ -178,19 +178,19 @@ public class NotificationDTO {
         this.contract = contract;
     }
 
-    public Client getClient() {
+    public User getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(User client) {
         this.client = client;
     }
 
-    public Coach getCoach() {
+    public User getCoach() {
         return coach;
     }
 
-    public void setCoach(Coach coach) {
+    public void setCoach(User coach) {
         this.coach = coach;
     }
 

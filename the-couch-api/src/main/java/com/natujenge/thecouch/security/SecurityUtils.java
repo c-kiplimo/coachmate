@@ -40,7 +40,7 @@ public class SecurityUtils {
         if (authentication == null) {
             return null;
         } else if (authentication.getPrincipal() instanceof User) {
-            return ((User) authentication.getPrincipal()).getCoach().getId();
+            return ((User) authentication.getPrincipal()).getId();
         }
 
         return null;
