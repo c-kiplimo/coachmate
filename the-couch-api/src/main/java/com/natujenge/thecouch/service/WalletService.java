@@ -4,10 +4,7 @@ import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.ClientWalletRepository;
-import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
@@ -16,7 +13,6 @@ import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import com.natujenge.thecouch.domain.ClientBillingAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,33 +26,47 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 @Slf4j
 @Service
 public class WalletService {
 
-    @Autowired
-    ClientWalletRepository clientWalletRepository;
-    @Autowired
-    NotificationRepository notificationRepository;
-    @Autowired
-    ClientBillingAccountRepository clientBillingAccountRepository;
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    AccountStatementService accountStatementService;
-    @Autowired
-    private NotificationServiceHTTPClient notificationServiceHTTPClient;
-    @Autowired
-    NotificationSettingsService notificationSettingsService;
-    @Autowired
-    ClientWalletRepository walletRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+    private final ClientWalletRepository clientWalletRepository;
+
+    private final NotificationRepository notificationRepository;
+
+    private final ClientBillingAccountRepository clientBillingAccountRepository;
+
+
+
+    private final AccountStatementService accountStatementService;
+
+    private final NotificationServiceHTTPClient notificationServiceHTTPClient;
+
+    private final NotificationSettingsService notificationSettingsService;
+
+
+
+    private final UserRepository userRepository;
+
+    private final ModelMapper modelMapper;
+
+    public WalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, UserRepository userRepository, ModelMapper modelMapper) {
+        this.clientWalletRepository = clientWalletRepository;
+        this.notificationRepository = notificationRepository;
+        this.clientBillingAccountRepository = clientBillingAccountRepository;
+        this.accountStatementService = accountStatementService;
+        this.notificationServiceHTTPClient = notificationServiceHTTPClient;
+        this.notificationSettingsService = notificationSettingsService;
+
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
 
     // Obtain the recent wallet account for the given client
     public ClientWallet getClientWalletRecentRecord(long coachId, long clientId) {
-log.info("Get client wallet recent record for coach id {} and client id {}", coachId, clientId);
+        log.info("Get client wallet recent record for coach id {} and client id {}", coachId, clientId);
         // obtain latest payment Record
         Optional<ClientWallet> optionalClientWallet = clientWalletRepository.
                 findFirstByCoachIdAndClientIdOrderByIdDesc(
@@ -80,20 +90,20 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
     }
 
-    public float updateBillingAccountOnPayment(Coach coach, Client client, float clientBalance,float amountIn) {
+    public float updateBillingAccountOnPayment(User coach, User client, float clientBalance, float amountIn) {
 
         // obtain recent record on billing account
 
         Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
                 findFirstByCoachIdAndClientIdOrderByIdDesc(coach.getId(), client.getId());
 
-        if(optionalClientBillingAccount.isEmpty()){
+        if (optionalClientBillingAccount.isEmpty()) {
             throw new IllegalArgumentException("Client Billing Account not found!");
         }
 
         ClientBillingAccount clientBillingAccountPrevious = optionalClientBillingAccount.get();
-        float amountBilled = (clientBillingAccountPrevious.getAmountBilled() != null)?
-                clientBillingAccountPrevious.getAmountBilled():
+        float amountBilled = (clientBillingAccountPrevious.getAmountBilled() != null) ?
+                clientBillingAccountPrevious.getAmountBilled() :
                 0f;
 
         // new client Billing Account record
@@ -105,25 +115,26 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
 
         // Calculate Balances
-        float paymentBalance =0f;
+        float paymentBalance = 0f;
         float walletBalance = 0f;
-        if (clientBalance >= amountBilled){
+        if (clientBalance >= amountBilled) {
             paymentBalance = clientBalance - amountBilled;
             walletBalance = paymentBalance;
             clientBillingAccount.setAmountBilled(0f);
 
 
         } else if (clientBalance < amountBilled && clientBalance > 0f) {
-            paymentBalance = amountBilled-clientBalance;
+            paymentBalance = amountBilled - clientBalance;
             walletBalance = 0f;
             clientBillingAccount.setAmountBilled(paymentBalance);
         }
-        accountStatementService.updateAccountStatement(coach, client,amountIn,amountBilled,paymentBalance);
+        accountStatementService.updateAccountStatement(coach, client, amountIn, amountBilled, paymentBalance);
         clientBillingAccountRepository.save(clientBillingAccount);
-        return walletBalance ;
+        return walletBalance;
     }
+
     // update billing account on payment by organization
-    public float updateBillingAccountOnPaymentByOrganization(Organization organization , Client client, float clientBalance,float amountIn) {
+    public float updateBillingAccountOnPaymentByOrganization(Organization organization, User client, float clientBalance, float amountIn) {
 
         // obtain recent record on billing account
         Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
@@ -137,7 +148,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                 0f;
         // new client Billing Account record
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        clientBillingAccount.setCreatedBy(organization.getFullName());
+        clientBillingAccount.setCreatedBy(organization.getOrgName());
         clientBillingAccount.setOrganization(organization);
         clientBillingAccount.setClient(client);
         clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
@@ -155,31 +166,29 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         }
         accountStatementService.updateAccountStatementByOrganization(organization, client, amountIn, amountBilled, paymentBalance);
         clientBillingAccountRepository.save(clientBillingAccount);
-        return walletBalance ;
+        return walletBalance;
     }
 
 
-
-
-// create payment by coach
-    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, Coach coach) {
+    // create payment by coach
+    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, User coach) {
 
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(paymentRequest.getClientId()
-                ,coach.getId());
-        if(clientOptional.isEmpty()){
+        Optional<User> clientOptional = userRepository.findByIdAndAddedById(paymentRequest.getClientId()
+                , coach.getId());
+        if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client = clientOptional.get();
+        User client = clientOptional.get();
 
 
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getCoachId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if(previousWalletRecord.get().getWalletBalance().equals(null)){
-             prevWalletBalance = 0;
-        }else {
-             prevWalletBalance = previousWalletRecord.get().getWalletBalance();
+        if (previousWalletRecord.get().getWalletBalance().equals(null)) {
+            prevWalletBalance = 0;
+        } else {
+            prevWalletBalance = previousWalletRecord.get().getWalletBalance();
         }
 
         ClientWallet clientWallet = new ClientWallet();
@@ -191,14 +200,13 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setCreatedAt(LocalDateTime.now());
 
 
-
         clientWallet.setClient(client);
         clientWallet.setCoach(coach);
 
         // mngmnt
         clientWallet.setCreatedBy(coach.getFullName());
         Optional<Organization> org = Optional.ofNullable(coach.getOrganization());
-        if(org.isPresent()) {
+        if (org.isPresent()) {
             clientWallet.setOrganization(coach.getOrganization());
         }
         // Update Payment Details based on balance on clientWallet;
@@ -208,12 +216,10 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // update billing account
         // return walletBalance
         Float walletBalanceAfter = updateBillingAccountOnPayment(
-                coach,client,walletBalance,paymentRequest.getAmount());
+                coach, client, walletBalance, paymentRequest.getAmount());
         clientWallet.setWalletBalance(walletBalanceAfter);
 
         //update account statement
-
-
 
 
         // save wallet
@@ -226,7 +232,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name",clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
 
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
 
@@ -243,7 +249,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         log.info("sms sent ");
 
         // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(),"PAYMENT RECEIVED",smsContent,false);
+        notificationServiceHTTPClient.sendEmail(client.getEmail(), "PAYMENT RECEIVED", smsContent, false);
         log.info("Email sent");
 
 
@@ -254,7 +260,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
@@ -266,21 +272,22 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
 
     }
+
     // create payment by organization
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
 
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
-        if(clientOptional.isEmpty()){
+        Optional<User> clientOptional = userRepository.findById(paymentRequest.getClientId());
+        if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client = clientOptional.get();
+        User client = clientOptional.get();
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if(previousWalletRecord.get().getWalletBalance().equals(null)){
+        if (previousWalletRecord.get().getWalletBalance().equals(null)) {
             prevWalletBalance = 0;
-        }else {
+        } else {
             prevWalletBalance = previousWalletRecord.get().getWalletBalance();
         }
         ClientWallet clientWallet = new ClientWallet();
@@ -292,13 +299,13 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setClient(client);
         clientWallet.setOrganization(organization);
         // mngmnt
-        clientWallet.setCreatedBy(organization.getFullName());
+        clientWallet.setCreatedBy(organization.getOrgName());
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
         // update billing account
         // return walletBalance
         Float walletBalanceAfter = updateBillingAccountOnPaymentByOrganization(
-                organization,client,walletBalance,paymentRequest.getAmount());
+                organization, client, walletBalance, paymentRequest.getAmount());
         clientWallet.setWalletBalance(walletBalanceAfter);
         //update account statement
         // save wallet
@@ -309,7 +316,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name",clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -321,7 +328,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
         log.info("sms sent ");
         // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(),"PAYMENT RECEIVED",smsContent,false);
+        notificationServiceHTTPClient.sendEmail(client.getEmail(), "PAYMENT RECEIVED", smsContent, false);
         log.info("Email sent");
         //create notification object and send it
         Notification notification = new Notification();
@@ -330,29 +337,30 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
-        notification.setCreatedBy(client.getCoach().getFullName());
+        notification.setCreatedBy(client.getAddedBy().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
         return clientWallet1;
         // Map to Dto and return
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
     }
+
     // create payment by client
-    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, Client client){
+    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, User client) {
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
-        if(clientOptional.isEmpty()){
+        Optional<User> clientOptional = userRepository.findById(paymentRequest.getClientId());
+        if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client1 = clientOptional.get();
+        User client1 = clientOptional.get();
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if(previousWalletRecord.get().getWalletBalance().equals(null)){
+        if (previousWalletRecord.get().getWalletBalance().equals(null)) {
             prevWalletBalance = 0;
-        }else {
+        } else {
             prevWalletBalance = previousWalletRecord.get().getWalletBalance();
         }
         ClientWallet clientWallet = new ClientWallet();
@@ -362,11 +370,11 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
         clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setClient(client1);
-        clientWallet.setOrganization(client1.getCoach().getOrganization());
+        clientWallet.setOrganization(client1.getAddedBy().getOrganization());
         // clientWallet Number Generation
         int randNo = (int) ((Math.random() * (99 - 1)) + 1);
         String clientWalletL = String.format("%05d", randNo);
-        String clientWalletNo = "PAY" + client1.getCoach().getBusinessName().substring(0, 2) +
+        String clientWalletNo = "PAY" + client1.getAddedBy().getBusinessName().substring(0, 2) +
                 client1.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientWalletL;
         clientWallet.setClientWalletNumber(clientWalletNo);
         // mngmnt
@@ -376,7 +384,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // update billing account
         // return walletBalance
         Float walletBalanceAfter = updateBillingAccountOnPaymentByClient(
-               client1,walletBalance,paymentRequest.getAmount());
+                client1, walletBalance, paymentRequest.getAmount());
         clientWallet.setWalletBalance(walletBalanceAfter);
         //update account statement
         // save wallet
@@ -387,7 +395,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name",clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -400,7 +408,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
         log.info("sms sent ");
         // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(),"PAYMENT RECEIVED",smsContent,false);
+        notificationServiceHTTPClient.sendEmail(client.getEmail(), "PAYMENT RECEIVED", smsContent, false);
         log.info("Email sent");
         //create notification object and send it
         Notification notification = new Notification();
@@ -408,10 +416,10 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCreatedBy(client.getCoach().getFullName());
+        notification.setCreatedBy(client.getAddedBy().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
         return clientWallet1;
@@ -419,7 +427,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
     }
 
-    private Float updateBillingAccountOnPaymentByClient(Client client1, float walletBalance, Float amount) {
+    private Float updateBillingAccountOnPaymentByClient(User client1, float walletBalance, Float amount) {
         // obtain recent record on billing account
         Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
                 findByClientIdOrderByIdDesc(client1.getId());
@@ -433,8 +441,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // new client Billing Account record
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setClient(client1);
-        clientBillingAccount.setCoach(client1.getCoach());
-        clientBillingAccount.setOrganization(client1.getCoach().getOrganization());
+        clientBillingAccount.setCoach(client1.getAddedBy());
+        clientBillingAccount.setOrganization(client1.getAddedBy().getOrganization());
         clientBillingAccount.setAmountBilled(amountBilled);
         clientBillingAccount.setCreatedBy(client1.getFullName());
         clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
@@ -504,12 +512,12 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                 walletPage.getTotalElements());
     }
 
-    public ListResponse getPaymentsByOrganizationIdAndClientId(int page, int perPage, Long organizationId,Long clientId) {
+    public ListResponse getPaymentsByOrganizationIdAndClientId(int page, int perPage, Long organizationId, Long clientId) {
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDto> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
                 organizationId,
                 clientId,
                 pageable
@@ -518,12 +526,12 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                 paymentPage.getTotalElements());
     }
 
-    public ListResponse getPaymentsByCoachIdIdAndClientId(int page, int perPage, Long coachId,Long clientId) {
+    public ListResponse getPaymentsByCoachIdIdAndClientId(int page, int perPage, Long coachId, Long clientId) {
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDto> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
                 coachId,
                 clientId,
                 pageable
@@ -531,9 +539,8 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
     }
-    public ListResponse filterByClientNameAndDate(int page, int perPage, String name ,LocalDate date) {
 
-
+    public ListResponse filterByClientNameAndDate(int page, int perPage, String name, LocalDate date) {
 
 
         page = page - 1;
@@ -542,19 +549,19 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
 
 
         Page<ClientWalletDto> receiptPage = null;
-        if (name != null && date != null ) {
+        if (name != null && date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
-        if(name !=null){
+        if (name != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name),q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
-        if(date !=null){
+        if (date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage= (Page<ClientWalletDto>) walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = (Page<ClientWalletDto>) clientWalletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
@@ -562,7 +569,7 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
     }
 
     //     Get all payments by coach Id and statement period
-    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId,StatementPeriod statementPeriod) {
+    public ListResponse getPaymentsByCoachIdAndStatementPeriod(int page, int perPage, Long coachId, StatementPeriod statementPeriod) {
         log.info("Get account statement by coach Id{} and statement period{}", coachId, statementPeriod);
 
 
@@ -574,29 +581,30 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
         // GET BY STATEMENT PERIOD
         if (statementPeriod == StatementPeriod.PER_MONTH) {
             paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(),pageable);
+                    LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
-            paymentPage=clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
+            paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_YEAR) {
-            paymentPage= clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
-                    LocalDateTime.now().minusDays(1), LocalDateTime.now(),pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
+                    LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
             paymentPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         }
     }
+
     // Get all payments by organization Id and statement period
     public ListResponse getPaymentsByOrganizationIdAndStatementPeriod(int page, int perPage, Long organizationId, StatementPeriod statementPeriod) {
         log.info("Get account statement by organization Id{} and statement period{}", organizationId, statementPeriod);
@@ -614,26 +622,27 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
             Page<ClientWalletDto> paymentPage;
-            paymentPage=clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
+            paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_YEAR) {
             Page<ClientWalletDto> paymentPage;
-            paymentPage= clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
+            paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
             Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         }
     }
+
     // Get all payments by client Id and statement period
     public ListResponse getPaymentsByClientIdAndStatementPeriod(int page, int perPage, Long clientId, StatementPeriod statementPeriod) {
         log.info("Get account statement by client Id{} and statement period{}", clientId, statementPeriod);
@@ -651,23 +660,23 @@ log.info("Get client wallet recent record for coach id {} and client id {}", coa
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
             Page<ClientWalletDto> paymentPage;
-            paymentPage=clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
+            paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_YEAR) {
             Page<ClientWalletDto> paymentPage;
-            paymentPage= clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
+            paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
             Page<ClientWalletDto> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
-            return new ListResponse( paymentPage.getContent(),
-                    paymentPage.getTotalPages(),  paymentPage.getNumberOfElements(),
+            return new ListResponse(paymentPage.getContent(),
+                    paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         }
     }

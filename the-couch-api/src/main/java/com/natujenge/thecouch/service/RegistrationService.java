@@ -44,7 +44,6 @@ public class RegistrationService {
 
     private final OrganizationBillingAccountService organizationBillingAccountService;
 
-    private final CoachRepository coachRepository;
 
     private final CoachWalletRepository coachWalletRepository;
     private final CoachBillingAccountService coachBillingAccountService;
@@ -146,7 +145,7 @@ public class RegistrationService {
                 notificationSettingsRequest.setConductedSessionEnable(true);
                 notificationSettingsRequest.setRescheduleSessionEnable(true);
                 notificationSettingsRequest.setPaymentReminderEnable(true);
-                notificationSettingsRequest.setUser(savedCoach);
+                notificationSettingsRequest.setCoach(savedCoach);
 
 
                 NotificationSettings notificationSettings = notificationSettingsService.
@@ -159,7 +158,7 @@ public class RegistrationService {
                 contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
                 contractTemplatesRequest.setPracticeTemplate(Constants.DEFAULT_PRACTICE_TEMPLATE);
                 contractTemplatesRequest.setTerms_and_conditionsTemplate(Constants.DEFAULT_TERMS_AND_CONDITIONS_TEMPLATE);
-                contractTemplatesRequest.setUser(savedCoach);
+                contractTemplatesRequest.setCoach(savedCoach);
                 ContractTemplate contractTemplate =notificationSettingsService.addContractTemplates(contractTemplatesRequest);
                 log.info("Contract Templates Saved Successfully");
                 User registeredUser = (User) response.get(0);
@@ -270,7 +269,7 @@ public class RegistrationService {
                     User registeredUser = (User) response.get(0);
                     log.info("User to be updated: " + registeredUser.getUsername());
                     registeredUser.setNotificationSettings(notificationSettings);
-                    registeredUser.setOrganization(Optional.of(registeredOrg));
+                    registeredUser.setOrganization(Optional.of(registeredOrg).get());
                     userService.updateUser(registeredUser);
 
 
@@ -365,7 +364,7 @@ public class RegistrationService {
         coach.setMsisdn(coachRequest.getMsisdn());
         coach.setEmail(coachRequest.getEmail());
         coach.setCreatedBy(coach.getFullName());
-        coach.setOrganization(Optional.ofNullable(organization));
+        coach.setOrganization(Optional.ofNullable(organization).get());
 
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
@@ -381,7 +380,7 @@ public class RegistrationService {
                         coachRequest.getEmail(),
                         coachRequest.getMsisdn(),
                         UserRole.COACH,
-                        Optional.ofNullable(organization)
+                        Optional.ofNullable(organization).get()
                 )
         );
 
@@ -448,7 +447,7 @@ public class RegistrationService {
         notificationSettingsRequest.setRescheduleSessionEnable(true);
         notificationSettingsRequest.setPaymentReminderEnable(true);
         notificationSettingsRequest.setCoach(savedCoach);
-        notificationSettingsRequest.setOrganization(savedCoach.getOrganization().get());
+        notificationSettingsRequest.setOrganization(savedCoach.getOrganization());
 
 
         NotificationSettings notificationSettings = notificationSettingsService.
@@ -495,7 +494,7 @@ public class RegistrationService {
                         clientRequest.getEmail(),
                         clientRequest.getMsisdn(),
                         UserRole.CLIENT,
-                        organization
+                        organization.get()
                 )
         );
 

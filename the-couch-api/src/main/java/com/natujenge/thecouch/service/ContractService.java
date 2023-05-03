@@ -60,8 +60,8 @@ public class ContractService {
     private final CoachBillingAccountService coachBillingAccountService;
 
     public ContractService(SessionRepository sessionRepository, OrganizationService organizationService,
-                           ContractObjectiveRepository clientObjectiveRepository, ContractRepository contractRepository,
-                           CoachRepository coachRepository, UserService userService, NotificationRepository notificationRepository,
+                           ContractObjectiveRepository clientObjectiveRepository, ContractRepository contractRepository
+                           , UserService userService, NotificationRepository notificationRepository,
                            UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
                            NotificationSettingsService notificationSettingsService, ClientBillingAccountService clientBillingAccountService,
                            NotificationService notificationService,

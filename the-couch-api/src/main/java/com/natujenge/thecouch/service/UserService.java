@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
     private final ContractTemplatesRepository contractTemplatesRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     ConfirmationTokenService confirmationTokenService;
@@ -221,7 +221,7 @@ public class UserService implements UserDetailsService {
         }
         if (organization != null) {
             user.setCreatedBy(organization.get().getOrgName());
-            user.setOrganization(organization.get());
+            user.setOrganization(organization);
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
             if (assignedCoach.isPresent()) {
                 User coach1 = assignedCoach.get();

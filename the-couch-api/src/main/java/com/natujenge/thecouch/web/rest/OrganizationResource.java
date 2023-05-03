@@ -26,8 +26,6 @@ public class OrganizationResource {
     private final OrganizationService organizationService;
     private final UserService userService;
 
-    private final UserService userService;
-
     public OrganizationResource(ModelMapper modelMapper, OrganizationService organizationService, UserService userService) {
         this.modelMapper = modelMapper;
         this.organizationService = organizationService;

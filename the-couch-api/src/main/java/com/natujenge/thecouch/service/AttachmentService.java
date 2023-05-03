@@ -3,7 +3,6 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.repository.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,20 +11,21 @@ import java.util.List;
 @Service
 @Slf4j
 public class AttachmentService {
-    @Autowired
-    SessionRepository sessionRepository;
 
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    AttachmentsRepository attachmentsRepository;
+    private final SessionRepository sessionRepository;
+
+    private final AttachmentsRepository attachmentsRepository;
 
 
-    @Autowired
-    CoachRepository coachRepository;
+    private final OrganizationRepository organizationRepository;
 
-    @Autowired
-    OrganizationRepository organizationRepository;
+    public AttachmentService(SessionRepository sessionRepository, AttachmentsRepository attachmentsRepository, OrganizationRepository organizationRepository) {
+        this.sessionRepository = sessionRepository;
+        this.attachmentsRepository = attachmentsRepository;
+
+        this.organizationRepository = organizationRepository;
+    }
+
     //get attachment by session id
     public List<Attachments> getAttachmentBySessionId(Long sessionId) {
         log.info("Request to get attachment by session id: {} and coachId : {}", sessionId);
@@ -34,6 +34,7 @@ public class AttachmentService {
 
         return feedbackOptional;
     }
+
     public void uploadAttachments(Long sessionId, MultipartFile[] files, String[] links) throws Exception {
         // Get the session associated with the given sessionId
         Session session = sessionRepository.findById(sessionId).orElseThrow(() -> new Exception("Session not found"));
