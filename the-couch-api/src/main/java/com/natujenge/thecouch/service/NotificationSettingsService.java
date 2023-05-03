@@ -185,7 +185,7 @@ public class NotificationSettingsService {
     }
     public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
         ContractTemplate contractTemplate = new ContractTemplate();
-        contractTemplate.setCoach(contractTemplatesRequest.getCoach());
+        contractTemplate.setUser(contractTemplatesRequest.getUser());
         contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
         contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
         contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());
@@ -224,17 +224,17 @@ public class NotificationSettingsService {
         notificationSettings.setCreatedAt(LocalDateTime.now());
         notificationSettings.setLastUpdatedAt(LocalDateTime.now());
 
-        if (notificationSettingsRequest.getCoach() != null) {
-            notificationSettings.setCoach(notificationSettingsRequest.getCoach());
-            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
-            notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
-            if (notificationSettingsRequest.getCoach().getOrganization() != null) {
-                notificationSettings.setOrganization(notificationSettingsRequest.getCoach().getOrganization());
+        if (notificationSettingsRequest.getUser() != null) {
+            notificationSettings.setUser(notificationSettingsRequest.getUser());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getUser().getFullName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getUser().getFullName());
+            if (notificationSettingsRequest.getUser().getOrganization() != null) {
+                notificationSettings.setOrganization(notificationSettingsRequest.getUser().getOrganization().get());
             }
         } else {
             notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
-            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
-            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getOrgName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getOrgName());
 
         }
         log.info("Notification Settings Created Successfully");

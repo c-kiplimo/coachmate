@@ -99,7 +99,7 @@ public class User implements UserDetails {
     private Boolean enabled = false;
 
     // User Registration Constructor
-    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
+    public User(String firstName, String lastName, String email, String msisdn, UserRole password, Optional<Organization> userRole,
                 User savedCoach) {
         this.fullName = firstName + ' ' + lastName;
         this.firstName = firstName;

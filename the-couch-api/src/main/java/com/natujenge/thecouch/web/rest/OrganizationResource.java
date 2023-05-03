@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.OrganizationService;
+import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,14 @@ public class OrganizationResource {
     @Autowired
     private ModelMapper modelMapper;
     private final OrganizationService organizationService;
+    private final UserService userService;
 
     private final CoachService coachService;
-    public OrganizationResource(OrganizationService organizationService,
-                                CoachService coachService) {
+    public OrganizationResource(ModelMapper modelMapper, OrganizationService organizationService,
+                                UserService userService, CoachService coachService) {
+        this.modelMapper = modelMapper;
         this.organizationService = organizationService;
+        this.userService = userService;
         this.coachService = coachService;
     }
 
@@ -98,7 +102,7 @@ public class OrganizationResource {
         log.info("Request to getCoachesByOrgId {}", organizationId);
 
         try{
-            List<Coach> listResponse = coachService.getCoachByOrganizationId(organizationId);
+            List<User> listResponse = userService.getCoachByOrganizationId(organizationId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e){
             log.error("Error Occurred ", e);

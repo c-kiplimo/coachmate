@@ -66,8 +66,8 @@ public class NotificationSettings {
     private boolean rescheduleSessionEnable;
 
     @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @JoinColumn(name="user_id")
+    User user;
     @ManyToOne
     @JoinColumn(name="organization_id")
     Organization organization;

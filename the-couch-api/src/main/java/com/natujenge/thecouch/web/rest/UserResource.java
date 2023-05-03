@@ -34,7 +34,7 @@ public class UserResource {
                                    @AuthenticationPrincipal User userDetails) {
         log.info("request to add new client");
         try {
-            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization().get());
 
             User newClientUser = userService.addNewClient(userDetails,organization,
                     clientRequest, userDetails.getMsisdn());
@@ -59,7 +59,7 @@ public class UserResource {
                                     @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization clients");
         try{
-            List<User> listResponse = userService.getClientByOrgId(userDetails.getOrganization().getId(), UserRole.CLIENT);
+            List<User> listResponse = userService.getClientByOrgId(userDetails.getOrganization().get().getId(), UserRole.CLIENT);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

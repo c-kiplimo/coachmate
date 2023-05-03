@@ -5,8 +5,13 @@ import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
+import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.service.dto.*;
+import com.natujenge.thecouch.service.mapper.CoachMapper;
+import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +32,15 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG = "User with Email %s not found!";
     private final static String USER_EXISTS = "Email %s Taken!";
-
+    private final CoachMapper coachMapper;
     private final UserRepository userRepository;
     private final RegistrationService registrationService;
     private final ClientWalletRepository clientWalletRepository;
     private final ClientBillingAccountService clientBillingAccountService;
+    private final PaymentDetailsService paymentDetailsService;
+    private final CoachSettingsService coachSettingsService;
+    private final NotificationSettingsService notificationSettingsService;
+    private final ContractTemplatesRepository contractTemplatesRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -202,6 +211,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Client with provided email already exists");
         }
 
+        User saveClient = null;
         User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization, saveClient);
         log.info("creating new client started");
 
@@ -211,9 +221,9 @@ public class UserService implements UserDetailsService {
         }
         if (organization != null) {
             user.setCreatedBy(organization.get().getOrgName());
-            user.setOrganization(organization.get());
+            user.setOrganization(organization);
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
-            if(assignedCoach.isPresent()){
+            if (assignedCoach.isPresent()) {
                 User coach1 = assignedCoach.get();
                 user.setAddedBy(coach1);
             }
@@ -240,14 +250,14 @@ public class UserService implements UserDetailsService {
 
         user.setProfession(clientRequest.getProfession());
 
-        User saveClient = userRepository.save(user);
+        saveClient = userRepository.save(user);
         log.info(" client saved");
         log.info("registering client as user begins");
 
 
         registrationService.registerClientAsUser(clientRequest, organization, saveClient);
         log.info("client registered as user now creating wallet");
-        log.info("Client registered is {}",saveClient);
+        log.info("Client registered is {}", saveClient);
 
         // Create client wallet
         ClientWallet clientWallet = new ClientWallet();
@@ -284,4 +294,51 @@ public class UserService implements UserDetailsService {
     public List<User> getCoachByOrganizationId(Long organizationId) {
         return userRepository.findAllByOrganizationId(organizationId);
     }
+
+    private void savePaymentDetails(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO) {
+        PaymentDetailsDTO savedPaymentDetailsDTO = paymentDetailsService.findTopByCoachId(coachDTO.getId());
+        if (savedPaymentDetailsDTO == null){
+            savedPaymentDetailsDTO = new PaymentDetailsDTO();
+        }
+        PaymentDetailsDTO paymentDetailsDTO = OnBoardCoachUtil.extractPaymentData(onBoardCoachDTO, coachDTO, savedPaymentDetailsDTO);
+        paymentDetailsService.save(paymentDetailsDTO);
+    }
+
+    private void saveSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO){
+        CoachSettingsDTO coachSettingsDTO = coachSettingsService.findTopByCoachId(coachDTO.getId());
+        if (coachSettingsDTO == null){
+            coachSettingsDTO = new CoachSettingsDTO();
+        }
+
+        coachSettingsDTO.setLogo(onBoardCoachDTO.getFilename());
+        coachSettingsDTO.setCoach(coachDTO);
+        coachSettingsService.save(coachSettingsDTO);
+    }
+
+    private void saveNotificationSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO) {
+        Optional<NotificationSettingsDTO> notificationSettingsDTOOptional = notificationSettingsService.findByCoachId(coachDTO.getId());
+        NotificationSettingsDTO notificationSettingsDTO = new NotificationSettingsDTO();
+        if (notificationSettingsDTOOptional.isPresent()) {
+            notificationSettingsDTO = notificationSettingsDTOOptional.get();
+        }
+
+        NotificationSettingsDTO notificationSettings = OnBoardCoachUtil.extractNotificationSettings(onBoardCoachDTO, coachDTO,notificationSettingsDTO);
+        notificationSettingsService.save(notificationSettings);
+    }
+
+    public ContractTemplate addContractTemplates(ContractTemplatesRequest contractTemplatesRequest) {
+        ContractTemplate contractTemplate = new ContractTemplate();
+        contractTemplate.setUser(contractTemplatesRequest.getUser());
+        contractTemplate.setNotesTemplate(contractTemplatesRequest.getNotesTemplate());
+        contractTemplate.setServicesTemplate(contractTemplatesRequest.getServicesTemplate());
+        contractTemplate.setPracticeTemplate(contractTemplatesRequest.getPracticeTemplate());
+        contractTemplate.setTerms_and_conditionsTemplate(contractTemplatesRequest.getTerms_and_conditionsTemplate());
+        return contractTemplatesRepository.save(contractTemplate);
+    }
+
+    public Optional<CoachDTO> findOne(Long id) {
+        log.info("Request to get Coach by id: {}", id);
+        return userRepository.findById(id).map(coachMapper::toDto);
+    }
+
 }

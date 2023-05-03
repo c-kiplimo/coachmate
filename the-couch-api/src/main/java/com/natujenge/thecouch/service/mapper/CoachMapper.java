@@ -1,18 +1,19 @@
 package com.natujenge.thecouch.service.mapper;
 
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.dto.CoachDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface CoachMapper extends EntityMapper<CoachDTO, Coach>{
+public interface CoachMapper extends EntityMapper<CoachDTO, User>{
 
-    CoachDTO toDto(Coach b);
+    CoachDTO toDto(User b);
 
-    default Coach fromId(Long id) {
+    default User fromId(Long id) {
         if (id == null) {
             return null;
         }
-        Coach coach = new Coach();
+        User coach = new User();
         coach.setId(id);
         return coach;
     }

@@ -75,7 +75,7 @@ public class RegistrationResource {
        // log.info("Request to confirm client token and update password");
         try {
             Optional<User> updateClient;
-            updateClient = clientService.confirmClientTokenAndUpdatePassword(clientRequest);
+            updateClient = userRepository.confirmClientTokenAndUpdatePassword(clientRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
