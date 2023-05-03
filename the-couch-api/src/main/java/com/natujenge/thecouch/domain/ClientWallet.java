@@ -55,8 +55,12 @@ public class ClientWallet {
     private String lastUpdatedBy;
 
     @OneToOne
-    @JoinColumn(name="user_id")
-    User user;
+    @JoinColumn(name="client_id")
+    User client;
+
+    @OneToOne
+    @JoinColumn(name="coach_id")
+    User coach;
 
 
     @OneToOne

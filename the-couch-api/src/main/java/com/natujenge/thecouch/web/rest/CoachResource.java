@@ -1,5 +1,5 @@
 package com.natujenge.thecouch.web.rest;
-import com.natujenge.thecouch.repository.CoachRepository;
+
 import com.natujenge.thecouch.service.dto.UploadResponse;
 import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.web.rest.errors.BadRequestException;
@@ -27,12 +27,12 @@ public class CoachResource {
 
     private final CoachService coachService;
     private final OrganizationRepository organizationRepository;
-    private final CoachRepository coachRepository;
 
-    public CoachResource(CoachService coachService, OrganizationRepository organizationRepository, CoachRepository coachRepository) {
+
+    public CoachResource(CoachService coachService, OrganizationRepository organizationRepository) {
         this.coachService = coachService;
         this.organizationRepository = organizationRepository;
-        this.coachRepository = coachRepository;
+
     }
 
 

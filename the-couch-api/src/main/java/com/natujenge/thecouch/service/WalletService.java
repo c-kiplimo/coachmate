@@ -4,10 +4,7 @@ import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
-import com.natujenge.thecouch.repository.ClientRepository;
-import com.natujenge.thecouch.repository.ClientWalletRepository;
-import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
@@ -41,7 +38,7 @@ public class WalletService {
 
     private final ClientBillingAccountRepository clientBillingAccountRepository;
 
-    private final ClientRepository clientRepository;
+
 
     private final AccountStatementService accountStatementService;
 
@@ -49,19 +46,21 @@ public class WalletService {
 
     private final NotificationSettingsService notificationSettingsService;
 
-    private final ClientWalletRepository walletRepository;
+
+
+    private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
-    public WalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, ClientRepository clientRepository, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, ClientWalletRepository walletRepository, ModelMapper modelMapper) {
+    public WalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, UserRepository userRepository, ModelMapper modelMapper) {
         this.clientWalletRepository = clientWalletRepository;
         this.notificationRepository = notificationRepository;
         this.clientBillingAccountRepository = clientBillingAccountRepository;
-        this.clientRepository = clientRepository;
         this.accountStatementService = accountStatementService;
         this.notificationServiceHTTPClient = notificationServiceHTTPClient;
         this.notificationSettingsService = notificationSettingsService;
-        this.walletRepository = walletRepository;
+
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -172,15 +171,15 @@ public class WalletService {
 
 
     // create payment by coach
-    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, Coach coach) {
+    public ClientWallet createPaymentByCoach(PaymentRequest paymentRequest, User coach) {
 
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findByIdAndCoachId(paymentRequest.getClientId()
+        Optional<User> clientOptional = userRepository.findByIdAndAddedById(paymentRequest.getClientId()
                 , coach.getId());
         if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client = clientOptional.get();
+        User client = clientOptional.get();
 
 
         // obtain previous payment Record
@@ -233,7 +232,7 @@ public class WalletService {
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
 
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
 
@@ -261,7 +260,7 @@ public class WalletService {
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
         notification.setCreatedBy(coach.getFullName());
         //TO DO: add logic to save notification to db
@@ -278,11 +277,11 @@ public class WalletService {
     public ClientWallet createPaymentByOrganization(PaymentRequest paymentRequest, Organization organization) {
 
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
+        Optional<User> clientOptional = userRepository.findById(paymentRequest.getClientId());
         if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client = clientOptional.get();
+        User client = clientOptional.get();
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
@@ -300,7 +299,7 @@ public class WalletService {
         clientWallet.setClient(client);
         clientWallet.setOrganization(organization);
         // mngmnt
-        clientWallet.setCreatedBy(organization.getFullName());
+        clientWallet.setCreatedBy(organization.getOrgName());
         // Update Payment Details based on balance on clientWallet;
         float walletBalance = prevWalletBalance + paymentRequest.getAmount();
         // update billing account
@@ -317,7 +316,7 @@ public class WalletService {
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -338,9 +337,9 @@ public class WalletService {
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
-        notification.setCreatedBy(client.getCoach().getFullName());
+        notification.setCreatedBy(client.getAddedBy().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
         return clientWallet1;
@@ -349,13 +348,13 @@ public class WalletService {
     }
 
     // create payment by client
-    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, Client client) {
+    public ClientWallet createPaymentByClient(PaymentRequest paymentRequest, User client) {
         // Obtain Client associated with wallet
-        Optional<Client> clientOptional = clientRepository.findById(paymentRequest.getClientId());
+        Optional<User> clientOptional = userRepository.findById(paymentRequest.getClientId());
         if (clientOptional.isEmpty()) {
             throw new IllegalArgumentException("Client not found!");
         }
-        Client client1 = clientOptional.get();
+        User client1 = clientOptional.get();
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getOrganizationId(), paymentRequest.getClientId()));
         float prevWalletBalance;
@@ -371,11 +370,11 @@ public class WalletService {
         clientWallet.setExtPaymentRef(paymentRequest.getExtPaymentRef());
         clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setClient(client1);
-        clientWallet.setOrganization(client1.getCoach().getOrganization());
+        clientWallet.setOrganization(client1.getAddedBy().getOrganization());
         // clientWallet Number Generation
         int randNo = (int) ((Math.random() * (99 - 1)) + 1);
         String clientWalletL = String.format("%05d", randNo);
-        String clientWalletNo = "PAY" + client1.getCoach().getBusinessName().substring(0, 2) +
+        String clientWalletNo = "PAY" + client1.getAddedBy().getBusinessName().substring(0, 2) +
                 client1.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + clientWalletL;
         clientWallet.setClientWalletNumber(clientWalletNo);
         // mngmnt
@@ -396,7 +395,7 @@ public class WalletService {
         replacementVariables.put("client_name", clientWallet1.getClient().getFullName());
         replacementVariables.put("amountDeposited", clientWallet1.getAmountDeposited());
         replacementVariables.put("amountBilled", clientWallet1.getWalletBalance());
-        replacementVariables.put("business_name", clientWallet1.getClient().getCoach().getBusinessName());
+        replacementVariables.put("business_name", clientWallet1.getClient().getAddedBy().getBusinessName());
         String smsTemplate = Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE;
         //replacement to get content
         String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
@@ -417,10 +416,10 @@ public class WalletService {
         notification.setDestinationAddress(msisdn);
         notification.setSourceAddress(sourceAddress);
         notification.setContent(smsContent);
-        notification.setCoachId(client.getCoach().getId());
+        notification.setCoachId(client.getAddedBy().getId());
         notification.setClientId(client.getId());
         notification.setSendReason("PAYMENT RECEIVED");
-        notification.setCreatedBy(client.getCoach().getFullName());
+        notification.setCreatedBy(client.getAddedBy().getFullName());
         //TO DO: add logic to save notification to db
         notificationRepository.save(notification);
         return clientWallet1;
@@ -428,7 +427,7 @@ public class WalletService {
         //return modelMapper.map(clientWallet1, ClientWalletDto.class);
     }
 
-    private Float updateBillingAccountOnPaymentByClient(Client client1, float walletBalance, Float amount) {
+    private Float updateBillingAccountOnPaymentByClient(User client1, float walletBalance, Float amount) {
         // obtain recent record on billing account
         Optional<ClientBillingAccount> optionalClientBillingAccount = clientBillingAccountRepository.
                 findByClientIdOrderByIdDesc(client1.getId());
@@ -442,8 +441,8 @@ public class WalletService {
         // new client Billing Account record
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
         clientBillingAccount.setClient(client1);
-        clientBillingAccount.setCoach(client1.getCoach());
-        clientBillingAccount.setOrganization(client1.getCoach().getOrganization());
+        clientBillingAccount.setCoach(client1.getAddedBy());
+        clientBillingAccount.setOrganization(client1.getAddedBy().getOrganization());
         clientBillingAccount.setAmountBilled(amountBilled);
         clientBillingAccount.setCreatedBy(client1.getFullName());
         clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
@@ -552,17 +551,17 @@ public class WalletService {
         Page<ClientWalletDto> receiptPage = null;
         if (name != null && date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if (name != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if (date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = (Page<ClientWalletDto>) walletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = (Page<ClientWalletDto>) clientWalletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 

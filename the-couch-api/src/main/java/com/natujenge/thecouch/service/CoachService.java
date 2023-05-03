@@ -8,7 +8,6 @@ import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
-import com.natujenge.thecouch.repository.CoachRepository;
 import com.natujenge.thecouch.repository.CoachWalletRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -17,20 +16,18 @@ import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 public class CoachService {
 
-    private final CoachRepository coachRepository;
+
     private final OrganizationRepository organizationRepository;
     private final ContractTemplatesRepository contractTemplatesRepository;
     private final RegistrationService registrationService;
@@ -42,16 +39,16 @@ public class CoachService {
     private final CoachMapper coachMapper;
     private final NotificationSettingsMapper notificationSettingsMapper;
     private final NotificationSettingsRepository notificationSettingsRepository;
-    @Autowired
-    CoachWalletRepository coachWalletRepository;
-    @Autowired
-    CoachBillingAccountService coachBillingAccountService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
+    private final CoachWalletRepository coachWalletRepository;
+
+    private final CoachBillingAccountService coachBillingAccountService;
+
+    private final PasswordEncoder passwordEncoder;
 
     //     constructor
-    public CoachService(CoachRepository coachRepository, OrganizationRepository organizationRepository, ContractTemplatesRepository contractTemplatesRepository, RegistrationService registrationService, UserRepository userRepository, CoachSettingsService coachSettingsService, UserService userService, NotificationSettingsService notificationSettingsService, PaymentDetailsService paymentDetailsService, CoachMapper coachMapper, NotificationSettingsMapper notificationSettingsMapper, NotificationSettingsRepository notificationSettingsRepository) {
-        this.coachRepository = coachRepository;
+    public CoachService(OrganizationRepository organizationRepository, ContractTemplatesRepository contractTemplatesRepository, RegistrationService registrationService, UserRepository userRepository, CoachSettingsService coachSettingsService, UserService userService, NotificationSettingsService notificationSettingsService, PaymentDetailsService paymentDetailsService, CoachMapper coachMapper, NotificationSettingsMapper notificationSettingsMapper, NotificationSettingsRepository notificationSettingsRepository, CoachWalletRepository coachWalletRepository, CoachBillingAccountService coachBillingAccountService, PasswordEncoder passwordEncoder) {
+
         this.organizationRepository = organizationRepository;
         this.contractTemplatesRepository = contractTemplatesRepository;
         this.registrationService = registrationService;
@@ -63,10 +60,13 @@ public class CoachService {
         this.coachMapper = coachMapper;
         this.notificationSettingsMapper = notificationSettingsMapper;
         this.notificationSettingsRepository = notificationSettingsRepository;
+        this.coachWalletRepository = coachWalletRepository;
+        this.coachBillingAccountService = coachBillingAccountService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // create coach by organization
-    public Coach   addNewCoachByOrganization(Organization organization, String msisdn, CoachRequest coachRequest) {
+    public User   addNewCoachByOrganization(Organization organization, String msisdn, CoachRequest coachRequest) {
         log.info("add a new coach to database by organization{}",organization.getId());
 
         Optional<User>  optionalUser = userService.findByMsisdn(coachRequest.getMsisdn());
@@ -74,12 +74,12 @@ public class CoachService {
           throw new IllegalArgumentException("User already exists!");
         }
 
-        Coach coach = new Coach();
+        User coach = new User();
         coach.setFirstName(coachRequest.getFirstName());
         coach.setLastName(coachRequest.getLastName());
         coach.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
         coach.setMsisdn(coachRequest.getMsisdn());
-        coach.setEmailAddress(coachRequest.getEmail());
+        coach.setEmail(coachRequest.getEmail());
         coach.setCreatedBy(msisdn);
         coach.setOrganization(organization);
 

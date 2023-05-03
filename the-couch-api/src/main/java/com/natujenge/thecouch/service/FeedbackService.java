@@ -15,11 +15,6 @@ public class FeedbackService {
 
 
    private final SessionRepository sessionRepository;
-
-
-    private final ClientRepository clientRepository;
-
-
   private final  FeedbackRepository feedbackRepository;
 
 
@@ -29,12 +24,10 @@ public class FeedbackService {
     private final OrganizationRepository organizationRepository;
 
     public FeedbackService(FeedbackRepository feedbackRepository, OrganizationRepository organizationRepository
-    , CoachRepository coachRepository, SessionRepository sessionRepository, ClientRepository clientRepository, UserRepository userRepository) {
+    , SessionRepository sessionRepository, UserRepository userRepository) {
         this.feedbackRepository = feedbackRepository;
         this.sessionRepository = sessionRepository;
         this.userRepository = userRepository;
-
-        this.clientRepository = clientRepository;
         this.organizationRepository = organizationRepository;
     }
 
