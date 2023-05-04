@@ -12,9 +12,7 @@ import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +26,6 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final static String USER_NOT_FOUND_MSG = "User with Email %s not found!";
     private final static String USER_EXISTS = "Email %s Taken!";
@@ -42,11 +39,23 @@ public class UserService implements UserDetailsService {
     private final NotificationSettingsService notificationSettingsService;
     private final ContractTemplatesRepository contractTemplatesRepository;
 
-    @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationTokenService confirmationTokenService;
+
+    public UserService(CoachMapper coachMapper, UserRepository userRepository, RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService) {
+        this.coachMapper = coachMapper;
+        this.userRepository = userRepository;
+        this.registrationService = registrationService;
+        this.clientWalletRepository = clientWalletRepository;
+        this.clientBillingAccountService = clientBillingAccountService;
+        this.paymentDetailsService = paymentDetailsService;
+        this.coachSettingsService = coachSettingsService;
+        this.notificationSettingsService = notificationSettingsService;
+        this.contractTemplatesRepository = contractTemplatesRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
+    }
 
     public void enableAppUser(String email) {
 

@@ -10,7 +10,6 @@ import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.request.*;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,9 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 @Slf4j
-@Transactional
 public class RegistrationService {
     private final static String USER_EXISTS = "Email %s Taken!";
     private final static String USER_NOT_FOUND_MSG = "user %s not found!";
@@ -34,7 +31,7 @@ public class RegistrationService {
 
     private final OrganizationService organizationService;
     private final NotificationSettingsService notificationSettingsService;
-    private EmailValidator emailValidator;
+    private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
 
     private final PasswordEncoder passwordEncoder;
@@ -49,6 +46,21 @@ public class RegistrationService {
     private final CoachBillingAccountService coachBillingAccountService;
 
     private final OrganizationRepository organizationRepository;
+
+    public RegistrationService(UserService userService, OrganizationService organizationService, NotificationSettingsService notificationSettingsService, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService, PasswordEncoder passwordEncoder, UserRepository userRepository, OrganizationWalletRepository organizationWalletRepository, OrganizationBillingAccountService organizationBillingAccountService, CoachWalletRepository coachWalletRepository, CoachBillingAccountService coachBillingAccountService, OrganizationRepository organizationRepository) {
+        this.userService = userService;
+        this.organizationService = organizationService;
+        this.notificationSettingsService = notificationSettingsService;
+        this.emailValidator = emailValidator;
+        this.confirmationTokenService = confirmationTokenService;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.organizationWalletRepository = organizationWalletRepository;
+        this.organizationBillingAccountService = organizationBillingAccountService;
+        this.coachWalletRepository = coachWalletRepository;
+        this.coachBillingAccountService = coachBillingAccountService;
+        this.organizationRepository = organizationRepository;
+    }
 
 
     // Register User
