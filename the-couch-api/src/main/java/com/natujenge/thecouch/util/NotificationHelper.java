@@ -71,7 +71,7 @@ public class NotificationHelper {
         String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS;
         String referenceId = "C-23342";
         String msisdn = session.getCoach().getMsisdn();
-        String email = session.getCoach().getEmailAddress();
+        String email = session.getCoach().getEmail();
         log.info("About to send message to Client content: {}, from: {}, to: {}, ref id {}",
                 smsContent, sourceAddress, msisdn, referenceId);
         //send sms

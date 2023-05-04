@@ -212,7 +212,7 @@ public class UserService implements UserDetailsService {
         }
 
         User saveClient = null;
-        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization, saveClient);
+        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization);
         log.info("creating new client started");
 
         if (userDetails != null) {
@@ -221,7 +221,7 @@ public class UserService implements UserDetailsService {
         }
         if (organization != null) {
             user.setCreatedBy(organization.get().getOrgName());
-            user.setOrganization(organization);
+            user.setOrganization(organization.get());
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
             if (assignedCoach.isPresent()) {
                 User coach1 = assignedCoach.get();
@@ -267,7 +267,7 @@ public class UserService implements UserDetailsService {
             clientWallet.setOrganization(organization.get());
         }
 
-        clientWallet.setUser(saveClient);
+        clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
@@ -279,7 +279,7 @@ public class UserService implements UserDetailsService {
             clientBillingAccount.setCreatedBy(organization.get().getOrgName());
             clientBillingAccount.setOrganization(organization.get());
         }
-        clientBillingAccount.setUser(saveClient);
+        clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccount.setCreatedBy(msisdn);
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
@@ -336,8 +336,10 @@ public class UserService implements UserDetailsService {
         return contractTemplatesRepository.save(contractTemplate);
     }
 
-    public Optional<CoachDTO> findOne(Long id) {
+    public Optional<UserDTO> findOne(Long id) {
         log.info("Request to get Coach by id: {}", id);
+        //Optional<User> userOptional = userRepository.findById(id);
+       // return userOptional.map(coachMapper::toDto);
         return userRepository.findById(id).map(coachMapper::toDto);
     }
 

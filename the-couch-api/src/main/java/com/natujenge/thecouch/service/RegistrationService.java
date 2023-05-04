@@ -217,8 +217,8 @@ public class RegistrationService {
                                 registrationRequest.getEmail(),
                                 registrationRequest.getMsisdn(),
                                 registrationRequest.getPassword(),
-                                UserRole.ORGANIZATION,
-                                registeredOrg.getUser()
+                                UserRole.ORGANIZATION
+                               // registeredOrg.getUser()
                         )
                 );
                 try {

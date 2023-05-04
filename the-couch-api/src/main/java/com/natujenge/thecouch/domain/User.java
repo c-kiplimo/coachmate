@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
@@ -98,9 +97,12 @@ public class User implements UserDetails {
     private Boolean locked = false;
     private Boolean enabled = false;
 
+    public User(){
+
+    }
+
     // User Registration Constructor
-    public User(String firstName, String lastName, String email, String msisdn, UserRole password, Optional<Organization> userRole,
-                User savedCoach) {
+    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole) {
         this.fullName = firstName + ' ' + lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -132,6 +134,10 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
+    }
+
+    public User(String firstName, String lastName, String email, String msisdn, UserRole client, Optional<Organization> organization) {
+
     }
 
     @Override
