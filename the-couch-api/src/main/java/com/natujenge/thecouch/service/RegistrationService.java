@@ -164,7 +164,7 @@ public class RegistrationService {
                 User registeredUser = (User) response.get(0);
                 registeredUser.setNotificationSettings(notificationSettings);
                 registeredUser.setContractTemplate(contractTemplate);
-                userService.updateUser(registeredUser);
+                //userService.updateUser(registeredUser);
 
 
                 log.info("Coach Updated Successfully");
@@ -270,7 +270,7 @@ public class RegistrationService {
                     log.info("User to be updated: " + registeredUser.getUsername());
                     registeredUser.setNotificationSettings(notificationSettings);
                     registeredUser.setOrganization(Optional.of(registeredOrg).get());
-                    userService.updateUser(registeredUser);
+                    //userService.updateUser(registeredUser);
 
 
                     // Sending Confirmation Token
@@ -458,7 +458,7 @@ public class RegistrationService {
         User registeredUser = (User) response.get(0);
         registeredUser.setNotificationSettings(notificationSettings);
        // registeredUser.setCoach(savedCoach);
-        userService.updateUser(registeredUser);
+       // userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);

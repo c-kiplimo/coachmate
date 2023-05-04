@@ -171,6 +171,7 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
         log.info("User Updated Successfully");
+        return;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -255,7 +256,7 @@ public class UserService implements UserDetailsService {
         log.info("registering client as user begins");
 
 
-        registrationService.registerClientAsUser(clientRequest, organization, saveClient);
+       // registrationService.registerClientAsUser(clientRequest, organization, saveClient);
         log.info("client registered as user now creating wallet");
         log.info("Client registered is {}", saveClient);
 
