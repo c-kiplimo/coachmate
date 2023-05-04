@@ -2,6 +2,7 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.UserSession;
+import com.natujenge.thecouch.service.dto.UserDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.repository.UserSessionRepository;
 import com.natujenge.thecouch.security.JwtTokenUtil;
@@ -18,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/token")
@@ -54,8 +57,10 @@ public class AuthenticationResource {
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("User authenticated ");
 
-            UserSession userSession = userSessionRepo.findByUser(user);
+            UserSession userSession = userSessionRepo.findByUserId(user.getId());
+            log.info("User session found");
 
             // save session if none exists, LoggedIn == 1, logged in user
             if(userSession ==  null){
@@ -63,15 +68,21 @@ public class AuthenticationResource {
                 userSession.setUser(user);
                 userSession.setLoggedIn(1);
                 userSessionRepo.save(userSession);
+                log.info("User seesion is null. saved new ");
+
             }
 
             // Since session already exists, increment loginTrials
             userSession.setLoginTrials(userSession.getLoginTrials()+1);
             userSessionRepo.save(userSession);
+            log.info("User session saved ");
 
             String token = jwtTokenUtil.generateToken(user);
+            log.info("User token generate  {} ", token);
+            Optional<UserDTO> userDto = userService.findByUsernameDto(user.getId());
+            log.info("User found of msisdn   {} ", user.getMsisdn());
 
-            return new ResponseEntity<>(new LoginToken(user, token), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginToken(userDto.get(), token), HttpStatus.OK);
 
         } catch (AuthenticationException authe){
             String message = String.format("Authentication error for  %s", login.getUsername());

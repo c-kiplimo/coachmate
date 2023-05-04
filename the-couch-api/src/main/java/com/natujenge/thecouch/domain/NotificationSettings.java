@@ -9,8 +9,7 @@ import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
