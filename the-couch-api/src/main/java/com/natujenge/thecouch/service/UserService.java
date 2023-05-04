@@ -48,13 +48,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     ConfirmationTokenService confirmationTokenService;
 
-    public void enableAppUser(String email) {
+    public User enableAppUser(String email) {
 
         // Request UserDto rather than all details
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
 
         user.setEnabled(true);
+
+        return user;
 
     }
 
@@ -65,6 +67,7 @@ public class UserService implements UserDetailsService {
         // Set details
         user.setPassword(encodedPassword);
         enableAppUser(user.getMsisdn());
+        return;
     }
 
 

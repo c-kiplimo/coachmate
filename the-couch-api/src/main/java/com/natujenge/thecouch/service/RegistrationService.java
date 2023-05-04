@@ -24,7 +24,6 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-@Transactional
 public class RegistrationService {
     private final static String USER_EXISTS = "Email %s Taken!";
     private final static String USER_NOT_FOUND_MSG = "user %s not found!";
