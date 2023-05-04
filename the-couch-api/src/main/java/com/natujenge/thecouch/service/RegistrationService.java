@@ -84,6 +84,8 @@ public class RegistrationService {
                 coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
                 coach.setMsisdn(registrationRequest.getMsisdn());
                 coach.setEmail(registrationRequest.getEmail());
+                coach.setUsername(registrationRequest.getEmail());
+                coach.setUserRole(UserRole.COACH);
                 coach.setCreatedBy("SELF-REGISTRATION");
                 // coach Number Generation
                 int randNo = (int) ((Math.random() * (999 - 1)) + 1);
@@ -177,7 +179,7 @@ public class RegistrationService {
                 User registeredUser = (User) response.get(0);
                 registeredUser.setNotificationSettings(notificationSettings);
                 registeredUser.setContractTemplate(contractTemplate);
-                //userService.updateUser(registeredUser);
+                userService.updateUser(registeredUser);
 
 
                 log.info("Coach Updated Successfully");
@@ -223,20 +225,64 @@ public class RegistrationService {
 
 
                 // create user and link organization
-                List<Object> response = signupUser(
-                        new User(
-                                registrationRequest.getFirstName(),
-                                registrationRequest.getLastName(),
-                                registrationRequest.getEmail(),
-                                registrationRequest.getMsisdn(),
-                                registrationRequest.getPassword(),
-                                UserRole.ORGANIZATION
-                               // registeredOrg.getUser()
-                        )
+                //List<Object> response = signupUser(registrationRequest);
+
+                User coach = new User();
+                coach.setBusinessName(registrationRequest.getBusinessName());
+                coach.setFirstName(registrationRequest.getFirstName());
+                coach.setLastName(registrationRequest.getLastName());
+                coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+                coach.setMsisdn(registrationRequest.getMsisdn());
+                coach.setEmail(registrationRequest.getEmail());
+                coach.setUsername(registrationRequest.getEmail());
+                coach.setUserRole(UserRole.ORGANIZATION);
+                coach.setCreatedBy("SELF-REGISTRATION");
+
+                // coach Number Generation
+                int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+                String coachL = String.format("%05d", randNo);
+                String coachNo = coach.getLastName().substring(0, 2) +
+                        coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+                coach.setCoachNumber(coachNo);
+
+                // Encode Password > from spring boot
+                String encodedPassword = passwordEncoder.encode(registrationRequest.getPassword());
+
+                // Set details
+                coach.setPassword(encodedPassword);
+                coach.setContentStatus(ContentStatus.ACTIVE);
+                coach.setCreatedAt(LocalDateTime.now());
+
+
+
+                // save the User in the database
+                User savedCoach = userRepository.save(coach);
+
+                log.info("User saved");
+
+                // Generate a Random 6 digit OTP - 0 - 999999
+                int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+                String token = String.format("%06d", randomOTP);
+
+                ConfirmationToken confirmationToken = new ConfirmationToken(
+                        token,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusMinutes(15), // expires after 15 minutes of generation
+                        coach
                 );
+
+                confirmationTokenService.saveConfirmationToken(confirmationToken);
+                log.info("Confirmation token generated");
+
+                List<Object> response = new ArrayList<>();
+                response.add(savedCoach);
+                response.add(token);
+
+
+
                 try {
                     User user = (User) response.get(0);
-                    organizationService.addNewOrganization(organization);
+                    //organizationService.addNewOrganization(organization);
                     log.info("Organization registered by super coach");
                     // Create Default NotificationSettings for Every User
                     // Generate default Templates for all TemplateTypes
@@ -287,8 +333,8 @@ public class RegistrationService {
 
 
                     // Sending Confirmation Token
-                    String token = (String) response.get(1);
-                    NotificationHelper.sendConfirmationToken(token, "CONFIRM", user);
+                    String token1 = (String) response.get(1);
+                    NotificationHelper.sendConfirmationToken(token1, "CONFIRM", user);
                 } catch (Exception e){
                     log.info("Error while sending confirmation token: ", e);
                 }

@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    window.scroll(0, 0);
+    
 
 
     this.user = JSON.parse(
@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit {
 
   saveProfileSettings(): void {
     this.isSaving = true;
-    window.scroll(0, 0);
+    
 
     this.coachService.editcoachProfile(this.coachProfile).subscribe(
       (res: any) => {

@@ -100,7 +100,7 @@ export class SessionsComponent implements OnInit {
 
   getAllOrgSessions() {
     this.loading = true;
-    window.scroll(0, 0);
+    
     this.page = 1;
     const options = {
       page: 1,
@@ -124,7 +124,7 @@ export class SessionsComponent implements OnInit {
   getAllSessions() {
     this.loading = true;
     this.sessions = [];
-    window.scroll(0, 0);
+    
     const options = {
       page: 1,
       per_page: this.itemsPerPage,

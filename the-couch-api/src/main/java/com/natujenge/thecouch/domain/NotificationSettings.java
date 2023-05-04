@@ -9,20 +9,13 @@ import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_notification_settings")
 @Entity
 public class NotificationSettings {
-    @SequenceGenerator(
-            name = "notification_settings_sequence",
-            sequenceName = "notification_settings_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_settings_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 

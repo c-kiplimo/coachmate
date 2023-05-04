@@ -7,7 +7,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -19,7 +18,6 @@ import java.util.Optional;
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;

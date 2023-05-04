@@ -83,13 +83,13 @@ Feedbacks: any;
     this.getCoachEducation(this.coachData.id);
     this.getCoachFeedbacks(this.coachData.coach.id);
     this.getAllContracts();
-    window.scroll(0, 0);
+    
     } else if(this.userRole == 'ORGANIZATION'){
       this.orgId = this.coachData.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getOrgClients();
-      window.scroll(0, 0);
+      
       
       
 
@@ -107,7 +107,7 @@ Feedbacks: any;
       this.getUser();
       this.getClientContracts(this.coachData.id);
       this.getClientSessions(this.coachData.id);
-      window.scroll(0, 0);
+      
       
     }
 
@@ -163,7 +163,7 @@ Feedbacks: any;
   getAllOrgSessions(id: any) {
 
     this.sessions = [];
-    window.scroll(0, 0);
+    
 
     const options = {
       page: 1,
