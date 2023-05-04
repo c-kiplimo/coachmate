@@ -2,6 +2,7 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import com.natujenge.thecouch.repository.AccountStatementRepository;
 import java.time.LocalDateTime;
@@ -14,12 +15,10 @@ public class AccountStatementService {
     private final AccountStatementRepository accountStatementRepository;
 
    private final ClientWalletRepository walletRepository;
-    private StatementPeriod statementPeriod;
 
-    public AccountStatementService(AccountStatementRepository accountStatementRepository, ClientWalletRepository walletRepository, StatementPeriod statementPeriod) {
+    public AccountStatementService(AccountStatementRepository accountStatementRepository, @Lazy ClientWalletRepository walletRepository) {
         this.accountStatementRepository = accountStatementRepository;
         this.walletRepository = walletRepository;
-        this.statementPeriod = statementPeriod;
     }
 
     // update account statement

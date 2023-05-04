@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public class ClientBillingAccountService {
 
     private final ClientBillingAccountRepository clientBillingAccountRepository;
 
-    public ClientBillingAccountService(ClientWalletService walletService, OrganizationWalletService organizationWalletService, OrganizationBillingAccountService organizationBillingAccountService, CoachWalletService coachWalletService, ClientBillingAccountRepository clientBillingAccountRepository) {
+    public ClientBillingAccountService(@Lazy ClientWalletService walletService, OrganizationWalletService organizationWalletService, OrganizationBillingAccountService organizationBillingAccountService, @Lazy CoachWalletService coachWalletService, ClientBillingAccountRepository clientBillingAccountRepository) {
         this.walletService = walletService;
         this.organizationWalletService = organizationWalletService;
         this.organizationBillingAccountService = organizationBillingAccountService;

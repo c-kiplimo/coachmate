@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CoachWalletRepository extends JpaRepository<CoachWallet,Long> {
-    Optional<CoachWallet> findFirstByOrganizationIdAndCoachIdOrderByIdDesc(long organizationId, long coachId);
-    Optional<CoachWallet> findFirstByCoachIdOrderByIdDesc(long coachId);
+    Optional<CoachWallet> findFirstByOrganizationIdAndUserIdOrderByIdDesc(long organizationId, long coachId);
+    Optional<CoachWallet> findFirstByUserIdOrderByIdDesc(long coachId);
 }

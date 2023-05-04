@@ -18,7 +18,7 @@ public class CoachWalletService {
         log.info("Get coach wallet recent record for organization id {} and coach id {}", organizationId, coachId);
         // obtain latest payment Record
         Optional<CoachWallet> optionalCoachWallet = coachWalletRepository.
-                findFirstByOrganizationIdAndCoachIdOrderByIdDesc(
+                findFirstByOrganizationIdAndUserIdOrderByIdDesc(
                         organizationId, coachId);
 
         if (optionalCoachWallet.isEmpty()) {
@@ -32,7 +32,7 @@ public class CoachWalletService {
         log.info("Get coach wallet recent record for organization id {} and coach id {}", coachId);
         // obtain latest payment Record
         Optional<CoachWallet> optionalCoachWallet = coachWalletRepository.
-                findFirstByCoachIdOrderByIdDesc(coachId);
+                findFirstByUserIdOrderByIdDesc(coachId);
 
         if (optionalCoachWallet.isEmpty()) {
             throw new IllegalArgumentException("Specified wallet does not exist!!!");

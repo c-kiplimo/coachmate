@@ -7,6 +7,7 @@ import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.Data;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class NotificationSettingsService {
     private final UserService userService;
     private final NotificationSettingsMapper notificationSettingsMapper;
 
-    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, ContractTemplatesRepository contractTemplatesRepository, UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
+    public NotificationSettingsService(@Lazy NotificationSettingsRepository notificationSettingsRepository, ContractTemplatesRepository contractTemplatesRepository, @Lazy UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
         this.notificationSettingsRepository = notificationSettingsRepository;
         this.contractTemplatesRepository = contractTemplatesRepository;
         this.userService = userService;
@@ -38,13 +39,13 @@ public class NotificationSettingsService {
     public Optional<NotificationSettings> getAllNotifications(Long coachId) {
         log.info("Getting Notifications Settings");
         // Get All Notifications By coachId
-        return notificationSettingsRepository.findByCoachId(coachId);
+        return notificationSettingsRepository.findByUserId(coachId);
     }
 
 
     public NotificationSettings updateSettings(NotificationSettingsRequest notificationSettingsRequest, Long coachId, String coachName) {
         log.info("Updating Settings for coach with id {}", coachId);
-        Optional<NotificationSettings> notificationOptional = notificationSettingsRepository.findByCoachId(coachId);
+        Optional<NotificationSettings> notificationOptional = notificationSettingsRepository.findByUserId(coachId);
 
         if (notificationOptional.isEmpty()) {
             throw new IllegalArgumentException("Coach has no setting configured! Contact Admin");
@@ -242,11 +243,11 @@ public class NotificationSettingsService {
     }
 
     public Optional<NotificationSettings> getNotification(Long coachId) {
-        return notificationSettingsRepository.findByCoachId(coachId);
+        return notificationSettingsRepository.findByUserId(coachId);
     }
 
     public Optional<NotificationSettingsDTO> findByCoachId(Long coachId) {
         log.info("Request to find notification settings by coachId: {}", coachId);
-        return notificationSettingsRepository.findByCoachId(coachId).map(notificationSettingsMapper::toDto);
+        return notificationSettingsRepository.findByUserId(coachId).map(notificationSettingsMapper::toDto);
     }
 }

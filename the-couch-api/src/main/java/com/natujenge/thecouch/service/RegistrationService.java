@@ -11,6 +11,7 @@ import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.request.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public class RegistrationService {
 
     private final OrganizationRepository organizationRepository;
 
-    public RegistrationService(UserService userService, OrganizationService organizationService, NotificationSettingsService notificationSettingsService, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService, PasswordEncoder passwordEncoder, UserRepository userRepository, OrganizationWalletRepository organizationWalletRepository, OrganizationBillingAccountService organizationBillingAccountService, CoachWalletRepository coachWalletRepository, CoachBillingAccountService coachBillingAccountService, OrganizationRepository organizationRepository) {
+    public RegistrationService(@Lazy UserService userService, OrganizationService organizationService, NotificationSettingsService notificationSettingsService, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService, PasswordEncoder passwordEncoder, UserRepository userRepository, OrganizationWalletRepository organizationWalletRepository, OrganizationBillingAccountService organizationBillingAccountService, CoachWalletRepository coachWalletRepository, CoachBillingAccountService coachBillingAccountService, OrganizationRepository organizationRepository) {
         this.userService = userService;
         this.organizationService = organizationService;
         this.notificationSettingsService = notificationSettingsService;

@@ -13,6 +13,7 @@ import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,12 +39,10 @@ public class UserService implements UserDetailsService {
     private final CoachSettingsService coachSettingsService;
     private final NotificationSettingsService notificationSettingsService;
     private final ContractTemplatesRepository contractTemplatesRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final ConfirmationTokenService confirmationTokenService;
 
-    public UserService(CoachMapper coachMapper, UserRepository userRepository, RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService) {
+    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService) {
         this.coachMapper = coachMapper;
         this.userRepository = userRepository;
         this.registrationService = registrationService;
