@@ -36,7 +36,7 @@ public class UserResource {
         try {
             Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
 
-            User newClientUser = userService.addNewClient(userDetails,organization,
+            User newClientUser = userService.addNewClient(userDetails,organization.get(),
                     clientRequest, userDetails.getMsisdn());
 
             if (newClientUser != null) {

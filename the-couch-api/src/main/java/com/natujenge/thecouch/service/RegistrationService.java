@@ -478,7 +478,7 @@ public class RegistrationService {
 
 
     //Register Client as user
-    public void registerClientAsUser(ClientRequest clientRequest, Optional<Organization> organization, User saveClient) {
+    public void registerClientAsUser(ClientRequest clientRequest, Organization organization, User saveClient) {
         log.info("Registering a Client as User");
         boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
 
@@ -494,7 +494,7 @@ public class RegistrationService {
                         clientRequest.getEmail(),
                         clientRequest.getMsisdn(),
                         UserRole.CLIENT,
-                        organization.get()
+                        organization
                 )
         );
 
