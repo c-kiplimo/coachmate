@@ -34,8 +34,8 @@ spring:
       max-file-size: 2MB
       max-request-size: 2MB
 
-logging:
-  level:
-    org.hibernate.SQL: info
-    org.hibernate.type: trace
-    com.natujenge.thecouch: info
+#logging:
+#  level:
+#    org.hibernate.SQL: info
+#    org.hibernate.type: trace
+#    com.natujenge.thecouch: info
