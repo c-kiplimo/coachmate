@@ -288,7 +288,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getClientByOrgId(Long id, UserRole userRole) {
-        return userRepository.getUserByOrganisationAndUserRole(id, userRole);
+        return userRepository.findUserByOrganizationAndUserRole(id, userRole);
     }
 
     public List<User> getCoachByOrganizationId(Long organizationId) {

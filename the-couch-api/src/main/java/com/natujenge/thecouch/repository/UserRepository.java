@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByIdAndAddedById(Long clientId, Long coachId);
 
-    List<User> getUserByOrganisationAndUserRole(Long id, UserRole userRole);
+    List<User> findUserByOrganizationAndUserRole(Long id, UserRole userRole);
 
     List<User> findAllByOrganizationId(Long organizationId);
 

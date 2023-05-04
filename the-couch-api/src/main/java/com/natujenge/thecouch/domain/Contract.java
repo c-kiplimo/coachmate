@@ -53,11 +53,11 @@ public class Contract {
 
     // relations
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="client_id")
     User client;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="coach_id")
     User coach;
 
     @Override
