@@ -1,10 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,8 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_contracts")
@@ -60,28 +56,5 @@ public class Contract {
     @JoinColumn(name="coach_id")
     User coach;
 
-    @Override
-    public String toString() {
-        return "Contract{" +
-                "id=" + id +
-                ", contractNumber='" + contractNumber + '\'' +
-                ", coachingCategory=" + coachingCategory +
-                ", coachingTopic='" + coachingTopic + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", individualFeesPerSession=" + individualFeesPerSession +
-                ", groupFeesPerSession=" + groupFeesPerSession +
-                ", noOfSessions=" + noOfSessions +
-                ", amountDue=" + amountDue +
-                ", services='" + services + '\'' +
-                ", practice='" + practice + '\'' +
-                ", terms_and_conditions='" + terms_and_conditions + '\'' +
-                ", note='" + note + '\'' +
-                ", contractStatus=" + contractStatus +
-                ", paymentStatus=" + paymentStatus +
-                ", organization=" + organization +
-                ", client=" + client +
-                ", coach=" + coach +
-                '}';
-    }
+
 }

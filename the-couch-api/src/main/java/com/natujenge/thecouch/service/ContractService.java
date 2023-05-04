@@ -567,4 +567,38 @@ public class ContractService {
 
 
     }
+
+
+    private Contract createExample(Long coachId, UserRole userRole, Long clientId,String search, Long organisationId) {
+        Contract  contactExample = new Contract();
+        if (organisationId != null) {
+
+            log.info("org id {}", organisationId);
+            contactExample.getCoach().setOrganization(new Organization());
+            contactExample.getCoach().getOrganization().setId(organisationId);
+        }
+
+//        if (farmerType != null) {
+//            farmerExample.setFarmerType(new FarmerType());
+//            farmerExample.getFarmerType().setName(farmerType);
+//
+//        }
+//        if (farmerStatus != null && !farmerStatus.isEmpty()) {
+//            UserStatus status = UserStatus.valueOf(farmerStatus);
+//            farmerExample.setFarmerStatus(status);
+//        }
+//
+//        if (search != null && !search.isEmpty()) {
+//
+//            if (search.contains("@")) {
+//                farmerExample.setEmail(search);
+//            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+//                farmerExample.setMsisdn(search);
+//            } else {
+//                farmerExample.setName(search);
+//            }
+
+//        }
+        return contactExample;
+    }
 }
