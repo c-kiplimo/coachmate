@@ -76,7 +76,7 @@ payment: any;
     }
   }
   getPaymentsByOrganizationId() {
-    window.scroll(0, 0);
+    
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -96,7 +96,7 @@ payment: any;
     )
   }
   filterByClientNameAndDate() {
-    window.scroll(0, 0);
+    
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -136,7 +136,7 @@ payment: any;
   }
 
   getPaymentsByCoachId(){
-    window.scroll(0, 0);
+    
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -200,7 +200,7 @@ payment: any;
   }
       // get payment by client id and selected period
       getPaymentsByCoachIdAndSelectedPeriod(){
-        window.scroll(0, 0);
+        
         const options = {
           page: 1,
           per_page: this.itemsPerPage,
@@ -222,7 +222,7 @@ payment: any;
       }
       // get payment by client id and selected period
       getPaymentsByClientIdAndSelectedPeriod(id: any){
-        window.scroll(0, 0);
+        
         const options = {
           page: 1,
           per_page: this.itemsPerPage,
@@ -244,7 +244,7 @@ payment: any;
       }
       // get payment by org id and selected period
       getPaymentsByOrgIdAndSelectedPeriod(){
-        window.scroll(0, 0);
+        
         const options = {
           page: 1,
           per_page: this.itemsPerPage,

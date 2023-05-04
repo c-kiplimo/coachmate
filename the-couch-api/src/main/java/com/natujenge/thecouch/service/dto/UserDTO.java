@@ -70,9 +70,9 @@ public class UserDTO {
     Organization organization;
 
 
-    NotificationSettings notificationSettings;
+//    NotificationSettings notificationSettings;
 
-    ContractTemplate contractTemplate;
+//    ContractTemplate contractTemplate;
 
     // Access fields
     private Boolean locked = false;

@@ -9,6 +9,7 @@ import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
+import com.natujenge.thecouch.service.mapper.UserMapper;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
@@ -42,7 +43,9 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService) {
+    private final UserMapper userMapper;
+
+    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService, UserMapper userMapper) {
         this.coachMapper = coachMapper;
         this.userRepository = userRepository;
         this.registrationService = registrationService;
@@ -54,6 +57,7 @@ public class UserService implements UserDetailsService {
         this.contractTemplatesRepository = contractTemplatesRepository;
         this.passwordEncoder = passwordEncoder;
         this.confirmationTokenService = confirmationTokenService;
+        this.userMapper = userMapper;
     }
 
     public User enableAppUser(String email) {
@@ -208,6 +212,10 @@ public class UserService implements UserDetailsService {
         log.info("Request to find user with phone : {}", msisdn);
 
         return userRepository.findByMsisdn(msisdn);
+    }
+    public Optional<UserDTO> findByUsernameDto(Long userId) {
+        return userRepository.findById(userId).map(userMapper::toDto);
+
     }
 
     // check if client exists

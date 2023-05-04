@@ -38,14 +38,14 @@ export class FeedbackComponent implements OnInit {
   } else if (this.userRole == 'COACH') {
     this.getCoachFeedbacks(this.coachData.coach.id);
   }
-  window.scroll(0, 0);
+  
   
 }
 
 
 
   getCoachFeedbacks(coachId: any) {
-    window.scroll(0, 0);
+    
     this.loading = true;
     this.apiService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
@@ -59,7 +59,7 @@ export class FeedbackComponent implements OnInit {
   }
   // get organization feedbacks
   getOrgFeedbacks(orgId: any) {
-    window.scroll(0, 0);
+    
     this.loading = true;
     this.apiService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {

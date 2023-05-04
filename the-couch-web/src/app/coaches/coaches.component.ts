@@ -46,7 +46,7 @@ OrgCoaches: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-    window.scroll(0, 0);
+    
 
     if(this.userRole == 'COACH'){
        this.getClients();
@@ -91,7 +91,7 @@ getOrgClients(){
     search: this.filters.searchItem,
  
   };
-  window.scroll(0, 0);
+  
   const id = this.coachData.id;
   this.loading = true;
   this.ClientService.getOrgClients(id).subscribe(
@@ -126,9 +126,9 @@ getOrgCoaches(id: any) {
   
   getClients(){
     this.Clients = [];
-    window.scroll(0, 0);
+    
     this.loading = true;
-    window.scroll(0, 0);
+    
     const options = {
       page: 1,
       per_page: this.itemsPerPage,

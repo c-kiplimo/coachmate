@@ -55,7 +55,7 @@ export class TemplatesComponent implements OnInit {
 
   ngOnInit(): void {
 
-    window.scroll(0, 0);
+    
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
@@ -83,7 +83,7 @@ export class TemplatesComponent implements OnInit {
         this.isSaving = false;
         this.saveSuccess = true;
         this.editingSettings = false;
-        window.scroll(0, 0);
+        
 
         sessionStorage.setItem('notificationSettings', JSON.stringify(this.notificationDetails));
         this.getAccount();

@@ -2,6 +2,7 @@ package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.service.dto.UserDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,5 +29,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findAllByOrganizationId(Long organizationId);
 
     Optional<User> findByIdAndOrganizationId(Long clientId, Long id);
+
+    Optional<UserDTO> getByMsisdn(String msisdn);
 }
 

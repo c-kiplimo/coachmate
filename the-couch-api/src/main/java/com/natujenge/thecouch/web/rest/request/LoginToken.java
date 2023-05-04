@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.web.rest.request;
 
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.service.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import lombok.Data;
 public class LoginToken {
 
     // return user DTO rather than entire user
-    private User user;
+    private UserDTO user;
     private String token;
 }
 

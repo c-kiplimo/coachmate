@@ -47,7 +47,7 @@ export class contractViewComponent implements OnInit {
     if(this.userRole == 'COACH'){
     this.getUser();
     this.getAllContracts();;
-    window.scroll(0, 0);
+    
     } else if(this.userRole == 'ORGANIZATION'){
       console.log('ORGANIZATION');
       this.getUserOrg();  
@@ -104,7 +104,7 @@ export class contractViewComponent implements OnInit {
   }
 
   getOrgContracts(id: any) {
-    window.scroll(0, 0);
+    
     this.loading = true;
     this.clientService.getOrgContracts(id).subscribe(
       (response: any) => {
@@ -119,7 +119,7 @@ export class contractViewComponent implements OnInit {
   }
 
   getAllContracts() {
-    window.scroll(0, 0);
+    
     this.loading = true;
     this.clientService.getContracts().subscribe(
       (response: any) => {
