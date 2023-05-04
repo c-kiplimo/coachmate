@@ -214,6 +214,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByMsisdn(msisdn);
     }
     public Optional<UserDTO> findByUsernameDto(Long userId) {
+        log.info("User ID Serv   {} ", userId);
         return userRepository.findById(userId).map(userMapper::toDto);
 
     }

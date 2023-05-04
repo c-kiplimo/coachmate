@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.service.dto;
-
 import com.natujenge.thecouch.domain.ContractTemplate;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
@@ -25,15 +24,11 @@ public class UserDTO {
 
     // LOGIN DETAILS
     private String username; //email
-    private String password;
     private UserRole userRole;
 
 
     //CLIENT DETAILS
-
     private ClientType clientType;
-
-
     private ClientStatus clientStatus;
 
 
@@ -42,9 +37,7 @@ public class UserDTO {
     private  String physicalAddress;
     private String clientNumber;
 
-
     //COACH DETAILS
-
     private CoachStatus coachStatus;
     private boolean onboarded; //COACH ADDED BY ORGANIZATION
     private String coachNumber;
@@ -60,22 +53,15 @@ public class UserDTO {
     // management fields
 
     private LocalDateTime createdAt;
-
     private LocalDateTime lastUpdatedAt;
-
     private ContentStatus contentStatus;
 
     // Object Relationships
-
     Organization organization;
 
 
 //    NotificationSettings notificationSettings;
 
 //    ContractTemplate contractTemplate;
-
-    // Access fields
-    private Boolean locked = false;
-    private Boolean enabled = false;
 
 }

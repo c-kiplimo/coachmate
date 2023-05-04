@@ -73,8 +73,7 @@ export class SignInComponent implements OnInit {
           //   location.reload();
           // }, 4);
           this.toastrService.success(
-            'You are loggged in',
-            'Login successfull!'
+            'You are loggged in'
           );
           console.log('here')
 
