@@ -35,7 +35,7 @@ public class FeedbackService {
         Feedback feedback = new Feedback();
 
         // Get session
-        Optional<Session> session = sessionRepository.findSessionById(sessionId);
+        Optional<Session> session = sessionRepository.findById(sessionId);
         Optional<User> client = userRepository.findById(session.get().getClient().getId());
 
         // Set coach or organization based on ID present
