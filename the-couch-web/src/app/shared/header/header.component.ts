@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  faSign,
-  faUser,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { faSign, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class UserComponent implements OnInit {
+export class HeaderComponent implements OnInit {
+
+  @Output() sideNavToggle = new EventEmitter<boolean>();
+  menuStatus: boolean = false;
+
   logoutIcon = faSign;
   showDropdown = false;
   loginIcon = faSign;
@@ -18,10 +19,13 @@ export class UserComponent implements OnInit {
   customersIcon = faUsers;
   businessName: any;
   backIcon: any;
-
-  constructor(public router: Router) { }
-
   user: any
+
+  constructor(
+    public router : Router
+  ) {}
+
+
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('user') as any);
     if (this.user.userRole === 'COACH') {
@@ -35,6 +39,11 @@ export class UserComponent implements OnInit {
     }
   }
 
+  SideNavToggle() {
+    this.menuStatus = !this.menuStatus;
+    this.sideNavToggle.emit(this.menuStatus);
+  }
+
   logOut() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('businessName');
@@ -42,9 +51,6 @@ export class UserComponent implements OnInit {
     this.businessName = '';
     this.router.navigate(['signin']);
 
-  }
-  back() {
-    window.history.back();
   }
 
 }

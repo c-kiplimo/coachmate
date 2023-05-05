@@ -52,31 +52,17 @@ export class SignInComponent implements OnInit {
           this.errorMessage = response.body.message;
         } else {
           this.loginSuccess = true;
-          const data = response;
-          this.token = data.token;
-          console.log(this.token);
-          if (data.user.coach === null) {
-            this.businessName = data.user.fullName;
-          } else{
-            this.businessName = data.user.coach.businessName;
-          }
-          console.log(this.businessName);
+          this.token = response.token;
 
           sessionStorage.setItem('token', this.token);
-          sessionStorage.setItem('businessName', this.businessName);
-          sessionStorage.setItem('user', JSON.stringify(data.user));
-          sessionStorage.setItem('notificationSettings', JSON.stringify(data.user.notificationSettings));
+          sessionStorage.setItem('businessName',  response.user.businessName);
+          sessionStorage.setItem('user', JSON.stringify(response.user));
+          //sessionStorage.setItem('notificationSettings', JSON.stringify(response.user.notificationSettings));
           
           this.router.navigate(['dashboard']);
-
-          // setTimeout(() => {
-          //   location.reload();
-          // }, 4);
           this.toastrService.success(
             'You are loggged in'
           );
-          console.log('here')
-
         }
       },
       error: (error: any): any => {
@@ -84,7 +70,6 @@ export class SignInComponent implements OnInit {
           'wrong Username/Password',
           'Failled to log in'
         );
-
         return (this.errorMessage = error.error.message);
       },
     });

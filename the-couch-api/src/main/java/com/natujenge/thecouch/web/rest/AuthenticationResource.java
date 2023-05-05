@@ -45,8 +45,11 @@ public class AuthenticationResource {
     @PostMapping
     public ResponseEntity<?> generateToken(@RequestBody Login login) {
         try {
+
             log.info("{}", login);
+
             User user = userService.findByUsername(login.getUsername());
+
             if (user == null) {
                 String message = String.format("User %s not found", login.getUsername());
                 log.info(message);
@@ -83,10 +86,10 @@ public class AuthenticationResource {
             String token = jwtTokenUtil.generateToken(user);
             log.info("User token generate  {} ", token);
             UserDTO userDto = userMapper.toDto(user);
-            log.info("User found of msisdn   {} ", user);
+            log.info("User found of msisdn   {} ", user.getId());
             log.info("User DTO   {} ", userDto);
 
-            return new ResponseEntity<>(new LoginToken(userDto, token), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginToken(user, token), HttpStatus.OK);
 
         } catch (AuthenticationException authe){
             String message = String.format("Authentication error for  %s", login.getUsername());

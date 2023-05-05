@@ -181,7 +181,6 @@ public class UserService implements UserDetailsService {
         }
 
         User user = optionalUser.get();
-        user.setNotificationSettings(registeredUser.getNotificationSettings());
         user.setFirstName(registeredUser.getFirstName());
 
         userRepository.save(user);

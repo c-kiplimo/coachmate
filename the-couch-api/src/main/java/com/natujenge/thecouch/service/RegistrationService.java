@@ -177,8 +177,6 @@ public class RegistrationService {
                 ContractTemplate contractTemplate =notificationSettingsService.addContractTemplates(contractTemplatesRequest);
                 log.info("Contract Templates Saved Successfully");
                 User registeredUser = (User) response.get(0);
-                registeredUser.setNotificationSettings(notificationSettings);
-                registeredUser.setContractTemplate(contractTemplate);
                 userService.updateUser(registeredUser);
 
 
@@ -327,7 +325,6 @@ public class RegistrationService {
                     // Update User
                     User registeredUser = (User) response.get(0);
                     log.info("User to be updated: " + registeredUser.getUsername());
-                    registeredUser.setNotificationSettings(notificationSettings);
                     registeredUser.setOrganization(Optional.of(registeredOrg).get());
                     //userService.updateUser(registeredUser);
 
@@ -515,7 +512,6 @@ public class RegistrationService {
         log.info("Notifications Saved Successfully");
         // Update User
         User registeredUser = (User) response.get(0);
-        registeredUser.setNotificationSettings(notificationSettings);
        // registeredUser.setCoach(savedCoach);
        // userService.updateUser(registeredUser);
 

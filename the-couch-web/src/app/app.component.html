@@ -1,6 +1,6 @@
 
 <app-sidnav *ngIf="!notlogged" (onToggleSideNav)="onToggleSideNav($any($event))"></app-sidnav>
-
+<app-header></app-header>
 <app-body 
     [collapsed]="isSideNavCollapsed"
     [screenWidth]="screenWidth"

@@ -24,11 +24,15 @@ public class UserDTO {
 
     // LOGIN DETAILS
     private String username; //email
+    private String password;
     private UserRole userRole;
 
 
     //CLIENT DETAILS
+
     private ClientType clientType;
+
+
     private ClientStatus clientStatus;
 
 
@@ -37,7 +41,9 @@ public class UserDTO {
     private  String physicalAddress;
     private String clientNumber;
 
+
     //COACH DETAILS
+
     private CoachStatus coachStatus;
     private boolean onboarded; //COACH ADDED BY ORGANIZATION
     private String coachNumber;
@@ -53,10 +59,13 @@ public class UserDTO {
     // management fields
 
     private LocalDateTime createdAt;
+
     private LocalDateTime lastUpdatedAt;
+
     private ContentStatus contentStatus;
 
     // Object Relationships
+
     Organization organization;
 
 

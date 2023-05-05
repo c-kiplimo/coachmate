@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './sidnav/sidnav.component';
-import{ContactUsComponent} from './contact-us/contact-us.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -67,6 +67,7 @@ import { InitialSetupComponent } from './account-settings/initial-setup/initial-
 import { TemplatesComponent } from './account-settings/templates/templates.component';
 import { ProfileComponent } from './account-settings/profile/profile.component';
 import { PaymentsComponent } from './account-settings/payments/payments.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 
 
@@ -105,22 +106,24 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
     ContractDetailsComponent,
     GetPeriodPipe,
     AddCoachComponent,
+    UserComponent,
 
     HomeComponent,
-      FeedbackComponent,
-      SupportComponent,
-      TermsAndConditionsPageComponent,
-      AddAvailableSlotsComponent,
-      SettingsComponent,
-      CoachConfirmComponent,
-      CoachViewComponent,
-      CoachesComponent,
-      NotificationsComponent
+    FeedbackComponent,
+    SupportComponent,
+    TermsAndConditionsPageComponent,
+    AddAvailableSlotsComponent,
+    SettingsComponent,
+    CoachConfirmComponent,
+    CoachViewComponent,
+    CoachesComponent,
+    NotificationsComponent,
+    HeaderComponent
 
 
   ],
-  imports: [  
-    MbscModule, 
+  imports: [
+    MbscModule,
     BrowserModule,
     CoachEducationModule,
     ReactiveFormsModule,
@@ -156,4 +159,4 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
