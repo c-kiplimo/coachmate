@@ -1,0 +1,180 @@
+
+<div class="row">
+        <div class="d-none d-md-block"class="col-4">
+          <div class="filters-section">
+            <div class="wrap">
+              <select
+                class="form-control"
+                name="codes"
+                [(ngModel)]="filters.status"
+              >
+                <option value="">All statuses</option>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="SUSPENDED">SUSPENDED</option>
+                <option value="CLOSED">CLOSED</option>
+              </select>
+            </div>
+            </div>
+        </div>
+    <div class="wrap" class="col-3">
+              <input
+                type="text"
+                class="form-control search-bar text-muted mt-3"
+                name="customer"
+                [(ngModel)]="filters.searchItem"
+                placeholder="Name, Phone or Email"
+                autocomplete="off"
+              />
+            </div>
+<div class="col-3">
+    <button class="btn button-filter  search-bar" (click)="getClients()" (click)="getOrgClients()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              Search
+            </button>
+</div>
+  <div class="col-2">
+    <button type="button" routerLink="/addclient" class="btn btn-success">
+      <i class="fa-solid fa-user-plus"></i> ADD CLIENT
+    </button>
+  </div>
+  </div>
+  
+<div class="row list-container container ">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Client Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Group/Cooporate</th>
+        <th scope="col">Address</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let client of Clients">
+        <th>{{ client.id }}</th>
+        <td>{{ client.firstName + " " + client.lastName | titlecase }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.msisdn }}</td>
+        <td>{{ client.clientType }}</td>
+        <td>{{ client.physicalAddress }}</td>
+        <td>
+          <span class="badge"[ngClass]="getClass(client)"
+          > {{ client.status }}</span>
+          
+        </td>
+        
+        <td class="actions">
+          <i
+            class="fa-solid fa-arrow-up-right-from-square"
+            (click)="navigateToClientView(client.id)"
+          ></i>
+          <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal"
+          data-bs-target="#editClientModal"
+          (click)="editClient(client)"></i>
+          <!-- <i
+            class="fa-solid fa-trash-can"
+            (click)="suspendClient(client)"
+          ></i> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+    <div class="donut multi"></div>
+  </div>
+  <p class="text-muted mt-5" *ngIf="!loading && !Clients.length">
+    No clients Found.
+  </p>
+</div>
+
+
+
+<!-- Edit Client Modal -->
+<div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form [formGroup]="updateClient">
+        <div class="mb-3 form-group">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+          value="{{ clientToBeUpdated?.firstName }}"/>
+        </div>
+        <div class="mb-3 form-group">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+          value="{{ clientToBeUpdated?.lastName }}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="email_address" class="form-label">Email</label>
+
+          <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
+
+          value="{{ clientToBeUpdated?.email }}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="msisdn" class="form-label">Phone Number</label>
+          <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
+          value="{{ clientToBeUpdated?.msisdn }}">
+        </div>
+
+        <div class="mb-3 form-group">
+
+          <label for="physicalAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physicalAddress"
+
+
+          value="{{ clientToBeUpdated?.physicalAddress}}">
+        </div>
+        <div class="mb-3 form-group">
+          <label for="reason" class="form-label">Reason</label>
+          <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
+          value="{{ clientToBeUpdated?.reason}}">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+          </div>
+
+          <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
+
+          value="{{ clientToBeUpdated?.paymentMode }}">
+            <option selected>Select Payment Mode</option>
+            <option value="PREPAY">PREPAY</option>
+            <option value="POSTPAY">POSTPAY</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="clientType">Client Type</label>
+          </div>
+          <select class="form-select" id="inputGroupSelect01" formControlName="type" 
+          value="{{ clientToBeUpdated?.clientType }}">
+            <option selected>Select Client type</option>
+            <option value="INDIVIDUAL">INDIVIDUAL</option>
+            <option value="CORPORATE">CORPORATE</option>
+            <option value="GROUP">GROUP</option>
+          </select>
+        </div>
+       </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success"
+        (click)="updateClientDetails(clientToBeUpdated.id)"
+        >Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

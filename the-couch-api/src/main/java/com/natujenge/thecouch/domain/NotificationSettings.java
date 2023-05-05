@@ -18,7 +18,6 @@ public class NotificationSettings {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     @Enumerated(EnumType.STRING)
     private NotificationMode notificationMode;
 

@@ -3,6 +3,7 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.UserSession;
 import com.natujenge.thecouch.service.dto.UserDTO;
+import com.natujenge.thecouch.service.mapper.UserMapper;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.repository.UserSessionRepository;
 import com.natujenge.thecouch.security.JwtTokenUtil;
@@ -19,8 +20,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/token")
 @Slf4j
@@ -33,12 +32,14 @@ public class AuthenticationResource {
     private final UserSessionRepository userSessionRepo;
 
     private final JwtTokenUtil jwtTokenUtil;
+    private final UserMapper userMapper;
 
-    public AuthenticationResource(UserService userService, AuthenticationManager authenticationManager, UserSessionRepository userSessionRepo, JwtTokenUtil jwtTokenUtil) {
+    public AuthenticationResource(UserService userService, AuthenticationManager authenticationManager, UserSessionRepository userSessionRepo, JwtTokenUtil jwtTokenUtil, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.userSessionRepo = userSessionRepo;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.userMapper = userMapper;
     }
 
     @PostMapping
@@ -84,10 +85,11 @@ public class AuthenticationResource {
 
             String token = jwtTokenUtil.generateToken(user);
             log.info("User token generate  {} ", token);
-            Optional<UserDTO> userDto = userService.findByUsernameDto(user.getId());
-            log.info("User found of msisdn   {} ", user.getMsisdn());
+            UserDTO userDto = userMapper.toDto(user);
+            log.info("User found of msisdn   {} ", user.getId());
+            log.info("User DTO   {} ", userDto);
 
-            return new ResponseEntity<>(new LoginToken(userDto.get(), token), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginToken(user, token), HttpStatus.OK);
 
         } catch (AuthenticationException authe){
             String message = String.format("Authentication error for  %s", login.getUsername());

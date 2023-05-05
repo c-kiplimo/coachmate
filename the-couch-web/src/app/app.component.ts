@@ -2,49 +2,30 @@ import { Component } from '@angular/core';
 import {LocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 
-
-interface SideNavToggle {
-  screenWidth: number;
-  collapsed: boolean;
-  
-}
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'The Couch Dashboard';
-  notlogged = false;
-  
+  title = 'CoachMatePRO';
+  sideNavStatus: boolean = false;
+  hideHeaderAndSideNav: boolean = false;
+  user: any;
 
-  constructor(private url:LocationStrategy, private router: Router) { }
-
-  User: any
+  constructor(private url:LocationStrategy, public router: Router) { }
 
   ngOnInit(): void {
-    // console.log(this.url.path());
-    // if(this.url.path()==='/signin'){
+    //get session storage of the loged in user
+    this.user = sessionStorage.getItem("user");
+    console.log(this.user);
 
-    //  this.notlogged=true; 
-    //  }
+    if (this.user != null) {
+      this.hideHeaderAndSideNav = true;
+    } else {
+      this.hideHeaderAndSideNav = false;
 
-    //  this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    //  if(!this.User) {
-    //   this.router.navigate(['/signin']);
-    //  }
+    }
   }
-  
-  isSideNavCollapsed = false;
-  screenWidth = 0;
-
-  
-  onToggleSideNav(data: SideNavToggle): void {
-    this.screenWidth = data.screenWidth;
-    this.isSideNavCollapsed = data.collapsed;
-  }
-
- 
  
 }

@@ -115,7 +115,7 @@ public class NotificationResource {
 
     // Filter notifications by sessionId
     @GetMapping("/filter-by-session-id")
-    public ResponseEntity<?> filterNotificationsBySessionIdAndCoachId(
+    public ResponseEntity<?> filterNotificationsBySessionId(
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
             @AuthenticationPrincipal User userDetails,
@@ -128,12 +128,10 @@ public class NotificationResource {
                     coachId
             );
             log.info("Coach id {}, session id {}",coachId,sessionId);
-            ListResponse notifications = notificationService.filterBySessionIdAndCoachId(
+            ListResponse notifications = notificationService.filterBySessionId(
                     page,
                     perPage,
-                    sessionId,
-                    coachId
-            );
+                    sessionId);
             //LATER add HTTP headers
             return ResponseEntity.ok().body(notifications);
         } catch (Exception e) {

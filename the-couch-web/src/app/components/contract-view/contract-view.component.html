@@ -1,0 +1,52 @@
+
+<div class="row">
+  <div class="col-sm-10 col-md-10"></div>
+  <div class="col-sm-2 col-md-2">
+    <button type="button" routerLink="/contract" class="btn btn-success d-sm-none d-md-block"
+      *ngIf="this.userRole != 'CLIENT'">
+      <i class="fa-solid fa-user-plus"></i>Add Contract
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th scope="col">Coaching Category</th>
+          <th scope="col">Status</th>
+          <th scope="col">Client</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">No Of Sessions</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contract of contracts">
+          <th scope="row">{{ contract.id}}</th>
+          <td>{{ contract.coachingTopic }}</td>
+          <td>{{ contract.coachingCategory }}</td>
+          <td>{{ contract.contractStatus}}</td>
+          <td>{{  contract.coachingTopic }}</td>
+          <td>{{ contract.startDate | date : "MMM d, y" }}</td>
+          <td>{{ contract.endDate | date : "MMM d, y" }}</td>
+          <td>{{ contract.noOfSessions }}</td>
+          <td class="actions">
+          <i class="fa-solid fa-arrow-up-right-from-square"  (click)="navigateToTerms(contract.id)" ></i>
+            <i class="fa-solid fa-pen-to-square"></i>
+            <i class="fa-solid fa-trash-can"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+    <div class="donut multi"></div>
+  </div>
+  <p class="text-muted mt-5" *ngIf="!loading && contracts.length == 0">
+    No contracts Found.
+  </p>
+</div>
