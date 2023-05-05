@@ -5,8 +5,8 @@ import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.ContractService;
-import com.natujenge.thecouch.service.dto.ContractDTO;
 import com.natujenge.thecouch.util.PaginationUtil;
+import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Slf4j

@@ -2,7 +2,8 @@ package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;

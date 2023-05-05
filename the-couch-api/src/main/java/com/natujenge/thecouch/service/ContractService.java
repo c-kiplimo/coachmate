@@ -1,19 +1,30 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.config.Constants;
-import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Notification;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.exception.UserNotFoundException;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.repository.ContractRepository;
+import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.mapper.ContractMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
+import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -346,7 +357,7 @@ public class ContractService {
     }
 
     public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId,
-            Pageable pageable) {
+                                    Pageable pageable) {
         Contract contract = createExample(userId, clientId, userRole, search, organisationId);
         log.info("After example {} ", contract);
         ExampleMatcher matcher = ExampleMatcher.matching()

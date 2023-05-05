@@ -1,9 +1,7 @@
 package com.natujenge.thecouch.service.mapper;
 
 import com.natujenge.thecouch.domain.Contract;
-import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.dto.ContractDTO;
-import com.natujenge.thecouch.service.dto.UserDTO;
+import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,14 +14,11 @@ public interface ContractMapper extends EntityMapper<ContractDTO, Contract> {
     @Mapping(target = "organizationEmail", source = "organization.email")
     @Mapping(target = "organizationSuperCoachId", source = "organization.superCoachId")
     @Mapping(target = "organizationStatus", source = "organization.status")
-
-
     @Mapping(target = "clientId", source = "client.id")
     @Mapping(target = "clientFullName", source = "client.fullName")
     @Mapping(target = "clientFirstName", source = "client.firstName")
     @Mapping(target = "clientLastName", source = "client.lastName")
     @Mapping(target = "clientBusinessName", source = "client.businessName")
-
     @Mapping(target = "coachId", source = "coach.id")
     @Mapping(target = "coachFullName", source = "coach.fullName")
     @Mapping(target = "coachFirstName", source = "coach.firstName")
