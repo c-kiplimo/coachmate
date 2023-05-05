@@ -6,15 +6,16 @@ import com.natujenge.thecouch.domain.enums.*;
 
 import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.service.dto.ContractDTO;
+import com.natujenge.thecouch.service.mapper.ContractMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
-import com.natujenge.thecouch.web.rest.dto.ContractDto;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +25,10 @@ import java.util.*;
 @Slf4j
 @Data
 public class ContractService {
-    public ContractDto contractDto;
-
 
     private final SessionRepository sessionRepository;
+
+    private final ContractMapper contractMapper;
 
     private final OrganizationService organizationService;
 
@@ -59,7 +60,7 @@ public class ContractService {
 
     private final CoachBillingAccountService coachBillingAccountService;
 
-    public ContractService(SessionRepository sessionRepository, OrganizationService organizationService,
+    public ContractService(SessionRepository sessionRepository, ContractMapper contractMapper, OrganizationService organizationService,
                            ContractObjectiveRepository clientObjectiveRepository, ContractRepository contractRepository
                            , UserService userService, NotificationRepository notificationRepository,
                            UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
@@ -67,6 +68,7 @@ public class ContractService {
                            NotificationService notificationService,
                            ContractObjectiveRepository contractObjectiveRepository, CoachBillingAccountService coachBillingAccountService) {
         this.sessionRepository = sessionRepository;
+        this.contractMapper = contractMapper;
         this.organizationService = organizationService;
         this.clientObjectiveRepository = clientObjectiveRepository;
         this.contractRepository = contractRepository;
@@ -569,36 +571,47 @@ public class ContractService {
     }
 
 
-    private Contract createExample(Long coachId, UserRole userRole, Long clientId,String search, Long organisationId) {
+    private Contract createExample(Long userId,Long clientId, UserRole userRole,String search, Long organisationId) {
         Contract  contactExample = new Contract();
+
+        User coach=new User();
+        User client=new User();
+
+        if (userId != null && userRole.equals(UserRole.COACH)) {
+
+            contactExample.setCoach(coach);
+
+            log.info("User role is  {}", userRole);
+            contactExample.getCoach().setId(userId);
+        }
         if (organisationId != null) {
+            contactExample.setCoach(coach);
 
             log.info("org id {}", organisationId);
             contactExample.getCoach().setOrganization(new Organization());
             contactExample.getCoach().getOrganization().setId(organisationId);
         }
+        if (clientId != null && userRole.equals(UserRole.CLIENT)) {
+            log.info("User role is {}", userRole);
+            contactExample.setClient(client);
+            contactExample.getClient().setId(clientId);
+        }
 
-//        if (farmerType != null) {
-//            farmerExample.setFarmerType(new FarmerType());
-//            farmerExample.getFarmerType().setName(farmerType);
-//
-//        }
-//        if (farmerStatus != null && !farmerStatus.isEmpty()) {
-//            UserStatus status = UserStatus.valueOf(farmerStatus);
-//            farmerExample.setFarmerStatus(status);
-//        }
-//
-//        if (search != null && !search.isEmpty()) {
-//
-//            if (search.contains("@")) {
-//                farmerExample.setEmail(search);
-//            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
-//                farmerExample.setMsisdn(search);
-//            } else {
-//                farmerExample.setName(search);
-//            }
 
-//        }
+
         return contactExample;
+    }
+
+
+    public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId, Pageable pageable) {
+        Contract contract = createExample(userId,clientId,userRole,search,organisationId);
+        log.info("After example {} ", contract);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreNullValues();
+        Example<Contract> example = Example.of(contract, matcher);
+        return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
+
     }
 }
