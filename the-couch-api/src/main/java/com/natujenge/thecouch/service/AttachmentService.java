@@ -1,7 +1,10 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.domain.Attachments;
+import com.natujenge.thecouch.domain.Session;
+import com.natujenge.thecouch.repository.AttachmentsRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

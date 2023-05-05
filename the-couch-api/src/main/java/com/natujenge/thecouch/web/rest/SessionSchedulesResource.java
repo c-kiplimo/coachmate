@@ -3,13 +3,21 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.SessionSchedulesService;
+import com.natujenge.thecouch.util.PaginationUtil;
+import com.natujenge.thecouch.util.ResponseUtil;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.dto.SessionSchedulesDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -18,22 +26,6 @@ public class SessionSchedulesResource {
     private final SessionSchedulesService sessionSchedulesService;
     public SessionSchedulesResource(SessionSchedulesService sessionSchedulesService) {
         this.sessionSchedulesService = sessionSchedulesService;
-    }
-
-    //Get by coach id
-    @GetMapping("/byCoachId/{coachId}")
-    public ResponseEntity<?> findSessionSchedulesByCoachId (@PathVariable("coachId") Long coachId,
-                                                            @RequestParam(name = "status", required = false) Boolean status,
-                                                            @AuthenticationPrincipal User userDetails) {
-        try {
-            List<SessionSchedules> sessionSchedules = sessionSchedulesService.findSessionSchedulesByCoachId(coachId, status);
-            return new ResponseEntity<>(sessionSchedules, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     //ADD
@@ -50,12 +42,30 @@ public class SessionSchedulesResource {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<SessionSchedulesDTO> getSessionSchedulesById(@PathVariable("id") Long id,
+                                                     @AuthenticationPrincipal User userDetails) {
 
+        Optional<SessionSchedulesDTO> sessionSchedules = sessionSchedulesService.findSessionSchedulesById(id);
+        return ResponseUtil.wrapOrNotFound(sessionSchedules);
+
+    }
     //DELETE
     @DeleteMapping
-    ResponseEntity delete(@RequestParam(name = "id") Long id, @RequestParam(name = "coachId") Long coachId) {
-        SessionSchedules deleteSessionSchedule = sessionSchedulesService.delete(id, coachId);
-        return new ResponseEntity(deleteSessionSchedule, HttpStatus.OK);
+    public ResponseEntity<?> delete(@RequestParam(name = "id") Long id) {
+        sessionSchedulesService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //Get by coach id
+    @GetMapping("/filter")
+    public ResponseEntity<?> filter (@RequestParam(name = "coachId", required = false) Long coachId,
+                                     @RequestParam(name = "status", required = false) Boolean status,
+                                     @RequestParam(name = "search", required = false) String search,
+                                     Pageable pageable,
+                                     @AuthenticationPrincipal User userDetails) {
+        Page<SessionSchedulesDTO> sessionSchedulesDTOPage = sessionSchedulesService.filter(coachId, status, search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), sessionSchedulesDTOPage);
+        return ResponseEntity.ok().headers(headers).body(sessionSchedulesDTOPage.getContent());
     }
 
 

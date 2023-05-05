@@ -4,13 +4,15 @@ import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
+import com.natujenge.thecouch.repository.ClientWalletRepository;
+import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
-import com.natujenge.thecouch.domain.ClientBillingAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -20,9 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

@@ -5,9 +5,10 @@ import com.natujenge.thecouch.domain.Notification;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.NotificationRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.NotificationDto;
-import com.natujenge.thecouch.web.rest.dto.SessionDto;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,10 +25,14 @@ import java.util.Optional;
 @Slf4j
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
 
-    public NotificationService(NotificationRepository notificationRepository) {
+    private final SessionMapper sessionMapper;
+
+    public NotificationService(NotificationRepository notificationRepository, SessionRepository sessionRepository, SessionMapper sessionMapper) {
         this.notificationRepository = notificationRepository;
+        this.sessionRepository = sessionRepository;
+        this.sessionMapper = sessionMapper;
     }
 
     public Notification getNotificationById(long id, Long coachId) {
@@ -79,13 +84,13 @@ public class NotificationService {
     }
 
     // get notification by session and coach id
-    public ListResponse filterBySessionIdAndCoachId(int page, int perPage, Long sessionId, Long coachId) {
+    public ListResponse filterBySessionId(int page, int perPage, Long sessionId) {
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
         // Check if session exists
-        Optional<SessionDto> optionalNotification = sessionRepository.findByIdAndCoachId(sessionId, coachId);
+        Optional<SessionDTO> optionalNotification = sessionRepository.findById(sessionId).map(sessionMapper::toDto);
         if (optionalNotification.isEmpty()) {
             throw new IllegalArgumentException("session not Found");
         }

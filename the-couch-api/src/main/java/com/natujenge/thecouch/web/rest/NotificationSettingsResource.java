@@ -1,9 +1,10 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
+import com.natujenge.thecouch.domain.NotificationSettings;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.NotificationSettingsService;
-import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

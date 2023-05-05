@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.web.rest.dto;
-import com.natujenge.thecouch.domain.enums.*;
-import lombok.Data;
+
+import com.natujenge.thecouch.domain.enums.ClientType;
+import com.natujenge.thecouch.domain.enums.CoachingCategory;
 
 import java.time.LocalDate;
 

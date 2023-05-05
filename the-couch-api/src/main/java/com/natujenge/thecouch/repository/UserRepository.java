@@ -2,7 +2,7 @@ package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
-import com.natujenge.thecouch.service.dto.UserDTO;
+import com.natujenge.thecouch.web.rest.dto.UserDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

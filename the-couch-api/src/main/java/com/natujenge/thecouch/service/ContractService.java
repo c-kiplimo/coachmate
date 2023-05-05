@@ -1,20 +1,30 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.config.Constants;
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.*;
-
+import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Notification;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.ContractStatus;
+import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.exception.UserNotFoundException;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.repository.ContractRepository;
+import com.natujenge.thecouch.repository.NotificationRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.service.mapper.ContractMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
-import com.natujenge.thecouch.web.rest.dto.ContractDto;
+import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
-
-
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,22 +34,16 @@ import java.util.*;
 @Slf4j
 @Data
 public class ContractService {
-    public ContractDto contractDto;
-
 
     private final SessionRepository sessionRepository;
 
+    private final ContractMapper contractMapper;
+
     private final OrganizationService organizationService;
-
-
-    private final ContractObjectiveRepository clientObjectiveRepository;
-
 
     private final ContractRepository contractRepository;
 
-
     private final UserService userService;
-
 
     private final NotificationRepository notificationRepository;
 
@@ -51,24 +55,20 @@ public class ContractService {
 
     private final ClientBillingAccountService clientBillingAccountService;
 
-
     private final NotificationService notificationService;
-
-
-    private final ContractObjectiveRepository contractObjectiveRepository;
 
     private final CoachBillingAccountService coachBillingAccountService;
 
-    public ContractService(SessionRepository sessionRepository, OrganizationService organizationService,
-                           ContractObjectiveRepository clientObjectiveRepository, ContractRepository contractRepository
-                           , UserService userService, NotificationRepository notificationRepository,
-                           UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
-                           NotificationSettingsService notificationSettingsService, ClientBillingAccountService clientBillingAccountService,
-                           NotificationService notificationService,
-                           ContractObjectiveRepository contractObjectiveRepository, CoachBillingAccountService coachBillingAccountService) {
+    public ContractService(SessionRepository sessionRepository, ContractMapper contractMapper,
+            OrganizationService organizationService, ContractRepository contractRepository, UserService userService,
+            NotificationRepository notificationRepository,
+            UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
+            NotificationSettingsService notificationSettingsService,
+            ClientBillingAccountService clientBillingAccountService,
+            NotificationService notificationService, CoachBillingAccountService coachBillingAccountService) {
         this.sessionRepository = sessionRepository;
+        this.contractMapper = contractMapper;
         this.organizationService = organizationService;
-        this.clientObjectiveRepository = clientObjectiveRepository;
         this.contractRepository = contractRepository;
 
         this.userService = userService;
@@ -78,7 +78,6 @@ public class ContractService {
         this.notificationSettingsService = notificationSettingsService;
         this.clientBillingAccountService = clientBillingAccountService;
         this.notificationService = notificationService;
-        this.contractObjectiveRepository = contractObjectiveRepository;
         this.coachBillingAccountService = coachBillingAccountService;
     }
 
@@ -102,18 +101,20 @@ public class ContractService {
         return contractRepository.findAllByClientId(clientId);
     }
 
-    public Contract createContract(Long coachId, ContractRequest contractRequest) {
+    public Contract createContract(Long coachId, ContractRequest contractRequest, Long organizationId) {
 
         // Get Client
         log.info("Client id:{}", contractRequest);
         User client = userRepository.findById(contractRequest.getClientId())
                 .orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
-                + " not found"));
+                        + " not found"));
 
         // Get Coach
         Optional<User> user = userRepository.findById(coachId);
+        log.info("user --{}", user.get());
+        log.info("coachid------{}", coachId);
         User coach = null;
-        Contract contract1 = null;
+        Contract savedcontract = null;
         if (user.isPresent()) {
             coach = user.get();
 
@@ -130,7 +131,17 @@ public class ContractService {
             contract.setContractStatus(ContractStatus.NEW);
             contract.setServices(contractRequest.getServices());
             contract.setPractice(contractRequest.getPractice());
+            contract.setObjective(contractRequest.getObjectives());
+            if (organizationId != null) {
+                contract.getOrganization().setId(organizationId);
+
+            }
+            log.info("coach------{}", coach);
+            contract.setCoach(coach);
+
             contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
+
+            contract.setObjective(contractRequest.getObjectives());
             contract.setNote(contractRequest.getNote());
             // contract Number Generation
             int randNo = (int) ((Math.random() * (99 - 1)) + 1);
@@ -139,13 +150,12 @@ public class ContractService {
                     client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + contractL;
             contract.setContractNumber(contractNo);
 
-
-            Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL) ?
-                    contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions() :
-                    contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
+            Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL)
+                    ? contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions()
+                    : contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
             log.info("Amount Due:{} ", amountDue);
             contract.setAmountDue(amountDue);
-            clientBillingAccountService.updateBillingAccount(amountDue, coach, client);
+            // clientBillingAccountService.updateBillingAccount(amountDue, coach, client);
             log.info("Amount Due:{} ", amountDue);
             log.info("Contract: " + contract.toString());
             log.info("Client: " + client.toString());
@@ -154,52 +164,35 @@ public class ContractService {
 
             contract.setCoach(coach);
 
-
             if (coach.getOrganization() != null) {
                 contract.setOrganization(coach.getOrganization());
             }
 
             log.info("Contract: " + contract.toString());
 
-            contract1 = contractRepository.save(contract);
-
-            List<String> objectives = contractRequest.getObjectives();
-            // save Objectives
-            List<CoachingObjective> coachingObjectives = new ArrayList<>();
-
-            for (String objective :
-                    objectives) {
-                CoachingObjective coachingObjective = new CoachingObjective();
-                coachingObjective.setObjective(objective);
-                coachingObjective.setCreatedBy(coach.getFullName());
-
-                coachingObjective.setClient(client);
-                coachingObjective.setContract(contract1);
-                coachingObjective.setCoach(client.getAddedBy());
-
-                coachingObjectives.add(coachingObjective);
-            }
-            contractObjectiveRepository.saveAll(coachingObjectives);
+            savedcontract = contractRepository.save(contract);
 
             log.info("Prep to send sms");
             Map<String, Object> replacementVariables = new HashMap<>();
-            replacementVariables.put("client_name", contract1.getClient().getFullName());
-            replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
-            replacementVariables.put("start_date", contract1.getStartDate());
-            replacementVariables.put("end_date", contract1.getEndDate());
-            replacementVariables.put("business_name", contract1.getClient().getAddedBy().getBusinessName());
+            replacementVariables.put("client_name", savedcontract.getClient().getFullName());
+            replacementVariables.put("coaching_topic", savedcontract.getCoachingTopic());
+            replacementVariables.put("start_date", savedcontract.getStartDate());
+            replacementVariables.put("end_date", savedcontract.getEndDate());
+            replacementVariables.put("business_name", savedcontract.getClient().getAddedBy().getBusinessName());
 
             String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
 
-            //replacement to get content
+            // replacement to get content
             String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-            String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
-            String referenceId = contract1.getId().toString();
-            String msisdn = contract1.getClient().getMsisdn();
+            String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; // TO-DO get this value from cooperative
+                                                                         // settings
+            String referenceId = savedcontract.getId().toString();
+            String msisdn = savedcontract.getClient().getMsisdn();
 
-            log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
+            log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent,
+                    sourceAddress, msisdn, referenceId);
 
-            //send sms
+            // send sms
             notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
             log.info("sms sent ");
 
@@ -207,8 +200,7 @@ public class ContractService {
             notificationServiceHTTPClient.sendEmail(client.getEmail(), "Contract Created", smsContent, false);
             log.info("Email sent");
 
-
-            //create notification object and send it
+            // create notification object and send it
             Notification notification = new Notification();
             notification.setNotificationMode(NotificationMode.SMS);
             notification.setDestinationAddress(msisdn);
@@ -221,14 +213,14 @@ public class ContractService {
                 notification.setOrganizationId(client.getOrganization().getId());
             }
             notification.setSendReason("New Contract Created");
-            notification.setContract(contract1);
-            //TO DO: add logic to save notification to db
+            notification.setContract(savedcontract);
+            // TO DO: add logic to save notification to db
 
             notificationRepository.save(notification);
             log.info("Notification saved");
 
         }
-        return contract1;
+        return savedcontract;
     }
 
     public void deleteContract(Long coachId, Long contractId) {
@@ -239,14 +231,14 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
-
     public List<Contract> getContractByOrgId(Long organizationId) {
         return contractRepository.findContractByOrganizationId(organizationId);
     }
 
     public Contract getContract(Long contractId) {
-        return contractRepository.findById(contractId).orElseThrow(() -> new UserNotFoundException("Contract by id " + contractId
-                + " not found"));
+        return contractRepository.findById(contractId)
+                .orElseThrow(() -> new UserNotFoundException("Contract by id " + contractId
+                        + " not found"));
     }
 
     @Transactional
@@ -335,236 +327,45 @@ public class ContractService {
         log.info("Contract status updated");
     }
 
-    public Contract createOrganizationAndCoachContract(Long organizationId, ContractRequest contractRequest) {
+    private Contract createExample(Long userId, Long clientId, UserRole userRole, String search, Long organisationId) {
+        Contract contactExample = new Contract();
 
-        // Get Coach
+        User coach = new User();
+        User client = new User();
 
-        User coach = userRepository.findById(contractRequest.getCoachId()).orElseThrow(() -> new UserNotFoundException("Coach by id " + contractRequest.coachId
-                + " not found"));
+        if (organisationId != null) {
+            contactExample.setCoach(coach);
 
-        // Get organization
-        Organization organization = organizationService.findOrganizationById(organizationId);
-        // Save Contract
-        Contract contract = new Contract();
+            log.info("org id {}", organisationId);
+            contactExample.getCoach().setOrganization(new Organization());
+            contactExample.getCoach().getOrganization().setId(organisationId);
+        }
+        if (userId != null && userRole.equals(UserRole.COACH)) {
 
-        contract.setCoachingTopic(contractRequest.getCoachingTopic());
-        contract.setCoachingCategory(contractRequest.getCoachingCategory());
-        contract.setStartDate(contractRequest.getStartDate());
-        contract.setEndDate((contractRequest.getEndDate()));
-        contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
-        contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
-        contract.setNoOfSessions(contractRequest.getNoOfSessions());
-        int randNo = (int) ((Math.random() * (99 - 1)) + 1);
-        String contractL = String.format("%05d", randNo);
-        String contractNo = coach.getOrganization().getOrgName().substring(0, 2) +
-                coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + contractL;
-        contract.setContractNumber(contractNo);
-        Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL) ?
-                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions() :
-                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-        log.info("Amount Due:{} ", amountDue);
-        contract.setAmountDue(amountDue);
-        coachBillingAccountService.updateOrganizationAndCoachBillingAccount(amountDue, organization, coach);
-        log.info("Amount Due:{} ", amountDue);
-        log.info("Contract: " + contract.toString());
-        log.info("Coach: " + coach.toString());
+            contactExample.setCoach(coach);
 
-        contract.setCoach(coach);
-        contract.setContractNumber(contractNo);
-        contract.setContractStatus(ContractStatus.NEW);
-        contract.setServices(contractRequest.getServices());
-        contract.setPractice(contractRequest.getPractice());
-        contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
-        contract.setNote(contractRequest.getNote());
-
-        if (coach.getOrganization() != null) {
-            contract.setOrganization(coach.getOrganization());
+            log.info("User role is  {}", userRole);
+            contactExample.getCoach().setId(userId);
+        }
+        if (clientId != null && userRole.equals(UserRole.CLIENT)) {
+            log.info("User role is {}", userRole);
+            contactExample.setClient(client);
+            contactExample.getClient().setId(clientId);
         }
 
-
-        log.info("Contract: " + contract.toString());
-        //check client wallet balance
-        Contract contract1 = contractRepository.save(contract);
-        log.info("Contract has been saved");
-
-        List<String> objectives = contractRequest.getObjectives();
-        // save Objectives
-        List<CoachingObjective> coachingObjectives = new ArrayList<>();
-
-        for (String objective :
-                objectives) {
-            CoachingObjective coachingObjective = new CoachingObjective();
-            coachingObjective.setObjective(objective);
-            coachingObjective.setCreatedBy(organization.getOrgName());
-            coachingObjective.setLastUpdatedBy(organization.getOrgName());
-
-            coachingObjective.setCoach(coach);
-            coachingObjective.setContract(contract1);
-            coachingObjective.setOrganization(organization);
-
-            coachingObjectives.add(coachingObjective);
-        }
-        contractObjectiveRepository.saveAll(coachingObjectives);
-
-        log.info("Prep to send sms");
-        Map<String, Object> replacementVariables = new HashMap<>();
-        replacementVariables.put("coach_name", contract1.getCoach().getFullName());
-        replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
-        replacementVariables.put("start_date", contract1.getStartDate());
-        replacementVariables.put("end_date", contract1.getEndDate());
-        replacementVariables.put("full_name", contract1.getCoach().getOrganization().getOrgName());
-
-        String smsTemplate = Constants.DEFAULT_NEW_ORGANIZATION_COACH_CONTRACT_SMS_TEMPLATE;
-
-        //replacement to get content
-        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
-        String referenceId = contract1.getId().toString();
-        String msisdn = contract1.getCoach().getMsisdn();
-
-        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
-
-        //send sms
-        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-        log.info("sms sent ");
-
-        // sendEmail
-        notificationServiceHTTPClient.sendEmail(coach.getEmail(), "Contract Created", smsContent, false);
-        log.info("Email sent");
-
-
-        //create notification object and send it
-        Notification notification = new Notification();
-        notification.setNotificationMode(NotificationMode.SMS);
-        notification.setDestinationAddress(msisdn);
-        notification.setSourceAddress(sourceAddress);
-        notification.setContent(smsContent);
-        notification.setOrganizationId(organization.getId());
-        notification.setCoachId(coach.getId());
-        notification.setContract(contract1);
-        notification.setCreatedBy(organization.getOrgName());
-        //TO DO: add logic to save notification to db
-
-        notificationRepository.save(notification);
-        log.info("Notification saved");
-        return contract1;
+        return contactExample;
     }
 
-    public Contract createOrganizationAndClientContract(Long organizationId, ContractRequest contractRequest) {
-
-        log.info("Organization with id {} ", organizationId);
-
-        // Get Client
-
-        User client = userRepository.findById(contractRequest.getClientId()).orElseThrow(() -> new UserNotFoundException("Client by id " + contractRequest.getClientId()
-                + " not found"));
-
-        // Get Coach
-        Organization organization = organizationService.findOrganizationById(organizationId);
-        // Save Contract
-        Contract contract = new Contract();
-        contract.setCoachingTopic(contractRequest.getCoachingTopic());
-        contract.setCoachingCategory(contractRequest.getCoachingCategory());
-        contract.setStartDate(contractRequest.getStartDate());
-
-        contract.setEndDate((contractRequest.getEndDate()));
-        contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
-        contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
-        contract.setNoOfSessions(contractRequest.getNoOfSessions());
-        int randNo = (int) ((Math.random() * (99 - 1)) + 1);
-        String contractL = String.format("%05d", randNo);
-        String contractNo = client.getOrganization().getOrgName().substring(0, 2) +
-                client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + contractL;
-        contract.setContractNumber(contractNo);
-        Float amountDue = (contractRequest.getCoachingCategory() == CoachingCategory.INDIVIDUAL) ?
-                contractRequest.getIndividualFeesPerSession() * contract.getNoOfSessions() :
-                contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
-        log.info("Amount Due:{} ", amountDue);
-        contract.setAmountDue(amountDue);
-        clientBillingAccountService.updateOrganizationAndClientBillingAccount(amountDue, organization, client);
-        log.info("Amount Due:{} ", amountDue);
-        log.info("Contract: " + contract.toString());
-        log.info("Client: " + client.toString());
-
-        contract.setClient(client);
-        contract.setContractNumber(contractNo);
-        contract.setContractStatus(ContractStatus.NEW);
-        contract.setServices(contractRequest.getServices());
-        contract.setPractice(contractRequest.getPractice());
-        contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
-        contract.setNote(contractRequest.getNote());
-
-        if (client.getOrganization() != null) {
-            contract.setOrganization(client.getOrganization());
-        }
-
-
-        log.info("Contract: " + contract.toString());
-        //check client wallet balance
-        Contract contract1 = contractRepository.save(contract);
-        log.info("Contract has been saved");
-
-        List<String> objectives = contractRequest.getObjectives();
-        // save Objectives
-        List<CoachingObjective> coachingObjectives = new ArrayList<>();
-
-        for (String objective :
-                objectives) {
-            CoachingObjective coachingObjective = new CoachingObjective();
-            coachingObjective.setObjective(objective);
-            coachingObjective.setCreatedBy(organization.getOrgName());
-            coachingObjective.setLastUpdatedBy(organization.getOrgName());
-
-            coachingObjective.setClient(client);
-            coachingObjective.setContract(contract1);
-            coachingObjective.setOrganization(organization);
-
-            coachingObjectives.add(coachingObjective);
-        }
-        contractObjectiveRepository.saveAll(coachingObjectives);
-        log.info("Prep to send sms");
-        Map<String, Object> replacementVariables = new HashMap<>();
-        replacementVariables.put("client_name", contract1.getClient().getFullName());
-        replacementVariables.put("start_date", contract1.getStartDate());
-        replacementVariables.put("end_date", contract1.getEndDate());
-        replacementVariables.put("org_name", contract1.getClient().getOrganization().getOrgName());
-
-        String smsTemplate = Constants.DEFAULT_NEW_ORGANIZATION_CLIENT_CONTRACT_SMS_TEMPLATE;
-
-        //replacement to get content
-        String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
-        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
-        String referenceId = contract1.getId().toString();
-        String msisdn = contract1.getClient().getMsisdn();
-        String email = contract1.getClient().getEmail();
-
-        log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
-
-        //send sms
-        notificationServiceHTTPClient.sendSMS(sourceAddress, msisdn, smsContent, referenceId);
-        log.info("sms sent ");
-
-        // sendEmail
-        notificationServiceHTTPClient.sendEmail(client.getEmail(), "Contract Created", smsContent, false);
-        log.info("Email sent");
-
-
-        //create notification object and send it
-        Notification notification = new Notification();
-        notification.setNotificationMode(NotificationMode.SMS);
-        notification.setDestinationAddress(msisdn);
-        notification.setSourceAddress(sourceAddress);
-        notification.setContent(smsContent);
-        notification.setOrganizationId(organization.getId());
-        notification.setClientId(client.getId());
-        notification.setContract(contract1);
-        notification.setCreatedBy(organization.getOrgName());
-        //TO DO: add logic to save notification to db
-
-        notificationRepository.save(notification);
-        log.info("Notification saved");
-        return contract1;
-
+    public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId,
+                                    Pageable pageable) {
+        Contract contract = createExample(userId, clientId, userRole, search, organisationId);
+        log.info("After example {} ", contract);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreNullValues();
+        Example<Contract> example = Example.of(contract, matcher);
+        return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
 
     }
 }

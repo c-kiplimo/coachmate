@@ -2,7 +2,6 @@ package com.natujenge.thecouch.web.rest.dto;
 
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 
-import java.time.LocalDateTime;
 
 public interface ClientDto {
     Long getId();

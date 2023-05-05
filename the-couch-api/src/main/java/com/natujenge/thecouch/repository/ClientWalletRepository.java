@@ -1,7 +1,6 @@
 package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.ClientWallet;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

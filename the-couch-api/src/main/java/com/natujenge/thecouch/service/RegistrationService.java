@@ -1,11 +1,15 @@
 package com.natujenge.thecouch.service;
-import com.natujenge.thecouch.domain.*;
+
 import com.natujenge.thecouch.config.Constants;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.repository.CoachWalletRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.repository.OrganizationWalletRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.EmailValidator;
 import com.natujenge.thecouch.util.NotificationHelper;

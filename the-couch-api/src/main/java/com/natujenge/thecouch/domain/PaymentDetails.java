@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
-import com .natujenge.thecouch.domain.enums.PaymentType;
+import com.natujenge.thecouch.domain.enums.PaymentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

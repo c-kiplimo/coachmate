@@ -1,9 +1,9 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.PaymentCurrency;
-import com.natujenge.thecouch.domain.enums.SessionVenue;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.domain.enums.SessionType;
+import com.natujenge.thecouch.domain.enums.SessionVenue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor

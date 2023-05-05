@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.web.rest.errors;
+package com.natujenge.thecouch.exception;
 
 import org.springframework.http.HttpStatus;
 

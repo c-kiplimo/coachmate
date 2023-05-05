@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.util;
 
 import com.natujenge.thecouch.config.Constants;
-import com.natujenge.thecouch.service.dto.UploadResponse;
+import com.natujenge.thecouch.web.rest.dto.UploadResponse;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;

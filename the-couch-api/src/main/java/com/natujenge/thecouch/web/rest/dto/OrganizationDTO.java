@@ -1,12 +1,9 @@
-package com.natujenge.thecouch.service.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
-import com.natujenge.thecouch.domain.OrganizationSubscription;
-import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.OrgStatus;
 import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 import java.util.List;
 @Data
@@ -20,14 +17,13 @@ public class OrganizationDTO {
     private String secondName;
     private String fullName;
     private OrganizationSubscription subscription;
-    private PaymentDetailsDTO paymentDetails;
-    private NotificationDTO notification;
-    private NotificationSettingsDTO notificationSettings;
+    private PaymentDetails paymentDetails;
+    private Notification notification;
+    private NotificationSettings notificationSettings;
 ;
 
     private Long superCoachId; //user id
 
-    @Enumerated(EnumType.STRING)
     private OrgStatus status;
 
     //Management details

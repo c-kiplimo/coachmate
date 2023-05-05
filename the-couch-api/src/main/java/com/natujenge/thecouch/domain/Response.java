@@ -3,6 +3,7 @@ package com.natujenge.thecouch.domain;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
     @Entity

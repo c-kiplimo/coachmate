@@ -4,8 +4,8 @@ import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
-import lombok.Data;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
+import lombok.Data;
 
 @Data
 public class NotificationSettingsRequest {

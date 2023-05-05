@@ -1,10 +1,10 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
-import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.domain.CoachSettings;
-import com.natujenge.thecouch.service.mapper.CoachSettingsMapper;
 import com.natujenge.thecouch.repository.CoachSettingsRepository;
+import com.natujenge.thecouch.security.SecurityUtils;
+import com.natujenge.thecouch.service.mapper.CoachSettingsMapper;
+import com.natujenge.thecouch.web.rest.dto.CoachSettingsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

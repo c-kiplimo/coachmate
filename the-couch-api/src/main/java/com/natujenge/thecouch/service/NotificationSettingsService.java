@@ -1,23 +1,22 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.ContractTemplate;
+import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
+import com.natujenge.thecouch.repository.NotificationSettingsRepository;
 import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
+import com.natujenge.thecouch.web.rest.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
+import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-
-import com.natujenge.thecouch.repository.NotificationSettingsRepository;
-import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

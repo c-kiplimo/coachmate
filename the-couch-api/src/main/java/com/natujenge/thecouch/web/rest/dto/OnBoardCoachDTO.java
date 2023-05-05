@@ -1,6 +1,7 @@
-package com.natujenge.thecouch.service.dto;
-import com.natujenge.thecouch.domain.enums.PaymentType;
+package com.natujenge.thecouch.web.rest.dto;
+
 import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
+import com.natujenge.thecouch.domain.enums.PaymentType;
 import lombok.Data;
 
 @Data
