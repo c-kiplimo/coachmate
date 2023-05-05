@@ -8,10 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
-
-public interface ContractMapper extends EntityMapper<ContractDTO, Contract>{
+public interface ContractMapper extends EntityMapper<ContractDTO, Contract> {
     @Override
-
     @Mapping(target = "organizationId", source = "organization.id")
     @Mapping(target = "organizationName", source = "organization.orgName")
     @Mapping(target = "organizationMsisdn", source = "organization.msisdn")
@@ -32,7 +30,5 @@ public interface ContractMapper extends EntityMapper<ContractDTO, Contract>{
     @Mapping(target = "coachLastName", source = "coach.lastName")
     @Mapping(target = "coachBusinessName", source = "coach.businessName")
 
-
-
-    ContractDTO toDto(Contract entity);
+    ContractDTO toDto(Contract Entity);
 }

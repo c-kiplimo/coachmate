@@ -87,39 +87,41 @@ public class ContractResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> createContract(
+    public ResponseEntity<Contract> createContract(
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails
     ) {
+
+
         try {
             log.info("adding contract");
-            Contract contract = null;
+            Long coachId = userDetails.getId();
+            log.info("coach id {}",coachId);
+            Long organisationId=null;
+            if(userDetails.getOrganization() !=null){
 
-            if (userDetails.getUserRole() == UserRole.COACH) {
-                Long coachId = userDetails.getId();
-                log.info("coach id {}", coachId);
-                contract = contractService.createContract(coachId, contractRequest);
-            } else if (userDetails.getOrganization() != null) {
-                Long organizationId = userDetails.getOrganization().getId();
-                log.info("org id {}", organizationId);
-                if (Objects.equals(contractRequest.getCoachId(), null)) {
-                    contract = contractService.createOrganizationAndCoachContract(organizationId, contractRequest);
-                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
-                } else {
-                    contract = contractService.createOrganizationAndClientContract(organizationId, contractRequest);
-                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
-                }
+                organisationId = userDetails.getOrganization().getId();
+
             }
+            Contract contract =  contract = contractService.createContract(coachId, contractRequest,organisationId);
 
-            if (contract == null) {
-                return new ResponseEntity<>("Unable to determine user role", HttpStatus.BAD_REQUEST);
+
+            if (contract != null) {
+                return new ResponseEntity(new RestResponse(false, "contract created successfully"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new RestResponse(true, "contract not created"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+//        try {
+
+            Contract contract = null;
+
+
+
+            return new ResponseEntity<>(contract,HttpStatus.CREATED) ;
     }
 
 

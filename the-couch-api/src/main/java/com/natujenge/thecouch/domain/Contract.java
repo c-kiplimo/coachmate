@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,8 +24,7 @@ public class Contract {
     private String coachingTopic;
     private LocalDate startDate;
     private LocalDate endDate;
-
-
+    private String objective;
     private Float individualFeesPerSession;
     private Float groupFeesPerSession;
     private Integer noOfSessions;
@@ -44,16 +44,16 @@ public class Contract {
 
     @Nullable
     @ManyToOne
-    @JoinColumn(name="organization_id")
+    @JoinColumn(name = "organization_id")
     Organization organization;
 
     // relations
     @ManyToOne
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     User client;
 
     @ManyToOne
-    @JoinColumn(name="coach_id")
+    @JoinColumn(name = "coach_id")
     User coach;
 
 

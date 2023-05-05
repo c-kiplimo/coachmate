@@ -33,7 +33,6 @@ public class ContractService {
     private final OrganizationService organizationService;
 
 
-    private final ContractObjectiveRepository clientObjectiveRepository;
 
 
     private final ContractRepository contractRepository;
@@ -56,21 +55,20 @@ public class ContractService {
     private final NotificationService notificationService;
 
 
-    private final ContractObjectiveRepository contractObjectiveRepository;
+
 
     private final CoachBillingAccountService coachBillingAccountService;
 
-    public ContractService(SessionRepository sessionRepository, ContractMapper contractMapper, OrganizationService organizationService,
-                           ContractObjectiveRepository clientObjectiveRepository, ContractRepository contractRepository
+    public ContractService(SessionRepository sessionRepository, ContractMapper contractMapper, OrganizationService organizationService
+                           , ContractRepository contractRepository
                            , UserService userService, NotificationRepository notificationRepository,
                            UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
                            NotificationSettingsService notificationSettingsService, ClientBillingAccountService clientBillingAccountService,
-                           NotificationService notificationService,
-                           ContractObjectiveRepository contractObjectiveRepository, CoachBillingAccountService coachBillingAccountService) {
+                           NotificationService notificationService
+                           , CoachBillingAccountService coachBillingAccountService) {
         this.sessionRepository = sessionRepository;
         this.contractMapper = contractMapper;
         this.organizationService = organizationService;
-        this.clientObjectiveRepository = clientObjectiveRepository;
         this.contractRepository = contractRepository;
 
         this.userService = userService;
@@ -80,7 +78,6 @@ public class ContractService {
         this.notificationSettingsService = notificationSettingsService;
         this.clientBillingAccountService = clientBillingAccountService;
         this.notificationService = notificationService;
-        this.contractObjectiveRepository = contractObjectiveRepository;
         this.coachBillingAccountService = coachBillingAccountService;
     }
 
@@ -104,7 +101,7 @@ public class ContractService {
         return contractRepository.findAllByClientId(clientId);
     }
 
-    public Contract createContract(Long coachId, ContractRequest contractRequest) {
+    public Contract createContract(Long coachId, ContractRequest contractRequest,Long organizationId) {
 
         // Get Client
         log.info("Client id:{}", contractRequest);
@@ -114,8 +111,10 @@ public class ContractService {
 
         // Get Coach
         Optional<User> user = userRepository.findById(coachId);
+        log.info("user --{}",user.get());
+        log.info("coachid------{}",coachId);
         User coach = null;
-        Contract contract1 = null;
+        Contract savedcontract = null;
         if (user.isPresent()) {
             coach = user.get();
 
@@ -132,7 +131,20 @@ public class ContractService {
             contract.setContractStatus(ContractStatus.NEW);
             contract.setServices(contractRequest.getServices());
             contract.setPractice(contractRequest.getPractice());
+            contract.setObjective(contractRequest.getObjectives());
+            if(organizationId !=null){
+                contract.getOrganization().setId(organizationId);
+
+
+            }
+            log.info("coach------{}",coach);
+            contract.setCoach(coach);
+
+
             contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
+
+
+            contract.setObjective(contractRequest.getObjectives());
             contract.setNote(contractRequest.getNote());
             // contract Number Generation
             int randNo = (int) ((Math.random() * (99 - 1)) + 1);
@@ -147,7 +159,7 @@ public class ContractService {
                     contractRequest.getGroupFeesPerSession() * contract.getNoOfSessions();
             log.info("Amount Due:{} ", amountDue);
             contract.setAmountDue(amountDue);
-            clientBillingAccountService.updateBillingAccount(amountDue, coach, client);
+//            clientBillingAccountService.updateBillingAccount(amountDue, coach, client);
             log.info("Amount Due:{} ", amountDue);
             log.info("Contract: " + contract.toString());
             log.info("Client: " + client.toString());
@@ -163,41 +175,25 @@ public class ContractService {
 
             log.info("Contract: " + contract.toString());
 
-            contract1 = contractRepository.save(contract);
+            savedcontract = contractRepository.save(contract);
 
-            List<String> objectives = contractRequest.getObjectives();
-            // save Objectives
-            List<CoachingObjective> coachingObjectives = new ArrayList<>();
 
-            for (String objective :
-                    objectives) {
-                CoachingObjective coachingObjective = new CoachingObjective();
-                coachingObjective.setObjective(objective);
-                coachingObjective.setCreatedBy(coach.getFullName());
-
-                coachingObjective.setClient(client);
-                coachingObjective.setContract(contract1);
-                coachingObjective.setCoach(client.getAddedBy());
-
-                coachingObjectives.add(coachingObjective);
-            }
-            contractObjectiveRepository.saveAll(coachingObjectives);
 
             log.info("Prep to send sms");
             Map<String, Object> replacementVariables = new HashMap<>();
-            replacementVariables.put("client_name", contract1.getClient().getFullName());
-            replacementVariables.put("coaching_topic", contract1.getCoachingTopic());
-            replacementVariables.put("start_date", contract1.getStartDate());
-            replacementVariables.put("end_date", contract1.getEndDate());
-            replacementVariables.put("business_name", contract1.getClient().getAddedBy().getBusinessName());
+            replacementVariables.put("client_name", savedcontract.getClient().getFullName());
+            replacementVariables.put("coaching_topic", savedcontract.getCoachingTopic());
+            replacementVariables.put("start_date", savedcontract.getStartDate());
+            replacementVariables.put("end_date", savedcontract.getEndDate());
+            replacementVariables.put("business_name", savedcontract.getClient().getAddedBy().getBusinessName());
 
             String smsTemplate = Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE;
 
             //replacement to get content
             String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
             String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; //TO-DO get this value from cooperative settings
-            String referenceId = contract1.getId().toString();
-            String msisdn = contract1.getClient().getMsisdn();
+            String referenceId = savedcontract.getId().toString();
+            String msisdn = savedcontract.getClient().getMsisdn();
 
             log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent, sourceAddress, msisdn, referenceId);
 
@@ -223,14 +219,14 @@ public class ContractService {
                 notification.setOrganizationId(client.getOrganization().getId());
             }
             notification.setSendReason("New Contract Created");
-            notification.setContract(contract1);
+            notification.setContract(savedcontract);
             //TO DO: add logic to save notification to db
 
             notificationRepository.save(notification);
             log.info("Notification saved");
 
         }
-        return contract1;
+        return savedcontract;
     }
 
     public void deleteContract(Long coachId, Long contractId) {
@@ -389,24 +385,6 @@ public class ContractService {
         Contract contract1 = contractRepository.save(contract);
         log.info("Contract has been saved");
 
-        List<String> objectives = contractRequest.getObjectives();
-        // save Objectives
-        List<CoachingObjective> coachingObjectives = new ArrayList<>();
-
-        for (String objective :
-                objectives) {
-            CoachingObjective coachingObjective = new CoachingObjective();
-            coachingObjective.setObjective(objective);
-            coachingObjective.setCreatedBy(organization.getOrgName());
-            coachingObjective.setLastUpdatedBy(organization.getOrgName());
-
-            coachingObjective.setCoach(coach);
-            coachingObjective.setContract(contract1);
-            coachingObjective.setOrganization(organization);
-
-            coachingObjectives.add(coachingObjective);
-        }
-        contractObjectiveRepository.saveAll(coachingObjectives);
 
         log.info("Prep to send sms");
         Map<String, Object> replacementVariables = new HashMap<>();
@@ -452,7 +430,7 @@ public class ContractService {
         return contract1;
     }
 
-    public Contract createOrganizationAndClientContract(Long organizationId, ContractRequest contractRequest) {
+    public Contract createOrganizationAndClientContract(Long organizationId, ContractRequest contractRequest, Long LoggedInUserId) {
 
         log.info("Organization with id {} ", organizationId);
 
@@ -489,6 +467,7 @@ public class ContractService {
         log.info("Client: " + client.toString());
 
         contract.setClient(client);
+//        contract.setCoach(coach);
         contract.setContractNumber(contractNo);
         contract.setContractStatus(ContractStatus.NEW);
         contract.setServices(contractRequest.getServices());
@@ -506,24 +485,24 @@ public class ContractService {
         Contract contract1 = contractRepository.save(contract);
         log.info("Contract has been saved");
 
-        List<String> objectives = contractRequest.getObjectives();
+//        List<String> objectives = contractRequest.getObjectives();
         // save Objectives
-        List<CoachingObjective> coachingObjectives = new ArrayList<>();
-
-        for (String objective :
-                objectives) {
-            CoachingObjective coachingObjective = new CoachingObjective();
-            coachingObjective.setObjective(objective);
-            coachingObjective.setCreatedBy(organization.getOrgName());
-            coachingObjective.setLastUpdatedBy(organization.getOrgName());
-
-            coachingObjective.setClient(client);
-            coachingObjective.setContract(contract1);
-            coachingObjective.setOrganization(organization);
-
-            coachingObjectives.add(coachingObjective);
-        }
-        contractObjectiveRepository.saveAll(coachingObjectives);
+//        List<CoachingObjective> coachingObjectives = new ArrayList<>();
+//
+//        for (String objective :
+//                objectives) {
+//            CoachingObjective coachingObjective = new CoachingObjective();
+//            coachingObjective.setObjective(objective);
+//            coachingObjective.setCreatedBy(organization.getOrgName());
+//            coachingObjective.setLastUpdatedBy(organization.getOrgName());
+//
+//            coachingObjective.setClient(client);
+//            coachingObjective.setContract(contract1);
+//            coachingObjective.setOrganization(organization);
+//
+//            coachingObjectives.add(coachingObjective);
+//        }
+//        contractObjectiveRepository.saveAll(coachingObjectives);
         log.info("Prep to send sms");
         Map<String, Object> replacementVariables = new HashMap<>();
         replacementVariables.put("client_name", contract1.getClient().getFullName());
@@ -577,19 +556,20 @@ public class ContractService {
         User coach=new User();
         User client=new User();
 
-        if (userId != null && userRole.equals(UserRole.COACH)) {
 
-            contactExample.setCoach(coach);
-
-            log.info("User role is  {}", userRole);
-            contactExample.getCoach().setId(userId);
-        }
         if (organisationId != null) {
             contactExample.setCoach(coach);
 
             log.info("org id {}", organisationId);
             contactExample.getCoach().setOrganization(new Organization());
             contactExample.getCoach().getOrganization().setId(organisationId);
+        }
+        if (userId != null && userRole.equals(UserRole.COACH)) {
+
+            contactExample.setCoach(coach);
+
+            log.info("User role is  {}", userRole);
+            contactExample.getCoach().setId(userId);
         }
         if (clientId != null && userRole.equals(UserRole.CLIENT)) {
             log.info("User role is {}", userRole);
