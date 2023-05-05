@@ -6,6 +6,7 @@ import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,15 @@ public class UserResource {
         try {
             Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
 
-            User newClientUser = userService.addNewClient(userDetails,organization.get(),
-                    clientRequest, userDetails.getMsisdn());
+            User newClientUser;
+            if(organization.isPresent()){
+                newClientUser = userService.addNewClient(userDetails,
+                        organization.get(),
+                        clientRequest);
+            } else {
+                newClientUser = userService.addNewClient(userDetails,
+                        null, clientRequest);
+            }
 
             if (newClientUser != null) {
                 ClientRequest response = modelMapper.map(newClientUser, ClientRequest.class);

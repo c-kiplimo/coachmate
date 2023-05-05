@@ -16,10 +16,8 @@ public class ClientRequest {
     private PaymentModeSubscription paymentMode;
     private String reason;
     private String password;
-    private String token;
     private Long id;
     private Long coachId;
     private Long organizationId;
     private String createdBy;
-
 }
