@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.service;
-
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
