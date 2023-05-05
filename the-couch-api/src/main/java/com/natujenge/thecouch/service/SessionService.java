@@ -110,7 +110,7 @@ public class SessionService {
         }
 
         try {
-            sessionSchedulesService.updateBookedStateToTrue(sessionSchedules.getId());
+            sessionSchedulesService.updateBookedState(sessionSchedules.getId());
             return sessionRepository.save(sessionRequest);
         } catch (Exception e) {
             log.error("Error occurred ", e);
