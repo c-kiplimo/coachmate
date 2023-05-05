@@ -2,25 +2,25 @@ export const sideNavData = {
     navDataforCoach: [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-home',
+        icon: 'fas fa-home',
         label: 'Dashboard',
         number: 1
     },
     {
         routeLink: 'sessions',
-        icon: 'fal fa-presentation',
+        icon: 'fa-solid fa-chalkboard-user',
         label: 'Sessions',
         number: 2
     },
     {
         routeLink: 'clients',
-        icon: 'fal fa-users',
+        icon: 'fas fa-users',
         label: 'Clients',
         number: 3
     },
     {
         routeLink: 'schedules',
-        icon: '	fas fa-calendar-check',
+        icon: 'fas fa-calendar-check',
         label: 'Schedules',
         number: 4
         
@@ -39,13 +39,13 @@ export const sideNavData = {
     },
     {
         routeLink: 'payment',
-        icon: 'fal fa-money-check-edit-alt',
+        icon: 'fas fa-money-check-alt',
         label: 'Payment',
         number: 8
     },
     {
         routeLink: 'feedback',
-        icon: 'fa-regular fa-star',
+        icon: 'fa-solid fa-star',
         label: 'Feedback',
         number: 9
     },
@@ -65,25 +65,25 @@ export const sideNavData = {
 navDataforOrg: [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-home',
+        icon: 'fas fa-home',
         label: 'Dashboard',
         number: 1
     },
     {
         routeLink: 'sessions',
-        icon: 'fal fa-presentation',
+        icon: 'fa-solid fa-chalkboard-user',
         label: 'Sessions',
         number: 2
     },
     {
         routeLink: 'clients',
-        icon: 'fal fa-users',
+        icon: 'fas fa-users',
         label: 'Clients',
         number: 3
     },
     {
         routeLink: 'coaches',
-        icon: 'fal fa-users',
+        icon: 'fas fa-users',
         label: 'Coaches',
         number: 4
     },
@@ -95,13 +95,13 @@ navDataforOrg: [
     },
     {
         routeLink: 'payment',
-        icon: 'fal fa-money-check-edit-alt',
+        icon: 'fas fa-money-check-alt',
         label: 'Payment',
         number: 6
     },
     {
         routeLink: 'feedback',
-        icon: 'fa-regular fa-star',
+        icon: 'fa-solid fa-star',
         label: 'Feedback',
         number: 7
     },
@@ -121,13 +121,13 @@ navDataforOrg: [
 navDataforClient: [
     {
         routeLink: 'dashboard',
-        icon: 'fal fa-home',
+        icon: 'fas fa-home',
         label: 'Dashboard',
         number: 1
     },
     {
         routeLink: 'sessions',
-        icon: 'fal fa-presentation',
+        icon: 'fa-solid fa-chalkboard-user',
         label: 'Sessions',
         number: 2
     },
@@ -146,7 +146,7 @@ navDataforClient: [
     },
     {
         routeLink: 'payment',
-        icon: 'fal fa-money-check-edit-alt',
+        icon: 'fas fa-money-check-alt',
         label: 'Payment',
         number: 5
     },

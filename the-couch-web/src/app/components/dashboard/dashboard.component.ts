@@ -11,9 +11,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  user: any;
   clients: any;
-  User: any;
-  Organization: any;
+  organization: any;
   sessions: any;
   orgName: any;
   contracts: any;
@@ -40,16 +40,15 @@ export class DashboardComponent implements OnInit {
   loading!: boolean;
   orgId!: number;
 
-  OrgCoaches: any;
+  orgCoaches: any;
   numberofCoaches!: number;
 
-  Clients: any;
-  OrgData: any;
+  orgData: any;
   orgSession: any;
-  OrgContracts: any;
+  orgContracts: any;
 
 session: any;
-Feedbacks: any;
+feedbacks: any;
   
 
   
@@ -93,8 +92,8 @@ Feedbacks: any;
       
       
 
-      this.OrgData = sessionStorage.getItem('Organization');
-      this.orgSession = JSON.parse(this.OrgData);
+      this.orgData = sessionStorage.getItem('Organization');
+      this.orgSession = JSON.parse(this.orgData);
       console.log(this.orgSession);
       
       this.getOrgContracts(this.orgId);
@@ -122,14 +121,14 @@ Feedbacks: any;
     this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response.body;
-        console.log(this.Feedbacks);
+        this.feedbacks = response.body;
+        console.log(this.feedbacks);
         let totalScore = 0;
 
-        for (let i = 0; i < Math.max(this.Feedbacks.length, 1); i++) {
-          totalScore += this.Feedbacks[i].overallScore;
+        for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
+          totalScore += this.feedbacks[i].overallScore;
         }
-        const success_rate = totalScore / (Math.max(this.Feedbacks.length, 1)*25);
+        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1)*25);
         this.success_rate_percent = Math.round(success_rate * 100);
 
         this.loading = false;
@@ -144,14 +143,14 @@ Feedbacks: any;
     this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
         console.log(response);
-        this.Feedbacks = response.body;
-        console.log(this.Feedbacks);
+        this.feedbacks = response.body;
+        console.log(this.feedbacks);
         let totalScore = 0;
 
-        for (let i = 0; i < Math.max(this.Feedbacks.length, 1); i++) {
-          totalScore += this.Feedbacks[i].overallScore;
+        for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
+          totalScore += this.feedbacks[i].overallScore;
         }
-        const success_rate = totalScore / (Math.max(this.Feedbacks.length, 1)*25);
+        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1)*25);
         this.success_rate_percent = Math.round(success_rate * 100);
 
         this.loading = false;
@@ -253,10 +252,10 @@ Feedbacks: any;
     this.clientService.getOrgClients(id).subscribe(
       (response) => {
         this.loading = false;
-        this.Clients = response.body;
+        this.clients = response.body;
         console.log(response)
-        console.log('clients',this.Clients)
-        this.numberOfClients = this.Clients.length;
+        console.log('clients',this.clients)
+        this.numberOfClients = this.clients.length;
   
       }, (error) => {
         console.log(error)
@@ -336,10 +335,10 @@ Feedbacks: any;
     this.clientService.getOrgCoaches(data).subscribe(
       (response: any) => {
         console.log('here Organization=> coaches', response);
-        this.OrgCoaches = response;
-        console.log(this.OrgCoaches);
+        this.orgCoaches = response;
+        console.log(this.orgCoaches);
         console.log('here Organization=> coaches', response);
-        this.numberofCoaches = this.OrgCoaches.length;
+        this.numberofCoaches = this.orgCoaches.length;
        
       },
       (error: any) => {
@@ -401,8 +400,8 @@ Feedbacks: any;
 
 
   getUser() {
-    this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.User);
+    this.user = JSON.parse(sessionStorage.getItem('user') as any);
+    console.log(this.user);
   }
   // getUserOrg() {
   //   this.User = JSON.parse(sessionStorage.getItem('user') as any);

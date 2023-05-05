@@ -11,13 +11,13 @@
       </span>
     </h2>
     <h2  class="fw-bold" *ngIf="this.userRole == 'COACH'">
-      Hello {{User.coach.businessName| lowercase }},
+      Hello {{user.businessName| lowercase }},
       <span class="fw-light">
         Welcome back!
       </span>
     </h2>
     <h2  class="fw-bold" *ngIf="this.userRole == 'CLIENT'">
-      Hello {{User.fullName| lowercase }},
+      Hello {{user.fullName| lowercase }},
       <span class="fw-light">
         Welcome back!
       </span>
@@ -235,7 +235,7 @@
                 <th colspan="1" class="text-center" width="100px">Actions</th>
               </thead>
               <tbody class="list-container">
-                <tr *ngFor="let coach of OrgCoaches">
+                <tr *ngFor="let coach of orgCoaches">
                   <th>{{ coach.id }}</th>
                   <td>{{ coach.fullName }}</td>
                   <td>{{ coach.emailAddress }}</td>
