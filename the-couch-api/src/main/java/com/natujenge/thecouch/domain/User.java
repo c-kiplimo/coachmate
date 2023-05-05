@@ -15,7 +15,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_users")
@@ -181,6 +182,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+
+
 
 
 }

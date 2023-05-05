@@ -5,26 +5,34 @@ import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.ContractService;
+import com.natujenge.thecouch.service.dto.ContractDTO;
+import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
 @Slf4j
-@AllArgsConstructor
+
 @RequestMapping(path = "api/contracts")
 public class ContractResource {
-    @Autowired
-    ContractService contractService;
+
+  private final ContractService contractService;
+
+    public ContractResource(ContractService contractService) {
+        this.contractService = contractService;
+    }
 
     // Get All Contracts
     @GetMapping
@@ -80,39 +88,41 @@ public class ContractResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> createContract(
+    public ResponseEntity<Contract> createContract(
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails
     ) {
+
+
         try {
             log.info("adding contract");
-            Contract contract = null;
+            Long coachId = userDetails.getId();
+            log.info("coach id {}",coachId);
+            Long organisationId=null;
+            if(userDetails.getOrganization() !=null){
 
-            if (userDetails.getUserRole() == UserRole.COACH) {
-                Long coachId = userDetails.getId();
-                log.info("coach id {}", coachId);
-                contract = contractService.createContract(coachId, contractRequest);
-            } else if (userDetails.getOrganization() != null) {
-                Long organizationId = userDetails.getOrganization().getId();
-                log.info("org id {}", organizationId);
-                if (Objects.equals(contractRequest.getCoachId(), null)) {
-                    contract = contractService.createOrganizationAndCoachContract(organizationId, contractRequest);
-                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
-                } else {
-                    contract = contractService.createOrganizationAndClientContract(organizationId, contractRequest);
-                    return new ResponseEntity<>(contract, HttpStatus.CREATED);
-                }
+                organisationId = userDetails.getOrganization().getId();
+
             }
+            Contract contract =  contract = contractService.createContract(coachId, contractRequest,organisationId);
 
-            if (contract == null) {
-                return new ResponseEntity<>("Unable to determine user role", HttpStatus.BAD_REQUEST);
+
+            if (contract != null) {
+                return new ResponseEntity(new RestResponse(false, "contract created successfully"), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new RestResponse(true, "contract not created"), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            return new ResponseEntity<>(contract, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+//        try {
+
+            Contract contract = null;
+
+
+
+            return new ResponseEntity<>(contract,HttpStatus.CREATED) ;
     }
 
 
@@ -174,5 +184,24 @@ public class ContractResource {
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/filter")
+    ResponseEntity<List<ContractDTO>> filterFarmers(@RequestParam(name = "client_id", required = false) Long clientId,
+
+                                                    @RequestParam(name = "search", required = false) String search,
+                                                    Pageable pageable,
+                                                    @AuthenticationPrincipal User userDetails) {
+        Long organisationId=null;
+        if(userDetails.getOrganization() !=null){
+            organisationId = userDetails.getOrganization().getId();
+
+        }
+        UserRole userRole = userDetails.getUserRole();
+        Long userId= userDetails.getId();
+
+        Page<ContractDTO> contractPage = contractService.filter(userId,clientId , userRole,search, organisationId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
+        return ResponseEntity.ok().headers(headers).body(contractPage.getContent());
     }
 }
