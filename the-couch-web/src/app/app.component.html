@@ -1,6 +1,5 @@
 <div class="container-fluid g-0">
     <app-header (sideNavToggle)="sideNavStatus = $event;" *ngIf="hideHeaderAndSideNav"></app-header>
-  
     <main>
       <app-sidenav [hidden]="
       router.url.includes('signin')

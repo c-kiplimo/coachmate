@@ -11,15 +11,14 @@ import { SidnavComponent } from './shared/sidenav/sidenav.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
 import { FooterComponent } from './shared/footer/footer.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { BodyComponent } from './body/body.component';
-import { ClientsComponent } from './clients/clients.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ClientsComponent } from './components/clients/clients.component';
 
-import { AddClientPageComponent } from './add-client-page/add-client-page.component';
+import { AddClientPageComponent } from './components/add-client-page/add-client-page.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SessionsComponent } from './sessions/sessions.component';
-import { AddSessionComponent } from './add-session/add-session.component';
+import { AddSessionComponent } from './components/add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -31,16 +30,16 @@ import { ClientService } from './services/ClientService';
 import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { contractComponent } from './contract/contract.component';
-import { ClientViewComponent } from './client-view/client-view.component';
-import { FeebackFormComponent } from './feeback-form/feeback-form.component';
-import { contractViewComponent } from './contract-view/contract-view.component';
+import { contractComponent } from './components/contract/contract.component';
+import { ClientViewComponent } from './components/client-view/client-view.component';
+import { FeebackFormComponent } from './components/feeback-form/feeback-form.component';
+import { contractViewComponent } from './components/contract-view/contract-view.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
-import { ConfirmedViewComponent } from './confirmed-view/confirmed-view.component';
+import { ConfirmedViewComponent } from './components/confirmed-view/confirmed-view.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
@@ -48,21 +47,21 @@ import { AddTrainingComponent } from './coach-education/add-training/add-trainin
 import { CoachEducationService } from './services/CoachEducationService';
 import { ClientConfirmComponent } from './client-confirm/client-confirm.component';
 import { PipesPipe } from './pipes.pipe';
-import { ContractDetailsComponent } from './contract-details/contract-details.component';
+import { ContractDetailsComponent } from './components/contract-details/contract-details.component';
 
-import { AddCoachComponent } from './add-coach/add-coach.component';
+import { AddCoachComponent } from './components/add-coach/add-coach.component';
 import { GetPeriodPipe } from './pipes/get-period.pipe';
 import { HomeComponent } from './home/home.component';
 import { PaymentModule } from './payment/payment.module';
-import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
 import { SupportComponent } from './support/support.component';
 import { TermsAndConditionsPageComponent } from './terms-and-conditions-page/terms-and-conditions-page.component';
-import { AddAvailableSlotsComponent } from './add-available-slots/add-available-slots.component';
+import { AddAvailableSlotsComponent } from './components/add-available-slots/add-available-slots.component';
 import { SettingsComponent } from './account-settings/settings/settings.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CoachConfirmComponent } from './coach-confirm/coach-confirm.component';
-import { CoachViewComponent } from './coach-view/coach-view.component';
-import { CoachesComponent } from './coaches/coaches.component';
+import { CoachViewComponent } from './components/coach-view/coach-view.component';
+import { CoachesComponent } from './components/coaches/coaches.component';
 import { NotificationsComponent } from './account-settings/notifications/notifications.component';
 import { InitialSetupComponent } from './account-settings/initial-setup/initial-setup.component';
 import { TemplatesComponent } from './account-settings/templates/templates.component';
@@ -82,7 +81,6 @@ import { HeaderComponent } from './shared/header/header.component';
     contractViewComponent,
     sessionViewComponent,
     DashboardComponent,
-    BodyComponent,
     ClientsComponent,
     AddClientPageComponent,
     SignUpComponent,

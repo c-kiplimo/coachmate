@@ -533,38 +533,26 @@ public class RegistrationService {
 
 
     //Register Client as user
-    public void registerClientAsUser(ClientRequest clientRequest, Organization organization, User saveClient) {
-        log.info("Registering a Client as User");
-        boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
-
-        if(!isValidEmail) {
-            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, clientRequest.getEmail()));
-        }
-
-        //Create Client User
-        List<Object> response = userService.signupClientAsUser(
-                new User(
-                        clientRequest.getFirstName(),
-                        clientRequest.getLastName(),
-                        clientRequest.getEmail(),
-                        clientRequest.getMsisdn(),
-                        UserRole.CLIENT,
-                        organization
-                )
-        );
-
-        //SEnding Confirmation token
-        String token = (String) response.get(1);
-        //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
-
-        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
-        String subject = "Your TheCoach Account Has Been Created.";
-        String content = "Hey, use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmclient/"+response.get(0)+"/"+token;
-        notificationServiceHTTPClient.sendEmail(clientRequest.getEmail(),subject, content, false);
-        notificationServiceHTTPClient.sendSMS(clientRequest.getMsisdn(), subject, content, String.valueOf(false));
-
-    }
+//    public void registerClientAsUser(ClientRequest clientRequest, Organization organization, User saveClient) {
+//        log.info("Registering a Client as User");
+//        boolean isValidEmail = emailValidator.test(clientRequest.getEmail());
+//
+//        if(!isValidEmail) {
+//            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, clientRequest.getEmail()));
+//        }
+//
+//        //Create Client User
+//        List<Object> response = userService.signupClientAsUser(
+//                new User(
+//                        clientRequest.getFirstName(),
+//                        clientRequest.getLastName(),
+//                        clientRequest.getEmail(),
+//                        clientRequest.getMsisdn(),
+//                        UserRole.CLIENT,
+//                        organization
+//                )
+//        );
+//    }
 
     // Confirm token
     @Transactional
@@ -574,22 +562,16 @@ public class RegistrationService {
 
         if(confirmationToken.getConfirmedAt() != null){
             throw new IllegalStateException("Email Already Confirmed!");
-
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-
         if(expiredAt.isBefore(LocalDateTime.now())){
             throw new IllegalStateException("Token Expired!");
-
         }
 
         confirmationTokenService.setConfirmedAt(token);
-
         userService.enableAppUser(confirmationToken.getUser().getEmail());
-
         return "Confirmed! You can now Login to your account";
-
     }
 
 

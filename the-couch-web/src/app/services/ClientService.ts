@@ -37,7 +37,7 @@ export class ClientService {
 
   addClient(client: any): Observable<any> {
     console.log(client)
-    return this.http.post(`${this.baseURL}clients`, client,
+    return this.http.post(`${this.baseURL}users`, client,
       { observe: 'response' }).pipe(
         catchError(this.handleError)
       );

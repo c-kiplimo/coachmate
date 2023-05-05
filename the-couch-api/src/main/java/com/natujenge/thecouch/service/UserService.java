@@ -10,9 +10,11 @@ import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.UserMapper;
+import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
+import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -67,7 +69,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
 
         user.setEnabled(true);
-
+        userRepository.save(user);
         return user;
 
     }
@@ -224,30 +226,29 @@ public class UserService implements UserDetailsService {
         return client.isPresent();
     }
 
-    public User addNewClient(User userDetails,Organization organization, ClientRequest clientRequest, String msisdn) {
+    public User addNewClient(User userDetails,Organization organization,
+                             ClientRequest clientRequest) {
         log.info("add a new client");
         // Check if client already exists
         if (doesUserExistByEmailAddress(clientRequest.getEmail())) {
             throw new IllegalStateException("Client with provided email already exists");
         }
 
-        User saveClient = null;
-        User user = new User(clientRequest.getFirstName(), clientRequest.getLastName(), clientRequest.getEmail(), clientRequest.getMsisdn(), UserRole.CLIENT, organization);
+        User user = new User();
         log.info("creating new client started");
-
         if (userDetails != null) {
             user.setCreatedBy(userDetails.getFullName());
             user.setAddedBy(userDetails);
         }
         if (organization != null) {
-            user.setCreatedBy(organization.getOrgName());
+            user.setCreatedBy(userDetails.getFullName());
             user.setOrganization(organization);
+            //ASSIGN COACH
             Optional<User> assignedCoach = userRepository.findById(clientRequest.getCoachId());
             if (assignedCoach.isPresent()) {
                 User coach1 = assignedCoach.get();
                 user.setAddedBy(coach1);
             }
-
         }
 
         user.setFirstName(clientRequest.getFirstName());
@@ -256,8 +257,10 @@ public class UserService implements UserDetailsService {
         user.setClientType(clientRequest.getClientType());
         user.setMsisdn(clientRequest.getMsisdn());
         user.setEmail(clientRequest.getEmail());
+        user.setUsername(clientRequest.getEmail());
         user.setPhysicalAddress(clientRequest.getPhysicalAddress());
         user.setClientStatus(ClientStatus.ACTIVE);
+        user.setUserRole(UserRole.CLIENT);
         user.setReason(clientRequest.getReason());
         user.setPaymentMode(clientRequest.getPaymentMode());
         user.setCreatedAt(LocalDateTime.now());
@@ -269,13 +272,33 @@ public class UserService implements UserDetailsService {
         user.setClientNumber(clientNo);
 
         user.setProfession(clientRequest.getProfession());
+        User saveClient = userRepository.save(user);
 
-        saveClient = userRepository.save(user);
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        log.info("Confirmation token generated");
+
+        //SEnding Confirmation token
+        //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
+        String subject = "Your TheCoach Account Has Been Created.";
+        String content = "Hey, use this link to confirm your account and set your password," +
+                " http://localhost:4200/confirmclient/"+saveClient.getId()+"/"+token;
+        notificationServiceHTTPClient.sendEmail(saveClient.getEmail(),subject, content, false);
+        notificationServiceHTTPClient.sendSMS(saveClient.getMsisdn(), subject, content, String.valueOf(false));
+
         log.info(" client saved");
-        log.info("registering client as user begins");
 
-
-       // registrationService.registerClientAsUser(clientRequest, organization, saveClient);
         log.info("client registered as user now creating wallet");
         log.info("Client registered is {}", saveClient);
 
@@ -287,6 +310,7 @@ public class UserService implements UserDetailsService {
             clientWallet.setOrganization(organization);
         }
 
+        clientWallet.setCreatedBy(userDetails.getFullName());
         clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
         clientWalletRepository.save(clientWallet);
@@ -301,7 +325,7 @@ public class UserService implements UserDetailsService {
         }
         clientBillingAccount.setClient(saveClient);
         clientBillingAccount.setAmountBilled((float) 0);
-        clientBillingAccount.setCreatedBy(msisdn);
+        clientBillingAccount.setCreatedBy(userDetails.getMsisdn());
         clientBillingAccountService.createBillingAccount(clientBillingAccount);
         log.info("Client Billing Account created Successfully!");
         return saveClient;
@@ -363,4 +387,37 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).map(coachMapper::toDto);
     }
 
+    public Optional<User> confirmClientTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
+        log.info("Request to confirm client token and update password: {}", userTokenConfirmRequest);
+        Optional<User> userOptional = userRepository.findById(userTokenConfirmRequest.getId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            ConfirmationToken confirmationToken = confirmationTokenService.getToken(userTokenConfirmRequest.getToken()).orElseThrow(() ->
+                    new IllegalStateException("Token not Found!"));
+
+            if (confirmationToken != null) {
+                if (confirmationToken.getConfirmedAt() != null) {
+                    throw new IllegalStateException("Email already confirmed");
+                } else {
+                    LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+                    if (expiredAt.isBefore(LocalDateTime.now())) {
+                        throw new IllegalStateException("Token has expired");
+                    } else {
+                        String encodedPassword = passwordEncoder.encode(userTokenConfirmRequest.getPassword());
+                        user.setPassword(encodedPassword);
+                        user.setClientStatus(ClientStatus.ACTIVE);
+                        userRepository.save(user);
+                        confirmationTokenService.setConfirmedAt(confirmationToken.getToken());
+                        enableAppUser(confirmationToken.getUser().getEmail());
+                        log.info("User password updated successfully");
+                        return userOptional;
+                    }
+                }
+            } else {
+                throw new IllegalStateException("Invalid Token");
+            }
+        } else {
+            throw new IllegalStateException("Invalid Client");
+        }
+    }
 }
