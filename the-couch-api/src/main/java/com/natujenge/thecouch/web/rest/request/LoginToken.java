@@ -10,7 +10,7 @@ import lombok.Data;
 public class LoginToken {
 
     // return user DTO rather than entire user
-    private UserDTO user;
+    private User user;
     private String token;
 }
 

@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.service.dto;
-
 import com.natujenge.thecouch.domain.ContractTemplate;
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
@@ -73,9 +72,5 @@ public class UserDTO {
 //    NotificationSettings notificationSettings;
 
 //    ContractTemplate contractTemplate;
-
-    // Access fields
-    private Boolean locked = false;
-    private Boolean enabled = false;
 
 }

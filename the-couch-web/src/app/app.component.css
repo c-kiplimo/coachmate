@@ -1,9 +1,91 @@
 * {
-    font-family: 'Mulish';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif !important;
+    color: #242322;
 }
-/* .footer {
-    margin-left: 72px;
+
+app-header {
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    height: 4rem;
+    z-index: 2;
 }
-.body {
-    margin-left: 100px;
-} */
+
+a {
+    cursor: pointer;
+}
+
+main {
+    position: absolute;
+    width: 100%;
+    top: 4rem;
+    /* z-index: 1; */
+
+}
+
+app-sidenav {
+    position: fixed;
+    left: 0rem;
+    width: 60px;
+    height: calc(100vh - 4rem);
+    /* box-shadow: 0 0px 10px  rgba(0, 0, 0, 0.5); */
+    background-color: #FAF9F8;
+    overflow-x: hidden;
+    white-space: nowrap;
+    transition: width 250ms ease-in;
+}
+app-footer {
+    position: absolute;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.app-sidenav-open {
+    width: 250px;
+
+}
+
+.display-area {
+    background-color: #ffffff;
+    position: absolute;
+    left: 80px;
+    width: calc(100% - 80px);
+    transition: left 250ms ease-in, width 250ms ease-in;
+
+}
+
+.display-area-shrink {
+    width: calc(100% - 240px);
+    left: 245px;
+}
+
+@media only screen and (max-width: 600px) {
+    app-sidenav {
+        width: 0px;
+        z-index: 9;
+        transition: width 250ms ease-in;
+    }
+
+    .app-sidenav-open {
+        width: 260px;
+        z-index: 9;
+        transition: width 250ms ease-in;
+    }
+
+    .display-area {
+        width: 100vw;
+        left: 0px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .display-area-shrink {
+        width: 100vw;
+        left: 0px;
+
+    }
+}

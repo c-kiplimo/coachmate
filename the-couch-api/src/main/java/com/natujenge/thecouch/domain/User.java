@@ -83,13 +83,13 @@ public class User implements UserDetails {
     @JoinColumn(name="org_id")
     Organization organization;
 
-    @ManyToOne
-    @JoinColumn(name="notification_settings_id")
-    NotificationSettings notificationSettings;
-
-    @ManyToOne
-    @JoinColumn(name="contract_template_id")
-    ContractTemplate contractTemplate;
+//    @ManyToOne
+//    @JoinColumn(name="notification_settings_id")
+//    NotificationSettings notificationSettings;
+//
+//    @ManyToOne
+//    @JoinColumn(name="contract_template_id")
+//    ContractTemplate contractTemplate;
 
     // Access fields
     private Boolean locked = false;

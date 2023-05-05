@@ -181,7 +181,6 @@ public class UserService implements UserDetailsService {
         }
 
         User user = optionalUser.get();
-        user.setNotificationSettings(registeredUser.getNotificationSettings());
         user.setFirstName(registeredUser.getFirstName());
 
         userRepository.save(user);
@@ -214,6 +213,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByMsisdn(msisdn);
     }
     public Optional<UserDTO> findByUsernameDto(Long userId) {
+        log.info("User ID Serv   {} ", userId);
         return userRepository.findById(userId).map(userMapper::toDto);
 
     }

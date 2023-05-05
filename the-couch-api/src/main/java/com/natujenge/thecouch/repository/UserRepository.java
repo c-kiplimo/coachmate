@@ -31,5 +31,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByIdAndOrganizationId(Long clientId, Long id);
 
     Optional<UserDTO> getByMsisdn(String msisdn);
+
+    Optional<User> findUserById(Long userId);
+
 }
 

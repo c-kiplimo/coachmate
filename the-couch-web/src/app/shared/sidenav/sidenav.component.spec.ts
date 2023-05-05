@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidnavComponent } from './sidnav.component';
+import { SidnavComponent } from './sidenav.component';
 
 describe('SidnavComponent', () => {
   let component: SidnavComponent;

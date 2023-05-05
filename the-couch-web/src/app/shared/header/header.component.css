@@ -1,0 +1,58 @@
+nav {
+    height: 100%;
+    background-color:#FAF9F8;
+    color: #242322;
+}
+.bars i {
+    font-size: 1.5rem;
+    color: #242322;
+}
+.logo {
+    height: 50px;
+}
+.brand-name {
+    color: #242322;
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+.side-nav-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.side-nav-button:hover {
+    background-color: #F3BF79;
+    border-radius: 30%;
+}
+.form-select option{
+    
+}
+
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+ .brand {
+    display: none;
+ }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+    .brand {
+        display: none;
+     }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 992px) {
+   
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1200px) {
+ 
+} 
