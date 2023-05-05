@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.service.ContractService;
@@ -9,7 +9,7 @@ import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.util.ResponseUtil;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.service.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +20,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import static org.springframework.util.StringUtils.hasLength;
 
 @RestController
 @Slf4j

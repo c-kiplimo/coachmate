@@ -2,10 +2,10 @@ package com.natujenge.thecouch.web.rest;
 
 
 import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
-import com.natujenge.thecouch.service.dto.CoachDTO;
-import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.service.CoachSettingsService;
+import com.natujenge.thecouch.util.FileUtil;
+import com.natujenge.thecouch.web.rest.dto.CoachDTO;
+import com.natujenge.thecouch.web.rest.dto.CoachSettingsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

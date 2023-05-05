@@ -1,11 +1,14 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.ModeOfPayment;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

@@ -1,10 +1,10 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.PaymentDetails;
-import com.natujenge.thecouch.service.dto.PaymentDetailsDTO;
-import com.natujenge.thecouch.service.mapper.PaymentDetailsMapper;
-import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.repository.PaymentDetailsRepository;
+import com.natujenge.thecouch.security.SecurityUtils;
+import com.natujenge.thecouch.service.mapper.PaymentDetailsMapper;
+import com.natujenge.thecouch.web.rest.dto.PaymentDetailsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

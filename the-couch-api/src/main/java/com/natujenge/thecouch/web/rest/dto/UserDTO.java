@@ -1,6 +1,5 @@
-package com.natujenge.thecouch.service.dto;
-import com.natujenge.thecouch.domain.ContractTemplate;
-import com.natujenge.thecouch.domain.NotificationSettings;
+package com.natujenge.thecouch.web.rest.dto;
+
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.*;

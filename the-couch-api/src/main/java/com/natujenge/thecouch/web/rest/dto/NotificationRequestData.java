@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.service.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
 import lombok.Getter;
 import lombok.Setter;

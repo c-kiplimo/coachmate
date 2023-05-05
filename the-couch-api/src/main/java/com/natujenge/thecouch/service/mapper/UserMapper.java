@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.service.mapper;
 
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.dto.UserDTO;
+import com.natujenge.thecouch.web.rest.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

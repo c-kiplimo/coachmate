@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.CoachEducation;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 

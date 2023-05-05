@@ -6,16 +6,17 @@ import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationHelper;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
-import com.natujenge.thecouch.service.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.natujenge.thecouch.domain.Session;
 
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
@@ -23,8 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service

@@ -1,7 +1,10 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.service.NotificationService;
+import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import com.natujenge.thecouch.service.NotificationService;
-import com.natujenge.thecouch.web.rest.request.NotificationRequest;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
 
 @RestController
 @RequestMapping("/api/notification")

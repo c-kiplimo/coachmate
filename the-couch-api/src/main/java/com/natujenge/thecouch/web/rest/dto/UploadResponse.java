@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.service.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
 import lombok.Data;
 
@@ -10,6 +10,4 @@ public class UploadResponse {
     private String status;
     private String statusReason;
     private int code;
-
-
 }

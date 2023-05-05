@@ -1,5 +1,6 @@
-package com.natujenge.thecouch.service.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.WalletStatus;
 import lombok.Data;
 
@@ -19,7 +20,7 @@ public class CoachWalletDTO {
     private String code;
     private Long coachId;
 
-    private CoachDTO coach;
+    private User coach;
 
 
 }

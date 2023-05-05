@@ -1,11 +1,11 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Attachments;
-import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.AttachmentsRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.AttachmentService;
 import com.natujenge.thecouch.service.SessionService;
-import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

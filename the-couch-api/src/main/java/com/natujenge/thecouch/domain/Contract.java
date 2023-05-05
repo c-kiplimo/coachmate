@@ -1,6 +1,8 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.*;
+import com.natujenge.thecouch.domain.enums.CoachingCategory;
+import com.natujenge.thecouch.domain.enums.ContractStatus;
+import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,6 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

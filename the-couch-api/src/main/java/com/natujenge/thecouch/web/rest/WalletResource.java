@@ -2,11 +2,11 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import com.natujenge.thecouch.service.ClientWalletService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

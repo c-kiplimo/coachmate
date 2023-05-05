@@ -1,7 +1,13 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.domain.Feedback;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.Session;
+import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.repository.FeedbackRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
+import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.web.rest.dto.FeedbackDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

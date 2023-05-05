@@ -1,26 +1,18 @@
 package com.natujenge.thecouch.service;
 
 
-
-import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.CoachBillingAccount;
+import com.natujenge.thecouch.domain.CoachWallet;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.*;
-import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.service.dto.*;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
-import com.natujenge.thecouch.repository.CoachWalletRepository;
-import com.natujenge.thecouch.repository.OrganizationRepository;
-import com.natujenge.thecouch.repository.UserRepository;
-
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
-import com.natujenge.thecouch.util.OnBoardCoachUtil;
-import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service

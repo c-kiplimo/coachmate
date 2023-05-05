@@ -1,12 +1,15 @@
 package com.natujenge.thecouch.service;
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
+
+import com.natujenge.thecouch.domain.AccountStatement;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.repository.AccountStatementRepository;
+import com.natujenge.thecouch.repository.ClientWalletRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import com.natujenge.thecouch.repository.AccountStatementRepository;
+
 import java.time.LocalDateTime;
-import com.natujenge.thecouch.repository.ClientWalletRepository;
 
 @Service
 @Slf4j

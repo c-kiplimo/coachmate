@@ -1,7 +1,8 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.OrgStatus;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.OrganizationBillingAccount;
+import com.natujenge.thecouch.domain.OrganizationWallet;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.OrganizationWalletRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service

@@ -2,12 +2,12 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.UserSession;
-import com.natujenge.thecouch.service.dto.UserDTO;
-import com.natujenge.thecouch.service.mapper.UserMapper;
-import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.repository.UserSessionRepository;
 import com.natujenge.thecouch.security.JwtTokenUtil;
 import com.natujenge.thecouch.service.UserService;
+import com.natujenge.thecouch.service.mapper.UserMapper;
+import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.dto.UserDTO;
 import com.natujenge.thecouch.web.rest.request.Login;
 import com.natujenge.thecouch.web.rest.request.LoginToken;
 import lombok.extern.slf4j.Slf4j;

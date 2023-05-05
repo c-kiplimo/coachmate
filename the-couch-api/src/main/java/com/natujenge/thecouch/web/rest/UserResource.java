@@ -6,7 +6,6 @@ import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
-import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

@@ -8,7 +8,7 @@ import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.NotificationDto;
-import com.natujenge.thecouch.service.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

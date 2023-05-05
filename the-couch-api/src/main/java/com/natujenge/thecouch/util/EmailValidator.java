@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.util;
 
 import org.springframework.stereotype.Service;
+
 import java.util.function.Predicate;
 
 @Service

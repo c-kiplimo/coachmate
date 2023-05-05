@@ -2,13 +2,15 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.RegistrationService;
+import com.natujenge.thecouch.service.ResponseService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.web.rest.request.*;
-import com.natujenge.thecouch.service.ResponseService;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
+import com.natujenge.thecouch.web.rest.request.ForgotPassword;
+import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
+import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

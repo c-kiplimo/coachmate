@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.CoachWallet;
 import com.natujenge.thecouch.repository.CoachWalletRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,6 @@
 package com.natujenge.thecouch.web.rest.request;
 
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

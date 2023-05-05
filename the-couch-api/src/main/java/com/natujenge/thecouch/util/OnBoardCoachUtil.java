@@ -1,8 +1,7 @@
 package com.natujenge.thecouch.util;
 
-import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.domain.enums.SessionTemplateType;
-import com.natujenge.thecouch.service.dto.*;
+import com.natujenge.thecouch.web.rest.dto.*;
+
 public class OnBoardCoachUtil {
     public static NotificationSettingsDTO extractNotificationSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO, NotificationSettingsDTO notificationSettingsDTO){
         notificationSettingsDTO.setTillNumber(onBoardCoachDTO.getTillNumber());

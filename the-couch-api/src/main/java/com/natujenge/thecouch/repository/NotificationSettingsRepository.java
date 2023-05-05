@@ -1,9 +1,8 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.web.rest.dto.NotificationSettingsDto;
+import com.natujenge.thecouch.domain.NotificationSettings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.natujenge.thecouch.domain.NotificationSettings;
 
 import java.util.Optional;
 

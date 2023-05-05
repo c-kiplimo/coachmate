@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.service.dto;
+package com.natujenge.thecouch.web.rest.dto;
 
 import lombok.Data;
 
@@ -12,7 +12,6 @@ public class SessionSchedulesDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean booked;
-
     private Long coachId;
     private String coachFullName;
     private String coachMsisdn;

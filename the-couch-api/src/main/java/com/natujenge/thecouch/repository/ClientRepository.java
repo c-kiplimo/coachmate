@@ -1,17 +1,10 @@
 package com.natujenge.thecouch.repository;
 
-import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.web.rest.dto.ClientDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClientRepository extends PagingAndSortingRepository<User,Long>, QuerydslPredicateExecutor<User> {
 //    List<User> findByFullNameContainingOrIdContaining(@Param("text") String text, @Param("text1") Long text1);

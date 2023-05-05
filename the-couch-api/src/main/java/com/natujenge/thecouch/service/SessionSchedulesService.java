@@ -2,12 +2,10 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.repository.SessionSchedulesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
-import com.natujenge.thecouch.service.dto.SessionDTO;
-import com.natujenge.thecouch.service.dto.SessionSchedulesDTO;
 import com.natujenge.thecouch.service.mapper.SessionSchedulesMapper;
+import com.natujenge.thecouch.web.rest.dto.SessionSchedulesDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service

@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.service.mapper;
 
 import com.natujenge.thecouch.domain.SessionSchedules;
-import com.natujenge.thecouch.service.dto.SessionSchedulesDTO;
+import com.natujenge.thecouch.web.rest.dto.SessionSchedulesDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
