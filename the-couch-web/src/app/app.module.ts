@@ -2,16 +2,17 @@ import { MbscModule } from '@mobiscroll/angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidnavComponent } from './sidnav/sidnav.component';
+import { SidnavComponent } from './shared/sidenav/sidenav.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
-import { FooterComponent } from './footer/footer.component';
+import { FooterComponent } from './shared/footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BodyComponent } from './body/body.component';
-import { UserComponent } from './user/user.component';
 import { ClientsComponent } from './clients/clients.component';
 
 import { AddClientPageComponent } from './add-client-page/add-client-page.component';
@@ -106,7 +107,6 @@ import { HeaderComponent } from './shared/header/header.component';
     ContractDetailsComponent,
     GetPeriodPipe,
     AddCoachComponent,
-    UserComponent,
 
     HomeComponent,
     FeedbackComponent,
@@ -132,6 +132,8 @@ import { HeaderComponent } from './shared/header/header.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     NgxPaginationModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
     FormsModule,
     FlatpickrModule,
     HttpClientModule,
