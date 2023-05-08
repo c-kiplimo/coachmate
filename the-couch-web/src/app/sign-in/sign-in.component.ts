@@ -22,6 +22,7 @@ export class SignInComponent implements OnInit {
   errorMessage = '';
   loginSuccess = false;
   fieldTextType!: boolean;
+  loading = false;
 
   formData = {
     username: '',
@@ -45,6 +46,7 @@ export class SignInComponent implements OnInit {
   userLogin() {
     this.errorMessage = '';
     this.loginSuccess = false;
+    this.loading = true;
     this.LoginService.login(this.formData).subscribe({
       next: (response) => {
         console.log(response);
@@ -52,13 +54,14 @@ export class SignInComponent implements OnInit {
           this.errorMessage = response.body.message;
         } else {
           this.loginSuccess = true;
+          this.loading = false;
           this.token = response.token;
 
           sessionStorage.setItem('token', this.token);
           sessionStorage.setItem('businessName',  response.user.businessName);
           sessionStorage.setItem('user', JSON.stringify(response.user));
           //sessionStorage.setItem('notificationSettings', JSON.stringify(response.user.notificationSettings));
-          
+        
           this.router.navigate(['dashboard']);
           this.toastrService.success(
             'You are loggged in'
@@ -66,6 +69,7 @@ export class SignInComponent implements OnInit {
         }
       },
       error: (error: any): any => {
+        this.loading = false;
         this.toastrService.error(
           'wrong Username/Password',
           'Failled to log in'

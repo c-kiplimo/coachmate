@@ -539,33 +539,20 @@ a {
   font-weight: bolder;
 }
 
-//Farm routes
-.farmNavigation {
+//routes
+.link {
   // color: #4F94E4 !important;
   color: #198754 !important;
   font-size: bold !important;
   cursor: pointer;
 }
 
-.farmNavigation:hover {
+.link:hover {
   text-decoration: underline;
   color: #4F94E4;
 
 }
 
-//Farmer routes
-
-.farmerNavigation {
-  // color: #4F94E4 !important;
-  color: #198754 !important;
-  font-size: bold !important;
-  cursor: pointer;
-}
-
-.farmerNavigation:hover {
-  text-decoration: underline;
-  color: #4F94E4;
-}
 
 // Detail view for individual view page
 .dtl:hover {
@@ -844,10 +831,25 @@ ul {
   }
 }
 
+.link {
+  // color: #4F94E4 !important;
+  color: #198754 !important;
+  font-size: bold !important;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: #4F94E4;
+
+}
+
 //style a tag when it is being hovered and clicked
 a {
   &:hover {
     cursor: pointer;
+    color: #4F94E4;
+    text-decoration: underline;
   }
 
   &:active {

@@ -1,94 +1,54 @@
-<div class="container mt-5 mb-5">
-  <div class="row d-flex justify-content-center">
-    <!-- <div class="col-md-6">
-      <div class="half-side">
-      <p></p>
-      
-      </div>
-    </div> -->
-    <div class="col-md-6">
-      <p class="p-3 back-link" routerLink="/home">
-        <fa-icon [icon]="backIcon"></fa-icon> Back to website
-      </p>
-      <div class="card card-table">
-      
-        <div class=" justify-content-center">
-          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 200px;
-          height: 100px; padding-top: 0%; margin-top: 0%;">
-          <h1 class="text-center mb-5">Login</h1>
-          <!-- <button type="button" class="btn btn-primary mb-3">
-            <fa-icon [icon]="googleIcon"></fa-icon> With Google
-          </button> -->
-          <!-- <h5 class="text-center">Or</h5>
-          <hr /> -->
-          <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-           -->
-          <div class="alert alert-danger" *ngIf="errorMessage">
-            {{ errorMessage }}
-          </div>
-          <form #loginForm="ngForm" (ngSubmit)="userLogin()">
-            <div class="mb-3">
-              <label for="email">E-Mail</label>
-              <input
-                [(ngModel)]="formData.username"
-                name="username"
-                type="text"
-                class="form-control"
-                id="email"
-                aria-describedby="emailHelp"
-                placeholder="eg user@gmail.com"
-                required
-               
-              />
-            </div>
-            <div class="form-group mb-3">
-              <label for="password">Password</label>
-              <div class="input-group">
-                <input
-                  [(ngModel)]="formData.password"
-                  [type]="fieldTextType ? 'text' : 'password'"
-                  name="password"
-                  type="password"
-                  class="form-control border-end-0 border"
-                  id="exampleInputPassword1"
-                  placeholder="Password"
-                  required
-                />
-                <span class="input-group-append ">
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="fieldTextType"
-                  >
-                    <fa-icon
-                      [icon]="eyeIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
-                  </span>
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="!fieldTextType"
-                  >
-                    <fa-icon
-                    
-                      [icon]="eyeSlashIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
-                  </span>
-                </span>
-              </div>
-            </div>
+<div class="row justify-content-center">
+  <!-- <div class="col-md-6">
+    <img src="../../../assets/images/pexels-thirdman-5318490.jpg" alt="" class="login_photo">
 
-            <button type="submit" class="btn btn-signup mt-2 mb-5" 
-            [disabled]="
-            !formData.username ||
-            !formData.password" >
-              Login 
-            </button>
-          </form>
-          <p><a routerLink="/reset/request">Forgot Password?</a></p>
-          <p>Don't have an account?<a routerLink="/signup"> Register</a></p>
-        </div>
+  </div> -->
+
+  <div class="col-md-4">
+    <p class="p-3 back-link" routerLink="/home">
+      <fa-icon [icon]="backIcon"></fa-icon> Back to website
+    </p>
+    <div class=" justify-content-center">
+      <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" style="  width: 200px;">
+      <h1 class="text-center mb-5">Login</h1>
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
       </div>
+      <form #loginForm="ngForm" (ngSubmit)="userLogin()">
+        <div class="mb-3">
+          <label for="email">E-Mail</label>
+          <input [(ngModel)]="formData.username" name="username" type="text" class="form-control" id="email"
+            aria-describedby="emailHelp" placeholder="eg user@gmail.com" required />
+        </div>
+        <div class="form-group mb-3">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input [(ngModel)]="formData.password" [type]="fieldTextType ? 'text' : 'password'" name="password"
+              type="password" class="form-control border-end-0 border" id="exampleInputPassword1" placeholder="Password"
+              required />
+            <span class="input-group-append ">
+              <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="fieldTextType">
+                <fa-icon [icon]="eyeIcon" (click)="toggleFieldTextType()"></fa-icon>
+              </span>
+              <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="!fieldTextType">
+                <fa-icon [icon]="eyeSlashIcon" (click)="toggleFieldTextType()"></fa-icon>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="donut-wrapper" *ngIf="loading">
+          <div class="donut multi"></div>
+        </div>
+
+        <button type="submit" class="btn btn-signup mt-2 mb-5" [disabled]="
+            !formData.username ||
+            !formData.password">
+          Login
+        </button>
+      </form>
+      <p><a routerLink="/reset/request" class="link">Forgot Password?</a></p>
+      <p>Don't have an account?<a routerLink="/signup" class="link"> Register</a></p>
     </div>
   </div>
 </div>

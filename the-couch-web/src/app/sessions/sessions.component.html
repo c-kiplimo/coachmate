@@ -1,10 +1,15 @@
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-bold">Sessions</h3>
+  </div>
+</div>
 
 <div class="row">
-  <div class="d-none d-md-block" class="col-4">
+  <div class="col-3">
     <div class="filters-section">
       <div class="wrap">
         <select class="form-control" name="codes">
-          <option value="">Filtering options</option>
+          <option value="">Filter By Status</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="SUSPENDED">SUSPENDED</option>
           <option value="CLOSED">CLOSED</option>
@@ -12,24 +17,21 @@
       </div>
     </div>
   </div>
-  <div class="wrap" class="col-3">
-    <input type="text" class="form-control search-bar" name="customer" placeholder="Name, Phone or Email"
-      autocomplete="off" />
-  </div>
   <div class="col-3">
-    <button class="btn button-filter">
-      <i class="fa fa-search" aria-hidden="true"></i>
-      Search
-    </button>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Name, Phone or Email" aria-label="Name, Phone or Email"
+        aria-describedby="button-addon2">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+    </div>
   </div>
-
   <div class="col-2">
     <button type="button" routerLink="/addSession" class="btn btn-success" *ngIf="this.userRole != 'CLIENT'">
       <i class="fa-solid fa-user-plus"></i>Add Session
     </button>
   </div>
 </div>
-<div class="row list-container container  ">
+
+<div class="row">
   <div class="card card-table">
     <div class="card-body">
       <table class="table">

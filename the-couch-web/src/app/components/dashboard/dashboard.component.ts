@@ -47,72 +47,76 @@ export class DashboardComponent implements OnInit {
   orgSession: any;
   orgContracts: any;
 
-session: any;
-feedbacks: any;
-  
+  session: any;
+  feedbacks: any;
 
-  
+
 
   constructor(
     private clientService: ClientService,
     private CoachEducationService: CoachEducationService,
     private router: Router,
-    private route:ActivatedRoute
-    ) {}
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user');
+
+    if(this.coachSessionData != null){
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
-   
-  
+    } else {
+      this.router.navigate(['/signin']);
+    }
+
+
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       // Retrieve the contract from the database using the id
       this.contracts = this.clientService.getContract(id);
     });
 
-    if(this.userRole == 'COACH'){
-    this.getClients();
-    this.getUser();
-    this.getNoOfSessions();
-    this.getNoOfContracts();
-    this.getCoachEducation(this.coachData.id);
-    this.getCoachFeedbacks(this.coachData.coach.id);
-    this.getAllContracts();
-    
-    } else if(this.userRole == 'ORGANIZATION'){
+    if (this.userRole == 'COACH') {
+      this.getClients();
+      this.getUser();
+      this.getNoOfSessions();
+      this.getNoOfContracts();
+      this.getCoachEducation(this.coachData.id);
+      this.getCoachFeedbacks(this.coachData.coach.id);
+      this.getAllContracts();
+
+    } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.coachData.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getOrgClients();
-      
-      
-      
+
+
+
 
       this.orgData = sessionStorage.getItem('Organization');
       this.orgSession = JSON.parse(this.orgData);
       console.log(this.orgSession);
-      
+
       this.getOrgContracts(this.orgId);
       this.getAllOrgSessions(this.orgId);
       this.getOrgFeedbacks(this.orgId);
       this.getOrgCoaches(this.orgId);
-     
-    }else if(this.userRole == 'CLIENT') {
+
+    } else if (this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
       this.getClientContracts(this.coachData.id);
       this.getClientSessions(this.coachData.id);
-      
-      
+
+
     }
 
-    
+
   }
-  
+
   reload() {
     location.reload();
   }
@@ -128,7 +132,7 @@ feedbacks: any;
         for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
           totalScore += this.feedbacks[i].overallScore;
         }
-        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1)*25);
+        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1) * 25);
         this.success_rate_percent = Math.round(success_rate * 100);
 
         this.loading = false;
@@ -136,9 +140,9 @@ feedbacks: any;
     );
 
   }
-  
+
   getOrgFeedbacks(orgId: any) {
-  
+
     this.loading = true;
     this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
@@ -150,7 +154,7 @@ feedbacks: any;
         for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
           totalScore += this.feedbacks[i].overallScore;
         }
-        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1)*25);
+        const success_rate = totalScore / (Math.max(this.feedbacks.length, 1) * 25);
         this.success_rate_percent = Math.round(success_rate * 100);
 
         this.loading = false;
@@ -162,7 +166,7 @@ feedbacks: any;
   getAllOrgSessions(id: any) {
 
     this.sessions = [];
-    
+
 
     const options = {
       page: 1,
@@ -171,18 +175,18 @@ feedbacks: any;
       search: this.filters.searchItem,
     };
 
-    this.clientService.getOrgSessions(options,id).subscribe(
+    this.clientService.getOrgSessions(options, id).subscribe(
       (response: any) => {
         console.log(response);
         this.sessions = response;
         this.loading = false;
         this.numberOfSessions = this.sessions.length;
-      (error: any) => {
-        console.log(error);
+        (error: any) => {
+          console.log(error);
+        }
       }
-    }
     );
-  
+
   }
   getNoOfSessions() {
     const options = {
@@ -200,29 +204,29 @@ feedbacks: any;
         for (let i = 0; i < Math.max(this.sessions.length, 1); i++) {
           let startTime = i < this.sessions.length ? this.sessions[i].sessionStartTime : "00:00";
           let endTime = i < this.sessions.length ? this.sessions[i].sessionEndTime : "00:00";
-          
+
           let start = startTime.split(':');
           let end = endTime.split(':');
-        
+
           let startMinutes = parseInt(start[0]) * 60 + parseInt(start[1]);
           let endMinutes = parseInt(end[0]) * 60 + parseInt(end[1]);
-        
+
           if (startMinutes >= 0 && endMinutes >= 0 && endMinutes >= startMinutes) {
             totalMinutes += endMinutes - startMinutes;
           }
         }
-        
-        
+
+
         this.numberOfHours = Math.floor(totalMinutes / 60);
         this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
-        
+
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
-  
+
 
 
   getOrgContracts(id: any) {
@@ -240,7 +244,7 @@ feedbacks: any;
     );
   }
 
-  getOrgClients(){
+  getOrgClients() {
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -254,9 +258,9 @@ feedbacks: any;
         this.loading = false;
         this.clients = response.body;
         console.log(response)
-        console.log('clients',this.clients)
+        console.log('clients', this.clients)
         this.numberOfClients = this.clients.length;
-  
+
       }, (error) => {
         console.log(error)
       }
@@ -292,14 +296,14 @@ feedbacks: any;
     );
   }
   navigateToTerms(id: any) {
-    console.log("contractId on navigate",id);
+    console.log("contractId on navigate", id);
     this.contractId = id;
-    if(this.userRole == 'COACH'){
+    if (this.userRole == 'COACH') {
 
-    this.router.navigate(['/contractDetail', id]);
-    } else if (this.userRole == 'CLIENT'&& id.contractStatus==null) {
+      this.router.navigate(['/contractDetail', id]);
+    } else if (this.userRole == 'CLIENT' && id.contractStatus == null) {
       this.router.navigate(['/terms', id]);
-    }else(this.userRole == 'CLIENT'&& id.contractStatus=="SIGNED")
+    } else (this.userRole == 'CLIENT' && id.contractStatus == "SIGNED")
     this.router.navigate(['/contractDetail', id]);
 
 
@@ -319,7 +323,7 @@ feedbacks: any;
 
 
   //       sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
-        
+
 
   //     },
   //     (error: any) => {
@@ -339,7 +343,7 @@ feedbacks: any;
         console.log(this.orgCoaches);
         console.log('here Organization=> coaches', response);
         this.numberofCoaches = this.orgCoaches.length;
-       
+
       },
       (error: any) => {
         console.log(error);
@@ -355,18 +359,18 @@ feedbacks: any;
         console.log('here contracts=>', response);
         this.contracts = response.body;
         console.log(this.contracts);
-      
+
       },
       (error: any) => {
         console.log(error);
       }
     );
   }
-  
+
   getNoOfContracts() {
     this.clientService.getContracts().subscribe(
       (response: any) => {
-        
+
         this.contracts = response.body;
         console.log(this.contracts);
         this.numberOfContracts = this.contracts.length;
@@ -391,7 +395,7 @@ feedbacks: any;
     );
   }
   navigateToContractDetail(id: any) {
-    console.log("contractId on navigate",id);
+    console.log("contractId on navigate", id);
     this.contractId = id;
     this.router.navigate(['/contractDetail/' + id]);
 
@@ -418,7 +422,7 @@ feedbacks: any;
 
     this.CoachEducationService.getCoachEducation(options).subscribe(
       (response: any) => {
-       
+
         console.log(response);
         this.coachEducationData = response;
         this.calculateNumberOfHours(this.coachEducationData);
@@ -451,21 +455,21 @@ feedbacks: any;
         console.log(error);
       }
     );
-  
+
   }
-  
+
 
   getClass(sessions: any) {
     if (sessions.status === 'CONDUCTED') {
-        return 'badge-warning';
+      return 'badge-warning';
     } else if (sessions.status === 'CONFIRMED') {
-        return 'badge-success';
+      return 'badge-success';
     }
-    else(sessions.status === 'CANCELLED') 
+    else (sessions.status === 'CANCELLED')
     return 'badge-success';
-    
-   
-}
+
+
+  }
 
 
 }

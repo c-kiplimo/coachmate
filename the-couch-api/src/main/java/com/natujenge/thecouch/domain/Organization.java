@@ -2,6 +2,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.OrgStatus;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Table(name = "tbl_organizations")
 @Entity
