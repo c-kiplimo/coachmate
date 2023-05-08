@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Slf4j
@@ -33,26 +32,13 @@ public class ContractResource {
         this.contractService = contractService;
     }
 
-    // Get All Contracts
-    @GetMapping
-    public ResponseEntity<?> getContracts(@AuthenticationPrincipal User userDetails) {
-        try{
-            Long coachId = userDetails.getId();
-            List<Contract> contracts = contractService.getContracts(coachId);
-            return new ResponseEntity<>(contracts, HttpStatus.OK);
-
-        }catch (Exception e){
-            return new ResponseEntity<>(new RestResponse(true,e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     // Get a Single Contract by ContractId
     @GetMapping("/{id}")
     public ResponseEntity<?> getContractById(@PathVariable("id") Long contractId,
                                              @AuthenticationPrincipal User userDetails) {
         try{
            // Long coachId = userDetails.getCoach().getId();
-            Contract contract = contractService.getSingleContract(contractId);
+            Contract contract = contractService.findContractById(contractId);
             return new ResponseEntity<>(contract, HttpStatus.OK);
 
         }catch (Exception e){
@@ -60,31 +46,9 @@ public class ContractResource {
         }
     }
     //Get contract by client Id
-    @GetMapping("byClient/{id}")
-    public ResponseEntity<?> getContractByClientId(@PathVariable("id") Long clientId,
-                                                   @AuthenticationPrincipal User userDetails) {
-        try{
-            List<Contract> contract = contractService.getContractByClientId(clientId);
-            return new ResponseEntity<>(contract, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+
 
     //API TO GET CONTRACTS BY ORG ID
-    @GetMapping(path = "getOrgContracts/{id}")
-    ResponseEntity<?> getOrgContracts(@PathVariable("id") Long orgId,
-                                      @AuthenticationPrincipal User userDetails){
-        log.info("Request to get Organization contracts", orgId);
-        try {
-            List<Contract> listResponse = contractService.getContractByOrgId(orgId);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error Occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @PostMapping
     public ResponseEntity<Contract> createContract(
@@ -128,46 +92,17 @@ public class ContractResource {
 
 
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
-    ResponseEntity<?> updateContractStatus(
+    ResponseEntity<Contract> updateContractStatus(
 
                                          @RequestParam("status") ContractStatus contractStatus,
-                                         @PathVariable Long id,
+                                         @PathVariable Long contractId,
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
-            try {
-                if(userDetails.getUserRole() != UserRole.CLIENT){
-                    return new ResponseEntity<>(new RestResponse(true, "Only a client can sign a contract"),
-                            HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-                contractService.updateContractStatusByClientId
-                        (id,contractStatus, userDetails.getId());
 
-            return new ResponseEntity<>(new RestResponse(false, "Contract status set to "+ contractStatus),
-                    HttpStatus.OK);
-
-
-        } catch (Exception e){
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+                Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId());
+        return  ResponseEntity.ok().body(updatedContract);
     }
-    // Update a contract
-    //    @PutMapping("/{id}")
-    //    public ResponseEntity<?> updateContract(@PathVariable("id") Long contractId,
-    //                                            @RequestBody ContractRequest contractRequest,
-    //                                            @AuthenticationPrincipal User userDetails) {
-    //        try{
-    //            Long coachId = userDetails.getCoach().getId();
-    //            contractService.updateContract(coachId,contractId,contractRequest);
-    //            return new ResponseEntity<>(new RestResponse(false,
-    //                    "Contract Updated Successfully"), HttpStatus.OK);
-    //
-    //        }catch (Exception e){
-    //            return new ResponseEntity<>(new RestResponse(true,e.getMessage()),
-    //                    HttpStatus.INTERNAL_SERVER_ERROR);
-    //        }
-    //    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContract(@PathVariable("id") Long contractId,
@@ -200,6 +135,7 @@ public class ContractResource {
         Long userId= userDetails.getId();
 
         Page<ContractDTO> contractPage = contractService.filter(userId,clientId , userRole,search, organisationId, pageable);
+        log.info("filtered {}",contractPage.getContent());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
         return ResponseEntity.ok().headers(headers).body(contractPage.getContent());
     }

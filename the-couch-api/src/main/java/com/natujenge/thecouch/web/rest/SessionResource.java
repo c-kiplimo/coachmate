@@ -50,7 +50,7 @@ public class SessionResource {
         log.info("Request to create session");
         try {
             // check if the number of sessions has been exceeded
-            Contract contract = contractService.getContract(contractId);
+            Contract contract = contractService.findContractById(contractId);
             Long sessionsCount = sessionService.countSessionByContractId(contractId);
             log.info("sessions {}", sessionsCount);
             if (sessionsCount >= contract.getNoOfSessions()) {

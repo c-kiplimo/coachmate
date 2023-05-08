@@ -81,11 +81,8 @@ public class ContractService {
         this.coachBillingAccountService = coachBillingAccountService;
     }
 
-    public List<Contract> getContracts(Long coachId) {
-        return contractRepository.findAllByCoachId(coachId);
-    }
 
-    public Contract getSingleContract(Long contractId) {
+    public Contract findContractById(Long contractId) {
 
         // Verify Coach
 
@@ -96,11 +93,6 @@ public class ContractService {
         }
         return optionalContract.get();
     }
-
-    public List<Contract> getContractByClientId(Long clientId) {
-        return contractRepository.findAllByClientId(clientId);
-    }
-
     public Contract createContract(Long coachId, ContractRequest contractRequest,Long organizationId) {
 
         // Get Client
@@ -172,6 +164,7 @@ public class ContractService {
             if (coach.getOrganization() != null) {
                 contract.setOrganization(coach.getOrganization());
             }
+            contract.setCreatedBy(coachId);
 
             log.info("Contract: " + contract.toString());
 
@@ -232,118 +225,57 @@ public class ContractService {
     public void deleteContract(Long coachId, Long contractId) {
 
         // GetContract ById and CoachId
-        Contract contract = getSingleContract(contractId);
+        Contract contract = findContractById(contractId);
 
         contractRepository.delete(contract);
     }
 
 
-    public List<Contract> getContractByOrgId(Long organizationId) {
-        return contractRepository.findContractByOrganizationId(organizationId);
-    }
 
-    public Contract getContract(Long contractId) {
-        return contractRepository.findById(contractId).orElseThrow(() -> new UserNotFoundException("Contract by id " + contractId
-                + " not found"));
-    }
 
-    @Transactional
-    public void updateContractStatusByOrganizationId(Long id, ContractStatus contractStatus, Long organizationId) {
-        log.info("Changing status of contract by organization {}", id);
-        Optional<Contract> contract = contractRepository.findByIdAndOrganizationId(id, organizationId);
-
-        if (contract.isEmpty()) {
+@Transactional
+    public Contract updateContractStatus(Long contractId, ContractStatus contractStatus,Long loggedInUSerId){
+        Optional<Contract> contractOptional = contractRepository.findById(contractId);
+        if (contractOptional.isEmpty()) {
             throw new IllegalStateException("Contract doesn't exist");
         }
+        Contract contract = contractOptional.get();
 
-        Contract contract1 = contract.get();
+        if(contractStatus==ContractStatus.SIGNED){
+            if(contract.getContractStatus()==ContractStatus.SIGNED ){
+                log.info("Contract {} is  is signed", contractId);
+                throw new IllegalStateException("Contract is signed");
 
-        if (contract1.getContractStatus() == ContractStatus.SIGNED) {
-            log.info("Contract {} is  is signed", id);
-            throw new IllegalStateException("Contract is signed");
-        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
-            log.info("Contract {} is  is finished", id);
-            throw new IllegalStateException("Contract is FINISHED");
+            }else{
+                contract.setContractStatus(ContractStatus.SIGNED);
+                contract.setLastUpdatedBy(loggedInUSerId);
 
-        } else if (Objects.equals(contractStatus, "SIGN")) {
-            contract1.setContractStatus(ContractStatus.SIGNED);
-        } else {
-            contract1.setContractStatus(ContractStatus.FINISHED);
+            }
+
+        }else if(contractStatus==ContractStatus.FINISHED){
+          if(contract.getContractStatus()==ContractStatus.FINISHED){
+              log.info("Contract {} is  is finished", contractId);
+              throw new IllegalStateException("Contract is FINISHED");
+          }else{
+              contract.setContractStatus(ContractStatus.FINISHED);
+              contract.setLastUpdatedBy(loggedInUSerId);
+
+          }
+
         }
-        log.info("Contract status updated");
+return  contract;
     }
-
-    @Transactional
-    public void updateContractStatusByCoachId(Long id, ContractStatus contractStatus, Long coachId) {
-        log.info("Changing status of contract by coach {}", id);
-        Optional<Contract> contract = contractRepository.findByIdAndCoachId(id, coachId);
-
-        if (contract.isEmpty()) {
-            throw new IllegalStateException("Contract doesn't exist");
-        }
-
-        Contract contract1 = contract.get();
-
-        if (contract1.getContractStatus() == ContractStatus.SIGNED) {
-            log.info("Contract {} is  is signed", id);
-            throw new IllegalStateException("Contract is signed");
-        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
-            log.info("Contract {} is  is finished", id);
-            throw new IllegalStateException("Contract is FINISHED");
-
-        } else if (Objects.equals(contractStatus, "SIGN")) {
-            contract1.setContractStatus(ContractStatus.SIGNED);
-        } else if (contract1.getContractStatus() == ContractStatus.NEW) {
-            contract1.setContractStatus(ContractStatus.FINISHED);
-        } else {
-            contract1.setContractStatus(ContractStatus.FINISHED);
-        }
-        log.info("Contract status updated");
-    }
-
-    @Transactional
-    public void updateContractStatusByClientId(Long id, ContractStatus contractStatus, Long clientId) {
-        log.info("Changing status of contract by client {}", id);
-        Optional<Contract> contract = contractRepository.findByIdAndClientId(id, clientId);
-
-        if (contract.isEmpty()) {
-            throw new IllegalStateException("Contract doesn't exist");
-        }
-
-        Contract contract1 = contract.get();
-
-        if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.FINISHED) {
-            log.info("Contract {} is  is signed", id);
-            contract1.setContractStatus(ContractStatus.FINISHED);
-        } else if (contract1.getContractStatus() == ContractStatus.FINISHED) {
-            log.info("Contract {} is  is finished", id);
-            throw new IllegalStateException("Contract is FINISHED");
-
-        } else if (contract1.getContractStatus() == null && contractStatus == ContractStatus.SIGNED) {
-            contract1.setContractStatus(ContractStatus.SIGNED);
-        } else if (contract1.getContractStatus() == ContractStatus.SIGNED && contractStatus == ContractStatus.SIGNED) {
-            throw new IllegalStateException("Contract is signed");
-        } else if (contract1.getContractStatus() == ContractStatus.NEW && contractStatus == ContractStatus.SIGNED) {
-            contract1.setContractStatus(ContractStatus.SIGNED);
-        } else if (contract1.getContractStatus() == ContractStatus.NEW && contractStatus == ContractStatus.FINISHED) {
-            contract1.setContractStatus(ContractStatus.FINISHED);
-        } else {
-            throw new IllegalStateException("Contract must be signed");
-        }
-        log.info("Contract status updated");
-    }
-
-
 
     private Contract createExample(Long userId,Long clientId, UserRole userRole,String search, Long organisationId) {
         Contract  contactExample = new Contract();
 
         User coach=new User();
-        User client=new User();
+
 
 
         if (organisationId != null) {
             contactExample.setCoach(coach);
+
 
             log.info("org id {}", organisationId);
             contactExample.getCoach().setOrganization(new Organization());
@@ -355,12 +287,18 @@ public class ContractService {
 
             log.info("User role is  {}", userRole);
             contactExample.getCoach().setId(userId);
+            contactExample.getCoach().setUserRole(userRole);
         }
-        if (clientId != null && userRole.equals(UserRole.CLIENT)) {
+
+        if (clientId != null || userRole.equals(UserRole.CLIENT)) {
+            User client=new User();
             log.info("User role is {}", userRole);
             contactExample.setClient(client);
             contactExample.getClient().setId(clientId);
+
         }
+
+
 
 
 
@@ -374,6 +312,8 @@ public class ContractService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded","client.locked", "client.enabled","client.onboarded")
+
                 .withIgnoreNullValues();
         Example<Contract> example = Example.of(contract, matcher);
         return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
