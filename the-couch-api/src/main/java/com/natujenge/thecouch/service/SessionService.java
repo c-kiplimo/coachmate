@@ -2,11 +2,14 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
+import com.natujenge.thecouch.domain.enums.SessionType;
+import com.natujenge.thecouch.domain.enums.SessionVenue;
 import com.natujenge.thecouch.repository.*;
 import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -90,6 +93,9 @@ public class SessionService {
 
         // New Sessions enter the new state
         sessionRequest.setSessionStatus(SessionStatus.NEW);
+        sessionRequest.setName(sessionRequest.getName());
+        sessionRequest.setSessionType(SessionType.valueOf(String.valueOf(sessionRequest.getSessionType())));
+        sessionRequest.setSessionVenue(SessionVenue.valueOf(String.valueOf(sessionRequest.getSessionVenue())));
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
@@ -284,30 +290,30 @@ public class SessionService {
         return sessionExample;
     }
 
-    public Page<SessionDTO> filter(Long coachId, Long clientId, Long contractId,String sessionStatus, LocalDateTime sessionDate,  Long organisationId, String search, Pageable pageable) {
+    public Page<SessionDTO> filter(Long coachId, Long clientId, Long contractId,String sessionStatus, LocalDate sessionDate,  Long organisationId, String search, Pageable pageable) {
         Session session = createExample(coachId, clientId, contractId, sessionStatus, organisationId, search);
         log.info("After example {} ", session);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths(".*\\.(locked|enabled)")
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded", "client.locked", "client.enabled","client.onboarded")
                 .withIgnoreNullValues();
         Example<Session> example = Example.of(session, matcher);
         if (sessionDate != null) {
-            log.info("Created at {} ", sessionDate);
+            log.info("Session date at {} ", sessionDate);
             return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
         }
         return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
     }
     public Specification<Session> getSpecFromDatesAndExample(
-            LocalDateTime sessionDate, Example<Session> example) {
+            LocalDate sessionDate, Example<Session> example) {
 
         return (Specification<Session>) (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
 
             if (sessionDate != null) {
-                predicates.add(builder.equal(root.get("sessionDate"),sessionDate));
+                predicates.add(builder.equal(root.get("sessionSchedules").get("sessionDate"),sessionDate));
             }
 
             predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));

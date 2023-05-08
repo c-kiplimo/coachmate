@@ -118,7 +118,7 @@ public class SessionSchedulesService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths(".*\\.(locked|enabled)")
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded")
                 .withIgnoreNullValues();
         Example<SessionSchedules> example = Example.of(sessionSchedules, matcher);
 

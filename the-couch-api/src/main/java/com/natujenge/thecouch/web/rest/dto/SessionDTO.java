@@ -9,18 +9,15 @@ import java.time.LocalTime;
 @Data
 public class SessionDTO {
     private Long id;
-    private String Name;
-    private String SessionDate;
-    private String SessionStartTime;
-    private String SessionEndTime;
-    private String SessionNumber;
-    private SessionType SessionType;
-    private SessionStatus SessionStatus;
-    private String Notes;
-    private String Feedback;
-    private SessionVenue SessionVenue;
-    private PaymentCurrency PaymentCurrency;
-    private String AmountPaid;
+    private String name;
+    private String sessionNumber;
+    private SessionType sessionType;
+    private SessionStatus sessionStatus;
+    private String notes;
+    private String feedback;
+    private SessionVenue sessionVenue;
+    private PaymentCurrency paymentCurrency;
+    private String amountPaid;
     private Long sessionSchedulesId;
     private Long sessionSchedulesOrgId;
     private LocalDate sessionSchedulesSessionDate;

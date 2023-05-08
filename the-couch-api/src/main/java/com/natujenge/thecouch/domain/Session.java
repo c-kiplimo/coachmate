@@ -41,13 +41,6 @@ public class Session {
     private String notes;
     private String feedback;
 
-    // includes date and time
-    private LocalDate sessionDate;
-    private String sessionDuration;
-    private String sessionStartTime;
-    private String sessionEndTime;
-
-
     @Enumerated(EnumType.STRING)
     private SessionVenue sessionVenue;
     @Enumerated(EnumType.STRING)
