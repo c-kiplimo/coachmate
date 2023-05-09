@@ -33,7 +33,6 @@ export class DashboardComponent implements OnInit {
   numberOfHoursCoachEducation: any;
   numberOfHoursCoachingHours: any;
   coachSessionData: any;
-  coachData: any;
   userRole: any;
 
   contractId: any;
@@ -49,6 +48,7 @@ export class DashboardComponent implements OnInit {
 
   session: any;
   feedbacks: any;
+  userData: any;
 
 
 
@@ -60,12 +60,12 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user');
+    this.userData = sessionStorage.getItem('user');
 
-    if(this.coachSessionData != null){
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
+    if(this.user != null){
+    this.user = JSON.parse(this.user);
+    console.log(this.user);
+    this.userRole = this.user.userRole;
     console.log(this.userRole);
     } else {
       this.router.navigate(['/signin']);
@@ -80,20 +80,17 @@ export class DashboardComponent implements OnInit {
 
     if (this.userRole == 'COACH') {
       this.getClients();
-      this.getUser();
       this.getNoOfSessions();
       this.getNoOfContracts();
-      this.getCoachEducation(this.coachData.id);
-      this.getCoachFeedbacks(this.coachData.coach.id);
+      this.getCoachEducation(this.user.id);
+      this.getCoachFeedbacks(this.user.id);
       this.getAllContracts();
 
     } else if (this.userRole == 'ORGANIZATION') {
-      this.orgId = this.coachData.organization.id;
+      this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getOrgClients();
-
-
 
 
       this.orgData = sessionStorage.getItem('Organization');
@@ -108,8 +105,8 @@ export class DashboardComponent implements OnInit {
     } else if (this.userRole == 'CLIENT') {
       console.log('not coach');
       this.getUser();
-      this.getClientContracts(this.coachData.id);
-      this.getClientSessions(this.coachData.id);
+      this.getClientContracts(this.user.id);
+      this.getClientSessions(this.user.id);
 
 
     }
@@ -251,7 +248,7 @@ export class DashboardComponent implements OnInit {
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    const id = this.coachData.id;
+    const id = this.user.id;
     this.loading = true;
     this.clientService.getOrgClients(id).subscribe(
       (response) => {

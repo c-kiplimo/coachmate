@@ -1,15 +1,20 @@
 package com.natujenge.thecouch.domain;
-
 import com.natujenge.thecouch.domain.enums.CoachingCategory;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.natujenge.thecouch.domain.enums.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -56,5 +61,15 @@ public class Contract {
     @ManyToOne
     @JoinColumn(name = "coach_id")
     User coach;
+
+    @Column(nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private Long createdBy;
+
+    @UpdateTimestamp
+    private LocalDateTime lastUpdatedAt;
+    private Long lastUpdatedBy;
 
 }

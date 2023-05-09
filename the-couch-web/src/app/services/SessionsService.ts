@@ -11,8 +11,12 @@ import { environment } from 'src/environments/environment';
 })
 
 export class SessionsService {
-    getSessions() {
-      throw new Error('Method not implemented.');
+
+    getSessions(options: any) {
+      return this.http.get<any>(this.baseURL + 'sessions/filter', {
+        observe: 'response',
+        params: options,
+      });     
     }
 
     baseURL: string =environment.apiURL + '/api/';
