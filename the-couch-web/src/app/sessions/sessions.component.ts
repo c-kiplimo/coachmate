@@ -126,6 +126,15 @@ export class SessionsComponent implements OnInit {
       }
     );
   }
+
+
+
+  filterByStatus(event: any): any {
+    this.page = 0;
+    this.filters.status = event.target.value;
+    this.getAllSessions(this.page);
+  }
+
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);

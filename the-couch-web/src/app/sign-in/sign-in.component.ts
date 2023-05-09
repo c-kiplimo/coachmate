@@ -47,28 +47,23 @@ export class SignInComponent implements OnInit {
     this.errorMessage = '';
     this.loginSuccess = false;
     this.loading = true;
-    this.LoginService.login(this.formData).subscribe({
-      next: (response) => {
+    this.LoginService.login(this.formData).subscribe(
+      (response: any) => {
         console.log(response);
-        if (response.error) {
-          this.errorMessage = response.body.message;
-        } else {
-          this.loginSuccess = true;
           this.loading = false;
-          this.token = response.token;
 
-          sessionStorage.setItem('token', this.token);
+          sessionStorage.setItem('token', response.token);
           sessionStorage.setItem('businessName',  response.user.businessName);
           sessionStorage.setItem('user', JSON.stringify(response.user));
           //sessionStorage.setItem('notificationSettings', JSON.stringify(response.user.notificationSettings));
         
+          this.loading = false;
           this.router.navigate(['dashboard']);
           this.toastrService.success(
             'You are loggged in'
           );
-        }
       },
-      error: (error: any): any => {
+      (error: any): any => {
         this.loading = false;
         this.toastrService.error(
           'wrong Username/Password',
@@ -76,7 +71,7 @@ export class SignInComponent implements OnInit {
         );
         return (this.errorMessage = error.error.message);
       },
-    });
+    );
   }
 
   toggleFieldTextType() {

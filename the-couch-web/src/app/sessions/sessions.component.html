@@ -8,11 +8,12 @@
   <div class="col-3">
     <div class="filters-section">
       <div class="wrap">
-        <select class="form-control" name="codes">
+        <select class="form-control" name="codes" (change)="filterByStatus($event)">
           <option value="">Filter By Status</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="SUSPENDED">SUSPENDED</option>
-          <option value="CLOSED">CLOSED</option>
+          <option value="NEW">NEW</option>
+          <option value="CONFIRMED">CONFIRMED</option>
+          <option value="CANCELLED">CANCELLED</option>
+          <option value="CONDUCTED">CONDUCTED</option>
         </select>
       </div>
     </div>

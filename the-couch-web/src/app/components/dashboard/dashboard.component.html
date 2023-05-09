@@ -35,8 +35,8 @@
         Contract</button>
       <button class="btn btn-outline-success m-1" routerLink="/addSession"><i class="fa fa-plus"></i> Add
         Session</button>
-        <button class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i class="fa fa-plus"></i> Add
-          Session Schedule</button>
+      <button class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i class="fa fa-plus"></i> Add
+        Session Schedule</button>
     </div>
   </div>
 </div>
@@ -60,43 +60,47 @@
 
 
       <div class="upcomingsessions list-container container">
-        <table class="table">
+        <table class="table" *ngIf="sessions.length">
           <thead>
-            <th colspan="1">Name</th>
-            <th colspan="1">Date</th>
-            <th colspan="1">Start Time</th>
-            <th colspan="1">End Time</th>
-            <th colspan="1">Venue</th>
-            <th colspan="1">Status</th>
-            <th colspan="1" class="text-center" width="100px">Actions</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Venue</th>
+            <th>Status</th>
+            <th>Actions</th>
           </thead>
           <tbody class="list-container">
             <tr *ngFor="let session of sessions">
               <td>{{ session.name }}</td>
-              <td>{{ session.sessionDate  }}</td>
-              <td>{{ session.sessionStartTime  }}</td>
-              <td>{{ session.sessionEndTime }}</td>
+              <td>{{ session.sessionSchedulesSessionDate  }}</td>
+              <td>{{ session.sessionSchedulesStartTime  }}</td>
+              <td>{{ session.sessionSchedulesEndTime }}</td>
               <td>{{ session.sessionVenue | titlecase }}</td>
               <td>
-                <span class="value">
-                  <span class="badge" [ngClass]="getClass(sessions)">{{ session.sessionStatus }}</span>
-
-                </span>
+                <span class="badge" [ngClass]="{
+                    'badge-success': session.sessionStatus === 'CONFIRMED',
+                    'badge-danger': session.sessionStatus === 'CANCELLED',
+                    'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                  }">{{ session.sessionStatus }}</span>
               </td>
-              <td class="text-center">
-                <button type="button" class="btn btn-sm btn-success"
-                  routerLink="/sessionView/{{session.id}}">View</button>
+              <td class="view">
+                <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
               </td>
 
             </tr>
           </tbody>
         </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
+          No yet sessions.
+        </p>
       </div>
 
     </div>
   </div>
-
-
   <div class="col-6">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
