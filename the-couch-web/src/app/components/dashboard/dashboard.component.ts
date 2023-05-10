@@ -4,12 +4,23 @@ import { CoachEducationService } from '../../services/CoachEducationService';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { SessionsService } from 'src/app/services/SessionsService';
+import { ContractsService } from 'src/app/services/contracts.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(600, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   user: any;
@@ -65,7 +76,8 @@ export class DashboardComponent implements OnInit {
     private CoachEducationService: CoachEducationService,
     private router: Router,
     private route: ActivatedRoute,
-    private sessionService: SessionsService
+    private sessionService: SessionsService,
+    private contractsService: ContractsService
   ) { }
 
   ngOnInit(): void {
@@ -85,9 +97,10 @@ export class DashboardComponent implements OnInit {
       this.coachId = this.user.id;
 
       this.getRecentSessions(this.page);
+      this.getAllContracts(this.page);
 
-      // this.getClients();
-      // this.getNoOfSessions();
+      // t.getAllContracts
+      // t.getAllContracts
       // this.getNoOfContracts();
       // this.getCoachEducation(this.user.id);
       // this.getCoachFeedbacks(this.user.id);
@@ -110,10 +123,10 @@ export class DashboardComponent implements OnInit {
       this.clientId = this.user.id;
 
       this.getRecentSessions(this.page);
+      this.getAllContracts(this.page);
 
 
       // console.log('not coach');
-      // this.getUser();
       // this.getClientContracts(this.user.id);
       // this.getClientSessions(this.user.id);
 
@@ -161,6 +174,47 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  getAllContracts(page: any) {
+
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionStatus: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+    };
+
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      //options.orgId = this.orgId;
+      options.coachId = this.coachId;
+    }
+
+    this.contractsService.getContracts(options).subscribe(
+      (res: any) => {
+        console.log("res",res);
+        this.contracts = res.body;
+        this.loading = false;
+      }, (err: any) => {
+        console.log(err);
+        this.loading = false;
+      }
+    );
+
   }
 
 
@@ -425,19 +479,8 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  getAllContracts() {
-    this.loading = true;
-    this.clientService.getContracts().subscribe(
-      (response: any) => {
-        console.log(response);
-        this.contracts = response.body;
-        this.loading = false;
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+
+
   navigateToContractDetail(id: any) {
     console.log("contractId on navigate", id);
     this.contractId = id;
