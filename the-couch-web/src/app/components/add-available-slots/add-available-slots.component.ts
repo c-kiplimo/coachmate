@@ -13,8 +13,12 @@ export class AddAvailableSlotsComponent implements OnInit {
     startTime: '',
     endTime: '',
   };
+
+  user: any;
   coachSessionData: any;
-  coachData: any;
+  userRole: any;
+  orgId: any;
+  coachId: any;
 
   coachSlots: any;
 
@@ -23,19 +27,29 @@ export class AddAvailableSlotsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //get user session
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
 
-    this.getCoachSlots();
+    this.coachSessionData = sessionStorage.getItem('user');
+    this.user = JSON.parse(this.coachSessionData);
 
+    this.userRole = this.user.userRole;
+    console.log(this.userRole);
+
+
+    if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.id;
+      this.getCoachSlots();
+
+    } else if (this.userRole == 'COACH') {
+      this.coachId = this.user.id;
+      this.getCoachSlots();
+
+    }
   }
 
   addSlot() {
     console.log(this.slot);
     const options = {
-      coachId: this.coachData.coach.id,
+      coachId: this.user.id,
     };
     this.apiService.addSlot(this.slot, options).subscribe({
       next: (response) => {
@@ -47,7 +61,7 @@ export class AddAvailableSlotsComponent implements OnInit {
   }
 
   getCoachSlots() {
-    const coachId = this.coachData.coach.id;
+    const coachId = this.user.id;
     const options = {
     };
     this.apiService.getCoachSlots(coachId, options).subscribe({
@@ -60,7 +74,7 @@ export class AddAvailableSlotsComponent implements OnInit {
   deleteSlot(slot: any) {
     if(slot.booked === false) {
     const options = {
-      coachId: this.coachData.coach.id,
+      coachId: this.user.id,
       id: slot.id,
     };
     this.apiService.deleteSlot(options).subscribe({
