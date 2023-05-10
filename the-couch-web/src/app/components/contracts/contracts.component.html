@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-bold">Contracts</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10"></div>
+  <div class="col-md-2">
+    <button type="button" routerLink="/add-contract" class="btn btn-success d-sm-none d-md-block"
+      *ngIf="this.userRole != 'CLIENT'">
+      <i class="fa fa-plus"></i>Add Contract
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table" *ngIf="contracts?.length">
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Category</th>
+              <th scope="col">Client</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">No Of Sessions</th>
+              <th scope="col">Amount Due</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contract of contracts">
+              <th>{{ contract?.coachingTopic}}</th>
+              <td>{{ contract?.coachingCategory }}</td>
+              <td>{{ contract?.clientFullName }}</td>
+              <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
+              <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
+              <td>{{ contract?.noOfSessions}}</td>
+              <td>{{ contract?.amountDue }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                    'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                    'badge-danger': contract?.contractStatus === 'ONGOING',
+                    'badge-primary': contract?.contractStatus === 'NEW'
+                  }">{{ contract?.contractStatus }}</span>
+              </td>
+              <td class="actions">
+                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToTerms(contract.id)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
+          No Contracts Yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<div class="text-center" *ngIf="totalElements > 15">
+  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+<br>

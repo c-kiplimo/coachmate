@@ -9,8 +9,8 @@ import { SessionsComponent } from './sessions/sessions.component';
 import { AddSessionComponent } from './components/add-session/add-session.component';
 import { SchedulesComponent } from './schedules/schedules.component';
 import { ClientViewComponent } from './components/client-view/client-view.component';
-import { contractViewComponent } from './components/contract-view/contract-view.component';
-import { contractComponent } from './components/contract/contract.component';
+import { contractComponent } from './components/contracts/contracts.component';
+import { AddContractComponent } from './components/add-contract/contract.component';
 import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './components/confirmed-view/confirmed-view.component';
@@ -103,12 +103,12 @@ const routes: Routes = [
     component: CoachViewComponent
   },
   {
-    path: 'contracts',
-    component: contractViewComponent
+    path: 'add-contract',
+    component: AddContractComponent
 
   },
   {
-     path:'contract',
+     path:'contracts',
      component:contractComponent
   },
   {

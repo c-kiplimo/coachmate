@@ -19,7 +19,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
     ]),
   ],
 })
-export class contractComponent implements OnInit{
+export class AddContractComponent implements OnInit{
   contractForm!: FormGroup;
   clients: any;
   sessions:any;

@@ -5,7 +5,7 @@
 </div>
 
 <div class="row">
-  <div class="col-3">
+  <div class="col-md-3">
     <div class="filters-section">
       <div class="wrap">
         <select class="form-control" name="codes" (change)="filterByStatus($event)">
@@ -18,14 +18,14 @@
       </div>
     </div>
   </div>
-  <div class="col-3">
+  <div class="col-md-3">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Name, Phone or Email" aria-label="Name, Phone or Email"
         aria-describedby="button-addon2">
       <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
     </div>
   </div>
-  <div class="col-2">
+  <div class="col-md-2">
     <button type="button" routerLink="/addSession" class="btn btn-outline-success" *ngIf="this.userRole != 'CLIENT'">
       <i class="fa fa-plus"></i> Add Session
     </button>
@@ -62,11 +62,15 @@
             <td>{{ session?.sessionSchedulesSessionDate }}</td>
             <td>{{ session?.sessionSchedulesStartTime }}</td>
             <td>{{ session?.sessionSchedulesEndTime }}</td>
-            <td>{{ session?.sessionStatus }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                  'badge-success': session.sessionStatus === 'CONFIRMED',
+                  'badge-danger': session.sessionStatus === 'CANCELLED',
+                  'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                }">{{ session.sessionStatus }}</span>
+            </td>
             <td class="actions">
               <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
-              <!-- <i class="fa-solid fa-pen-to-square"></i>
-          <i class="fa-solid fa-trash-can"></i> -->
             </td>
           </tr>
         </tbody>

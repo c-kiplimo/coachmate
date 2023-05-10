@@ -30,10 +30,10 @@ import { ClientService } from './services/ClientService';
 import { SessionsService } from './services/SessionsService';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { contractComponent } from './components/contract/contract.component';
+import { AddContractComponent } from './components/add-contract/contract.component';
 import { ClientViewComponent } from './components/client-view/client-view.component';
 import { FeebackFormComponent } from './components/feeback-form/feeback-form.component';
-import { contractViewComponent } from './components/contract-view/contract-view.component';
+import { contractComponent } from './components/contracts/contracts.component';
 import { ApiService } from './services/ApiService';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
@@ -68,6 +68,7 @@ import { TemplatesComponent } from './account-settings/templates/templates.compo
 import { ProfileComponent } from './account-settings/profile/profile.component';
 import { PaymentsComponent } from './account-settings/payments/payments.component';
 import { HeaderComponent } from './shared/header/header.component';
+import { ContractsService } from './services/contracts.service';
 
 
 
@@ -78,7 +79,7 @@ import { HeaderComponent } from './shared/header/header.component';
     AppComponent,
     SidnavComponent,
     FooterComponent,
-    contractViewComponent,
+    AddContractComponent,
     sessionViewComponent,
     DashboardComponent,
     ClientsComponent,
@@ -156,6 +157,7 @@ import { HeaderComponent } from './shared/header/header.component';
     SessionsService,
     ApiService,
     CoachEducationService,
+    ContractsService,
   ],
   bootstrap: [AppComponent],
 })
