@@ -380,7 +380,7 @@ export class DashboardComponent implements OnInit {
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    this.clientService.getClient(options).subscribe(
+    this.clientService.getClients(options).subscribe(
       (response: any) => {
         console.log('here clients=>', response.body.data);
         this.clients = response.body.data;

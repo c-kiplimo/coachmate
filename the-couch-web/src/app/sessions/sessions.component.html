@@ -36,7 +36,7 @@
   <div class="col-md-12">
   <div class="card">
     <div class="card-body">
-      <table class="table">
+      <table class="table" *ngIf="sessions?.length">
         <thead>
           <tr>
             <th scope="col">Name</th>
@@ -53,7 +53,7 @@
         </thead>
 
         <tbody class="list-container">
-          <tr *ngFor="let session of sessions">
+          <tr *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
             <td>{{ session?.name }}</td>
             <td>{{ session?.contractCoachingTopic }}</td>
             <td>{{ session?.sessionVenue }}</td>

@@ -124,24 +124,29 @@ salesData: any;
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
       options.coachId = this.coachId;
     }
 
-    this.clientService.getClient(options).subscribe(
+    this.clientService.getClients(options).subscribe(
       (response) => {
         this.loading = false;
-        this.clients = response.body.data;
-        console.log(response.body)
+        this.clients = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
         
       }, (error) => {
+        this.loading = false;
         console.log(error)
       }
     )
   }
 
   search() {
+    this.page = 0;
+    this.getClients(this.page);
+  }
+  filterByStatus() {
+    this.page = 0;
     this.getClients(this.page);
   }
 
@@ -215,6 +220,11 @@ editClientModal!: ElementRef;
   // filter clients by status
   filterClientsByStatus(status: any) {
     this.filters.status = status;
+    this.getClients(this.page);
+  }
+
+  onTableDataChange(event: any) {
+    this.page = event;
     this.getClients(this.page);
   }
   

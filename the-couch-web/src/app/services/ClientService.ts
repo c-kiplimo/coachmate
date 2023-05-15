@@ -22,8 +22,8 @@ export class ClientService {
 
   }
 
-  getClient(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}clients`,
+  getClients(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}users/clients`,
       {
         params: options,
         observe: 'response',

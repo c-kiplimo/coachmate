@@ -136,7 +136,7 @@ getOrgCoaches(id: any) {
       search: this.filters.searchItem,
     };
     this.loading = true;
-    this.ClientService.getClient(options).subscribe(
+    this.ClientService.getClients(options).subscribe(
       (response) => {
         this.loading = false;
         this.Clients = response.body.data;
@@ -158,7 +158,7 @@ getOrgCoaches(id: any) {
   deleteClient(client: any) {
     this.ClientService.deleteClient().subscribe(() => {
         // update the list of items
-        this.ClientService.getClient(client).subscribe(clients => {
+        this.ClientService.getClients(client).subscribe(clients => {
             this.Clients = clients;
         });
     });

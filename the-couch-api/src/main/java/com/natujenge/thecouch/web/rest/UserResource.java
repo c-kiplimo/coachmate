@@ -4,14 +4,20 @@ import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.UserService;
+import com.natujenge.thecouch.util.PaginationUtil;
+import com.natujenge.thecouch.web.rest.dto.ClientDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +64,24 @@ public class UserResource {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //GET CLIENTS By ORG ID or COACH ID
+    @GetMapping(path = "clients")
+    ResponseEntity<List<ClientDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
+                                               @RequestParam(name = "coachId", required = false) Long coachId,
+                                               @RequestParam(name = "status", required = false) String status,
+                                               @RequestParam(name = "search", required = false) String search,
+                                               Pageable pageable,
+                                               @AuthenticationPrincipal User userDetails){
+        log.info("Request to get clients {}, " , coachId);
+        Long organizationId = null;
+        if (userDetails.getOrganization() != null) {
+            organizationId = userDetails.getOrganization().getId();
+        }
+        Page<ClientDTO> clientDtoPage = userService.getClients(coachId, status, search, organizationId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), clientDtoPage);
+        return ResponseEntity.ok().headers(headers).body(clientDtoPage.getContent());
     }
 
     //API TO GET CLIENTS BY ORG ID

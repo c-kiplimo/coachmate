@@ -6,6 +6,7 @@ import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.service.mapper.ClientMapper;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.UserMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
@@ -16,6 +17,10 @@ import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -45,8 +50,9 @@ public class UserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
 
     private final UserMapper userMapper;
+    private final ClientMapper clientMapper;
 
-    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService, UserMapper userMapper) {
+    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService, UserMapper userMapper, ClientMapper clientMapper) {
         this.coachMapper = coachMapper;
         this.userRepository = userRepository;
         this.registrationService = registrationService;
@@ -59,6 +65,7 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
         this.confirmationTokenService = confirmationTokenService;
         this.userMapper = userMapper;
+        this.clientMapper = clientMapper;
     }
 
     public User enableAppUser(String email) {
@@ -418,5 +425,58 @@ public class UserService implements UserDetailsService {
         } else {
             throw new IllegalStateException("Invalid Client");
         }
+    }
+
+    //Example for getting clients
+    private User createExample (Long coachId, String status, String search, Long organizationId) {
+        User userClientExample = new User();
+        User userCoach = new User();
+        Organization organization = new Organization();
+        log.info("Request to get clients by coachId: {}", coachId);
+
+        //userClientExample.setUserRole(UserRole.CLIENT);
+        if(organizationId != null) {
+            userClientExample.setOrganization(organization);
+            userClientExample.getOrganization().setId(organizationId);
+        }
+        if (coachId != null) {
+            userClientExample.setAddedBy(userCoach);
+            userClientExample.getAddedBy().setId(coachId);
+            log.info("Coach Id not null: {}", coachId);
+            log.info("userClientExample: {}", userClientExample.getAddedBy());
+
+        }
+        if (status != null && !status.isEmpty()) {
+            userClientExample.setClientStatus(ClientStatus.valueOf(status));
+        }
+        if (search != null && !search.isEmpty()) {
+            if(search.contains("@")) {
+                userClientExample.setEmail(search);
+            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+                userClientExample.setMsisdn(search);
+            } else {
+                userClientExample.setFullName(search);
+            }
+        }
+
+        return userClientExample;
+
+    }
+
+
+
+    public Page<ClientDTO> getClients(Long coachId, String status, String search, Long organizationId, Pageable pageable) {
+        User user = createExample(coachId, status, search, organizationId);
+        log.info("After example {} ", user);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("addedBy.locked", "addedBy.enabled","addedBy.onboarded")
+                .withIgnoreNullValues();
+        Example<User> example = Example.of(user, matcher);
+
+        //return example
+        return userRepository.findAll(example, pageable).map(clientMapper::toDto);
     }
 }

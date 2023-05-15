@@ -33,7 +33,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let contract of contracts">
+            <tr *ngFor="let contract of contracts | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
               <th>{{ contract?.coachingTopic}}</th>
               <td>{{ contract?.coachingCategory }}</td>
               <td>{{ contract?.clientFullName }}</td>

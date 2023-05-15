@@ -135,7 +135,7 @@ contractTemplates: any;
       status: this.filters.status,
       search: this.filters.searchItem,
     };
-    this.clientService.getClient(options).subscribe(
+    this.clientService.getClients(options).subscribe(
       (response: any) => {
         console.log(response.body)
         this.clients = response.body.data;

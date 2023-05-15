@@ -43,7 +43,7 @@ invoicesPaid: any;
 
   }
   getClients(id: any) {
-    this.clientService.getClient(id).subscribe((data: any) => {
+    this.clientService.getClients(id).subscribe((data: any) => {
       console.log(data);
       this.totalDue = data.totalDue;
       this.amountDeposited = data.amountDeposited;
