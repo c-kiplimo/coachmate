@@ -64,7 +64,7 @@ export class ClientService {
     console.log("edit client reached")
     console.log("client  to be updated here", clientToBeUpdated)
     console.log("client id here", id)
-    return this.http.put(`${this.baseURL}clients/${id}`, clientToBeUpdated)
+    return this.http.put(`${this.baseURL}users/client/${id}`, clientToBeUpdated)
   }
 
   changeClient(clientId: any, status: any, statusForm: any): Observable<any> {

@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -478,5 +479,27 @@ public class UserService implements UserDetailsService {
 
         //return example
         return userRepository.findAll(example, pageable).map(clientMapper::toDto);
+    }
+
+    public User editClient(Long clientId, User userDetails, ClientRequest clientRequest) {
+        log.info("Request to edit client: {}", clientRequest);
+        Optional<User> userOptional = userRepository.findById(clientId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setFullName(clientRequest.getFirstName() + " " + clientRequest.getLastName());
+            user.setFirstName(clientRequest.getFirstName());
+            user.setLastName(clientRequest.getLastName());
+            user.setMsisdn(clientRequest.getMsisdn());
+            user.setEmail(clientRequest.getEmail());
+            user.setPhysicalAddress(clientRequest.getPhysicalAddress());
+            user.setReason(clientRequest.getReason());
+            user.setPaymentMode(clientRequest.getPaymentMode());
+            user.setClientType(clientRequest.getClientType());
+            user.setLastUpdatedBy(userDetails.getFullName());
+            user.setLastUpdatedAt(LocalDateTime.now());
+            return userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Client not found");
+        }
     }
 }

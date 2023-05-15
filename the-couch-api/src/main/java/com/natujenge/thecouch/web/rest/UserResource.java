@@ -84,6 +84,35 @@ public class UserResource {
         return ResponseEntity.ok().headers(headers).body(clientDtoPage.getContent());
     }
 
+    //EDIT CLIENT
+    @PutMapping(path = "client/{id}")
+    ResponseEntity<?> editClient(@PathVariable("id") Long clientId,
+                                 @RequestBody ClientRequest clientRequest,
+                                 @AuthenticationPrincipal User userDetails){
+        log.info("Request to edit client {}", clientId);
+        try{
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
+            User editedClient;
+            if(organization.isPresent()){
+                editedClient = userService.editClient(clientId, userDetails, clientRequest);
+            } else {
+                editedClient = userService.editClient(clientId, userDetails, clientRequest);
+            }
+
+            if(editedClient != null){
+                ClientRequest response = modelMapper.map(editedClient, ClientRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not edited"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //API TO GET CLIENTS BY ORG ID
     @GetMapping(path = "getOrgClients/{id}")
     ResponseEntity<?> getOrgClients(@PathVariable("id") Long OrgId,
