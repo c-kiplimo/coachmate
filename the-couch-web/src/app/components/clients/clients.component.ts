@@ -33,32 +33,46 @@ salesData: any;
 
   updateClient!: FormGroup;
 
-  constructor(private ClientService: ClientService, 
+  constructor(private clientService: ClientService, 
     private router: Router,
     private toastrService: ToastrService,
     private formbuilder: FormBuilder,) { }
   
-  Clients!: any;
+  clients!: any;
 
   clientToBeUpdated!: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
 
+  user: any;
+
+  orgId!: number;
+  coachId!: number;
+
+  page: number = 0;
+  pageSize: number = 15;
+  totalElements: any;
+
   ngOnInit(): void {
+    this.coachSessionData = sessionStorage.getItem('user');
+    this.user = JSON.parse(this.coachSessionData);
 
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
+    this.userRole = this.user.userRole;
     console.log(this.userRole);
-    
 
-    if(this.userRole == 'COACH'){
-       this.getClients();
-    }else if(this.userRole == 'ORGANIZATION'){
-      this.getOrgClients();
 
+    if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.id;
+      this.getClients(this.page);
+
+    } else if (this.userRole == 'COACH') {
+      this.coachId = this.user.id;
+      this.getClients(this.page);
+
+    } else if (this.userRole == 'CLIENT') {
+      this.clientId = this.user.id;
+      this.getClients(this.page);
     }
 
     this.updateClient = this.formbuilder.group({
@@ -86,52 +100,49 @@ salesData: any;
     }
 }
 
-getOrgClients(){
-  const options = {
-    page: 1,
-    per_page: this.itemsPerPage,
-    status: this.filters.status,
-    search: this.filters.searchItem,
- 
-  };
-  
-  const id = this.coachData.id;
-  this.loading = true;
-  this.ClientService.getOrgClients(id).subscribe(
-    (response) => {
-      this.loading = false;
-      this.Clients = response.body;
-      console.log('clients',this.Clients)
 
-    }, (error) => {
-      console.log(error)
-    }
-  )
-}
-  
-  getClients(){
-    this.Clients = [];
-    
+  getClients(page: any) {
+ 
     this.loading = true;
-    
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
       status: this.filters.status,
       search: this.filters.searchItem,
+      sort: 'id,desc',
     };
-    this.loading = true;
-    this.ClientService.getClient(options).subscribe(
+
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      //options.orgId = this.orgId;
+      options.coachId = this.coachId;
+    }
+
+    this.clientService.getClient(options).subscribe(
       (response) => {
         this.loading = false;
-        this.Clients = response.body.data;
+        this.clients = response.body.data;
         console.log(response.body)
-        console.log('clients',this.Clients)
+        console.log('clients',this.clients)
         
       }, (error) => {
         console.log(error)
       }
     )
+  }
+
+  search() {
+    this.getClients(this.page);
   }
 
   navigateToClientView(id: any) {
@@ -141,13 +152,14 @@ getOrgClients(){
 
   }
   deleteClient(client: any) {
-    this.ClientService.deleteClient().subscribe(() => {
-        // update the list of items
-        this.ClientService.getClient(client).subscribe(clients => {
-            this.Clients = clients;
-        });
-    });
+    // this.clientService.deleteClient().subscribe(() => {
+    //     // update the list of items
+    //     this.clientService.getClient(client).subscribe(clients => {
+    //         this.Clients = clients;
+    //     });
+    // });
 }
+
 @ViewChild('editClientModal', { static: false })
 editClientModal!: ElementRef;  
   editClient(client:any){
@@ -173,7 +185,7 @@ editClientModal!: ElementRef;
     this.clientToBeUpdated = this.updateClient.value;
     console.log(this.clientToBeUpdated)
     console.log(id)  
-    this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+    this.clientService.editClient(this.clientToBeUpdated,id).subscribe(
       (data) => {
         console.log(data)
         this.toastrService.success('Client Updated', 'Success!');
@@ -190,9 +202,9 @@ editClientModal!: ElementRef;
   }
 
   suspendClient(client:any){
-    this.ClientService.suspendClient(client).subscribe(
+    this.clientService.suspendClient(client).subscribe(
       (response) => {
-        this.getClients();
+        this.getClients(this.page);
         this.loading = false;
 
       }, (error) => {
@@ -203,7 +215,7 @@ editClientModal!: ElementRef;
   // filter clients by status
   filterClientsByStatus(status: any) {
     this.filters.status = status;
-    this.getClients();
+    this.getClients(this.page);
   }
   
 }

@@ -27,7 +27,7 @@
               />
             </div>
 <div class="col-3">
-    <button class="btn button-filter  search-bar" (click)="getClients()" (click)="getOrgClients()">
+    <button class="btn button-filter  search-bar" (click)="search()">
               <i class="fa fa-search" aria-hidden="true"></i>
               Search
             </button>
@@ -55,7 +55,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let client of Clients">
+      <tr *ngFor="let client of clients">
         <th>{{ client.id }}</th>
         <td>{{ client.firstName + " " + client.lastName | titlecase }}</td>
         <td>{{ client.email }}</td>
@@ -87,7 +87,7 @@
   <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
-  <p class="text-muted mt-5" *ngIf="!loading && !Clients.length">
+  <p class="text-muted mt-5" *ngIf="!loading && !clients.length">
     No clients Found.
   </p>
 </div>
