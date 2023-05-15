@@ -1,241 +1,171 @@
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-bold">Education</h3>
+  </div>
+</div>
 
 <div class="row">
-
-    <div class="col-12">
-     
-        <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3" >
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-              <h5 class="card-title">Continuous Coaching Education Hours</h5>
-              <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
-            </div>
-            <div class="col">
-              <button type="button" routerLink="/AddTraining" class="btn btn-success">
-                <i class="fa-solid fa-user-plus"></i>Add Training
-              </button>
-            </div>
-            </div>
+  <div class="col-md-12">
+    <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h5 class="card-title">Education Hours</h5>
+            <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
+          </div>
+          <div class="col">
+            <button type="button" routerLink="/AddTraining" class="btn btn-success">
+              <i class="fa fa-plus"></i>Add Education
+            </button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
 </div>
 <div class="row">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Course Name</th>
-        <th scope="col">Provider</th>
-        <th scope="col">Issue Date</th>
-        <th scope="col">Valid until</th>
-        <th scope="col">Education Hours</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Course Name</th>
+              <th scope="col">Provider</th>
+              <th scope="col">Issue Date</th>
+              <th scope="col">Valid until</th>
+              <th scope="col">Education Hours</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
 
-    <tbody>
-      <tr *ngFor="let coachEducation of coachEducationData">
-        <td scope="row">{{coachEducation.id}}</td>
-        <td scope="row">{{coachEducation.courseName}}</td>
-        <td scope="row">{{coachEducation.provider}}</td>
-        <td scope="row">{{coachEducation.dateIssued | date : "yyyy-MM-dd" }}</td>
-        <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
-        <td scope="row">{{coachEducation.trainingHours}}</td>
-        <td class="actions">
-          <i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
-          (click)="setCurrectCoachEducation(coachEducation)"></i>
-          <i data-bs-toggle="modal" data-bs-target="#confirmDelete"
-          (click)="deleteItem(coachEducation)"class="fa-solid fa-trash-can p-1"></i>
-        </td>
-      </tr>
-     
-    </tbody>
-  </table>
+          <tbody>
+            <tr *ngFor="let coachEducation of coachEducationData">
+              <td scope="row">{{coachEducation.courseName}}</td>
+              <td scope="row">{{coachEducation.provider}}</td>
+              <td scope="row">{{coachEducation.dateIssued | date : "yyyy-MM-dd" }}</td>
+              <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
+              <td scope="row">{{coachEducation.trainingHours}}</td>
+              <td class="actions">
+                <i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
+                  (click)="setCurrectCoachEducation(coachEducation)"></i>
+                <i data-bs-toggle="modal" data-bs-target="#confirmDelete" (click)="deleteItem(coachEducation)"
+                  class="fa-solid fa-trash-can p-1"></i>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
   <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
-  <p class="text-muted mt-5" *ngIf="loading" >
+  <p class="text-muted mt-5" *ngIf="loading">
     No Courses Found.
   </p>
 </div>
 
 
-<div
-    class="modal fade bd-example-modal-lg"
-    id="confirmDelete"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
+<div class="modal fade bd-example-modal-lg" id="confirmDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
 
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="d-flex justify-content-between">
-            <h6>Confirm you want to Delete</h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <h6>Confirm you want to Delete</h6>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
             Close
           </button>
-          <button
-            type="button"
-            class="btn btn-success"
-            data-bs-dismiss="modal"
-            (click)="deleteCoachEducation()"
-          >
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="deleteCoachEducation()">
             Confirm
           </button>
         </div>
       </div>
     </div>
   </div>
-  </div>
+</div>
 
 
-  <div
-    class="modal fade bd-example-modal-lg"
-    id="editModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Coach Education</h1>
+<div class="modal fade bd-example-modal-lg" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Coach Education</h1>
 
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="d-flex justify-content-between">
-            <div class="card card-table d-flex justify-content-center align-items-center">
-             
-              <form  [formGroup]="editCoachEducationForm">
-                <div class="row p-2">
-                  <div class=" mb-3 col-md-6 ">
-                    <label for="courseName">Course Name *</label>
-                    <input
-                    formControlName="courseName"
-                    value="{{currentCoachEducation?.courseName}}"
-                      name="courseName"
-                      type="text"
-                      class="form-control"
-                      id="courseName"
-                      required
-                    />
-                  </div>
-                  <div class="mb-3  col">
-                    <label for="provider">Provider *</label>
-                    <input
-                      formControlName="provider"
-                      value="{{currentCoachEducation?.provider}}"
-                      name="provider"
-                      type="text"
-                      class="form-control"
-                      id="provider"
-                      required
-                    />
-                  </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <div class="card card-table d-flex justify-content-center align-items-center">
+
+            <form [formGroup]="editCoachEducationForm">
+              <div class="row p-2">
+                <div class=" mb-3 col-md-6 ">
+                  <label for="courseName">Course Name *</label>
+                  <input formControlName="courseName" value="{{currentCoachEducation?.courseName}}" name="courseName"
+                    type="text" class="form-control" id="courseName" required />
                 </div>
-                <div class="row p-2">
-                    <div class="mb-3 col-md-6">
-                        <label for="dateIssued">Date Issued*</label>
-                        <input
-                        formControlName="dateIssued"
-                        value="{{currentCoachEducation?.dateIssued}}"
-                          name="dateIssued"
-                          type="date"
-                          class="form-control"
-                          required
-                        />
-                      </div>
-                  <div class="mb-3 col-md-6">
-                    <label for="validTill">Valid till*</label>
-                    <input
-                    formControlName="validTill"
-                    value="{{currentCoachEducation?.validTill}}"
-                      name="validTill"
-                      type="date"
-                      class="form-control"
-                      required
-                    />
-                  </div>
-    
+                <div class="mb-3  col">
+                  <label for="provider">Provider *</label>
+                  <input formControlName="provider" value="{{currentCoachEducation?.provider}}" name="provider"
+                    type="text" class="form-control" id="provider" required />
                 </div>
-                <div class="row p-2">
-                    <div class="mb-3 col-md-6">
-                        <label for="trainingHours" class="form-label">Training Hours *</label>
-                        <input
-                        formControlName="trainingHours"
-                        value="{{currentCoachEducation?.trainingHours}}"
-                          name="trainingHours"
-                          type="number"
-                          class="form-control"
-                          required
-                          placeholder="eg 45hrs"
-                        />
-                      </div>
-                      <div class="mb-3  col">
-                        <label for="provider">Certficate Url</label>
-                        <input
-                          formControlName="certificateUrl"
-                          value="{{currentCoachEducation?.certificateUrl}}"
-                          name="certificateUrl"
-                          type="text"
-                          class="form-control"
-                          id="certificateUrl"
-                          required
-                        />
-                      </div>
-                    <div class="mb-3 col-md-6 form-group">
-                        <label for="certficate" class="form-label">certficate</label>
-                        <input 
-                        type="file"
-                        value="{{currentCoachEducation?.certificate}}"
-                        class="form-control"
-                        name="certificate"
-                        placeholder="upload your certificate"
-                        >
-                    </div>
-    
+              </div>
+              <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                  <label for="dateIssued">Date Issued*</label>
+                  <input formControlName="dateIssued" value="{{currentCoachEducation?.dateIssued}}" name="dateIssued"
+                    type="date" class="form-control" required />
                 </div>
-              
-              </form>
-            </div>
+                <div class="mb-3 col-md-6">
+                  <label for="validTill">Valid till*</label>
+                  <input formControlName="validTill" value="{{currentCoachEducation?.validTill}}" name="validTill"
+                    type="date" class="form-control" required />
+                </div>
+
+              </div>
+              <div class="row p-2">
+                <div class="mb-3 col-md-6">
+                  <label for="trainingHours" class="form-label">Training Hours *</label>
+                  <input formControlName="trainingHours" value="{{currentCoachEducation?.trainingHours}}"
+                    name="trainingHours" type="number" class="form-control" required placeholder="eg 45hrs" />
+                </div>
+                <div class="mb-3  col">
+                  <label for="provider">Certficate Url</label>
+                  <input formControlName="certificateUrl" value="{{currentCoachEducation?.certificateUrl}}"
+                    name="certificateUrl" type="text" class="form-control" id="certificateUrl" required />
+                </div>
+                <div class="mb-3 col-md-6 form-group">
+                  <label for="certficate" class="form-label">certficate</label>
+                  <input type="file" value="{{currentCoachEducation?.certificate}}" class="form-control"
+                    name="certificate" placeholder="upload your certificate">
+                </div>
+
+              </div>
+
+            </form>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
             Close
           </button>
-          <button
-            type="button"
-            class="btn btn-success"
-            data-bs-dismiss="modal"
-            (click)="editCoachEducation()"
-          >
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="editCoachEducation()">
             Update
           </button>
         </div>
       </div>
     </div>
   </div>
-  </div>
-
-
+</div>
