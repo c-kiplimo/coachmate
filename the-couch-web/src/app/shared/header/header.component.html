@@ -13,7 +13,7 @@ router.url.includes('signin')">
       <img src="../../../assets/images/cat_user.png" height="30px" /> {{user?.firstName}} ({{user?.userRole}})
     </button>
     <ul class="dropdown-menu">
-      <li><a [routerLink]="['profile']" class="dropdown-item">View Profile</a></li>
+      <li><a [routerLink]="['account-settings/profile']" class="dropdown-item">View Profile</a></li>
       <li class="dropdown-item"><button class="btn btn-success ml-5 pl-5" (click)="logOut()">Log Out</button></li>
     </ul>
   </div>
