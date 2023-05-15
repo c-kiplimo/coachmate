@@ -97,25 +97,25 @@ navDataforOrg: [
         routeLink: 'payment',
         icon: 'fas fa-money-check-alt',
         label: 'Payment',
-        number: 6
+        number: 8
     },
     {
         routeLink: 'feedback',
         icon: 'fa-solid fa-star',
         label: 'Feedback',
-        number: 7
+        number: 9
     },
     {
         routeLink: 'support',
         icon: 'fa-solid fa-headset',
         label: 'Support',
-        number: 8
+        number: 10
     },
     {
         routeLink: 'settings',
         icon: 'fa-solid fa-gear',
         label: 'Settings',
-        number: 9
+        number: 11
     },
 ],
 navDataforClient: [
@@ -136,26 +136,26 @@ navDataforClient: [
         routeLink: 'schedules',
         icon: '	fas fa-calendar-check',
         label: 'Schedules',
-        number: 3
+        number: 4
     },
     {
         routeLink: 'contracts',
         icon: 'fa-solid fa-file-contract',
         label: 'Contracts',
-        number: 4
+        number: 5
     },
     {
         routeLink: 'payment',
         icon: 'fas fa-money-check-alt',
         label: 'Payment',
-        number: 5
+        number: 8
     },
  
     {
         routeLink: 'support',
         icon: 'fa-solid fa-headset',
         label: 'Support',
-        number: 6
+        number: 10
     },
 ]
 };
