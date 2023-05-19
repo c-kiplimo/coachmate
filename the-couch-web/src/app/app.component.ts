@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {LocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +12,7 @@ export class AppComponent {
   hideHeaderAndSideNav: boolean = false;
   user: any;
 
-  constructor(private url:LocationStrategy, public router: Router) { }
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
     //get session storage of the loged in user
@@ -27,5 +26,6 @@ export class AppComponent {
 
     }
   }
+
  
 }

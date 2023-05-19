@@ -41,7 +41,13 @@ export class SignInComponent implements OnInit {
     private toastrService: ToastrService
     ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+        //get session storage of the loged in user
+        let user = sessionStorage.getItem("user");
+        if (user != null) {
+          this.router.navigate(['dashboard']);
+        }
+  }
 
   userLogin() {
     this.errorMessage = '';
@@ -51,13 +57,13 @@ export class SignInComponent implements OnInit {
       (response: any) => {
         console.log(response);
           this.loading = false;
-
           sessionStorage.setItem('token', response.token);
           sessionStorage.setItem('businessName',  response.user.businessName);
           sessionStorage.setItem('user', JSON.stringify(response.user));
           //sessionStorage.setItem('notificationSettings', JSON.stringify(response.user.notificationSettings));
         
           this.loading = false;
+          window.location.reload();
           this.router.navigate(['dashboard']);
           this.toastrService.success(
             'You are loggged in'
@@ -73,6 +79,8 @@ export class SignInComponent implements OnInit {
       },
     );
   }
+
+
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
