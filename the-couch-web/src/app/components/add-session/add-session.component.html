@@ -16,7 +16,7 @@
               <select [(ngModel)]="selectedContract" class="form-select" formControlName="selectedContract"
                 id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
                 <option *ngFor="let contract of contracts" [value]="contract.id">
-                  {{contract.coachingTopic}}-{{contract.client.fullName}}</option>
+                  {{contract?.coachingTopic}}-{{contract?.clientFirstName}}</option>
               </select>
 
             </div>

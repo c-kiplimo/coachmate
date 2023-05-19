@@ -11,6 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ClientService } from '../../services/ClientService';
 import { ApiService } from '../../services/ApiService'; 
 import {SessionsService }  from '../../services/SessionsService';
+import { ContractsService } from '../../services/contracts.service';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -56,10 +57,16 @@ export class AddSessionComponent implements OnInit {
   ];
 
   coachSlots: any;
+  orgId!: number;
+  coachId!: number;
+
+  page: number = 0;
+  pageSize: number = 15;
+  totalElements: any;
 
 
   contracts: any;
-  createSessionClientId: any;
+  getContractId: any;
   selectedContract: any;
 
 
@@ -90,6 +97,7 @@ export class AddSessionComponent implements OnInit {
   numberOfClients!: number; 
   coachSessionData: any;
   coachData: any;
+  userRole: any;
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
 
@@ -109,25 +117,37 @@ export class AddSessionComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private sessionService: ClientService,
+    private contractsService: ContractsService,
     private toastrService: ToastrService
   ) {
     
   }
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    
-    this.getCoachSlots();
-    this.getContracts();
-    //this.user = JSON.parse(sessionStorage.getItem('user') as any);
-    this.getClients();
+    this.coachSessionData = sessionStorage.getItem('user');
+    this.user = JSON.parse(this.coachSessionData);
+
+    this.userRole = this.user.userRole;
+    console.log(this.userRole);
+
+
+    if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.id;
+      this.getCoachSlots(this.page);
+      this.getContracts(this.page);
+      this.getClients();
+    } else if (this.userRole == 'COACH') {
+      this.coachId = this.user.id;
+      this.getCoachSlots(this.page);
+      this.getContracts(this.page);
+      this.getClients();
+    }
+   
 
   }
  
   onContractChange(event: any) {
     console.log(event.target.value);
-    this.createSessionClientId = event.target.value;
+    this.getContractId = event.target.value;
 
     //get client details from contract id
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
@@ -164,15 +184,15 @@ closeModal() {
   addSession () {
     console.log('add button clicked here')
     console.log(this.formData);
-    if (this.selectedContract && this.selectedContract.client) {
-      this.addSessionForm.clientId = this.selectedContract.client.id;
+    if (this.selectedContract) {
+      this.addSessionForm.clientId = this.selectedContract.clientId;
     }
    console.log(this.formData);
    console.log('add button clicked here')
    const params = {
-      clientId: this.selectedContract.client.id,
+      clientId: this.selectedContract.clientId,
       
-      contractId: this.createSessionClientId,
+      contractId: this.getContractId,
       sessionScheduleId: this.formData.sessionSchedules,
    };
 
@@ -191,19 +211,38 @@ closeModal() {
   }
 
 
-  getContracts() {
-    this.sessionService.getContracts().subscribe((res:any) => {
+  getContracts(page: number) {
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sort: 'id,desc',
+    };
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      //options.orgId = this.orgId;
+      options.coachId = this.coachId;
+    }
+    this.contractsService.getContracts(options).subscribe((res:any) => {
       console.log(res);
-      this.contracts = res.body; });
+      this.contracts = res.body;
+    }, (error: any) => {
+      console.log(error);
+    });
   }
 
 
-  getCoachSlots() {
+  getCoachSlots(page: number) {
     const options = {
-      status: false,
+      page: page,
+      size: this.pageSize,
+      coachId: this.coachId,
+      sort: 'id,desc',
+      status: false
     };
-    const coachId = this.coachData.coach.id;
-    this.apiService.getCoachSlots(coachId, options).subscribe({
+    this.apiService.getCoachSlots(options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
       }

@@ -48,8 +48,8 @@
                     'badge-primary': contract?.contractStatus === 'NEW'
                   }">{{ contract?.contractStatus }}</span>
               </td>
-              <td class="actions">
-                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToTerms(contract.id)"></i>
+              <td class="view">
+                <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
               </td>
             </tr>
           </tbody>

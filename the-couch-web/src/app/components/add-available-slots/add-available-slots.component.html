@@ -38,6 +38,12 @@
             </tr>
           </tbody>
         </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !coachSlots?.length">
+          No Slots Added Yet.
+        </p>
       </div>
     </div>
   </div>

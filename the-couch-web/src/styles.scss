@@ -103,12 +103,12 @@ button:active {
   height: 3rem;
   // margin: 2rem;
   border-radius: 50%;
-  border: 0.3rem solid #36773A44;
-  border-top-color: #36773A;
+  border: 0.3rem solid #EF481344;
+  border-top-color: #EF4813;
   animation: 1.5s spin infinite linear;
 
   &.multi {
-    border-bottom-color: #36773A;
+    border-bottom-color: #EF4813;
   }
 }
 

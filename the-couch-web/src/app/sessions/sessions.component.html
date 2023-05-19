@@ -69,8 +69,8 @@
                   'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
                 }">{{ session.sessionStatus }}</span>
             </td>
-            <td class="actions">
-              <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
+            <td class="view">
+              <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
             </td>
           </tr>
         </tbody>

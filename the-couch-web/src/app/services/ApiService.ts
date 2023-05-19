@@ -203,8 +203,8 @@ export class ApiService {
     });
   }
 
-  getCoachSlots(coachId: any, options: any): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/sessionSchedules/byCoachId/' + coachId, {
+  getCoachSlots(options: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/sessionSchedules/filter',{
       params: options, 
       observe: 'response',
     });
