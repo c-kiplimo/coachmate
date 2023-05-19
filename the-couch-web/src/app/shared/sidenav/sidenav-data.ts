@@ -85,7 +85,7 @@ navDataforOrg: [
         routeLink: 'coaches',
         icon: 'fas fa-users',
         label: 'Coaches',
-        number: 4
+        number: 12
     },
     {
         routeLink: 'contracts',
@@ -134,7 +134,7 @@ navDataforClient: [
   
     {
         routeLink: 'schedules',
-        icon: '	fas fa-calendar-check',
+        icon: 'fas fa-calendar-check',
         label: 'Schedules',
         number: 4
     },

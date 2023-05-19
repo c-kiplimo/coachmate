@@ -47,11 +47,11 @@
               <td scope="row">{{coachEducation.dateIssued | date : "yyyy-MM-dd" }}</td>
               <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
               <td scope="row">{{coachEducation.trainingHours}}</td>
-              <td class="actions">
-                <i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
-                  (click)="setCurrectCoachEducation(coachEducation)"></i>
-                <i data-bs-toggle="modal" data-bs-target="#confirmDelete" (click)="deleteItem(coachEducation)"
-                  class="fa-solid fa-trash-can p-1"></i>
+              <td class="view">
+                <a><i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
+                  (click)="setCurrectCoachEducation(coachEducation)"></i></a>
+                <a><i data-bs-toggle="modal" data-bs-target="#confirmDelete" (click)="deleteItem(coachEducation)"
+                  class="fa-solid fa-trash-can p-1"></i></a>
               </td>
             </tr>
 
