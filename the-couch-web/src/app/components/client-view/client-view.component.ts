@@ -17,6 +17,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ApiService } from '../../services/ApiService';
+import { ContractsService } from 'src/app/services/contracts.service';
 
 @Component({
   selector: 'app-client-view',
@@ -127,6 +128,7 @@ export class ClientViewComponent implements OnInit {
     private toastrService: ToastrService,
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private contractsService: ContractsService,
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -542,7 +544,7 @@ export class ClientViewComponent implements OnInit {
     data.objectives = this.objectives;
     data.clientId = this.clientId;
     console.log(data);
-    this.apiService.addNewContract(data).subscribe(
+    this.contractsService.addNewContract(data).subscribe(
       (response: any) => {
         this.toastrService.success('Contract added!', 'Success!', { timeOut: 8000 });
         setTimeout(() => {

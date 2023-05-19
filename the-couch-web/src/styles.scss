@@ -149,7 +149,12 @@ tbody {
 }
 
 .view a {
-  color: #198754;
+  color: #55906A;
+
+  //hover
+  &:hover {
+  color: #EF4813;
+  }
 }
 
 .faded {

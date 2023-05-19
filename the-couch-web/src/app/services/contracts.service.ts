@@ -13,6 +13,13 @@ export class ContractsService {
 
   constructor(private http: HttpClient) { }
 
+  // Add new Contract
+  addNewContract(newContract: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + 'contracts', newContract, {
+      observe: 'response',
+    });
+  }
+
   getContracts(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}contracts/filter`, {
       observe: 'response',

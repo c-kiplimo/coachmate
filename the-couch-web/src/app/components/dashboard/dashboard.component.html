@@ -1,4 +1,27 @@
-<!-- <div class="row dashboard-banner d-flex justify-content-between align-items-center p-3">
+<div class="row">
+  <div class="d-flex justify-content-between mt-2">
+    <div class="col  mt-4" style="margin-left: 5px;">
+      <h3 class="fw-bold">Dashboard</h3>
+    </div>
+    <div>
+      <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1"
+        routerLink="/addCoach"><i class="fa fa-plus"></i> Add Coach</button>
+      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addclient"><i
+          class="fa fa-plus"></i> Add Client</button>
+      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/add-contract"><i
+          class="fa fa-plus"></i> Add
+        Contract</button>
+      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
+          class="fa fa-plus"></i> Add
+        Session</button>
+      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i
+          class="fa fa-plus"></i> Add
+        Session Schedule</button>
+    </div>
+  </div>
+</div>
+
+<div class="row dashboard-banner d-flex justify-content-between align-items-center p-3">
   <div class="col-10 text-center p-3 mb-10">
     <h2 class="fw-bold" *ngIf="this.userRole == 'ORGANIZATION'">
       Hello {{orgName | lowercase }},
@@ -7,7 +30,7 @@
       </span>
     </h2>
     <h2 class="fw-bold" *ngIf="this.userRole == 'COACH'">
-      Hello {{user.businessName| lowercase }},
+      Hello {{user.firstName| lowercase }},
       <span class="fw-light">
         Welcome back!
       </span>
@@ -18,32 +41,12 @@
         Welcome back!
       </span>
     </h2>
-
-  </div>
-</div> -->
-
-
-<div class="row">
-  <div class="d-flex justify-content-between mt-2">
-    <div class="col  mt-4" style="margin-left: 5px;">
-      <h3 class="fw-bold">Dashboard</h3>
-    </div>
-    <div>
-      <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addCoach"><i class="fa fa-plus"></i> Add Coach</button>
-      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addclient"><i class="fa fa-plus"></i> Add Client</button>
-      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/contract"><i class="fa fa-plus"></i> Add
-        Contract</button>
-      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i class="fa fa-plus"></i> Add
-        Session</button>
-      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i class="fa fa-plus"></i> Add
-        Session Schedule</button>
-    </div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-10">
-    <p class="p-3 desc">Hello {{user.fullName| lowercase }}, Here's how things currently look like...</p>
+    <p class="p-3 desc">Hello {{user.firstName| lowercase }}, Here's how things currently look like...</p>
   </div>
 </div>
 
@@ -133,7 +136,7 @@
                   }">{{ contract?.contractStatus }}</span>
               </td>
               <td class="view">
-                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToTerms(contract.id)"></i>
+                <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
               </td>
             </tr>
           </tbody>
@@ -208,13 +211,13 @@
             
           </div>
       </div> -->
-  <div class="col-3 card text-center top-cards">
+  <!-- <div class="col-3 card text-center top-cards">
     <div class="card-body">
       <h6 class="card-title">Coaching Hours</h6>
       <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
 
     </div>
-  </div>
+  </div> -->
   <!-- <div class="col-3 card text-center top-cards" >
       <div class="card-body">
         <h6 class="card-title">Coach Education</h6>
@@ -223,14 +226,14 @@
         
       </div>
   </div> -->
-  <div class="col-3 card text-center top-cards">
+  <!-- <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <!-- <h6 class="card-title">Sessions Created</h6>
-            <h3 class="card-text fw-bold">{{numberOfSessions}}</h3> -->
+      <h6 class="card-title">Sessions Created</h6>
+            <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
       <h6 class="card-title">Sessions Success Rate</h6>
       <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
     </div>
-  </div>
+  </div> -->
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
       <h6 class="card-title">Clients</h6>

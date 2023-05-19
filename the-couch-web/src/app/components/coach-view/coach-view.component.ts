@@ -6,6 +6,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCaretDown, faPlus, faPenSquare, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../services/ApiService';
+import { ContractsService } from '../../services/contracts.service';
 import { ClientService } from '../../services/ClientService';
 
 @Component({
@@ -107,6 +108,7 @@ coaches: any;
     private toastrService: ToastrService,
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private contractsService: ContractsService,
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -522,7 +524,7 @@ coaches: any;
     data.objectives = this.objectives;
     data.clientId = this.clientId;
     console.log(data);
-    this.apiService.addNewContract(data).subscribe(
+    this.contractsService.addNewContract(data).subscribe(
       (response: any) => {
         this.toastrService.success('Contract added!', 'Success!', { timeOut: 8000 });
         setTimeout(() => {

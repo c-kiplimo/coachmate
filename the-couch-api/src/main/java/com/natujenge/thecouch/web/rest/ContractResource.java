@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 @Slf4j
-
 @RequestMapping(path = "api/contracts")
 public class ContractResource {
 
@@ -56,20 +55,13 @@ public class ContractResource {
             @RequestBody ContractRequest contractRequest,
             @AuthenticationPrincipal User userDetails
     ) {
-
-
+        log.info("Request to create contract");
         try {
-            log.info("adding contract");
-            Long coachId = userDetails.getId();
-            log.info("coach id {}",coachId);
             Long organisationId=null;
             if(userDetails.getOrganization() !=null){
-
                 organisationId = userDetails.getOrganization().getId();
-
             }
-            Contract contract =  contract = contractService.createContract(coachId, contractRequest,organisationId);
-
+            Contract contract = contractService.createContract(userDetails.getId(), contractRequest,organisationId);
 
             if (contract != null) {
                 return new ResponseEntity(new RestResponse(false, "contract created successfully"), HttpStatus.OK);

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ClientService } from '../../services/ClientService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/ApiService';
+import { ContractsService } from 'src/app/services/contracts.service';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { style, animate, transition, trigger } from '@angular/animations';
 @Component({
@@ -47,7 +48,6 @@ coachingCategory: any;
   organizationId: any;
   OrgCoaches: any;
   numberofCoaches: any;
-  coachId: any;
   editingSettings = false;
   isSaving = false;
   disableButton = false;
@@ -56,39 +56,54 @@ contractTemplates: any;
   user: any;
   contractTemplate: any;
 
+  orgId!: number;
+  coachId!: number;
+
+  page: number = 0;
+  pageSize: number = 15;
+  totalElements: any;
+  loading = false;
+  clientId: any;
+
+
   constructor(private clientService : ClientService,
     private apiService:ApiService,
+    private contractService:ContractsService,
     private formBuilder:FormBuilder,
     private router:Router,
     private route: ActivatedRoute
     ) { }
 
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    this.user = this.coachData;
-    console.log(this.user);
-    this.contractTemplates = this.user.contractTemplate;
-    console.log(this.contractTemplates);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
-    console.log(this.userRole);
+   // this.contractTemplates = this.user.contractTemplate;
+   this.coachSessionData = sessionStorage.getItem('user');
+   this.user = JSON.parse(this.coachSessionData);
 
-    if(this.userRole == 'COACH'){
-      this.getClients();
-      this.coachId = this.coachData.id;
-    
-     
-   
+   this.userRole = this.user.userRole;
+   console.log(this.userRole);
+
+
+   if (this.userRole == 'ORGANIZATION') {
+     this.orgId = this.user.organization.id;
+     this.getClients(this.page);
+
+   } else if (this.userRole == 'COACH') {
+     this.coachId = this.user.id;
+     this.getClients(this.page);
+
+   } else if (this.userRole == 'CLIENT') {
+     this.clientId = this.user.id;
+   }
+
   
-      } else if(this.userRole == 'ORGANIZATION'){
-        console.log('ORGANIZATION');
-        this.organizationId = this.coachData.organization.id;
-        console.log("organization id",this.organizationId);
-        this.getOrgClients();
-        this.getOrgCoaches(this.organizationId);
+      // } else if(this.userRole == 'ORGANIZATION'){
+      //   console.log('ORGANIZATION');
+      //   this.organizationId = this.coachData.organization.id;
+      //   console.log("organization id",this.organizationId);
+      //   this.getOrgClients();
+      //   this.getOrgCoaches(this.organizationId);
        
-      }
+      // }
     this.contractForm = this.formBuilder.group(
       {
         coachingCategory:'',
@@ -100,7 +115,7 @@ contractTemplates: any;
         individualFeesPerSession:'',
         noOfSessions:'',
         objectives:'',
-        service:'',
+        services:'',
         practice:'',
         note:'',
         terms_and_conditions:'',
@@ -128,24 +143,45 @@ contractTemplates: any;
       this.disableButton = false;
     }, 2000);
   }
-  getClients(){
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
+  getClients(page: number){
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
       status: this.filters.status,
       search: this.filters.searchItem,
+      sort: 'id,desc',
     };
+
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.coachId = this.coachId;
+    }
+
     this.clientService.getClients(options).subscribe(
-      (response: any) => {
-        console.log(response.body)
-        this.clients = response.body.data;
-        this.numberOfClients = this.clients.length;
-        console.log(this.numberOfClients)
-      }, (error: any) => {
+      (response) => {
+        this.loading = false;
+        this.clients = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
+        console.log('clients',this.clients)
+        
+      }, (error) => {
+        this.loading = false;
         console.log(error)
       }
     )
   }
+
   getOrgCoaches(id: any) {
     const data = {
       orgId: id,
@@ -197,21 +233,20 @@ contractTemplates: any;
       }
     )
   }
+  
   addContract(){
-    this.contractTemplates = this.user.contractTemplate;
+    //this.contractTemplates = this.user.contractTemplate;
     console.log(this.contractTemplates);
     console.log('here');
     console.log(this.contractForm.value);
     var data = this.contractForm.value;
     data.coachId = this.coachId
-    data.organizationId = this.organizationId
-    data.objectives = this.objectives;
-    data.service = this.contractTemplates.serviceTemplate;
-    data.practice = this.contractTemplates.practiceTemplate;
-    data.note = this.contractTemplates.noteTemplate;
-    data.terms_and_conditions = this.contractTemplates.terms_and_conditionsTemplate;
+    data.organizationId = this.orgId
+    //Stringify the objectives array
+    let objectives = JSON.stringify(this.objectives);
+    data.objectives = objectives;
     console.log(data);
-    this.apiService.addNewContract(data).subscribe(
+    this.contractService.addNewContract(data).subscribe(
       (response: any) => {
         
         this.router.navigate(['/contracts']);
@@ -220,6 +255,7 @@ contractTemplates: any;
       }
     )
   }
+
   addObjective(){
     
     console.log(this.Objectives);
