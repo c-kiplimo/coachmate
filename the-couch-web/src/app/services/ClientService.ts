@@ -206,13 +206,10 @@ export class ClientService {
   }
   // FEEDBACK SERVICES
   addFeedback(feedback: any, options: any): Observable<any> {
-    console.log(feedback.value, "feedback");
-    console.log(options, "options");
-    return this.http.post<any>(
-      this.baseURL + 'feedback/upload',
-      feedback,
-      { params: options, observe: 'response' }
-    );
+    return this.http.post<any>(this.baseURL + 'feedback/upload', feedback, {
+      params: options,
+      observe: 'response',
+    });
   }
   // ATTACHMENT SERVICES
   addAttachment(formData: any, options: any, headers: any): Observable<any> {

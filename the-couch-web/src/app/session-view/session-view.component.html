@@ -1,194 +1,166 @@
+<div class="row">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h5 class="fw-bold">
+      <i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i> Session
+    </h5>
+  </div>
+</div>
 
 <br>
-<h5 class="section-title text-center ">Session Details</h5>
-<div class="row">
-  <div class="col-2">
-  </div>
-  <div class="col-8">
-    <div class="container-fluid Client mb-5">
-      <div class="container">
-        <div class="card details-card">
-          <div class="mt-5" class=""[@fadeIn]>
-            <div class="d-flex justify-content-between flex-wrap">
-            <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" 
-            data-bs-toggle="modal"
-          data-bs-target="#addfeedbackModal"
-            >Give Feedback</button>
-            <button class="btn btn-success" *ngIf="this.userRole == 'COACH'" 
-            data-bs-toggle="modal"
-          data-bs-target="#attachmentModal"
-            >Add Attachments</button>
-            <div class="dropdown">
-              <a class="btn btn-success dropdown-toggle"role="button" id="dropdownMenuLink"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                  *ngIf="this.userRole == 'COACH'" >
-                Actions
-              </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li  *ngIf="this.userRole == 'COACH'" >
-                    <a
-                      class="dropdown-item"
-                      data-bs-toggle="modal"
-                      data-bs-target="#confirmsessionModal"
-                      (click)="statusState('CONFIRMED')"
-                      >Confirm
-                      </a
-                    >
 
-                  </li>
-                  <li  *ngIf="this.userRole == 'COACH'" >
-                    <a
-                      class="dropdown-item"
-                      data-bs-toggle="modal"
-                      data-bs-target="#conductedsessionModal"
-                      (click)="statusState('CONDUCTED')"
-                      >conducted</a
-                    >
-                  </li>
-                  <li  *ngIf="this.userRole == 'COACH'" >
-                    <a
-                      class="dropdown-item"
-                      data-bs-toggle="modal"
-                      data-bs-target="#cancelsessionModal"
-                      (click)="statusState('CANCELLED')"
-                      >Cancel</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editsessionModal"
-                      (click)="editSession(sessions)"
-                      >Reschedule</a
-                    >
-                  </li>
-                </ul>
-            </div>
-            </div>
-        <div class="session-details" [@fadeIn] >
-          <div class="d-flex justify-content-between main-detail">
-            <span class="title">Session Ref:</span>
-            <span class="value">{{ sessions.sessionNumber}}</span>
+<div class="row justify-content-center">
+  <div class="col-md-6 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row dtl">
+          <h3 class="fw-bold col">Details</h3>
+          <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal"
+            data-bs-target="#addfeedbackModal">Give Feedback</button>
+
+          <div class="col dropdown">
+            <a class="btn btn-success dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+              aria-expanded="false" *ngIf="this.userRole == 'COACH'">
+              Actions
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li class="dropdown-item">
+                <button class="btn btn-success" *ngIf="this.userRole == 'COACH'" data-bs-toggle="modal"
+                  data-bs-target="#attachmentModal">Add Attachments</button>
+              </li>
+              <li *ngIf="this.userRole == 'COACH'">
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmsessionModal"
+                  (click)="statusState('CONFIRMED')">Confirm
+                </a>
+
+              </li>
+              <li *ngIf="this.userRole == 'COACH'">
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#conductedsessionModal"
+                  (click)="statusState('CONDUCTED')">conducted</a>
+              </li>
+              <li *ngIf="this.userRole == 'COACH'">
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancelsessionModal"
+                  (click)="statusState('CANCELLED')">Cancel</a>
+              </li>
+              <li>
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editsessionModal"
+                  (click)="editSession(sessions)">Reschedule</a>
+              </li>
+            </ul>
           </div>
-          <div class="d-flex justify-content-between main-detail">
-            <span class="title">Session name:</span>
-            <span class="value">{{ sessions.name }}</span>
+        </div>
+        <div class="col-md-12" [@fadeIn]>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Session Ref</h6>
+            <p class="col">{{ sessions?.sessionNumber }}</p>
           </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Session Date</span>
-              <span class="value">{{ sessions.sessionDate }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Client name</span>
-              <span class="value">{{ sessions.client.fullName }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Session type</span>
-              <span class="value">{{ sessions.sessionType}}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Start Time</span>
-              <span class="value">{{ sessions.sessionStartTime}}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">End Time</span>
-              <span class="value">{{ sessions.sessionEndTime }}</span>
-            </div>
-            
-            <div class="d-flex justify-content-between">
-              <span class="title">Status</span>
-              
-              <span
-              class="badge"
-              [ngClass]="getClass(sessions)"
-              >{{ sessions.sessionStatus }}
-              </span> 
-              
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Session Venue</span>
-              <span class="value">{{sessions.sessionVenue}}</span>
-            </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Name</h6>
+            <p class="col">{{ sessions?.name }}</p>
           </div>
-      </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Date</h6>
+            <p class="col">{{ sessions?.sessionSchedulesSessionDate }}</p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Client name</h6>
+            <p class="col">{{ sessions?.clientFullName }}</p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Session type</h6>
+            <p class="col">{{ sessions?.sessionType }}</p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Start Time</h6>
+            <p class="col">{{ sessions?.sessionSchedulesStartTime }}</p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">End Time</h6>
+            <p class="col">{{ sessions?.sessionSchedulesEndTime }}</p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Status</h6>
+            <p class="col">
+              <span class="badge" [ngClass]="{
+                'badge-success': sessions.sessionStatus === 'CONFIRMED',
+                'badge-danger': sessions.sessionStatus === 'CANCELLED',
+                'badge-primary': sessions.sessionStatus === 'NEW' || sessions.sessionStatus === 'CONDUCTED'
+              }">{{ sessions.sessionStatus }}</span>
+            </p>
+          </div>
+          <div class="row dtl">
+            <h6 class="fw-bold faded col">Venue</h6>
+            <p class="col">{{ sessions?.sessionVenue }}</p>
+          </div>
+        </div>
+
       </div>
     </div>
-    </div>
   </div>
-  <div class="card details-card">
-      <div class="tabs-section">
-      <button  *ngIf="this.userRole == 'COACH'" 
+</div>
 
-        class="btn btn-tabs"
-        (click)="toggleTab('feedback')"
-        [ngClass]="{ 'active-tab': currentTab === 'feedback' }"
-      >
+<br>
+
+<div class="card">
+  <div class="card-body">
+    <div class="tabs-section">
+      <button *ngIf="this.userRole == 'COACH'" class="btn btn-tabs" (click)="toggleTab('feedback')"
+        [ngClass]="{ 'active-tab': currentTab === 'feedback' }">
         Feedback
       </button>
-      <button
-            class="btn btn-tabs"
-          (click)="toggleTab('attachments')"
-          [ngClass]="{ 'active-tab': currentTab === 'attachments' }"
-        >
-          Attachments
-        </button>
+      <button class="btn btn-tabs" (click)="toggleTab('attachments')"
+        [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
+        Attachments
+      </button>
     </div>
-      <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
-        <div class="row list-container container ">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Session Name</th>
-                <th scope="col">Client Name</th>
-                <th scope="col">Availability</th>
-                <th scope="col">Clarification Score</th>
-                <th scope="col">Emotional Intelligence</th>
-                <th scope="col">Listening Skills</th>
-                <th scope="col">Understanding</th>
-                <th scope="col">Average</th>
-                <th scope="col">Comments</th>
-              </tr>
-            </thead>
-        
-            <tbody>
-              <tr *ngFor="let feedback of feedbacks">
-            
-               
-                <td>{{ feedback.session.name }}</td>
-                <td>{{ feedback.client.firstName }}</td>
-                <td>{{ feedback.availabilityScore }}</td>
-                <td>{{ feedback.clarificationScore }}</td>
-                <td>{{ feedback.emotionalIntelligenceScore }}</td>
-                <td>{{ feedback.listeningSkillsScore }}</td>
-                <td>{{ feedback.understandingScore }}</td>
-                <td>{{ feedback.overallScore }}</td>
-                <td>     <button class="btn btn-success"
-                  data-bs-toggle="modal"
-                data-bs-target="#feedbackModal"
-                (click)="viewComment(feedback)"
-                >
-                  <i   class="fa-solid fa-arrow-up-right-from-square"></i>
+    <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
+      <div class="row list-container container ">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Session Name</th>
+              <th scope="col">Client Name</th>
+              <th scope="col">Availability</th>
+              <th scope="col">Clarification Score</th>
+              <th scope="col">Emotional Intelligence</th>
+              <th scope="col">Listening Skills</th>
+              <th scope="col">Understanding</th>
+              <th scope="col">Average</th>
+              <th scope="col">Comments</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let feedback of feedbacks">
+
+
+              <td>{{ feedback.session.name }}</td>
+              <td>{{ feedback.client.firstName }}</td>
+              <td>{{ feedback.availabilityScore }}</td>
+              <td>{{ feedback.clarificationScore }}</td>
+              <td>{{ feedback.emotionalIntelligenceScore }}</td>
+              <td>{{ feedback.listeningSkillsScore }}</td>
+              <td>{{ feedback.understandingScore }}</td>
+              <td>{{ feedback.overallScore }}</td>
+              <td> <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#feedbackModal"
+                  (click)="viewComment(feedback)">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
                   Comments
                 </button></td>
-                
-              </tr>
-            </tbody>
-          </table>
-          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-            <div class="donut multi"></div>
-          </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
-            No feedbacks Found.
-          </p>
+
+            </tr>
+          </tbody>
+        </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
+          No feedbacks Found.
+        </p>
       </div>
-      </div>
-  <div
-    class="d-none d-lg-block"
-    *ngIf="currentTab === 'attachments'" [@fadeIn]
-  >
-  <div class="row list-container container ">
-    <table class="table">
+    </div>
+    <div class="d-none d-lg-block" *ngIf="currentTab === 'attachments'" [@fadeIn]>
+      <div class="row list-container container ">
+        <table class="table">
           <thead>
             <th coslpan="1">Attachment No</th>
             <th coslpan="1">Attachment date</th>
@@ -200,11 +172,7 @@
               <td>{{ attachment.createdAt | date : "MMM d, y " }}</td>
               <td>{{ attachment.links }}</td>
               <td>
-                <button
-                class="btn btn-success"
-                  data-bs-toggle="modal"
-                  data-bs-target="#attachmentDetailModal"
-                >
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
                   View
                 </button>
               </td>
@@ -218,16 +186,11 @@
           No attachment Found.
         </p>
       </div>
+    </div>
   </div>
 </div>
 <!-- Notification details modal -->
-<div
-  class="modal fade"
-  id="notificationModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -235,14 +198,9 @@
           Notification Details
         </h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-        <div class="modal-body" *ngIf="notification">
+      <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
           <p>Destination</p>
           <span>{{ notification.destinationAddress }}</span>
@@ -259,7 +217,7 @@
         <div class="d-flex-column">
           <p>Content:</p>
           <span>{{ notification.content }}</span>
-        </div>  
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
@@ -284,50 +242,51 @@
           <div class="row p-2">
             <div class=" mb-3 col-md-6">
               <label for="name">Session Name *</label>
-              <input formControlName="name" value="{{currentSession?.name}}" id="name" name="name" type="text" class="form-control" required />
+              <input formControlName="name" value="{{currentSession?.name}}" id="name" name="name" type="text"
+                class="form-control" required />
             </div>
             <div class=" mb-3 col-md-6">
               <label for="sessionType">Session Type *</label>
-              <input formControlName="sessionType" value="{{currentSession?.sessionType}}" id="sessionType" type="text" class="form-control" placeholder="Enter Session Type" name="sessionType" required />
+              <input formControlName="sessionType" value="{{currentSession?.sessionType}}" id="sessionType" type="text"
+                class="form-control" placeholder="Enter Session Type" name="sessionType" required />
             </div>
           </div>
           <div class="row p-2">
             <div class="mb-3 col-md-6">
               <label for="sessionStartTime">From *</label>
-              <input formControlName="sessionStartTime" value="{{currentSession?.sessionStartTime}}" id="sessionStartTime" type="time" class="form-control" placeholder="Time" name="session_time_from">
+              <input formControlName="sessionStartTime" value="{{currentSession?.sessionStartTime}}"
+                id="sessionStartTime" type="time" class="form-control" placeholder="Time" name="session_time_from">
             </div>
             <div class="mb-3 col-md-6">
               <label for="sessionEndTime">To *</label>
-              <input formControlName="sessionEndTime" value="{{currentSession?.sessionEndTime}}" id="sessionEndTime" type="time" class="form-control" placeholder="Time" name="session_time_to">
+              <input formControlName="sessionEndTime" value="{{currentSession?.sessionEndTime}}" id="sessionEndTime"
+                type="time" class="form-control" placeholder="Time" name="session_time_to">
             </div>
           </div>
           <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
               <label class="form-group-text" for="sessionVenue">Session Venue *</label>
-              <select formControlName="sessionVenue" value="{{currentSession?.sessionVenue}}" id="sessionVenue" class="form-control" name="sessionVenue">
+              <select formControlName="sessionVenue" value="{{currentSession?.sessionVenue}}" id="sessionVenue"
+                class="form-control" name="sessionVenue">
                 <option value="VIRTUAL">VIRTUAL</option>
                 <option value="PHYSICAL">PHYSICAL
 
                 <option value="PHYSICAL">PHYSICAL</option>
-            </select>
+              </select>
             </div>
             <div class=" mb-3 col-md-6">
               <label for="sessionDate">Session Date *</label>
-              <input formControlName="sessionDate" value="{{currentSession?.sessionDate}}" id="sessionDate" type="date" class="form-control" placeholder="Date" name="sessionDate">
-          </div> 
+              <input formControlName="sessionDate" value="{{currentSession?.sessionDate}}" id="sessionDate" type="date"
+                class="form-control" placeholder="Date" name="sessionDate">
+            </div>
           </div>
-      </form>
+        </form>
       </div>
       <div class="modal-footer d-flex justify-content-between">
-      <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)="editedSession(currentSession.id)"
-        >
+        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)="editedSession(currentSession.id)">
           Update session
         </button>
       </div>
@@ -337,24 +296,14 @@
 
 
 <!-- Confirm session modal -->
-<div
-  class="modal fade bd-example-modal-lg"
-  id="confirmsessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade bd-example-modal-lg" id="confirmsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm session</h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -373,12 +322,7 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)=" changeSessionStatus()"
-        >
+        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)=" changeSessionStatus()">
           Submit
         </button>
       </div>
@@ -387,26 +331,16 @@
 </div>
 
 <!-- conducted session modal -->
-<div
-  class="modal fade bd-example-modal-lg"
-  id="conductedsessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade bd-example-modal-lg" id="conductedsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" >
-           set session as conducted
+        <h1 class="modal-title fs-5">
+          set session as conducted
         </h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -425,12 +359,7 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)=" changeSessionStatus()"
-        >
+        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)=" changeSessionStatus()">
           Submit
         </button>
       </div>
@@ -439,26 +368,16 @@
 </div>
 
 <!-- Cancel session modal -->
-<div
-  class="modal fade bd-example-modal-lg"
-  id="cancelsessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade bd-example-modal-lg" id="cancelsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">Cancel session</h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body" >
+      <div class="modal-body">
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
@@ -469,18 +388,13 @@
         <div class="d-flex justify-content-between">
           <p>Session</p>
           <span>{{ sessions.name }}</span>
-      </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)=" changeSessionStatus()"
-        >
+        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)=" changeSessionStatus()">
           Submit
         </button>
       </div>
@@ -490,24 +404,14 @@
 
 <!-- Delete session modal -->
 
-<div
-  class="modal fade bd-example-modal-lg"
-  id="deletesessionModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade bd-example-modal-lg" id="deletesessionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">Delete session</h1>
 
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -526,12 +430,7 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button
-          type="button"
-          class="btn btn-submit"
-          data-bs-dismiss="modal"
-          (click)=" changeSessionStatus()"
-        >
+        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)=" changeSessionStatus()">
           Submit
         </button>
       </div>
@@ -541,7 +440,8 @@
 
 
 <!-- Add Feedback Modal -->
-<div class="modal fade" id="addfeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addfeedbackModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-x1">
     <div class="modal-content">
       <div class="modal-header">
@@ -552,57 +452,66 @@
       </div>
       <div class="modal-body">
         <h3>Session Feedback Form</h3>
-        <p>Thank you for choosing to work with our professional coach. 
-            We value your feedback and would appreciate if you could take a few minutes to complete this form.
-            Your input will help us to continue to improve our coaching services and ensure that you have the best experience possible. 
-            Please rate each statement on a scale of 1-5, with 1 being the least and 5 being the most.
-            Your comments and suggestions are also welcome. Thank you for your time and support.</p>
+        <p>Thank you for choosing to work with our professional coach.
+          We value your feedback and would appreciate if you could take a few minutes to complete this form.
+          Your input will help us to continue to improve our coaching services and ensure that you have the best
+          experience possible.
+          Please rate each statement on a scale of 1-5, with 1 being the least and 5 being the most.
+          Your comments and suggestions are also welcome. Thank you for your time and support.</p>
         <form [formGroup]="feebackForm">
-            <div class="form-group">
-              <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me personally and professionally:</label>
-              <div class="form-group__rating">
-                <input type="radio" formControlName="understandingScore" value="1" required id="goalSetting1">
-                <label for="goalSetting1">1</label>
-                <input type="radio" formControlName="understandingScore" value="2" required id="goalSetting2">
-                <label for="goalSetting2">2</label>
-                <input type="radio" formControlName="understandingScore" value="3" required id="goalSetting3">
-                <label for="goalSetting3">3</label>
-                <input type="radio" formControlName="understandingScore" value="4" required id="goalSetting4">
-                <label for="goalSetting4">4</label>
-                <input type="radio" formControlName="understandingScore" value="5" required id="goalSetting5">
-                <label for="goalSetting5">5</label>
-              </div>
+          <div class="form-group">
+            <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me
+              personally and professionally:</label>
+            <div class="form-group__rating">
+              <input type="radio" formControlName="understandingScore" value="1" required id="goalSetting1">
+              <label for="goalSetting1">1</label>
+              <input type="radio" formControlName="understandingScore" value="2" required id="goalSetting2">
+              <label for="goalSetting2">2</label>
+              <input type="radio" formControlName="understandingScore" value="3" required id="goalSetting3">
+              <label for="goalSetting3">3</label>
+              <input type="radio" formControlName="understandingScore" value="4" required id="goalSetting4">
+              <label for="goalSetting4">4</label>
+              <input type="radio" formControlName="understandingScore" value="5" required id="goalSetting5">
+              <label for="goalSetting5">5</label>
             </div>
-            <div class="form-group">
-              <label for="emotionManagement">2. My coach demonstrated an ability to work with strong emotions and was not overpowered:</label>
-              <div class="form-group__rating">
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="1" required id="emotionManagement1">
-                <label for="emotionManagement1">1</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="2" required id="emotionManagement2">
-                <label for="emotionManagement2">2</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="3" required id="emotionManagement3">
-                <label for="emotionManagement3">3</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="4" required id="emotionManagement4">
-                <label for="emotionManagement4">4</label>
-                <input type="radio" formControlName="emotionalIntelligenceScore" value="5" required id="emotionManagement5">
-                <label for="emotionManagement5">5</label>
-              </div>
+          </div>
+          <div class="form-group">
+            <label for="emotionManagement">2. My coach demonstrated an ability to work with strong emotions and was
+              not overpowered:</label>
+            <div class="form-group__rating">
+              <input type="radio" formControlName="emotionalIntelligenceScore" value="1" required
+                id="emotionManagement1">
+              <label for="emotionManagement1">1</label>
+              <input type="radio" formControlName="emotionalIntelligenceScore" value="2" required
+                id="emotionManagement2">
+              <label for="emotionManagement2">2</label>
+              <input type="radio" formControlName="emotionalIntelligenceScore" value="3" required
+                id="emotionManagement3">
+              <label for="emotionManagement3">3</label>
+              <input type="radio" formControlName="emotionalIntelligenceScore" value="4" required
+                id="emotionManagement4">
+              <label for="emotionManagement4">4</label>
+              <input type="radio" formControlName="emotionalIntelligenceScore" value="5" required
+                id="emotionManagement5">
+              <label for="emotionManagement5">5</label>
             </div>
-            <div class="form-group">
-              <label for="activeListening">3. My coach asked questions that demonstrated active listening and understanding of my perspective and encouraged clarity, learning and exploration:</label>
-              <div class="form-group__rating">
-                <input type="radio" formControlName="listeningSkillsScore" value="1" required id="activeListening1">
-                <label for="activeListening1">1</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="2" required id="activeListening2">
-                <label for="activeListening2">2</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="3" required id="activeListening3">
-                <label for="activeListening3">3</label>
-                <input type="radio" formControlName="listeningSkillsScore" value="4" required id="activeListening4">
-                <label for="activeListening4">4</label>
-        <input type="radio" formControlName="listeningSkillsScore" value="5" required id="activeListening5">
-        <label for="activeListening5">5</label>
-        </div>
-        
+          </div>
+          <div class="form-group">
+            <label for="activeListening">3. My coach asked questions that demonstrated active listening and
+              understanding of my perspective and encouraged clarity, learning and exploration:</label>
+            <div class="form-group__rating">
+              <input type="radio" formControlName="listeningSkillsScore" value="1" required id="activeListening1">
+              <label for="activeListening1">1</label>
+              <input type="radio" formControlName="listeningSkillsScore" value="2" required id="activeListening2">
+              <label for="activeListening2">2</label>
+              <input type="radio" formControlName="listeningSkillsScore" value="3" required id="activeListening3">
+              <label for="activeListening3">3</label>
+              <input type="radio" formControlName="listeningSkillsScore" value="4" required id="activeListening4">
+              <label for="activeListening4">4</label>
+              <input type="radio" formControlName="listeningSkillsScore" value="5" required id="activeListening5">
+              <label for="activeListening5">5</label>
+            </div>
+
           </div>
           <div class="form-group">
             <label for="clarification">4. My coach was able to repeat what I said for clarification:</label>
@@ -629,185 +538,136 @@
               <input type="radio" formControlName="availabilityScore" value="3" required id="presence3">
               <label for="presence3">3</label>
               <input type="radio" formControlName="availabilityScore" value="4" required id="presence4">
-        <label for="presence4">4</label>
-        <input type="radio" formControlName="availabilityScore" value="5" required id="presence5">
-        <label for="presence5">5</label>
-        </div>
-        
+              <label for="presence4">4</label>
+              <input type="radio" formControlName="availabilityScore" value="5" required id="presence5">
+              <label for="presence5">5</label>
+            </div>
+
           </div>
           <div class="form-group">
             <label for="additionalComments">Additional Comments:</label>
             <textarea formControlName="comments" id="additionalComments"></textarea>
           </div>
-        
+
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success"
-        [disabled]="!feebackForm.valid"
-        (click)="giveFeedback()"
-        >Save changes</button>
+        <button type="button" class="btn btn-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
+          changes</button>
       </div>
     </div>
   </div>
 </div>
-  <!-- feedback details modal -->
-<div
-class="modal fade"
-id="feedbackModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      feedback Comments
-    </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body" *ngIf="feedback">
-    <div class="d-flex-column">
-      <span>{{ feedback.comments }}</span>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" 
-    class="btn btn-secondary" 
-    data-bs-dismiss="modal"
-    >
-      Close
-    </button>
-  </div>
-</div>
-</div>
-</div> 
- <!-- add attachment modal -->
- <div
- class="modal fade"
- id="attachmentModal"
- tabindex="-1"
- aria-labelledby="exampleModalLabel"
- aria-hidden="true"
- >
- <div class="modal-dialog modal-lg">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Attachments</h1>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <form (submit)="addAttachment()">
+<!-- feedback details modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          feedback Comments
+        </h1>
 
-    <section>
-      <h3>Links</h3>
-      <div class="row">
-        <div class="col">
-          <input [(ngModel)]="Links.link"
-          type="text"
-          class="form-control"
-          placeholder="Add link"
-          formControlName="link"
-        />
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="feedback">
+        <div class="d-flex-column">
+          <span>{{ feedback.comments }}</span>
         </div>
-              <div class="col">
-                <button
-                type="button"
-                class="btn btn-success"
-                (click)="addLink()"
-              >
-             Add link
-              </button>
-              </div>      
-
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add attachment modal -->
+<div class="modal fade" id="attachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Attachments</h1>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form (submit)="addAttachment()">
+
+        <section>
+          <h3>Links</h3>
+          <div class="row">
+            <div class="col">
+              <input [(ngModel)]="Links.link" type="text" class="form-control" placeholder="Add link"
+                formControlName="link" />
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-success" (click)="addLink()">
+                Add link
+              </button>
+            </div>
+
+          </div>
 
           <div class="mb-3">
-          <ol>
-            <li *ngFor="let link of links; index as i">{{ link }} 
-              
-              <button  (click)="removeLink(i)"  type="button">
-                <i 
-             role="button"
-              class="fa-solid fa-trash-can p-1">
-             </i>Delete
-            </button> 
-            </li>
-          </ol>
-            </div>
-    </section>
-   <section>
-    <h3>Files</h3>
-    <div class="mb-3">
-      <input 
-      type="file" 
-      id="fileInput" 
-      multiple (change)="onFileSelected($event)"
-      placeholder="Add file"
-      >
-      <button  class="btn btn-success" type="button" (click)="addFile()">Add file</button>
-    </div>
-    <div class="mb-3">
-      <ol>
-    <li *ngFor="let file of files; let i = index">
-      <span>{{ file.name }}</span>
-      <button type="button" (click)="removeFile(i)">Remove</button>
-    </li>
-      </ol>
-    </div>
-   </section>
+            <ol>
+              <li *ngFor="let link of links; index as i">{{ link }}
+
+                <button (click)="removeLink(i)" type="button">
+                  <i role="button" class="fa-solid fa-trash-can p-1">
+                  </i>Delete
+                </button>
+              </li>
+            </ol>
+          </div>
+        </section>
+        <section>
+          <h3>Files</h3>
+          <div class="mb-3">
+            <input type="file" id="fileInput" multiple (change)="onFileSelected($event)" placeholder="Add file">
+            <button class="btn btn-success" type="button" (click)="addFile()">Add file</button>
+          </div>
+          <div class="mb-3">
+            <ol>
+              <li *ngFor="let file of files; let i = index">
+                <span>{{ file.name }}</span>
+                <button type="button" (click)="removeFile(i)">Remove</button>
+              </li>
+            </ol>
+          </div>
+        </section>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-success" (click)="addAttachment()">add attachment</button>
         </div>
       </form>
-      
-  </div>
-</div>
-</div>
 
- <!-- attachment details modal -->
-<div
-class="modal fade"
-id="attachmentDetailModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      Attachments
-    </h1>
-
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body" *ngIf="feedback">
-    <div class="d-flex-column">
-      <span>{{ feedback.comments }}</span>
     </div>
   </div>
-  <div class="modal-footer">
-    <button type="button" 
-    class="btn btn-secondary" 
-    data-bs-dismiss="modal"
-    >
-      Close
-    </button>
+</div>
+
+<!-- attachment details modal -->
+<div class="modal fade" id="attachmentDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Attachments
+        </h1>
+
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="feedback">
+        <div class="d-flex-column">
+          <span>{{ feedback.comments }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 </div>
-</div>
-</div> 

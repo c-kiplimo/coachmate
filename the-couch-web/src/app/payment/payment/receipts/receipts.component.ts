@@ -148,8 +148,6 @@ payment: any;
 
     this.loading = true;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
-      
-    
       (response) => {
         if(response.body.extPaymentRef!==null){
           this.loading = false;
