@@ -9,12 +9,12 @@
 <br>
 
 <div class="row justify-content-center">
-  <div class="col-md-6 col-sm-12">
+  <div class="col-md-8 col-sm-12">
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
           <h3 class="fw-bold col">Details</h3>
-          <button class="btn btn-success" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal"
+          <button class="col btn btn-success" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal"
             data-bs-target="#addfeedbackModal">Give Feedback</button>
 
           <div class="col dropdown">
@@ -81,10 +81,10 @@
             <h6 class="fw-bold faded col">Status</h6>
             <p class="col">
               <span class="badge" [ngClass]="{
-                'badge-success': sessions.sessionStatus === 'CONFIRMED',
-                'badge-danger': sessions.sessionStatus === 'CANCELLED',
-                'badge-primary': sessions.sessionStatus === 'NEW' || sessions.sessionStatus === 'CONDUCTED'
-              }">{{ sessions.sessionStatus }}</span>
+                'badge-success': sessions?.sessionStatus === 'CONFIRMED',
+                'badge-danger': sessions?.sessionStatus === 'CANCELLED',
+                'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'CONDUCTED'
+              }">{{ sessions?.sessionStatus }}</span>
             </p>
           </div>
           <div class="row dtl">
@@ -100,95 +100,98 @@
 
 <br>
 
-<div class="card">
-  <div class="card-body">
-    <div class="tabs-section">
-      <button *ngIf="this.userRole == 'COACH'" class="btn btn-tabs" (click)="toggleTab('feedback')"
-        [ngClass]="{ 'active-tab': currentTab === 'feedback' }">
-        Feedback
-      </button>
-      <button class="btn btn-tabs" (click)="toggleTab('attachments')"
-        [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
-        Attachments
-      </button>
-    </div>
-    <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
-      <div class="row list-container container ">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Session Name</th>
-              <th scope="col">Client Name</th>
-              <th scope="col">Availability</th>
-              <th scope="col">Clarification Score</th>
-              <th scope="col">Emotional Intelligence</th>
-              <th scope="col">Listening Skills</th>
-              <th scope="col">Understanding</th>
-              <th scope="col">Average</th>
-              <th scope="col">Comments</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let feedback of feedbacks">
-
-
-              <td>{{ feedback.session.name }}</td>
-              <td>{{ feedback.client.firstName }}</td>
-              <td>{{ feedback.availabilityScore }}</td>
-              <td>{{ feedback.clarificationScore }}</td>
-              <td>{{ feedback.emotionalIntelligenceScore }}</td>
-              <td>{{ feedback.listeningSkillsScore }}</td>
-              <td>{{ feedback.understandingScore }}</td>
-              <td>{{ feedback.overallScore }}</td>
-              <td> <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#feedbackModal"
-                  (click)="viewComment(feedback)">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                  Comments
-                </button></td>
-
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="tabs-section">
+          <button *ngIf="this.userRole == 'COACH'" class="btn btn-tabs" (click)="toggleTab('feedback')"
+            [ngClass]="{ 'active-tab': currentTab === 'feedback' }">
+            Feedback
+          </button>
+          <button class="btn btn-tabs" (click)="toggleTab('attachments')"
+            [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
+            Attachments
+          </button>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
-          No feedbacks Found.
-        </p>
-      </div>
-    </div>
-    <div class="d-none d-lg-block" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-      <div class="row list-container container ">
-        <table class="table">
-          <thead>
-            <th coslpan="1">Attachment No</th>
-            <th coslpan="1">Attachment date</th>
-            <th coslpan="1">Details</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let attachment of attachmentss">
-              <td>{{ attachment.id }}</td>
-              <td>{{ attachment.createdAt | date : "MMM d, y " }}</td>
-              <td>{{ attachment.links }}</td>
-              <td>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
-                  View
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+        <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
+          <div class="row">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Session Name</th>
+                  <th scope="col">Client Name</th>
+                  <th scope="col">Availability</th>
+                  <th scope="col">Clarification Score</th>
+                  <th scope="col">Emotional Intelligence</th>
+                  <th scope="col">Listening Skills</th>
+                  <th scope="col">Understanding</th>
+                  <th scope="col">Average</th>
+                  <th scope="col">Comments</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let feedback of feedbacks">
+                  <td>{{ feedback.session.name }}</td>
+                  <td>{{ feedback.client.firstName }}</td>
+                  <td>{{ feedback.availabilityScore }}</td>
+                  <td>{{ feedback.clarificationScore }}</td>
+                  <td>{{ feedback.emotionalIntelligenceScore }}</td>
+                  <td>{{ feedback.listeningSkillsScore }}</td>
+                  <td>{{ feedback.understandingScore }}</td>
+                  <td>{{ feedback.overallScore }}</td>
+                  <td> <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#feedbackModal"
+                      (click)="viewComment(feedback)">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                      Comments
+                    </button></td>
+
+                </tr>
+              </tbody>
+            </table>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+            <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
+              No feedbacks Found.
+            </p>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
-          No attachment Found.
-        </p>
+        <div class="d-none d-lg-block" *ngIf="currentTab === 'attachments'" [@fadeIn]>
+          <div class="row list-container container ">
+            <table class="table">
+              <thead>
+                <th coslpan="1">Attachment No</th>
+                <th coslpan="1">Attachment date</th>
+                <th coslpan="1">Details</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let attachment of attachmentss">
+                  <td>{{ attachment.id }}</td>
+                  <td>{{ attachment.createdAt | date : "MMM d, y " }}</td>
+                  <td>{{ attachment.links }}</td>
+                  <td>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
+                      View
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+            <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
+              No attachment Found.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Notification details modal -->
 <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -309,13 +312,13 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            sessions.client.fullName 
+            sessions?.clientFullName 
               | titlecase
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session name</p>
-          <span>{{ sessions.name }}</span>
+          <span>{{ sessions?.name }}</span>
         </div>
       </div>
       <div class="modal-footer">
@@ -346,13 +349,13 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            sessions.client.fullName 
+            sessions?.clientFullName 
               | titlecase
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session name</p>
-          <span>{{ sessions.name }}</span>
+          <span>{{ sessions?.name }}</span>
         </div>
       </div>
       <div class="modal-footer">
@@ -381,13 +384,13 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            sessions.client.fullName 
+            sessions?.clientFullName 
               | titlecase
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session</p>
-          <span>{{ sessions.name }}</span>
+          <span>{{ sessions?.name }}</span>
         </div>
       </div>
       <div class="modal-footer">
@@ -417,13 +420,13 @@
         <div class="d-flex justify-content-between">
           <p>Client Name</p>
           <span>{{
-            sessions.client.fullName 
+            sessions?.clientFullName 
               | titlecase
           }}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Session</p>
-          <span>{{ sessions.name }}</span>
+          <span>{{ sessions?.name }}</span>
         </div>
       </div>
       <div class="modal-footer">

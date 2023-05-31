@@ -69,6 +69,7 @@ import { ProfileComponent } from './account-settings/profile/profile.component';
 import { PaymentsComponent } from './account-settings/payments/payments.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { ContractsService } from './services/contracts.service';
+import { FeedbackService } from './services/feedback.service';
 
 
 
@@ -158,6 +159,7 @@ import { ContractsService } from './services/contracts.service';
     ApiService,
     CoachEducationService,
     ContractsService,
+    FeedbackService,
   ],
   bootstrap: [AppComponent],
 })
