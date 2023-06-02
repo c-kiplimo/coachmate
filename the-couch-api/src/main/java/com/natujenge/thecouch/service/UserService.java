@@ -27,7 +27,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -502,4 +501,11 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Client not found");
         }
     }
+
+    public User getClientById(Long clientId, User userDetails) {
+        log.info("Request to get client by id: {}", clientId);
+        Optional<User> userOptional = userRepository.findById(clientId);
+        return userOptional.orElseThrow(() -> new IllegalStateException("Client not found"));
+        }
+
 }

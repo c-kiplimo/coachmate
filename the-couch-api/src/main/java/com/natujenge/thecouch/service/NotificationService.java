@@ -2,19 +2,18 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Notification;
+import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.NotificationRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.service.mapper.NotificationMapper;
 import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
-import com.natujenge.thecouch.web.rest.dto.NotificationDto;
+import com.natujenge.thecouch.web.rest.dto.NotificationDTO;
 import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,11 +27,13 @@ public class NotificationService {
     private final SessionRepository sessionRepository;
 
     private final SessionMapper sessionMapper;
+    private final NotificationMapper notificationMapper;
 
-    public NotificationService(NotificationRepository notificationRepository, SessionRepository sessionRepository, SessionMapper sessionMapper) {
+    public NotificationService(NotificationRepository notificationRepository, SessionRepository sessionRepository, SessionMapper sessionMapper, NotificationMapper notificationMapper) {
         this.notificationRepository = notificationRepository;
         this.sessionRepository = sessionRepository;
         this.sessionMapper = sessionMapper;
+        this.notificationMapper = notificationMapper;
     }
 
     public Notification getNotificationById(long id, Long coachId) {
@@ -95,7 +96,7 @@ public class NotificationService {
             throw new IllegalArgumentException("session not Found");
         }
 
-        Page<NotificationDto> notificationPage = notificationRepository.findBySessionId(
+        Page<NotificationDTO> notificationPage = notificationRepository.findBySessionId(
                 sessionId,
                 pageable
         );
@@ -110,7 +111,7 @@ public class NotificationService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<NotificationDto> notificationPage = notificationRepository.findByClientIdAndCoachId(
+        Page<NotificationDTO> notificationPage = notificationRepository.findByClientIdAndCoachId(
                 coachId,
                 clientId,
                 pageable
@@ -125,12 +126,46 @@ public class NotificationService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<NotificationDto> notificationPage = notificationRepository.findByClientId(
+        Page<NotificationDTO> notificationPage = notificationRepository.findByClientId(
                 clientId,
                 pageable
         );
         log.info("Notification Found!");
         return new ListResponse(notificationPage.getContent(), notificationPage.getTotalPages(), notificationPage.getNumberOfElements(),
                 notificationPage.getTotalElements());
+    }
+
+
+    private Notification createExample(Long coachId, Long clientId, Long sessionId, Long organizationId) {
+        Notification notificationExample = new Notification();
+
+        Session session = new Session();
+        if (coachId != null) {
+            notificationExample.setCoachId(coachId);
+        }
+        if (clientId != null) {
+            notificationExample.setClientId(clientId);
+        }
+        if (sessionId != null) {
+            notificationExample.setSession(session);
+            notificationExample.getSession().setId(sessionId);
+        }
+        if (organizationId != null) {
+            notificationExample.setOrganizationId(organizationId);
+        }
+        return notificationExample;
+
+    }
+    public Page<NotificationDTO> filterNotifications(Long coachId, Long clientId, Long sessionId, Long organizationId, Pageable pageable) {
+        Notification notification = createExample(coachId, clientId, sessionId, organizationId);
+        log.info("Filtering notifications by {}", notification);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Notification> example = Example.of(notification, matcher);
+        return notificationRepository.findAll(example, pageable).map(notificationMapper::toDto);
+
     }
 }

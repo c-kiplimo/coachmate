@@ -14,7 +14,6 @@ public class ClientDTO {
     private String fullName;
     private String msisdn;
     private String email;
-    private CoachStatus status;
     private UserRole userRole;
 
     private ClientType clientType;

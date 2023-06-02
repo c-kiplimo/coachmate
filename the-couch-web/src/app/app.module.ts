@@ -70,6 +70,7 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
 import { HeaderComponent } from './shared/header/header.component';
 import { ContractsService } from './services/contracts.service';
 import { FeedbackService } from './services/feedback.service';
+import { NotificationsService } from './services/notifications.service';
 
 
 
@@ -160,6 +161,7 @@ import { FeedbackService } from './services/feedback.service';
     CoachEducationService,
     ContractsService,
     FeedbackService,
+    NotificationsService,
   ],
   bootstrap: [AppComponent],
 })

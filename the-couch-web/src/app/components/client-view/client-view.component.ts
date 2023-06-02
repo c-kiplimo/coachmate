@@ -1,5 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ClientService } from '../../services/ClientService';
+import { SessionsService } from '../../services/SessionsService';
+import { NotificationsService } from '../../services/notifications.service';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -71,9 +73,7 @@ export class ClientViewComponent implements OnInit {
   notifications!: any[];
   notification!: any;
 
-  sessionType = [
-
-  ];
+  sessionType = [ ];
 
   currentTab = 'sessions';
   searching = false;
@@ -83,7 +83,6 @@ export class ClientViewComponent implements OnInit {
   notificationType = ['sms', 'email'];
   loadingClient = false;
   totalLength: any;
-  page: number = 1;
   itemsPerPage: number = 20;
   open = false;
   id: any;
@@ -120,8 +119,16 @@ export class ClientViewComponent implements OnInit {
     objective: ''
   };
   coachingCategory: any;
+  user: any;
+  coachId: any;
+  orgId: any;
+  page: number = 0;
+  pageSize: number = 15;
+  totalElements: any;
+
   constructor(
     private ClientService: ClientService,
+    private notificationsService: NotificationsService,
     private router: Router,
     private http: HttpClient,
     private formbuilder: FormBuilder,
@@ -129,6 +136,7 @@ export class ClientViewComponent implements OnInit {
     private route: ActivatedRoute,
     private apiService: ApiService,
     private contractsService: ContractsService,
+    private sessionService: SessionsService,
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -139,54 +147,25 @@ export class ClientViewComponent implements OnInit {
     });
 
     this.coachSessionData = sessionStorage.getItem('user');
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
-    console.log(this.userRole);
+    this.user = JSON.parse(this.coachSessionData);
+
+    this.userRole = this.user.userRole;
+    this.route.params.subscribe((params) => {
+      this.clientId = params['id'];
+    });
 
     if (this.userRole == 'COACH') {
-      this.sessionId = this.route.snapshot.params['sessionId'];
-      console.log(this.sessionId);
-      this.clientId = this.activatedRoute.snapshot.params['id'];
-      this.getClientData(this.clientId);
-      this.id = this.clientId
-
-      this.getContracts(this.id);
-      this.contractForm = this.formbuilder.group(
-        {
-          coachingCategory: '',
-          coachingTopic: '',
-          clientId: '',
-          startDate: '',
-          endDate: '',
-          groupFeesPerSession: '',
-          individualFeesPerSession: '',
-          noOfSessions: '',
-          objectives: '',
-        }
-      );
-      this.updateClient = this.formbuilder.group({
-
-        firstName: ' ',
-        lastName: ' ',
-        clientType: ' ',
-        msisdn: ' ',
-        email: ' ',
-        physicalAddress: ' ',
-        profession: ' ',
-        paymentMode: ' ',
-        reason: '',
-
-      });
-      this.getClientSessions()
-      this.getNotificationsByClientId(this.clientId);
-      this.getPaymentsByClientId(this.clientId);
+      this.coachId = this.user.id;
+      
+    } else if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.organization.id;
+    } else if (this.userRole == 'CLIENT') {
+      this.clientId = this.user.id;
+      this.coachId = this.user.addedBy.id;
     }
-    else if (this.userRole == 'ORGANIZATION') {
-      this.clientId = this.activatedRoute.snapshot.params['id'];
-      this.getClientData(this.clientId);
-      this.id = this.clientId
-      this.getContracts(this.id);
+    this.getClientData(this.clientId);
+
+    if (this.userRole == 'COACH') {
       this.contractForm = this.formbuilder.group(
         {
           coachingCategory: '',
@@ -213,9 +192,7 @@ export class ClientViewComponent implements OnInit {
         reason: '',
 
       });
-      this.getClientSessions()
-      this.getNotificationsByClientId(this.clientId);
-      this.getPaymentsByClientId(this.clientId)
+
     }
 
     this.addsessionForm = this.formbuilder.group({
@@ -231,33 +208,47 @@ export class ClientViewComponent implements OnInit {
     });
 
   }
-  getClientSessions() {
-    console.log("client id", this.clientId)
+  getAllSessions(page: any) {
     this.loading = true;
-    this.ClientService.getClientSessions(this.clientId)
-      .subscribe((data: any) => {
-        this.sessions = data.body;
-        console.log(this.sessions);
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sort: 'id,desc',
+      // coachId: this.coachId,
+      clientId: this.clientId,
+      //contractId: this.coachData.contractId,
+      //sessionDate: this.filters.sessionDate,
+    };
+
+    this.sessionService.getSessions(options).subscribe(
+      (response: any) => {
+        this.sessions = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
         this.loading = false;
-        console.log("sessions gotten here", this.sessions)
       },
-        (error: any) => {
-          console.log(error);
-          this.loading = false;
-        }
-      );
+      (error: any) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
   }
-  getNotificationsByClientId(id: any) {
+  getNotifications(page: any) {
     const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      client_id: id,
+      page: page,
+      size: this.pageSize,
+      sort: 'id,desc',
+      clientId: this.clientId,
     };
 
     this.loading = true;
-    this.ClientService.getNotificationsbyClientId(options).subscribe((res: any) => {
+    this.notificationsService.getNotifications(options).subscribe((res: any) => {
       this.notifications = res.body;
       console.log('notification ni', this.notifications);
       this.searching = false;
@@ -363,6 +354,10 @@ export class ClientViewComponent implements OnInit {
       this.loadingClient = false;
       this.clients = data.body;
       console.log(this.clients);
+      this.getAllSessions(this.page = 0);
+      this.getAllContracts(this.page = 0);
+      this.getNotifications(this.page = 0);
+      this.getPaymentsByClientId(id);
     },
       (error: any) => {
         console.log(error);
@@ -370,6 +365,42 @@ export class ClientViewComponent implements OnInit {
 
       });
   }
+
+  getAllContracts(page: any) {
+
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionStatus: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+      clientId: this.clientId,
+      
+    };
+
+    this.contractsService.getContracts(options).subscribe(
+      (res: any) => {
+        console.log("res",res);
+        this.contracts = res.body;
+        this.totalElements = +res.headers.get('X-Total-Count');
+        this.loading = false;
+      }, (err: any) => {
+        console.log(err);
+        this.loading = false;
+      }
+    );
+
+  }
+
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
   closeModal() {

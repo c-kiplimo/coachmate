@@ -84,6 +84,27 @@ public class UserResource {
         return ResponseEntity.ok().headers(headers).body(clientDtoPage.getContent());
     }
 
+    //GET CLIENT BY ID
+    @GetMapping(path = "client/{id}")
+    ResponseEntity<?> getClientById(@PathVariable("id") Long clientId,
+                                     @AuthenticationPrincipal User userDetails){
+        log.info("Request to get client {}", clientId);
+        try{
+            User client = userService.getClientById(clientId, userDetails);
+            if(client != null){
+                ClientDTO response = modelMapper.map(client, ClientDTO.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not found"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //EDIT CLIENT
     @PutMapping(path = "client/{id}")
     ResponseEntity<?> editClient(@PathVariable("id") Long clientId,

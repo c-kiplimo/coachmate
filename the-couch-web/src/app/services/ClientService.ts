@@ -81,10 +81,11 @@ export class ClientService {
 
   }
   getOneClient(id: number): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/clients/' + id, {
+    return this.http.get<any>(this.baseURL + 'users/client/' + id, {
       observe: 'response',
     });
   }
+
   getClientContracts(clientId: any): Observable<any> {
     console.log("Get Contracts reached!");
     return this.http.get(`${this.baseURL}contracts/byClient/` + clientId, { observe: 'response' })
