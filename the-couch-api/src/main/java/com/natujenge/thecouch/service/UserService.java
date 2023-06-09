@@ -442,8 +442,6 @@ public class UserService implements UserDetailsService {
         if (coachId != null) {
             userClientExample.setAddedBy(userCoach);
             userClientExample.getAddedBy().setId(coachId);
-            log.info("Coach Id not null: {}", coachId);
-            log.info("userClientExample: {}", userClientExample.getAddedBy());
 
         }
         if (status != null && !status.isEmpty()) {
@@ -472,7 +470,7 @@ public class UserService implements UserDetailsService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths("addedBy.locked", "addedBy.enabled","addedBy.onboarded")
+                .withIgnorePaths("locked", "enabled","onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
                 .withIgnoreNullValues();
         Example<User> example = Example.of(user, matcher);
 
