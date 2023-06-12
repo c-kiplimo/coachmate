@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ClientsComponent implements OnInit {
   clientId: any;
   editedClient: any;  
-salesData: any;
+  salesData: any;
   loading = false;
   itemsPerPage = 20;
   filters: any = {

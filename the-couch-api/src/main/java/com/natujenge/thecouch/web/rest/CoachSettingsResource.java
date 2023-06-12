@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-<<<<<<< HEAD
 //import static com.natujenge.thecouch.domain.QCoachSubscription.coachSubscription;
-=======
->>>>>>> 54c276dcb3ecc20d696e63f9a3e6dcb5ebf25cc8
 
 @Slf4j
 @RestController
