@@ -1,0 +1,180 @@
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-bold">Clients</h3>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="filters-section">
+      <div class="wrap">
+        <select class="form-control" name="codes" [(ngModel)]="filters.status" (change)="filterByStatus()">
+          <option value="">All statuses</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="SUSPENDED">SUSPENDED</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+        aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <button type="button" routerLink="/addclient" class="btn btn-success">
+      <i class="fa fa-plus"></i> Add Client
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table" *ngIf="clients?.length">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Group/Cooporate</th>
+              <th scope="col">Address</th>
+              <th scope="col">Profession</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let client of clients | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+              <td>{{ client?.fullName| titlecase }}</td>
+              <td>{{ client?.email }}</td>
+              <td>{{ client?.msisdn }}</td>
+              <td>{{ client?.clientType }}</td>
+              <td>{{ client?.physicalAddress }}</td>
+              <td>{{ client?.profession }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+              'badge-success': client?.clientStatus === 'ACTIVE',
+              'badge-danger': client?.clientStatus === 'SUSPENDED' || client?.clientStatus === 'CLOSED',
+              'badge-primary': client?.clientStatus === 'NEW'
+            }">{{ client?.clientStatus }}</span>
+              </td>
+
+              <td class="actions">
+                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToClientView(client.id)"></i>
+                <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                  (click)="editClient(client)"></i>
+                <!-- <i
+            class="fa-solid fa-trash-can"
+            (click)="suspendClient(client)"
+          ></i> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !clients.length">
+          No Clients Found.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<div class="text-center" *ngIf="totalElements > 15">
+  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+<br>
+
+
+
+<!-- Edit Client Modal -->
+<div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateClient">
+          <div class="mb-3 form-group">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+              value="{{ clientToBeUpdated?.firstName }}" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+              value="{{ clientToBeUpdated?.lastName }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="email_address" class="form-label">Email</label>
+
+            <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
+              value="{{ clientToBeUpdated?.email }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="msisdn" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
+              value="{{ clientToBeUpdated?.msisdn }}">
+          </div>
+
+          <div class="mb-3 form-group">
+
+            <label for="physicalAddress" class="form-label">Address</label>
+            <input type="text" class="form-control" id="physicalAddress" name="physicalAddress"
+              formControlName="physicalAddress" value="{{ clientToBeUpdated?.physicalAddress}}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="reason" class="form-label">Reason</label>
+            <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
+              value="{{ clientToBeUpdated?.reason}}">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+            </div>
+
+            <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
+              value="{{ clientToBeUpdated?.paymentMode }}">
+              <option selected>Select Payment Mode</option>
+              <option value="PREPAY">PREPAY</option>
+              <option value="POSTPAY">POSTPAY</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="clientType">Client Type</label>
+            </div>
+            <select class="form-select" id="inputGroupSelect01" formControlName="type"
+              value="{{ clientToBeUpdated?.clientType }}">
+              <option selected>Select Client type</option>
+              <option value="INDIVIDUAL">INDIVIDUAL</option>
+              <option value="CORPORATE">CORPORATE</option>
+              <option value="GROUP">GROUP</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
+          changes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -29,7 +29,6 @@ public class ConfirmationTokenService {
                 new IllegalStateException("Specified Token Not Found!"));
 
         confirmedUser.setConfirmedAt(LocalDateTime.now());
-
-
+        confirmationTokenRepository.save(confirmedUser);
     }
 }

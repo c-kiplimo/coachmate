@@ -54,7 +54,7 @@ export class PaymentsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    window.scroll(0, 0);
+    
     this.user = JSON.parse(
       sessionStorage.getItem('user') || '{}'
     );
@@ -79,7 +79,7 @@ export class PaymentsComponent implements OnInit {
         this.isSaving = false;
         this.saveSuccess = true;
         this.editingSettings = false;
-        window.scroll(0, 0);
+        
 
         this.getAccount();
 

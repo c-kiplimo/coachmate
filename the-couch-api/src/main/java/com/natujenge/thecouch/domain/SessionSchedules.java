@@ -27,5 +27,5 @@ public class SessionSchedules {
 
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    Coach coach;
+    User coach;
 }

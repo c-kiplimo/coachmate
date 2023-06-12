@@ -22,8 +22,8 @@ export class ClientService {
 
   }
 
-  getClient(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}clients`,
+  getClients(options: any): Observable<any> {
+    return this.http.get(`${this.baseURL}users/clients`,
       {
         params: options,
         observe: 'response',
@@ -37,7 +37,7 @@ export class ClientService {
 
   addClient(client: any): Observable<any> {
     console.log(client)
-    return this.http.post(`${this.baseURL}clients`, client,
+    return this.http.post(`${this.baseURL}users`, client,
       { observe: 'response' }).pipe(
         catchError(this.handleError)
       );
@@ -64,7 +64,7 @@ export class ClientService {
     console.log("edit client reached")
     console.log("client  to be updated here", clientToBeUpdated)
     console.log("client id here", id)
-    return this.http.put(`${this.baseURL}clients/${id}`, clientToBeUpdated)
+    return this.http.put(`${this.baseURL}users/client/${id}`, clientToBeUpdated)
   }
 
   changeClient(clientId: any, status: any, statusForm: any): Observable<any> {
@@ -81,10 +81,11 @@ export class ClientService {
 
   }
   getOneClient(id: number): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/clients/' + id, {
+    return this.http.get<any>(this.baseURL + 'users/client/' + id, {
       observe: 'response',
     });
   }
+
   getClientContracts(clientId: any): Observable<any> {
     console.log("Get Contracts reached!");
     return this.http.get(`${this.baseURL}contracts/byClient/` + clientId, { observe: 'response' })
@@ -206,13 +207,10 @@ export class ClientService {
   }
   // FEEDBACK SERVICES
   addFeedback(feedback: any, options: any): Observable<any> {
-    console.log(feedback.value, "feedback");
-    console.log(options, "options");
-    return this.http.post<any>(
-      this.baseURL + 'feedback/upload',
-      feedback,
-      { params: options, observe: 'response' }
-    );
+    return this.http.post<any>(this.baseURL + 'feedback/upload', feedback, {
+      params: options,
+      observe: 'response',
+    });
   }
   // ATTACHMENT SERVICES
   addAttachment(formData: any, options: any, headers: any): Observable<any> {

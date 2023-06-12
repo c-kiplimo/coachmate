@@ -26,8 +26,9 @@ import {
 } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { ClientService } from '../services/ClientService';
+import { SessionsService } from '../services/SessionsService';
 
-import { setOptions, MbscDatepicker  } from '@mobiscroll/angular';
+import { setOptions, MbscDatepicker } from '@mobiscroll/angular';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -58,6 +59,21 @@ export class SchedulesComponent implements OnInit {
     searchItem: '',
   };
 
+  coachSessionData: any;
+  coachData: any;
+  userRole: any;
+  user: any;
+  clientId: any;
+
+  orgId!: number;
+  coachId!: number;
+  loading = true;
+
+  page: number = 0;
+  pageSize: number = 100;
+  totalElements: any;
+
+
   @ViewChild('modalContent', { static: true }) modalContent:
     | TemplateRef<any>
     | undefined;
@@ -77,71 +93,51 @@ export class SchedulesComponent implements OnInit {
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fas fa-fw fa-pencil-alt" style="color:black"></i>',
-      a11yLabel: 'Edit',
+      label: '<i class="fa-solid fa-arrow-up-right-from-square"></i>',
+      a11yLabel: 'View',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       },
     },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"  style="color:black"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
+    // {
+    //   label: '<i class="fas fa-fw fa-trash-alt"  style="color:black"></i>',
+    //   a11yLabel: 'Delete',
+    //   onClick: ({ event }: { event: CalendarEvent }): void => {
+    //     this.events = this.events.filter((iEvent) => iEvent !== event);
+    //     this.handleEvent('Deleted', event);
+    //   },
+    // },
   ];
 
   refresh = new Subject<void>();
 
   events: CalendarEvent[] = [];
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'erere',
-    //   color: { ...colors['red'] },
-    //   actions: this.actions,
-    //   allDay: true,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true,
-    //   },
-    //   draggable: true,
-    // },
-    // {
-    //   start: startOfDay(new Date()),
-    //   title: 'Hellow',
-    //   color: { ...colors['red'] },
-    //   actions: this.actions,
-    // },
-    // {
-    //   start: subDays(endOfMonth(new Date()), 3),
-    //   end: addDays(endOfMonth(new Date()), 3),
-    //   title: 'Hello',
-    //   color: { ...colors['blue'] },
-    //   allDay: true,
-    // },
-  //   {
-  //     start: addHours(startOfDay(new Date()), 2),
-  //     end: addHours(new Date(), 2),
-  //     title: 'A draggable and resizable event',
-  //     color: { ...colors['yellow'] },
-  //     actions: this.actions,
-  //     resizable: {
-  //       beforeStart: true,
-  //       afterEnd: true,
-  //     }
-  //   },
-  // ];
 
   activeDayIsOpen: boolean = true;
   modal: any;
 
-  constructor(private restApiService: ClientService) { }
+  constructor(private sessionService: SessionsService) { }
 
   ngOnInit(): void {
-    this.getSessions();
+    this.coachSessionData = sessionStorage.getItem('user');
+    this.user = JSON.parse(this.coachSessionData);
+
+    this.userRole = this.user.userRole;
+    console.log(this.userRole);
+
+
+    if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.id;
+      this.getSessions(this.page);
+
+    } else if (this.userRole == 'COACH') {
+      this.coachId = this.user.id;
+      this.getSessions(this.page);
+
+    } else if (this.userRole == 'CLIENT') {
+      this.clientId = this.user.id;
+      this.getSessions(this.page);
+    }
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -177,8 +173,10 @@ export class SchedulesComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    // this.modalData = { event, action };
+    // this.modal.open(this.modalContent, { size: 'lg' });
+
+   // this.router.navigate(['/terms', id]);
   }
 
   addEvent(): void {
@@ -210,32 +208,53 @@ export class SchedulesComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  getSessions() {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
+  getSessions(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionStatus: this.filters.status,
       search: this.filters.searchItem,
+      sort: 'id,desc',
     };
-    this.restApiService.getSessions(options).subscribe(
+    if (this.userRole == 'COACH') {
+      options.coachId = this.coachId;
+    } else if (this.userRole == 'CLIENT') {
+      options.clientId = this.clientId;
+    } else if (this.userRole == 'ORGANIZATION') {
+      //options.orgId = this.orgId;
+      options.coachId = this.coachId;
+    }
+
+    this.sessionService.getSessions(options).subscribe(
       (response: any) => {
         console.log(response);
-        this.sessions = response.body.data;
+        this.sessions = response.body;
         this.setCalendarEvents(this.sessions);
+        this.loading = false;
       },
       (error: any) => {
         console.log(error);
+        this.loading = false;
       }
     );
   }
+
   setCalendarEvents(sessions: any) {
     console.log('here');
     this.events = [];
     sessions.forEach((session: any) => {
       const event = {
-        start: new Date(`${session.sessionSchedules.sessionDate}T${session.sessionSchedules.startTime}`),
-        end: new Date(`${session.sessionSchedules.sessionDate}T${session.sessionSchedules.endTime}`),
-        title: session.name + " with " + session.client.fullName,
+        start: new Date(`${session.sessionSchedulesSessionDate}T${session.sessionSchedulesStartTime}`),
+        end: new Date(`${session.sessionSchedulesSessionDate}T${session.sessionSchedulesEndTime}`),
+        title: session.name + " with " + session.clientFullName,
         color: { ...colors['green'] },
         actions: this.actions,
         allDay: false,
@@ -246,7 +265,7 @@ export class SchedulesComponent implements OnInit {
         // draggable: true,
       };
       this.events.push(event);
-      this.view = CalendarView.Week;
+      this.view = CalendarView.Month; //Week, Month, Day
       this.refresh.next();
     });
     console.log(this.events);

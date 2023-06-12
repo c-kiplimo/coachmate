@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.MPesaPaymentType;
-import com .natujenge.thecouch.domain.enums.PaymentType;
+import com.natujenge.thecouch.domain.enums.PaymentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,7 +33,7 @@ public class PaymentDetails {
     @JoinColumn(
             name = "coach_id"
     )
-    private Coach coach;
+    private User coach;
     @ManyToOne
     @JoinColumn(
             name = "organization_id"
@@ -135,11 +135,11 @@ public class PaymentDetails {
         this.depositPercentage = depositPercentage;
     }
 
-    public Coach getCoach() {
+    public User getCoach() {
         return coach;
     }
 
-    public void setBaker(Coach coach) {
+    public void setBaker(User coach) {
         this.coach = coach;
     }
 
@@ -175,7 +175,7 @@ public class PaymentDetails {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public void setCoach(Coach coach) {
+    public void setCoach(User coach) {
         this.coach = coach;
     }
 

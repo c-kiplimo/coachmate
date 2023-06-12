@@ -1,15 +1,19 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.SessionSchedules;
-import com.natujenge.thecouch.repository.CoachRepository;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.SessionSchedulesRepository;
+import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.service.mapper.SessionSchedulesMapper;
+import com.natujenge.thecouch.web.rest.dto.SessionSchedulesDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,30 +21,21 @@ import java.util.Optional;
 @Transactional
 
 public class SessionSchedulesService {
-    @Autowired
-    SessionSchedulesRepository sessionSchedulesRepository;
+    private final SessionSchedulesRepository sessionSchedulesRepository;
 
-    @Autowired
-    CoachRepository coachRepository;
+    private final UserRepository userRepository;
 
-    //Get all schedule by coach id
-    public List<SessionSchedules> findSessionSchedulesByCoachId(Long id, Boolean status) {
-        log.debug("Request to get SessionSchedules : {} by coach id {}", id, status);
-
-        Optional<Coach> optionalCoach = coachRepository.findCoachById(id);
-        if(status == null) {
-            log.info("Request to get session schedule");
-            return sessionSchedulesRepository.findByCoach(optionalCoach.get());
-        } else {
-            log.info("Request to get session schedule");
-            return sessionSchedulesRepository.findByCoachAndBooked(optionalCoach.get(), status);
-        }
+    private final SessionSchedulesMapper sessionSchedulesMapper;
+    public SessionSchedulesService(SessionSchedulesRepository sessionSchedulesRepository, UserRepository userRepository, SessionSchedulesMapper sessionSchedulesMapper) {
+        this.sessionSchedulesRepository = sessionSchedulesRepository;
+        this.userRepository = userRepository;
+        this.sessionSchedulesMapper = sessionSchedulesMapper;
     }
 
     //Create session schedule
     public SessionSchedules createSessionSchedule(Long coachId, SessionSchedules sessionSchedules) throws IllegalArgumentException{
         log.info("Creating a new session schedule");
-        Optional<Coach> optionalCoach = coachRepository.findCoachById(coachId);
+        Optional<User> optionalCoach = userRepository.findById(coachId);
 
         if(optionalCoach.isEmpty()){
             log.warn("Coach with id {} not found", coachId );
@@ -61,35 +56,73 @@ public class SessionSchedulesService {
         }
     }
 
-    public SessionSchedules delete(Long id, Long coachId) {
-    boolean exist = sessionSchedulesRepository.existsByIdAndCoachId(id, coachId);
+    public Optional<SessionSchedulesDTO> findSessionSchedulesById(Long sessionSchedulesId){
+        return sessionSchedulesRepository.findById(sessionSchedulesId).map(sessionSchedulesMapper::toDto);
+    }
+    public void delete(Long id) {
+    boolean exist = sessionSchedulesRepository.existsById(id);
     if(!exist) {
         throw new IllegalStateException("Schedule Not Found");
     }
     sessionSchedulesRepository.deleteById(id);
-    return null;
     }
 
     //UPDATE SCHEDULE TO BOOKED
-    public Optional<SessionSchedules> updateBookedStateToTrue(Long id) {
-        Optional<SessionSchedules> sessionSchedules = Optional.ofNullable(sessionSchedulesRepository.findById(id)
+    public SessionSchedulesDTO updateBookedState(Long id) {
+        Optional<SessionSchedules> sessionSchedulesOptional = Optional.ofNullable(sessionSchedulesRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Schedule Not Found")));
 
-        SessionSchedules sessionSchedules1 = sessionSchedules.get();
-        sessionSchedules1.setBooked(true);
+        SessionSchedules sessionSchedules = sessionSchedulesOptional.get();
+        if(sessionSchedules.isBooked()){
+            //UPDATE SCHEDULE TO UNBOOKED
+            sessionSchedules.setBooked(false);
+        }
+        else {
+            //UPDATE SCHEDULE TO BOOKED
+            sessionSchedules.setBooked(true);
+        }
 
-        sessionSchedules1 = sessionSchedulesRepository.save(sessionSchedules1);
-        return Optional.of(sessionSchedules1);
+        sessionSchedules = sessionSchedulesRepository.save(sessionSchedules);
+        return sessionSchedulesMapper.toDto(sessionSchedules);
     }
-    //UPDATE SCHEDULE TO UNBOOKED
-    public Optional<SessionSchedules> updateBookedStateToFalse(Long id) {
-        Optional<SessionSchedules> sessionSchedules = Optional.ofNullable(sessionSchedulesRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Schedule Not Found")));
 
-        SessionSchedules sessionSchedules1 = sessionSchedules.get();
-        sessionSchedules1.setBooked(false);
+    private SessionSchedules createExample(Long coachId,Boolean bookedStatus, String search) {
+        SessionSchedules sessionExample = new SessionSchedules();
+        User coach = new User();
 
-        sessionSchedules1 = sessionSchedulesRepository.save(sessionSchedules1);
-        return Optional.of(sessionSchedules1);
+        if (coachId != null) {
+            sessionExample.setCoach(coach);
+            sessionExample.getCoach().setId(coachId);
+        }
+        if (bookedStatus != null) {
+            sessionExample.setBooked(bookedStatus);
+        }
+
+        if (search != null && !search.isEmpty()) {
+            sessionExample.setCoach(coach);
+            if (search.contains("@")) {
+                sessionExample.getCoach().setEmail(search);
+            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+                sessionExample.getCoach().setMsisdn(search);
+            } else {
+                sessionExample.getCoach().setFullName(search);
+            }
+        }
+        return sessionExample;
     }
+
+    public Page<SessionSchedulesDTO> filter(Long coachId, Boolean bookedStatus, String search, Pageable pageable) {
+        SessionSchedules sessionSchedules = createExample(coachId, bookedStatus, search);
+        log.info("After example {} ", sessionSchedules);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded")
+                .withIgnoreNullValues();
+        Example<SessionSchedules> example = Example.of(sessionSchedules, matcher);
+
+        return sessionSchedulesRepository.findAll(example, pageable).map(sessionSchedulesMapper::toDto);
+    }
+
 }

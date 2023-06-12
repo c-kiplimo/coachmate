@@ -1,12 +1,13 @@
 package com.natujenge.thecouch.util;
 
+import com.natujenge.thecouch.config.Constants;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.natujenge.thecouch.config.Constants;
 public class NotificationUtil {
     private static final String TEMPLATE_REGEX = "\\$\\w+";
 

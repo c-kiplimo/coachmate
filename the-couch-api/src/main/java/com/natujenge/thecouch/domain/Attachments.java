@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 

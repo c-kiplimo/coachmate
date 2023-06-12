@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand navbar-light px-2" [hidden]="
+router.url.includes('signin')">
+  <div class="d-none d-lg-block side-nav-button p-2 me-3 text-light bars" (click)="SideNavToggle()">
+    <i class="fas fa-bars"></i>
+  </div>
+  <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" />
+  <!-- <a class="navbar-brand brand-name brand" href="">CoachMatePRO</a> -->
+
+  <div class="navbar-collapse"></div>
+  <!-- <i class="fas fa-user-circle"></i> -->
+  <div class="profile-logo dropdown">
+    <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
+      <img src="../../../assets/images/cat_user.png" height="30px" /> {{user?.firstName}} ({{user?.userRole}})
+    </button>
+    <ul class="dropdown-menu">
+      <li><a [routerLink]="['account-settings/profile']" class="dropdown-item">View Profile</a></li>
+      <li class="dropdown-item"><button class="btn btn-success ml-5 pl-5" (click)="logOut()">Log Out</button></li>
+    </ul>
+  </div>
+</nav>

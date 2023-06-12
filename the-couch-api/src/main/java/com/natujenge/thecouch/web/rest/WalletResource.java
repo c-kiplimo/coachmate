@@ -2,11 +2,11 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import com.natujenge.thecouch.service.ClientWalletService;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,11 +35,11 @@ public class WalletResource {
         log.info("userDetails{}",userDetails.getId());
         try {
             log.info("Logged in user {} ",userDetails);
-            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
+            Long coachId = (userDetails == null) ? null : userDetails.getId();
             log.info("coach id {}",coachId);
             Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
             log.info("org id {}",organizationId);
-            Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
+            Long clientId = (userDetails == null) ? null : userDetails.getId();
             log.info("client id {}",coachId);
 
             if (organizationId != null) {
@@ -61,7 +61,7 @@ public class WalletResource {
             } else if (clientId != null) {
                 log.info("Request to create payment by client");
                 try {
-                    ClientWallet wallet = walletService.createPaymentByClient(paymentRequest, userDetails.getClient());
+                    ClientWallet wallet = walletService.createPaymentByClient(paymentRequest, userDetails);
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());
@@ -76,7 +76,7 @@ public class WalletResource {
             } else if (coachId != null) {
                 log.info("Request to create payment by coach");
                 try {
-                    ClientWallet wallet = walletService.createPaymentByCoach(paymentRequest, userDetails.getCoach());
+                    ClientWallet wallet = walletService.createPaymentByCoach(paymentRequest, userDetails);
 
                     URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
                             .toUriString());
@@ -105,10 +105,10 @@ public class WalletResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("Request all payments");
         try {
-            Long coachId = (userDetails.getCoach() == null) ? null : userDetails.getCoach().getId();
-            Long organizationId = (userDetails.getCoach().getOrganization() == null) ? null :
-                    userDetails.getCoach().getOrganization().getId();
-            Long clientId = (userDetails.getClient() == null) ? null : userDetails.getClient().getId();
+            Long coachId = (userDetails == null) ? null : userDetails.getId();
+            Long organizationId = (userDetails.getOrganization() == null) ? null :
+                    userDetails.getOrganization().getId();
+            Long clientId = (userDetails == null) ? null : userDetails.getId();
 
 
 
@@ -234,7 +234,7 @@ public class WalletResource {
 
     ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.info("Request to get account statement by coach Id {} and statement period {}", coachId, statementPeriod);
             ListResponse listResponse = walletService.getPaymentsByCoachIdAndStatementPeriod(page,perPage, coachId,search,clientName, statementPeriod);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
@@ -256,7 +256,7 @@ public class WalletResource {
 
     ) {
         try {
-            Long clientId = userDetails.getClient().getId();
+            Long clientId = userDetails.getId();
             log.info("Request to get account statement by client Id {} and statement period {}", clientId, statementPeriod);
             ListResponse listResponse = walletService.getPaymentsByClientIdAndStatementPeriod(page,perPage, clientId, statementPeriod);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);

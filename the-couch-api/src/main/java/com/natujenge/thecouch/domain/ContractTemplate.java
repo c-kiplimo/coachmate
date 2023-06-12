@@ -1,6 +1,9 @@
 package com.natujenge.thecouch.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -25,10 +28,11 @@ public class ContractTemplate {
     @Column(length = 5000, columnDefinition = "text")
     private String notesTemplate;
     @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @JoinColumn(name = "user_id")
+    User coach;
+
     @ManyToOne
-    @JoinColumn(name="organization_id")
+    @JoinColumn(name = "organization_id")
     Organization organization;
 
 }

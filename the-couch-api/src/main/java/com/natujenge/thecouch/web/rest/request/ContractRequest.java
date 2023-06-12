@@ -4,7 +4,6 @@ import com.natujenge.thecouch.domain.enums.CoachingCategory;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,7 +25,7 @@ public class ContractRequest {
     private String note;
 
 
-    public List<String> objectives;
+    public String objectives;
     public List<SessionRequest> sessions;
     // notification options
     public boolean sendNotification;

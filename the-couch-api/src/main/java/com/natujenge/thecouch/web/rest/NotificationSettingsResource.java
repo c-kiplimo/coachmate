@@ -1,9 +1,10 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
+import com.natujenge.thecouch.domain.NotificationSettings;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.NotificationSettingsService;
-import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class NotificationSettingsResource {
             @AuthenticationPrincipal User userDetails) {
 
         try{
-            Long coachId = userDetails.getCoach().getId();
-            String coachName = userDetails.getCoach().getFullName();
+            Long coachId = userDetails.getId();
+            String coachName = userDetails.getFullName();
             log.info("Request to update notification settings by coach with id {}",coachId);
 
 
@@ -55,8 +56,8 @@ public class NotificationSettingsResource {
                                          @AuthenticationPrincipal User userDetails) {
         log.info("request to create notification");
         try{
-            Long coachId = userDetails.getCoach().getId();
-            String coachName = userDetails.getCoach().getFullName();
+            Long coachId = userDetails.getId();
+            String coachName = userDetails.getFullName();
             log.info("Request to create notification settings by coach with id {}",coachId);
 
 

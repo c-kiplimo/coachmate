@@ -24,7 +24,7 @@ public class CoachSettings {
             nullable = false,
             name = "coach_id"
     )
-    private Coach coach;
+    private User coach;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -49,11 +49,11 @@ public class CoachSettings {
         this.logo = logo;
     }
 
-    public Coach getCoach() {
+    public User getCoach() {
         return coach;
     }
 
-    public void setBaker(Coach coach) {
+    public void setBaker(User coach) {
         this.coach = coach;
     }
 

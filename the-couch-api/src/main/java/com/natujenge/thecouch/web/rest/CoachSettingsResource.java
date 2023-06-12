@@ -2,10 +2,10 @@ package com.natujenge.thecouch.web.rest;
 
 
 import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.service.dto.CoachSettingsDTO;
-import com.natujenge.thecouch.service.dto.CoachDTO;
-import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.service.CoachSettingsService;
+import com.natujenge.thecouch.util.FileUtil;
+import com.natujenge.thecouch.web.rest.dto.CoachDTO;
+import com.natujenge.thecouch.web.rest.dto.CoachSettingsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+<<<<<<< HEAD
 //import static com.natujenge.thecouch.domain.QCoachSubscription.coachSubscription;
+=======
+>>>>>>> 54c276dcb3ecc20d696e63f9a3e6dcb5ebf25cc8
 
 @Slf4j
 @RestController

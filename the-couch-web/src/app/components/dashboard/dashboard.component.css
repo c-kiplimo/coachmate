@@ -1,0 +1,121 @@
+.row-height {
+    /* height: 150px; */
+    margin: 10px;
+}
+.top-cards {
+    margin: 10px;
+    width: 300px;
+}
+.listing-item {
+    padding: 10px 0;
+    border-bottom: 3px solid #f1f1f1;
+}
+
+/* .listing-item { & :last-child {
+      border-bottom: none;
+    }
+} */
+
+   .listing-item h6 {
+      color: #1B3A27;
+      font-weight: 600;
+    }
+
+   .listing-item span {
+      font-size: 0.9rem;
+      color: #80868b;
+    }
+.title{
+    color: #1B3A27;
+    font-weight: 1000;
+}
+.p-3{
+    font-size: larger;
+}
+.dashboard-banner {
+    background-color: #EF4813;
+    color: white;
+    margin: 10px;
+    border-radius: 10px;
+    height: 200px;
+
+}
+.top-cards {
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+    border: none;
+}
+.desc {
+    font-size: 1rem;
+    color: #80868b;
+}
+.addbtn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 10px;
+}
+.addbtn:hover {
+    background-color: #5fc686;
+    color: white;
+}
+.upcomingSessions {
+    box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+}
+.list-container {
+    overflow-y: scroll;
+  }
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  .container {
+    overflow: auto;
+}
+.container {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+  @media only screen and (max-width: 600px) {
+    .col-6 {
+    width: 100%;
+    }
+    .card-title {
+    font-size: 1.5em;
+    }
+    .card-body {
+    flex-direction: column;
+    align-items: center;
+    }
+    .upcomingsessionsTable table {
+    width: 100%;
+    display: block;
+    }
+    .upcomingsessionsTable table thead {
+    display: none;
+    }
+    .upcomingsessionsTable table tr {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    }
+    .upcomingsessionsTable table td {
+    display: block;
+    width: 100%;
+    text-align: left;
+    }
+    .upcomingsessionsTable table td:before {
+    content: attr(data-label);
+    display: block;
+    font-weight: bold;
+    }
+    }

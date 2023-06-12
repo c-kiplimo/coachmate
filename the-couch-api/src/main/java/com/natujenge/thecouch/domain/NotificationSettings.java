@@ -1,31 +1,26 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.ModeOfPayment;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.SessionTemplateType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_notification_settings")
 @Entity
 public class NotificationSettings {
-    @SequenceGenerator(
-            name = "notification_settings_sequence",
-            sequenceName = "notification_settings_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_settings_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     @Enumerated(EnumType.STRING)
     private NotificationMode notificationMode;
 
@@ -66,8 +61,9 @@ public class NotificationSettings {
     private boolean rescheduleSessionEnable;
 
     @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
+    @JoinColumn(name="user_id")
+    User user;
+    
     @ManyToOne
     @JoinColumn(name="organization_id")
     Organization organization;

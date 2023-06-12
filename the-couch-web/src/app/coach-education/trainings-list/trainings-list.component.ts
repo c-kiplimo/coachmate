@@ -39,7 +39,7 @@ numberOfMinutes: any;
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
-    window.scroll(0, 0);
+    
 
     this.getCoachEducation(this.coachData.id);
 
@@ -59,7 +59,7 @@ numberOfMinutes: any;
     const options = {
       coachId: id,
     }
-    window.scroll(0, 0);
+    
     this.loading = true;
     this.CoachEducationService.getCoachEducation(options).subscribe(
       (response: any) => {

@@ -1,12 +1,12 @@
 package com.natujenge.thecouch.domain;
 
+import com.natujenge.thecouch.domain.enums.NotificationMode;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.enums.SessionStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

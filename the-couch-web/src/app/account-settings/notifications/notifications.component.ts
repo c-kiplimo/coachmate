@@ -29,7 +29,7 @@ export class NotificationsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    window.scroll(0, 0);
+    
 
     this.userNotificationSettings = JSON.parse(
       sessionStorage.getItem('notificationSettings') || '{}'
@@ -40,7 +40,7 @@ export class NotificationsComponent implements OnInit {
   }
 
   saveSettings(): void {
-    window.scroll(0, 0);
+    
 
     this.coachService.saveSettings(this.notificationDetails).subscribe({
       next: (res: any) => {

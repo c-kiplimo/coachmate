@@ -1,22 +1,22 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.ContractTemplate;
+import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
+import com.natujenge.thecouch.repository.NotificationSettingsRepository;
 import com.natujenge.thecouch.security.SecurityUtils;
-import com.natujenge.thecouch.service.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.service.mapper.NotificationSettingsMapper;
+import com.natujenge.thecouch.web.rest.dto.NotificationSettingsDTO;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
+import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-
-import com.natujenge.thecouch.repository.NotificationSettingsRepository;
-import com.natujenge.thecouch.domain.NotificationSettings;
-import com.natujenge.thecouch.web.rest.request.NotificationSettingsRequest;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -28,7 +28,7 @@ public class NotificationSettingsService {
     private final UserService userService;
     private final NotificationSettingsMapper notificationSettingsMapper;
 
-    public NotificationSettingsService(NotificationSettingsRepository notificationSettingsRepository, ContractTemplatesRepository contractTemplatesRepository, UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
+    public NotificationSettingsService(@Lazy NotificationSettingsRepository notificationSettingsRepository, ContractTemplatesRepository contractTemplatesRepository, @Lazy UserService userService, NotificationSettingsMapper notificationSettingsMapper) {
         this.notificationSettingsRepository = notificationSettingsRepository;
         this.contractTemplatesRepository = contractTemplatesRepository;
         this.userService = userService;
@@ -38,13 +38,13 @@ public class NotificationSettingsService {
     public Optional<NotificationSettings> getAllNotifications(Long coachId) {
         log.info("Getting Notifications Settings");
         // Get All Notifications By coachId
-        return notificationSettingsRepository.findByCoachId(coachId);
+        return notificationSettingsRepository.findByUserId(coachId);
     }
 
 
     public NotificationSettings updateSettings(NotificationSettingsRequest notificationSettingsRequest, Long coachId, String coachName) {
         log.info("Updating Settings for coach with id {}", coachId);
-        Optional<NotificationSettings> notificationOptional = notificationSettingsRepository.findByCoachId(coachId);
+        Optional<NotificationSettings> notificationOptional = notificationSettingsRepository.findByUserId(coachId);
 
         if (notificationOptional.isEmpty()) {
             throw new IllegalArgumentException("Coach has no setting configured! Contact Admin");
@@ -225,7 +225,7 @@ public class NotificationSettingsService {
         notificationSettings.setLastUpdatedAt(LocalDateTime.now());
 
         if (notificationSettingsRequest.getCoach() != null) {
-            notificationSettings.setCoach(notificationSettingsRequest.getCoach());
+            notificationSettings.setUser(notificationSettingsRequest.getCoach());
             notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getCoach().getFullName());
             notificationSettings.setCreatedBy(notificationSettingsRequest.getCoach().getFullName());
             if (notificationSettingsRequest.getCoach().getOrganization() != null) {
@@ -233,8 +233,8 @@ public class NotificationSettingsService {
             }
         } else {
             notificationSettings.setOrganization(notificationSettingsRequest.getOrganization());
-            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getFirstName());
-            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getFirstName());
+            notificationSettings.setLastUpdatedBy(notificationSettingsRequest.getOrganization().getOrgName());
+            notificationSettings.setCreatedBy(notificationSettingsRequest.getOrganization().getOrgName());
 
         }
         log.info("Notification Settings Created Successfully");
@@ -242,11 +242,11 @@ public class NotificationSettingsService {
     }
 
     public Optional<NotificationSettings> getNotification(Long coachId) {
-        return notificationSettingsRepository.findByCoachId(coachId);
+        return notificationSettingsRepository.findByUserId(coachId);
     }
 
     public Optional<NotificationSettingsDTO> findByCoachId(Long coachId) {
         log.info("Request to find notification settings by coachId: {}", coachId);
-        return notificationSettingsRepository.findByCoachId(coachId).map(notificationSettingsMapper::toDto);
+        return notificationSettingsRepository.findByUserId(coachId).map(notificationSettingsMapper::toDto);
     }
 }

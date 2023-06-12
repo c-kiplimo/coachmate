@@ -62,12 +62,6 @@ export class ApiService {
     });
   }
 
-  // Add new Contract
-  addNewContract(newContract: any): Observable<any> {
-    return this.http.post<any>(this.baseURL + 'contracts', newContract, {
-      observe: 'response',
-    });
-  }
 
   // Get Contracts
   getContracts(): Observable<any> {
@@ -209,8 +203,8 @@ export class ApiService {
     });
   }
 
-  getCoachSlots(coachId: any, options: any): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/sessionSchedules/byCoachId/' + coachId, {
+  getCoachSlots(options: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/sessionSchedules/filter',{
       params: options, 
       observe: 'response',
     });

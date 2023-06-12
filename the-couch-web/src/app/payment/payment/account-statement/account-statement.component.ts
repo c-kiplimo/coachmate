@@ -91,7 +91,7 @@ export class AccountStatementComponent implements OnInit {
       
     }
     getPaymentsByClientId(id: any){
-      window.scroll(0, 0);
+      
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -113,7 +113,7 @@ export class AccountStatementComponent implements OnInit {
     }
   
     getPaymentsByCoachId(){
-      window.scroll(0, 0);
+      
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -135,7 +135,7 @@ export class AccountStatementComponent implements OnInit {
     }
 // get statement by coach id and selected period
     getAccountStatementByCoachIdAndStatementPeriod(){
-      window.scroll(0, 0);
+      
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -157,7 +157,7 @@ export class AccountStatementComponent implements OnInit {
     }
     // get statement by client id and selected period
     getAccountStatementByClientIdAndStatementPeriod(id: any){
-      window.scroll(0, 0);
+      
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -179,7 +179,7 @@ export class AccountStatementComponent implements OnInit {
     }
     // get statement by org id and selected period
     getAccountStatementByOrgIdAndStatementPeriod(){
-      window.scroll(0, 0);
+      
       const options = {
         page: 1,
         per_page: this.itemsPerPage,
@@ -204,7 +204,7 @@ export class AccountStatementComponent implements OnInit {
 
   // get statement by client id
     getAccountStatementByClientId(id: any){
-      window.scroll(0, 0);
+      
      
       const options = {
         page: 1, 

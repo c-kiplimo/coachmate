@@ -10,4 +10,5 @@ public interface UserSessionRepository extends JpaRepository<UserSession,Long> {
 
     UserSession findByUser(User user);
 
+    UserSession findByUserId(Long id);
 }
