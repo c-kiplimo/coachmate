@@ -8,9 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface SessionSchedulesMapper extends EntityMapper<SessionSchedulesDTO, SessionSchedules>{
 //    @Override
-    @Mapping(target = "coachId", source = "coach.id")
-    @Mapping(target = "coachFullName", source = "coach.fullName")
-    @Mapping(target = "coachMsisdn", source = "coach.msisdn")
+//    @Mapping(target = "coachId", source = "coach.id")
+//    @Mapping(target = "coachFullName", source = "coach.fullName")
+//    @Mapping(target = "coachMsisdn", source = "coach.msisdn")
 
     SessionSchedulesDTO toDto(SessionSchedules entity);
 }

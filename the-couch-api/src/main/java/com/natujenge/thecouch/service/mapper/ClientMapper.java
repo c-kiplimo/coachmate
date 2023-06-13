@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface ClientMapper extends EntityMapper<ClientDTO, User> {
 
+    @Override
     ClientDTO toDto(User Entity);
 }

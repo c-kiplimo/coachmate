@@ -125,5 +125,4 @@ public class SessionResource {
         return ResponseEntity.ok().headers(headers).body(sessionDtoPage.getContent());
     }
 
-
 }

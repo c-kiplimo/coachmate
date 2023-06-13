@@ -9,7 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {})
 public interface PaymentDetailsMapper extends EntityMapper<PaymentDetailsDTO, PaymentDetails>{
 
-    @Mapping(target = "coachId", source = "coach.id")
-    @Mapping(target = "organizationId", source = "organization.id")
+//    @Mapping(target = "coachId", source = "coach.id")
+//    @Mapping(target = "organizationId", source = "organization.id")
+
     PaymentDetailsDTO toDto(PaymentDetails b);
 }

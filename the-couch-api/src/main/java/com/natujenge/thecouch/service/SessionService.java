@@ -304,6 +304,7 @@ public class SessionService {
             log.info("Session date at {} ", sessionDate);
             return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
         }
+
         return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
     }
     public Specification<Session> getSpecFromDatesAndExample(
@@ -321,4 +322,5 @@ public class SessionService {
             return builder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
     }
+
 }
