@@ -14,9 +14,10 @@ spring:
     password: elijah@maria22
     username: elijah
 
-#    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-#    username: root
-#    password: ninja
+    url: jdbc:mysql://164.92.70.172:3315/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    username: root
+    password: natujenge
+
 
 
   jpa:

@@ -31,6 +31,10 @@ export class SessionsService {
         observe: 'response',
       });
     } 
+    changeSessionStatus(id: number, status: string): Observable<any> {
+      const data = { status: status };
+      return this.http.put<any>(this.baseURL + 'sessions/change-status/' + id + '/status', data);
+    }
 }
 
 // ,
