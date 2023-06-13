@@ -1,8 +1,9 @@
 package com.natujenge.thecouch.domain;
 
-import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
-import lombok.*;
+import com.natujenge.thecouch.domain.enums.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,32 +14,65 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
-@Getter
 @Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@Data
+@Getter
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_users")
 public class User implements UserDetails {
-
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     private String fullName;
     private String firstName;
     private String lastName;
+    private String businessName;
+
+    @ManyToOne
+    @JoinColumn(name="addedBy")
+    User addedBy; //user - coach id
     @Column(unique = true)
     private String msisdn;
     @Column(unique = true)
     private String email;
 
-    // username and password are same
-    private String username;
+    // LOGIN DETAILS
+    private String username; //email
     private String password;
+
+    @Enumerated(EnumType.STRING) //COACH, CLIENT, ORGANIZATION, ADMIN
+    private UserRole userRole;
+
+
+    //CLIENT DETAILS
+    @Enumerated(EnumType.STRING)
+    private ClientType clientType;
+
+    @Enumerated(EnumType.STRING)
+    private ClientStatus clientStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentModeSubscription paymentMode;
+    private  String profession;
+    private  String physicalAddress;
+    private String clientNumber;
+
+
+    //COACH DETAILS
+    @Enumerated(EnumType.STRING)
+    private CoachStatus coachStatus;
+    private boolean onboarded; //COACH ADDED BY ORGANIZATION
+    private String coachNumber;
+
+    //FOR ONBOARDED COACH AND ALL CLIENTS
+    private String reason;
+
+
+    private String createdBy; //full name
+    private String lastUpdatedBy; //full name
+
 
     // management fields
     @CreationTimestamp
@@ -48,48 +82,30 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private ContentStatus contentStatus;
 
-
-    // Role of creator, current default assignment ADMIN
-
-    private String createdBy;
-    private String lastUpdatedBy;
-
-
-    @Enumerated(EnumType.STRING) //
-    private UserRole userRole;
-
     // Object Relationships
-    @ManyToOne
-    @JoinColumn(name="notification_settings_id")
-    NotificationSettings notificationSettings;
-
-    @ManyToOne
-    @JoinColumn(name="contract_template_id")
-    ContractTemplate contractTemplate;
-
-
-    @ManyToOne
-    @JoinColumn(name="client_id")
-    Client client;
-
-
-    @ManyToOne
-    @JoinColumn(name="coach_id")
-    Coach coach;
-
     @ManyToOne
     @JoinColumn(name="org_id")
     Organization organization;
 
+//    @ManyToOne
+//    @JoinColumn(name="notification_settings_id")
+//    NotificationSettings notificationSettings;
+//
+//    @ManyToOne
+//    @JoinColumn(name="contract_template_id")
+//    ContractTemplate contractTemplate;
 
     // Access fields
     private Boolean locked = false;
     private Boolean enabled = false;
 
+    public User(){
+
+    }
+
     // User Registration Constructor
-    public User(String firstName,String lastName, String email, String msisdn,String password, UserRole userRole,
-                Coach coach) {
-        this.fullName = firstName + ' '+lastName;
+    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole) {
+        this.fullName = firstName + ' ' + lastName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -97,10 +113,8 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.password = password;
         this.userRole = userRole;
-        this.coach = coach;
-
     }
-    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole,
+    public User(String firstName, String lastName, String email, String msisdn, UserRole password, UserRole userRole,
                 Organization organization) {
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
@@ -108,36 +122,12 @@ public class User implements UserDetails {
         this.email = email;
         this.username = email;
         this.msisdn = msisdn;
-        this.password = password;
+        this.password = String.valueOf(password);
         this.userRole = userRole;
         this.organization = organization;
-
-    }
-    public User(String firstName, String lastName, String email, String msisdn, String password, UserRole userRole){
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.password = password;
-        this.userRole = userRole;
-    }
-
-// org coach user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach){
-        this.fullName = firstName + ' '+lastName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = email;
-        this.msisdn = msisdn;
-        this.userRole = userRole;
-        this.organization = organization;
-        this.coach = coach;
     }
     // org client user
-    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization,Coach coach , Client client){
+    public User(String firstName, String lastName, String email, String msisdn, UserRole userRole, Organization organization ){
         this.fullName = firstName + ' '+lastName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -146,8 +136,10 @@ public class User implements UserDetails {
         this.msisdn = msisdn;
         this.userRole = userRole;
         this.organization = organization;
-        this.coach = coach;
-        this.client = client;
+    }
+
+    public User(String firstName, String lastName, String email, String msisdn, UserRole client, Optional<Organization> organization) {
+
     }
 
     @Override
@@ -193,4 +185,17 @@ public class User implements UserDetails {
     }
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", businessName='" + businessName + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

@@ -1,26 +1,20 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.ClientService;
 import com.natujenge.thecouch.service.CoachService;
 import com.natujenge.thecouch.service.RegistrationService;
+import com.natujenge.thecouch.service.ResponseService;
+import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
 import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
-import com.natujenge.thecouch.service.ResponseService;
-import io.swagger.annotations.ApiOperation;
+import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -32,9 +26,10 @@ import java.util.Optional;
 @Slf4j
 public class RegistrationResource {
     private final RegistrationService registrationService;
-    private final ClientService clientService;
+   // private final ClientService clientService;
     private final CoachService coachService;
     private final ResponseService responseService;
+    private final UserService userService;
 
 
     @PostMapping
@@ -73,27 +68,26 @@ public class RegistrationResource {
         }
     }
 
-    //api to confirm client and update password
     @PostMapping(path = "/confirmClientToken")
-    ResponseEntity<?> updateAndConfirmClientToken(@RequestBody ClientRequest clientRequest){
-       // log.info("Request to confirm client token and update password");
+    ResponseEntity<?> updateAndConfirmClientToken(@RequestBody UserTokenConfirmRequest userTokenConfirmRequest){
+        log.info("Request to confirm client token and update password");
         try {
-            Optional<User> updateClient;
-            updateClient = clientService.confirmClientTokenAndUpdatePassword(clientRequest);
+            Optional<User> updateClient = userService.confirmClientTokenAndUpdatePassword(userTokenConfirmRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {
-           // log.error("Error while Confirming Client and Updating Client password", e);
+            // log.error("Error while Confirming Client and Updating Client password", e);
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     //api to confirm coach and update password
     @PostMapping(path = "/confirmCoachToken")
     ResponseEntity<?> updateAndConfirmCoachToken(@RequestBody CoachRequest coachRequest){
         //log.info("Request to confirm coach token and update password");
         try {
             Optional<User> updateCoach;
-            updateCoach = coachService.confirmCoachTokenAndUpdatePassword(coachRequest);
+           // updateCoach = userRepository.confirmCoachTokenAndUpdatePassword(coachRequest);
 
             return new ResponseEntity<>(new RestResponse(false, "CONFIRMED AND PASSWORD UPDATED"), HttpStatus.OK);
         } catch (Exception e) {

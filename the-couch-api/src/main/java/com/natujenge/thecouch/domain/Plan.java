@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.PlanType;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 

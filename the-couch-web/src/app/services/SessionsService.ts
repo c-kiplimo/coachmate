@@ -11,20 +11,30 @@ import { environment } from 'src/environments/environment';
 })
 
 export class SessionsService {
-    getSessions() {
-      throw new Error('Method not implemented.');
-    }
+
+ 
 
     baseURL: string =environment.apiURL + '/api/';
     
     constructor(private http: HttpClient) {
 
     }
+
+    getSessions(options: any) {
+      return this.http.get<any>(this.baseURL + 'sessions/filter', {
+        observe: 'response',
+        params: options,
+      });     
+    }
     getOneSession(id: number): Observable<any> {
       return this.http.get<any>(this.baseURL + '/sessions/' + id, {
         observe: 'response',
       });
     } 
+    changeSessionStatus(id: number, status: string): Observable<any> {
+      const data = { status: status };
+      return this.http.put<any>(this.baseURL + 'sessions/change-status/' + id + '/status', data);
+    }
 }
 
 // ,

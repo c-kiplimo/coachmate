@@ -1,9 +1,9 @@
 package com.natujenge.thecouch.domain;
 
 import com.natujenge.thecouch.domain.enums.PaymentCurrency;
-import com.natujenge.thecouch.domain.enums.SessionVenue;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.domain.enums.SessionType;
+import com.natujenge.thecouch.domain.enums.SessionVenue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -42,13 +41,6 @@ public class Session {
     private String notes;
     private String feedback;
 
-    // includes date and time
-    private LocalDate sessionDate;
-    private String sessionDuration;
-    private String sessionStartTime;
-    private String sessionEndTime;
-
-
     @Enumerated(EnumType.STRING)
     private SessionVenue sessionVenue;
     @Enumerated(EnumType.STRING)
@@ -74,7 +66,7 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name="client_id")
-    Client client;
+    User client;
 
     @ManyToOne
     @JoinColumn(name="contract_id")
@@ -82,6 +74,6 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name="coach_id")
-    Coach coach;
+    User coach;
 
 }

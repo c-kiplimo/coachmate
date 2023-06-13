@@ -121,8 +121,8 @@ public class NotificationServiceHTTPClient {
         // SHORTCODE
         String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS;
         String referenceId = "C-3452";
-        String msisdn = user.getCoach().getMsisdn();
-        String email = user.getCoach().getEmailAddress();
+        String msisdn = user.getMsisdn();
+        String email = user.getEmail();
         log.info("About to send message to Coach content: {}, from: {}, to: {}, ref id {}",
                 smsContent, sourceAddress, msisdn, referenceId);
 

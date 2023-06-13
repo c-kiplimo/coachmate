@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.CoachBillingAccount;
 import com.natujenge.thecouch.domain.OrganizationBillingAccount;
 import com.natujenge.thecouch.repository.OrganizationBillingAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;

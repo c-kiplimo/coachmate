@@ -1,6 +1,9 @@
 package com.natujenge.thecouch.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -45,11 +48,11 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    Coach coach;
+    User coach;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    Client client;
+    User client;
 
     @ManyToOne
     @JoinColumn(name = "org_id_id")

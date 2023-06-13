@@ -1,10 +1,13 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.ClientBillingAccount;
+import com.natujenge.thecouch.domain.ClientWallet;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +20,25 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ClientBillingAccountService {
 
-    @Autowired
-    ClientWalletService walletService;
-    @Autowired
-    OrganizationWalletService organizationWalletService;
-    @Autowired
-    OrganizationBillingAccountService organizationBillingAccountService;
-    @Autowired
-    CoachWalletService coachWalletService;
-    @Autowired
-    ClientBillingAccountRepository clientBillingAccountRepository;
+
+    private final ClientWalletService walletService;
+
+    private final OrganizationWalletService organizationWalletService;
+
+   private final OrganizationBillingAccountService organizationBillingAccountService;
+
+   private final CoachWalletService coachWalletService;
+
+    private final ClientBillingAccountRepository clientBillingAccountRepository;
+
+    public ClientBillingAccountService(@Lazy ClientWalletService walletService, OrganizationWalletService organizationWalletService, OrganizationBillingAccountService organizationBillingAccountService, @Lazy CoachWalletService coachWalletService, ClientBillingAccountRepository clientBillingAccountRepository) {
+        this.walletService = walletService;
+        this.organizationWalletService = organizationWalletService;
+        this.organizationBillingAccountService = organizationBillingAccountService;
+        this.coachWalletService = coachWalletService;
+        this.clientBillingAccountRepository = clientBillingAccountRepository;
+    }
+
     // Get all billingAccounts by coach Id
     public ListResponse getBillingAccountByCoachId(int page, int perPage, Long coachId) {
         log.info("Get all billing accounts by Coach id {}", coachId);
@@ -51,7 +63,7 @@ public class ClientBillingAccountService {
         clientBillingAccountRepository.save(clientBillingAccount);
     }
 
-    public void updateBillingAccount(float amountBilled, Coach coach, Client client) {
+    public void updateBillingAccount(float amountBilled, User coach, User client) {
         // Retrieve client's most recent wallet record
         ClientWallet clientWallet = walletService.getClientWalletRecentRecord(coach.getId(), client.getId());
 
@@ -88,7 +100,7 @@ public class ClientBillingAccountService {
         clientBillingAccountRepository.save(clientBillingAccount);
     }
 
-    public void updateOrganizationAndClientBillingAccount(float amountBilled,Organization organization,Client client) {
+    public void updateOrganizationAndClientBillingAccount(float amountBilled,Organization organization,User client) {
         // CHECK wallet balance
         // Update contract payment status and amountDue
         // Get wallet balance should check the last record on dB by client
@@ -109,15 +121,15 @@ public class ClientBillingAccountService {
         float paymentBalance;
         if (clientWalletBalance >= amountBilled) {
             paymentBalance = clientWalletBalance - amountBilled;
-            walletService.updateWalletBalance(clientWallet, paymentBalance, organization.getFullName());
+            walletService.updateWalletBalance(clientWallet, paymentBalance, organization.getOrgName());
         } else {
             paymentBalance = amountBilled - clientWalletBalance;
-            walletService.updateWalletBalance(clientWallet, 0f, organization.getFullName());
+            walletService.updateWalletBalance(clientWallet, 0f, organization.getOrgName());
         }
 
         // Create new client billing account recordtbl_coach_billing_accountm
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
-        clientBillingAccount.setCreatedBy(organization.getFullName());
+        clientBillingAccount.setCreatedBy(organization.getOrgName());
         clientBillingAccount.setOrganization(organization);
         clientBillingAccount.setClient(client);
         clientBillingAccount.setAmountBilled(amountBilled);

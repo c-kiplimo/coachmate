@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.domain;
 
+import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import com.natujenge.thecouch.domain.enums.SessionTemplateType;
 
 @Getter
 @Setter

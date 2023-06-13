@@ -1,0 +1,23 @@
+<div class="side-nav-content" [hidden]="
+router.url.includes('signin')
+">
+
+  <ul class="nav-list" [ngClass]="{'nav-list-open': sideNavStatus}">
+
+    <li class="nav-list-item" *ngFor="let menu of menuData" [ngClass]="{ 'active': menu.number === selectedTabIndex}"
+      [routerLink]="[menu.routeLink]">
+
+      <a>
+        <i class="{{menu.icon}}" data-toggle="tooltip" data-placement="right" title="{{menu.label}}"></i>
+
+        <div class="sideNavSmall" *ngIf="!sideNavStatus">
+          <a>{{menu.label}}</a>
+        </div>
+
+        <span *ngIf="sideNavStatus">
+          <a>{{menu.label}}</a>
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>

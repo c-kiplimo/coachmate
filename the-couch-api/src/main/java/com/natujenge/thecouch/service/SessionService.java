@@ -2,23 +2,33 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
+import com.natujenge.thecouch.domain.enums.SessionType;
+import com.natujenge.thecouch.domain.enums.SessionVenue;
 import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationHelper;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
-import com.natujenge.thecouch.web.rest.dto.SessionDto;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.request.SessionRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.convert.QueryByExamplePredicateBuilder;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.natujenge.thecouch.domain.Session;
+
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -27,64 +37,34 @@ import java.util.Objects;
 
 public class SessionService {
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final SessionRepository sessionRepository;
+    private final ContractRepository contractRepository;
+    private final OrganizationRepository organizationRepository;
+    private final SessionSchedulesRepository sessionSchedulesRepository;
+    private final NotificationServiceHTTPClient notificationServiceHTTPClient;
+    private final SessionSchedulesService sessionSchedulesService;
+    private final UserRepository userRepository;
+    private final SessionMapper sessionMapper;
 
-    @Autowired
-    SessionRepository sessionRepository;
-    @Autowired
-    ClientRepository clientRepository;
-    @Autowired
-    ContractRepository contractRepository;
-    @Autowired
-    OrganizationRepository organizationRepository;
-    @Autowired
-    SessionSchedulesRepository sessionSchedulesRepository;
-    @Autowired
-    private NotificationServiceHTTPClient notificationServiceHTTPClient;
-
-    @Autowired
-    SessionSchedulesService sessionSchedulesService;
-
-    @Autowired
-    CoachRepository coachRepository;
-
-    // GetAllSessions
-    public ListResponse getAllSessions(int page, int perPage, String search, Long id) {
-        page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page, perPage, sort);
-
-        Page<SessionDto> sessionPage;
-
-            sessionPage = sessionRepository.findAllByCoachId(id, pageable);
-
-        return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                sessionPage.getTotalElements());
-
+    public SessionService(JdbcTemplate jdbcTemplate, SessionRepository sessionRepository, ContractRepository contractRepository, OrganizationRepository organizationRepository, SessionSchedulesRepository sessionSchedulesRepository, NotificationServiceHTTPClient notificationServiceHTTPClient, SessionSchedulesService sessionSchedulesService, UserRepository userRepository, SessionMapper sessionMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.sessionRepository = sessionRepository;
+        this.contractRepository = contractRepository;
+        this.organizationRepository = organizationRepository;
+        this.sessionSchedulesRepository = sessionSchedulesRepository;
+        this.notificationServiceHTTPClient = notificationServiceHTTPClient;
+        this.sessionSchedulesService = sessionSchedulesService;
+        this.userRepository = userRepository;
+        this.sessionMapper = sessionMapper;
     }
-
-    // Get Individual Sessions by id
-    public Session findSessionByIdAndCoachId(Long id) {
-        log.debug("Request to get session : {} and coachId : {}", id);
-
-        Optional<Session> sessionOptional = sessionRepository.findById(id);
-        if (sessionOptional.isPresent()) {
-            return sessionOptional.get();
-
-        } else {
-            throw new IllegalArgumentException("Session not found!");
-
-        }
-    }
-
 
     //CREATE NEW SESSION
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
 
-        Optional<Client> optionalClient = clientRepository.findClientByIdAndCoachId(clientId,coachId);
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId,coachId);
+        Optional<User> optionalClient = userRepository.findByIdAndAddedById(clientId, coachId);
+        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId, coachId);
         Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
 
         if (optionalClient.isEmpty()) {
@@ -96,16 +76,16 @@ public class SessionService {
             log.warn("Contract with id {} not found", contractId);
             throw new IllegalArgumentException("Contract not found!");
         }
-        if(optionalSessionSchedules.isEmpty()){
+        if (optionalSessionSchedules.isEmpty()) {
             log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
             throw new IllegalArgumentException("Session Slot no found!");
         }
         Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
 
         // Client
-        Client client = optionalClient.get();
+        User client = optionalClient.get();
         // Coach
-        Coach coach = client.getCoach();
+        User coach = client.getAddedBy();
         // Contract
         Contract contract = optionalContract.get();
         //Session slot
@@ -113,6 +93,9 @@ public class SessionService {
 
         // New Sessions enter the new state
         sessionRequest.setSessionStatus(SessionStatus.NEW);
+        sessionRequest.setName(sessionRequest.getName());
+        sessionRequest.setSessionType(SessionType.valueOf(String.valueOf(sessionRequest.getSessionType())));
+        sessionRequest.setSessionVenue(SessionVenue.valueOf(String.valueOf(sessionRequest.getSessionVenue())));
         sessionRequest.setCoach(coach);
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
@@ -122,7 +105,7 @@ public class SessionService {
         // session Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
         String sessionL = String.format("%05d", randNo);
-        String sessionNo = client.getCoach().getBusinessName().substring(0, 2) +
+        String sessionNo = client.getAddedBy().getBusinessName().substring(0, 2) +
                 client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
         sessionRequest.setSessionNumber(sessionNo);
         if (optionalOrganization.isPresent()) {
@@ -134,7 +117,7 @@ public class SessionService {
         }
 
         try {
-            sessionSchedulesService.updateBookedStateToTrue(sessionSchedules.getId());
+            sessionSchedulesService.updateBookedState(sessionSchedules.getId());
             return sessionRepository.save(sessionRequest);
         } catch (Exception e) {
             log.error("Error occurred ", e);
@@ -142,11 +125,15 @@ public class SessionService {
         }
     }
 
+    // Get Individual Sessions by id
+    public Optional<SessionDTO> findSessionById(Long sessionId){
+       return sessionRepository.findById(sessionId).map(sessionMapper::toDto);
+    }
 
     //UPDATE SESSION
-    public Optional<Session> updateSession(Long sessionId, Long coachId, Session sessionRequest) {
+    public SessionDTO updateSession(Long sessionId, Session sessionRequest) {
 
-        Optional<Session> sessionOptional = sessionRepository.findSessionByIdAndCoachId(sessionId, coachId);
+        Optional<Session> sessionOptional = sessionRepository.findById(sessionId);
 
         if (sessionOptional.isPresent()) {
             log.info("Session with id {} found", sessionId);
@@ -180,202 +167,158 @@ public class SessionService {
             if (sessionRequest.getAmountPaid() != null) {
                 session.setAmountPaid(sessionRequest.getAmountPaid());
             }
-            sessionRepository.save(session);
-            return Optional.of(session);
+            session = sessionRepository.save(session);
+            return sessionMapper.toDto(session);
 
         }
-        return sessionOptional;
+        return sessionMapper.toDto(sessionOptional.get());
     }
 
     // Delete session by ID
-    public void deleteSession(Long id, Long coachId) {
+    public void deleteSession(Long id) {
         log.debug("Request to delete session : {}", id);
 
 
-        boolean exist = sessionRepository.existsByIdAndCoachId(id, coachId);
+        boolean exist = sessionRepository.existsById(id);
         if (!exist) {
             throw new IllegalStateException("session doesn't exist");
 
         }
-        coachRepository.deleteById(id);
+        sessionRepository.deleteById(id);
     }
-
-    public List<SessionDto> findSessionByClientId(Long clientId) {
-        log.debug("Request to get sessions  by clientId : {}", clientId);
-        return sessionRepository.findByClientId(clientId);
-    }
-
-    public List<SessionDto> findSessionByContractId(Long contractId) {
-        log.debug("Request to get sessions by contractId : {}", contractId);
-        return sessionRepository.findByContractId(contractId);
-    }
-
 
     //send notification to client and coach when session is upcoming
     @Scheduled(cron = "0 0 6 * * *")
     public void sendUpcomingSessionReminderToCoach() {
         log.debug("Request to send upcoming session reminder");
         //List<Session> sessions = sessionSchedulesRepository.findAllBySessionDate(LocalDate.now());
-        List<Session> sessions = sessionRepository.findAllBysessionSchedules(LocalDate.now());
+        List<Session> sessions = sessionRepository.findAllBySessionSchedulesSessionDate(LocalDate.now());
 
         for (Session session : sessions) {
             String smsContent;
 
-            smsContent = "Hello " + session.getCoach().getFirstName()+",\n You have an upcoming session " + session.getName()+" with " +
-                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+            smsContent = "Hello " + session.getCoach().getFirstName() + ",\n You have an upcoming session " + session.getName() + " with " +
+                    " client: " + session.getClient().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
                     + session.getSessionSchedules().getStartTime() + " to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
             String smsContentClient;
-            smsContentClient = "Hello " + session.getClient().getFirstName()+",\n You have an upcoming session" + session.getName()+"with " +
-                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue()+ " at "
+            smsContentClient = "Hello " + session.getClient().getFirstName() + ",\n You have an upcoming session" + session.getName() + "with " +
+                    " coach: " + session.getCoach().getFullName() + "\n The session will be " + session.getSessionVenue() + " at "
                     + session.getSessionSchedules().getStartTime() + "to " + session.getSessionSchedules().getEndTime() + "\n See you there!";
-                //send notification to coach
-                NotificationHelper.sendUpcomingSessionReminderToCoach(session);
-                // sendEmail
-              String email =  session.getCoach().getEmailAddress();
-                notificationServiceHTTPClient.sendEmail(email,"SESSION DUE TODAY",smsContent,false);
-                log.info("Email sent");
-                //send notification to client
-                NotificationHelper.sendUpcomingSessionReminderToClient(session);
-                // sendEmail
-                String clientEmail =  session.getClient().getEmail();
-                notificationServiceHTTPClient.sendEmail(clientEmail,"SESSION DUE TODAY", smsContentClient,false);
-            }
+            //send notification to coach
+            NotificationHelper.sendUpcomingSessionReminderToCoach(session);
+            // sendEmail
+            String email = session.getCoach().getEmail();
+            notificationServiceHTTPClient.sendEmail(email, "SESSION DUE TODAY", smsContent, false);
+            log.info("Email sent");
+            //send notification to client
+            NotificationHelper.sendUpcomingSessionReminderToClient(session);
+            // sendEmail
+            String clientEmail = session.getClient().getEmail();
+            notificationServiceHTTPClient.sendEmail(clientEmail, "SESSION DUE TODAY", smsContentClient, false);
+        }
 
     }
-
-    public List<Session> getSessionByOrgId(Long orgId) {
-        return sessionRepository.findSessionByOrgId(orgId);
-    }
-
-    public List<Session> getSessionsByContract(Long contractId) {
-        return sessionRepository.findSessionByContractId(contractId);
-    }
-
-    public ListResponse filterSessionsByClientNameAndSessionNameAndDate(String clientName, String sessionName, LocalDate date, int page, int perPage) {
-        page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
-        Pageable pageable = PageRequest.of(page, perPage, sort);
-        Page<SessionDto> sessionPage = null;
-
-        if (clientName != null && sessionName != null && date != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                    .and(qSession.name.containsIgnoreCase(sessionName))
-                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        if (clientName != null && sessionName != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                    .and(qSession.name.containsIgnoreCase(sessionName)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        if (clientName != null && date != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName)
-                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        if (sessionName != null && date != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName)
-                    .and(qSession.sessionSchedules.sessionDate.eq(date)), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        if (clientName != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.client.fullName.containsIgnoreCase(clientName), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        if (sessionName != null) {
-            QSession qSession = QSession.session;
-            sessionPage = sessionRepository.findBy(qSession.name.containsIgnoreCase(sessionName), q -> q.sortBy(sort).as(SessionDto.class).page(pageable));
-            log.info("This is a list of sessions found {}", sessionPage.getContent());
-            return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(),
-                    sessionPage.getTotalElements());
-        }
-
-        log.info("This is a list of sessions found {}", sessionPage.getContent());
-        return new ListResponse(sessionPage.getContent(), sessionPage.getTotalPages(), sessionPage.getNumberOfElements(), sessionPage.getTotalElements());
-    }
-
     @Transactional
-    public void updateSessionStatus(Long id, Long coachId, SessionStatus sessionStatus) {
+    public SessionDTO updateSessionStatus(Long id, SessionStatus sessionStatus) {
         log.info("Changing status of session {} to status {}", id, sessionStatus);
-        Optional<Session> session = sessionRepository.findByIdAndCoach_id(id, coachId);
+        Optional<Session> sessionOptional = sessionRepository.findById(id);
 
-        if (session.isEmpty()) {
+        if (sessionOptional.isEmpty()) {
             throw new IllegalStateException("Coach doesn't exist");
         }
 
-        Session session1 = session.get();
+        Session session = sessionOptional.get();
 
-        if (session1.getSessionStatus() == SessionStatus.CANCELLED) {
+        if (session.getSessionStatus() == SessionStatus.CANCELLED) {
             log.info("Session {} is in Cancelled state", id);
             throw new IllegalStateException("Session is in Cancelled State");
         } else if (Objects.equals(sessionStatus, SessionStatus.CONFIRMED)) {
-            session1.setSessionStatus(SessionStatus.CONFIRMED);
+            session.setSessionStatus(SessionStatus.CONFIRMED);
         } else if (Objects.equals(sessionStatus, SessionStatus.CONDUCTED)) {
-            session1.setSessionStatus(SessionStatus.CONDUCTED);
+            session.setSessionStatus(SessionStatus.CONDUCTED);
         } else if (Objects.equals(sessionStatus, SessionStatus.CANCELLED)) {
-            session1.setSessionStatus(SessionStatus.CANCELLED);
-        } else if (session1.getSessionStatus() == SessionStatus.CONFIRMED) {
-            session1.setSessionStatus(SessionStatus.CONFIRMED);
-        } else if (session1.getSessionStatus() == SessionStatus.CONDUCTED) {
-            session1.setSessionStatus(SessionStatus.CONDUCTED);
+            session.setSessionStatus(SessionStatus.CANCELLED);
+        } else if (session.getSessionStatus() == SessionStatus.CONFIRMED) {
+            session.setSessionStatus(SessionStatus.CONFIRMED);
+        } else if (session.getSessionStatus() == SessionStatus.CONDUCTED) {
+            session.setSessionStatus(SessionStatus.CONDUCTED);
         }
-
+        session = sessionRepository.save(session);
         log.info("Session with id {} changed status to {}", id, sessionStatus);
+        return sessionMapper.toDto(session);
+
     }
 
-    //CREATE EXAMPLE
-    private Session createExample(String search, String status, Long coachId) {
+    public long countSessionByContractId(Long contractId){
+        return sessionRepository.countByContractId(contractId);
+    }
+    private Session createExample(Long coachId, Long clientId, Long contractId, String sessionStatus,Long organisationId, String search) {
         Session sessionExample = new Session();
-        Session session = new Session();
-        Client client = new Client();
+        User client = new User();
+        User coach = new User();
+        Contract contract = new Contract();
 
-        if(search != null && !search.isEmpty()) {
+        if (coachId != null) {
+            sessionExample.setCoach(coach);
+            sessionExample.getCoach().setId(coachId);
+        }
+        if (clientId != null) {
             sessionExample.setClient(client);
-            sessionExample.setName(search);
+            sessionExample.getClient().setId(clientId);
+        }
+        if (contractId != null) {
+            sessionExample.setContract(contract);
+            sessionExample.getContract().setId(contractId);
+        }
+        if (sessionStatus != null && !sessionStatus.isEmpty()) {
+            SessionStatus status = SessionStatus.valueOf(sessionStatus);
+            sessionExample.setSessionStatus(status);
+        }
+        if (organisationId != null) {
+            sessionExample.setOrgId(organisationId);
+        }
+        if (search != null && !search.isEmpty()) {
+            sessionExample.setClient(client);
             if (search.contains("@")) {
-                sessionExample.getClient().getEmail();
+                sessionExample.getClient().setEmail(search);
             } else if (search.startsWith("+") || search.matches("[0-9]+")) {
-                sessionExample.getClient().getMsisdn();
+                sessionExample.getClient().setMsisdn(search);
             } else {
-                sessionExample.getName();
+                sessionExample.getClient().setFullName(search);
             }
         }
-        if(status != null && !status.isEmpty()) {
-            sessionExample.setSessionStatus(SessionStatus.valueOf(status));
-        }
-
         return sessionExample;
     }
 
-    public Page<SessionDto> filter(String search, String status, Long coachId, Pageable pageable) {
-    Session session = createExample(search, status, coachId);
+    public Page<SessionDTO> filter(Long coachId, Long clientId, Long contractId,String sessionStatus, LocalDate sessionDate,  Long organisationId, String search, Pageable pageable) {
+        Session session = createExample(coachId, clientId, contractId, sessionStatus, organisationId, search);
+        log.info("After example {} ", session);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded", "client.locked", "client.enabled","client.onboarded")
                 .withIgnoreNullValues();
         Example<Session> example = Example.of(session, matcher);
+        if (sessionDate != null) {
+            log.info("Session date at {} ", sessionDate);
+            return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
+        }
+        return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
+    }
+    public Specification<Session> getSpecFromDatesAndExample(
+            LocalDate sessionDate, Example<Session> example) {
 
-        return sessionRepository.findAll(example, pageable);
+        return (Specification<Session>) (root, query, builder) -> {
+            final List<Predicate> predicates = new ArrayList<>();
+
+            if (sessionDate != null) {
+                predicates.add(builder.equal(root.get("sessionSchedules").get("sessionDate"),sessionDate));
+            }
+
+            predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
+
+            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
     }
 }

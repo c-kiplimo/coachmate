@@ -34,10 +34,10 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client client;
+    private User client;
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    private Coach coach;
+    private User coach;
     @ManyToOne
     @JoinColumn(name = "organization_id")
     private Organization organization;

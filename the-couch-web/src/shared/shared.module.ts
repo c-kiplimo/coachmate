@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
-import { UserComponent } from 'src/app/user/user.component';
-
 @NgModule({
-  declarations: [UserComponent],
+  declarations: [],
   imports: [],
-  exports: [UserComponent],
+  exports: [],
 })
 export class SharedModule { }

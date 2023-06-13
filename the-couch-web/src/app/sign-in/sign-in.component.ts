@@ -22,6 +22,7 @@ export class SignInComponent implements OnInit {
   errorMessage = '';
   loginSuccess = false;
   fieldTextType!: boolean;
+  loading = false;
 
   formData = {
     username: '',
@@ -40,56 +41,46 @@ export class SignInComponent implements OnInit {
     private toastrService: ToastrService
     ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+        //get session storage of the loged in user
+        let user = sessionStorage.getItem("user");
+        if (user != null) {
+          this.router.navigate(['dashboard']);
+        }
+  }
 
   userLogin() {
     this.errorMessage = '';
     this.loginSuccess = false;
-    this.LoginService.login(this.formData).subscribe({
-      next: (response) => {
+    this.loading = true;
+    this.LoginService.login(this.formData).subscribe(
+      (response: any) => {
         console.log(response);
-        if (response.error) {
-          this.errorMessage = response.body.message;
-        } else {
-          this.loginSuccess = true;
-          const data = response;
-          this.token = data.token;
-          console.log(this.token);
-          if (data.user.coach === null) {
-            this.businessName = data.user.fullName;
-          } else{
-            this.businessName = data.user.coach.businessName;
-          }
-          console.log(this.businessName);
-
-          sessionStorage.setItem('token', this.token);
-          sessionStorage.setItem('businessName', this.businessName);
-          sessionStorage.setItem('user', JSON.stringify(data.user));
-          sessionStorage.setItem('notificationSettings', JSON.stringify(data.user.notificationSettings));
-          
+          this.loading = false;
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('businessName',  response.user.businessName);
+          sessionStorage.setItem('user', JSON.stringify(response.user));
+          //sessionStorage.setItem('notificationSettings', JSON.stringify(response.user.notificationSettings));
+        
+          this.loading = false;
+          window.location.reload();
           this.router.navigate(['dashboard']);
-
-          // setTimeout(() => {
-          //   location.reload();
-          // }, 4);
           this.toastrService.success(
-            'You are loggged in',
-            'Login successfull!'
+            'You are loggged in'
           );
-          console.log('here')
-
-        }
       },
-      error: (error: any): any => {
+      (error: any): any => {
+        this.loading = false;
         this.toastrService.error(
           'wrong Username/Password',
           'Failled to log in'
         );
-
         return (this.errorMessage = error.error.message);
       },
-    });
+    );
   }
+
+
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;

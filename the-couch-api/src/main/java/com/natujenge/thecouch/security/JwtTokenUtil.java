@@ -64,7 +64,7 @@ public class JwtTokenUtil implements Serializable {
 
         final Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("scopes", Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().name())));
-        claims.put("cid", user.getCoach() != null ? user.getCoach().getId(): null);
+        claims.put("cid", user != null ? user.getId(): null);
 
         return Jwts.builder().setClaims(claims).setIssuer("https://natujenge.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))

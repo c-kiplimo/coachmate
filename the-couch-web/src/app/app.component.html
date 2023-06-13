@@ -1,8 +1,16 @@
-
-<app-sidnav *ngIf="!notlogged" (onToggleSideNav)="onToggleSideNav($any($event))"></app-sidnav>
-
-<app-body 
-    [collapsed]="isSideNavCollapsed"
-    [screenWidth]="screenWidth"
-></app-body>
-<app-footer *ngIf="!notlogged" ></app-footer>
+<div class="container-fluid g-0">
+    <app-header (sideNavToggle)="sideNavStatus = $event;" *ngIf="hideHeaderAndSideNav"></app-header>
+    <main>
+      <app-sidenav [hidden]="
+      router.url.includes('signin')
+      " [sideNavStatus]="sideNavStatus" *ngIf="hideHeaderAndSideNav"
+        [ngClass]="{'app-sidenav-open': sideNavStatus}"></app-sidenav>
+  
+      <div class="display-area" [ngClass]="
+      {'display-area-shrink': sideNavStatus}">
+        <router-outlet></router-outlet>
+            <br>
+       <app-footer></app-footer>
+      </div>
+    </main>
+  </div>

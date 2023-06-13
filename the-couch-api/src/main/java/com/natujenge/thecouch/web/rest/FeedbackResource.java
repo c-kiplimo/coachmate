@@ -7,7 +7,6 @@ import com.natujenge.thecouch.web.rest.dto.FeedbackDto;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +20,8 @@ import java.util.List;
 @Slf4j
 public class FeedbackResource {
 
-    @Autowired
-    FeedbackService feedBackService;
+
+   private final FeedbackService feedBackService;
 
     // create feedback
     @PostMapping(value = "/feedback")
@@ -78,7 +77,7 @@ public class FeedbackResource {
             @RequestParam(name = "client_id",required = false) Long clientId
     ) {
         try {
-            Long coachId = userDetails.getCoach().getId();
+            Long coachId = userDetails.getId();
             log.debug(
                     "REST request to get feedback given client Id {} and coachId {}",
                     clientId,

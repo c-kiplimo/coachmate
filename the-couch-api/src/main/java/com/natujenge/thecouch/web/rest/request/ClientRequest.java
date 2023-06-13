@@ -12,15 +12,12 @@ public class ClientRequest {
     private String msisdn;
     private String email;
     private String physicalAddress;
-    private String clientNumber;
     private String profession;
     private PaymentModeSubscription paymentMode;
     private String reason;
     private String password;
-    private String token;
     private Long id;
     private Long coachId;
     private Long organizationId;
     private String createdBy;
-
 }

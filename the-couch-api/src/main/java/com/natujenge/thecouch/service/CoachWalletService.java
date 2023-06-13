@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.CoachWallet;
 import com.natujenge.thecouch.repository.CoachWalletRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,7 @@ public class CoachWalletService {
         log.info("Get coach wallet recent record for organization id {} and coach id {}", organizationId, coachId);
         // obtain latest payment Record
         Optional<CoachWallet> optionalCoachWallet = coachWalletRepository.
-                findFirstByOrganizationIdAndCoachIdOrderByIdDesc(
+                findFirstByOrganizationIdAndUserIdOrderByIdDesc(
                         organizationId, coachId);
 
         if (optionalCoachWallet.isEmpty()) {
@@ -32,7 +31,7 @@ public class CoachWalletService {
         log.info("Get coach wallet recent record for organization id {} and coach id {}", coachId);
         // obtain latest payment Record
         Optional<CoachWallet> optionalCoachWallet = coachWalletRepository.
-                findFirstByCoachIdOrderByIdDesc(coachId);
+                findFirstByUserIdOrderByIdDesc(coachId);
 
         if (optionalCoachWallet.isEmpty()) {
             throw new IllegalArgumentException("Specified wallet does not exist!!!");

@@ -1,31 +1,31 @@
 package com.natujenge.thecouch.service;
-import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.Client;
-import com.natujenge.thecouch.domain.Coach;
-import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.web.rest.dto.ListResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+
+import com.natujenge.thecouch.domain.AccountStatement;
+import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.AccountStatementRepository;
-import java.time.LocalDateTime;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
 public class AccountStatementService {
-    @Autowired
-    private AccountStatementRepository accountStatementRepository;
-    @Autowired
-    ClientWalletRepository walletRepository;
-    private StatementPeriod statementPeriod;
+
+    private final AccountStatementRepository accountStatementRepository;
+
+   private final ClientWalletRepository walletRepository;
+
+    public AccountStatementService(AccountStatementRepository accountStatementRepository, @Lazy ClientWalletRepository walletRepository) {
+        this.accountStatementRepository = accountStatementRepository;
+        this.walletRepository = walletRepository;
+    }
 
     // update account statement
-    public void updateAccountStatement(Coach coach, Client client, float amountIn, float walletBalance,
+    public void updateAccountStatement(User coach, User client, float amountIn, float walletBalance,
                                        float amountBilled) {
         log.info("Update account statement for client {} by coach {}", client.getId(), coach.getId());
 
@@ -44,7 +44,7 @@ public class AccountStatementService {
         log.info("account statement saved");
     }
 
-    public void updateAccountStatementByOrganization(Organization organization, Client client, float amountIn, float amountBilled, float paymentBalance) {
+    public void updateAccountStatementByOrganization(Organization organization, User client, float amountIn, float amountBilled, float paymentBalance) {
     }
 }
     // Get account statement by organization Id
