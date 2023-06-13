@@ -123,8 +123,8 @@ import { NotificationsService } from './services/notifications.service';
 
 
   ],
-  imports: [
-    MbscModule,
+  imports: [  
+    MbscModule, 
     BrowserModule,
     CoachEducationModule,
     ReactiveFormsModule,

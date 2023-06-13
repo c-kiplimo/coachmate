@@ -29,6 +29,8 @@ export class ClientService {
         observe: 'response',
       })
   }
+
+
   getOneSession(id: number): Observable<any> {
     return this.http.get<any>(this.baseURL + '/sessions/' + id, {
       observe: 'response',
@@ -73,7 +75,6 @@ export class ClientService {
     };
     return this.http.put<any>(this.baseURL + 'clients/change-status/' + clientId, statusForm,
       {
-
         params: options,
         observe: "response"
 
@@ -119,7 +120,7 @@ export class ClientService {
       );
     }
   getSessions(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions`,
+    return this.http.get(`${this.baseURL}sessions/filter`, //TODO: change to sessions/filter
       {
         params: options,
         observe: 'response',
@@ -127,7 +128,7 @@ export class ClientService {
   }
   // Get sessions by contractId
   getSessionsBycontractId(contractId: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions/contractSessions/` + contractId, { observe: 'response' })
+    return this.http.get(`${this.baseURL}sessions/filter` , { observe: 'response', params: { contractId: contractId } }) // added params and filter - contractSession/
   }
 
   // session actions

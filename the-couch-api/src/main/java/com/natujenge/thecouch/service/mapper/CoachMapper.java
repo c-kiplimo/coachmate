@@ -10,6 +10,7 @@ public interface CoachMapper extends EntityMapper<UserDTO, User>{
 
     UserDTO toDto(User Entity);
 
+
 //    default User fromId(Long id) {
 //        if (id == null) {
 //            return null;
