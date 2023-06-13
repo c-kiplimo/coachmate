@@ -6,6 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface NotificationMapper extends EntityMapper<NotificationDTO, Notification>{
-    @Override
+//    @Override
     NotificationDTO toDto(Notification entity);
 }

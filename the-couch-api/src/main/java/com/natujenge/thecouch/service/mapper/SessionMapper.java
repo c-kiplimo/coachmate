@@ -7,21 +7,22 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface SessionMapper extends EntityMapper<SessionDTO, Session>  {
-    @Override
-//    @Mapping(target = "sessionSchedulesId", source = "sessionSchedules.id")
-//    @Mapping(target = "sessionSchedulesOrgId", source = "sessionSchedules.orgId")
-//    @Mapping(target = "sessionSchedulesSessionDate", source = "sessionSchedules.sessionDate")
-//    @Mapping(target = "sessionSchedulesStartTime", source = "sessionSchedules.startTime")
-//    @Mapping(target = "sessionSchedulesEndTime", source = "sessionSchedules.endTime")
-//    @Mapping(target = "sessionSchedulesBooked", source = "sessionSchedules.booked")
-//    @Mapping(target = "clientId", source = "client.id")
-//    @Mapping(target = "clientFullName", source = "client.fullName")
-//    @Mapping(target = "clientType", source = "client.clientType")
-//    @Mapping(target = "clientMsisdn", source = "client.msisdn")
-//    @Mapping(target = "coachId", source = "coach.id")
-//    @Mapping(target = "contractId", source = "contract.id")
-//    @Mapping(target = "contractCoachingCategory", source = "contract.coachingCategory")
-//    @Mapping(target = "contractCoachingTopic", source = "contract.coachingTopic")
+//    @Override
+    @Mapping(target = "sessionSchedulesId", source = "sessionSchedules.id")
+    @Mapping(target = "sessionSchedulesOrgId", source = "sessionSchedules.orgId")
+    @Mapping(target = "sessionSchedulesSessionDate", source = "sessionSchedules.sessionDate")
+    @Mapping(target = "sessionSchedulesStartTime", source = "sessionSchedules.startTime")
+    @Mapping(target = "sessionSchedulesEndTime", source = "sessionSchedules.endTime")
+    @Mapping(target = "sessionSchedulesBooked", source = "sessionSchedules.booked")
+    @Mapping(target = "clientId", source = "client.id")
+    @Mapping(target = "clientFullName", source = "client.fullName")
+    @Mapping(target = "clientType", source = "client.clientType")
+    @Mapping(target = "clientMsisdn", source = "client.msisdn")
+    @Mapping(target = "coachId", source = "coach.id")
+    @Mapping(target = "contractId", source = "contract.id")
+    @Mapping(target = "contractCoachingCategory", source = "contract.coachingCategory")
+    @Mapping(target = "contractCoachingTopic", source = "contract.coachingTopic")
+
     SessionDTO toDto(Session entity);
 
 }
