@@ -39,6 +39,7 @@ export class ClientsComponent implements OnInit {
     private formbuilder: FormBuilder,) { }
   
   clients!: any;
+  all_clients!: any;
 
   clientToBeUpdated!: any;
   coachSessionData: any;
@@ -88,6 +89,8 @@ export class ClientsComponent implements OnInit {
     reason: '',
 
     });
+
+    this.getClients(this.page);
     
   }
   getClass(client: any) {
@@ -126,14 +129,13 @@ export class ClientsComponent implements OnInit {
     }else if(this.userRole == 'ORGANIZATION'){
       options.coachId = this.coachId;
     }
-
+    
     this.clientService.getClients(options).subscribe(
       (response) => {
         this.loading = false;
         this.clients = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
-        
       }, (error) => {
         this.loading = false;
         console.log(error)

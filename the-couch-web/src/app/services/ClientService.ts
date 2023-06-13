@@ -29,6 +29,8 @@ export class ClientService {
         observe: 'response',
       })
   }
+
+
   getOneSession(id: number): Observable<any> {
     return this.http.get<any>(this.baseURL + '/sessions/' + id, {
       observe: 'response',
@@ -73,7 +75,6 @@ export class ClientService {
     };
     return this.http.put<any>(this.baseURL + 'clients/change-status/' + clientId, statusForm,
       {
-
         params: options,
         observe: "response"
 
