@@ -20,4 +20,5 @@ describe('SessionViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
 });

@@ -157,9 +157,7 @@ tbody {
   }
 }
 
-.faded {
-  color: #00000073;
-}
+
 
 a {
   cursor: pointer;
@@ -333,7 +331,7 @@ a {
           background-color: transparent;
           border-radius: 50%;
           border: 1px solid #3193E6;
-          color: #3193E6;
+          color: #2b2c2d;
           padding: 3px 10px;
           margin-left: 10px;
         }
@@ -644,6 +642,9 @@ a {
     }
 
   }
+  .faded {
+    color: #00000073;
+  }
 
   .filter-section-title {
     color: #3c4043;
@@ -880,3 +881,4 @@ select {
   z-index: 0;
   /* change this value to be lower than other elements */
 }
+
