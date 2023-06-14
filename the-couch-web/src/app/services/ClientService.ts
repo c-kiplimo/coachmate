@@ -30,7 +30,7 @@ export class ClientService {
       })
   }
   getOneSession(id: number): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/sessions/' + id, {
+    return this.http.get<any>(this.baseURL + 'sessions/' + id, {
       observe: 'response',
     });
   }
@@ -145,7 +145,7 @@ export class ClientService {
 
 
   deleteSession(id: any): Observable<any> {
-    return this.http.delete(this.baseURL + `/sessions/` + id,);
+    return this.http.delete(this.baseURL + `sessions/` + id,);
   }
 
   getOrgSessions(options: any,id:any): Observable<any> {
@@ -376,7 +376,7 @@ export class ClientService {
   //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(
-      this.baseURL + '/registration/contact',
+      this.baseURL + 'registration/contact',
       message,
       {
         observe: 'response',
@@ -386,7 +386,7 @@ export class ClientService {
   //save settings service
   saveSettings(settingsObject: any): Observable<any> {
     return this.http.put<any>(
-      this.baseURL + '/settings',
+      this.baseURL + 'settings',
       settingsObject,
       { observe: 'response' }
     );
@@ -423,7 +423,7 @@ export class ClientService {
   }
   getAllNotifications(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification',
+      this.baseURL + 'notification',
       {
         params: options,
         observe: 'response',

@@ -20,7 +20,13 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/styles.scss",
+              {
+                "glob": "bootstrap.css",
+                "input": "node_modules/bootstrap/dist/css",
+                "output": "assets/css"
+              }
             ],
             "styles": [
               "node_modules/angular-calendar/css/angular-calendar.css",
