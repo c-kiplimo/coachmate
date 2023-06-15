@@ -10,6 +10,7 @@ import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
