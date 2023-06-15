@@ -19,7 +19,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 @Transactional
-
 public class SessionSchedulesService {
     private final SessionSchedulesRepository sessionSchedulesRepository;
 
