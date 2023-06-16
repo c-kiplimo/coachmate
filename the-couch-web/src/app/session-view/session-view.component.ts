@@ -176,6 +176,7 @@ export class sessionViewComponent implements OnInit {
       }
     );
   }
+  
   editSession(session: any) {
     this.currentSession = session;
     console.log(this.currentSession);
@@ -336,16 +337,18 @@ export class sessionViewComponent implements OnInit {
       sessionId: this.sessionId,
       coachId: this.coachId,
       clientId: this.clientId,
-
     };
+    
     console.log(params);
     console.log(this.feebackForm.value);
+    
     this.feedbackService.addFeedback(this.feebackForm.value, params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Feedback added successfully', 'Success!', { timeOut: 8000 });
-        this.addfeedbackModal.nativeElement.classList.remove('show');
-        this.addfeedbackModal.nativeElement.style.display = 'none';
+        
+        // Close the feedback form
+        this.closeFeedbackForm();
       },
       (error) => {
         console.log(error);
@@ -353,6 +356,12 @@ export class sessionViewComponent implements OnInit {
       }
     );
   }
+  
+  closeFeedbackForm() {
+    this.addfeedbackModal.nativeElement.classList.remove('show');
+    this.addfeedbackModal.nativeElement.style.display = 'none';
+  }
+  
 
   onFileSelected(event: Event) {
     const files = (event.target as HTMLInputElement).files;
