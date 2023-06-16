@@ -8,16 +8,15 @@
   <div class="col-md-12">
     <div class="card text-center top-cards row dashboard-banner d-flex justify-content-between align-items-center p-3">
       <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <h5 class="card-title">Education Hours</h5>
-            <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
-          </div>
-          <div class="col">
-            <button type="button" routerLink="/AddTraining" class="btn btn-success" style="transform: translateX(9cm) translateY(0.3cm) ;" >
-              <i class="fa fa-plus"></i> Add Education
-            </button>
-          </div>
+  
+        <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="card-title">Education Hours</h5>
+              <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
+            </div>
+          <button type="button" routerLink="/AddTraining" class="btn" style="color: white;">
+            <i class="fa fa-plus"></i> Add Education
+          </button>
         </div>
       </div>
     </div>
