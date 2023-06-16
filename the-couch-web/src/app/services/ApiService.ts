@@ -95,7 +95,7 @@ export class ApiService {
   //confirm registration service
   confirmMobileNumber(token: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + 'registration/confirm?token=' + token,
+      this.baseURL + '/registration/confirm?token=' + token,
       {
         observe: 'response',
       }
