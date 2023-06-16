@@ -309,8 +309,8 @@ return  contract;
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
                 .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded","client.locked", "client.enabled","client.onboarded")
-
                 .withIgnoreNullValues();
+
         Example<Contract> example = Example.of(contract, matcher);
         return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
 

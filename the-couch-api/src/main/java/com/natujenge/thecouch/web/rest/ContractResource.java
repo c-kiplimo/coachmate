@@ -114,7 +114,7 @@ public class ContractResource {
     }
 
     @GetMapping("/filter")
-    ResponseEntity<List<ContractDTO>> filterFarmers(@RequestParam(name = "client_id", required = false) Long clientId,
+    ResponseEntity<List<ContractDTO>> filterFarmers(@RequestParam(name = "clientId", required = false) Long clientId,
 
                                                     @RequestParam(name = "search", required = false) String search,
                                                     Pageable pageable,
@@ -127,7 +127,7 @@ public class ContractResource {
         UserRole userRole = userDetails.getUserRole();
         Long userId= userDetails.getId();
 
-        Page<ContractDTO> contractPage = contractService.filter(userId,clientId , userRole,search, organisationId, pageable);
+        Page<ContractDTO> contractPage = contractService.filter(userId, clientId , userRole, search, organisationId, pageable);
         log.info("filtered {}",contractPage.getContent());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
         return ResponseEntity.ok().headers(headers).body(contractPage.getContent());
