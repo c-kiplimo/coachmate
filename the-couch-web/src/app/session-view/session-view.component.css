@@ -1,3 +1,10 @@
+.tabs-section .btn-tabs {
+  margin-right: 18px;
+}
+
+.tabs-section {
+  margin-bottom: 20px;
+}
 
 
 .feedback-section {
@@ -6,9 +13,6 @@
 
 .attachments-section {
   margin-top: 20px;
-}
-.btn-tabs {
-  font-size: 20px; /* Adjust the font size as desired */
 }
 
 .btn-tabs:focus {

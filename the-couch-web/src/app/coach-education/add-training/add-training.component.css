@@ -10,7 +10,7 @@
 
 .card {
     
-        color: #1B3A27;
+        color: black;
         text-decoration: none;
     }
 .input-error{
@@ -19,9 +19,7 @@
 .back-link{
     cursor: pointer;
 }
-    :hover {
-    color: #0d7d9a;
-}
+
 fa-icon{
     font-size:larger;
    

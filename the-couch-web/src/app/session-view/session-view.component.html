@@ -116,15 +116,16 @@
     <div class="card">
       <div class="card-body">
         <div class="tabs-section">
-          <button *ngIf="this.userRole == 'COACH'" class="btn btn-tabs btn-lg fw-bold me-3" (click)="toggleTab('feedback')"
+          <button *ngIf="userRole === 'COACH'" class="btn btn-tabs btn-lg fw-bold me-3" (click)="toggleTab('feedback')"
             [ngClass]="{ 'active-tab': currentTab === 'feedback' }">
-            <span class="d-none d-sm-inline">Feedback</span>
+            <span class="d-none d-sm-inline" style="font-size: 20px;">Feedback</span>
           </button>
           <button class="btn btn-tabs btn-lg fw-bold" (click)="toggleTab('attachments')"
             [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
-            <span class="d-none d-sm-inline">Attachments</span>
+            <span class="d-none d-sm-inline" style="font-size: 20px;">Attachments</span>
           </button>
         </div>
+        
         
         <div class="feedback-section" *ngIf="currentTab === 'feedback'" [@fadeIn]>
           <div class="row">
