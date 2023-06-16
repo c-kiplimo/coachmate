@@ -197,7 +197,7 @@ export class ApiService {
 
   //COACH SESSION SLOTS
   addSlot(slot: any, options: any): Observable<any> {
-    return this.http.post<any>(this.baseURL + '/sessionSchedules', slot, {
+    return this.http.post<any>(this.baseURL + '/sessionSchedules', slot, { //to check
       params: options,
       observe: 'response',
     });

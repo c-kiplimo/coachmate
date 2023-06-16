@@ -112,7 +112,7 @@ export class ContractDetailsComponent implements OnInit {
       console.log(this.contract);
       const contractId = params['id'];
       console.log("contract id gottten", contractId);
-      this.getSessionsBycontractId(contractId)
+      this.getSessionsBycontractId(contractId);
 
   }
   )},
@@ -219,7 +219,7 @@ closeModal() {
         this.sessions = data.body;
         console.log(this.sessions);
         this.loading = false;
-        console.log("sessions gotten here",this.sessions)
+        console.log("sessions gotten here",this.sessions);
       },
       (error: any) => {
         console.log(error);

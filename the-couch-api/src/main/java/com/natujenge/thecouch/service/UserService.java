@@ -17,10 +17,7 @@ import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -477,6 +474,7 @@ public class UserService implements UserDetailsService {
         //return example
         return userRepository.findAll(example, pageable).map(clientMapper::toDto);
     }
+
 
     public User editClient(Long clientId, User userDetails, ClientRequest clientRequest) {
         log.info("Request to edit client: {}", clientRequest);

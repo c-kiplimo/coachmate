@@ -14,8 +14,8 @@
             <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
           </div>
           <div class="col">
-            <button type="button" routerLink="/AddTraining" class="btn btn-success">
-              <i class="fa fa-plus"></i>Add Education
+            <button type="button" routerLink="/AddTraining" class="btn btn-success" style="transform: translateX(9cm) translateY(0.3cm) ;" >
+              <i class="fa fa-plus"></i> Add Education
             </button>
           </div>
         </div>
@@ -28,7 +28,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
-        <table class="table">
+        <table class="table"*ngIf="coachEducationData.length > 0">
           <thead>
             <tr>
               <th scope="col">Course Name</th>
