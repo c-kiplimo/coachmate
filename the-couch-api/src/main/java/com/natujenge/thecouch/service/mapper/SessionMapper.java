@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface SessionMapper extends EntityMapper<SessionDTO, Session>  {
-    @Override
     @Mapping(target = "sessionSchedulesId", source = "sessionSchedules.id")
     @Mapping(target = "sessionSchedulesOrgId", source = "sessionSchedules.orgId")
     @Mapping(target = "sessionSchedulesSessionDate", source = "sessionSchedules.sessionDate")
@@ -22,6 +21,8 @@ public interface SessionMapper extends EntityMapper<SessionDTO, Session>  {
     @Mapping(target = "contractId", source = "contract.id")
     @Mapping(target = "contractCoachingCategory", source = "contract.coachingCategory")
     @Mapping(target = "contractCoachingTopic", source = "contract.coachingTopic")
+
+    @Override
     SessionDTO toDto(Session entity);
 
 }

@@ -84,11 +84,9 @@ public class FeedbackService {
 
 
     public List<FeedbackDto> getFeedbackBySessionId(Long sessionId) {
-        log.info("Request to get feedback by session id: {} and coachId : {}", sessionId);
+        log.info("Request to get feedback by session id: {}", sessionId);
 
-        List<FeedbackDto> feedbackOptional = feedbackRepository.findBySessionId(sessionId);
-
-        return feedbackOptional;
+        return feedbackRepository.findBySessionId(sessionId);
     }
 
     public FeedbackDto getFeedbackByClientId(Long clientId, Long coachId) {
@@ -111,6 +109,7 @@ public class FeedbackService {
 
     public List<FeedbackDto> getCoachFeedback(Long coachId) {
         Optional<User> optionalCoach = userRepository.findById(coachId);
-        return feedbackRepository.findByCoach(optionalCoach.get());
+        System.out.println("\nFeedback: " + feedbackRepository.findByCoachId(optionalCoach.get().getId()));
+        return feedbackRepository.findByCoachId(optionalCoach.get().getId());
     }
 }

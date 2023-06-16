@@ -26,9 +26,9 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
-              "src/styles.scss",
-              "./node_modules/@mobiscroll/angular/dist/css/mobiscroll.min.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -100,6 +100,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.scss"
             ],

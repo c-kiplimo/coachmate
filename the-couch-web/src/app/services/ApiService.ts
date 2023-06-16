@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class ApiService {
-  baseURL: string = environment.apiURL + '/api/';
+  baseURL: string = environment.apiURL + '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -197,7 +197,7 @@ export class ApiService {
 
   //COACH SESSION SLOTS
   addSlot(slot: any, options: any): Observable<any> {
-    return this.http.post<any>(this.baseURL + '/sessionSchedules', slot, {
+    return this.http.post<any>(this.baseURL + '/sessionSchedules', slot, { //to check
       params: options,
       observe: 'response',
     });
