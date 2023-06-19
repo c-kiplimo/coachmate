@@ -20,6 +20,9 @@ export class SupportComponent implements OnInit {
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
+  isCollapseOpen: boolean = false;
+  isCollapseOpen2: boolean = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,6 +37,14 @@ export class SupportComponent implements OnInit {
       message: '',
     });
   }
+
+  toggleCollapse() {
+    this.isCollapseOpen = !this.isCollapseOpen;
+  }
+  toggleCollapse2() {
+    this.isCollapseOpen2 = !this.isCollapseOpen2;
+  }
+
 title: any;
 contactUsMessage() {
   console.log(this.contactForm.value);

@@ -27,7 +27,11 @@
               </div>
               <div class="d-flex justify-content-between onedetail">
                 <span class="title">Contract Status:</span>
-                <span class="value">{{ contract.contractStatus }}</span>
+                <span class="badge-primary" [ngClass]="{
+                  'badge-success': sessions?.sessionStatus === 'CONFIRMED',
+                  'badge-danger': sessions?.sessionStatus === 'CANCELLED',
+                  'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'CONDUCTED'
+                }">{{ contract.contractStatus }}</span>
               </div>
               <div class="d-flex justify-content-between onedetail">
                 <span class="title">Start Date:</span>

@@ -152,6 +152,7 @@ export class ClientViewComponent implements OnInit {
     this.userRole = this.user.userRole;
     this.route.params.subscribe((params) => {
       this.clientId = params['id'];
+      this.id = params['id'];
     });
 
     if (this.userRole == 'COACH') {

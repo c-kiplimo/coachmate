@@ -72,7 +72,6 @@
 
       </div>
 
-
       <div class="d-flex justify-content-between border-0 position-relative" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Deposit percentage</span>
         <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.depositPercentage ?? 'not set'}}</span>

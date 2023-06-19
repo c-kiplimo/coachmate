@@ -8,6 +8,7 @@ import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -77,7 +78,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: SessionsService,
-    private contractsService: ContractsService
+    private contractsService: ContractsService,
   ) { }
 
   ngOnInit(): void {
@@ -98,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
       this.getRecentSessions(this.page);
       this.getAllContracts(this.page);
+      this.getClients(this.page);
 
       // t.getAllContracts
       // t.getAllContracts
@@ -110,12 +112,12 @@ export class DashboardComponent implements OnInit {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
-      // this.getOrgClients();
+      this.getOrgClients();
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
       // console.log(this.orgSession);
-      // this.getOrgContracts(this.orgId);
-      // this.getAllOrgSessions(this.orgId);
+      this.getOrgContracts(this.orgId);
+      this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
       // this.getOrgCoaches(this.orgId);
 
@@ -124,15 +126,10 @@ export class DashboardComponent implements OnInit {
 
       this.getRecentSessions(this.page);
       this.getAllContracts(this.page);
-
-
       // console.log('not coach');
       // this.getClientContracts(this.user.id);
       // this.getClientSessions(this.user.id);
-
-
     }
-
 
   }
 
@@ -209,6 +206,7 @@ export class DashboardComponent implements OnInit {
         console.log("res",res);
         this.contracts = res.body;
         this.loading = false;
+        this.numberOfContracts = this.contracts.length;
       }, (err: any) => {
         console.log(err);
         this.loading = false;
@@ -216,7 +214,6 @@ export class DashboardComponent implements OnInit {
     );
 
   }
-
 
   getCoachFeedbacks(coachId: any) {
     this.loading = true;
@@ -262,9 +259,7 @@ export class DashboardComponent implements OnInit {
   }
   // get all feedbacks overrall score and get a percentage
   getAllOrgSessions(id: any) {
-
     this.sessions = [];
-
 
     const options = {
       page: 1,
@@ -314,7 +309,6 @@ export class DashboardComponent implements OnInit {
           }
         }
 
-
         this.numberOfHours = Math.floor(totalMinutes / 60);
         this.numberOfMinutes = totalMinutes - this.numberOfHours * 60;
 
@@ -324,8 +318,6 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
-
 
   getOrgContracts(id: any) {
     this.loading = true;
@@ -365,34 +357,52 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-
-
-
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
 
-  getClients() {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
+  getClients(page: any) {
+ 
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
       status: this.filters.status,
       search: this.filters.searchItem,
+      sort: 'id,desc',
     };
-    this.clientService.getClients(options).subscribe(
-      (response: any) => {
-        console.log('here clients=>', response.body.data);
-        this.clients = response.body.data;
 
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.coachId = this.coachId;
+    }
+    
+    this.clientService.getClients(options).subscribe(
+      (response) => {
+        this.loading = false;
+        this.clients = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
         this.numberOfClients = this.clients.length;
-        console.log(this.numberOfClients);
-      },
-      (error: any) => {
-        console.log(error);
+        console.log('clients',this.clients)
+      }, (error) => {
+        this.loading = false;
+        console.log(error)
       }
-    );
+    )
   }
+
+
   navigateToTerms(id: any) {
     console.log("contractId on navigate", id);
     this.contractId = id;
@@ -465,20 +475,20 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getNoOfContracts() {
-    this.clientService.getContracts().subscribe(
-      (response: any) => {
+  // getNoOfContracts() {
+  //   this.clientService.getContracts().subscribe(
+  //     (response: any) => {
 
-        this.contracts = response.body;
-        console.log(this.contracts);
-        this.numberOfContracts = this.contracts.length;
-        console.log(this.numberOfContracts);
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+  //       this.contracts = response.body;
+  //       console.log(this.contracts);
+  //       this.numberOfContracts = this.contracts.length;
+  //       console.log(this.numberOfContracts);
+  //     },
+  //     (error: any) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
 
   navigateToContractDetail(id: any) {

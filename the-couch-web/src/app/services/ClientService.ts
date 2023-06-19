@@ -32,7 +32,7 @@ export class ClientService {
 
 
   getOneSession(id: number): Observable<any> {
-    return this.http.get<any>(this.baseURL + '/sessions/' + id, {
+    return this.http.get<any>(this.baseURL + 'sessions/' + id, {
       observe: 'response',
     });
   }
@@ -57,6 +57,7 @@ export class ClientService {
     // Return an observable with a user-facing error message
     return throwError(errorMessage);
   }
+
   suspendClient(clientData: any): Observable<any> {
     return this.http.put(`${this.baseURL}clients`, clientData)
   }
@@ -109,16 +110,17 @@ export class ClientService {
   getContract(id: any): Observable<any> {
     return this.http.get<any>(this.baseURL + 'contracts/' + id, { observe: 'response' });
   }
-    // change contract status
-    changeContractStatus(contractId: any, data: any): Observable<any> {
-
-      return this.http.put<any>(
+    
+  // change contract status
+  changeContractStatus(contractId: any, data: any): Observable<any> {
+    return this.http.put<any>(
         this.baseURL + 'contracts/changeContractStatus/' + contractId + "?status=" + data.status,
         {
           observe: 'response',
         }
       );
-    }
+  }
+
   getSessions(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}sessions/filter`, //TODO: change to sessions/filter
       {
@@ -136,6 +138,7 @@ export class ClientService {
     console.log(session);
     return this.http.post(`${this.baseURL}sessions`, session, { params: params })
   }
+
   editSession(data: any, id: any): Observable<any> {
     console.log("edit session reached")
     console.log("session  to be updated here", data)
@@ -143,10 +146,8 @@ export class ClientService {
     return this.http.put(`${this.baseURL}sessions/${id}`, data)
   }
 
-
-
   deleteSession(id: any): Observable<any> {
-    return this.http.delete(this.baseURL + `/sessions/` + id,);
+    return this.http.delete(this.baseURL + `sessions/` + id,);
   }
 
   getOrgSessions(options: any,id:any): Observable<any> {
@@ -156,12 +157,11 @@ export class ClientService {
     });
   }
 
-
-
   getClientSessions(clientId: any): Observable<any> {
     console.log("Get Sessions reached!");
     return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId, { observe: 'response' })
   }
+
   changeSession(coachId: any, data: any): Observable<any> {
     console.log("change session status reached")
     console.log("client id", coachId)
@@ -173,13 +173,13 @@ export class ClientService {
       }
     );
   }
+
   getFeedback(params: any): Observable<any> {
     return this.http.get(`${this.baseURL}feedback/get-by-session-id`, {
       params: params,
       observe: 'response'
     })
   }
-  
 
   //ORGANIZATION SERVICES
   getOrganization(data: any): Observable<any> {
@@ -191,6 +191,7 @@ export class ClientService {
     console.log("data", data)
     return this.http.get(`${this.baseURL}organizations/getCoachesByOrgId`, { params: data })
   }
+
   getOrgClients(id: any): Observable<any> {
     return this.http.get(`${this.baseURL}clients/getOrgClients/` + id, { observe: 'response' });
   }
@@ -206,6 +207,7 @@ export class ClientService {
   getCoachFeedbacks(id: any): Observable<any> {
     return this.http.get(`${this.baseURL}feedback/getCoachFeedbacks/` + id, { observe: 'response' });
   }
+
   // FEEDBACK SERVICES
   addFeedback(feedback: any, options: any): Observable<any> {
     return this.http.post<any>(this.baseURL + 'feedback/upload', feedback, {
@@ -213,6 +215,7 @@ export class ClientService {
       observe: 'response',
     });
   }
+
   // ATTACHMENT SERVICES
   addAttachment(formData: any, options: any, headers: any): Observable<any> {
     const data = new FormData();
@@ -231,14 +234,13 @@ export class ClientService {
       }
     );
   }
+
   getAttachment(params: any): Observable<any> {
     return this.http.get(`${this.baseURL}attachments/get-by-session-id`, {
       params: params,
       observe: 'response'
     })
   }
-
-
 
   //PAYMENT SERVICES
   recordPayment(payment: any): Observable<any> {
@@ -255,30 +257,35 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   getPaymentsByClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filter-by-client-id`, {
       params: options,
       observe: 'response'
     })
   }
+
   filterByClientNameAndDate(options:any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByClientNameAndDate`, {
       params: options,
       observe: 'response'
     })
   }
+
   getPaymentsByClientIdAndCoachId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByClientIdAndCoachId`, {
       params: options,
       observe: 'response'
     })
   }
+
   getPaymentsByOrganizationId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByOrgId`, {
       params: options,
       observe: 'response'
     })
   }
+
   getPaymentsByOrgIdAndClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByOrgIdAndClientId`, {
       params: options,
@@ -292,6 +299,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //getPaymentByCoachIdAndSelectedPeriod
   getPaymentsByCoachIdAndSelectedPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`, {
@@ -299,6 +307,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //getPaymentByClientIdAndSelectedPeriod
   getPaymentsByClientIdAndSelectedPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByClientIdAndStatementPeriod`, {
@@ -307,6 +316,7 @@ export class ClientService {
     })
 
   }
+
   //getPaymentByOrgIdAndSelectedPeriod
   getPaymentsByOrgIdAndSelectedPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByOrganizationIdAndStatementPeriod`, {
@@ -315,7 +325,6 @@ export class ClientService {
     })
   }
 
-
   //get statement by coach id
   getAccountStatementByCoachId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByCoachId`, {
@@ -323,6 +332,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //get statement by client id
   getAccountStatementByClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByClientId`, {
@@ -330,6 +340,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //get statement by organization id
   getAccountStatementByOrgId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByOrgId`, {
@@ -337,6 +348,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //get statement by organization id and client id
   getAccountStatementByOrgIdAndClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByOrgIdAndClientId`, {
@@ -344,6 +356,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //get statement by coach id and client id
   getAccountStatementByCoachIdAndClientId(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByCoachIdAndClientId`, {
@@ -351,6 +364,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //getAccountStatementByCoachIdAndSelectedPeriod
   getAccountStatementByCoachIdAndStatementPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByCoachIdAndStatementPeriod`, {
@@ -358,6 +372,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //getAccountStatementByClientIdAndSelectedPeriod
   getAccountStatementByClientIdAndStatementPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByClientIdAndStatementPeriod`, {
@@ -365,6 +380,7 @@ export class ClientService {
       observe: 'response'
     })
   }
+
   //getAccountStatementByOrgIdAndSelectedPeriod
   getAccountStatementByOrgIdAndStatementPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}statement/filterByOrgIdAndStatementPeriod`, {
@@ -377,17 +393,18 @@ export class ClientService {
   //contact us  message
   contactUsMessage(message: any): Observable<any> {
     return this.http.post<any>(
-      this.baseURL + '/registration/contact',
+      this.baseURL + 'registration/contact',
       message,
       {
         observe: 'response',
       }
     );
   }
+
   //save settings service
   saveSettings(settingsObject: any): Observable<any> {
     return this.http.put<any>(
-      this.baseURL + '/settings',
+      this.baseURL + 'settings',
       settingsObject,
       { observe: 'response' }
     );
@@ -404,6 +421,7 @@ export class ClientService {
       }
     );
   }
+
   getNotificationsbyCoachId(options: any): Observable<any> {
     return this.http.get<any>(
       this.baseURL + 'notification/filter-by-coach-id',
@@ -413,6 +431,7 @@ export class ClientService {
       }
     );
   }
+
   getNotificationsbyClientId(options: any): Observable<any> {
     return this.http.get<any>(
       this.baseURL + 'notification/filter-by-client-id',
@@ -422,9 +441,10 @@ export class ClientService {
       }
     );
   }
+  
   getAllNotifications(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + '/notification',
+      this.baseURL + 'notification',
       {
         params: options,
         observe: 'response',

@@ -1,7 +1,9 @@
 
-
-  <br>
-
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-bold">Feedbacks</h3>
+  </div>
+</div>
   <div class="row list-container container ">
     <table class="table">
       <thead>
@@ -20,16 +22,14 @@
   
       <tbody>
         <tr *ngFor="let feedback of feedbacks">
-      
-         
-          <td>{{ feedback.session.name }}</td>
-          <td>{{ feedback.client.firstName }}</td>
-          <td>{{ feedback.availabilityScore }}</td>
-          <td>{{ feedback.clarificationScore }}</td>
-          <td>{{ feedback.emotionalIntelligenceScore }}</td>
-          <td>{{ feedback.listeningSkillsScore }}</td>
-          <td>{{ feedback.understandingScore }}</td>
-          <td>{{ feedback.overallScore }}</td>
+          <td>{{ feedback?.session.name }}</td>
+          <td>{{ feedback?.client.firstName }}</td>
+          <td>{{ feedback?.availabilityScore }}</td>
+          <td>{{ feedback?.clarificationScore }}</td>
+          <td>{{ feedback?.emotionalIntelligenceScore }}</td>
+          <td>{{ feedback?.listeningSkillsScore }}</td>
+          <td>{{ feedback?.understandingScore }}</td>
+          <td>{{ feedback?.overallScore }}</td>
           <td>     <button class="btn btn-success"
             data-bs-toggle="modal"
           data-bs-target="#feedbackModal"
@@ -38,14 +38,13 @@
             <i   class="fa-solid fa-arrow-up-right-from-square"></i>
             Comments
           </button></td>
-          
         </tr>
       </tbody>
     </table>
     <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
       <div class="donut multi"></div>
     </div>
-    <p class="text-muted mt-5" *ngIf="!loading && !feedbacks">
+    <p class="text-muted mt-5" *ngIf="!loading && !feedbacks?.length">
       No feedbacks Found.
     </p>
   </div>

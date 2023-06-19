@@ -29,6 +29,7 @@ import { ClientService } from '../services/ClientService';
 import { SessionsService } from '../services/SessionsService';
 
 import { setOptions, MbscDatepicker } from '@mobiscroll/angular';
+import { Router } from '@angular/router';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -116,7 +117,10 @@ export class SchedulesComponent implements OnInit {
   activeDayIsOpen: boolean = true;
   modal: any;
 
-  constructor(private sessionService: SessionsService) { }
+  constructor(
+    private sessionService: SessionsService,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user');
@@ -173,10 +177,10 @@ export class SchedulesComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    // this.modalData = { event, action };
-    // this.modal.open(this.modalContent, { size: 'lg' });
+  //   this.modalData = { event, action };
+  //   this.modal.open(this.modalContent, { size: 'lg' });
 
-   // this.router.navigate(['/terms', id]);
+  //  this.router.navigate(['/terms', this.coachData.id]);
   }
 
   addEvent(): void {

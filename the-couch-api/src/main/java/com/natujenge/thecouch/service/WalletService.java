@@ -185,11 +185,8 @@ public class WalletService {
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getCoachId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if (previousWalletRecord.get().getWalletBalance().equals(null)) {
-            prevWalletBalance = 0;
-        } else {
-            prevWalletBalance = previousWalletRecord.get().getWalletBalance();
-        }
+        previousWalletRecord.get();
+        prevWalletBalance = previousWalletRecord.get().getWalletBalance();
 
         ClientWallet clientWallet = new ClientWallet();
         clientWallet.setAmountDeposited(paymentRequest.getAmount());
@@ -488,6 +485,7 @@ public class WalletService {
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
+        System.out.println(coachId);
 
         return new ListResponse(walletPage.getContent(),
                 walletPage.getTotalPages(), walletPage.getNumberOfElements(),
