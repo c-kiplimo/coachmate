@@ -23,6 +23,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
 
     List<FeedbackDto> findByOrganization(Organization orgId);
 
+    List<FeedbackDto> findByCoachId(Long coachId);
 
     List<FeedbackDto> findByCoach(User id);
 }

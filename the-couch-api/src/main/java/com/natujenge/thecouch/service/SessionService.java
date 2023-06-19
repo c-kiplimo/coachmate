@@ -10,6 +10,7 @@ import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.SessionRequest;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -34,7 +35,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 @Transactional
-
 public class SessionService {
 
     private final JdbcTemplate jdbcTemplate;
@@ -304,6 +304,7 @@ public class SessionService {
             log.info("Session date at {} ", sessionDate);
             return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
         }
+
         return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
     }
     public Specification<Session> getSpecFromDatesAndExample(
@@ -321,4 +322,5 @@ public class SessionService {
             return builder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
     }
+
 }

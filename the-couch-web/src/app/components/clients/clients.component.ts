@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ClientsComponent implements OnInit {
   clientId: any;
   editedClient: any;  
-salesData: any;
+  salesData: any;
   loading = false;
   itemsPerPage = 20;
   filters: any = {
@@ -39,6 +39,7 @@ salesData: any;
     private formbuilder: FormBuilder,) { }
   
   clients!: any;
+  all_clients!: any;
 
   clientToBeUpdated!: any;
   coachSessionData: any;
@@ -88,6 +89,8 @@ salesData: any;
     reason: '',
 
     });
+
+    this.getClients(this.page);
     
   }
   getClass(client: any) {
@@ -126,14 +129,13 @@ salesData: any;
     }else if(this.userRole == 'ORGANIZATION'){
       options.coachId = this.coachId;
     }
-
+    
     this.clientService.getClients(options).subscribe(
       (response) => {
         this.loading = false;
         this.clients = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
-        
       }, (error) => {
         this.loading = false;
         console.log(error)

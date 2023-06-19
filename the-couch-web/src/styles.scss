@@ -880,5 +880,11 @@ select {
 .input-group {
   z-index: 0;
   /* change this value to be lower than other elements */
+
 }
+
+}
+@import "~@mobiscroll/angular/dist/css/mobiscroll.scss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
