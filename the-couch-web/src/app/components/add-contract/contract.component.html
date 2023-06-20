@@ -108,38 +108,27 @@
             </div>
           </div>
         </section>
-        <div class="d-flex justify-content-end mb-3">
-          <button class="btn btn-add ms-4" *ngIf="!editingSettings" [@fadeIn] (click)="toggleEditingSettings()"
-            [disabled]="disableButton">
-            Edit
-          </button>
-        </div>
-        <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#collapseService"
-          aria-expanded="false" aria-controls="collapseService">
+        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false" aria-controls="collapseService" (click)="toggleEditingSettings()" [disabled]="disableButton">
           <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
         <div class="collapse" id="collapseService">
           <div class="card card-body">
             <div class="row">
               <div class="col-10">
-
                 <div class="form-group">
-                  <span class="description" *ngIf="!editingSettings"
-                    [@fadeIn]>{{contractTemplates?.servicesTemplate}}</span>
-                  <textarea name="servicesTemplate" class="form-control" id="servicesTemplate"
-                    aria-describedby="servicesTemplate" rows="4" formControlName="services"
-                    *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
-              </textarea>
+                  <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.servicesTemplate}}</span>
+                  <textarea name="servicesTemplate" class="form-control no-box-shadow" id="servicesTemplate" aria-describedby="servicesTemplate" rows="4" formControlName="services" *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving"></textarea>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
+        
+        
         <div class="input-group mb-3">
 
           <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms"
-            aria-expanded="false" aria-controls="collapseTerms">
+            aria-expanded="false" aria-controls="collapseTerms"(click)="toggleEditingSettings()" [disabled]="disableButton">
             <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
           </button>
           <br />
@@ -162,7 +151,7 @@
           </div>
           <div class="input-group mb-3">
             <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePractice"
-              aria-expanded="false" aria-controls="collapsePractice">
+              aria-expanded="false" aria-controls="collapsePractice" (click)="toggleEditingSettings()" [disabled]="disableButton">
               <h3>Practice <i class="fa fa-arrow-circle-down"></i></h3>
             </button>
 
@@ -193,7 +182,14 @@
                 </div>
               </div>
           </div>
-
-          <button type="button" (click)="addContract()" class="btn btn-success">
-            submit
-          </button>
+         <div class="row">
+          <div class="col-md-12">
+            <div class="d-flex  justify-content-between ">
+              <p></p>
+             <button type="button" (click)="addContract()" class="btn btn-success ">
+               Submit
+             </button>
+             </div>
+          </div>
+         </div>
+          
