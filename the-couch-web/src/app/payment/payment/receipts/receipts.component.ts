@@ -143,7 +143,7 @@ payment: any;
     this.ClientService.getPaymentsByCoachId(options).subscribe(
       (response) => {
           this.loading = false;
-          this.payments = response.body;
+          this.payments = response.body.data;
           console.log('payments', this.payments);
         }, (error) => {
         console.log(error);

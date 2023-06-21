@@ -10,6 +10,7 @@ import com.natujenge.thecouch.repository.NotificationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
+import com.natujenge.thecouch.web.rest.dto.ClientDTO;
 import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
@@ -50,11 +51,12 @@ public class ClientWalletService {
     private final NotificationSettingsService notificationSettingsService;
 
     private final ClientWalletRepository walletRepository;
+    private final WalletService walletService;
 
 
     private final ModelMapper modelMapper;
 
-    public ClientWalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, UserRepository userRepository, CoachWalletService coachWalletService, OrganizationWalletService organizationWalletService, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, ClientWalletRepository walletRepository, ModelMapper modelMapper) {
+    public ClientWalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, UserRepository userRepository, CoachWalletService coachWalletService, OrganizationWalletService organizationWalletService, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, ClientWalletRepository walletRepository, ModelMapper modelMapper, WalletService walletService) {
         this.clientWalletRepository = clientWalletRepository;
         this.notificationRepository = notificationRepository;
         this.clientBillingAccountRepository = clientBillingAccountRepository;
@@ -66,6 +68,7 @@ public class ClientWalletService {
         this.notificationSettingsService = notificationSettingsService;
         this.walletRepository = walletRepository;
         this.modelMapper = modelMapper;
+        this.walletService = walletService;
     }
 
     // Obtain the recent wallet account for the given client
@@ -84,11 +87,9 @@ public class ClientWalletService {
         Optional<ClientWallet> optionalClientWallet = clientWalletRepository
                 .findFirstByCoachIdAndClientIdOrderByIdDesc(coachId, clientId);
 
-        if (optionalClientWallet.isEmpty()) {
-            throw new IllegalArgumentException("Specified wallet does not exist!!!");
-        }
+        //            throw new IllegalArgumentException("Specified wallet does not exist!!!");
+        return optionalClientWallet.orElseGet(ClientWallet::new);
 
-        return optionalClientWallet.get();
     }
 
 
@@ -111,7 +112,16 @@ public class ClientWalletService {
                 findFirstByCoachIdAndClientIdOrderByIdDesc(coach.getId(), client.getId());
 
         if(optionalClientBillingAccount.isEmpty()){
-            throw new IllegalArgumentException("Client Billing Account not found!");
+            // create new billing account
+            ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
+            clientBillingAccount.setCoach(coach);
+            clientBillingAccount.setClient(client);
+            clientBillingAccount.setCreatedBy(coach.getFullName());
+            clientBillingAccount.setLastUpdatedAt(LocalDateTime.now());
+            clientBillingAccount.setAmountBilled(amountIn);
+            clientBillingAccountRepository.save(clientBillingAccount);
+            return clientBalance;
+//            throw new IllegalArgumentException("Client Billing Account not found!");
         }
         CoachWallet coachWallet = coachWalletService.getWalletRecentRecord(coach.getId());
 
@@ -309,7 +319,7 @@ public class ClientWalletService {
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getCoachId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if(previousWalletRecord.get().getWalletBalance().equals(null)){
+        if(previousWalletRecord.get().getWalletBalance() == null){
              prevWalletBalance = 0;
         }else {
              prevWalletBalance = previousWalletRecord.get().getWalletBalance();
@@ -351,6 +361,16 @@ public class ClientWalletService {
 
         // save wallet
         ClientWallet clientWallet1 = clientWalletRepository.save(clientWallet);
+
+        // update payments table
+        Payment payment = new Payment();
+        payment.setAmount(paymentRequest.getAmount());
+        payment.setBalanceAfter(walletBalanceAfter);
+        payment.setExtPaymentRef(paymentRequest.getExtPaymentRef());
+        payment.setModeOfPayment(paymentRequest.getModeOfPayment());
+        payment.setCreatedAt(LocalDateTime.now());
+        payment.setClient(client);
+        payment.setCoach(coach);
 
 
         log.info("Wallet successfully saved");
