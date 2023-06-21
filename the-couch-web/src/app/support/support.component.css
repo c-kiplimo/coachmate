@@ -5,6 +5,19 @@
     justify-content: center;
 }
 .sub-titles {
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+mat-expansion-panel {
+    border-bottom: 0.2px solid #f5f1f1;
+}
+mat-panel-title {
+    font-weight: 400;
+    font-size: 1.2rem;
+}
+p {
     font-weight: 400;
     font-size: 1.0rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-top: 10px;
 }

@@ -241,6 +241,7 @@ export class ClientViewComponent implements OnInit {
     );
   }
   getNotifications(page: any) {
+    this.loading = true;
     const options = {
       page: page,
       size: this.pageSize,
@@ -248,9 +249,9 @@ export class ClientViewComponent implements OnInit {
       clientId: this.clientId,
     };
 
-    this.loading = true;
-    this.notificationsService.getNotifications(options).subscribe((res: any) => {
-      this.notifications = res.body;
+    this.loading = false;
+    this.notificationsService.getNotifications(options).subscribe((response: any) => {
+      this.notifications = response.body;
       console.log('notification ni', this.notifications);
       this.searching = false;
     });
