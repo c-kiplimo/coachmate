@@ -22,7 +22,7 @@ import { error } from 'jquery';
 export class FeedbackComponent implements OnInit {
 
   loading = false;
-  feedbacks!: any;
+  feedbacks?: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -91,6 +91,5 @@ export class FeedbackComponent implements OnInit {
     this.feedback = feedback;
     console.log(this.feedback);
   }
-
 
 }

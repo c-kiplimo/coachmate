@@ -4,49 +4,57 @@
     <h3 class="fw-bold">Feedbacks</h3>
   </div>
 </div>
-  <div class="row list-container container ">
-    <table class="table" *ngIf="feedbacks?.length">
-      <thead>
-        <tr>
-          <th scope="col">Session Name</th>
-          <th scope="col">Client Name</th>
-          <th scope="col">Availability</th>
-          <th scope="col">Clarification Score</th>
-          <th scope="col">Emotional Intelligence</th>
-          <th scope="col">Listening Skills</th>
-          <th scope="col">Understanding</th>
-          <th scope="col">Average</th>
-          <th scope="col">Comments</th>
-        </tr>
-      </thead>
-  
-      <tbody>
-        <tr *ngFor="let feedback of feedbacks">
-          <td>{{ feedback?.session.name }}</td>
-          <td>{{ feedback?.client.firstName }}</td>
-          <td>{{ feedback?.availabilityScore }}</td>
-          <td>{{ feedback?.clarificationScore }}</td>
-          <td>{{ feedback?.emotionalIntelligenceScore }}</td>
-          <td>{{ feedback?.listeningSkillsScore }}</td>
-          <td>{{ feedback?.understandingScore }}</td>
-          <td>{{ feedback?.overallScore }}</td>
-          <td>     <button class="btn btn-success"
-            data-bs-toggle="modal"
-          data-bs-target="#feedbackModal"
-          (click)="viewComment(feedback)"
-          >
-            <i   class="fa-solid fa-arrow-up-right-from-square"></i>
-            Comments
-          </button></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-      <div class="donut multi"></div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table" *ngIf="feedbacks?.length">
+            <thead>
+              <tr>
+                <th scope="col">Session Name</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Availability</th>
+                <th scope="col">Clarification Score</th>
+                <th scope="col">Emotional Intelligence</th>
+                <th scope="col">Listening Skills</th>
+                <th scope="col">Understanding</th>
+                <th scope="col">Average</th>
+                <th scope="col">Comments</th>
+              </tr>
+            </thead>
+        
+            <tbody>
+              <tr *ngFor="let feedback of feedbacks">
+                <td>{{ feedback?.session.name }}</td>
+                <td>{{ feedback?.client.firstName }}</td>
+                <td>{{ feedback?.availabilityScore }}</td>
+                <td>{{ feedback?.clarificationScore }}</td>
+                <td>{{ feedback?.emotionalIntelligenceScore }}</td>
+                <td>{{ feedback?.listeningSkillsScore }}</td>
+                <td>{{ feedback?.understandingScore }}</td>
+                <td>{{ feedback?.overallScore }}</td>
+                <td>     
+                <button class="btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#feedbackModal"
+                  (click)="viewComment(feedback)"
+                >
+                  <!-- <i class="fa-solid fa-arrow-up-right-from-square">btn-success</i> -->
+                  <i class="fa-solid fa-comment fa-xl" style="color: #076e1c;"></i>
+                </button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <p class="text-muted mt-5" *ngIf="!loading && !feedbacks?.length">
+            No feedbacks Found.
+          </p>
+        </div>
+      </div>
     </div>
-    <p class="text-muted mt-5" *ngIf="!loading && !feedbacks?.length">
-      No feedbacks Found.
-    </p>
   </div>
   <!-- feedback details modal -->
 <div

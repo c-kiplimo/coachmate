@@ -62,11 +62,10 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+
     public List<Notification> getAllNotifications() {
         log.info("Get all Notifications");
         return notificationRepository.findAll();
-
-
     }
 
     public Notification createNotification(Notification notificationRequest) {
@@ -166,6 +165,5 @@ public class NotificationService {
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Notification> example = Example.of(notification, matcher);
         return notificationRepository.findAll(example, pageable).map(notificationMapper::toDto);
-
     }
 }
