@@ -20,6 +20,8 @@ export class SupportComponent implements OnInit {
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
+  panelOpenState = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,6 +36,8 @@ export class SupportComponent implements OnInit {
       message: '',
     });
   }
+
+
 title: any;
 contactUsMessage() {
   console.log(this.contactForm.value);

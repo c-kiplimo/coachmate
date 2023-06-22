@@ -185,11 +185,8 @@ public class WalletService {
         // obtain previous payment Record
         Optional<ClientWallet> previousWalletRecord = Optional.ofNullable(getClientWalletRecentRecord(paymentRequest.getCoachId(), paymentRequest.getClientId()));
         float prevWalletBalance;
-        if (previousWalletRecord.get().getWalletBalance().equals(null)) {
-            prevWalletBalance = 0;
-        } else {
-            prevWalletBalance = previousWalletRecord.get().getWalletBalance();
-        }
+        previousWalletRecord.get();
+        prevWalletBalance = previousWalletRecord.get().getWalletBalance();
 
         ClientWallet clientWallet = new ClientWallet();
         clientWallet.setAmountDeposited(paymentRequest.getAmount());
@@ -480,6 +477,7 @@ public class WalletService {
     public ListResponse getPaymentsByCoachId(int page, int perPage, Long coachId) {
         log.info("Get all Payments by Coach id {}", coachId);
 
+
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
@@ -488,6 +486,7 @@ public class WalletService {
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
+
 
         return new ListResponse(walletPage.getContent(),
                 walletPage.getTotalPages(), walletPage.getNumberOfElements(),
@@ -681,4 +680,15 @@ public class WalletService {
         }
     }
 
+    public void createWallet(long coachId, long clientId) {
+        log.info("Create wallet for coach Id{} and client Id{}", coachId, clientId);
+        ClientWallet clientWallet = new ClientWallet();
+        clientWallet.setCoach(userRepository.findById(coachId).orElseThrow(IllegalCallerException::new));
+        clientWallet.setClient(userRepository.findById(clientId).orElseThrow(IllegalArgumentException::new));
+        clientWallet.setOrganization(clientWallet.getClient().getOrganization());
+        clientWallet.setWalletBalance(0.0F);
+        clientWallet.setCreatedAt(LocalDateTime.now());
+        clientWallet.setLastUpdatedAt(LocalDate.from(LocalDateTime.now()));
+        clientWalletRepository.save(clientWallet);
+    }
 }

@@ -58,20 +58,20 @@ public class WalletResource {
                     return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
                             HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-            } else if (clientId != null) {
-                log.info("Request to create payment by client");
-                try {
-                    ClientWallet wallet = walletService.createPaymentByClient(paymentRequest, userDetails);
-
-                    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
-                            .toUriString());
-                    return ResponseEntity.created(uri).body(wallet);
-
-                } catch (Exception e) {
-                    log.error("Error ", e);
-                    return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                            HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+//            } else if (clientId != null) {
+//                log.info("Request to create payment by client");
+//                try {
+//                    ClientWallet wallet = walletService.createPaymentByClient(paymentRequest, userDetails);
+//
+//                    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/payments")
+//                            .toUriString());
+//                    return ResponseEntity.created(uri).body(wallet);
+//
+//                } catch (Exception e) {
+//                    log.error("Error ", e);
+//                    return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+//                            HttpStatus.INTERNAL_SERVER_ERROR);
+//                }
 
             } else if (coachId != null) {
                 log.info("Request to create payment by coach");

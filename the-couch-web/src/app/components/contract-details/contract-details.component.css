@@ -162,4 +162,7 @@
   .badge-danger {
     background-color: red !important;
   }
+  .badge-primary {
+    background-color: blue !important;
+  }
   
