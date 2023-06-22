@@ -252,7 +252,7 @@ export class ClientViewComponent implements OnInit {
     this.loading = false;
     this.notificationsService.getNotifications(options).subscribe((response: any) => {
       this.notifications = response.body;
-      console.log('notification ni', this.notifications);
+      console.log('notification', this.notifications);
       this.searching = false;
     });
   }
