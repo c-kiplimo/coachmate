@@ -31,6 +31,20 @@ export class SessionsService {
         observe: 'response',
       });
     } 
+    changeSessionStatus(id: number, status: string): Observable<any> {
+      const data = { status: status };
+      return this.http.put<any>(this.baseURL + 'sessions/change-status/' + id + '/status', data);
+    }
+    addAttachment(id: number, link: string, file: File): Observable<any> {
+      const formData = new FormData();
+      formData.append('link', link);
+      formData.append('file', file);
+    
+      return this.http.post<any>(this.baseURL + '/upload', formData, {
+        observe: 'response',
+      });
+    }
+    
 }
 
 // ,

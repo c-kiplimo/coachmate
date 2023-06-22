@@ -1,0 +1,141 @@
+.tabs-section .btn-tabs {
+  margin-right: 18px;
+}
+
+.tabs-section {
+  margin-bottom: 20px;
+}
+
+
+.feedback-section {
+  margin-bottom: 20px;
+}
+
+.attachments-section {
+  margin-top: 20px;
+}
+
+.btn-tabs:focus {
+  box-shadow: none; /* Remove the reflection effect when clicked */
+}
+.feedback-button {
+  margin-left: 10px; /* Adjust the margin-left value as needed */
+}
+
+.custom-feedback-button {
+  margin-left: 0; /* Reset the default left margin */
+  margin-right: 10px; /* Set the desired right margin */
+}
+
+
+
+.table tbody td .badge {
+  border-radius: 20px;
+  padding: 6px 12px !important;
+  vertical-align: middle;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.feedback-form {
+  width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: normal;
+  color: #333;
+}
+
+.form-group__rating {
+  display: flex;
+  align-items: center;
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #999;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+}
+
+input[type="radio"]::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+input[type="radio"]:checked::after {
+  opacity: 1;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+}
+
+button {
+  display: block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  color: #000000fc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center; /* Added text-align center */
+}
+.form-group__rating input[type="radio"] {
+  margin-right: 10px; /* Increase the margin to add spacing between radio buttons */
+  margin-bottom: 5px; /* Add some vertical spacing between radio buttons */
+}  
+.form-group__rating label {
+  margin-right: 10px; /* Add some horizontal spacing between radio buttons and labels */
+}
+.tabs-section {
+  display: flex;
+  justify-content: flex-start;
+}
+button:focus,
+button:active,
+.dropdown-toggle:focus,
+.dropdown-toggle:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.input-height {
+  height: 40px;
+}
+
+.btn-match-height {
+  height: 40px;
+  line-height: 40px;
+}
+.btn-large {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+
+
