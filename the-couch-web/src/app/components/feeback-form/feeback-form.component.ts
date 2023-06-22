@@ -31,11 +31,7 @@ export class FeebackFormComponent implements OnInit {
    
     this.sessionId = this.route.snapshot.params['sessionId'];
     console.log(this.sessionId);
-  
-    
-    
-      
-    
+
     
     this.feebackForm = this.formbuilder.group({
       understandingScore: [''],

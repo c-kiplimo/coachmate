@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -24,7 +25,10 @@ public class ClientWallet {
                     .IDENTITY)
     Long id;
     // updated on every payment
+    @Nullable
     Float walletBalanceBefore;
+
+    @Nullable
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;

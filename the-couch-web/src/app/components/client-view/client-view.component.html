@@ -240,21 +240,17 @@
     </div>
   </div>
 
-  <!-- <div class="text-end mt-2 d-none d-md-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
+  <div class="d-none d-lg-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
+    <!-- <div class="text-end mt-2 d-none d-md-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
       <button class="btn btn-refresh" >
         <fa-icon [icon]="refreshIcon"></fa-icon>
         Refresh
       </button>
-      <button
-      class="btn btn-refresh me-2"
-      data-bs-toggle="modal"
-      data-bs-target="#paymentReminderModal"
-    >
+      <button class="btn btn-refresh me-2"  data-bs-toggle="modal"  data-bs-target="#paymentReminderModal">
       <fa-icon [icon]="alertIcon"></fa-icon>
       Remind
     </button>
     </div> -->
-  <div class="d-none d-lg-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
     <div class="row">
       <div class="col-md-12">
         <table class="table">
@@ -310,6 +306,7 @@
               <th>Actions</th>
             </tr>
           </thead>
+          <p>{{notifications}}</p>
           <tbody>
             <tr *ngFor="let notification of notifications">
               <td>{{ notification?.subject }}</td>

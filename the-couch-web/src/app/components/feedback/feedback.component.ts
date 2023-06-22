@@ -1,16 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/ClientService';
 import { style, animate, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.css']
+  styleUrls: ['./feedback.component.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(600, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class FeedbackComponent implements OnInit {
 
   loading = false;
-  feedbacks: any;
+  feedbacks!: any;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -18,9 +30,13 @@ export class FeedbackComponent implements OnInit {
   OrgData: any;
   orgSession: any;
   feedback: any;
+  coachId: any;
+  page: number = 0;
 
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private apiService: ClientService,
   ) { }
   
@@ -33,25 +49,25 @@ export class FeedbackComponent implements OnInit {
 
     if(this.userRole == 'ORGANIZATION'){
       this.OrgData = sessionStorage.getItem('Organization');
-
-    
+      this.getOrgFeedbacks(this.OrgData.id);
   } else if (this.userRole == 'COACH') {
-    this.getCoachFeedbacks(this.coachData.coach.id);
+    this.coachId = this.coachData.id;
+    this.getCoachFeedbacks(this.coachId);
   }
   
   
 }
 
-
-
   getCoachFeedbacks(coachId: any) {
-    
     this.loading = true;
     this.apiService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
         console.log(response);
         this.feedbacks = response.body;
         console.log(this.feedbacks);
+        this.loading = false;
+      }, error => {
+        console.log(error);
         this.loading = false;
       }
     );

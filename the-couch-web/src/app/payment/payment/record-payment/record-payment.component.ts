@@ -28,6 +28,7 @@ export class RecordPaymentComponent implements OnInit {
   };
 
   loading = false;
+  page: any;
 
 
   constructor(
@@ -60,32 +61,28 @@ export class RecordPaymentComponent implements OnInit {
     console.log(this.userRole);
 
  if(this.userRole == 'COACH'){
-  this.getUser();
-    this.getClients()
+    this.getUser();
+    this.getClients(this.page)
  } else if(this.userRole == 'ORGANIZATION'){
-  this.getUserOrg();
+    this.getUserOrg();
     this.getOrgClients()
  } else if(this.userRole == 'CLIENT'){
-  this.getUserClient();
+    this.getUserClient();
  }
   
 
   }
   getUser() {
-    this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.User);
-    this.coachId = this.User.coach.id;
+    this.coachId = this.coachData.id;
+    console.log(this.coachId);
   }
   getUserOrg() {
-    this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.User);
-    this.orgId = this.User.organization.id;
+    this.orgId = this.coachData.id;
+    console.log(this.orgId);
   }
   getUserClient() {
-    this.User = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.User);
-    this.clientId = this.User.id;
-
+    this.clientId = this.coachData.id;
+    console.log(this.clientId);
   }
 
   recordPayment() {
@@ -113,20 +110,31 @@ export class RecordPaymentComponent implements OnInit {
 
 
   }
-  getClients() {
+  getClients(page: any) {
+    this.loading = true;
+    this.page = page;
+
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
     const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
+      page: page,
       status: this.filters.status,
       search: this.filters.searchItem,
+      coachId: this.coachId,
     };
+
     this.clientService.getClients(options).subscribe(
       (response: any) => {
-        console.log('here clients=>', response.body.data);
-        this.clients = response.body.data;
+        this.loading = false;
+        this.clients = response.body;
+        console.log("clients",this.clients);
 
-      },
-      (error: any) => {
+      }, (error: any) => {
+        this.loading = false;
         console.log(error);
       }
     );
@@ -153,6 +161,10 @@ export class RecordPaymentComponent implements OnInit {
         console.log(error)
       }
     )
+  }
+
+  back() {
+    window.history.back();
   }
 
 }

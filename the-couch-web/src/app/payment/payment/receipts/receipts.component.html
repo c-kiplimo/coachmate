@@ -37,7 +37,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
-        <table class="table" *ngIf="payments.data?.length">
+        <table class="table" *ngIf="payments?.length !=0">
           <thead>
             <tr>
               <th>Payed By</th>
@@ -49,7 +49,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of payments.data">
+            <tr *ngFor="let payment of payments">
               <td>{{ payment.client.firstName }}</td>
               <td>{{ payment.amountDeposited}}</td>
               <td>{{ payment.modeOfPayment}}</td>
@@ -66,7 +66,7 @@
         <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
           <div class="donut multi"></div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !payments">
+        <p class="text-muted mt-5" *ngIf="!loading && !payments.length">
           No receipts Found.
         </p>
       </div>

@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -140,6 +142,8 @@ import { NotificationsService } from './services/notifications.service';
     HttpClientModule,
     PaymentModule,
     SharedModule,
+    MatFormFieldModule,
+    MatExpansionModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
