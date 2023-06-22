@@ -9,6 +9,12 @@
     margin-left: 10px;
     font-weight: bold;
 }
+.f-weight{
+  font-weight: 500;
+}
+.smaller-font{
+  font-size: 15px;
+}
 .value {
     margin-left: 10px;
 }

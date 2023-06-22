@@ -1,7 +1,7 @@
 <div class="row">
   <div class="d-flex justify-content-between mt-2">
     <div class="col  mt-4" style="margin-left: 5px;">
-      <h3 class="fw-bold">Dashboard</h3>
+      <h3 class="fw-semi-bold fs-5 f-weight ">Dashboard</h3>
     </div>
     <div>
       <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1"
@@ -46,7 +46,7 @@
 
 <div class="row">
   <div class="col-10">
-    <p class="p-3 desc">Hello {{user.firstName| lowercase }}, Here's how things currently look like...</p>
+    <p class="p-3 desc ">Hello {{user.firstName| lowercase }}, Here's how things currently look like...</p>
   </div>
 </div>
 
@@ -55,7 +55,7 @@
   <div class="col-6">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-bold">Upcoming Sessions</h5>
+        <h5 class="card-title  f-weight fw-semi-bold fs-6">Upcoming Sessions</h5>
         <a [routerLink]="['/sessions']">
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
@@ -107,7 +107,7 @@
   <div class="col-6">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-bold">Recent Contracts</h5>
+        <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
         <a [routerLink]="['/contracts']">
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
@@ -202,8 +202,8 @@
   </div>
 </div>
 
-
-<div class="row row-height" *ngIf="this.userRole == 'COACH'">
+<!-- 
+<div class="row row-height" *ngIf="this.userRole == 'COACH'"> -->
   <!-- <div class="col-3 card text-center top-cards">
           <div class="card-body">
             <h6 class="card-title">Upcoming Sessions</h6>
@@ -234,7 +234,7 @@
       <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
     </div>
   </div> -->
-  <div class="col-3 card text-center top-cards">
+  <!-- <div class="col-3 card text-center top-cards">
     <div class="card-body">
       <h6 class="card-title">Clients</h6>
       <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
@@ -246,7 +246,7 @@
       <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
     </div>
   </div>
-</div>
+</div> -->
 
 <!--ORGANIZATION-->
 <div class="row row-height" *ngIf="this.userRole == 'ORGANIZATION'">
