@@ -41,13 +41,13 @@
 }
 .title {
     margin-left: 10px;
-    font-weight: bold;
+   
 }
 .value {
     margin-left: 10px;
 }
 .onedetail {
-    padding: 5px;
+    padding: 10px;
 }
 .client-details-card{
     width: 100%;
@@ -143,6 +143,9 @@
     background-color: #1B3A27;
   
   
+  }
+  .f-weight{
+    font-weight: 500;
   }
 
   .modal-title{

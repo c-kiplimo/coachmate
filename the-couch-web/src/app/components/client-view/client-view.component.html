@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
+    <h5 class="fw-semi-bold fs-5 f-weight">
       <i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i> Client
     </h5>
   </div>
@@ -13,9 +13,8 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-          <h3 class="fw-bold col">Details</h3>
-          <div class="col">
-            <div class="dropdown">
+          <h3 class="fw-semi-bold fs-6 f-weight">Details</h3>
+          <div class="col dropdown">
               <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Actions</a>
@@ -34,46 +33,46 @@
                 <li (click)="statusState('CLOSED')"><a class="dropdown-item" data-bs-toggle="modal"
                     data-bs-target="#closeclientModal">Close</a></li>
               </ul>
-            </div>
+            
           </div>
         </div>
 
         <div class="col-md-12" [@fadeIn]>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Id</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font" >Id</h6>
             <p class="col">{{ clients?.id }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Name</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
             <p class="col">{{ clients?.firstName + " " + clients?.lastName | titlecase }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Email</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
             <p class="col">{{ clients?.email }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Phone number</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Phone number</h6>
             <p class="col">{{ clients?.msisdn }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Address</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Address</h6>
             <p class="col">{{ clients?.physicalAddress }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Client Type</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Client Type</h6>
             <p class="col">{{ clients?.clientType }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Profession</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Profession</h6>
             <p class="col">{{ clients?.profession }}</p>
           </div>
 
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Payment Mode</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Payment Mode</h6>
             <p class="col">{{ clients?.paymentMode }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Status</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Status</h6>
             <p class="col">
               <span class="badge" [ngClass]="{
                 'badge-success': clients?.clientStatus === 'ACTIVE',
@@ -83,19 +82,19 @@
             </p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Created On</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Created On</h6>
             <p class="col">{{ clients?.createdAt | date: "MMM d y" }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Last Updated</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Last Updated</h6>
             <p class="col">{{ clients?.lastUpdatedAt | date: "MMM d y" }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Created By</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Created By</h6>
             <p class="col">{{ clients?.createdBy }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Reason</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Reason</h6>
             <p class="col">{{ clients?.reason }}</p>
           </div>
 
@@ -110,21 +109,21 @@
 
 <div class="card details-card">
   <div class="tabs-section">
-    <button class="btn btn-tabs" (click)="toggleTab('sessions')"
+    <button class="btn btn-tabs " (click)="toggleTab('sessions')"
       [ngClass]="{ 'active-tab': currentTab === 'sessions' }">
-      sessions
+      <h6 class="fs-6 f-weight">Sessions</h6>
     </button>
     <button class="btn btn-tabs" (click)="toggleTab('contracts')"
       [ngClass]="{ 'active-tab': currentTab === 'contracts' }">
-      contracts
+      <h6 class="fs-6 f-weight">Contracts</h6>
     </button>
     <button class="btn btn-tabs" (click)="toggleTab('payments')"
       [ngClass]="{ 'active-tab': currentTab === 'payments' }">
-      Payments
+      <h6 class="fs-6 f-weight">Payments</h6>
     </button>
     <button class="btn btn-tabs" (click)="toggleTab('notifications')"
       [ngClass]="{ 'active-tab': currentTab === 'notifications' }">
-      Notifications
+      <h6 class="fs-6 f-weight">Notifications</h6>
     </button>
   </div>
   <div *ngIf="currentTab === 'sessions'">

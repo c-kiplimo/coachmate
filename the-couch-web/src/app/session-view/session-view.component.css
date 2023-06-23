@@ -136,6 +136,10 @@ button:active,
   font-size: 1rem;
   line-height: 1.5;
 }
-
-
-
+.smaller-font{
+  font-size: 15px;
+ 
+}
+.f-weight{
+  font-weight: 500;
+}
