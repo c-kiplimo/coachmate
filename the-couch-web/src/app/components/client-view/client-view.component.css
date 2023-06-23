@@ -55,24 +55,26 @@
     border: 1px solid #0a0a0a;
   }
     .active-tab {
-        background-color: #e1e1e1!important;
+        
         font-weight: 600!important;
-        color: #3c4043;
+        color: black
+       
       }
     .tabs-section {
       margin: 20px 0;
       padding: 20px 0;
-      border-bottom: 1px solid #e1e1e1;
+     
     }
   
-      .btn-tabs {
-        width: 25%;
-        text-align: center;
-        letter-spacing: 1px;
-        background-color: #fff;
-        outline: none!important;
-        box-shadow: none!important;
-      }
+    .btn-tabs {
+      width: 10%;
+      text-align: center;
+      letter-spacing: 1px;
+      background-color: #fff;
+      outline: none;
+      box-shadow: none;
+    
+    }
     
     .btn-view-order{
       background-color: #1B3A27;
