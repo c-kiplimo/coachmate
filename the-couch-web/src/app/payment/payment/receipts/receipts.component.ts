@@ -129,6 +129,9 @@ payment: any;
       }
     )
   }
+  // searchPayments() {
+  //   this.getPaymentsByClientId(this.ClientId);
+  // }
 
   getPaymentsByCoachId(){
     

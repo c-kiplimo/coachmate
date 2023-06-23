@@ -8,7 +8,7 @@
   <div class="col-md-3">
     <div class="filters-section">
       <div class="wrap">
-        <select class="form-control" (change)="applyFilter()" [(ngModel)]="statementPeriod">
+        <select class="form-control" name="codes" [(ngModel)]="statementPeriod" (change)="applyFilter()">
           <option value="" selected>Filter By Period</option>
           <option value="PerMonth">1 month</option>
           <option value="Per6Months">6 months</option>
@@ -17,18 +17,19 @@
       </div>
     </div>
   </div>
-  <div class="col-md-3">
+
+  <div class="col-md-4">
     <div class="input-group mb-3">
-      <input type="text" class="form-control text-muted mt-3" name="customer"  aria-describedby="button-addon2"
+      <input type="text" class="form-control" name="customer"  aria-describedby="button-addon2"
         [(ngModel)]="filters.searchItem" placeholder="Client Name and Date '2000-10-31'"/>
       <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="filterByClientNameAndDate()"
         (click)="getPaymentsByClientId(this.ClientId)" (click)="getPaymentsByOrganizationId()">Search</button>
     </div>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-2">
     <button type="button" routerLink="/record-payment" class="btn btn-success" *ngIf="this.userRole != 'CLIENT'">
-      <i class="fa-solid fa-user-plus"></i>Add Payment
+      <i class="fa fa-plus"></i>Add Payment
     </button>
   </div>
 </div>
