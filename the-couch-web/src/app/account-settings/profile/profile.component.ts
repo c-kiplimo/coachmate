@@ -26,6 +26,7 @@ export class ProfileComponent implements OnInit {
   user: any;
   coachSessionData: any;
   userRole: any;
+  coachStatus:any;
 
   constructor(
     private toastrService: ToastrService,
@@ -37,7 +38,10 @@ export class ProfileComponent implements OnInit {
     this.user = JSON.parse(this.coachSessionData);
 
     this.userRole = this.user.userRole;
+    this.coachStatus = this.user.coachStatus;
     console.log(this.userRole);
+   console.log(this.coachStatus);
+  
 
   }
 
