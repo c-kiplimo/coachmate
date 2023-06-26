@@ -20,19 +20,19 @@
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Actions</a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                <!-- <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
                   (click)="editClient(clients)">
                   <i class="fas fa-edit"></i>
                   Edit
-                </button>
-                <li>
-                </li>
+                </button> -->
+                <li (click)="editClient(clients)"><a class="dropdown-item" data-bs-toggle="modal"
+                  data-bs-target="#editClientModal"><i class="fas fa-edit"></i> Edit </a></li>
                 <li (click)="statusState('ACTIVE')"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#activateclientModal">Activate</a></li>
+                    data-bs-target="#activateclientModal">Activate </a></li>
                 <li (click)="statusState('SUSPENDED')"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#suspendclientModal">Suspend</a></li>
+                    data-bs-target="#suspendclientModal">Suspend </a></li>
                 <li (click)="statusState('CLOSED')"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#closeclientModal">Close</a></li>
+                    data-bs-target="#closeclientModal">Close </a></li>
               </ul>
             </div>
           </div>

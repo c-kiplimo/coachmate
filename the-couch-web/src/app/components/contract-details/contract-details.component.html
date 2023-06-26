@@ -96,16 +96,15 @@
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
-            
                 <tbody>
                   <tr *ngFor="let session of sessions">
                     <th scope="row">{{ session.id }}</th>
                     <td>{{ session.name }}</td>
                     <td>{{ session.sessionVenue }}</td>
                     <td>{{ session.sessionType }}</td>
-                    <td>{{ session.sessionDate }}</td>
-                    <td>{{ session.sessionStartTime }}</td>
-                    <td>{{ session.sessionEndTime }}</td>
+                    <td>{{ session.sessionSchedulesSessionDate }}</td>
+                    <td>{{ session.sessionSchedulesStartTime }}</td>
+                    <td>{{ session.sessionSchedulesEndTime }}</td>
                     <td class="actions">
                       <i
                       (click)="navigateToSessionView(session.id)"
