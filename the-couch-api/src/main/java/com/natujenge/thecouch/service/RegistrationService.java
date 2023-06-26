@@ -2,10 +2,7 @@ package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.NotificationMode;
-import com.natujenge.thecouch.domain.enums.OrgStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.domain.enums.*;
 import com.natujenge.thecouch.repository.CoachWalletRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.OrganizationWalletRepository;
@@ -90,6 +87,7 @@ public class RegistrationService {
                 coach.setEmail(registrationRequest.getEmail());
                 coach.setUsername(registrationRequest.getEmail());
                 coach.setUserRole(UserRole.COACH);
+                coach.setCoachStatus(CoachStatus.NEW);
                 coach.setCreatedBy("SELF-REGISTRATION");
                 // coach Number Generation
                 int randNo = (int) ((Math.random() * (999 - 1)) + 1);
@@ -111,7 +109,7 @@ public class RegistrationService {
                 // save the User in the database
                 User savedCoach = userRepository.save(coach);
 
-                log.info("User saved");
+                log.info("User saved",savedCoach);
 
                 // Generate a Random 6 digit OTP - 0 - 999999
                 int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
