@@ -16,9 +16,7 @@ spring:
     username: root
     password: ninja
 
-#    url: jdbc:mysql://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-#    password: elijah@maria22
-#    username: elijah
+
 
 
 
