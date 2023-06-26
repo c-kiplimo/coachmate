@@ -11,6 +11,10 @@
     border-bottom: 3px solid #f1f1f1;
 }
 
+.f-weight{
+    font-weight: 500;
+}
+
 /* .listing-item { & :last-child {
       border-bottom: none;
     }
