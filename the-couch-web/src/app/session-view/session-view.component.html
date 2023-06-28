@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
+    <h5 class="fw-semi-bold fs-5">
       <i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i> Session
     </h5>
   </div>
@@ -13,8 +13,13 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-          <h3 class="fw-bold col">Details</h3>
-          <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button>
+<!-- <!--            <h3 class="fw-bold col">Details</h3> --> -->
+<!--           <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button> --> -->
+          <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
+          <button class="btn btn-success btn-sm"  *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button>
+
+
+
           <div class="col dropdown">
             <a class="btn btn-success dropdown-toggle" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
               aria-expanded="false" *ngIf="this.userRole == 'COACH'">
@@ -49,35 +54,35 @@
         </div>
         <div class="col-md-12" [@fadeIn]>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Session Ref</h6>
+            <h6 class="fw-semi-bold smaller-font faded col">Session Ref</h6>
             <p class="col">{{ sessions?.sessionNumber }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Name</h6>
+            <h6 class="fw-semi-bold smaller-font col">Name</h6>
             <p class="col">{{ sessions?.name }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Date</h6>
+            <h6 class="fw-semi-bold smaller-font col">Date</h6>
             <p class="col">{{ sessions?.sessionSchedulesSessionDate }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Client name</h6>
+            <h6 class="fw-semi-bold smaller-font col">Client name</h6>
             <p class="col">{{ sessions?.clientFullName }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Session type</h6>
+            <h6 class="fw-semi-bold smaller-font faded col">Session type</h6>
             <p class="col">{{ sessions?.sessionType }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Start Time</h6>
+            <h6 class="fw-semi-bold smaller-font col">Start Time</h6>
             <p class="col">{{ sessions?.sessionSchedulesStartTime }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">End Time</h6>
+            <h6 class="fw-semi-bold smaller-font faded col">End Time</h6>
             <p class="col">{{ sessions?.sessionSchedulesEndTime }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Status</h6>
+            <h6 class="fw-semi-bold smaller-font col">Status</h6>
             <p class="col">
               <span _ngcontent-tvo-c211="" class="badge ng-tns-c211-5"
               [ngClass]="{
@@ -95,7 +100,7 @@
           
           
           <div class="row dtl">
-            <h6 class="fw-bold faded col">Venue</h6>
+            <h6 class="fw-semi-bold smaller-font col">Venue</h6>
             <p class="col">{{ sessions?.sessionVenue }}</p>
           </div>
         </div>
