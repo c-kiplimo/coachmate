@@ -67,6 +67,37 @@
             formControlName="groupFeesPerSession" required="true" />
         </div>
       </div>
+      <section>
+        <br>
+        <h3>Coaching Goals</h3>
+        <br>
+        <div class="row mb-3">
+          <div class="col-12"></div>
+  
+          <div class="row">
+            <div class="col-6">
+              <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Goal"
+                formControlName="objectives" />
+            </div>
+            <div class="col-6">
+              <button type="button" class="btn btn-success" (click)="addObjective()">
+                <i class="fa-solid fa-user-plus"></i>Add goal
+              </button>
+            </div>
+  
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-10">
+            <div class="mb-3">
+              <ol>
+                <li *ngFor="let obj of objectives; index as i">{{ obj }} <i (click)="removeObjective(i)" role="button"
+                    class="fa-solid fa-trash-can p-1"></i></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
       <div class="row">
         <div class="col-6">
           <label for="number" class="form-label">No. of Sessions:</label>
@@ -75,37 +106,7 @@
         </div>
       </div>
     </div>
-    <section>
-      <br>
-      <h3>Coaching Goals</h3>
-      <br>
-      <div class="row mb-3">
-        <div class="col-12"></div>
-
-        <div class="row">
-          <div class="col-6">
-            <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Objective"
-              formControlName="objectives" />
-          </div>
-          <div class="col-6">
-            <button type="button" class="btn btn-success" (click)="addObjective()">
-              <i class="fa-solid fa-user-plus"></i>Add objective
-            </button>
-          </div>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-10">
-          <div class="mb-3">
-            <ol>
-              <li *ngFor="let obj of objectives; index as i">{{ obj }} <i (click)="removeObjective(i)" role="button"
-                  class="fa-solid fa-trash-can p-1"></i></li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
+   
     <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false"
       aria-controls="collapseService" (click)="toggleEditingSettings()" [disabled]="disableButton">
       <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
