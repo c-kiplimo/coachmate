@@ -41,7 +41,6 @@ export class NotificationsComponent implements OnInit {
 
   saveSettings(): void {
     
-
     this.coachService.saveSettings(this.notificationDetails).subscribe({
       next: (res: any) => {
         const data = res.body;
