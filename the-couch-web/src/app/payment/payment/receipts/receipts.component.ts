@@ -113,16 +113,16 @@ payment: any;
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      client_id: id,
+      // status: this.filters.status,
+      // search: this.filters.searchItem,
+      clientId: id,
     };
 
     this.loading = true;
     this.ClientService.getPaymentsByClientId(options).subscribe(
       (response) => {
         this.loading = false;
-        this.payments = response.body;
+        this.payments = response.body.data;
         console.log('payments', this.payments);
       }, (error) => {
         console.log(error);

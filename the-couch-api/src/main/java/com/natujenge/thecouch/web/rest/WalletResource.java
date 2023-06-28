@@ -178,20 +178,16 @@ public class WalletResource {
             @RequestParam("per_page") int perPage,
             @RequestParam("page") int page,
             @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "client_id",required = false) Long clientId
+            @RequestParam(name = "clientId") Long clientId
     ) {
         try {
 
             log.debug(
-                    "REST request to filter payments given, coach id : {}, client id  : {}",
+                    "REST request to filter payments given, client id  : {}",
                     clientId
-
-
             );
 
-            ListResponse listResponse;
-                listResponse = walletService.getPaymentsByClientId
-                        (page, perPage, clientId);
+            ListResponse listResponse = walletService.getPaymentsByClientId(page, perPage, clientId);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
 
         } catch (Exception e){
