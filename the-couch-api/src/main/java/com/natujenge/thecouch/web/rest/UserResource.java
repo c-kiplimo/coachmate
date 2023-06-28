@@ -3,11 +3,13 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -28,11 +30,34 @@ import java.util.Optional;
 public class UserResource {
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final RegistrationService registrationService;
 
-    public UserResource(ModelMapper modelMapper, UserService userService) {
+    public UserResource(ModelMapper modelMapper, UserService userService, RegistrationService registrationService) {
         this.modelMapper = modelMapper;
         this.userService = userService;
+        this.registrationService = registrationService;
     }
+
+
+     //api to create a coach by organization
+     @PostMapping(path = "/coach")
+     ResponseEntity<?> addNewCoach(@RequestBody RegistrationRequest registrationRequest,
+                                   @AuthenticationPrincipal User userDetails) {
+
+         try {
+             Organization organization = userDetails.getOrganization();
+             log.info("request to add new coach by organization{}",organization.getId());
+             registrationService.addCoach(organization, registrationRequest);
+
+             return new ResponseEntity<>(new RestResponse(false,
+                     "Coach by organization  created"), HttpStatus.OK);
+
+         } catch (Exception e) {
+             log.error("Error ", e);
+             return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                     HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+     }
 
     //api to create a client user
     @PostMapping
