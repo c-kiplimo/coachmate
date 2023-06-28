@@ -1,5 +1,4 @@
 package com.natujenge.thecouch.service.mapper;
-
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import org.mapstruct.Mapper;

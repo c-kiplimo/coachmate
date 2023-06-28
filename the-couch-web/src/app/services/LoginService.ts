@@ -13,11 +13,8 @@ import { environment } from 'src/environments/environment';
 
 export class LoginService {
  
-
-
-    baseURL: string = environment.apiURL + '/api/';
+    baseURL = environment.apiURL + '/api/';
     constructor(private http: HttpClient) {
-
     }
     getAccount(): Observable<any> {
       return this.http.get<any>(
@@ -48,6 +45,14 @@ export class LoginService {
       return this.http.post<any>(
         this.baseURL+ 'coach',
         signupObject,
+        { observe: 'response' }
+      );
+    }
+
+    addCoach(coach: any): Observable<any> {
+      return this.http.post<any>(
+        this.baseURL+ 'users/coach',
+        coach,
         { observe: 'response' }
       );
     }
