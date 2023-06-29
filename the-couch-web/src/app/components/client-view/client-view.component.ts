@@ -260,9 +260,9 @@ export class ClientViewComponent implements OnInit {
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      client_id: id,
+      // status: this.filters.status,
+      // search: this.filters.searchItem,
+      clientId: id,
     };
 
     this.loading = true;
