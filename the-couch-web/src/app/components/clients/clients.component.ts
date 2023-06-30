@@ -127,7 +127,7 @@ export class ClientsComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      options.coachId = this.coachId;
+      options.orgId = this.orgId;
     }
     
     this.clientService.getClients(options).subscribe(
