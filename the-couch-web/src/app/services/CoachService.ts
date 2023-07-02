@@ -56,5 +56,37 @@ export class CoachService {
     return this.httpClient.get<any>(this.baseURL + '/coach-settings/logo', { observe: 'response', responseType: 'blob' as 'json' });
   }
 
+  getCoaches(options: any): Observable<any> {
+    return this.httpClient.get(`${this.baseURL}users/coaches`,
+      {
+        params: options,
+        observe: 'response',
+      })
+  }
+  suspendCoach(coachData: any): Observable<any> {
+    return this.httpClient.put(`${this.baseURL}coaches`, coachData)
+  }
+  editCoach(coachToBeUpdated: any, id: any): Observable<any> {
+    console.log("edit client reached")
+    console.log("coach  to be updated here", coachToBeUpdated)
+    console.log("coach id here", id)
+    return this.httpClient.put(`${this.baseURL}users/coach/${id}`, coachToBeUpdated)
+  }
+  getOneCoach(id: number): Observable<any> {
+    return this.httpClient.get<any>(this.baseURL + 'users/coach/' + id, {
+      observe: 'response',
+    });
+  }
+  changeCoach(coachId: any, status: any, statusForm: any): Observable<any> {
+    let options = {
+      status: status,
+    };
+    return this.httpClient.put<any>(this.baseURL + 'coaches/change-status/' + coachId, statusForm,
+      {
+        params: options,
+        observe: "response"
 
+      });
+
+  }
 }

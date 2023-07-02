@@ -2,18 +2,27 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ClientService } from '../../services/ClientService';
+import { style, animate, transition, trigger } from '@angular/animations';
+import { CoachService } from 'src/app/services/CoachService';
 
 @Component({
   selector: 'app-coaches',
   templateUrl: './coaches.component.html',
-  styleUrls: ['./coaches.component.css']
+  styleUrls: ['./coaches.component.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(600, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class CoachesComponent implements OnInit {
 
-  clientId: any;
-  editedClient: any;  
-salesData: any;
+  coachId: any;
+  editedCoach: any;  
   loading = false;
   itemsPerPage = 20;
   filters: any = {
@@ -22,47 +31,47 @@ salesData: any;
   };
   
 
-  updateClient!: FormGroup;
-OrgCoaches: any;
-  orgId: any;
-  numberofCoaches: any;
+  updateCoach!: FormGroup;
 
-  constructor(private ClientService: ClientService, 
+
+  constructor(private coachService: CoachService, 
     private router: Router,
     private toastrService: ToastrService,
     private formbuilder: FormBuilder,) { }
   
-  Clients!: any;
+  coaches!: any;
+  all_coaches!: any;
 
-  clientToBeUpdated!: any;
-  coachSessionData: any;
-  coachData: any;
+  coachToBeUpdated!: any;
+  organizationSessionData: any;
+  organizationData: any;
   userRole: any;
+  user: any;
+  orgId!: number;
+  page: number = 0;
+  pageSize: number = 15;
+  totalElements: any;
 
   ngOnInit(): void {
 
-    this.coachSessionData = sessionStorage.getItem('user'); 
-    this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
+    this.organizationSessionData = sessionStorage.getItem('user'); 
+    this.user = JSON.parse(this.organizationSessionData);
+    this.userRole = this.organizationData.userRole;
     console.log(this.userRole);
     
 
-    if(this.userRole == 'COACH'){
-       this.getClients();
-    }else if(this.userRole == 'ORGANIZATION'){
-      this.orgId = this.coachData.organization.id;
+    if(this.userRole == 'ORGANIZATION'){
+      this.orgId = this.user.id;
       console.log('ORGANIZATION');
-      this.getOrgClients();
-      this.getOrgCoaches(this.orgId);
+      this.getCoaches(this.page);
 
     }
 
-    this.updateClient = this.formbuilder.group({
+    this.updateCoach = this.formbuilder.group({
      
     firstName: ' ',
     lastName: ' ',
-    clientType: ' ',
+    coachType: ' ',
     msisdn: ' ',
     email: ' ',
     physicalAddress: ' ',
@@ -71,7 +80,7 @@ OrgCoaches: any;
     reason: '',
 
     });
-    
+    this.getCoaches(this.page);
   }
   getClass(client: any) {
     if (client.status === 'SUSPENDED') {
@@ -83,120 +92,96 @@ OrgCoaches: any;
     }
 }
 
-getOrgClients(){
-  const options = {
-    page: 1,
-    per_page: this.itemsPerPage,
+
+  
+getCoaches(page: any) {
+ 
+  this.loading = true;
+  this.page = page;
+  //if page is 0, don't subtract 1
+  if (page === 0 || page < 0) {
+    page = 0;
+  } else {
+    page = page - 1;
+  }
+  const options: any = {
+    page: page,
+    size: this.pageSize,
     status: this.filters.status,
     search: this.filters.searchItem,
- 
+    sort: 'id,desc',
   };
+
+ if(this.userRole == 'ORGANIZATION'){
+    options.coachId = this.coachId;
+  }
   
-  const id = this.coachData.id;
-  this.loading = true;
-  this.ClientService.getOrgClients(id).subscribe(
+  this.coachService.getCoaches(options).subscribe(
     (response) => {
       this.loading = false;
-      this.Clients = response.body;
-      console.log('clients',this.Clients)
-
+      this.coaches = response.body;
+      this.totalElements = +response.headers.get('X-Total-Count');
+      console.log('coaches',this.coaches)
     }, (error) => {
+      this.loading = false;
       console.log(error)
     }
   )
 }
-getOrgCoaches(id: any) {
-  const data = {
-    orgId: id,
-  }
-  this.ClientService.getOrgCoaches(data).subscribe(
-    (response: any) => {
-      console.log('here Organization=> coaches', response);
-      this.OrgCoaches = response;
-      console.log(this.OrgCoaches);
-      console.log('here Organization=> coaches', response);
-      this.numberofCoaches = this.OrgCoaches.length;
-     
-    },
-    (error: any) => {
-      console.log(error);
-    }
-  );
+search() {
+  this.page = 0;
+  this.getCoaches(this.page);
+}
+filterByStatus() {
+  this.page = 0;
+  this.getCoaches(this.page);
 }
   
-  getClients(){
-    this.Clients = [];
-    
-    this.loading = true;
-    
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    this.loading = true;
-    this.ClientService.getClients(options).subscribe(
-      (response) => {
-        this.loading = false;
-        this.Clients = response.body.data;
-        console.log(response.body)
-        console.log('clients',this.Clients)
-        
-      }, (error) => {
-        console.log(error)
-      }
-    )
-  }
+  
 
-  navigateToClientView(id: any) {
+  navigateToCoachView(id: any) {
     console.log(id)
-    this.router.navigate(['/clientView', id]);
+    this.router.navigate(['/coachView', id]);
 
 
   }
-  deleteClient(client: any) {
-    this.ClientService.deleteClient().subscribe(() => {
-        // update the list of items
-        this.ClientService.getClients(client).subscribe(clients => {
-            this.Clients = clients;
-        });
-    });
+  deleteCoach(client: any) {
+ //To be checked
+
 }
-@ViewChild('editClientModal', { static: false })
-editClientModal!: ElementRef;  
-  editClient(client:any){
-    this.clientToBeUpdated = client;
+@ViewChild('editCoachModal', { static: false })
+editCoachModal!: ElementRef;  
+  editCoach(coach:any){
+    this.coachToBeUpdated = coach;
 
-    this.updateClient = this.formbuilder.group({
-      firstName: this.clientToBeUpdated.firstName,
-      lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.clientType,
-      msisdn: this.clientToBeUpdated.msisdn,
-      email: this.clientToBeUpdated.email,
+    this.updateCoach = this.formbuilder.group({
+      firstName: this.coachToBeUpdated.firstName,
+      lastName: this.coachToBeUpdated.lastName,
+      msisdn: this.coachToBeUpdated.msisdn,
+      email: this.coachToBeUpdated.email,
 
-      physicalAddress: this.clientToBeUpdated.physicalAddress,
+      physicalAddress: this.coachToBeUpdated.physicalAddress,
 
-      profession: this.clientToBeUpdated.profession,
-      paymentMode: this.clientToBeUpdated.paymentMode,
-      reason: this.clientToBeUpdated.reason,
+      // profession: this.coachToBeUpdated.profession,
+      // paymentMode: this.clientToBeUpdated.paymentMode,
+      reason: this.coachToBeUpdated.reason,
     });
   
   }
 
-  updateClientDetails(id:any){
-    this.clientToBeUpdated = this.updateClient.value;
-    console.log(this.clientToBeUpdated)
+  updateCoachDetails(id:any){
+    this.coachToBeUpdated = this.updateCoach.value;
+    console.log(this.coachToBeUpdated)
     console.log(id)  
-    this.ClientService.editClient(this.clientToBeUpdated,id).subscribe(
+    this.coachService.editCoach(this.coachToBeUpdated,id).subscribe(
       (data) => {
         console.log(data)
-        this.toastrService.success('Client Updated', 'Success!');
+        this.toastrService.success('Coach Updated', 'Success!');
         setTimeout(() => {
           location.reload();
         }, 1000);
-        this.editClientModal.nativeElement.classList.remove('show');
-        this.editClientModal.nativeElement.style.display = 'none';
+        this.editCoachModal.nativeElement.classList.remove('show');
+        this.editCoachModal.nativeElement.style.display = 'none';
 
       }, (error) => {
         console.log(error)
@@ -204,10 +189,10 @@ editClientModal!: ElementRef;
     );
   }
 
-  suspendClient(client:any){
-    this.ClientService.suspendClient(client).subscribe(
+  suspendCoach(coach:any){
+    this.coachService.suspendCoach(coach).subscribe(
       (response) => {
-        this.getClients();
+        this.getCoaches(this.page);
         this.loading = false;
 
       }, (error) => {
@@ -216,10 +201,15 @@ editClientModal!: ElementRef;
     );
   }
   // filter clients by status
-  filterClientsByStatus(status: any) {
+  filterCoachesByStatus(status: any) {
     this.filters.status = status;
-    this.getClients();
+    this.getCoaches(this.page);
   }
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getCoaches(this.page);
+  }
+  
   
 }
 
