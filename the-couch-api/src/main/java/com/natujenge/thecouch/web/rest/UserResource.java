@@ -6,8 +6,10 @@ import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientDTO;
+import com.natujenge.thecouch.web.rest.dto.CoachDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -148,5 +150,67 @@ public class UserResource {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping(path = "coaches")
+    ResponseEntity<List<CoachDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
+                                              @RequestParam(name = "status", required = false) String status,
+                                              @RequestParam(name = "search", required = false) String search,
+                                              Pageable pageable,
+                                              @AuthenticationPrincipal User userDetails){
+        log.info("Request to get coaches {}, " , orgId);
+        Long organizationId = null;
+        if (userDetails.getOrganization() != null) {
+            organizationId = userDetails.getOrganization().getId();
+        }
+        Page<CoachDTO> coachDtoPage = userService.getCoaches(status, search, organizationId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), coachDtoPage);
+        return ResponseEntity.ok().headers(headers).body(coachDtoPage.getContent());
+    }
+    @PutMapping(path = "coach/{id}")
+    ResponseEntity<?> editCoach(@PathVariable("id") Long coachId,
+                                 @RequestBody CoachRequest coachRequest,
+                                 @AuthenticationPrincipal User userDetails){
+        log.info("Request to edit coach {}", coachId);
+        try{
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
+            User editedCoach;
+            if(organization.isPresent()){
+                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
+            } else {
+                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
+            }
+
+            if(editedCoach != null){
+                CoachRequest response = modelMapper.map(editedCoach, CoachRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Coach not edited"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(path = "coach/{id}")
+    ResponseEntity<?> getCoachById(@PathVariable("id") Long coachId,
+                                    @AuthenticationPrincipal User userDetails){
+        log.info("Request to get client {}", coachId);
+        try{
+            User coach = userService.getCoachById(coachId, userDetails);
+            if(coach != null){
+                CoachDTO response = modelMapper.map(coach, CoachDTO.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not found"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
