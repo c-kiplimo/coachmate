@@ -156,39 +156,42 @@
   <div class="col-12">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-bold">Coaches</h5>
-        <a [routerLink]="['/sessions']">
+        <h5 class="card-title fw-semi-bold f-weight fs-6">Coaches</h5>
+        <a [routerLink]="['/coaches']">
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
 
 
       <div class="upcomingsessions list-container container">
-        <table class="table">
+        <table class="table" *ngIf="orgCoaches?.length">
           <thead>
-            <th colspan="1">#id</th>
             <th colspan="1">Full Name</th>
             <th colspan="1">Email</th>
             <th colspan="1">Phone</th>
             <th colspan="1">Created On</th>
             <th colspan="1">Status</th>
-            <th colspan="1" class="text-center" width="100px">Actions</th>
+            <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
             <tr *ngFor="let coach of orgCoaches">
-              <th>{{ coach.id }}</th>
               <td>{{ coach.fullName }}</td>
               <td>{{ coach.emailAddress }}</td>
               <td>{{ coach.msisdn }}</td>
               <td>{{ coach.createdAt | date: "MMM d y"}}</td>
 
               <td>
-                <span class="value">
-                  <span class="badge" [ngClass]="getClass(coach)">{{ coach.status }}</span>
+                  <span class="badge" [ngClass]="{
+                    'badge-success': coach?.coachStatus === 'ACTIVE' || coach?.coachStatus === 'NEW',
+                    'badge-danger': coach?.coachStatus === 'SUSPENDED',
+                    'badge-primary': coach?.coachStatus === 'CLOSED'
+                  }">
+                    {{ coach.status }}</span>
 
-                </span>
-              <td class="text-center">
-                <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button>
+                </td>
+              <td class="view">
+                <a [routerLink]="['/editCoach', coach.id]"><i class="fas fa-external-link-alt"></i></a>
+                <!-- <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button> -->
               </td>
 
             </tr>
@@ -251,26 +254,26 @@
 
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Number of Coaches</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Coaches</h6>
       <h3 class="card-text fw-bold">{{numberofCoaches}}</h3>
     </div>
   </div>
 
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Sessions Success Rate</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Sessions Success Rate</h6>
       <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
     </div>
   </div>
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Number of Clients</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Clients</h6>
       <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
     </div>
   </div>
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Number of Contracts</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Contracts</h6>
       <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
     </div>
   </div>

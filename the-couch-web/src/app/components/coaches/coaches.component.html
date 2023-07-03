@@ -5,15 +5,15 @@
 </div>
         
         <div class="row">
-                <div class="col-4">
+                <div class="col-md-3">
                   <div class="filters-section">
                     <div class="wrap">
                       <select
                         class="form-control"
                         name="codes"
-                        [(ngModel)]="filters.status"
+                        [(ngModel)]="filters.status" (change)="filterByStatus()"
                       >
-                        <option value="">All statuses</option>
+                        <option value="" selected>All statuses</option>
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="SUSPENDED">SUSPENDED</option>
                         <option value="CLOSED">CLOSED</option>
