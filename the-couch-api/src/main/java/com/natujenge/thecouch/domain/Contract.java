@@ -51,16 +51,16 @@ public class Contract {
     @Nullable
     @ManyToOne
     @JoinColumn(name = "organization_id")
-    Organization organization;
+    private Organization organization;
 
     // relations
     @ManyToOne
     @JoinColumn(name = "client_id")
-    User client;
+    private User client;
 
     @ManyToOne
     @JoinColumn(name = "coach_id")
-    User coach;
+    private User coach;
 
     @Column(nullable = false)
     @CreationTimestamp

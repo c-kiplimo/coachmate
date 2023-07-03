@@ -4,7 +4,7 @@
     <div class="col calender">
 
         <div class="row text-center">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="btn-group">
                 <div
                   class="btn btn-success"
@@ -33,10 +33,10 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="btn-group">
                 <div
                   class="btn btn-success"
@@ -61,6 +61,13 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-3">
+            <div>
+            <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i
+              class="fa fa-plus"></i> Add
+            Session Schedule</button>
+            </div>
+          </div>
           </div>
           <br />
           <div [ngSwitch]="view">
