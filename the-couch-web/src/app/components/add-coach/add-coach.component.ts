@@ -63,7 +63,7 @@ export class AddCoachComponent implements OnInit {
   }
 
 
-  signUp() {
+  addCoach() {
     this.errorMessage = '';
     this.orgId = this.coachData.id;
     console.log('organization id =>', this.orgId);
@@ -75,7 +75,7 @@ export class AddCoachComponent implements OnInit {
         console.log(response);
         this.registrationSuccess = true;
         this.toastrService.success('Coach added successfully');
-        this.router.navigate(['']);
+        this.router.navigate(['coaches']);
       },
       error: (error) => {
         console.log(error);

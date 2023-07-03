@@ -444,7 +444,6 @@ public class UserService implements UserDetailsService {
         if (coachId != null) {
             userClientExample.setAddedBy(userCoach);
             userClientExample.getAddedBy().setId(coachId);
-
         }
         if (status != null && !status.isEmpty()) {
             userClientExample.setClientStatus(ClientStatus.valueOf(status));

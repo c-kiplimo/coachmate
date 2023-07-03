@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from '../services/LoginService';
 import { Router } from '@angular/router';
- import { ToastrService } from 'ngx-toastr';
- import intlTelInput from 'intl-tel-input';
+import { ToastrService } from 'ngx-toastr';
+import intlTelInput from 'intl-tel-input';
 import 'intl-tel-input/build/js/utils';
 import {
   faChevronLeft,
@@ -26,7 +26,7 @@ export class SignUpComponent implements OnInit {
     email: '',
     password: '',
     passwordConfirm: '',
-    
+
   };
   fieldTextType!: boolean;
   eyeIcon = faEye;
@@ -42,7 +42,7 @@ export class SignUpComponent implements OnInit {
   isPasswordActive!: boolean;
   iti!: intlTelInput.Plugin;
 
-  constructor(private LoginService: LoginService, private router: Router,private toastrService :ToastrService ) {}
+  constructor(private LoginService: LoginService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit(): void {
     const input = document.querySelector("#phone");
@@ -102,28 +102,29 @@ export class SignUpComponent implements OnInit {
     }
   }
   validatePassword() {
-    if(this.formData.password!=null && this.formData.passwordConfirm!=null){
+    if (this.formData.password != null && this.formData.passwordConfirm != null) {
       // validate password rule
       //check if pass
       this.validatePasswordRule();
-      if (this.passwordInvalid){
-          return;
-      }else if(this.formData.password != this.formData.passwordConfirm){
-        this.passwordInvalid=true;
-        this.passwordErrorMessage="Passwords don't match";
+      if (this.passwordInvalid) {
+        return;
+      } else if (this.formData.password != this.formData.passwordConfirm) {
+        this.passwordInvalid = true;
+        this.passwordErrorMessage = "Passwords don't match";
         return;
 
-      }else if (this.formData.password.length>7) {
-        this.passwordInvalid = false;     
-        this.signUp();  
+      } else if (this.formData.password.length > 7) {
+        this.passwordInvalid = false;
+        this.signUp();
       }
 
-  }else{
-    this.passwordInvalid = true;
-    this.passwordErrorMessage = "Password Fields cannot be empty";
+    } else {
+      this.passwordInvalid = true;
+      this.passwordErrorMessage = "Password Fields cannot be empty";
 
+    }
   }
-  }
+
   signUp() {
     sessionStorage.setItem('formData', JSON.stringify(this.formData));
     this.errorMessage = ''
@@ -136,7 +137,7 @@ export class SignUpComponent implements OnInit {
 
         this.registrationSuccess = true;
         this.router.navigate(['registration/confirm']);
-        
+
         if (response.body.error) {
           this.errorMessage = response.body.message;
           console.log('here');
