@@ -31,6 +31,7 @@ export class FeedbackComponent implements OnInit {
   orgSession: any;
   feedback: any;
   coachId: any;
+  orgId: any;
   page: number = 0;
 
 
@@ -48,8 +49,8 @@ export class FeedbackComponent implements OnInit {
     console.log(this.userRole);
 
     if(this.userRole == 'ORGANIZATION'){
-      this.OrgData = sessionStorage.getItem('Organization');
-      this.getOrgFeedbacks(this.OrgData.id);
+      this.orgId = this.coachData.organization.id;
+      this.getOrgFeedbacks(this.orgId);
   } else if (this.userRole == 'COACH') {
     this.coachId = this.coachData.id;
     this.getCoachFeedbacks(this.coachId);

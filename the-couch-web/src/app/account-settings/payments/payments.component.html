@@ -7,7 +7,8 @@
         <span>Payment changes saved succesfully</span>
       </div>
 
-      <div class="d-flex justify-content-end border-0" *ngIf="!editingSettings" [@fadeIn]>
+      <div class="d-flex justify-content-end border-0" [@fadeIn]>
+        <!-- *ngIf="!editingSettings"  -->
         <button class="btn btn-add" (click)="toggleEditingSettings()" [disabled]="disableButton">
           Edit
         </button>
@@ -18,7 +19,7 @@
       </div>
 
 
-      <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+      <div class="card-body d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Payment mode</span>
         <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{(this.user.baker.defaultBakerPaymentDetails?.paymentType | titlecase) ?? 'not set'}}</span>
         <select class="form-select" name="option" [(ngModel)]="paymentDetails.paymentType" (change)="selectPaymentOption()" [disabled]="isSaving" *ngIf="editingSettings" [@fadeIn]>
@@ -29,7 +30,7 @@
 
       <div *ngIf="paymentDetails?.paymentType === 'MPESA'">
 
-        <div class="d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
+        <div class="card-body d-flex justify-content-between" [ngClass]="{'flex-column-sm':editingSettings}">
           <span class="title">Mpesa option</span>
           <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{replaceUnderScoreSymbols(this.user.baker.defaultBakerPaymentDetails?.mpesaPaymentType) | titlecase}}</span>
           <select class="form-select" name="mpesaOption" [(ngModel)]="paymentDetails.mpesaPaymentType" (change)="selectPaymentOption()" [disabled]="isSaving" *ngIf="editingSettings" [@fadeIn]>
@@ -37,14 +38,14 @@
           </select>
         </div>
 
-        <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}" *ngIf="paymentDetails.mpesaPaymentType === 'BUY_GOODS'" [@fadeIn]>
+        <div class="card-body d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}" *ngIf="paymentDetails.mpesaPaymentType === 'BUY_GOODS'" [@fadeIn]>
           <span class="title">Till number</span>
           <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.tillNumber}}</span>
           <input [(ngModel)]="paymentDetails.tillNumber" (ngModelChange)="!paymentDetails.tillNumber ? optionFilled = false : optionFilled = true;" name="tillNumber" type="text" class="form-control" id="tillNumber" aria-describedby="tillNumber"
             placeholder="eg 5156299" *ngIf="editingSettings" [@fadeIn] oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^7/,2547).replace(/(\..*)\./g, '$1');" [disabled]="isSaving" />
         </div>
 
-        <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}" *ngIf="paymentDetails.mpesaPaymentType === 'SEND_MONEY' || paymentDetails.mpesaPaymentType === 'POCHI_LA_BIASHARA'" [@fadeIn]>
+        <div class="card-body d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}" *ngIf="paymentDetails.mpesaPaymentType === 'SEND_MONEY' || paymentDetails.mpesaPaymentType === 'POCHI_LA_BIASHARA'" [@fadeIn]>
           <span class="title" for="displayName">Phone number</span>
           <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.msisdn}}</span>
           <input [(ngModel)]="paymentDetails.msisdn" (ngModelChange)="!paymentDetails.msisdn ? optionFilled = false : optionFilled = true;" name="msisdn" type="text" class="form-control" id="msisdn" aria-describedby="msisdn"
@@ -52,7 +53,7 @@
         </div>
 
         <div *ngIf="paymentDetails?.mpesaPaymentType === 'PAY_BILL'" [@fadeIn]>
-          <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
+          <div class="card-body d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
             <span class="title" for="displayName">Paybill number</span>
             <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.businessNumber}}</span>
             <input [(ngModel)]="paymentDetails.businessNumber" (ngModelChange)="!paymentDetails.businessNumber || !paymentDetails.accountNumber ? optionFilled = false : optionFilled = true;" name="businessNumber" type="text" class="form-control"
@@ -60,7 +61,7 @@
               [disabled]="isSaving" />
           </div>
 
-          <div class="d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
+          <div class="card-body d-flex justify-content-between " [ngClass]="{'flex-column-sm':editingSettings}">
             <span class="title" for="displayName">Account number</span>
             <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.accountNumber}}</span>
             <input [(ngModel)]="paymentDetails.accountNumber" (ngModelChange)="!paymentDetails.accountNumber || !paymentDetails.businessNumber ? optionFilled = false : optionFilled = true;" name="accountNumber" type="text" class="form-control"
@@ -71,7 +72,7 @@
 
       </div>
 
-      <div class="d-flex justify-content-between border-0 position-relative" [ngClass]="{'flex-column-sm':editingSettings}">
+      <div class="card-body d-flex justify-content-between border-0 position-relative" [ngClass]="{'flex-column-sm':editingSettings}">
         <span class="title">Deposit percentage</span>
         <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{this.user.baker.defaultBakerPaymentDetails?.depositPercentage ?? 'not set'}}</span>
         <input *ngIf="editingSettings" [@fadeIn] [(ngModel)]="paymentDetails.depositPercentage" (ngModelChange)="percentageValidation(paymentDetails.depositPercentage)" type="text" class="form-control" name="depositPercentage" placeholder="eg: 50"

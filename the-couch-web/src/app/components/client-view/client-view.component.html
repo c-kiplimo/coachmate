@@ -13,9 +13,9 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-          <h3 class="fw-semi-bold fs-6 f-weight">Details</h3>
+          <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
           <div class="col dropdown">
-              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Actions</a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -24,16 +24,15 @@
                   <i class="fas fa-edit"></i>
                   Edit
                 </button> -->
-                <li (click)="editClient(clients)"><a class="dropdown-item" data-bs-toggle="modal"
+                <li (click)="editClient(clients)" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                   data-bs-target="#editClientModal"><i class="fas fa-edit"></i> Edit </a></li>
-                <li (click)="statusState('ACTIVE')"><a class="dropdown-item" data-bs-toggle="modal"
+                <li (click)="statusState('ACTIVE')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                     data-bs-target="#activateclientModal">Activate </a></li>
-                <li (click)="statusState('SUSPENDED')"><a class="dropdown-item" data-bs-toggle="modal"
+                <li (click)="statusState('SUSPENDED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                     data-bs-target="#suspendclientModal">Suspend </a></li>
-                <li (click)="statusState('CLOSED')"><a class="dropdown-item" data-bs-toggle="modal"
+                <li (click)="statusState('CLOSED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                     data-bs-target="#closeclientModal">Close </a></li>
               </ul>
-            
           </div>
         </div>
 
@@ -97,9 +96,7 @@
             <h6 class="fw-semi-bold  faded col smaller-font">Reason</h6>
             <p class="col">{{ clients?.reason }}</p>
           </div>
-
         </div>
-
       </div>
     </div>
   </div>
@@ -129,13 +126,13 @@
   <div *ngIf="currentTab === 'sessions'">
     <!-- add session button -->
     <div class="d-flex justify-content-end">
-      <button class="btn btn-success" *ngIf="!loading" data-bs-toggle="modal" data-bs-target="#sessionModal">
+      <button *ngIf="!loading" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sessionModal">
         Add Session
       </button>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <table class="table">
+        <table class="table" *ngIf="sessions?.length">
           <thead>
             <tr>
               <th scope="col">Name</th>
@@ -150,7 +147,7 @@
               <th scope="col">Actions</th>
             </tr>
           </thead>
-          <tbody class="list-container">
+          <tbody>
             <tr
               *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
               <td>{{ session?.name }}</td>
@@ -177,7 +174,7 @@
         <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
           <div class="donut multi"></div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
+        <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
           No sessions Found.
         </p>
       </div>
@@ -192,7 +189,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <table class="table table-sm">
+        <table class="table table-sm" *ngIf="contracts.length">
           <thead>
             <tr>
               <th scope="col">Title</th>
@@ -252,7 +249,7 @@
     </div> -->
     <div class="row">
       <div class="col-md-12">
-        <table class="table">
+        <table class="table" *ngIf="payments.length">
           <thead>
             <tr>
               <th>Payed By</th>
@@ -291,7 +288,7 @@
   <div class="d-none d-lg-block" *ngIf="currentTab === 'notifications'" [@fadeIn]>
     <div class="row">
       <div class="col-md-12">
-        <table class="table">
+        <table class="table" *ngIf="notifications.length">
           <thead>
             <tr>
               <th>Subject</th>
@@ -699,9 +696,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 <!-- modal for adding contract -->
 <div class="modal" id="addContractModal" tabindex="-1" role="dialog">
