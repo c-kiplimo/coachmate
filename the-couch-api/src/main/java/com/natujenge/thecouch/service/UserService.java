@@ -502,6 +502,7 @@ public class UserService implements UserDetailsService {
         log.info("Request to get client by id: {}", clientId);
         Optional<User> userOptional = userRepository.findById(clientId);
         return userOptional.orElseThrow(() -> new IllegalStateException("Client not found"));
-        }
+    }
+
 
 }

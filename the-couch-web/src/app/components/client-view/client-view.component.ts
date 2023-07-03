@@ -13,6 +13,7 @@ import {
   faPenSquare,
   faPlus,
   faRedo,
+  fas,
   // faRefresh,
 } from '@fortawesome/free-solid-svg-icons';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -81,7 +82,7 @@ export class ClientViewComponent implements OnInit {
 
   notificationOptions = [false, true];
   notificationType = ['sms', 'email'];
-  loadingClient = false;
+  loadingClient = true;
   totalLength: any;
   itemsPerPage: number = 20;
   open = false;
@@ -100,7 +101,7 @@ export class ClientViewComponent implements OnInit {
   sessionDueDate: any;
   sessionStartTime: any;
   sessionDuration: any;
-  loading: any;
+  loading = true;
   refreshIcon!: IconProp;
   createSessionClientId: any;
   selectedContract: any;
@@ -157,7 +158,6 @@ export class ClientViewComponent implements OnInit {
 
     if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
-      
     } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
     } else if (this.userRole == 'CLIENT') {
@@ -222,11 +222,19 @@ export class ClientViewComponent implements OnInit {
       page: page,
       size: this.pageSize,
       sort: 'id,desc',
-      // coachId: this.coachId,
+      search: this.filters.searchItem,
       clientId: this.clientId,
+      sessionStatus: this.filters.status,
       //contractId: this.coachData.contractId,
-      //sessionDate: this.filters.sessionDate,
+      // sessionDate: this.filters.sessionDate,
     };
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.orgId = this.orgId;
+    }
 
     this.sessionService.getSessions(options).subscribe(
       (response: any) => {
@@ -268,11 +276,12 @@ export class ClientViewComponent implements OnInit {
     this.loading = true;
     this.ClientService.getPaymentsByClientId(options).subscribe(
       (response) => {
-        this.loading = false;
         this.payments = response.body.data;
         console.log('payments', this.payments);
+        this.loading = false;
       }, (error) => {
         console.log(error);
+        this.loading = false;
       }
     )
   }
@@ -386,8 +395,11 @@ export class ClientViewComponent implements OnInit {
       search: this.filters.searchItem,
       sort: 'id,desc',
       clientId: this.clientId,
-      
     };
+
+    if (this.userRole === 'ORGANISATION') {
+      options.organisationId = this.orgId;
+    }
 
     this.contractsService.getContracts(options).subscribe(
       (res: any) => {

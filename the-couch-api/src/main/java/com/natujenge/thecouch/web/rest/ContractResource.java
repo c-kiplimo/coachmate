@@ -114,16 +114,20 @@ public class ContractResource {
     }
 
     @GetMapping("/filter")
-    ResponseEntity<List<ContractDTO>> filterFarmers(@RequestParam(name = "clientId", required = false) Long clientId,
+    ResponseEntity<List<ContractDTO>> filterContracts(@RequestParam(name = "clientId", required = false) Long clientId,
 
                                                     @RequestParam(name = "search", required = false) String search,
+                                                    @RequestParam(name="organisationId", required = false) Long orgId,
                                                     Pageable pageable,
                                                     @AuthenticationPrincipal User userDetails) {
         Long organisationId=null;
-        if(userDetails.getOrganization() !=null){
-            organisationId = userDetails.getOrganization().getId();
+        if (orgId != null) {
+            organisationId = orgId;
+        } else
+            if (userDetails.getOrganization() !=null){
+                organisationId = userDetails.getOrganization().getId();
+            }
 
-        }
         UserRole userRole = userDetails.getUserRole();
         Long userId= userDetails.getId();
 

@@ -130,10 +130,15 @@ export class ClientsComponent implements OnInit {
       options.orgId = this.orgId;
     }
     
-    this.clientService.getClients(options).subscribe(
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
       (response) => {
         this.loading = false;
         this.clients = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'CLIENT') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
       }, (error) => {

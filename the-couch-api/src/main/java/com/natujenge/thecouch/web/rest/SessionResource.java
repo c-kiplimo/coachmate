@@ -114,12 +114,17 @@ public class SessionResource {
                                                            @RequestParam(name = "sessionStatus", required = false) String sessionStatus,
                                                            @RequestParam(name = "sessionDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate sessionDate,
                                                            @RequestParam(name = "search", required = false) String search,
+                                                           @RequestParam(name="orgId", required = false) Long orgId,
                                                            Pageable pageable,
                                                            @AuthenticationPrincipal User userDetails) {
         Long organisationId = null;
-        if (userDetails.getOrganization() != null) {
-            organisationId = userDetails.getOrganization().getId();
-        }
+        if (orgId != null) {
+            organisationId = orgId;
+        } else
+            if (userDetails.getOrganization() != null) {
+                organisationId = userDetails.getOrganization().getId();
+            }
+
         Page<SessionDTO> sessionDtoPage = sessionService.filter(coachId, clientId, contractId, sessionStatus, sessionDate, organisationId, search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), sessionDtoPage);
         return ResponseEntity.ok().headers(headers).body(sessionDtoPage.getContent());

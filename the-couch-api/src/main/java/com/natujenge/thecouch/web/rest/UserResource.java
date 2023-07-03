@@ -136,11 +136,11 @@ public class UserResource {
 
     //API TO GET CLIENTS BY ORG ID
     @GetMapping(path = "getOrgClients/{id}")
-    ResponseEntity<?> getOrgClients(@PathVariable("id") Long OrgId,
+    ResponseEntity<?> getOrgClients(@PathVariable("id") Long orgId,
                                     @AuthenticationPrincipal User userDetails){
         log.info("Request to get Organization clients");
         try{
-            List<User> listResponse = userService.getClientByOrgId(userDetails.getOrganization().getId(), UserRole.CLIENT);
+            List<User> listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
             return new ResponseEntity<>(listResponse, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error Occurred ", e);

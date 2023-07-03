@@ -51,7 +51,6 @@
             <th scope="col">Actions</th>
           </tr>
         </thead>
-
         <tbody class="list-container">
           <tr *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
             <td>{{ session?.name }}</td>
