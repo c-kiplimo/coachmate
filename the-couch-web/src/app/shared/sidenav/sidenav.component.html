@@ -21,3 +21,38 @@ router.url.includes('signin')
     </li>
   </ul>
 </div>
+
+
+<div class="show-sm">
+  <br>
+  <br>
+  <nav class="bottom-nav">
+    <a class="bottom-nav__destination" *ngFor="let menu of menuDataForMobile"
+      [ngClass]="{ 'active': menu.number === selectedTabIndex }" [routerLink]="[menu.url]"
+      [ngClass]="{ 'addFarmerClass' : menu.number === 10 }">
+      <i class="{{menu.icon}}"></i>
+      <span class="bottom-nav__label">{{menu.name}}</span>
+    </a>
+
+    <a class="bottom-nav__destination bottom-nav__destination--active" (click)="handleShowMoreMenus()">
+      <i class="fa fa-ellipsis-v"></i>
+      <span class="bottom-nav__label">More</span>
+    </a>
+  </nav>
+
+  <div class="add-options-container" [ngClass]="{'active-panel':showMoreMenus}">
+    <div class="add-options-panel" *ngIf="showMoreMenus" [@fadeIn]>
+      <div class="add-options-panel-heading">
+        <h6>Other Menus</h6>
+        <span (click)="hideMoreMenus()">Cancel</span>
+      </div>
+
+      <div>
+        <div class="add-option" *ngFor="let menu of excessMenu" [routerLink]="[menu.url]" (click)="hideMoreMenus()">
+          <span class="title"><i class="{{menu.icon}}"></i></span>
+          <small> {{ menu.name }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
