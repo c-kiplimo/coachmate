@@ -122,7 +122,7 @@ export class ClientService {
   }
 
   getSessions(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}sessions/filter`, //TODO: change to sessions/filter
+    return this.http.get(`${this.baseURL}sessions/filter`, 
       {
         params: options,
         observe: 'response',

@@ -300,11 +300,11 @@ public class SessionService {
                 .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded", "client.locked", "client.enabled","client.onboarded")
                 .withIgnoreNullValues();
         Example<Session> example = Example.of(session, matcher);
+
         if (sessionDate != null) {
             log.info("Session date at {} ", sessionDate);
             return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
         }
-
         return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
     }
     public Specification<Session> getSpecFromDatesAndExample(

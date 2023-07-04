@@ -13,8 +13,9 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-<!--          <h3 class="fw-bold col">Details</h3> --> 
-<!--           <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button> -->
+          <h3 class="fw-bold col">Details</h3> 
+          <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button> 
+
           <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
           <button class="btn btn-success col"  *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button>
 
@@ -25,27 +26,28 @@
               aria-expanded="false" *ngIf="this.userRole == 'COACH'">
               Actions
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li class="dropdown-item">
-                <button class="btn btn-success" (click)="addAttachment()"data-bs-toggle="modal"
-                data-bs-target="#attachmentModal" *ngIf="userRole === 'COACH'">Add Attachments</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li class="dropdown-item" *ngIf="userRole === 'COACH'">
+                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#attachmentModal"
+                  (click)="addAttachment()">Add Attachments
+                </a>
               </li>
               
-              <li *ngIf="this.userRole == 'COACH'">
+              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmsessionModal"
                   (click)="statusState('CONFIRMED')">Confirm
                 </a>
 
               </li>
-              <li *ngIf="this.userRole == 'COACH'">
+              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#conductedsessionModal"
                   (click)="statusState('CONDUCTED')">conducted</a>
               </li>
-              <li *ngIf="this.userRole == 'COACH'">
+              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancelsessionModal"
                   (click)="statusState('CANCELLED')">Cancel</a>
               </li>
-              <li>
+              <li class="dropdown-item">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editsessionModal"
                   (click)="editSession(sessions)">Reschedule</a>
               </li>
