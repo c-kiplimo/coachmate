@@ -18,7 +18,7 @@ export class CoachEducationService {
     }
 
     getOneCoachEducation(id: number): Observable<any> {
-        return this.http.get<any>(this.baseURL + "/coachEducation/" + id, {
+        return this.http.get<any>(this.baseURL + "coachEducation/" + id, {
             observe: "response"
         });
     }

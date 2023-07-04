@@ -14,7 +14,7 @@
               <h5 class="card-title">Education Hours</h5>
               <h2 class="card-text fw-bold">{{numberOfHours}} hrs</h2>
             </div>
-          <button type="button" routerLink="/AddTraining" class="btn" style="color: white;">
+          <button type="button" routerLink="/AddTraining" class="btn btn-success" style="color: white;">
             <i class="fa fa-plus"></i> Add Education
           </button>
         </div>
@@ -62,7 +62,7 @@
   <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
     <div class="donut multi"></div>
   </div>
-  <p class="text-muted mt-5" *ngIf="loading">
+  <p class="text-muted mt-5" *ngIf="!loading && !coachEducationData.length">
     No Courses Found.
   </p>
 </div>

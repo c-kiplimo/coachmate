@@ -28,7 +28,7 @@ numberOfMinutes: any;
 
   currentCoachEducation: any;
 
-  coachEducationData: any;
+  coachEducationData: any = [];
   constructor(
      private router: Router,
      private CoachEducationService: CoachEducationService,
@@ -65,7 +65,7 @@ numberOfMinutes: any;
       (response: any) => {
         this.loading = false;
         console.log(response);
-        this.coachEducationData = response;
+        this.coachEducationData = JSON.stringify(response.body.data);
         this.calculateNumberOfHours(this.coachEducationData);
       }, (error: any) => {
         console.log(error);

@@ -22,7 +22,7 @@ public interface SessionMapper extends EntityMapper<SessionDTO, Session>  {
     @Mapping(target = "contractCoachingCategory", source = "contract.coachingCategory")
     @Mapping(target = "contractCoachingTopic", source = "contract.coachingTopic")
 
-    @Override
+//    @Override
     SessionDTO toDto(Session entity);
 
 }

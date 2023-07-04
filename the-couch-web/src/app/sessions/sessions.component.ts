@@ -110,8 +110,7 @@ export class SessionsComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
-      options.coachId = this.coachId;
+      options.orgId = this.orgId;
     }
 
     this.sessionService.getSessions(options).subscribe(

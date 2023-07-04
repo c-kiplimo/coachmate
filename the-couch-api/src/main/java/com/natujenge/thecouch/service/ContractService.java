@@ -304,6 +304,7 @@ return  contract;
     public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId,
                                     Pageable pageable) {
         Contract contract = createExample(userId, clientId, userRole, search, organisationId);
+
         log.info("After example {} ", contract);
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
@@ -312,6 +313,7 @@ return  contract;
                 .withIgnoreNullValues();
 
         Example<Contract> example = Example.of(contract, matcher);
+
         return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
 
     }
