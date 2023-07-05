@@ -73,7 +73,7 @@ export class CoachService {
     return this.httpClient.put(`${this.baseURL}users/coach/${id}`, coachToBeUpdated)
   }
   getOneCoach(id: number): Observable<any> {
-    return this.httpClient.get<any>(this.baseURL + 'users/coach/' + id, {
+    return this.httpClient.get<any>(this.baseURL + '/users/coach/' + id, {
       observe: 'response',
     });
   }

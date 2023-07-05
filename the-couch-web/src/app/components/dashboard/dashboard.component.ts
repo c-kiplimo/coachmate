@@ -112,7 +112,7 @@ export class DashboardComponent implements OnInit {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
-      this.getOrgClients();
+      this.getClients(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
       // console.log(this.orgSession);
@@ -334,28 +334,28 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getOrgClients() {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    const id = this.user.id;
-    this.loading = true;
-    this.clientService.getOrgClients(id).subscribe(
-      (response) => {
-        this.loading = false;
-        this.clients = response.body;
-        console.log(response)
-        console.log('clients', this.clients)
-        this.numberOfClients = this.clients.length;
+  // getOrgClients() {
+  //   const options = {
+  //     page: 1,
+  //     per_page: this.itemsPerPage,
+  //     status: this.filters.status,
+  //     search: this.filters.searchItem,
+  //   };
+  //   const id = this.user.id;
+  //   this.loading = true;
+  //   this.clientService.getOrgClients(id).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  //       this.clients = response.body;
+  //       console.log(response)
+  //       console.log('clients', this.clients)
+  //       this.numberOfClients = this.clients.length;
 
-      }, (error) => {
-        console.log(error)
-      }
-    )
-  }
+  //     }, (error) => {
+  //       console.log(error)
+  //     }
+  //   )
+  // }
 
   navigateToSessionView(id: any) {
     console.log(id);
