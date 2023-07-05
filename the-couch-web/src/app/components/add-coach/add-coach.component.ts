@@ -41,7 +41,7 @@ export class AddCoachComponent implements OnInit {
 
   };
   orgId: any;
-  coachSessionData: any;
+  organizationSessionData: any;
 
   constructor(
     private coachService: CoachService,
@@ -50,18 +50,16 @@ export class AddCoachComponent implements OnInit {
     private toastrService: ToastrService  
   ) {}
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user');
-    this.coachData = JSON.parse(this.coachSessionData);
+    this.organizationSessionData = sessionStorage.getItem('user');
+    this.orgData = JSON.parse(this.organizationSessionData);
     console.log(this.coachData);
-    this.userRole = this.coachData.userRole;
+    this.userRole = this.orgData.userRole;
     console.log(this.userRole);
-    this.orgId = this.coachData.id;
-    console.log('organization id =>', this.orgId);
     console.log('user role=>', this.userRole);
-    console.log('coach data=>', this.coachData);
+    console.log('organization data=>', this.orgData);
 
     if (this.userRole == 'ORGANIZATION') {
-      this.orgId = this.coachData.organization.id;
+      this.orgId = this.orgData.organization.id;
       this.getCoaches(this.orgId);
       console.log('org id=>', this.orgId);
     }
@@ -92,7 +90,7 @@ export class AddCoachComponent implements OnInit {
 
     details.status = 'NEW';
     details.password = '12345678';
-    
+
    
     
   if(this.userRole == 'ORGANIZATION'){

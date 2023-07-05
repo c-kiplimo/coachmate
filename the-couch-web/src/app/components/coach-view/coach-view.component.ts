@@ -131,6 +131,7 @@ export class CoachViewComponent implements OnInit {
         lastName: ' ',
         msisdn: ' ',
         email: ' ',
+        status: ' ',
         physicalAddress: ' ',
         reason: '',
 
@@ -141,6 +142,7 @@ export class CoachViewComponent implements OnInit {
         lastName: ' ',
         msisdn: ' ',
         email: ' ',
+        status: ' ',
        
 
       });

@@ -74,6 +74,7 @@ export class CoachesComponent implements OnInit {
     coachType: ' ',
     msisdn: ' ',
     email: ' ',
+    status: '',
     physicalAddress: ' ',
     profession: ' ',
     paymentMode: ' ',

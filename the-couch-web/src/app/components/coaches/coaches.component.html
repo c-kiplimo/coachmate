@@ -52,15 +52,15 @@
               <tbody>
                 <tr *ngFor="let coach of coaches | paginate: { itemsPerPage: pageSize,currentPage:page,totalItems: totalElements}">
                   <td>{{ coach?.fullName| titlecase }}</td>
-                  <td>{{ coach?.emailAdress }}</td>
+                  <td>{{ coach?.email }}</td>
                   <td>{{ coach?.msisdn }}</td>
                   <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
                   
                   <td>
                     <span class="badge" [ngClass]="{
-                  'badge-success': coach?.coachStatus === 'ACTIVE',
-                  'badge-danger': coach?.coachStatus === 'SUSPENDED' || coach.coachtStatus === 'CLOSED',
-                  'badge-primary': coach?.coachStatus === 'NEW'
+                  'badge-success': coach?.status === 'ACTIVE',
+                  'badge-danger': coach?.status === 'SUSPENDED' || coach.coachtStatus === 'CLOSED',
+                  'badge-primary': coach?.status=== 'NEW'
                 }">{{ coach?.coachStatus }}</span>
                   </td>
     
@@ -126,20 +126,6 @@
                   <label for="msisdn" class="form-label">Phone Number</label>
                   <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
                   value="{{ coachToBeUpdated?.msisdn }}">
-                </div>
-        
-                <div class="mb-3 form-group">
-        
-                  <label for="physicalAddress" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physicalAddress"
-        
-        
-                  value="{{ coachToBeUpdated?.physicalAddress}}">
-                </div>
-                <div class="mb-3 form-group">
-                  <label for="reason" class="form-label">Reason</label>
-                  <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
-                  value="{{ coachToBeUpdated?.reason}}">
                 </div>
                </form>
               </div>
