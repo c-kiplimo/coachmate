@@ -94,16 +94,19 @@ public class UserResource {
 
     //GET CLIENTS By ORG ID or COACH ID
     @GetMapping(path = "clients")
-    ResponseEntity<List<ClientDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
+    ResponseEntity<List<ClientDTO>> getClients(@RequestParam(name = "orgId", required = false) Long organizationId,
                                                @RequestParam(name = "coachId", required = false) Long coachId,
                                                @RequestParam(name = "status", required = false) String status,
                                                @RequestParam(name = "search", required = false) String search,
                                                Pageable pageable,
                                                @AuthenticationPrincipal User userDetails){
-        log.info("Request to get clients {}, " , coachId);
-        Long organizationId = null;
+
         if (userDetails.getOrganization() != null) {
             organizationId = userDetails.getOrganization().getId();
+        }else {
+            if(userDetails.getUserRole().equals(UserRole.COACH)){
+                coachId=userDetails.getId();
+            }
         }
         Page<ClientDTO> clientDtoPage = userService.getClients(coachId, status, search, organizationId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), clientDtoPage);
@@ -175,20 +178,27 @@ public class UserResource {
         }
     }
     @GetMapping(path = "coaches")
-    ResponseEntity<List<CoachDTO>> getCoaches(@RequestParam(name = "orgId", required = false) Long orgId,
-                                              @RequestParam(name = "status", required = false) String status,
-                                              @RequestParam(name = "search", required = false) String search,
-                                              Pageable pageable,
-                                              @AuthenticationPrincipal User userDetails){
-        log.info("Request to get coaches {}, " , orgId);
-        Long organizationId = null;
-        if (userDetails.getOrganization() != null) {
+    ResponseEntity<List<CoachDTO>> getCoaches(
+            @RequestParam(name = "orgId", required = false) Long organizationId,
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "search", required = false) String search,
+            Pageable pageable,
+            @AuthenticationPrincipal User userDetails
+    ) {
+        log.info("Request to get coaches");
+        if (userDetails != null && userDetails.getOrganization() != null) {
             organizationId = userDetails.getOrganization().getId();
+        } else {
+            // Return an appropriate response or throw an exception for unauthorized access
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        // Only return coaches created by the logged in user's organization
         Page<CoachDTO> coachDtoPage = userService.getCoaches(status, search, organizationId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), coachDtoPage);
         return ResponseEntity.ok().headers(headers).body(coachDtoPage.getContent());
     }
+
     @PutMapping(path = "coach/{id}")
     ResponseEntity<?> editCoach(@PathVariable("id") Long coachId,
                                  @RequestBody CoachRequest coachRequest,

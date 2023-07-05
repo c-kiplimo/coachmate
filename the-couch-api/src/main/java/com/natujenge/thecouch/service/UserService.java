@@ -127,7 +127,7 @@ public class UserService implements UserDetailsService {
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        log.info("Confirmation token generated   ");
+        log.info("Confirmation token generated");
 
         List<Object> response = new ArrayList<>();
         response.add(user1.getId());
@@ -138,7 +138,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    // Coach as user
     // Coach as user
     public List<Object> signupCoachAsUser(User user ) {
         log.info("Signing up coach as user");
@@ -456,14 +455,13 @@ public class UserService implements UserDetailsService {
 
     }
 
-    //Example forGetting Coaches
-    private User createExample_ ( String status, String search, Long organizationId) {
+    private User createExample_( String status, String search, Long organizationId) {
         User userCoachExample = new User();
         Organization organization = new Organization();
         log.info("Request to get coaches by orgId: {}", organizationId);
 
-        //userClientExample.setUserRole(UserRole.CLIENT);
-        if(organizationId != null) {
+        //userClientExample.setUserRole(UserRole.COACH);
+        if (organizationId != null) {
             userCoachExample.setOrganization(organization);
             userCoachExample.getOrganization().setId(organizationId);
         }
@@ -472,19 +470,22 @@ public class UserService implements UserDetailsService {
             userCoachExample.setCoachStatus(CoachStatus.valueOf(status));
         }
         if (search != null && !search.isEmpty()) {
-            if(search.contains("@")) {
+            if (search.contains("@")) {
                 userCoachExample.setEmail(search);
             } else if (search.startsWith("+") || search.matches("[0-9]+")) {
                 userCoachExample.setMsisdn(search);
             } else {
-                userCoachExample.setFullName(search);
+                // Only return coaches created by the logged in user's organization
+                if (organizationId != null) {
+                    userCoachExample.setFullName(search + " (Organization: " + organizationId + ")");
+                } else {
+                    userCoachExample.setFullName(search);
+                }
             }
         }
 
         return userCoachExample;
-
     }
-
 
 
     public Page<ClientDTO> getClients(Long coachId, String status, String search, Long organizationId, Pageable pageable) {
@@ -501,17 +502,21 @@ public class UserService implements UserDetailsService {
         //return example
         return userRepository.findAll(example, pageable).map(clientMapper::toDto);
     }
-    public Page<CoachDTO> getCoaches( String status, String search, Long organizationId, Pageable pageable) {
+    public Page<CoachDTO> getCoaches(
+            String status,
+            String search,
+            Long organizationId,
+            Pageable pageable) {
         User user = createExample_(status, search, organizationId);
         log.info("After example {} ", user);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths("locked", "enabled","onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
+                .withIgnorePaths("locked", "enabled", "onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
                 .withIgnoreNullValues();
+
         Example<User> example = Example.of(user, matcher);
-        //return example
         return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }
 
