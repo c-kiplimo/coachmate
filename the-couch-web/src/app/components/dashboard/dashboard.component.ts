@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionsService } from 'src/app/services/SessionsService';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { CoachService } from 'src/app/services/CoachService';
 
 
 
@@ -52,7 +53,7 @@ export class DashboardComponent implements OnInit {
   loading!: boolean;
   orgId!: number;
 
-  orgCoaches: any;
+  coaches: any;
   numberofCoaches!: number;
 
   orgData: any;
@@ -74,6 +75,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private clientService: ClientService,
+    private coachService: CoachService,
     private CoachEducationService: CoachEducationService,
     private router: Router,
     private route: ActivatedRoute,
@@ -444,13 +446,13 @@ export class DashboardComponent implements OnInit {
     const data = {
       orgId: id,
     }
-    this.clientService.getOrgCoaches(data).subscribe(
+    this.coachService.getCoaches(data).subscribe(
       (response: any) => {
         console.log('here Organization=> coaches', response);
-        this.orgCoaches = response;
-        console.log(this.orgCoaches);
+        this.coaches = response;
+        console.log(this.coaches);
         console.log('here Organization=> coaches', response);
-        this.numberofCoaches = this.orgCoaches.length;
+        this.numberofCoaches = this.coaches.length;
 
       },
       (error: any) => {

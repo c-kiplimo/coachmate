@@ -164,7 +164,7 @@
 
 
       <div class="upcomingsessions list-container container">
-        <table class="table" *ngIf="orgCoaches?.length">
+        <table class="table" *ngIf="coaches?.length">
           <thead>
             <th colspan="1">Full Name</th>
             <th colspan="1">Email</th>
@@ -174,7 +174,7 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let coach of orgCoaches">
+            <tr *ngFor="let coach of coaches">
               <td>{{ coach.fullName }}</td>
               <td>{{ coach.emailAddress }}</td>
               <td>{{ coach.msisdn }}</td>
