@@ -70,15 +70,13 @@ public class ContractResource {
             }
 
         } catch (Exception e) {
-
+            return new ResponseEntity(new RestResponse(true, "contract not created"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 //        try {
-
-            Contract contract = null;
-
-
-
-            return new ResponseEntity<>(contract,HttpStatus.CREATED) ;
+//            Contract contract = null;
+//
+//            return new ResponseEntity<>(c
+//            ontract,HttpStatus.CREATED) ;
     }
 
 

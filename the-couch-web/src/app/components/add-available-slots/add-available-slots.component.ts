@@ -21,7 +21,7 @@ export class AddAvailableSlotsComponent implements OnInit {
   coachId: any;
 
   coachSlots: any;
-  loading = false;
+  loading = true;
   
   page: number = 0;
   pageSize: number = 15;
@@ -73,8 +73,13 @@ export class AddAvailableSlotsComponent implements OnInit {
     };
     this.apiService.getCoachSlots(options).subscribe({
       next: (response) => {
-        this.loading = false;
         this.coachSlots = response.body;
+        this.totalElements = response.headers.get('X-Total-Count');
+        console.log(this.coachSlots);
+        this.loading = false;
+      }, error: (error) => {
+        console.log(error);
+        this.loading = false;
       }
     });
   }
@@ -97,7 +102,4 @@ export class AddAvailableSlotsComponent implements OnInit {
     alert('Cannot delete booked slot');
   }
 }
-
-
-
 }

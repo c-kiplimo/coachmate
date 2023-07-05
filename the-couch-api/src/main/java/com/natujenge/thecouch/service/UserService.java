@@ -455,7 +455,6 @@ public class UserService implements UserDetailsService {
         }
 
         return userClientExample;
-
     }
 
     private User createExample_( String status, String search, Long organizationId) {

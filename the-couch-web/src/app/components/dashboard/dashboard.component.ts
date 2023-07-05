@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
       // this.getOrgContracts(this.orgId);
       this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      // this.getOrgCoaches(this.orgId);
+      this.getOrgCoaches(this.orgId);
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
