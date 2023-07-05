@@ -14,7 +14,7 @@ public class CoachDTO {
     private String fullName;
     private String msisdn;
     private String email;
-    private CoachStatus status;
+    private CoachStatus coachStatus;
     private boolean onboarded;
     private String reason;
     private LocalDateTime createdAt;

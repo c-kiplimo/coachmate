@@ -463,7 +463,7 @@ public class UserService implements UserDetailsService {
         Organization organization = new Organization();
         log.info("Request to get coaches by orgId: {}", organizationId);
 
-        //userClientExample.setUserRole(UserRole.COACH);
+        userCoachExample.setUserRole(UserRole.COACH);
         if (organizationId != null) {
             userCoachExample.setOrganization(organization);
             userCoachExample.getOrganization().setId(organizationId);
