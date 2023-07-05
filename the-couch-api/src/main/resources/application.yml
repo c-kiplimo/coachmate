@@ -10,11 +10,22 @@ spring:
 #    username: root
 #    password: N@tujengeroot
 
+    #    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    #    username: root
+    #    password: ninja
+
+    #    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    #    username: root
+    #    password: ninja
+
+    #  url: jdbc:mysql://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    # password: elijah@maria22
+    #username: elijah
 
 
-#    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-#    username: root
-#    password: ninja
+    #  url: jdbc:mysql://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    # password: elijah@maria22
+    #username: elijah
 
 
 

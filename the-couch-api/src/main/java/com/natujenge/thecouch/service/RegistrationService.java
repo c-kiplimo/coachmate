@@ -26,11 +26,12 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class RegistrationService {
-    private final static String USER_EXISTS = "Email %s Taken!";
+    private final static String USER_EXISTS = "Email %s is already taken!";
     private final static String USER_NOT_FOUND_MSG = "user %s not found!";
     private final static String EMAIL_NOT_VALID = "EMAIL %s IS NOT VALID";
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
     private static final String EMAIL_ALREADY_EXISTS = "Email %s already exists";
+    private static final String PHONE_EXISTS = "Phone %s already exists";
     private final UserService userService;
 
     private final OrganizationService organizationService;
@@ -76,6 +77,17 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
         }
+
+        //check if email and phone number exists
+        Optional<User> userOptional = userRepository.findByEmail(registrationRequest.getEmail());
+        Optional<User> userOptional1 = userRepository.findByMsisdn(registrationRequest.getMsisdn());
+        if (userOptional.isPresent()) {
+            throw new IllegalStateException(String.format(USER_EXISTS, registrationRequest.getEmail()));
+        }
+        if (userOptional1.isPresent()) {
+            throw new IllegalStateException(String.format(PHONE_EXISTS, registrationRequest.getMsisdn()));
+        }
+
 
         switch (registrationRequest.getUserRole()) {
             case COACH: {
@@ -171,7 +183,7 @@ public class RegistrationService {
                         addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
-               // set contract templates
+                // set contract templates
                 ContractTemplatesRequest contractTemplatesRequest = new ContractTemplatesRequest();
                 contractTemplatesRequest.setServicesTemplate(Constants.DEFAULT_SERVICES_TEMPLATE);
                 contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
@@ -444,7 +456,7 @@ public class RegistrationService {
                 )
         );
 
-       // User savedCoach = coachRepository.save(coach);
+        // User savedCoach = coachRepository.save(coach);
 
         // Create client wallet
         CoachWallet coachWallet = new CoachWallet();
@@ -456,7 +468,7 @@ public class RegistrationService {
 
         coachWallet.setUser(savedCoach);
         coachWallet.setWalletBalance(Float.valueOf(0));
-       // coachWallet.setCreatedBy();
+        // coachWallet.setCreatedBy();
         coachWalletRepository.save(coachWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -471,7 +483,7 @@ public class RegistrationService {
         //coachBillingAccount.setCreatedBy(msisdn);
         coachBillingAccountService.createBillingAccount(coachBillingAccount);
         log.info("Client Billing Account created Successfully!");
-       // return savedCoach;
+        // return savedCoach;
 
         // Create Default NotificationSettings for Every User
         // Generate default Templates for all TemplateTypes
@@ -516,8 +528,8 @@ public class RegistrationService {
         log.info("Notifications Saved Successfully");
         // Update User
         User registeredUser = (User) response.get(0);
-       // registeredUser.setCoach(savedCoach);
-       // userService.updateUser(registeredUser);
+        // registeredUser.setCoach(savedCoach);
+        // userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);
@@ -679,6 +691,7 @@ public class RegistrationService {
         User coach = new User();
         coach.setFirstName(registrationRequest.getFirstName());
         coach.setLastName(registrationRequest.getLastName());
+        coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
         coach.setEmail(registrationRequest.getEmail());
         coach.setUsername(registrationRequest.getEmail());
         coach.setMsisdn(registrationRequest.getMsisdn());
@@ -687,6 +700,7 @@ public class RegistrationService {
         coach.setBusinessName(organization.getOrgName());
         coach.setCoachStatus(CoachStatus.NEW);
         coach.setCreatedBy(organization.getOrgName());
+        coach.setCreatedAt(LocalDateTime.now());
 
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);
@@ -711,41 +725,38 @@ public class RegistrationService {
 
         log.info("Creating Default Settings for User");
 
-//        // Defaults for All
-//        NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
-//        notificationSettingsRequest.setNotificationMode(NotificationMode.SMS);
-//        notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
-//        notificationSettingsRequest.setNotificationMode(NotificationMode.SMS_EMAIL);
-//        notificationSettingsRequest.setNotificationEnable(true);
-//        notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
-//        notificationSettingsRequest.setEmailDisplayName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
-//        notificationSettingsRequest.setMsisdn(registrationRequest.getMsisdn());
-//        notificationSettingsRequest.setTillNumber("DEFAULT");
-//        notificationSettingsRequest.setAccountNumber(registrationRequest.getMsisdn());
-//        notificationSettingsRequest.setDepositPercentage(30F);
+        // Defaults for All
+        NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
+        notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
+        notificationSettingsRequest.setNotificationEnable(true);
+        notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
+        notificationSettingsRequest.setEmailDisplayName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+        notificationSettingsRequest.setMsisdn(registrationRequest.getMsisdn());
+        notificationSettingsRequest.setTillNumber("DEFAULT");
+        notificationSettingsRequest.setAccountNumber(registrationRequest.getMsisdn());
+        notificationSettingsRequest.setDepositPercentage(30F);
 
-//        notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
-//        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
-//        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_SMS_TEMPLATE);
-//        notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
-//        notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
-//        notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
-//        notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
-//        notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
-//        notificationSettingsRequest.setCreatedBy(organization.getOrgName());
+        notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
+        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
+        notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
+        notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
+        notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
+        notificationSettingsRequest.setCreatedBy(organization.getOrgName());
 
-//        notificationSettingsRequest.setNewContractEnable(true);
-//        notificationSettingsRequest.setPartialBillPaymentEnable(true);
-//        notificationSettingsRequest.setFullBillPaymentEnable(true);
-//        notificationSettingsRequest.setCancelSessionEnable(true);
-//        notificationSettingsRequest.setConductedSessionEnable(true);
-//        notificationSettingsRequest.setRescheduleSessionEnable(true);
-//        notificationSettingsRequest.setPaymentReminderEnable(true);
-//        notificationSettingsRequest.setCoach(savedCoach);
+        notificationSettingsRequest.setNewContractEnable(true);
+        notificationSettingsRequest.setPartialBillPaymentEnable(true);
+        notificationSettingsRequest.setFullBillPaymentEnable(true);
+        notificationSettingsRequest.setCancelSessionEnable(true);
+        notificationSettingsRequest.setConductedSessionEnable(true);
+        notificationSettingsRequest.setRescheduleSessionEnable(true);
+        notificationSettingsRequest.setPaymentReminderEnable(true);
+        notificationSettingsRequest.setCoach(savedCoach);
 
 
-//        NotificationSettings notificationSettings = notificationSettingsService.
-//                addNewSettings(notificationSettingsRequest);
+        NotificationSettings notificationSettings = notificationSettingsService.
+                addNewSettings(notificationSettingsRequest);
 
         log.info("Notifications Saved Successfully");
         // set contract templates
@@ -779,8 +790,8 @@ public class RegistrationService {
         //SEnding Confirmation token
         //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
-        String subject = "Your coachMatePro Account Has Been Created.";
-        String content = "Hey, use this link to confirm your account and set your password," +
+        String subject = "Confirm Your CoachMatePro Account.";
+        String content = "Hey, use this link to confirm your CoachMatePro account and set your password," +
                 host +"/confirmcoach/"+savedCoach.getId()+"/"+token;
         notificationServiceHTTPClient.sendEmail(savedCoach.getEmail(),subject, content, false);
         notificationServiceHTTPClient.sendSMS(savedCoach.getMsisdn(), subject, content, String.valueOf(false));
