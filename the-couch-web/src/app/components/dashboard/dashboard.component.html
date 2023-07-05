@@ -150,20 +150,16 @@
   </div>
 </div>
 
-
-
 <div class="row" *ngIf="this.userRole == 'ORGANIZATION'">
-  <div class="col-12">
+  <div class="col-md-12">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-semi-bold f-weight fs-6">Coaches</h5>
+        <h5 class="card-title fw-bold">Coaches</h5>
         <a [routerLink]="['/coaches']">
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
-
-
-      <div class="upcomingsessions list-container container">
+      <div class="card-body">   <!-- upcomingsessionsTable list-container container -->
         <table class="table" *ngIf="orgCoaches?.length">
           <thead>
             <th colspan="1">Full Name</th>
@@ -188,7 +184,6 @@
                   }">
                     {{ coach.status }}</span>
 
-                </td>
               <td class="view">
                 <a [routerLink]="['/editCoach', coach.id]"><i class="fas fa-external-link-alt"></i></a>
                 <!-- <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button> -->
@@ -198,11 +193,9 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </div>
-
 
 <div class="row row-height" *ngIf="this.userRole == 'COACH'">
   <!-- <div class="col-3 card text-center top-cards">
