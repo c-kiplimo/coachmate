@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", uses = {})
 public interface CoachMapper extends EntityMapper<CoachDTO, User>{
 
-    @Override
+//    @Override
     CoachDTO toDto(User Entity);
 
 
