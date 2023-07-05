@@ -127,7 +127,7 @@ public class UserService implements UserDetailsService {
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        log.info("Confirmation token generated");
+        log.info("Confirmation token generated   ");
 
         List<Object> response = new ArrayList<>();
         response.add(user1.getId());
@@ -138,6 +138,7 @@ public class UserService implements UserDetailsService {
     }
 
 
+    // Coach as user
     // Coach as user
     public List<Object> signupCoachAsUser(User user ) {
         log.info("Signing up coach as user");
@@ -510,7 +511,6 @@ public class UserService implements UserDetailsService {
                 .withIgnorePaths("locked", "enabled","onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
                 .withIgnoreNullValues();
         Example<User> example = Example.of(user, matcher);
-
         //return example
         return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }

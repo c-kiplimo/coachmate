@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,12 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class RegistrationService {
-    private final static String USER_EXISTS = "Email %s Taken!";
+    private final static String USER_EXISTS = "Email %s is already taken!";
     private final static String USER_NOT_FOUND_MSG = "user %s not found!";
     private final static String EMAIL_NOT_VALID = "EMAIL %s IS NOT VALID";
     private final static String PHONE_NOT_VALID = "PHONE %s IS NOT VALID";
+    private static final String EMAIL_ALREADY_EXISTS = "Email %s already exists";
+    private static final String PHONE_EXISTS = "Phone %s already exists";
     private final UserService userService;
 
     private final OrganizationService organizationService;
@@ -74,6 +77,17 @@ public class RegistrationService {
         if (!isValidEmail) {
             throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
         }
+
+        //check if email and phone number exists
+        Optional<User> userOptional = userRepository.findByEmail(registrationRequest.getEmail());
+        Optional<User> userOptional1 = userRepository.findByMsisdn(registrationRequest.getMsisdn());
+        if (userOptional.isPresent()) {
+            throw new IllegalStateException(String.format(USER_EXISTS, registrationRequest.getEmail()));
+        }
+        if (userOptional1.isPresent()) {
+            throw new IllegalStateException(String.format(PHONE_EXISTS, registrationRequest.getMsisdn()));
+        }
+
 
         switch (registrationRequest.getUserRole()) {
             case COACH: {
@@ -169,7 +183,7 @@ public class RegistrationService {
                         addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
-               // set contract templates
+                // set contract templates
                 ContractTemplatesRequest contractTemplatesRequest = new ContractTemplatesRequest();
                 contractTemplatesRequest.setServicesTemplate(Constants.DEFAULT_SERVICES_TEMPLATE);
                 contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
@@ -442,7 +456,7 @@ public class RegistrationService {
                 )
         );
 
-       // User savedCoach = coachRepository.save(coach);
+        // User savedCoach = coachRepository.save(coach);
 
         // Create client wallet
         CoachWallet coachWallet = new CoachWallet();
@@ -454,7 +468,7 @@ public class RegistrationService {
 
         coachWallet.setUser(savedCoach);
         coachWallet.setWalletBalance(Float.valueOf(0));
-       // coachWallet.setCreatedBy();
+        // coachWallet.setCreatedBy();
         coachWalletRepository.save(coachWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -469,7 +483,7 @@ public class RegistrationService {
         //coachBillingAccount.setCreatedBy(msisdn);
         coachBillingAccountService.createBillingAccount(coachBillingAccount);
         log.info("Client Billing Account created Successfully!");
-       // return savedCoach;
+        // return savedCoach;
 
         // Create Default NotificationSettings for Every User
         // Generate default Templates for all TemplateTypes
@@ -514,8 +528,8 @@ public class RegistrationService {
         log.info("Notifications Saved Successfully");
         // Update User
         User registeredUser = (User) response.get(0);
-       // registeredUser.setCoach(savedCoach);
-       // userService.updateUser(registeredUser);
+        // registeredUser.setCoach(savedCoach);
+        // userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);
@@ -657,5 +671,147 @@ public class RegistrationService {
         log.info("User Updated Successfully");
 
         return "PASSWORD CHANGED SUCCESSFULLY";
+    }
+
+    public void addCoach(Organization organization, RegistrationRequest registrationRequest) {
+        log.info("Adding a Coach");
+        boolean isValidEmail = emailValidator.test(registrationRequest.getEmail());
+
+        if(!isValidEmail) {
+            throw new IllegalStateException(String.format(EMAIL_NOT_VALID, registrationRequest.getEmail()));
+        }
+
+        //Create Coach User
+        //check if user exists
+        Optional<User> userOptional = userService.findByEmail(registrationRequest.getEmail());
+        if(userOptional.isPresent()) {
+            throw new IllegalStateException(String.format(EMAIL_ALREADY_EXISTS, registrationRequest.getEmail()));
+        }
+
+        User coach = new User();
+        coach.setFirstName(registrationRequest.getFirstName());
+        coach.setLastName(registrationRequest.getLastName());
+        coach.setFullName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+        coach.setEmail(registrationRequest.getEmail());
+        coach.setUsername(registrationRequest.getEmail());
+        coach.setMsisdn(registrationRequest.getMsisdn());
+        coach.setUserRole(UserRole.COACH);
+        coach.setOrganization(organization);
+        coach.setBusinessName(organization.getOrgName());
+        coach.setCoachStatus(CoachStatus.NEW);
+        coach.setCreatedBy(organization.getOrgName());
+        coach.setCreatedAt(LocalDateTime.now());
+
+        // coach Number Generation
+        int randNo = (int) ((Math.random() * (999 - 1)) + 1);
+        String coachL = String.format("%05d", randNo);
+        String coachNo = coach.getLastName().substring(0, 2) +
+                coach.getFirstName().charAt(0) + coach.getLastName().charAt(0) + "-" + coachL;
+        coach.setCoachNumber(coachNo);
+
+        // Encode Password > from spring boot
+        String encodedPassword = passwordEncoder.encode("qwerty1@");
+
+        // Set details
+        coach.setPassword(encodedPassword);
+        coach.setContentStatus(ContentStatus.ACTIVE);
+        coach.setCreatedAt(LocalDateTime.now());
+
+        // save the User in the database
+        User savedCoach = userRepository.save(coach);
+
+        log.info("User saved",savedCoach);
+
+
+        log.info("Creating Default Settings for User");
+
+        // Defaults for All
+        NotificationSettingsRequest notificationSettingsRequest = new NotificationSettingsRequest();
+        notificationSettingsRequest.setNotificationMode(NotificationMode.EMAIL);
+        notificationSettingsRequest.setNotificationEnable(true);
+        notificationSettingsRequest.setSmsDisplayName(Constants.DEFAULT_SMS_SOURCE_ADDRESS);
+        notificationSettingsRequest.setEmailDisplayName(registrationRequest.getFirstName() + " " + registrationRequest.getLastName());
+        notificationSettingsRequest.setMsisdn(registrationRequest.getMsisdn());
+        notificationSettingsRequest.setTillNumber("DEFAULT");
+        notificationSettingsRequest.setAccountNumber(registrationRequest.getMsisdn());
+        notificationSettingsRequest.setDepositPercentage(30F);
+
+        notificationSettingsRequest.setRescheduleSessionTemplate(Constants.RESCHEDULE_SESSION_TEMPLATE);
+        notificationSettingsRequest.setNewContractTemplate(Constants.DEFAULT_NEW_CONTRACT_EMAIL_TEMPLATE);
+        notificationSettingsRequest.setPartialBillPaymentTemplate(Constants.DEFAULT_PARTIAL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setFullBillPaymentTemplate(Constants.FULL_BILL_PAYMENT_TEMPLATE);
+        notificationSettingsRequest.setConductedSessionTemplate(Constants.CONDUCTED_SESSION_TEMPLATE);
+        notificationSettingsRequest.setCancelSessionTemplate(Constants.CANCEL_SESSION_TEMPLATE);
+        notificationSettingsRequest.setPaymentReminderTemplate(Constants.DEFAULT_PAYMENT_REMINDER_TEMPLATE);
+        notificationSettingsRequest.setCreatedBy(organization.getOrgName());
+
+        notificationSettingsRequest.setNewContractEnable(true);
+        notificationSettingsRequest.setPartialBillPaymentEnable(true);
+        notificationSettingsRequest.setFullBillPaymentEnable(true);
+        notificationSettingsRequest.setCancelSessionEnable(true);
+        notificationSettingsRequest.setConductedSessionEnable(true);
+        notificationSettingsRequest.setRescheduleSessionEnable(true);
+        notificationSettingsRequest.setPaymentReminderEnable(true);
+        notificationSettingsRequest.setCoach(savedCoach);
+
+
+        NotificationSettings notificationSettings = notificationSettingsService.
+                addNewSettings(notificationSettingsRequest);
+
+        log.info("Notifications Saved Successfully");
+        // set contract templates
+        ContractTemplatesRequest contractTemplatesRequest = new ContractTemplatesRequest();
+        contractTemplatesRequest.setServicesTemplate(Constants.DEFAULT_SERVICES_TEMPLATE);
+        contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
+        contractTemplatesRequest.setPracticeTemplate(Constants.DEFAULT_PRACTICE_TEMPLATE);
+        contractTemplatesRequest.setTerms_and_conditionsTemplate(Constants.DEFAULT_TERMS_AND_CONDITIONS_TEMPLATE);
+        contractTemplatesRequest.setCoach(savedCoach);
+        ContractTemplate contractTemplate =notificationSettingsService.addContractTemplates(contractTemplatesRequest);
+        log.info("Contract Templates Saved Successfully");
+
+
+        // Generate a Random 6 digit OTP - 0 - 999999
+        int randomOTP = (int) ((Math.random() * (999999 - 1)) + 1);
+        String token = String.format("%06d", randomOTP);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
+                coach
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        log.info("Confirmation token generated");
+
+        //get where the app is running
+        String host = InetAddress.getLoopbackAddress().getHostName();
+
+        //SEnding Confirmation token
+        //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
+        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
+        String subject = "Confirm Your CoachMatePro Account.";
+        String content = "Hey, use this link to confirm your CoachMatePro account and set your password," +
+                host +"/confirmcoach/"+savedCoach.getId()+"/"+token;
+        notificationServiceHTTPClient.sendEmail(savedCoach.getEmail(),subject, content, false);
+        notificationServiceHTTPClient.sendSMS(savedCoach.getMsisdn(), subject, content, String.valueOf(false));
+
+
+        // Create CoachWallet
+        CoachWallet coachWallet = new CoachWallet();
+        coachWallet.setUser(savedCoach);
+        coachWallet.setWalletBalance(0f);
+        coachWallet.setCreatedBy(registrationRequest.getMsisdn());
+        coachWalletRepository.save(coachWallet);
+        log.info("Coach Wallet created Successfully!");
+
+
+        // Create CoachBillingAccount
+        CoachBillingAccount coachBillingAccount = new CoachBillingAccount();
+        coachBillingAccount.setCoach(savedCoach);
+        coachBillingAccount.setAmountBilled(0f);
+        coachBillingAccount.setCreatedBy(registrationRequest.getMsisdn());
+        coachBillingAccountService.createBillingAccount(coachBillingAccount);
+        log.info("Coach Billing Account created Successfully!");
     }
 }

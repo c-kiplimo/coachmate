@@ -3,6 +3,7 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientDTO;
@@ -10,8 +11,10 @@ import com.natujenge.thecouch.web.rest.dto.CoachDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
+import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -31,11 +34,32 @@ public class UserResource {
     private final ModelMapper modelMapper;
     private final UserService userService;
 
+    @Autowired
+    private RegistrationService registrationService;
+
     public UserResource(ModelMapper modelMapper, UserService userService) {
         this.modelMapper = modelMapper;
         this.userService = userService;
     }
 
+    @PostMapping(path = "/coach")
+    ResponseEntity<?> addNewCoach(@RequestBody RegistrationRequest registrationRequest,
+                                  @AuthenticationPrincipal User userDetails) {
+
+        try {
+            Organization organization = userDetails.getOrganization();
+            log.info("request to add new coach by organization{}",organization.getId());
+            registrationService.addCoach(organization, registrationRequest);
+
+            return new ResponseEntity<>(new RestResponse(false,
+                    "Coach by organization  created"), HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     //api to create a client user
     @PostMapping
     ResponseEntity<?> addNewClient(@RequestBody ClientRequest clientRequest,
@@ -151,7 +175,7 @@ public class UserResource {
         }
     }
     @GetMapping(path = "coaches")
-    ResponseEntity<List<CoachDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
+    ResponseEntity<List<CoachDTO>> getCoaches(@RequestParam(name = "orgId", required = false) Long orgId,
                                               @RequestParam(name = "status", required = false) String status,
                                               @RequestParam(name = "search", required = false) String search,
                                               Pageable pageable,
