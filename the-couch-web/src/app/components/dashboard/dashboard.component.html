@@ -159,10 +159,12 @@
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
-      <div class="card-body">   <!-- upcomingsessionsTable list-container container -->
-        <table class="table" *ngIf="orgCoaches?.length">
+
+      <div class="upcomingsessions list-container container">
+        <table class="table" *ngIf="coaches?.length">
+
           <thead>
-            <th colspan="1">Full Name</th>
+            <th colspan="1">Name</th>
             <th colspan="1">Email</th>
             <th colspan="1">Phone</th>
             <th colspan="1">Created On</th>
@@ -170,11 +172,11 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let coach of orgCoaches">
-              <td>{{ coach.fullName }}</td>
-              <td>{{ coach.emailAddress }}</td>
-              <td>{{ coach.msisdn }}</td>
-              <td>{{ coach.createdAt | date: "MMM d y"}}</td>
+            <tr *ngFor="let coach of coaches">
+              <td>{{ coach?.fullName }}</td>
+              <td>{{ coach?.emailAddress }}</td>
+              <td>{{ coach?.msisdn }}</td>
+              <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
 
               <td>
                   <span class="badge" [ngClass]="{
@@ -182,7 +184,7 @@
                     'badge-danger': coach?.coachStatus === 'SUSPENDED',
                     'badge-primary': coach?.coachStatus === 'CLOSED'
                   }">
-                    {{ coach.status }}</span>
+                    {{ coach.coachStatus }}</span>
 
               <td class="view">
                 <a [routerLink]="['/editCoach', coach.id]"><i class="fas fa-external-link-alt"></i></a>
