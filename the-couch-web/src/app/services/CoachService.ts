@@ -57,7 +57,7 @@ export class CoachService {
   }
 
   getCoaches(options: any): Observable<any> {
-    return this.httpClient.get(`${this.baseURL}users/coaches`,
+    return this.httpClient.get(`${this.baseURL}/users/coaches`,
       {
         params: options,
         observe: 'response',
