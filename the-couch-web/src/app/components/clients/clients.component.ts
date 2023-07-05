@@ -26,18 +26,13 @@ export class ClientsComponent implements OnInit {
   loading = false;
   itemsPerPage = 20;
   filters: any = {
-    status: '',
+    status: 'ALL',
     searchItem: '',
   };
   
 
   updateClient!: FormGroup;
 
-  constructor(private clientService: ClientService, 
-    private router: Router,
-    private toastrService: ToastrService,
-    private formbuilder: FormBuilder,) { }
-  
   clients!: any;
   all_clients!: any;
 
@@ -50,10 +45,17 @@ export class ClientsComponent implements OnInit {
 
   orgId!: number;
   coachId!: number;
-
+  showFilters = false;
+  clientStatuses = ['ALL', 'ACTIVE', 'SUSPENDED', 'CLOSED']
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
+
+  constructor(private clientService: ClientService, 
+    private router: Router,
+    private toastrService: ToastrService,
+    private formbuilder: FormBuilder,) { }
+  
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user');
@@ -105,7 +107,6 @@ export class ClientsComponent implements OnInit {
 
 
   getClients(page: any) {
- 
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -113,6 +114,9 @@ export class ClientsComponent implements OnInit {
       page = 0;
     } else {
       page = page - 1;
+    }
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
     }
     const options: any = {
       page: page,
@@ -232,5 +236,13 @@ editClientModal!: ElementRef;
     this.page = event;
     this.getClients(this.page);
   }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
   
+  resetStatuses(): void {
+    this.filters.status = 'ALL';
+    this.getClients(0);
+  }
 }
