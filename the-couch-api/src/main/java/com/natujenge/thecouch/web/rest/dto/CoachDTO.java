@@ -13,7 +13,7 @@ public class CoachDTO {
     private String lastName;
     private String fullName;
     private String msisdn;
-    private String emailAddress;
+    private String email;
     private CoachStatus status;
     private boolean onboarded;
     private String reason;

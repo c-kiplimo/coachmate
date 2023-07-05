@@ -1,15 +1,19 @@
-
+<div class="row">
+  <div class="col  mt-4" style="margin-left: 5px;">
+    <h3 class="fw-semi-bold f-weight fs-5">Coaches</h3>
+  </div>
+</div>
         
         <div class="row">
-                <div class="d-none d-md-block"class="col-4">
+                <div class="col-md-3">
                   <div class="filters-section">
                     <div class="wrap">
                       <select
                         class="form-control"
                         name="codes"
-                        [(ngModel)]="filters.status"
+                        [(ngModel)]="filters.status" (change)="filterByStatus()"
                       >
-                        <option value="">All statuses</option>
+                        <option value="" >All statuses</option>
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="SUSPENDED">SUSPENDED</option>
                         <option value="CLOSED">CLOSED</option>
@@ -17,149 +21,118 @@
                     </div>
                     </div>
                 </div>
-            <div class="wrap" class="col-3">
-                      <input
-                        type="text"
-                        class="form-control search-bar text-muted mt-3"
-                        name="customer"
-                        [(ngModel)]="filters.searchItem"
-                        placeholder="Name, Phone or Email"
-                        autocomplete="off"
-                      />
-                    </div>
-        <div class="col-3">
-            <button class="btn button-filter  search-bar" (click)="getClients()" (click)="getOrgClients()">
-                      <i class="fa fa-search" aria-hidden="true"></i>
-                      Search
-                    </button>
+                <div class="col-md-4">
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+                      aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
+                  </div>
+                </div>
+        <div class="col-md-2">
+          <button type="button" routerLink="/addCoach" class="btn btn-success">
+            <i class="fa fa-plus"></i> Add Coach
+          </button>
         </div>
-          <div class="col-2">
-            <button type="button" routerLink="/addclient" class="btn btn-success">
-              <i class="fa-solid fa-user-plus"></i> ADD COACH
-            </button>
-          </div>
-          </div>
-          <div class="upcomingsessions list-container container">
-            <table class="table" >
-              <thead>
-                <th colspan="1">#id</th>
-                <th colspan="1">Full Name</th>
-                <th colspan="1">Email</th>
-                <th colspan="1">Phone</th>
-                <th colspan="1">Created On</th>
-                <th colspan="1">Status</th>
-                <th colspan="1" class="text-center" width="100px">Actions</th>
+      </div>
+          <div class="row">
+            <div class="col-md-10" >
+              <div class="card">
+                <div class="card-body">
+                  <table class="table" *ngIf="coaches?.length">
+              <thead >
+                <tr>
+                <th scope=" col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
               </thead>
-              <tbody class="list-container">
-                <tr *ngFor="let coach of OrgCoaches">
-                  <th>{{ coach.id }}</th>
-                  <td>{{ coach.fullName }}</td>
-                  <td>{{ coach.emailAddress }}</td>
-                  <td>{{ coach.msisdn }}</td>
-                  <td>{{ coach.createdAt | date: "MMM d y"}}</td>
+              <tbody>
+                <tr *ngFor="let coach of coaches | paginate: { itemsPerPage: pageSize,currentPage:page,totalItems: totalElements}">
+                  <td>{{ coach?.fullName| titlecase }}</td>
+                  <td>{{ coach?.email }}</td>
+                  <td>{{ coach?.msisdn }}</td>
+                  <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
                   
                   <td>
-                    <span class="value">
-                    <span
-                    class="badge"
-                    [ngClass]="getClass(coach)"
-                    >{{ coach.status }}</span> 
-                    
-                  </span>
-                  <td class="text-center">
-                    <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button>
+                    <span class="badge" [ngClass]="{
+                  'badge-success': coach?.status === 'ACTIVE',
+                  'badge-danger': coach?.status === 'SUSPENDED' || coach.coachtStatus === 'CLOSED',
+                  'badge-primary': coach?.status=== 'NEW'
+                }">{{ coach?.coachStatus }}</span>
                   </td>
-
+    
+                  <td class="actions">
+                    <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToCoachView(coach.id)"></i>
+                    <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editCoachModal"
+                      (click)="editCoach(coach)"></i>
+                    <!-- <i
+                class="fa-solid fa-trash-can"
+                (click)="suspendClient(client)"
+              ></i> -->
+                  </td>
                 </tr>
               </tbody>
             </table>
             <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !OrgCoaches.length">
+              <p class="text-muted mt-5" *ngIf="!loading && !coaches.length">
                 No coaches Found.
               </p>
           </div>
+              </div>
+            </div>
+            </div>
+            <br>
+<div class="text-center" *ngIf="totalElements > 15">
+  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+<br>
+
           
         <!-- Edit Client Modal -->
-        <div class="modal fade" id="editClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editCoachModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-x1">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-               <form [formGroup]="updateClient">
+               <form [formGroup]="updateCoach">
                 <div class="mb-3 form-group">
                   <label for="firstName" class="form-label">First Name</label>
                   <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
-                  value="{{ clientToBeUpdated?.firstName }}"/>
+                  value="{{ coachToBeUpdated?.firstName }}"/>
                 </div>
                 <div class="mb-3 form-group">
                   <label for="lastName" class="form-label">Last Name</label>
                   <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
-                  value="{{ clientToBeUpdated?.lastName }}">
+                  value="{{ coachToBeUpdated?.lastName }}">
                 </div>
                 <div class="mb-3 form-group">
                   <label for="email_address" class="form-label">Email</label>
         
                   <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
         
-                  value="{{ clientToBeUpdated?.email }}">
+                  value="{{ coachToBeUpdated?.email }}">
                 </div>
                 <div class="mb-3 form-group">
                   <label for="msisdn" class="form-label">Phone Number</label>
                   <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
-                  value="{{ clientToBeUpdated?.msisdn }}">
-                </div>
-        
-                <div class="mb-3 form-group">
-        
-                  <label for="physicalAddress" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="physicalAddress" name="physicalAddress" formControlName="physicalAddress"
-        
-        
-                  value="{{ clientToBeUpdated?.physicalAddress}}">
-                </div>
-                <div class="mb-3 form-group">
-                  <label for="reason" class="form-label">Reason</label>
-                  <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
-                  value="{{ clientToBeUpdated?.reason}}">
-                </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="PaymentMode">Payment Mode</label>
-                  </div>
-        
-                  <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
-        
-                  value="{{ clientToBeUpdated?.paymentMode }}">
-                    <option selected>Select Payment Mode</option>
-                    <option value="PREPAY">PREPAY</option>
-                    <option value="POSTPAY">POSTPAY</option>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" for="clientType">Client Type</label>
-                  </div>
-                  <select class="form-select" id="inputGroupSelect01" formControlName="type" 
-                  value="{{ clientToBeUpdated?.clientType }}">
-                    <option selected>Select Client type</option>
-                    <option value="INDIVIDUAL">INDIVIDUAL</option>
-                    <option value="CORPORATE">CORPORATE</option>
-                    <option value="GROUP">GROUP</option>
-                  </select>
+                  value="{{ coachToBeUpdated?.msisdn }}">
                 </div>
                </form>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success"
-                (click)="updateClientDetails(clientToBeUpdated.id)"
+                (click)="updateCoachDetails(coachToBeUpdated.id)"
                 >Save changes</button>
               </div>
             </div>

@@ -1,131 +1,138 @@
 .details-card {
-    padding: 10px;
-    box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.1);
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
+  padding: 10px;
+  box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.1);
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
 }
 .title {
-    margin-left: 10px;
-    font-weight: bold;
+  margin-left: 10px;
+  font-weight: bold;
+}
+.f-weight{
+font-weight: 500;
+}
+.smaller-font{
+font-size: 15px;
 }
 .value {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 .onedetail {
-    padding: 5px;
+  padding: 5px;
 }
 .client-details-card{
-    width: 100%;
-    padding: 50px 80px;
-    border-radius: 8px;
-    border: 1px solid #3a3737;
-    margin-bottom: 30px;
+  width: 100%;
+  padding: 50px 80px;
+  border-radius: 8px;
+  border: 1px solid #3a3737;
+  margin-bottom: 30px;
 }
-    .client-details{
-      margin-top: 50px;
-    }
-    .holder {
-      width: 125px;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: flex-end;
-      flex-wrap: nowrap;
-      align-items: stretch;
-    background-color:red;
-    }
+  .client-details{
+    margin-top: 50px;
+  }
+  .holder {
+    width: 125px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  background-color:red;
+  }
 
-  .form-control{
-    width: 85%;
-  }
-  .form-select{
-    width: 85%;
-  }
-  .client-orders-card{
-    padding: 30px;
-    border-radius: 8px;
-    border: 1px solid #0a0a0a;
-  }
-    .active-tab {
-        background-color: #e1e1e1!important;
-        font-weight: 600!important;
-        color: #3c4043;
-      }
-    .tabs-section {
-      margin: 20px 0;
-      padding: 20px 0;
-      border-bottom: 1px solid #e1e1e1;
-    }
-  
-      .btn-tabs {
-        width: 25%;
-        text-align: center;
-        letter-spacing: 1px;
-        background-color: #fff;
-        outline: none!important;
-        box-shadow: none!important;
-      }
-    
-    .btn-view-order{
-      background-color: #1B3A27;
-    
-      letter-spacing: 1px;
-      font-size: 0.9rem;
-      border-radius: 4px ;
-    }
-    .btn-add{
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #1B3A27;
+.form-control{
+  width: 85%;
+}
+.form-select{
+  width: 85%;
+}
+.client-orders-card{
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #0a0a0a;
+}
+  .active-tab {
       
-      letter-spacing: 1px;
-      font-size: 0.9rem;
-      border-radius: 4px ;
-      width: 200px;
+      font-weight: 600!important;
+      color: black
+     
     }
-  
-  .main-detail{
-    text-transform:uppercase;
-    font-weight: 400;
-     background-color: #1B3A27;
+  .tabs-section {
+    margin: 20px 0;
+    padding: 20px 0;
+   
   }
-  .status{
-    background-color:#e1e1e1;
-    color: #1B3A27;
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: 600;
-  }
-  
 
+  .btn-tabs {
+    width: 10%;
+    text-align: center;
+    letter-spacing: 1px;
+    background-color: #fff;
+    outline: none;
+    box-shadow: none;
+  
+  }
+  
+  .btn-view-order{
+    background-color: #1B3A27;
+  
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-radius: 4px ;
+  }
   .btn-add{
+    position: absolute;
+    top: 10px;
+    right: 10px;
     background-color: #1B3A27;
-    color: white;
-  }
-  .modal-header{
-    background-color: #1B3A27;
-  
-  
+    
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    border-radius: 4px ;
+    width: 200px;
   }
 
-  .modal-title{
-    background-color: #1B3A27;
-    color: white
-  }
-  input[type=checkbox] {
-    transform: scale(1.5);
-    zoom: 1.5;
-  }
-  .badge-warning {
-    background-color: rgb(51, 53, 52) !important;
-  }
-  .badge-success {
-    background-color: green !important;
-  }
-  .badge-danger {
-    background-color: red !important;
-  }
-  
+.main-detail{
+  text-transform:uppercase;
+  font-weight: 400;
+   background-color: #1B3A27;
+}
+.status{
+  background-color:#e1e1e1;
+  color: #1B3A27;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+
+.btn-add{
+  background-color: #1B3A27;
+  color: white;
+}
+.modal-header{
+  background-color: #1B3A27;
+
+
+}
+
+.modal-title{
+  background-color: #1B3A27;
+  color: white
+}
+input[type=checkbox] {
+  transform: scale(1.5);
+  zoom: 1.5;
+}
+.badge-warning {
+  background-color: rgb(51, 53, 52) !important;
+}
+.badge-success {
+  background-color: green !important;
+}
+.badge-danger {
+  background-color: red !important;
+}
