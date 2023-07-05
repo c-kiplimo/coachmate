@@ -183,7 +183,7 @@ public class RegistrationService {
                         addNewSettings(notificationSettingsRequest);
 
                 log.info("Notifications Saved Successfully");
-               // set contract templates
+                // set contract templates
                 ContractTemplatesRequest contractTemplatesRequest = new ContractTemplatesRequest();
                 contractTemplatesRequest.setServicesTemplate(Constants.DEFAULT_SERVICES_TEMPLATE);
                 contractTemplatesRequest.setNotesTemplate(Constants.DEFAULT_NOTE_TEMPLATE);
@@ -456,7 +456,7 @@ public class RegistrationService {
                 )
         );
 
-       // User savedCoach = coachRepository.save(coach);
+        // User savedCoach = coachRepository.save(coach);
 
         // Create client wallet
         CoachWallet coachWallet = new CoachWallet();
@@ -468,7 +468,7 @@ public class RegistrationService {
 
         coachWallet.setUser(savedCoach);
         coachWallet.setWalletBalance(Float.valueOf(0));
-       // coachWallet.setCreatedBy();
+        // coachWallet.setCreatedBy();
         coachWalletRepository.save(coachWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -483,7 +483,7 @@ public class RegistrationService {
         //coachBillingAccount.setCreatedBy(msisdn);
         coachBillingAccountService.createBillingAccount(coachBillingAccount);
         log.info("Client Billing Account created Successfully!");
-       // return savedCoach;
+        // return savedCoach;
 
         // Create Default NotificationSettings for Every User
         // Generate default Templates for all TemplateTypes
@@ -528,8 +528,8 @@ public class RegistrationService {
         log.info("Notifications Saved Successfully");
         // Update User
         User registeredUser = (User) response.get(0);
-       // registeredUser.setCoach(savedCoach);
-       // userService.updateUser(registeredUser);
+        // registeredUser.setCoach(savedCoach);
+        // userService.updateUser(registeredUser);
 
         //SEnding Confirmation token
         String token = (String) response.get(1);
@@ -700,6 +700,7 @@ public class RegistrationService {
         coach.setBusinessName(organization.getOrgName());
         coach.setCoachStatus(CoachStatus.NEW);
         coach.setCreatedBy(organization.getOrgName());
+        coach.setCreatedAt(LocalDateTime.now());
 
         // coach Number Generation
         int randNo = (int) ((Math.random() * (999 - 1)) + 1);

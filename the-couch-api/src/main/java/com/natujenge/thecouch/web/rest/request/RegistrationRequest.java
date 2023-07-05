@@ -2,6 +2,7 @@ package com.natujenge.thecouch.web.rest.request;
 
 import com.natujenge.thecouch.domain.NotificationSettings;
 import com.natujenge.thecouch.domain.Organization;
+import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ public class RegistrationRequest {
     private String businessName;
     private String msisdn;
     private final String email;
+    private CoachStatus coachStatus;
     private final String password;
     private UserRole userRole;
     private Organization organization;

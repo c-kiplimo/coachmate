@@ -14,6 +14,7 @@ import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.dto.*;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
+import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -388,12 +389,7 @@ public class UserService implements UserDetailsService {
         return contractTemplatesRepository.save(contractTemplate);
     }
 
-    public Optional<UserDTO> findOne(Long id) {
-        log.info("Request to get Coach by id: {}", id);
-        //Optional<User> userOptional = userRepository.findById(id);
-       // return userOptional.map(coachMapper::toDto);
-        return userRepository.findById(id).map(coachMapper::toDto);
-    }
+
 
     public Optional<User> confirmClientTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
         log.info("Request to confirm client token and update password: {}", userTokenConfirmRequest);
@@ -436,7 +432,7 @@ public class UserService implements UserDetailsService {
         Organization organization = new Organization();
         log.info("Request to get clients by coachId: {}", coachId);
 
-        //userClientExample.setUserRole(UserRole.CLIENT);
+        userClientExample.setUserRole(UserRole.CLIENT);
         if(organizationId != null) {
             userClientExample.setOrganization(organization);
             userClientExample.getOrganization().setId(organizationId);
@@ -462,6 +458,37 @@ public class UserService implements UserDetailsService {
 
     }
 
+    private User createExample_( String status, String search, Long organizationId) {
+        User userCoachExample = new User();
+        Organization organization = new Organization();
+        log.info("Request to get coaches by orgId: {}", organizationId);
+
+        //userClientExample.setUserRole(UserRole.COACH);
+        if (organizationId != null) {
+            userCoachExample.setOrganization(organization);
+            userCoachExample.getOrganization().setId(organizationId);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            userCoachExample.setCoachStatus(CoachStatus.valueOf(status));
+        }
+        if (search != null && !search.isEmpty()) {
+            if (search.contains("@")) {
+                userCoachExample.setEmail(search);
+            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+                userCoachExample.setMsisdn(search);
+            } else {
+                // Only return coaches created by the logged in user's organization
+                if (organizationId != null) {
+                    userCoachExample.setFullName(search + " (Organization: " + organizationId + ")");
+                } else {
+                    userCoachExample.setFullName(search);
+                }
+            }
+        }
+
+        return userCoachExample;
+    }
 
 
     public Page<ClientDTO> getClients(Long coachId, String status, String search, Long organizationId, Pageable pageable) {
@@ -477,6 +504,23 @@ public class UserService implements UserDetailsService {
 
         //return example
         return userRepository.findAll(example, pageable).map(clientMapper::toDto);
+    }
+    public Page<CoachDTO> getCoaches(
+            String status,
+            String search,
+            Long organizationId,
+            Pageable pageable) {
+        User user = createExample_(status, search, organizationId);
+        log.info("After example {} ", user);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("locked", "enabled", "onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
+                .withIgnoreNullValues();
+
+        Example<User> example = Example.of(user, matcher);
+        return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }
 
 
@@ -501,7 +545,23 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Client not found");
         }
     }
-
+    public User editCoach(Long coachId, User userDetails, CoachRequest coachRequest) {
+        log.info("Request to edit coach: {}", coachRequest);
+        Optional<User> userOptional = userRepository.findById(coachId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
+            user.setFirstName(coachRequest.getFirstName());
+            user.setLastName(coachRequest.getLastName());
+            user.setMsisdn(coachRequest.getMsisdn());
+            user.setEmail(coachRequest.getEmail());
+            user.setLastUpdatedBy(userDetails.getFullName());
+            user.setLastUpdatedAt(LocalDateTime.now());
+            return userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Coach not found");
+        }
+    }
     public User getClientById(Long clientId, User userDetails) {
         log.info("Request to get client by id: {}", clientId);
         Optional<User> userOptional = userRepository.findById(clientId);
@@ -509,6 +569,12 @@ public class UserService implements UserDetailsService {
     }
 
 
+
+    public User getCoachById(Long coachId, User userDetails) {
+        log.info("Request to get coach by id: {}", coachId);
+        Optional<User> userOptional = userRepository.findById(coachId);
+        return userOptional.orElseThrow(() -> new IllegalStateException("Coach not found"));
+    }
     public Optional<User> confirmCoachTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
         log.info("Request to confirm coach token and update password: {}", userTokenConfirmRequest);
         Optional<User> userOptional = userRepository.findById(userTokenConfirmRequest.getId());
@@ -542,4 +608,5 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Invalid Coach");
         }
     }
+
 }
