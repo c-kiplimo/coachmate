@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
+import com.natujenge.thecouch.domain.enums.CoachStatus;
 import com.natujenge.thecouch.domain.enums.ContentStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -291,12 +293,15 @@ public class UserService implements UserDetailsService {
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         log.info("Confirmation token generated");
 
+        //get where the app is running
+        String host = InetAddress.getLoopbackAddress().getHostName();
+
         //SEnding Confirmation token
         //NotificationHelper.sendConfirmationToken(token, "CONFIRM", (User) response.get(0));
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
-        String subject = "Your TheCoach Account Has Been Created.";
+        String subject = "Your coachMatePro Account Has Been Created.";
         String content = "Hey, use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmclient/"+saveClient.getId()+"/"+token;
+                host+"/confirmclient/"+saveClient.getId()+"/"+token;
         notificationServiceHTTPClient.sendEmail(saveClient.getEmail(),subject, content, false);
         notificationServiceHTTPClient.sendSMS(saveClient.getMsisdn(), subject, content, String.valueOf(false));
 
@@ -505,4 +510,37 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public Optional<User> confirmCoachTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
+        log.info("Request to confirm coach token and update password: {}", userTokenConfirmRequest);
+        Optional<User> userOptional = userRepository.findById(userTokenConfirmRequest.getId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            ConfirmationToken confirmationToken = confirmationTokenService.getToken(userTokenConfirmRequest.getToken()).orElseThrow(() ->
+                    new IllegalStateException("Token not Found!"));
+
+            if (confirmationToken != null) {
+                if (confirmationToken.getConfirmedAt() != null) {
+                    throw new IllegalStateException("Email already confirmed");
+                } else {
+                    LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+                    if (expiredAt.isBefore(LocalDateTime.now())) {
+                        throw new IllegalStateException("Token has expired");
+                    } else {
+                        String encodedPassword = passwordEncoder.encode(userTokenConfirmRequest.getPassword());
+                        user.setPassword(encodedPassword);
+                        user.setCoachStatus(CoachStatus.ACTIVE);
+                        userRepository.save(user);
+                        confirmationTokenService.setConfirmedAt(confirmationToken.getToken());
+                        enableAppUser(confirmationToken.getUser().getEmail());
+                        log.info("User password updated successfully");
+                        return userOptional;
+                    }
+                }
+            } else {
+                throw new IllegalStateException("Invalid Token");
+            }
+        } else {
+            throw new IllegalStateException("Invalid Coach");
+        }
+    }
 }

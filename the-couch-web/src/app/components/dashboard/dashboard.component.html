@@ -11,9 +11,7 @@
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/add-contract"><i
           class="fa fa-plus"></i> Add
         Contract</button>
-      <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i
-          class="fa fa-plus"></i> Add
-        Session Schedule</button>
+      
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
           class="fa fa-plus"></i> Add
         Session</button>
@@ -236,13 +234,13 @@
   </div> -->
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Clients</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Clients</h6>
       <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
     </div>
   </div>
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
-      <h6 class="card-title">Contracts</h6>
+      <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
       <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
     </div>
   </div>

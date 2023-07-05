@@ -36,6 +36,7 @@ public class NotificationSettingsRequest {
     private String conductedSessionTemplate;
     private String rescheduleSessionTemplate;
     private String paymentReminderTemplate;
+    private String createdBy;
 
     private boolean newContractEnable;
     private boolean rescheduleSessionEnable;
