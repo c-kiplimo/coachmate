@@ -56,7 +56,7 @@ export class CoachesComponent implements OnInit {
 
     this.organizationSessionData = sessionStorage.getItem('user'); 
     this.user = JSON.parse(this.organizationSessionData);
-    this.userRole = this.organizationData.userRole;
+    this.userRole = this.user.userRole;
     console.log(this.userRole);
     
 
@@ -113,7 +113,7 @@ getCoaches(page: any) {
   };
 
  if(this.userRole == 'ORGANIZATION'){
-    options.coachId = this.coachId;
+    options.orgId = this.orgId;
   }
   
   this.coachService.getCoaches(options).subscribe(

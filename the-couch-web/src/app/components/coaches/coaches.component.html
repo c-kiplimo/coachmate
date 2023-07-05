@@ -13,7 +13,7 @@
                         name="codes"
                         [(ngModel)]="filters.status" (change)="filterByStatus()"
                       >
-                        <option value="" selected>All statuses</option>
+                        <option value="" >All statuses</option>
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="SUSPENDED">SUSPENDED</option>
                         <option value="CLOSED">CLOSED</option>
@@ -21,7 +21,6 @@
                     </div>
                     </div>
                 </div>
-              
                 <div class="col-md-4">
                   <div class="input-group mb-3">
                     <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
@@ -29,34 +28,33 @@
                     <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
                   </div>
                 </div>
-                
         <div class="col-md-2">
-          <button type="button" routerLink="/addcoach" class="btn btn-success">
+          <button type="button" routerLink="/addCoach" class="btn btn-success">
             <i class="fa fa-plus"></i> Add Coach
           </button>
         </div>
       </div>
           <div class="row">
-            <div class="col-md-12" >
+            <div class="col-md-10" >
               <div class="card">
                 <div class="card-body">
                   <table class="table" *ngIf="coaches?.length">
-              <thead>
+              <thead >
                 <tr>
-                <th colspan="1">Full Name</th>
-                <th colspan="1">Email</th>
-                <th colspan="1">Phone</th>
-                <th colspan="1">Created On</th>
-                <th colspan="1">Status</th>
-                <th colspan="1" class="text-center" width="100px">Actions</th>
+                <th scope=" col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
               </tr>
               </thead>
-              <tbody class="list-container">
+              <tbody>
                 <tr *ngFor="let coach of coaches | paginate: { itemsPerPage: pageSize,currentPage:page,totalItems: totalElements}">
-                  <td>{{ coach.fullName }}</td>
-                  <td>{{ coach.emailAddress }}</td>
-                  <td>{{ coach.msisdn }}</td>
-                  <td>{{ coach.createdAt | date: "MMM d y"}}</td>
+                  <td>{{ coach?.fullName| titlecase }}</td>
+                  <td>{{ coach?.emailAdress }}</td>
+                  <td>{{ coach?.msisdn }}</td>
+                  <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
                   
                   <td>
                     <span class="badge" [ngClass]="{
@@ -68,7 +66,7 @@
     
                   <td class="actions">
                     <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToCoachView(coach.id)"></i>
-                    <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                    <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editCoachModal"
                       (click)="editCoach(coach)"></i>
                     <!-- <i
                 class="fa-solid fa-trash-can"
@@ -100,7 +98,7 @@
           <div class="modal-dialog modal-x1">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
