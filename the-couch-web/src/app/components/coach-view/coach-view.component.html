@@ -19,37 +19,33 @@
           Actions</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <li (click)="statusState('ACTIVE')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#activateclientModal"
+                data-bs-toggle="modal" data-bs-target="#activatecoachModal"
                 >Activate</a></li>
             <li (click)="statusState('SUSPENDED')"><a class="dropdown-item"
-              data-bs-toggle="modal" data-bs-target="#suspendclientModal"
+              data-bs-toggle="modal" data-bs-target="#suspendcoachModal"
               >Suspend</a></li>
               <li (click)="statusState('CLOSED')"><a class="dropdown-item"
-                data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a></li>
+                data-bs-toggle="modal" data-bs-target="#closecoachModal">Close</a></li>
           </ul>
       </div>
      
     </div>
               <div class="col-md-12" [@fadeIn]>
                 <div class="row dtl">
-                <h6 class="fw-semi-bold faded col smaller-font">Id</h6>>
+                <h6 class="fw-semi-bold faded col smaller-font">Id</h6>
                 <p class="col">{{coaches?.id}}</p>
               </div>
               <div class="row dtl">
-                <h6 class="title">Name</h6>
-                <p class="col">{{coaches.firstName + " " + coaches.lastName | titlecase}}</p>
+                <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
+                <p class="col">{{coaches?.firstName + " " + coaches?.lastName | titlecase}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="fw-semi-bold  faded col smaller-font">Client email</h6>
-              <p class="col">{{coaches.email}}</p>
+              <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
+              <p class="col">{{coaches?.email}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="fw-semi-bold  faded col smaller-fon">Phone</h6>
-              <span class="col">{{coaches.msisdn}}</span>
-            </div>
-            <div class="row dtl">
-              <h6 class="fw-semi-bold  faded col smaller-font">Client Address</h6>
-              <p class="col">{{coaches.physicalAddress}}</p>
+              <h6 class="fw-semi-bold  faded col smaller-font">Phone</h6>
+              <span class="col">{{coaches?.msisdn}}</span>
             </div>
             <div class="row dtl">
               <h6 class="fw-semi-bold  faded col smaller-font">Status</h6>
