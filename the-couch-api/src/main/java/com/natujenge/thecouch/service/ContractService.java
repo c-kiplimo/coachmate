@@ -257,28 +257,24 @@ public class ContractService {
         return  contract;
     }
 
-    private Contract createExample(Long userId,Long clientId, UserRole userRole,String search, Long organisationId) {
+    private Contract createExample(Long coachId,Long clientId,String search, Long organisationId) {
         Contract  contactExample = new Contract();
         User coach=new User();
+        User client=new User();
+        Organization organization=new Organization();
 
         if (organisationId != null) {
-            contactExample.setCoach(coach);
-
-            log.info("org id {}", organisationId);
-            contactExample.getCoach().setOrganization(new Organization());
-            contactExample.getCoach().getOrganization().setId(organisationId);
+            contactExample.setOrganization(organization);
+            contactExample.getOrganization().setId(organisationId);
         }
-        if (userId != null && userRole.equals(UserRole.COACH)) {
+        if (coachId != null) {
             contactExample.setCoach(coach);
-
-            log.info("User role is  {}", userRole);
-            contactExample.getCoach().setId(userId);
-            contactExample.getCoach().setUserRole(userRole);
+            contactExample.getCoach().setId(coachId);
         }
-
-        if (clientId != null || userRole.equals(UserRole.CLIENT)) {
-            User client=new User();
-            log.info("User role is {}", userRole);
+        if (search != null) {
+            contactExample.setCoachingTopic(search);
+        }
+        if (clientId != null) {
             contactExample.setClient(client);
             contactExample.getClient().setId(clientId);
         }
@@ -286,9 +282,9 @@ public class ContractService {
         return contactExample;
     }
 
-    public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId,
+    public Page<ContractDTO> filter(Long coachId, Long clientId, String search, Long organisationId,
                                     Pageable pageable) {
-        Contract contract = createExample(userId, clientId, userRole, search, organisationId);
+        Contract contract = createExample(coachId, clientId, search, organisationId);
 
         log.info("After example {} ", contract);
         ExampleMatcher matcher = ExampleMatcher.matching()
