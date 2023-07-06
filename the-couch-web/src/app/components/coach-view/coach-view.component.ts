@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../services/ApiService';
 import { ContractsService } from '../../services/contracts.service';
 import { ClientService } from '../../services/ClientService';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-coach-view',
@@ -211,6 +212,7 @@ coaches: any;
     });
 
   }
+
   getClientSessions() {
     console.log("client id", this.clientId)
     this.loading = true;
@@ -227,6 +229,17 @@ coaches: any;
         }
       );
   }
+
+  getContracts(id: any) {
+    // this.loading = true;
+    this.ClientService.getContractsByClientId(id).subscribe((res: any) => {
+      console.log("client sessions here", res);
+      this.contracts = res.body;
+      // this.totalElements = 
+      // this.loading = false;
+    });
+  }
+
   getNotificationsByClientId(id: any) {
     const options = {
       page: 1,
@@ -240,7 +253,10 @@ coaches: any;
     this.ClientService.getNotificationsbyClientId(options).subscribe((res: any) => {
       this.notifications = res.body;
       console.log('notification ni', this.notifications);
-      this.searching = false;
+      this.loading = false;
+    }, (error) => {
+      console.log(error);
+      this.loading = false;
     });
   }
   getPaymentsByClientId(id: any) {
@@ -255,11 +271,12 @@ coaches: any;
     this.loading = true;
     this.ClientService.getPaymentsByClientId(options).subscribe(
       (response) => {
-        this.loading = false;
         this.payments = response.body.data;
         console.log('payments', this.payments);
+        this.loading = false;
       }, (error) => {
         console.log(error);
+        this.loading = false;
       }
     )
   }
@@ -434,7 +451,10 @@ coaches: any;
     }
 
   }
-  changeClientStatus() {
+
+
+  // TODO: change to changeCoachStatus
+  changeCoachStatus() {
     console.log(this.status);
     if (this.status === "ACTIVE") {
       this.ClientService.changeClient(this.clientId, "ACTIVE", this.statusForm.value).subscribe(
@@ -509,13 +529,6 @@ coaches: any;
     this.paymentId = this.payment.id;
   }
 
-  getContracts(id: any) {
-    this.contracts = [];
-    this.ClientService.getContractsByClientId(id).subscribe((res: any) => {
-      console.log("client sessions here", res);
-      this.contracts = res.body;
-    });
-  }
   addContract() {
     console.log('here');
     console.log(this.contractForm.value);
