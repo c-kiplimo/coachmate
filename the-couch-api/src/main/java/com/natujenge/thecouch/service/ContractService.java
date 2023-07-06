@@ -111,7 +111,6 @@ public class ContractService {
         Contract savedcontract = null;
         if (user.isPresent()) {
             coach = user.get();
-
             // Save Contract
             Contract contract = new Contract();
 
@@ -126,10 +125,15 @@ public class ContractService {
             contract.setServices(contractRequest.getServices());
             contract.setPractice(contractRequest.getPractice());
             contract.setObjective(contractRequest.getObjectives());
-            if (organizationId != null) {
-                contract.getOrganization().setId(organizationId);
 
+
+            if (organizationId != null) {
+//                assert contract.getOrganization() != null;
+//                contract.getOrganization().setId(organizationId);
+                contract.setOrganization(organizationService.findOrganizationById(organizationId));
             }
+
+
             log.info("coach------{}", coach);
             contract.setCoach(coach);
 
@@ -209,11 +213,9 @@ public class ContractService {
             }
             notification.setSendReason("New Contract Created");
             notification.setContract(savedcontract);
-            // TO DO: add logic to save notification to db
-
+            // TODO: add logic to save notification to db
             notificationRepository.save(notification);
             log.info("Notification saved");
-
         }
         return savedcontract;
     }
@@ -225,9 +227,6 @@ public class ContractService {
 
         contractRepository.delete(contract);
     }
-
-
-
 
 @Transactional
     public Contract updateContractStatus(Long contractId, ContractStatus contractStatus,Long loggedInUSerId){
@@ -245,9 +244,7 @@ public class ContractService {
             }else{
                 contract.setContractStatus(ContractStatus.SIGNED);
                 contract.setLastUpdatedBy(loggedInUSerId);
-
             }
-
         }else if(contractStatus==ContractStatus.FINISHED){
           if(contract.getContractStatus()==ContractStatus.FINISHED){
               log.info("Contract {} is  is finished", contractId);
@@ -255,11 +252,9 @@ public class ContractService {
           }else{
               contract.setContractStatus(ContractStatus.FINISHED);
               contract.setLastUpdatedBy(loggedInUSerId);
-
           }
-
         }
-return  contract;
+        return  contract;
     }
 
     private Contract createExample(Long coachId,Long clientId,String search, Long organisationId) {
@@ -283,6 +278,7 @@ return  contract;
             contactExample.setClient(client);
             contactExample.getClient().setId(clientId);
         }
+
         return contactExample;
     }
 
