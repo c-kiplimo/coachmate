@@ -115,6 +115,8 @@ export class DashboardComponent implements OnInit {
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getClients(this.page);
+      this.getCoaches(this.page);
+      this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
       // console.log(this.orgSession);
@@ -270,17 +272,17 @@ export class DashboardComponent implements OnInit {
       search: this.filters.searchItem,
     };
 
-    this.clientService.getOrgSessions(options, id).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.sessions = response;
-        this.loading = false;
-        this.numberOfSessions = this.sessions.length;
-        (error: any) => {
-          console.log(error);
-        }
-      }
-    );
+    // this.clientService.getOrgSessions(options, id).subscribe(
+    //   (response: any) => {
+    //     console.log(response);
+    //     this.sessions = response;
+    //     this.loading = false;
+    //     this.numberOfSessions = this.sessions.length;
+    //     (error: any) => {
+    //       console.log(error);
+    //     }
+    //   }
+    // );
 
   }
   getNoOfSessions() {
@@ -364,8 +366,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['sessionView', id]);
   }
 
+  
   getClients(page: any) {
- 
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -373,6 +375,9 @@ export class DashboardComponent implements OnInit {
       page = 0;
     } else {
       page = page - 1;
+    }
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
     }
     const options: any = {
       page: page,
@@ -387,13 +392,18 @@ export class DashboardComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      options.coachId = this.coachId;
+      options.orgId = this.orgId;
     }
     
-    this.clientService.getClients(options).subscribe(
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
       (response) => {
         this.loading = false;
         this.clients = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'CLIENT') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
         this.totalElements = +response.headers.get('X-Total-Count');
         this.numberOfClients = this.clients.length;
         console.log('clients',this.clients)
@@ -403,7 +413,6 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-
 
   navigateToTerms(id: any) {
     console.log("contractId on navigate", id);
@@ -469,6 +478,7 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
         this.coaches = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
+        this.numberofCoaches =this.coaches.length;
         console.log('coaches',this.coaches)
       }, (error) => {
         this.loading = false;
