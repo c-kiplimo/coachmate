@@ -45,11 +45,8 @@ public class ContractResource {
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //Get contract by client Id
-
 
     //API TO GET CONTRACTS BY ORG ID
-
     @PostMapping
     public ResponseEntity<Contract> createContract(
             @RequestBody ContractRequest contractRequest,
@@ -61,24 +58,17 @@ public class ContractResource {
             if(userDetails.getOrganization() !=null){
                 organisationId = userDetails.getOrganization().getId();
             }
-            Contract contract = contractService.createContract(userDetails.getId(), contractRequest,organisationId);
-
-            if (contract != null) {
-                return new ResponseEntity(new RestResponse(false, "contract created successfully"), HttpStatus.OK);
-            } else {
-                return new ResponseEntity(new RestResponse(true, "contract not created"), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
+            Contract contract = contractService.createContract(userDetails.getId(), contractRequest, organisationId);
+            return ResponseEntity.created(
+                    ServletUriComponentsBuilder
+                            .fromCurrentRequest()
+                            .path("/{id}")
+                            .buildAndExpand(contract.getId())
+                            .toUri())
+                    .body(contract);
         } catch (Exception e) {
-
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        try {
-
-            Contract contract = null;
-
-
-
-            return new ResponseEntity<>(contract,HttpStatus.CREATED) ;
     }
 
 
@@ -115,23 +105,13 @@ public class ContractResource {
 
     @GetMapping("/filter")
     ResponseEntity<List<ContractDTO>> filterContracts(@RequestParam(name = "clientId", required = false) Long clientId,
-
+                                                    @RequestParam(name = "coachId", required = false) Long coachId,
                                                     @RequestParam(name = "search", required = false) String search,
-                                                    @RequestParam(name="organisationId", required = false) Long orgId,
+                                                    @RequestParam(name="organisationId", required = false) Long organisationId,
                                                     Pageable pageable,
                                                     @AuthenticationPrincipal User userDetails) {
-        Long organisationId=null;
-        if (orgId != null) {
-            organisationId = orgId;
-        } else
-            if (userDetails.getOrganization() !=null){
-                organisationId = userDetails.getOrganization().getId();
-            }
 
-        UserRole userRole = userDetails.getUserRole();
-        Long userId= userDetails.getId();
-
-        Page<ContractDTO> contractPage = contractService.filter(userId, clientId , userRole, search, organisationId, pageable);
+        Page<ContractDTO> contractPage = contractService.filter(coachId, clientId, search, organisationId, pageable);
         log.info("filtered {}",contractPage.getContent());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
         return ResponseEntity.ok().headers(headers).body(contractPage.getContent());
