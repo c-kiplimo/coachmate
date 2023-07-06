@@ -265,6 +265,7 @@ public class ContractService {
 
         if (organisationId != null) {
             contactExample.setOrganization(organization);
+            assert contactExample.getOrganization() != null;
             contactExample.getOrganization().setId(organisationId);
         }
         if (coachId != null) {
@@ -278,7 +279,6 @@ public class ContractService {
             contactExample.setClient(client);
             contactExample.getClient().setId(clientId);
         }
-
         return contactExample;
     }
 
