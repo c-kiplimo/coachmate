@@ -20,13 +20,13 @@
   </div>
   <div class="col-md-3">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Name, Phone or Email" aria-label="Name, Phone or Email"
-        aria-describedby="button-addon2">
-      <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
+      <input type="text" class="form-control" placeholder="Client Name, Phone or Email" aria-label="Name, Phone or Email"
+        aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllSessions(0)">Search</button>
     </div>
   </div>
   <div class="col-md-2">
-    <button type="button" routerLink="/addSession" class="btn btn-outline-success" *ngIf="this.userRole != 'CLIENT'">
+    <button type="button" routerLink="/addSession" class="btn btn-outline-success">
       <i class="fa fa-plus"></i> Add Session
     </button>
   </div>
@@ -42,7 +42,7 @@
             <th scope="col">Name</th>
             <th scope="col">Contract</th>
             <th scope="col">Venue</th>
-            <th scope="col">Client</th>
+            <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
             <th scope="col">Type</th>
             <th scope="col">Date</th>
             <th scope="col">Start Time</th>
@@ -56,7 +56,7 @@
             <td>{{ session?.name }}</td>
             <td>{{ session?.contractCoachingTopic }}</td>
             <td>{{ session?.sessionVenue }}</td>
-            <td>{{ session?.clientFullName }}</td>
+            <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
             <td>{{ session?.sessionType }}</td>
             <td>{{ session?.sessionSchedulesSessionDate }}</td>
             <td>{{ session?.sessionSchedulesStartTime }}</td>
