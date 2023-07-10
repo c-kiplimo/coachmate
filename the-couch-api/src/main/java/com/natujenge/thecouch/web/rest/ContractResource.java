@@ -108,11 +108,12 @@ public class ContractResource {
     ResponseEntity<List<ContractDTO>> filterContracts(@RequestParam(name = "clientId", required = false) Long clientId,
                                                     @RequestParam(name = "coachId", required = false) Long coachId,
                                                     @RequestParam(name = "search", required = false) String search,
+                                                    @RequestParam(name = "status", required = false) ContractStatus status,
                                                     @RequestParam(name="organisationId", required = false) Long organisationId,
                                                     Pageable pageable,
                                                     @AuthenticationPrincipal User userDetails) {
 
-        Page<ContractDTO> contractPage = contractService.filter(coachId, clientId, search, organisationId, pageable);
+        Page<ContractDTO> contractPage = contractService.filter(coachId, clientId, search, status, organisationId, pageable);
         log.info("filtered {}",contractPage.getContent());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
         return ResponseEntity.ok().headers(headers).body(contractPage.getContent());

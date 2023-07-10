@@ -29,9 +29,9 @@ public class CoachEducation {
     private String createdBy;
 
     //Relations
-//    @ManyToOne
-//    @JoinColumn(name = "coach_id")
-    private Long coachId;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private User coach;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

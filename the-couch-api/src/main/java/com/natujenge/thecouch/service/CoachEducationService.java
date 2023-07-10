@@ -1,14 +1,19 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.CoachEducation;
+import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.CoachEducationRepository;
+import com.natujenge.thecouch.service.mapper.CoachEducationMapper;
+import com.natujenge.thecouch.web.rest.dto.CoachEducationDTO;
+import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -16,16 +21,21 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class CoachEducationService {
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    CoachEducationRepository coachEducationRepository;
+    private final CoachEducationRepository coachEducationRepository;
+    private final CoachEducationMapper coachEducationMapper;
+
+    public CoachEducationService(CoachEducationRepository coachEducationRepository, CoachEducationMapper coachEducationMapper) {
+        this.coachEducationRepository = coachEducationRepository;
+        this.coachEducationMapper = coachEducationMapper;
+    }
 
     //CREATE
     public CoachEducation createCoachEducation(CoachEducation coachEducation) {
 
         try{
+            User coach = new User();
+            coachEducation.setCoach(coach);
             coachEducationRepository.save(coachEducation);
 
             return coachEducation;
@@ -38,8 +48,29 @@ public class CoachEducationService {
     }
 
     //GET ALL
-    public List<CoachEducation> getAllCoachEducation(CoachEducation coachEducation) {
-        return coachEducationRepository.findAllByCoachId(coachEducation.getCoachId());
+    private CoachEducation createExampleCoachEducation(Long coachId, String search) {
+        CoachEducation exampleCoachEducation = new CoachEducation();
+        User coach = new User();
+        if (coachId != null) {
+            exampleCoachEducation.setCoach(coach);
+            exampleCoachEducation.getCoach().setId(coachId);
+        }
+         if (search != null && !search.isEmpty()) {
+            exampleCoachEducation.setCourseName(search);
+            exampleCoachEducation.setProvider(search);
+        }
+        return exampleCoachEducation;
+    }
+    public Page<CoachEducationDTO> getAllCoachEducation(Long coachId, String search, Pageable pageable) {
+        log.info("Request to get all coach education");
+        CoachEducation exampleCoachEducation = createExampleCoachEducation(coachId, search);
+        log.info("Example CoachEducation: {}", exampleCoachEducation);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreNullValues();
+        Example<CoachEducation> example = Example.of(exampleCoachEducation, matcher);
+        return coachEducationRepository.findAll(example, pageable).map(coachEducationMapper::toDto);
     }
 
     //Get ONE CoachEducation

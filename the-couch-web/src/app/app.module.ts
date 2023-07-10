@@ -43,7 +43,6 @@ import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './components/confirmed-view/confirmed-view.component';
 import { ToastrModule } from 'ngx-toastr';
-import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { CoachEducationService } from './services/CoachEducationService';
@@ -73,7 +72,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { ContractsService } from './services/contracts.service';
 import { FeedbackService } from './services/feedback.service';
 import { NotificationsService } from './services/notifications.service';
-
+import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +106,7 @@ import { NotificationsService } from './services/notifications.service';
     ContractDetailsComponent,
     GetPeriodPipe,
     AddCoachComponent,
-
+    TrainingsListComponent,
     HomeComponent,
     FeedbackComponent,
     SupportComponent,
@@ -125,7 +124,6 @@ import { NotificationsService } from './services/notifications.service';
   imports: [  
     MbscModule, 
     BrowserModule,
-    CoachEducationModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,

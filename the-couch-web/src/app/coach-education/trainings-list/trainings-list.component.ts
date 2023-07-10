@@ -16,30 +16,34 @@ export class TrainingsListComponent implements OnInit {
     searchItem: '',
   };
 
-editCoachEducationForm!: FormGroup;
+  editCoachEducationForm!: FormGroup;
 
-numberOfHours: any;
+  numberOfHours: any;
 
-numberOfMinutes: any;
+  numberOfMinutes: any;
   http: any;
   items: any;
   coachSessionData: any;
   coachData: any;
 
+  totalElements: any;
+  page: number = 0;
+  pageSize: number = 15;
+
   currentCoachEducation: any;
 
   coachEducationData: any = [];
   constructor(
-     private router: Router,
-     private CoachEducationService: CoachEducationService,
-     private formbuilder: FormBuilder,
-    ) { }
+    private router: Router,
+    private CoachEducationService: CoachEducationService,
+    private formbuilder: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
-    this.coachSessionData = sessionStorage.getItem('user'); 
+    this.coachSessionData = sessionStorage.getItem('user');
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
-    
+
 
     this.getCoachEducation(this.coachData.id);
 
@@ -55,18 +59,30 @@ numberOfMinutes: any;
 
   }
 
-  getCoachEducation(id: any) {
-    const options = {
-      coachId: id,
+  getCoachEducation(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
     }
-    
+
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+    };
+
     this.loading = true;
     this.CoachEducationService.getCoachEducation(options).subscribe(
       (response: any) => {
         this.loading = false;
         console.log(response);
-        this.coachEducationData = JSON.stringify(response.body.data);
-        this.calculateNumberOfHours(this.coachEducationData);
+        this.coachEducationData = response.data;
+        //this.calculateNumberOfHours(this.coachEducationData);
       }, (error: any) => {
         console.log(error);
       }
@@ -74,64 +90,69 @@ numberOfMinutes: any;
 
   }
 
-  calculateNumberOfHours(data: any) {
-    //calculate total number of hours
-    let totalHours = 0;
-    data.forEach((element: any) => {
-      totalHours += parseInt(element.trainingHours);
-    });
-    this.numberOfHours = Math.floor(totalHours);
+  // calculateNumberOfHours(data: any) {
+  //   //calculate total number of hours
+  //   let totalHours = 0;
+  //   data.forEach((element: any) => {
+  //     totalHours += parseInt(element.trainingHours);
+  //   });
+  //   this.numberOfHours = Math.floor(totalHours);
+  // }
+
+  deleteItem(coachEducation: any) {
+    console.log(coachEducation);
+    this.currentCoachEducation = coachEducation;
+  }
+  deleteCoachEducation() {
+    this.loading = true;
+    this.CoachEducationService.deleteCoachEducation(this.currentCoachEducation.id).subscribe(
+      (response: any) => {
+        this.loading = false;
+        console.log(response);
+        this.getCoachEducation(this.coachData.id);
+      }, (error: any) => {
+        console.log(error);
+      }
+    )
   }
 
-deleteItem(coachEducation: any) {
-  console.log(coachEducation);
-  this.currentCoachEducation = coachEducation;
-}
-deleteCoachEducation() {
-  this.loading = true;
-  this.CoachEducationService.deleteCoachEducation(this.currentCoachEducation.id).subscribe(
-    (response: any) => {
-      this.loading = false;
-      console.log(response);
-      this.getCoachEducation(this.coachData.id);
-    }, (error: any) => {
-      console.log(error);
-    }
-  )
-}
+  setCurrectCoachEducation(coachEducation: any) {
+    this.currentCoachEducation = coachEducation;
+    console.log(this.currentCoachEducation);
 
-setCurrectCoachEducation(coachEducation: any) {
-  this.currentCoachEducation = coachEducation;
-  console.log(this.currentCoachEducation);
+    this.editCoachEducationForm = this.formbuilder.group({
+      courseName: this.currentCoachEducation.courseName,
+      provider: this.currentCoachEducation.provider,
+      dateIssued: this.currentCoachEducation.dateIssued,
+      validTill: this.currentCoachEducation.validTill,
+      trainingHours: this.currentCoachEducation.trainingHours,
+      certificateUrl: this.currentCoachEducation.certificateUrl,
 
-  this.editCoachEducationForm = this.formbuilder.group({
-    courseName: this.currentCoachEducation.courseName,
-    provider: this.currentCoachEducation.provider,
-    dateIssued: this.currentCoachEducation.dateIssued,
-    validTill: this.currentCoachEducation.validTill,
-    trainingHours: this.currentCoachEducation.trainingHours,
-    certificateUrl: this.currentCoachEducation.certificateUrl,
-    
-  });
-}
+    });
+  }
 
-editCoachEducation() {
-  console.log(this.editCoachEducationForm.value);
-  this.loading = true;
-  var data = this.editCoachEducationForm.value;
-  data.id = this.currentCoachEducation.id;
-  data.lastUpdatedBy = this.coachData.fullName;
-  console.log(data);
-  this.CoachEducationService.updateCoachEducation(data).subscribe(
-    (response: any) => {
-      this.loading = false;
-      console.log(response);
-      this.getCoachEducation(this.coachData.id);
-    }, (error: any) => {
-      console.log(error);
-    }
-  )
-}
+  editCoachEducation() {
+    console.log(this.editCoachEducationForm.value);
+    this.loading = true;
+    var data = this.editCoachEducationForm.value;
+    data.id = this.currentCoachEducation.id;
+    data.lastUpdatedBy = this.coachData.fullName;
+    console.log(data);
+    this.CoachEducationService.updateCoachEducation(data).subscribe(
+      (response: any) => {
+        this.loading = false;
+        console.log(response);
+        this.getCoachEducation(this.coachData.id);
+      }, (error: any) => {
+        console.log(error);
+      }
+    )
+  }
+
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getCoachEducation(this.page);
+  }
 
 
 }

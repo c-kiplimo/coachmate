@@ -99,7 +99,7 @@ export class contractComponent implements OnInit {
     const options: any = {
       page: page,
       size: this.pageSize,
-      sessionStatus: this.filters.status,
+      status: this.filters.status,
       search: this.filters.searchItem,
       sort: 'id,desc',
     };
