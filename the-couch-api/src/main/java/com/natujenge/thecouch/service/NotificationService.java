@@ -157,13 +157,14 @@ public class NotificationService {
     }
     public Page<NotificationDTO> filterNotifications(Long coachId, Long clientId, Long sessionId, Long organizationId, Pageable pageable) {
         Notification notification = createExample(coachId, clientId, sessionId, organizationId);
-        log.info("Filtering notifications by {}", notification);
+        log.info("Filtering notifications by {}", coachId);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreNullValues()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Notification> example = Example.of(notification, matcher);
+        log.info("\nFiltered Notification {}\n", notificationRepository.findAll(example, pageable));
         return notificationRepository.findAll(example, pageable).map(notificationMapper::toDto);
     }
 }

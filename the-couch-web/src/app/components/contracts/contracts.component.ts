@@ -86,7 +86,6 @@ export class contractComponent implements OnInit {
   }
 
   getAllContracts(page: any) {
-
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -124,7 +123,6 @@ export class contractComponent implements OnInit {
         this.loading = false;
       }
     );
-
   }
 
   onTableDataChange(event: any) {

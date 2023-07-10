@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../services/ApiService';
 import { ContractsService } from '../../services/contracts.service';
 import { ClientService } from '../../services/ClientService';
+import { NotificationsService } from '../../services/notifications.service';
 import { error } from 'jquery';
 
 @Component({
@@ -17,15 +18,14 @@ import { error } from 'jquery';
 })
 export class CoachViewComponent implements OnInit {
 
-  Clients!: [];
   addsessionForm!: FormGroup;
   payment: any;
   addSessionForm: any = {
 
   };
-  editedClient: any;
   coachSessionData: any;
   coachData: any;
+  coachId: any;
   userRole: any;
   alertIcon!: IconProp;
   userIcon!: IconProp;
@@ -58,11 +58,8 @@ export class CoachViewComponent implements OnInit {
   currentTab = 'sessions';
   searching = false;
   actions = ['Activate', 'Close', 'Suspend'];
-
-  notificationOptions = [false, true];
   notificationType = ['sms', 'email'];
   loadingClient = false;
-  totalLength: any;
   page: number = 1;
   itemsPerPage: number = 20;
   open = false;
@@ -81,26 +78,25 @@ export class CoachViewComponent implements OnInit {
   sessionDueDate: any;
   sessionStartTime: any;
   sessionDuration: any;
-  loading: any;
+  loading = true;
   refreshIcon!: IconProp;
   createSessionClientId: any;
   selectedContract: any;
   sessionId: any;
+  pageSize: number = 15;
+  totalElements: any;
   clientToBeUpdated!: any;
   sessionModal: any;
   contractId: any;
   contract: any;
   contractForm!: FormGroup;
-  numberOfClients!: number;
-  numberOfSessions!: number;
-  numberOfContracts!: number;
   objectives: string[] = [];
   //Add Objective Form
   Objectives = {
     objective: ''
   };
   coachingCategory: any;
-coaches: any;
+coach: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,
@@ -110,7 +106,9 @@ coaches: any;
     private route: ActivatedRoute,
     private apiService: ApiService,
     private contractsService: ContractsService,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private notificationsService: NotificationsService,
+    ) { }
 
   ngOnInit() {
 
@@ -129,7 +127,7 @@ coaches: any;
       this.sessionId = this.route.snapshot.params['sessionId'];
       console.log(this.sessionId);
       this.clientId = this.activatedRoute.snapshot.params['id'];
-      this.getClientData(this.clientId);
+      this.getCoachData(this.coachId);
       this.id = this.clientId
 
       this.getContracts(this.id);
@@ -160,14 +158,18 @@ coaches: any;
 
       });
       this.getClientSessions()
-      this.getNotificationsByClientId(this.clientId);
-      this.getPaymentsByClientId(this.clientId);
+      this.getNotifications(this.page);
+      this.getPaymentsByCoachId(this.page);
     }
     else if (this.userRole == 'ORGANIZATION') {
       this.clientId = this.activatedRoute.snapshot.params['id'];
-      this.getClientData(this.clientId);
       this.id = this.clientId
-      this.getContracts(this.id);
+      this.coachId = this.coachData.id;
+      this.getContracts(this.page);
+      this.getCoachData(this.coachId);
+      this.getClientSessions()
+      this.getNotifications(this.page);
+      this.getPaymentsByCoachId(this.page);
       this.contractForm = this.formbuilder.group(
         {
           coachingCategory: '',
@@ -194,9 +196,6 @@ coaches: any;
         reason: '',
 
       });
-      this.getClientSessions()
-      this.getNotificationsByClientId(this.clientId);
-      this.getPaymentsByClientId(this.clientId)
     }
 
     this.addsessionForm = this.formbuilder.group({
@@ -219,7 +218,7 @@ coaches: any;
     this.ClientService.getClientSessions(this.clientId)
       .subscribe((data: any) => {
         this.sessions = data.body;
-        console.log(this.sessions);
+        this.totalElements = data.body.totalElements;
         this.loading = false;
         console.log("sessions gotten here", this.sessions)
       },
@@ -230,56 +229,100 @@ coaches: any;
       );
   }
 
-  getContracts(id: any) {
-    // this.loading = true;
-    this.ClientService.getContractsByClientId(id).subscribe((res: any) => {
-      console.log("client sessions here", res);
-      this.contracts = res.body;
-      // this.totalElements = 
-      // this.loading = false;
-    });
-  }
+  getContracts(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
 
-  getNotificationsByClientId(id: any) {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionStatus: this.filters.status,
       search: this.filters.searchItem,
-      client_id: id,
+      sort: 'id,desc',
     };
 
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      //options.orgId = this.orgId;
+      options.coachId = this.coachId;
+    }
+
+    this.contractsService.getContracts(options).subscribe(
+      (res: any) => {
+        console.log("res",res);
+        this.contracts = res.body;
+        this.totalElements = +res.headers.get('X-Total-Count');
+        this.loading = false;
+      }, (err: any) => {
+        console.log(err);
+        this.loading = false;
+      }
+    );
+  }
+
+  getNotifications(page: any) {
     this.loading = true;
-    this.ClientService.getNotificationsbyClientId(options).subscribe((res: any) => {
-      this.notifications = res.body;
-      console.log('notification ni', this.notifications);
-      this.loading = false;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sort: 'id,desc',
+      coachId: this.coachId,
+    };
+
+    this.notificationsService.getNotifications(options).subscribe((response: any) => {
+      this.notifications = response.body;
+      this.totalElements = +response.headers.get('X-Total-Count');
+      console.log('notification', this.notifications);
+      this.loading= false;
     }, (error) => {
       console.log(error);
       this.loading = false;
     });
   }
-  getPaymentsByClientId(id: any) {
+
+  getPaymentsByCoachId(page: any){
+    this.loading = true;
+    this.page = page;
+
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
     const options = {
-      page: 1,
+      page: page,
       per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      client_id: id,
+      coachId: this.coachId,  
     };
 
-    this.loading = true;
-    this.ClientService.getPaymentsByClientId(options).subscribe(
+    this.ClientService.getPaymentsByCoachId(options).subscribe(
       (response) => {
-        this.payments = response.body.data;
-        console.log('payments', this.payments);
-        this.loading = false;
-      }, (error) => {
+          this.loading = false;
+          this.payments = response.body.data;
+          console.log('payments', this.payments);
+        }, (error) => {
         console.log(error);
-        this.loading = false;
       }
     )
   }
+
   onContractChange(event: any) {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
@@ -352,19 +395,19 @@ coaches: any;
     this.currentTab = tab;
   }
 
-  getClientData(id: any) {
-    console.log("Get Client");
-    this.loadingClient = true;
+  getCoachData(id: any) {
+    this.loading = true;
+    console.log("Get Coach");
 
     this.ClientService.getOneClient(id).subscribe((data) => {
-      this.loadingClient = false;
-      this.clients = data.body;
-      console.log(this.clients);
+      this.coach = data.body;
+      this.totalElements = +data.headers.get('X-Total-Count');
+      console.log(this.coach);
+      this.loading = false;
     },
       (error: any) => {
         console.log(error);
-        this.loadingClient = false;
-
+        this.loading = false;
       });
   }
   @ViewChild('modal', { static: false })
@@ -573,10 +616,3 @@ coaches: any;
   }
 
 }
-
-
-  // Get Notification for specific customer
-
-
-
-

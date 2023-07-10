@@ -38,49 +38,49 @@
         <div class="col-md-12" [@fadeIn]>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font" >Id</h6>
-            <p class="col">{{ coaches?.id }}</p>
+            <p class="col">{{ coach?.id }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
-            <p class="col">{{ coaches?.firstName + " " + coaches?.lastName | titlecase }}</p>
+            <p class="col">{{ coach?.firstName + " " + coach?.lastName | titlecase }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
-            <p class="col">{{ coaches?.email }}</p>
+            <p class="col">{{ coach?.email }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Phone number</h6>
-            <p class="col">{{ coaches?.msisdn }}</p>
+            <p class="col">{{ coach?.msisdn }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Address</h6>
-            <p class="col">{{ coaches?.physicalAddress }}</p>
+            <p class="col">{{ coach?.physicalAddress }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Profession</h6>
-            <p class="col">{{ coaches?.profession }}</p>
+            <p class="col">{{ coach?.profession }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Status</h6>
             <p class="col">
               <span class="badge" [ngClass]="{
-                'badge-success': coaches?.clientStatus === 'ACTIVE',
-                'badge-danger': coaches?.clientStatus === 'SUSPENDED' || coaches?.clientStatus === 'CLOSED',
-                'badge-primary': coaches?.clientStatus === 'NEW'
-              }">{{ coaches?.clientStatus }}</span>
+                'badge-success': coach?.clientStatus === 'ACTIVE',
+                'badge-danger': coach?.clientStatus === 'SUSPENDED' || coach?.clientStatus === 'CLOSED',
+                'badge-primary': coach?.clientStatus === 'NEW'
+              }">{{ coach?.clientStatus }}</span>
             </p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Created On</h6>
-            <p class="col">{{ coaches?.createdAt | date: "MMM d y" }}</p>
+            <p class="col">{{ coach?.createdAt | date: "MMM d y" }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Last Updated</h6>
-            <p class="col">{{ coaches?.lastUpdatedAt | date: "MMM d y" }}</p>
+            <p class="col">{{ coach?.lastUpdatedAt | date: "MMM d y" }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Reason</h6>
-            <p class="col">{{ coaches?.reason }}</p>
+            <p class="col">{{ coach?.reason }}</p>
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@
             <tr *ngFor="let contract of contracts">
               <td>{{ contract.coachingTopic }}</td>
               <td>{{ contract.coachingCategory }}</td>
-              <td>{{ contract.client.fullName }}</td>
+              <td>{{ contract.clientFullName }}</td>
               <td>{{ contract.startDate | date : "MMM d, y" }}</td>
               <td>{{ contract.endDate | date : "MMM d, y" }}</td>
               <td>{{ contract.noOfSessions }}</td>
@@ -284,7 +284,7 @@
           </tbody>
         </table>
         <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-        <p class="text-muted mt-5" *ngIf="!notifications?.length">
+        <p class="text-muted mt-5" *ngIf="!loading && !notifications?.length">
           No notifications found.
         </p>
         </div>
@@ -310,7 +310,7 @@
         <div class="d-flex justify-content-between">
           <p class="">
             Are you sure you want to suspend
-            <span class="fw-bold">{{ coaches?.firstName + " " + coaches?.lastName }}</span>?
+            <span class="fw-bold">{{ coach?.firstName + " " + coach?.lastName }}</span>?
           </p>
 
         </div>
