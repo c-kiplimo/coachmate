@@ -519,9 +519,9 @@ public class UserService implements UserDetailsService {
                 .withIgnoreNullValues();
 
         Example<User> example = Example.of(user, matcher);
+        log.info("\nGot coaches {} \n", userRepository.findAll(example, pageable));
         return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }
-
 
     public User editClient(Long clientId, User userDetails, ClientRequest clientRequest) {
         log.info("Request to edit client: {}", clientRequest);

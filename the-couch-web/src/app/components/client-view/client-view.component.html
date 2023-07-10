@@ -124,6 +124,7 @@
     </button>
   </div>
                                                                     <!-- TODO: remove the line below -->
+          <p>{{contracts}}</p>
   <div *ngIf="currentTab === 'sessions'">
     <!-- add session button -->
     <div class="d-flex justify-content-end">
@@ -207,13 +208,13 @@
           <tbody>
             <tr
               *ngFor="let contract of contracts | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
-              <td>{{ contract.coachingTopic}}</td>
-              <td>{{ contract.coachingCategory }}</td>
-              <td>{{ contract.clientFullName }}</td>
-              <td>{{ contract.startDate | date : "MMM d, y" }}</td>
-              <td>{{ contract.endDate | date : "MMM d, y" }}</td>
-              <td>{{ contract.noOfSessions}}</td>
-              <td>{{ contract.amountDue }}</td>
+              <td>{{ contract?.coachingTopic}}</td>
+              <td>{{ contract?.coachingCategory }}</td>
+              <td>{{ contract?.clientFullName }}</td>
+              <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
+              <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
+              <td>{{ contract?.noOfSessions}}</td>
+              <td>{{ contract?.amountDue }}</td>
               <td>
                 <span class="badge" [ngClass]="{
                   'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',

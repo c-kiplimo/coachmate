@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionsService } from 'src/app/services/SessionsService';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { th } from 'date-fns/locale';
 import { CoachService } from 'src/app/services/CoachService';
 
 
@@ -450,6 +451,7 @@ export class DashboardComponent implements OnInit {
   //     }
   //   );
   // }
+
 
   getCoaches(page: any) {
  

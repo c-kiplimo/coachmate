@@ -94,7 +94,6 @@ export class CoachesComponent implements OnInit {
 }
 
 
-  
 getCoaches(page: any) {
  
   this.loading = true;
@@ -129,6 +128,7 @@ getCoaches(page: any) {
     }
   )
 }
+
 search() {
   this.page = 0;
   this.getCoaches(this.page);
