@@ -109,8 +109,7 @@ export class contractComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
-      options.coachId = this.coachId;
+      options.organisationId = this.orgId;
     }
 
     this.contractsService.getContracts(options).subscribe(

@@ -426,18 +426,18 @@ coach: any;
       return 'badge-danger';
     }
   }
-  @ViewChild('editClientModal', { static: false })
-  editClientModal!: ElementRef;
-  @ViewChild('activateclientModal', { static: false })
-  activateclientModal!: ElementRef;
-  @ViewChild('addContractModal', { static: false })
-  addContractModal!: ElementRef;
-  @ViewChild('suspendclientModal', { static: false })
-  suspendclientModal!: ElementRef;
-  @ViewChild('closeclientModal', { static: false })
-  closeclientModal!: ElementRef;
-  editClient(client: any) {
-    this.clientToBeUpdated = client;
+
+  @ViewChild('editCoachModal', { static: false })
+  editCoachModal!: ElementRef;
+  @ViewChild('activatecoachModal', { static: false })
+  activatecoachModal!: ElementRef;
+
+  @ViewChild('suspendcoachModal', { static: false })
+  suspendcoachModal!: ElementRef;
+  @ViewChild('closecoachModal', { static: false })
+  closecoachModal!: ElementRef;
+  editCoach(client: any) {
+    this.coachToBeUpdated = client;
 
     this.updateClient = this.formbuilder.group({
       firstName: this.clientToBeUpdated.firstName,
