@@ -13,8 +13,8 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "tbl_coach_education")
 @Entity
+@Table(name = "tbl_coach_education")
 public class CoachEducation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -29,9 +29,9 @@ public class CoachEducation {
     private String createdBy;
 
     //Relations
-//    @ManyToOne
-//    @JoinColumn(name = "coach_id")
-    private Long coachId;
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private User coach;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

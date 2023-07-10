@@ -257,7 +257,7 @@ public class ContractService {
         return  contract;
     }
 
-    private Contract createExample(Long coachId,Long clientId,String search, Long organisationId) {
+    private Contract createExample(Long coachId,Long clientId,String search, ContractStatus status, Long organisationId) {
         Contract  contactExample = new Contract();
         User coach=new User();
         User client=new User();
@@ -273,7 +273,11 @@ public class ContractService {
             contactExample.getCoach().setId(coachId);
         }
         if (search != null) {
-            contactExample.setCoachingTopic(search);
+            contactExample.setClient(client);
+            contactExample.getClient().setFullName(search);
+        }
+        if (status != null) {
+            contactExample.setContractStatus(status);
         }
         if (clientId != null) {
             contactExample.setClient(client);
@@ -282,9 +286,9 @@ public class ContractService {
         return contactExample;
     }
 
-    public Page<ContractDTO> filter(Long coachId, Long clientId, String search, Long organisationId,
+    public Page<ContractDTO> filter(Long coachId, Long clientId, String search, ContractStatus status, Long organisationId,
                                     Pageable pageable) {
-        Contract contract = createExample(coachId, clientId, search, organisationId);
+        Contract contract = createExample(coachId, clientId, search, status, organisationId);
 
         log.info("After example {} ", contract);
         ExampleMatcher matcher = ExampleMatcher.matching()

@@ -13,8 +13,11 @@ export class CoachEducationService {
 
     constructor(private http: HttpClient) {}
 
-    getCoachEducation(coachId: any): Observable<any> {
-        return this.http.post(`${this.baseURL}coachEducation/getCoachEducation`, coachId);
+    getCoachEducation(options: any): Observable<any> {
+        return this.http.get<any>(this.baseURL + "coachEducation/allCoachEducation", {
+            params: options,
+            observe: "response"
+        });
     }
 
     getOneCoachEducation(id: number): Observable<any> {

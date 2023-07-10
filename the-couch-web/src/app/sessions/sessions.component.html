@@ -1,88 +1,100 @@
 <div class="row">
-  <div class="col  mt-4" style="margin-left: 5px;">
-    <h3 class="fw-semi-bold fs-5">Sessions</h3>
+  <div class="col mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold">Sessions</h2>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-3">
-    <div class="filters-section">
-      <div class="wrap">
-        <select class="form-control" name="codes" (change)="filterByStatus($event)">
-          <option value="">Filter By Status</option>
-          <option value="NEW">NEW</option>
-          <option value="CONFIRMED">CONFIRMED</option>
-          <option value="CANCELLED">CANCELLED</option>
-          <option value="CONDUCTED">CONDUCTED</option>
-        </select>
+<div class="d-none d-lg-block">
+  <div class="row justify-content-center">
+    <div class="col-md-12 col-sm-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="filters-section">
+            <div class="wrap">
+              <select class="form-control" name="codes" (change)="filterByStatus($event)">
+                <option value="">Filter By Status</option>
+                <option value="NEW">NEW</option>
+                <option value="CONFIRMED">CONFIRMED</option>
+                <option value="CANCELLED">CANCELLED</option>
+                <option value="CONDUCTED">CONDUCTED</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Client Name, Phone or Email"
+              aria-label="Name, Phone or Email" aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+            <button class="btn btn-outline-success" type="button" id="button-addon2"
+              (click)="getAllSessions(0)">Search</button>
+          </div>
+        </div>
+        <div class="col-md-2 mr-1">
+          <button type="button" routerLink="/addSession" class="btn btn-outline-success">
+            <i class="fa fa-plus"></i> Add Session
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Client Name, Phone or Email" aria-label="Name, Phone or Email"
-        aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
-      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllSessions(0)">Search</button>
-    </div>
-  </div>
-  <div class="col-md-2">
-    <button type="button" routerLink="/addSession" class="btn btn-outline-success">
-      <i class="fa fa-plus"></i> Add Session
-    </button>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12">
-  <div class="card">
-    <div class="card-body">
-      <table class="table" *ngIf="sessions?.length">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Contract</th>
-            <th scope="col">Venue</th>
-            <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
-            <th scope="col">Type</th>
-            <th scope="col">Date</th>
-            <th scope="col">Start Time</th>
-            <th scope="col">End Time</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="list-container">
-          <tr *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
-            <td>{{ session?.name }}</td>
-            <td>{{ session?.contractCoachingTopic }}</td>
-            <td>{{ session?.sessionVenue }}</td>
-            <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
-            <td>{{ session?.sessionType }}</td>
-            <td>{{ session?.sessionSchedulesSessionDate }}</td>
-            <td>{{ session?.sessionSchedulesStartTime }}</td>
-            <td>{{ session?.sessionSchedulesEndTime }}</td>
-            <td>
-              <span class="badge" [ngClass]="{
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <table class="table" *ngIf="sessions?.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="list-container">
+                  <tr
+                    *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                    <td>{{ session?.name }}</td>
+                    <td>{{ session?.contractCoachingTopic }}</td>
+                    <td>{{ session?.sessionVenue }}</td>
+                    <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
+                    <td>{{ session?.sessionType }}</td>
+                    <td>{{ session?.sessionSchedulesSessionDate }}</td>
+                    <td>{{ session?.sessionSchedulesStartTime }}</td>
+                    <td>{{ session?.sessionSchedulesEndTime }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
                   'badge-success': session.sessionStatus === 'CONFIRMED',
                   'badge-danger': session.sessionStatus === 'CANCELLED',
                   'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
                 }">{{ session.sessionStatus }}</span>
-            </td>
-            <td class="view">
-              <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-        <div class="donut multi"></div>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
+                No sessions Found.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-        No sessions Found.
-      </p>
     </div>
   </div>
-  </div>
+</div>
+
+<div class="show-sm">
+  
 </div>
 
 <br>
