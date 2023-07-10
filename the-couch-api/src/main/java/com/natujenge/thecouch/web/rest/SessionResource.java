@@ -54,7 +54,12 @@ public class SessionResource {
             if (sessionsCount >= contract.getNoOfSessions()) {
                 return new ResponseEntity<>(new RestResponse(false, "Cannot create session: maximum number of sessions has been reached"), HttpStatus.BAD_REQUEST);
             }
-
+            //get organization id
+            if (userDetails.getOrganization() != null) {
+                session.setOrganization(userDetails.getOrganization());
+            } else {
+                session.setOrganization(null);
+            }
             Session sessionResponse = sessionService.createSession(userDetails.getId(), clientId, contractId, session);
             return new ResponseEntity<>(new RestResponse(false, "Session Created Successfully"), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -113,17 +118,10 @@ public class SessionResource {
                                                            @RequestParam(name = "sessionStatus", required = false) String sessionStatus,
                                                            @RequestParam(name = "sessionDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate sessionDate,
                                                            @RequestParam(name = "search", required = false) String search,
-                                                           @RequestParam(name="orgId", required = false) Long orgId,
+                                                           @RequestParam(name="orgId", required = false) Long organisationId,
                                                            Pageable pageable,
                                                            @AuthenticationPrincipal User userDetails) {
-        Long organisationId = null;
-        if (orgId != null) {
-            organisationId = orgId;
-        } else
-            if (userDetails.getOrganization() != null) {
-                organisationId = userDetails.getOrganization().getId();
-            }
-
+        log.info("Request to filter sessions");
         Page<SessionDTO> sessionDtoPage = sessionService.filter(coachId, clientId, contractId, sessionStatus, sessionDate, organisationId, search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), sessionDtoPage);
         return ResponseEntity.ok().headers(headers).body(sessionDtoPage.getContent());

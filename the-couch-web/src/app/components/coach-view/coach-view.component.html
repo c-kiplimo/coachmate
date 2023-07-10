@@ -40,12 +40,15 @@
 <div class="card-body">
 
   <div class="row dtl">
-  <h3 class="fw-semi-bold fs-6 f-weight">Details</h3>
+  <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
       <div class="col dropdown">
         <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
           data-bs-toggle="dropdown" aria-expanded="false">
           Actions</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li (click)="editCoach(coaches)" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+              data-bs-target="#editCoachModal"><i class="fas fa-edit"></i> Edit </a></li>
+            
             <li (click)="statusState('ACTIVE')"><a class="dropdown-item"
                 data-bs-toggle="modal" data-bs-target="#activatecoachModal"
                 >Activate</a></li>
@@ -800,7 +803,7 @@
               <div class="col-md-12" [@fadeIn]>
                 <div class="row dtl">
                 <h6 class="fw-semi-bold faded col smaller-font">Id</h6>
-                <p class="col">{{coaches?.id}}</p>
+                <p class="col">{{coaches?.id }}</p>
               </div>
               <div class="row dtl">
                 <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
@@ -808,11 +811,11 @@
             </div>
             <div class="row dtl">
               <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
-              <p class="col">{{coaches?.email}}</p>
+              <p class="col">{{coaches?.email }}</p>
             </div>
             <div class="row dtl">
               <h6 class="fw-semi-bold  faded col smaller-font">Phone</h6>
-              <span class="col">{{coaches?.msisdn}}</span>
+              <span class="col">{{coaches?.msisdn }}</span>
             </div>
             <div class="row dtl">
               <h6 class="fw-semi-bold  faded col smaller-font">Status</h6>
@@ -821,7 +824,7 @@
                   'badge-success': coaches?.coachStatus === 'ACTIVE',
                   'badge-danger': coaches?.coachStatus === 'SUSPENDED' || coaches?.coachStatus === 'CLOSED',
                   'badge-primary': coaches?.coachStatus === 'NEW'
-                }">{{ coaches?.coachtatus }}</span>
+                }">{{ coaches?.coachStatus }}</span>
               </p>
             </div>
             <div class="row dtl">
@@ -835,6 +838,157 @@
   </div>
 </div>
 </div>
+  </div>
+</div>
+<div class="modal fade" id="editCoachModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateCoach">
+          <div class="mb-3 form-group">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+              value="{{ coachToBeUpdated?.firstName }}" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+              value="{{ coachToBeUpdated?.lastName }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="email_address" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email"
+              value="{{ coachToBeUpdated?.email }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="msisdn" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
+              value="{{ coachToBeUpdated?.msisdn }}">
+          </div>
+      
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="updateCoachDetails(coachToBeUpdated.id)">Save
+          changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="suspendcoachModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">
+          Suspend Coach
+        </h1>
+
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <p class="">
+            Are you sure you want to suspend
+            <span class="fw-bold">{{ coaches?.firstName + " " + coaches?.lastName }}</span>?
+          </p>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Close client modal -->
+<div class="modal fade bd-example-modal-lg" id="closecoachModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Close Coach</h1>
+
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <p>coach Name:</p>
+          <span>{{
+        coaches?.firstName + " " + coaches?.lastName | titlecase
+      }}</span>
+        </div>
+        <form [formGroup]="closeCoachForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1">Reason</label>
+            <textarea formControlName="narration" name="narration" class="form-control" id="narration"
+              aria-describedby="narration" placeholder="narration for closing the client">
+        </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
+          Submit
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activate client modal -->
+<div class="modal fade" id="activatecoachModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">
+          Activate coach
+        </h1>
+
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex justify-content-between">
+          <p>coach Name:</p>
+          <span>{{
+        coaches?.firstName + " " + coaches?.lastName | titlecase
+      }}</span>
+        </div>
+        <form [formGroup]="activateCoachForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1">Reason</label>
+            <textarea formControlName="narration" name="narration" class="form-control" id="narration"
+              aria-describedby="narration" placeholder="narration for activating the client">
+        </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
+          Submit
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 

@@ -571,7 +571,7 @@ coach: any;
   suspendcoachModal!: ElementRef;
   @ViewChild('closecoachModal', { static: false })
   closecoachModal!: ElementRef;
-  editClient(client: any) {
+  editCoach(client: any) {
     this.coachToBeUpdated = client;
 
     this.updateCoach = this.formbuilder.group({
