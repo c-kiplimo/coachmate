@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionsService } from 'src/app/services/SessionsService';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { th } from 'date-fns/locale';
 
 
 
@@ -440,23 +441,39 @@ export class DashboardComponent implements OnInit {
   //   );
   // }
 
-  getOrgCoaches(id: any) {
-    const data = {
-      orgId: id,
-    }
-    this.clientService.getOrgCoaches(data).subscribe(
-      (response: any) => {
-        console.log('here Organization=> coaches', response);
-        this.orgCoaches = response;
-        console.log(this.orgCoaches);
-        console.log('here Organization=> coaches', response);
-        this.numberofCoaches = this.orgCoaches.length;
-
-      },
-      (error: any) => {
-        console.log(error);
+  getOrgCoaches(page: any) {
+ 
+      this.loading = true;
+      this.page = page;
+      //if page is 0, don't subtract 1
+      if (page === 0 || page < 0) {
+        page = 0;
+      } else {
+        page = page - 1;
       }
-    );
+      const options: any = {
+        page: page,
+        size: this.pageSize,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        sort: 'id,desc',
+      };
+    
+     if(this.userRole == 'ORGANIZATION'){
+        options.orgId = this.orgId;
+      }
+      
+      this.clientService.getOrgCoaches(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.orgCoaches = response.body;
+          this.totalElements = +response.headers.get('X-Total-Count');
+          console.log('coaches',this.orgCoaches)
+        }, (error) => {
+          this.loading = false;
+          console.log(error)
+        }
+      )
   }
   getClientContracts(id: any) {
     // const data = {
