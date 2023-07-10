@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
