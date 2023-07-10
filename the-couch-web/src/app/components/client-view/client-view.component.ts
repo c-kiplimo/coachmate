@@ -404,7 +404,7 @@ export class ClientViewComponent implements OnInit {
     this.contractsService.getContracts(options).subscribe(
       (res: any) => {
         console.log("res",res);
-        this.contracts = JSON.stringify(res.body) as any;              // TODO: remove the stringify
+        this.contracts = res.body;              // TODO: remove the stringify
         this.totalElements = +res.headers.get('X-Total-Count');
         this.loading = false;
       }, (err: any) => {
