@@ -18,7 +18,7 @@
         </div>
 
         <div class="col-md-2 mr-1">
-          <button type="button" routerLink="/AddTraining" class="btn btn-outline-success" style="color: white;">
+          <button type="button" routerLink="/AddTraining" class="btn btn-outline-success">
             <i class="fa fa-plus"></i> Add Education
           </button>
         </div>
@@ -47,10 +47,9 @@
                     <td scope="row">{{coachEducation.validTill | date : "yyyy-MM-dd" }}</td>
                     <td scope="row">{{coachEducation.trainingHours}}</td>
                     <td class="view">
-                      <a><i class="fa-solid fa-pen-to-square p-1" data-bs-toggle="modal" data-bs-target="#editModal"
-                          (click)="setCurrectCoachEducation(coachEducation)"></i></a>
-                      <a><i data-bs-toggle="modal" data-bs-target="#confirmDelete" (click)="deleteItem(coachEducation)"
-                          class="fa-solid fa-trash-can p-1"></i></a>
+                      <a class="p-2" data-bs-toggle="modal" data-bs-target="#editModal"
+                      (click)="setCurrectCoachEducation(coachEducation)"><i class="fa-solid fa-pen-to-square"></i></a>
+                      <a class="p-2" data-bs-toggle="modal" data-bs-target="#confirmDelete" (click)="deleteItem(coachEducation)"><i class="fa-solid fa-trash-can"></i></a>
                     </td>
                   </tr>
 
