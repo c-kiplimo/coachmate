@@ -7,9 +7,13 @@ import { faCaretDown, faPlus, faPenSquare, faChevronRight, faChevronLeft } from 
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../services/ApiService';
 import { ContractsService } from '../../services/contracts.service';
+<<<<<<< HEAD
 import { ClientService } from '../../services/ClientService';
 import { NotificationsService } from '../../services/notifications.service';
 import { error } from 'jquery';
+=======
+import { CoachService } from 'src/app/services/CoachService';
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
 
 @Component({
   selector: 'app-coach-view',
@@ -18,6 +22,7 @@ import { error } from 'jquery';
 })
 export class CoachViewComponent implements OnInit {
 
+<<<<<<< HEAD
   addsessionForm!: FormGroup;
   payment: any;
   addSessionForm: any = {
@@ -26,30 +31,30 @@ export class CoachViewComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
   coachId: any;
+=======
+  Coaches!: [];
+ 
+  organizationSessionData: any;
+  organizationData: any;
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   userRole: any;
   alertIcon!: IconProp;
   userIcon!: IconProp;
   calendarIcon: IconProp = "function";
   clockIcon: IconProp = "function";
   contracts!: any[];
-  suspendClientForm!: FormGroup;
-  closeClientForm!: FormGroup;
-  activateClientForm!: FormGroup;
-  editPaymentForm!: FormGroup;
+  suspendCoachForm!: FormGroup;
+  closeCoachForm!: FormGroup;
+  activateCoachForm!: FormGroup;
   caretDown = faCaretDown;
   addIcon = faPlus;
   editIcon = faPenSquare;
   rightIcon = faChevronRight;
   backIcon = faChevronLeft;
-  clientId: any;
-  orderId: any;
-  paymentId: any;
+  coachId: any;
   searchTerm = '';
-  orders!: any;
   showHideMessage = true;
-  payments!: any[];
-  notifications!: any[];
-  notification!: any;
+  
 
   sessionType = [
 
@@ -58,15 +63,23 @@ export class CoachViewComponent implements OnInit {
   currentTab = 'sessions';
   searching = false;
   actions = ['Activate', 'Close', 'Suspend'];
+<<<<<<< HEAD
   notificationType = ['sms', 'email'];
   loadingClient = false;
   page: number = 1;
+=======
+
+
+ 
+  loadingCoach = false;
+  totalLength: any;
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   itemsPerPage: number = 20;
   open = false;
   id: any;
   sessions!: any[];
   session: any;
-  clients: any;
+  coaches: any;
   console: any;
   filters: any = {
     status: '',
@@ -74,31 +87,49 @@ export class CoachViewComponent implements OnInit {
   };
   status: any;
   statusForm!: FormGroup;
-  updateClient!: FormGroup;
+  updateCoach!: FormGroup;
   sessionDueDate: any;
   sessionStartTime: any;
   sessionDuration: any;
   loading = true;
   refreshIcon!: IconProp;
-  createSessionClientId: any;
   selectedContract: any;
   sessionId: any;
+<<<<<<< HEAD
   pageSize: number = 15;
   totalElements: any;
   clientToBeUpdated!: any;
+=======
+  coachToBeUpdated!: any;
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   sessionModal: any;
   contractId: any;
   contract: any;
   contractForm!: FormGroup;
+<<<<<<< HEAD
+=======
+  numberOfCoachess!: number;
+  numberOfSessions!: number;
+  numberOfContracts!: number;
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   objectives: string[] = [];
   //Add Objective Form
   Objectives = {
     objective: ''
   };
+<<<<<<< HEAD
   coachingCategory: any;
 coach: any;
+=======
+
+  user: any;
+  orgId: any;
+  page: number = 1;
+  pageSize: number = 15;
+  totalElements: any;
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   constructor(
-    private ClientService: ClientService,
+    private coachService: CoachService,
     private router: Router,
     private http: HttpClient,
     private formbuilder: FormBuilder,
@@ -112,11 +143,23 @@ coach: any;
 
   ngOnInit() {
 
-    this.statusForm = this.formbuilder.group({
-      narration: 'Test',
-      isSendNotification: true
-    });
+    // this.statusForm = this.formbuilder.group({
+    //   narration: 'Test',
+    //   isSendNotification: true
+    // });
 
+    this.organizationSessionData = sessionStorage.getItem('user');
+    this.user = JSON.parse(this.organizationSessionData);
+   
+    this.userRole = this.user.userRole;
+    this.route.params.subscribe((params) => {
+      this.coachId = params['id'];
+      this.id = params['id'];
+    });
+    
+  
+
+<<<<<<< HEAD
     this.coachSessionData = sessionStorage.getItem('user');
     this.coachData = JSON.parse(this.coachSessionData);
     console.log(this.coachData);
@@ -145,18 +188,25 @@ coach: any;
         }
       );
       this.updateClient = this.formbuilder.group({
+=======
+ if (this.userRole == 'ORGANIZATION') {
+   this.orgId = this.user.id;
+ }
+ this.getCoachData(this.coachId)
+ if (this.userRole == 'ORGANIZATION') {
+      this.updateCoach = this.formbuilder.group({
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
 
         firstName: ' ',
         lastName: ' ',
-        clientType: ' ',
         msisdn: ' ',
         email: ' ',
+        status: ' ',
         physicalAddress: ' ',
-        profession: ' ',
-        paymentMode: ' ',
         reason: '',
 
       });
+<<<<<<< HEAD
       this.getClientSessions()
       this.getNotifications(this.page);
       this.getPaymentsByCoachId(this.page);
@@ -184,18 +234,19 @@ coach: any;
         }
       );
       this.updateClient = this.formbuilder.group({
+=======
+      this.updateCoach = this.formbuilder.group({
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
 
         firstName: ' ',
         lastName: ' ',
-        clientType: ' ',
         msisdn: ' ',
         email: ' ',
-        physicalAddress: ' ',
-        profession: ' ',
-        paymentMode: ' ',
-        reason: '',
+        status: ' ',
+       
 
       });
+<<<<<<< HEAD
     }
 
     this.addsessionForm = this.formbuilder.group({
@@ -390,11 +441,21 @@ coach: any;
     }
 
 
+=======
+     
+    }
+
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   }
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
+  
+  getCoachData(id: any) {
+    console.log("Get Coach");
+    this.loadingCoach = true;
 
+<<<<<<< HEAD
   getCoachData(id: any) {
     this.loading = true;
     console.log("Get Coach");
@@ -408,8 +469,83 @@ coach: any;
       (error: any) => {
         console.log(error);
         this.loading = false;
+=======
+    this.coachService.getOneCoach(id).subscribe((data) => {
+      this.loadingCoach = false;
+      this.coaches = data.body;
+      console.log(this.coaches);
+
+    },
+      (error: any) => {
+        console.log(error);
+        this.loadingCoach = false;
+
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
       });
+    }
+  changeCoachStatus() {
+    console.log(this.status);
+    if (this.status === "ACTIVE") {
+      this.coachService.changeCoach(this.coachId, "ACTIVE", this.statusForm.value).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.activatecoachModal.nativeElement.classList.remove('show');
+          this.activatecoachModal.nativeElement.style.display = 'none';
+
+        }, (error) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.activatecoachModal.nativeElement.classList.remove('show');
+          this.activatecoachModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if (this.status === "SUSPENDED") {
+      this.coachService.changeCoach(this.coachId, "SUSPENDED", this.statusForm.value).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.suspendcoachModal.nativeElement.classList.remove('show');
+          this.suspendcoachModal.nativeElement.style.display = 'none';
+        }, (error) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.suspendcoachModal.nativeElement.classList.remove('show');
+          this.suspendcoachModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
+    if (this.status === "CLOSED") {
+      this.coachService.changeCoach(this.coachId, "CLOSED", this.statusForm.value).subscribe(
+        (response) => {
+          console.log(response);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.closecoachModal.nativeElement.classList.remove('show');
+          this.closecoachModal.nativeElement.style.display = 'none';
+        }, (error: any) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.closecoachModal.nativeElement.classList.remove('show');
+          this.closecoachModal.nativeElement.style.display = 'none';
+        }
+      );
+    }
+
   }
+ 
+
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
   closeModal() {
@@ -417,63 +553,58 @@ coach: any;
     document.body.classList.remove('modal-open');
   }
 
-  getClass(Clients: any) {
-    if (Clients.status === 'SUSPENDED') {
+  getClass(Coaches: any) {
+    if (Coaches.status === 'SUSPENDED') {
       return 'badge-warning';
-    } else if (Clients.status === 'ACTIVE') {
+    } else if (Coaches.status === 'ACTIVE') {
       return 'badge-success';
     } else {
       return 'badge-danger';
     }
   }
-  @ViewChild('editClientModal', { static: false })
-  editClientModal!: ElementRef;
-  @ViewChild('activateclientModal', { static: false })
-  activateclientModal!: ElementRef;
-  @ViewChild('addContractModal', { static: false })
-  addContractModal!: ElementRef;
-  @ViewChild('suspendclientModal', { static: false })
-  suspendclientModal!: ElementRef;
-  @ViewChild('closeclientModal', { static: false })
-  closeclientModal!: ElementRef;
+  @ViewChild('editCoachModal', { static: false })
+  editCoachModal!: ElementRef;
+  @ViewChild('activatecoachModal', { static: false })
+  activatecoachModal!: ElementRef;
+
+  @ViewChild('suspendcoachModal', { static: false })
+  suspendcoachModal!: ElementRef;
+  @ViewChild('closecoachModal', { static: false })
+  closecoachModal!: ElementRef;
   editClient(client: any) {
-    this.clientToBeUpdated = client;
+    this.coachToBeUpdated = client;
 
-    this.updateClient = this.formbuilder.group({
-      firstName: this.clientToBeUpdated.firstName,
-      lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.clientType,
-      msisdn: this.clientToBeUpdated.msisdn,
-      email: this.clientToBeUpdated.email,
+    this.updateCoach = this.formbuilder.group({
+      firstName: this.coachToBeUpdated.firstName,
+      lastName: this.coachToBeUpdated.lastName,
+      msisdn: this.coachToBeUpdated.msisdn,
+      email: this.coachToBeUpdated.email,
 
-      physicalAddress: this.clientToBeUpdated.physicalAddress,
+      physicalAddress: this.coachToBeUpdated.physicalAddress,
 
-      profession: this.clientToBeUpdated.profession,
-      paymentMode: this.clientToBeUpdated.paymentMode,
-      reason: this.clientToBeUpdated.reason,
     });
 
   }
 
-  updateClientDetails(id: any) {
-    this.clientToBeUpdated = this.updateClient.value;
-    console.log(this.clientToBeUpdated)
+  updateCoachDetails(id: any) {
+    this.coachToBeUpdated = this.updateCoach.value;
+    console.log(this.coachToBeUpdated)
     console.log(id)
-    this.ClientService.editClient(this.clientToBeUpdated, id).subscribe(
+    this.coachService.editCoach(this.coachToBeUpdated, id).subscribe(
       (data) => {
         console.log(data)
         this.toastrService.success('updated!', 'Success!', { timeOut: 8000 });
         setTimeout(() => {
           location.reload();
         }, 1000);
-        this.editClientModal.nativeElement.classList.remove('show');
-        this.editClientModal.nativeElement.style.display = 'none';
+        this.editCoachModal.nativeElement.classList.remove('show');
+        this.editCoachModal.nativeElement.style.display = 'none';
 
       }, (error) => {
         console.log(error)
         this.toastrService.error('Error!', 'Error!', { timeOut: 8000 });
-        this.editClientModal.nativeElement.classList.remove('show');
-        this.editClientModal.nativeElement.style.display = 'none';
+        this.editCoachModal.nativeElement.classList.remove('show');
+        this.editCoachModal.nativeElement.style.display = 'none';
       }
     );
   }
@@ -494,6 +625,7 @@ coach: any;
     }
 
   }
+<<<<<<< HEAD
 
 
   // TODO: change to changeCoachStatus
@@ -611,6 +743,8 @@ coach: any;
   removeObjective(index: number) {
     this.objectives.splice(index, 1);
   }
+=======
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
   back() {
     window.history.back();
   }

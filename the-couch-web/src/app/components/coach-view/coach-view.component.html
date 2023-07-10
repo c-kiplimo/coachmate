@@ -5,6 +5,7 @@
     </h5>
   </div>
 </div>
+<<<<<<< HEAD
 
 <br>
 
@@ -31,6 +32,29 @@
             <li (click)="statusState('CLOSED')" class="dropdown-item"><a class="dropdown-item"
               data-bs-toggle="modal" data-bs-target="#closeclientModal">Close</a>
             </li>
+=======
+<br>
+<div class="row  justify-content-center">
+  <div class="col-md-8 col-sm-12">
+  <div class="card">
+<div class="card-body">
+
+  <div class="row dtl">
+  <h3 class="fw-semi-bold fs-6 f-weight">Details</h3>
+      <div class="col dropdown">
+        <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Actions</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li (click)="statusState('ACTIVE')"><a class="dropdown-item"
+                data-bs-toggle="modal" data-bs-target="#activatecoachModal"
+                >Activate</a></li>
+            <li (click)="statusState('SUSPENDED')"><a class="dropdown-item"
+              data-bs-toggle="modal" data-bs-target="#suspendcoachModal"
+              >Suspend</a></li>
+              <li (click)="statusState('CLOSED')"><a class="dropdown-item"
+                data-bs-toggle="modal" data-bs-target="#closecoachModal">Close</a></li>
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81
           </ul>
           </div>
         </div>
@@ -85,6 +109,7 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
   </div>
 </div>
 
@@ -771,3 +796,46 @@
 </div>
 
   
+=======
+              <div class="col-md-12" [@fadeIn]>
+                <div class="row dtl">
+                <h6 class="fw-semi-bold faded col smaller-font">Id</h6>
+                <p class="col">{{coaches?.id}}</p>
+              </div>
+              <div class="row dtl">
+                <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
+                <p class="col">{{coaches?.firstName + " " + coaches?.lastName | titlecase}}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
+              <p class="col">{{coaches?.email}}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold  faded col smaller-font">Phone</h6>
+              <span class="col">{{coaches?.msisdn}}</span>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold  faded col smaller-font">Status</h6>
+              <p class="col">
+                <span class="badge" [ngClass]="{
+                  'badge-success': coaches?.coachStatus === 'ACTIVE',
+                  'badge-danger': coaches?.coachStatus === 'SUSPENDED' || coaches?.coachStatus === 'CLOSED',
+                  'badge-primary': coaches?.coachStatus === 'NEW'
+                }">{{ coaches?.coachtatus }}</span>
+              </p>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold  faded col smaller-font">Created On</h6>
+              <p class="col">{{coaches.createdAt | date: "MMM d y"}}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold  faded col smaller-font">Last Updated</h6>
+              <p class="col">{{coaches.lastUpdatedAt| date: "MMM d y"}}</p>
+            </div>
+  </div>
+</div>
+</div>
+  </div>
+</div>
+
+>>>>>>> 93909a3cd5a3b9fae945f015ffc98bb0832bcb81

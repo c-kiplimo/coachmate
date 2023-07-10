@@ -1,14 +1,15 @@
 package com.natujenge.thecouch.service.mapper;
 
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.web.rest.dto.CoachDTO;
 import com.natujenge.thecouch.web.rest.dto.UserDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {})
-public interface CoachMapper extends EntityMapper<UserDTO, User>{
+public interface CoachMapper extends EntityMapper<CoachDTO, User>{
 
-
-    UserDTO toDto(User Entity);
+//    @Override
+    CoachDTO toDto(User Entity);
 
 
 //    default User fromId(Long id) {

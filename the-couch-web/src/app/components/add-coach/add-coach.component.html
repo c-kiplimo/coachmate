@@ -1,57 +1,67 @@
+
 <div class="container mb-5">
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card card-table d-flex justify-content-center align-items-center">
+    <div class="col-md-8">
+      <div
+        class="card card-table d-flex "
+      >
         <div class="">
-          <h1 class="text-center mb-3">Add a Coach</h1>
-
-          <div class="alert alert-danger" *ngIf="errorMessage">
-            {{ errorMessage }}
+          <h1 class="modal-title fs-5 text-center"  id="exampleModalLabel">Add New Coach</h1>
           </div>
-        </div>
+        
 
-        <form *ngIf="!registrationSuccess" #registrationForm="ngForm" ngNativeValidate>
+        <form>
           <div class="row p-2">
             <div class="mb-3 col-md-6">
-              <label for="fullname">Coach First Name *</label>
-              <input [(ngModel)]="formData.firstName" name="firstName" type="text" class="form-control"
-                placeholder="Enter User First Name" id="firstame" required />
+              <label for="fullname">First Name *</label>
+              <input
+                [(ngModel)]="addCoach.firstName"
+                name="firstName"
+                type="text"
+                class="form-control"
+                placeholder="First Name"
+                aria-describedby="emailHelp"
+                id="firstame"
+                required
+              />
             </div>
             <div class="mb-3 col">
-              <label for="fullname">Coach Last Name *</label>
-              <input [(ngModel)]="formData.lastName" name="lastName" type="text" placeholder="Enter User Last Name"
-                class="form-control" id="lastName" required />
+              <label for="fullname">Last Name *</label>
+              <input
+                [(ngModel)]="addCoach.lastName"
+                name="lastName"
+                type="text"
+                placeholder="Enter User Last Name"
+                class="form-control"
+                id="lastName"
+                required
+              />
             </div>
           </div>
 
           <div class="row p-2">
-            <div class="mb-3 col-md-6">
-              <label for="email">
-                Email address *
-                <small class="redText ms-2" *ngIf="emailInvalid">
-                  Invalid Email
-                </small>
-              </label>
-              <input [ngClass]="emailInvalid ? 'input-error' : ''" [(ngModel)]="formData.email" name="email"
-                type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                placeholder="Enter User Email Address" required />
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="phonenumber" class="form-label">Phone Number *</label>
-              <input [(ngModel)]="formData.msisdn" name="msisdn" type="text" class="form-control" required
-                placeholder="eg. 0700123456"
+            <div class=" mb-3 col-md-6 ">
+              <label for="exampleInputPassword1">Mobile no *</label>
+              <input required [(ngModel)]="addCoach.msisdn" name="msisdn" type="number" class="form-control"
+                id="contact" placeholder="Contact" required
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
             </div>
+            <div class=" mb-3 col-md-6 ">
+              <label for="exampleInputPassword1">Email *</label>
+              <input [(ngModel)]="addCoach.email" name="email" type="email" class="form-control" id="email"
+                placeholder="Email" required />
+            </div>
           </div>
-          <button type="submit" class="btn btn-success mb-3 mt-2 p-2" [disabled]="
-              !formData.email ||
-              !formData.msisdn ||
-              !formData.firstName ||
-              !formData.lastName
-            " (click)=" signUp()">
-            SUBMIT
-          </button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="newCoach()" [disabled]="
+            !addCoach.firstName||
+            !addCoach.lastName||
+            !addCoach.email||
+            !addCoach.msisdn
+            ">ADD COACH
+            </button>
+          </div>
         </form>
       </div>
     </div>
