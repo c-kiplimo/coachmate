@@ -3,7 +3,7 @@
     <h3 class="fw-semi-bold f-weight fs-5">Coaches</h3>
   </div>
 </div>
-
+<div class="d-none d-lg-block">
 <div class="row">
   <div class="col-md-3">
     <div class="filters-section">
@@ -83,14 +83,124 @@
     </div>
   </div>
 </div>
+</div>
+<div class="show-sm">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h3></h3>
+        <div>
+          <button type="button" routerLink="/addCoach" class="btn btn-success">
+            <i class="fa fa-plus"></i> Add Coach
+          </button>
+        </div>
+      </div>
+
+      <div class="row" [@fadeIn]>
+        <div class="col-md-10 mb-2">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+              aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+            <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h5>Coaches</h5>
+        <div (click)="toggleFilters()">
+          Filters
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+            viewBox="0 0 16 16">
+            <path
+              d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </div>
+      </div>
+
+
+      <div class="pt-3 pb-2 listing-item"
+        *ngFor="let coach of coaches  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+        [routerLink]="['/clientView', coach.id]">
+
+
+        <div class="d-flex justify-content-between">
+          <h4 class="farmer" [routerLink]="['/coachView', coach.id]">
+            {{ coach?.fullName | titlecase }}
+          </h4>
+
+          <span class="no-word-break">
+            <a [routerLink]="['/coachView', coach.id]"><i class="fa fa-angle-right"></i></a>
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coach.email | titlecase }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coach.msisdn }}
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-1">
+          <span class="badge" [ngClass]="{
+          'badge-success': coach?.coachStatus === 'ACTIVE',
+          'badge-danger': coach?.coachStatus === 'SUSPENDED' || coach?.coachStatus === 'CLOSED',
+          'badge-primary': coach?.coachStatus === 'NEW'
+        }">{{ coach?.coachStatus }}</span>
+        </div>
+      </div>
+
+
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
+      </div>
+      <div *ngIf="!loading && coaches?.length === 0">
+        <h2 class="text-muted mt-5">No Coaches Found.</h2>
+      </div>
+
+    </div>
+  </div>
+</div>
 <br>
 <div class="text-center" *ngIf="totalElements > 15">
   <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
 </div>
 <br>
 
+<!-- Panel -->
+<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
 
-<!-- Edit Client Modal -->
+  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+    <div class="add-options-panel-heading">
+      <h4>Filter options</h4>
+      <span (click)="toggleFilters()">Cancel</span>
+    </div>
+
+
+    <div class="mb-1 border-bottom">
+      <h6 class="filter-section-title">Filter by status</h6>
+      <div class="add-filter-option" 
+        *ngFor="let status of coachStatuses;index as i" (click)="filters.status = status">
+        <span>{{status | titlecase}}</span>
+        <span class="checkbox-border">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="action-buttons mb-4">
+      <button class="btn btn-cancel" (click)="resetStatuses()">Reset</button>
+      <button class="btn btn-submit" (click)="toggleFilters();getCoaches(0)">Submit</button>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Edit Coach Modal -->
 <div class="modal fade" id="editCoachModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-x1">
