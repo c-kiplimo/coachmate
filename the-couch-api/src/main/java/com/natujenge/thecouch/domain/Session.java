@@ -27,7 +27,6 @@ public class Session {
     private Long id;
     private String name;
 
-    private Long orgId;
     private String sessionNumber;
 
     @Enumerated(EnumType.STRING)
@@ -75,5 +74,9 @@ public class Session {
     @ManyToOne
     @JoinColumn(name="coach_id")
     User coach;
+
+    @ManyToOne
+    @JoinColumn(name="org_id")
+    Organization organization;
 
 }

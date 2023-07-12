@@ -72,7 +72,7 @@ export class SessionsComponent implements OnInit {
 
 
     if (this.userRole == 'ORGANIZATION') {
-      this.orgId = this.user.id;
+      this.orgId = this.user.organization.id;
       this.getAllSessions(this.page);
 
     } else if (this.userRole == 'COACH') {
@@ -100,10 +100,6 @@ export class SessionsComponent implements OnInit {
       sessionStatus: this.filters.status,
       search: this.filters.searchItem,
       sort: 'id,desc',
-      // coachId: this.coachId,
-      // clientId: this.clientId,
-      //contractId: this.coachData.contractId,
-      //sessionDate: this.filters.sessionDate,
     };
     if(this.userRole == 'COACH'){
       options.coachId = this.coachId;

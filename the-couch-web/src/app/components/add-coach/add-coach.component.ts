@@ -72,7 +72,7 @@ export class AddCoachComponent implements OnInit {
     const options = {
       orgId: this.orgId,
     }
-    this.coachService.getOrgCoaches(options).subscribe(
+    this.coachService.getCoaches(options).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
         this.coaches = response;

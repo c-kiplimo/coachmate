@@ -5,8 +5,16 @@
 export const environment = {
   production: false,
   title: 'Development Environment',
+<<<<<<< HEAD
    apiURL: "http://51.15.141.206:10290",
   //  apiURL: 'http://localhost:10290',
+=======
+    // apiURL: "http://51.15.141.206:10290",
+  //  apiURL: "http://51.15.141.206:10290",
+   apiURL: 'http://localhost:10290',
+//     apiURL: 'http://localhost:10290',
+
+>>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
 };
 
 /*

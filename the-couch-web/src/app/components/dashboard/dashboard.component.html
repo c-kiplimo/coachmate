@@ -158,10 +158,17 @@
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
+<<<<<<< HEAD
       <div class="card-body">   <!-- upcomingsessionsTable list-container container -->
         <table class="table" *ngIf="coachesImpl?.length">
+=======
+
+      <div class="upcomingsessions list-container container">
+        <table class="table" *ngIf="coaches?.length">
+
+>>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
           <thead>
-            <th colspan="1">Full Name</th>
+            <th colspan="1">Name</th>
             <th colspan="1">Email</th>
             <th colspan="1">Phone</th>
             <th colspan="1">Created On</th>
@@ -169,11 +176,19 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
+<<<<<<< HEAD
             <tr *ngFor="let coach of coachesImpl">
               <td>{{ coach.fullName }}</td>
               <td>{{ coach.email}}</td>
               <td>{{ coach.msisdn }}</td>
               <td>{{ coach.createdAt | date: "MMM d y"}}</td>
+=======
+            <tr *ngFor="let coach of coaches">
+              <td>{{ coach?.fullName }}</td>
+              <td>{{ coach?.emailAddress }}</td>
+              <td>{{ coach?.msisdn }}</td>
+              <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
+>>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
 
               <td>
                   <span class="badge" [ngClass]="{
@@ -181,7 +196,7 @@
                     'badge-danger': coach?.coachStatus === 'SUSPENDED',
                     'badge-primary': coach?.coachStatus === 'CLOSED'
                   }">
-                    {{ coach.status }}</span>
+                    {{ coach.coachStatus }}</span>
 
               <td class="view">
                 <a [routerLink]="['/coachView', coach.id]"><i class="fas fa-external-link-alt"></i></a>
