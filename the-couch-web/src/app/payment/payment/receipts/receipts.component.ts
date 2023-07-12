@@ -132,9 +132,8 @@ payment: any;
   // searchPayments() {
   //   this.getPaymentsByClientId(this.ClientId);
   // }
-
   getPaymentsByCoachId(){
-    
+  
     const options = {
       page: 1,
       per_page: this.itemsPerPage,

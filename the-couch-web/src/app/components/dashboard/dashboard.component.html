@@ -110,7 +110,7 @@
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
-      <div class="upcomingsessionsTable list-container container ">
+      <div class="upcomingsessionsTable list-container container "> 
         <table class="table" *ngIf="contracts?.length">
           <thead>
             <!-- <th colspan="1">Title</th> -->
@@ -159,7 +159,7 @@
         </a>
       </div>
       <div class="card-body">   <!-- upcomingsessionsTable list-container container -->
-        <table class="table" *ngIf="orgCoaches?.length">
+        <table class="table" *ngIf="coachesImpl?.length">
           <thead>
             <th colspan="1">Full Name</th>
             <th colspan="1">Email</th>
@@ -169,9 +169,9 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let coach of orgCoaches">
+            <tr *ngFor="let coach of coachesImpl">
               <td>{{ coach.fullName }}</td>
-              <td>{{ coach.emailAddress }}</td>
+              <td>{{ coach.email}}</td>
               <td>{{ coach.msisdn }}</td>
               <td>{{ coach.createdAt | date: "MMM d y"}}</td>
 
@@ -184,7 +184,7 @@
                     {{ coach.status }}</span>
 
               <td class="view">
-                <a [routerLink]="['/editCoach', coach.id]"><i class="fas fa-external-link-alt"></i></a>
+                <a [routerLink]="['/coachView', coach.id]"><i class="fas fa-external-link-alt"></i></a>
                 <!-- <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button> -->
               </td>
 

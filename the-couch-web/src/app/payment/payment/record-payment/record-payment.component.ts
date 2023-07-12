@@ -61,6 +61,7 @@ export class RecordPaymentComponent implements OnInit {
     console.log(this.userRole);
 
  if(this.userRole == 'COACH'){
+    this.coachId = this.coachData.id;
     this.getUser();
     this.getClients(this.page)
  } else if(this.userRole == 'ORGANIZATION'){
@@ -129,13 +130,12 @@ export class RecordPaymentComponent implements OnInit {
 
     this.clientService.getClients(options).subscribe(
       (response: any) => {
-        this.loading = false;
-        this.clients = response.body;
+        this.clients = JSON.stringify(response.body);
         console.log("clients",this.clients);
-
-      }, (error: any) => {
         this.loading = false;
+      }, (error: any) => {
         console.log(error);
+        this.loading = false;
       }
     );
   }
@@ -155,8 +155,6 @@ export class RecordPaymentComponent implements OnInit {
         this.clients = response.body;
         console.log(response)
         console.log('clients',this.clients)
-  
-  
       }, (error) => {
         console.log(error)
       }

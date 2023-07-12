@@ -74,7 +74,7 @@ export class CoachViewComponent implements OnInit {
   };
   status: any;
   statusForm!: FormGroup;
-  updateClient!: FormGroup;
+  updateCoach!: FormGroup;
   sessionDueDate: any;
   sessionStartTime: any;
   sessionDuration: any;
@@ -85,7 +85,7 @@ export class CoachViewComponent implements OnInit {
   sessionId: any;
   pageSize: number = 15;
   totalElements: any;
-  clientToBeUpdated!: any;
+  coachToBeUpdated!: any;
   sessionModal: any;
   contractId: any;
   contract: any;
@@ -122,6 +122,9 @@ coach: any;
     console.log(this.coachData);
     this.userRole = this.coachData.userRole;
     console.log(this.userRole);
+    this.route.params.subscribe((params) => {
+      this.coachId = params['id'];
+    });
 
     if (this.userRole == 'COACH') {
       this.sessionId = this.route.snapshot.params['sessionId'];
@@ -144,7 +147,7 @@ coach: any;
           objectives: '',
         }
       );
-      this.updateClient = this.formbuilder.group({
+      this.updateCoach = this.formbuilder.group({
 
         firstName: ' ',
         lastName: ' ',
@@ -157,19 +160,18 @@ coach: any;
         reason: '',
 
       });
-      this.getClientSessions()
+      this.getCoachSessions(this.page);
       this.getNotifications(this.page);
-      this.getPaymentsByCoachId(this.page);
+      this.getPaymentsByCoachId();
     }
     else if (this.userRole == 'ORGANIZATION') {
       this.clientId = this.activatedRoute.snapshot.params['id'];
       this.id = this.clientId
-      this.coachId = this.coachData.id;
       this.getContracts(this.page);
       this.getCoachData(this.coachId);
-      this.getClientSessions()
+      this.getCoachSessions(this.page);
       this.getNotifications(this.page);
-      this.getPaymentsByCoachId(this.page);
+      this.getPaymentsByCoachId();
       this.contractForm = this.formbuilder.group(
         {
           coachingCategory: '',
@@ -183,7 +185,7 @@ coach: any;
           objectives: '',
         }
       );
-      this.updateClient = this.formbuilder.group({
+      this.updateCoach = this.formbuilder.group({
 
         firstName: ' ',
         lastName: ' ',
@@ -212,21 +214,41 @@ coach: any;
 
   }
 
-  getClientSessions() {
-    console.log("client id", this.clientId)
+  getCoachSessions(page: any) {
     this.loading = true;
-    this.ClientService.getClientSessions(this.clientId)
-      .subscribe((data: any) => {
-        this.sessions = data.body;
-        this.totalElements = data.body.totalElements;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionStatus: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+    };
+
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.coachId = this.coachId;
+    }
+
+    this.ClientService.getSessions(options).subscribe(
+      (response) => {
+        this.sessions = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
+        console.log('sessions got', this.sessions);
         this.loading = false;
-        console.log("sessions gotten here", this.sessions)
-      },
-        (error: any) => {
-          console.log(error);
-          this.loading = false;
-        }
-      );
+      }, (error) => {
+        console.log('error');
+        this.loading = false;
+      }
+    );
   }
 
   getContracts(page: any) {
@@ -297,28 +319,23 @@ coach: any;
     });
   }
 
-  getPaymentsByCoachId(page: any){
+  getPaymentsByCoachId(){
     this.loading = true;
-    this.page = page;
 
-    if (page === 0 || page < 0) {
-      page = 0;
-    } else {
-      page = page - 1;
-    }
     const options = {
-      page: page,
+      page: 1,
       per_page: this.itemsPerPage,
       coachId: this.coachId,  
     };
 
     this.ClientService.getPaymentsByCoachId(options).subscribe(
       (response) => {
-          this.loading = false;
           this.payments = response.body.data;
           console.log('payments', this.payments);
+          this.loading = false;
         }, (error) => {
         console.log(error);
+        this.loading = false;
       }
     )
   }
@@ -383,7 +400,6 @@ coach: any;
     console.log("contractId on navigate", id);
     this.contractId = id;
     if (this.userRole == 'COACH') {
-
       this.router.navigate(['/contractDetail', id]);
     } else if (this.userRole == 'CLIENT') {
       this.router.navigate(['/terms', id]);
@@ -410,6 +426,7 @@ coach: any;
         this.loading = false;
       });
   }
+
   @ViewChild('modal', { static: false })
   modal!: ElementRef;
   closeModal() {
@@ -436,30 +453,26 @@ coach: any;
   suspendclientModal!: ElementRef;
   @ViewChild('closeclientModal', { static: false })
   closeclientModal!: ElementRef;
-  editClient(client: any) {
-    this.clientToBeUpdated = client;
 
-    this.updateClient = this.formbuilder.group({
-      firstName: this.clientToBeUpdated.firstName,
-      lastName: this.clientToBeUpdated.lastName,
-      clientType: this.clientToBeUpdated.clientType,
-      msisdn: this.clientToBeUpdated.msisdn,
-      email: this.clientToBeUpdated.email,
+  editCoach(coach: any) {
+    this.coachToBeUpdated = coach;
 
-      physicalAddress: this.clientToBeUpdated.physicalAddress,
-
-      profession: this.clientToBeUpdated.profession,
-      paymentMode: this.clientToBeUpdated.paymentMode,
-      reason: this.clientToBeUpdated.reason,
+    this.updateCoach = this.formbuilder.group({
+      firstName: this.coachToBeUpdated.firstName,
+      lastName: this.coachToBeUpdated.lastName,
+      msisdn: this.coachToBeUpdated.msisdn,
+      email: this.coachToBeUpdated.email,
+      physicalAddress: this.coachToBeUpdated.physicalAddress,
+      profession: this.coachToBeUpdated.profession,
+      reason: this.coachToBeUpdated.reason,
     });
-
   }
 
-  updateClientDetails(id: any) {
-    this.clientToBeUpdated = this.updateClient.value;
-    console.log(this.clientToBeUpdated)
+  updateCoachDetails(id: any) {
+    this.coachToBeUpdated = this.updateCoach.value;
+    console.log(this.coachToBeUpdated)
     console.log(id)
-    this.ClientService.editClient(this.clientToBeUpdated, id).subscribe(
+    this.ClientService.editClient(this.coachToBeUpdated, id).subscribe(
       (data) => {
         console.log(data)
         this.toastrService.success('updated!', 'Success!', { timeOut: 8000 });
@@ -492,7 +505,6 @@ coach: any;
       this.showStatus = "CLOSE";
       this.status = "CLOSED";
     }
-
   }
 
 
@@ -500,7 +512,7 @@ coach: any;
   changeCoachStatus() {
     console.log(this.status);
     if (this.status === "ACTIVE") {
-      this.ClientService.changeClient(this.clientId, "ACTIVE", this.statusForm.value).subscribe(
+      this.ClientService.changeClient(this.coachId, "ACTIVE", this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
@@ -520,7 +532,7 @@ coach: any;
     }
 
     if (this.status === "SUSPENDED") {
-      this.ClientService.changeClient(this.clientId, "SUSPENDED", this.statusForm.value).subscribe(
+      this.ClientService.changeClient(this.coachId, "SUSPENDED", this.statusForm.value).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
@@ -539,7 +551,7 @@ coach: any;
     }
 
     if (this.status === "CLOSED") {
-      this.ClientService.changeClient(this.clientId, "CLOSED", this.statusForm.value).subscribe(
+      this.ClientService.changeClient(this.coachId, "CLOSED", this.statusForm.value).subscribe(
         (response) => {
           console.log(response);
           this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });

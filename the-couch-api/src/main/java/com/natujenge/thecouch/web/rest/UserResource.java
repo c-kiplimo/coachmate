@@ -173,14 +173,15 @@ public class UserResource {
         ResponseEntity<?> getOrgClients(@PathVariable("id") Long orgId,
                 @AuthenticationPrincipal User userDetails){
             log.info("Request to get Organization clients");
+            List<User> listResponse;
             try{
-                List<User> listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
-                return new ResponseEntity<>(listResponse, HttpStatus.OK);
+                listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
             } catch (Exception e) {
                 log.error("Error Occurred ", e);
                 return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
         }
         @GetMapping(path = "coaches")
         ResponseEntity<List<CoachDTO>> getCoaches(

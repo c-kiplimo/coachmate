@@ -477,7 +477,6 @@ public class WalletService {
     public ListResponse getPaymentsByCoachId(int page, int perPage, Long coachId) {
         log.info("Get all Payments by Coach id {}", coachId);
 
-
         page = page - 1;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
