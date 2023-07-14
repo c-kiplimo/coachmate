@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Data
 public class CoachingLogRequest {
-    private Long id;
     private String  noInGroup;
     private String clientName;
     private String  clientEmail;

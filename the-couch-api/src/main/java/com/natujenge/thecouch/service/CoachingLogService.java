@@ -41,7 +41,7 @@ public class CoachingLogService {
             throw new IllegalArgumentException("Coach with id " + coachId + " not found");
         }
 
-        log.info("Request to create coaching log");
+        log.info("Request to create coaching log , service layer");
         CoachingLog coachingLog = new CoachingLog();
         coachingLog.setClientName(coachingLogRequest.getClientName());
         coachingLog.setClientEmail(coachingLogRequest.getClientEmail());

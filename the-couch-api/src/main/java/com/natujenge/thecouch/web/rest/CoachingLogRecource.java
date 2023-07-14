@@ -15,7 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -30,25 +32,35 @@ public class CoachingLogRecource {
 
         //CREATE
         @PostMapping
-        public ResponseEntity<?> createCoachingLog(
-                @RequestBody CoachingLogRequest coachingLogRequest,
+        public ResponseEntity<?> createCoachingLogs(
+                @RequestBody List<CoachingLogRequest> coachingLogRequests,
                 @AuthenticationPrincipal User userDetails
         ) {
-            log.info("Request to create coaching log");
+            log.info("Request to create coaching logs");
             try {
                 Long coachId = userDetails.getId();
-                CoachingLog coachingLog = coachingLogService.createCoachingLog(coachingLogRequest, coachId);
+                // Create a list to hold the created coaching logs
+                List<CoachingLog> createdLogs = new ArrayList<>();
+
+                // Iterate over the coachingLogRequests and create coaching logs
+                for (CoachingLogRequest coachingLogRequest : coachingLogRequests) {
+                    CoachingLog coachingLog = coachingLogService.createCoachingLog(coachingLogRequest, coachId);
+                    createdLogs.add(coachingLog);
+                }
+
+                // Extract the IDs of the created coaching logs
+                List<Long> createdLogIds = createdLogs.stream()
+                        .map(CoachingLog::getId)
+                        .collect(Collectors.toList());
+
                 return ResponseEntity.created(
                         ServletUriComponentsBuilder
                                 .fromCurrentRequest()
-                                .path("/{id}")
-                                .buildAndExpand(coachingLog.getId())
-                                .toUri()
-                ).body(coachingLog);
+                                .build().toUri()
+                ).body(createdLogIds);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
-
         }
 
         //get all coaching logs
