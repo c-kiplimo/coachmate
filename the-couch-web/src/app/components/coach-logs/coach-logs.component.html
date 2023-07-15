@@ -54,6 +54,9 @@
               <!--error message-->
               <p class="text-danger">Make sure you data is clean and try again!!!</p>
             </div>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
             <br />
             <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
               <h2 class="card-title">Preview</h2>
@@ -88,7 +91,8 @@
 
             <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
               <button type="button" class="btn btn-cancel" (click)="clearData()">Cancel</button>
-              <button type="button" class="btn btn-success" (click)="uploadExcel()">Upload</button>
+              <button type="button" class="btn btn-success" (click)="uploadExcel()"><i
+                  class="fas fa-file-upload"></i> Upload</button>
             </div>
 
           </div>

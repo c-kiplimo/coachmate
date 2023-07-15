@@ -22,15 +22,15 @@ import { HttpResponse } from '@angular/common/http';
 export class CoachLogsComponent implements OnInit {
 
   coachingLog = {
-      noInGroup: '',
-      clientName: '',
-      clientEmail: '',
-      startDate: '',
-      endDate: '',
-      paidHours: '',
-      proBonoHours: '',
-      createdAt: '',
-      createdBy: ''
+    noInGroup: '',
+    clientName: '',
+    clientEmail: '',
+    startDate: '',
+    endDate: '',
+    paidHours: '',
+    proBonoHours: '',
+    createdAt: '',
+    createdBy: ''
   };
   loading = false;
   itemsPerPage = 20;
@@ -45,7 +45,7 @@ export class CoachLogsComponent implements OnInit {
   totalElements: any;
   excelData: any;
   uploadFromExcel: boolean = false;
-  headerRow: any  = [];
+  headerRow: any = [];
   coachingLogsFromExcel: any = [];
   showErrorMessage: boolean = false;
 
@@ -58,6 +58,14 @@ export class CoachLogsComponent implements OnInit {
 
   getCoachingLogs(page: any) {
     this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    
     const options = {
       page: page,
       sort: 'id,desc',
@@ -66,8 +74,8 @@ export class CoachLogsComponent implements OnInit {
     };
     this.coachLogsService.getCoachLogs(options).subscribe((response: any) => {
       this.coachingLogs = response.body;
-      this.totalElements = +response.headers.get('X-Total-Count');
-      alert(this.totalElements);
+      this.totalElements = response.headers.get('X-Total-Count');
+      console.log('response', response);
       this.loading = false;
     }, (error: any) => {
       console.log(error);
@@ -101,11 +109,11 @@ export class CoachLogsComponent implements OnInit {
   onFileChange(event: any) {
     //read the .xlsx file uploaded and get the data from the file and store it in coachingLogs
     let file = event.target.files[0];
-    
+
     let reader = new FileReader();
 
     if (file) {
-      
+
       if (reader.readyState === 1) {
         // Abort the previous reading operation if it's still in progress
         reader.abort();
@@ -127,7 +135,7 @@ export class CoachLogsComponent implements OnInit {
 
         console.log('Data', this.coachingLogs);
 
-        
+
       };
 
       reader.readAsArrayBuffer(file);
