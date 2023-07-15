@@ -85,6 +85,12 @@ export class sessionViewComponent implements OnInit {
   OrgData: any;
   orgSession: any;
   currentSession!: any;
+
+  @ViewChild('stickyMenu')
+  menuElement!: ElementRef;
+  sticky: boolean = false;
+  elementPosition: any;
+
   constructor(
     private clientService: ClientService,
     private http: HttpClient,
@@ -141,6 +147,19 @@ export class sessionViewComponent implements OnInit {
       sessionEndTime: '',
     });
 
+  }
+
+  ngAfterViewInit() {
+    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+  }
+  @HostListener('window:scroll', ['$event'])
+  handleScroll() {
+    const windowScroll = window.pageYOffset;
+    if (windowScroll >= this.elementPosition) {
+      this.sticky = true;
+    } else {
+      this.sticky = false;
+    }
   }
 
   //get feedback for session
