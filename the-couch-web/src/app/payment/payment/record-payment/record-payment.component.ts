@@ -65,8 +65,10 @@ export class RecordPaymentComponent implements OnInit {
     this.getUser();
     this.getClients(this.page)
  } else if(this.userRole == 'ORGANIZATION'){
+    this.coachId = this.coachData.id;
     this.getUserOrg();
-    this.getOrgClients()
+    // this.getOrgClients()
+    this.getClientsOrg(this.page);
  } else if(this.userRole == 'CLIENT'){
     this.getUserClient();
  }
@@ -111,6 +113,7 @@ export class RecordPaymentComponent implements OnInit {
 
 
   }
+
   getClients(page: any) {
     this.loading = true;
     this.page = page;
@@ -130,7 +133,7 @@ export class RecordPaymentComponent implements OnInit {
 
     this.clientService.getClients(options).subscribe(
       (response: any) => {
-        this.clients = JSON.stringify(response.body);
+        this.clients = response.body;
         console.log("clients",this.clients);
         this.loading = false;
       }, (error: any) => {
@@ -161,6 +164,41 @@ export class RecordPaymentComponent implements OnInit {
     )
   }
 
+  getClientsOrg(page: any) {
+    this.loading = true;
+    this.page = page;
+
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
+    const options = {
+      page: page,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      orgId: this.orgId,
+    };
+
+    this.clientService.getClients(options).subscribe(
+      (response: any) => {
+        this.clients = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'CLIENT') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
+        console.log("clients",this.clients);
+        this.loading = false;
+      }, (error: any) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
+  }
+
+    
   back() {
     window.history.back();
   }

@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getClients(this.page);
-      this.getCoaches(this.page);
+      // this.getCoaches(this.page);
       this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
@@ -125,12 +125,8 @@ export class DashboardComponent implements OnInit {
       // this.getOrgContracts(this.orgId);
       this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-<<<<<<< HEAD
       // this.getOrgCoaches(this.page);
       this.getCoachesImpl(this.page)
-=======
-      this.getCoaches(this.orgId);
->>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -458,13 +454,7 @@ export class DashboardComponent implements OnInit {
   //   );
   // }
 
-<<<<<<< HEAD
   getCoachesImpl(page: any) {
-=======
-
-  getCoaches(page: any) {
- 
->>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -473,12 +463,9 @@ export class DashboardComponent implements OnInit {
     } else {
       page = page - 1;
     }
-<<<<<<< HEAD
     if(this.filters.status == 'ALL'){
       this.filters.status = '';
     }
-=======
->>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
     const options: any = {
       page: page,
       size: this.pageSize,
@@ -486,7 +473,6 @@ export class DashboardComponent implements OnInit {
       search: this.filters.searchItem,
       sort: 'id,desc',
     };
-<<<<<<< HEAD
 
     if(this.userRole == 'COACH'){
       options.coachId = this.coachId;
@@ -507,20 +493,6 @@ export class DashboardComponent implements OnInit {
         }
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
-=======
-  
-   if(this.userRole == 'ORGANIZATION'){
-      options.orgId = this.orgId;
-    }
-    
-    this.coachService.getCoaches(options).subscribe(
-      (response) => {
-        this.loading = false;
-        this.coaches = response.body;
-        this.totalElements = +response.headers.get('X-Total-Count');
-        this.numberofCoaches =this.coaches.length;
-        console.log('coaches',this.coaches)
->>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
       }, (error) => {
         this.loading = false;
         console.log(error)

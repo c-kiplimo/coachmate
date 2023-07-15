@@ -443,7 +443,6 @@ coach: any;
       return 'badge-danger';
     }
   }
-<<<<<<< HEAD
   @ViewChild('editClientModal', { static: false })
   editClientModal!: ElementRef;
   @ViewChild('activateclientModal', { static: false })
@@ -454,20 +453,6 @@ coach: any;
   suspendclientModal!: ElementRef;
   @ViewChild('closeclientModal', { static: false })
   closeclientModal!: ElementRef;
-=======
-
-  @ViewChild('editCoachModal', { static: false })
-  editCoachModal!: ElementRef;
-  @ViewChild('activatecoachModal', { static: false })
-  activatecoachModal!: ElementRef;
-
-  @ViewChild('suspendcoachModal', { static: false })
-  suspendcoachModal!: ElementRef;
-  @ViewChild('closecoachModal', { static: false })
-  closecoachModal!: ElementRef;
-  editCoach(client: any) {
-    this.coachToBeUpdated = client;
->>>>>>> eb4ff13bcdf30b50d37d5c853c3072167b98a966
 
   editCoach(coach: any) {
     this.coachToBeUpdated = coach;
