@@ -12,28 +12,40 @@ public class Attachments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String  FileName;
-    private String  attachmentNumber;
-    private String  FileType;
-    private Long  FileSize;
-    private  byte[]  FileContent;
+
+    @Column(name = "file_name")
+    private String fileName;
+
+    @Column(name = "attachment_number")
+    private String attachmentNumber;
+
+    @Column(name = "file_type")
+    private String fileType;
+
+    @Column(name = "file_size")
+    private Long fileSize;
+
+    @Lob
+    @Column(name = "file_content", columnDefinition = "BLOB")
+    private byte[] fileContent;
 
 
-    private String link;
-    private String  linkUrl;
-    private byte[]  file;
+    @Column(name = "link_url")
+    private String linkUrl;
 
-    @Column(nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column(nullable = false)
+
+    @Column(name = "created_by")
     private String createdBy;
+
+    @Column(name = "last_updated_at")
     private LocalDateTime lastUpdatedAt;
+
+    @Column(name = "last_updated_by")
     private String lastUpdatedBy;
 
     @ManyToOne
     @JoinColumn(name = "session_id")
-    Session session;
-
-
-
+    private Session session;
 }

@@ -235,9 +235,9 @@ export class ClientService {
     );
   }
 
-  getAttachment(params: any): Observable<any> {
+  getAttachment(sessionId: any): Observable<any> {
     return this.http.get(`${this.baseURL}attachments/get-by-session-id`, {
-      params: params,
+      params: { sessionId: sessionId } ,
       observe: 'response'
     })
   }

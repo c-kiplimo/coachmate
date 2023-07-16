@@ -16,7 +16,7 @@
           <h3 class="fw-bold col">Details</h3> 
           <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button> 
 
-          <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
+          <!-- <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3> -->
           <button class="btn btn-success col"  *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button>
 
 
@@ -27,11 +27,11 @@
               Actions
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown-item" *ngIf="userRole === 'COACH'">
+              <!-- <li class="dropdown-item" *ngIf="userRole === 'COACH'">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#attachmentModal"
                   (click)="addAttachment()">Add Attachments
                 </a>
-              </li>
+              </li> -->
               
               <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                 <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmsessionModal"
@@ -127,6 +127,7 @@
             [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
             <span class="d-none d-sm-inline" style="font-size: 20px;">Attachments</span>
           </button>
+          
         </div>
         
         
@@ -176,36 +177,44 @@
               No feedbacks Found.
             </p>
           </div>
+          
         </div>
-        <div class="attachments-section" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-          <div class="row list-container container ">
-            <table class="table">
-              <thead>
-                <th coslpan="1">Attachment No</th>
-                <th coslpan="1">Attachment date</th>
-                <th coslpan="1">Details</th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let attachment of attachmentss">
-                  <td class="text-center">{{ attachment.id }}</td>
-                  <td class="text-center">{{ attachment.createdAt | date : "MMM d, y " }}</td>
-                  <td class="text-center">{{ attachment.links }}</td>
-                  <td>
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
-                      View
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-              <div class="donut multi"></div>
+          
+        <!-- <div>
+          <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addAvailableSlots"><i
+            class="fa fa-plus"></i> Add
+          Session Schedule</button>
+          </div> -->
+          
+          <div class="attachments-section" *ngIf="currentTab === 'attachments'" [@fadeIn]>
+            <div class="row list-container container">
+              <div class="d-flex justify-content-end mb-2"> <!-- Added "d-flex justify-content-end" and "mb-2" classes to align the button to the right and add margin-bottom -->
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentModal" (click)="addAttachment()">
+                  <i class="fa fa-plus"></i> Attachments
+                </button>
+              </div>
+              <table class="table">
+                <thead>
+                  <th scope="col">Attachment No</th>
+                  <th scope="col">Attachment date</th>
+                  <th scope="col">Details</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let attachment of attachments">
+                    <th scope="row">{{ attachment.id }}</th>
+                    <td >{{ attachment.links }}</td>
+                    <td >{{ attachments.files}}</td>
+                    <td>{{ attachment.createdAt | date: "MMM d, y" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+                No attachment Found.
+              </p>
             </div>
-            <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
-              No attachment Found.
-            </p>
           </div>
-        </div>
+          
+        
       </div>
     </div>
   </div>
@@ -620,8 +629,7 @@
           <h3>Links</h3>
           <div class="mb-3">
             <div class="input-group">
-              <input [(ngModel)]="Links.link" type="text" class="form-control input-height" placeholder="Add link"
-                formControlName="link">
+              <input [(ngModel)]="link" type="text" class="form-control input-height" placeholder="Add link" name="linkInput" (ngModelChange)="onLinkChange()">
               <button type="button" style="transform: translateY(-0.5cm);" class="btn btn-success btn-match-height" (click)="addLink()">Add</button>
             </div>
           </div>
@@ -642,8 +650,8 @@
           <h3>Files</h3>
           <div class="mb-3">
             <div class="input-group">
-              <input type="file" id="fileInput" multiple (change)="onFileSelected($event)" class="form-control-file input-height">
-              <button class="btn btn-success btn-match-height"style="transform: translateY(-0.5cm);"  type="button" (click)="addFile()">Add</button>
+              <input type="file" id="fileInput" multiple (change)="onFileSelected($event)" class="form-control-file input-height" name="fileInput">
+              <button class="btn btn-success btn-match-height" style="transform: translateY(-0.5cm);" type="button" (click)="addFile()">Add</button>
             </div>
           </div>
           <div class="mb-3">
@@ -657,7 +665,7 @@
         </section>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-small" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary btn-small" data-bs-dismiss="modal" (click)="resetForm()">Close</button>
           <button type="button" class="btn btn-success btn-small" (click)="addAttachment()">Add Attachment</button>
         </div>
         
@@ -666,6 +674,8 @@
     </div>
   </div>
 </div>
+
+
 
 
 

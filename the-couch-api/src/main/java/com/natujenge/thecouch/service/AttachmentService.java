@@ -5,11 +5,16 @@ import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.repository.AttachmentsRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
+import com.natujenge.thecouch.web.rest.request.AttachmentRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -31,59 +36,95 @@ public class AttachmentService {
 
     //get attachment by session id
     public List<Attachments> getAttachmentBySessionId(Long sessionId) {
-        log.info("Request to get attachment by session id: {} and coachId : {}", sessionId);
+        log.info("Request to get attachments by session ID: {}", sessionId);
 
-        List<Attachments> feedbackOptional = attachmentsRepository.findBySessionId(sessionId);
+        List<Attachments> attachments = attachmentsRepository.findBySessionId(sessionId);
 
-        return feedbackOptional;
+        return attachments;
     }
 
-    public void uploadAttachments(Long sessionId, MultipartFile[] files, String[] links) throws Exception {
+
+    public void uploadAttachments(Long sessionId, List<AttachmentRequest> attachmentRequests) throws Exception {
+        log.info("Request to upload attachments for session ID: {}", sessionId);
+
         // Get the session associated with the given sessionId
-        Session session = sessionRepository.findById(sessionId).orElseThrow(() -> new Exception("Session not found"));
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new Exception("Session not found"));
 
-        // Handle file uploads
-        if (files != null && files.length > 0) {
-            for (MultipartFile file : files) {
-                // Check if the file is a valid type (PDF or DOCX)
-                String fileType = file.getContentType();
-                if (fileType.equals("application/pdf") || fileType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
-                    // Create a new attachment entity for each file and associate it with the session
-                    Attachments attachment = new Attachments();
-                    attachment.setSession(session);
-                    attachment.setFileName(file.getOriginalFilename());
-                    attachment.setFileType(file.getContentType());
-                    attachment.setFileSize(file.getSize());
-                    attachment.setFileContent(file.getBytes());
-                    // Attachment Number Generation
-                    int randNo = (int) ((Math.random() * (999 - 1)) + 1);
-                    String attachmentL = String.format("%05d", randNo);
-                    String attachmentNo = attachment.getSession().getName().charAt(0) + "-" + attachmentL;
-                    attachment.setAttachmentNumber(attachmentNo);
-                    attachmentsRepository.save(attachment);
+        if (attachmentRequests != null && !attachmentRequests.isEmpty()) {
+            log.info("Processing attachments...");
+            for (AttachmentRequest attachmentRequest : attachmentRequests) {
+                if (attachmentRequest.getFileDownloadUri() != null) {
+                    // It's a file
+                    processFileAttachment(session, attachmentRequest);
+                } else {
+                    // It's a link
+                    processLinkAttachment(session, attachmentRequest);
                 }
             }
-        }
 
-        // Handle link uploads
-        if (links != null && links.length > 0) {
-            for (String link : links) {
-                // Check if the link is a valid video link (supports YouTube and Vimeo links)
-                if (link.contains("youtube.com") || link.contains("vimeo.com")) {
-                    // Create a new attachment entity for each link and associate it with the session
-                    Attachments attachment = new Attachments();
-                    attachment.setSession(session);
-                    attachment.setFileName(link);
-                    attachment.setFileType("link");
-                    attachment.setLinkUrl(link);
-                    // Attachment Number Generation
-                    int randNo = (int) ((Math.random() * (99999 - 1)) + 1);
-                    String attachmentL = String.format("%05d", randNo);
-                    String attachmentNo = attachment.getSession().getName().charAt(0) + "-" + attachmentL;
-                    attachment.setAttachmentNumber(attachmentNo);
-                    attachmentsRepository.save(attachment);
-                }
-            }
+            log.info("Attachments processed successfully.");
+        } else {
+            log.info("No attachments to upload.");
         }
     }
+
+    private void processFileAttachment(Session session, AttachmentRequest attachmentRequest) {
+        log.info("Processing file: {}", attachmentRequest.getFileName());
+
+        // Check if the file is a valid type (PDF)
+        if ("application/pdf".equals(attachmentRequest.getFileType())) {
+            log.info("File type is PDF. Uploading...");
+
+            // Create a new attachment entity for the file and associate it with the session
+            Attachments attachment = new Attachments();
+            attachment.setSession(session);
+            attachment.setFileName(attachmentRequest.getFileName());
+            attachment.setFileType(attachmentRequest.getFileType());
+            attachment.setFileSize(attachmentRequest.getSize());
+
+            String attachmentNumber = generateAttachmentNumber("F");
+            attachment.setAttachmentNumber(attachmentNumber);
+
+            // Set other fields as needed.
+            attachment.setCreatedAt(LocalDateTime.now());
+            attachment.setCreatedBy(attachmentRequest.getCreatedBy());
+
+            attachmentsRepository.save(attachment);
+
+            log.info("File uploaded successfully.");
+        } else {
+            log.info("Invalid file type. Skipping file: {}", attachmentRequest.getFileName());
+        }
+    }
+
+    private void processLinkAttachment(Session session, AttachmentRequest attachmentRequest) {
+        log.info("Processing link: {}", attachmentRequest.getFileDownloadUri());
+
+        // Create a new attachment entity for the link and associate it with the session
+        Attachments attachment = new Attachments();
+        attachment.setSession(session);
+        attachment.setFileName(attachmentRequest.getFileName());
+        attachment.setFileType("link");
+
+        String attachmentNumber = generateAttachmentNumber("L");
+        attachment.setAttachmentNumber(attachmentNumber);
+
+        // Set other fields as needed.
+        attachment.setCreatedAt(LocalDateTime.now());
+        attachment.setCreatedBy("System");
+        attachment.setLinkUrl(attachmentRequest.getFileDownloadUri());
+
+        attachmentsRepository.save(attachment);
+
+        log.info("Link uploaded successfully.");
+    }
+
+    private String generateAttachmentNumber(String attachmentType) {
+        String randomAlphaNumeric = RandomStringUtils.randomAlphanumeric(8); // Generate 8-character random alphanumeric string
+        return attachmentType + "-" + randomAlphaNumeric;
+    }
+
+
 }
+

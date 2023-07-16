@@ -37,7 +37,7 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
 import { ProfileComponent } from './account-settings/profile/profile.component';
 import { TemplatesComponent } from './account-settings/templates/templates.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
-
+import { AttachmentsComponent } from './components/attachments/attachments.component';
 
 const routes: Routes = [
   {
@@ -60,6 +60,10 @@ const routes: Routes = [
   {
     path: 'addclient',
     component: AddClientPageComponent
+  },
+  {
+    path: 'attachments',
+    component: AttachmentsComponent
   },
   {
     path:'sessionView/:id',

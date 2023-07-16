@@ -73,6 +73,7 @@ import { ContractsService } from './services/contracts.service';
 import { FeedbackService } from './services/feedback.service';
 import { NotificationsService } from './services/notifications.service';
 import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
+import { AttachmentsComponent } from './components/attachments/attachments.component';
 
 @NgModule({
   declarations: [
@@ -117,7 +118,8 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
     CoachViewComponent,
     CoachesComponent,
     NotificationsComponent,
-    HeaderComponent
+    HeaderComponent,
+    AttachmentsComponent
 
 
   ],
