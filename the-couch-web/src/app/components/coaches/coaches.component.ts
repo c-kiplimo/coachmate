@@ -45,6 +45,8 @@ export class CoachesComponent implements OnInit {
   coachToBeUpdated!: any;
   organizationSessionData: any;
   organizationData: any;
+  showFilters = false;
+  coachStatuses = ['ACTIVE', 'SUSPENDED', 'CLOSED',,'NEW']
   userRole: any;
   user: any;
   orgId!: number;
@@ -136,7 +138,13 @@ filterByStatus() {
   this.page = 0;
   this.getCoaches(this.page);
 }
-  
+toggleFilters() {
+  this.showFilters = !this.showFilters;
+}
+resetStatuses(): void {
+  this.filters.status = 'ALL';
+  this.getCoaches(0);
+}
   
 
   navigateToCoachView(id: any) {

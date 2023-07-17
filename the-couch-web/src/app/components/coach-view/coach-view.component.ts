@@ -97,6 +97,12 @@ export class CoachViewComponent implements OnInit {
   };
   coachingCategory: any;
 coach: any;
+  addContractModal: any;
+  closeclientModal: any;
+  activateclientModal: any;
+  suspendclientModal: any;
+  editClientModal: any;
+  // coachToBeUpdated: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,
@@ -443,16 +449,16 @@ coach: any;
       return 'badge-danger';
     }
   }
-  @ViewChild('editClientModal', { static: false })
-  editClientModal!: ElementRef;
-  @ViewChild('activateclientModal', { static: false })
-  activateclientModal!: ElementRef;
-  @ViewChild('addContractModal', { static: false })
-  addContractModal!: ElementRef;
-  @ViewChild('suspendclientModal', { static: false })
-  suspendclientModal!: ElementRef;
-  @ViewChild('closeclientModal', { static: false })
-  closeclientModal!: ElementRef;
+  // @ViewChild('editClientModal', { static: false })
+  // editClientModal!: ElementRef;
+  // @ViewChild('activateclientModal', { static: false })
+  // activateclientModal!: ElementRef;
+  // @ViewChild('addContractModal', { static: false })
+  // addContractModal!: ElementRef;
+  // @ViewChild('suspendclientModal', { static: false })
+  // suspendclientModal!: ElementRef;
+  // @ViewChild('closeclientModal', { static: false })
+  // closeclientModal!: ElementRef;
 
   editCoach(coach: any) {
     this.coachToBeUpdated = coach;
