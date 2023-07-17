@@ -1,0 +1,221 @@
+<div class="row">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold">Coaching Logs</h2>
+  </div>
+</div>
+
+<div class="d-none d-lg-block">
+  <div class="row justify-content-center">
+    <div class="col-md-12 col-sm-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Client Name" aria-label="Client name"
+              aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+            <button class="btn btn-outline-success" type="button" id="button-addon2"
+              (click)="getCoachingLogs(0)">Search</button>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCoachLogs">
+            <i class="fa fa-plus"></i> Add Coaching Log
+          </button>
+        </div>
+
+        <div class="col-md-3">
+          <div class="input-group mb-3">
+            <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="fromExcel()">
+              <i class="fas fa-file-upload"></i> Upload from Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="uploadFromExcel">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <p></p>
+              <span class="close"><i class="fas fa-times" (click)="clearAndClose()"></i></span>
+            </div>
+            <!--Title-->
+            <div class="d-flex justify-content-center m-3">
+              <h4 class="card-title">Upload Excel file (.xlsx or .xls)</h4>
+            </div>
+            <!--accept excels only-->
+            <div class="d-flex justify-content-center m-3">
+              <input type="file" id="fileInput" class="file-upload-input" (change)="onFileChange($event)"
+                accept=".xlsx, .xls" />
+            </div>
+            <div class="d-flex justify-content-center m-3" *ngIf="showErrorMessage">
+              <!--error message-->
+              <p class="text-danger">Make sure you data is clean and try again!!!</p>
+            </div>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+            <br />
+            <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
+              <h2 class="card-title">Preview</h2>
+            </div>
+            <table class="table" *ngIf="excelData?.length > 0">
+              <!--show excelData here-->
+              <thead>
+                <tr>
+                  <th *ngFor="let header of headerRow" scope="col">{{ header }}</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="list-container">
+                <tr *ngFor="let row of excelData; let i = index">
+                  <td> {{ row['Client’s Name'] }}</td>
+                  <td> {{ row['Email Address'] }}</td>
+                  <td> {{ row['No. in Group'] }}</td>
+                  <td> {{ row['Start Date'] }}</td>
+                  <td> {{ row['End Date'] }}</td>
+                  <td> {{ row['Paid Hours'] }}</td>
+                  <td> {{ row['Pro-bono Hours'] }}</td>
+                  <td class="view">
+                    <!--Actions-->
+                    <a (click)="deleteRow(i)"><i class="fas fa-trash-alt"></i></a>
+                  </td>
+
+                </tr>
+              </tbody>
+
+            </table>
+            <br>
+
+            <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
+              <button type="button" class="btn btn-cancel" (click)="clearData()">Cancel</button>
+              <button type="button" class="btn btn-success" (click)="uploadExcel()"><i
+                  class="fas fa-file-upload"></i> Upload</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table" *ngIf="coachingLogs?.length">
+              <thead>
+                <tr>
+                  <th scope="col">Client</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">No. in Group</th>
+                  <th scope="col">Dates</th>
+                  <th scope="col">Paid Hours</th>
+                  <th scope="col">Pro-bono hours</th>
+                  <th scope="col">Created At</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="list-container">
+                <tr
+                  *ngFor="let coachingLog of coachingLogs | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                  <td>{{ coachingLog?.clientName }}</td>
+                  <td>{{ coachingLog?.clientEmail }}</td>
+                  <td>{{ coachingLog?.noInGroup }}</td>
+                  <td>{{ coachingLog?.startDate | date :  "dd.MM.y"   }} to
+                    {{ coachingLog?.endDate | date :  "dd.MM.y"   }}</td>
+                  <td>{{ coachingLog?.paidHours }}</td>
+                  <td>{{ coachingLog?.proBonoHours }}</td>
+                  <td>{{ coachingLog?.createdAt | date :  "dd.MM.y"  }}</td>
+                  <td class="view">
+                    <a><i class="fas fa-external-link-alt"></i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+            <p class="text-muted mt-5" *ngIf="!loading && !coachingLogs?.length">
+              No coaching logs Found.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="show-sm">
+
+</div>
+
+
+
+<br>
+<div class="text-center" *ngIf="totalElements > 20">
+  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+<br>
+
+<!--Add coaching logs-->
+<div class="modal fade" id="addCoachLogs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add Coaching Log</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3 form-group">
+            <label for="name" class="form-label">Client's Name</label>
+            <input type="text" class="form-control" [(ngModel)]="coachingLog.clientName" id="name" name="clientName"
+              placeholder="john doe" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" [(ngModel)]="coachingLog.clientEmail" id="email" name="clientEmail"
+              placeholder="johndoe@gmail.com" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="noInGroup" class="form-label">No. in Group</label>
+            <input type="text" class="form-control" [(ngModel)]="coachingLog.noInGroup" id="noInGroup"
+              name="noInGroup" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" variant="success" [(ngModel)]="coachingLog.startDate" name="startDate"
+              class="form-control" id="inputEmail4" placeholder="Date" name="startDate">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" [(ngModel)]="coachingLog.endDate" id="endDate" name="endDate" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="paidHours" class="form-label">Paid Hours</label>
+            <input type="number" class="form-control" [(ngModel)]="coachingLog.paidHours" id="paidHours"
+              name="paidHours" placeholder="eg. 2" />
+          </div>
+          <div class="mb-3 form-group">
+            <label for="pro-bonHours" class="form-label">Pro-bon Hours</label>
+            <input type="number" class="form-control" [(ngModel)]="coachingLog.proBonoHours" id="pro-bonHours"
+              name="proBonoHours" placeholder="eg. 1" />
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="addCoachingLog()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

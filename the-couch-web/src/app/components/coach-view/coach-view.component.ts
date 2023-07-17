@@ -97,6 +97,12 @@ export class CoachViewComponent implements OnInit {
   };
   coachingCategory: any;
 coach: any;
+  addContractModal: any;
+  closeclientModal: any;
+  activateclientModal: any;
+  suspendclientModal: any;
+  editClientModal: any;
+  coachToBeUpdated: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,
