@@ -1,37 +1,31 @@
 package com.natujenge.thecouch.domain;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Table(name = "tbl_sessionResources")
 @Data
 @Entity
-public class Attachments {
+@Table(name="tbl_attachments")
+public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "file_name")
-    private String fileName;
 
-    @Column(name = "attachment_number")
+    @Column(name="attachment_no")
     private String attachmentNumber;
 
-    @Column(name = "file_type")
-    private String fileType;
-
-    @Column(name = "file_size")
-    private Long fileSize;
 
     @Lob
-    @Column(name = "file_content", columnDefinition = "BLOB")
-    private byte[] fileContent;
+    private List<byte[]> files;
 
-
-    @Column(name = "link_url")
-    private String linkUrl;
+    @ElementCollection
+    private List<String> links;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -45,7 +39,10 @@ public class Attachments {
     @Column(name = "last_updated_by")
     private String lastUpdatedBy;
 
+
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;
+
+
 }

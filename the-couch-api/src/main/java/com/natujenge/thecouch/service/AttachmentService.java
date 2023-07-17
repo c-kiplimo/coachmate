@@ -1,8 +1,8 @@
 package com.natujenge.thecouch.service;
 
-import com.natujenge.thecouch.domain.Attachments;
+import com.natujenge.thecouch.domain.Attachment;
 import com.natujenge.thecouch.domain.Session;
-import com.natujenge.thecouch.repository.AttachmentsRepository;
+import com.natujenge.thecouch.repository.AttachmentRepository;
 import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.web.rest.request.AttachmentRequest;
@@ -11,9 +11,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Blob;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -22,109 +23,94 @@ public class AttachmentService {
 
     private final SessionRepository sessionRepository;
 
-    private final AttachmentsRepository attachmentsRepository;
+    private final AttachmentRepository attachmentRepository;
+
+
+    private  final UserService userService;
 
 
     private final OrganizationRepository organizationRepository;
 
-    public AttachmentService(SessionRepository sessionRepository, AttachmentsRepository attachmentsRepository, OrganizationRepository organizationRepository) {
+    public AttachmentService(SessionRepository sessionRepository,UserService userService, AttachmentRepository attachmentRepository, OrganizationRepository organizationRepository) {
         this.sessionRepository = sessionRepository;
-        this.attachmentsRepository = attachmentsRepository;
+        this.attachmentRepository = attachmentRepository;
+        this.userService=userService;
 
         this.organizationRepository = organizationRepository;
     }
 
     //get attachment by session id
-    public List<Attachments> getAttachmentBySessionId(Long sessionId) {
+    public List<Attachment> getAttachmentBySessionId(Long sessionId) {
         log.info("Request to get attachments by session ID: {}", sessionId);
 
-        List<Attachments> attachments = attachmentsRepository.findBySessionId(sessionId);
+        List<Attachment> attachments = attachmentRepository.findBySessionId(sessionId);
 
         return attachments;
     }
 
 
-    public void uploadAttachments(Long sessionId, List<AttachmentRequest> attachmentRequests) throws Exception {
+    public void uploadAttachments(Long sessionId, AttachmentRequest attachmentRequest) {
         log.info("Request to upload attachments for session ID: {}", sessionId);
 
-        // Get the session associated with the given sessionId
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new Exception("Session not found"));
+        try {
+            Session session = sessionRepository.findById(sessionId)
+                    .orElseThrow(() -> new Exception("Session not found"));
 
-        if (attachmentRequests != null && !attachmentRequests.isEmpty()) {
-            log.info("Processing attachments...");
-            for (AttachmentRequest attachmentRequest : attachmentRequests) {
-                if (attachmentRequest.getFileDownloadUri() != null) {
-                    // It's a file
-                    processFileAttachment(session, attachmentRequest);
-                } else {
-                    // It's a link
-                    processLinkAttachment(session, attachmentRequest);
+            processAttachment(session, attachmentRequest);
+        } catch (Exception e) {
+            log.error("Error while uploading attachments for session ID: {}", sessionId, e);
+        }
+    }
+
+    private void processAttachment(Session session, AttachmentRequest attachmentRequest) {
+        log.info("Processing attachments for session ID: {}", session.getId());
+
+        try {
+            List<byte[]> files = attachmentRequest.getFiles();
+            List<String> links = attachmentRequest.getLinks();
+
+            if (files != null && !files.isEmpty()) {
+                for (byte[] file : files) {
+                    Attachment attachment = new Attachment();
+                    attachment.setSession(session);
+                    attachment.setFiles(List.of(file));
+                    setAttachmentNumber(attachment); // Set the attachment number
+                    // Set other fields as needed...
+                    attachmentRepository.save(attachment);
                 }
             }
 
-            log.info("Attachments processed successfully.");
-        } else {
-            log.info("No attachments to upload.");
+            if (links != null && !links.isEmpty()) {
+                for (String link : links) {
+                    Attachment attachment = new Attachment();
+                    attachment.setSession(session);
+                    attachment.setLinks(List.of(link));
+                    setAttachmentNumber(attachment); // Set the attachment number
+                    // Set other fields as needed...
+                    attachmentRepository.save(attachment);
+                }
+            }
+
+            log.info("Attachments uploaded successfully for session ID: {}", session.getId());
+        } catch (Exception e) {
+            log.error("Error while processing attachments for session ID: {}", session.getId(), e);
         }
     }
 
-    private void processFileAttachment(Session session, AttachmentRequest attachmentRequest) {
-        log.info("Processing file: {}", attachmentRequest.getFileName());
+    // Generate a unique attachment number using a random UUID and taking the last 8 characters
+    private void setAttachmentNumber(Attachment attachment) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder(8);
 
-        // Check if the file is a valid type (PDF)
-        if ("application/pdf".equals(attachmentRequest.getFileType())) {
-            log.info("File type is PDF. Uploading...");
-
-            // Create a new attachment entity for the file and associate it with the session
-            Attachments attachment = new Attachments();
-            attachment.setSession(session);
-            attachment.setFileName(attachmentRequest.getFileName());
-            attachment.setFileType(attachmentRequest.getFileType());
-            attachment.setFileSize(attachmentRequest.getSize());
-
-            String attachmentNumber = generateAttachmentNumber("F");
-            attachment.setAttachmentNumber(attachmentNumber);
-
-            // Set other fields as needed.
-            attachment.setCreatedAt(LocalDateTime.now());
-            attachment.setCreatedBy(attachmentRequest.getCreatedBy());
-
-            attachmentsRepository.save(attachment);
-
-            log.info("File uploaded successfully.");
-        } else {
-            log.info("Invalid file type. Skipping file: {}", attachmentRequest.getFileName());
+        for (int i = 0; i < 8; i++) {
+            int index = new Random().nextInt(characters.length());
+            sb.append(characters.charAt(index));
         }
+
+        attachment.setAttachmentNumber(sb.toString());
     }
-
-    private void processLinkAttachment(Session session, AttachmentRequest attachmentRequest) {
-        log.info("Processing link: {}", attachmentRequest.getFileDownloadUri());
-
-        // Create a new attachment entity for the link and associate it with the session
-        Attachments attachment = new Attachments();
-        attachment.setSession(session);
-        attachment.setFileName(attachmentRequest.getFileName());
-        attachment.setFileType("link");
-
-        String attachmentNumber = generateAttachmentNumber("L");
-        attachment.setAttachmentNumber(attachmentNumber);
-
-        // Set other fields as needed.
-        attachment.setCreatedAt(LocalDateTime.now());
-        attachment.setCreatedBy("System");
-        attachment.setLinkUrl(attachmentRequest.getFileDownloadUri());
-
-        attachmentsRepository.save(attachment);
-
-        log.info("Link uploaded successfully.");
-    }
-
-    private String generateAttachmentNumber(String attachmentType) {
-        String randomAlphaNumeric = RandomStringUtils.randomAlphanumeric(8); // Generate 8-character random alphanumeric string
-        return attachmentType + "-" + randomAlphaNumeric;
-    }
-
-
 }
+
+
+
 

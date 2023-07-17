@@ -420,10 +420,6 @@ throw new Error('Method not implemented.');
     this.links.splice(index, 1);
   }
   addAttachment() {
-    const boundary = '-------------------------' + Math.random().toString(16).substring(2);
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data; boundary=' + boundary
-    });
     const formData = this.attachmentForm.value;
     formData.links = this.links;
     formData.files = this.files;
@@ -439,7 +435,7 @@ throw new Error('Method not implemented.');
     console.log(formData);
     console.log(this.files);
     // Send formData to backend using a service or API
-    this.clientService.addAttachment(formData,params,headers).subscribe(
+    this.clientService.addAttachment(formData,params).subscribe(
       (response) => {
         console.log(response);
         // Only show toast notification after successful attachment addition

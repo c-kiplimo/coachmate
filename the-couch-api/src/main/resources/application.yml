@@ -27,10 +27,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  servlet:
-    multipart:
-      max-file-size: 2MB
-      max-request-size: 2MB
+#  servlet:
+#    multipart:
+#
+#      max-file-size: 10MB    # Set the maximum file size if needed
+#      max-request-size: 10MB  # Set the maximum request size if needed
 
 #logging:
 #  level:
