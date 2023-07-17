@@ -6,6 +6,7 @@ import com.natujenge.thecouch.repository.UserSessionRepository;
 import com.natujenge.thecouch.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,14 +40,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     UserSessionRepository userSessionRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest req, @NotNull HttpServletResponse res, @NotNull FilterChain chain)
             throws IOException, ServletException {
         final String header = req.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
             authToken = header.replace(TOKEN_PREFIX, "");
-            if(authToken != null && authToken !="") {
+            if(authToken != null && !authToken.equals("")) {
                 try {
                     username = jwtTokenUtil.getUsernameFromToken(authToken);
                 } catch (final IllegalArgumentException e) {

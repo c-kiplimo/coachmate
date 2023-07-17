@@ -19,7 +19,7 @@
           data-bs-toggle="dropdown" aria-expanded="false">
           Actions</a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li (click)="updateClientDetails(clients)" class="dropdown-item"><a class="dropdown-item"
+            <li (click)="editCoach(clients)" class="dropdown-item"><a class="dropdown-item"
               data-bs-toggle="modal" data-bs-target="#editClientModal"><i class="fas fa-edit"></i> Edit</a>
             </li>
             <li (click)="statusState('ACTIVE')" class="dropdown-item"><a class="dropdown-item"
@@ -187,7 +187,7 @@
             <tr *ngFor="let contract of contracts">
               <td>{{ contract.coachingTopic }}</td>
               <td>{{ contract.coachingCategory }}</td>
-              <td>{{ contract.client.fullName }}</td>
+              <td>{{ contract.clientFullName }}</td>
               <td>{{ contract.startDate | date : "MMM d, y" }}</td>
               <td>{{ contract.endDate | date : "MMM d, y" }}</td>
               <td>{{ contract.noOfSessions }}</td>
@@ -215,7 +215,7 @@
     </div>
   </div>
 
-  <div *ngIf="currentTab === 'payments'" [@fadeIn]>
+  <div *ngIf="currentTab === 'payments'">
     <div class="row">
       <div class="col-md-12">
         <table class="table" *ngIf="payments.length">
@@ -250,7 +250,7 @@
     </div>  
   </div>
 
-  <div *ngIf="currentTab === 'notifications'" [@fadeIn]>
+  <div *ngIf="currentTab === 'notifications'">
     <div class="row">
       <div class="col-md-12">
         <table class="table" *ngIf="notifications.length">
@@ -283,15 +283,15 @@
             </tr>
           </tbody>
         </table>
-        <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-        <p class="text-muted mt-5" *ngIf="!notifications?.length">
-          No notifications found.
-        </p>
+        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+          <div class="donut multi"></div>
         </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !notifications?.length">
+          No Notifications Found.
+        </p>
       </div>
     </div>
   </div>
-
 </div>
 
 
@@ -319,7 +319,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
+        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
           Submit
         </button>
       </div>
@@ -333,15 +333,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">Close client</h1>
+        <h1 class="modal-title fs-5">Close coach</h1>
 
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
-          <p>client Name:</p>
+          <p>coach Name:</p>
           <span>{{
-        clients?.firstName + " " + clients?.lastName | titlecase
+        coach?.firstName + " " + coach?.lastName | titlecase
       }}</span>
         </div>
         <form [formGroup]="closeClientForm">
@@ -354,11 +354,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
-          Submit
-        </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -378,9 +378,9 @@
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
-          <p>client Name:</p>
+          <p>coach Name:</p>
           <span>{{
-        clients?.firstName + " " + clients?.lastName | titlecase
+        coach?.firstName + " " + coach?.lastName | titlecase
       }}</span>
         </div>
         <form [formGroup]="activateClientForm">
@@ -393,11 +393,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)=" changeCoachStatus()">
-          Submit
-        </button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -511,66 +511,43 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="updateClient">
+        <form [formGroup]="updateCoach">
           <div class="mb-3 form-group">
             <label for="firstName" class="form-label">First Name</label>
             <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
-              value="{{ clientToBeUpdated?.firstName }}" />
+              value="{{ coachToBeUpdated?.firstName }}" />
           </div>
           <div class="mb-3 form-group">
             <label for="lastName" class="form-label">Last Name</label>
             <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
-              value="{{ clientToBeUpdated?.lastName }}">
+              value="{{ coachToBeUpdated?.lastName }}">
           </div>
           <div class="mb-3 form-group">
             <label for="email_address" class="form-label">Email</label>
             <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email"
-              value="{{ clientToBeUpdated?.email }}">
+              value="{{ coachToBeUpdated?.email }}">
           </div>
           <div class="mb-3 form-group">
             <label for="msisdn" class="form-label">Phone Number</label>
             <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
-              value="{{ clientToBeUpdated?.msisdn }}">
+              value="{{ coachToBeUpdated?.msisdn }}">
           </div>
 
           <div class="mb-3 form-group">
             <label for="physical_address" class="form-label">Address</label>
             <input type="text" class="form-control" id="physical_address" name="physicalAddress"
-              formControlName="physicalAddress" value="{{ clientToBeUpdated?.physicalAddress}}">
+              formControlName="physicalAddress" value="{{ coachToBeUpdated?.physicalAddress}}">
           </div>
           <div class="mb-3 form-group">
             <label for="reason" class="form-label">Reason</label>
             <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
-              value="{{ clientToBeUpdated?.reason}}">
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="PaymentMode">Payment Mode</label>
-            </div>
-            <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
-              value="{{ clientToBeUpdated?.paymentMode }}">
-              <option selected>Select Payment Mode</option>
-              <option value="PREPAY">PREPAY</option>
-              <option value="POSTPAY">POSTPAY</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="clientType">Client Type</label>
-            </div>
-            <select class="form-select" id="inputGroupSelect01" formControlName="type"
-              value="{{ clientToBeUpdated?.clientType }}">
-              <option selected>Select Client type</option>
-              <option value="INDIVIDUAL">INDIVIDUAL</option>
-              <option value="CORPORATE">CORPORATE</option>
-              <option value="GROUP">GROUP</option>
-            </select>
+              value="{{ coachToBeUpdated?.reason}}">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
+        <button type="button" class="btn btn-success" (click)="updateCoachDetails(coachToBeUpdated.id)">Save
           changes</button>
       </div>
     </div>
