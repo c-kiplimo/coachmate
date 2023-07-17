@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit {
   coachId!: number;
   clientId!: number;
 
+  currentTab: any = 'sessions';
 
 
   constructor(
@@ -643,6 +644,10 @@ export class DashboardComponent implements OnInit {
     }
     else (sessions.status === 'CANCELLED')
     return 'badge-success';
+  }
+
+  toggleTab(tab: string): void {
+    this.currentTab = tab;
   }
 
 }

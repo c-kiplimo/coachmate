@@ -1,0 +1,12 @@
+.file-upload-input {
+    cursor: pointer;
+    padding: 10px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.close i {
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+}

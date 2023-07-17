@@ -3,10 +3,20 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { CoachEducationService } from '../../services/CoachEducationService';
+import { animate, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-trainings-list',
   templateUrl: './trainings-list.component.html',
-  styleUrls: ['./trainings-list.component.css']
+  styleUrls: ['./trainings-list.component.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(600, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class TrainingsListComponent implements OnInit {
   loading = false;
@@ -45,7 +55,7 @@ export class TrainingsListComponent implements OnInit {
     console.log(this.coachData);
 
 
-    this.getCoachEducation(this.coachData.id);
+    this.getCoachEducation(0);
 
     this.editCoachEducationForm = this.formbuilder.group({
       courseName: ' ',
@@ -81,7 +91,7 @@ export class TrainingsListComponent implements OnInit {
       (response: any) => {
         this.loading = false;
         console.log(response);
-        this.coachEducationData = response.data;
+        this.coachEducationData = response.body;
         //this.calculateNumberOfHours(this.coachEducationData);
       }, (error: any) => {
         console.log(error);
@@ -109,7 +119,7 @@ export class TrainingsListComponent implements OnInit {
       (response: any) => {
         this.loading = false;
         console.log(response);
-        this.getCoachEducation(this.coachData.id);
+        this.getCoachEducation(0);
       }, (error: any) => {
         console.log(error);
       }
@@ -142,7 +152,7 @@ export class TrainingsListComponent implements OnInit {
       (response: any) => {
         this.loading = false;
         console.log(response);
-        this.getCoachEducation(this.coachData.id);
+        this.getCoachEducation(0);
       }, (error: any) => {
         console.log(error);
       }

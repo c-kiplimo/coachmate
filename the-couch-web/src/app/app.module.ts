@@ -7,6 +7,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './shared/sidenav/sidenav.component';
@@ -73,6 +75,8 @@ import { ContractsService } from './services/contracts.service';
 import { FeedbackService } from './services/feedback.service';
 import { NotificationsService } from './services/notifications.service';
 import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
+import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
+import { CoachLogsService } from './services/coach-logs.service';
 
 @NgModule({
   declarations: [
@@ -117,7 +121,8 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
     CoachViewComponent,
     CoachesComponent,
     NotificationsComponent,
-    HeaderComponent
+    HeaderComponent,
+    CoachLogsComponent
 
 
   ],
@@ -161,6 +166,7 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
     ContractsService,
     FeedbackService,
     NotificationsService,
+    CoachLogsService
   ],
   bootstrap: [AppComponent],
 })

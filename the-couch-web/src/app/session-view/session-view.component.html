@@ -1,8 +1,6 @@
 <div class="row">
   <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-semi-bold fs-5">
-      <i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i> Session
-    </h5>
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Sessions</h2>
   </div>
 </div>
 
@@ -13,48 +11,57 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-          <h3 class="fw-bold col">Details</h3> 
-          <button class="btn btn-success btn-sm" style="transform: translateX(2cm) translateY(-0.5cm); width: 18%;" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button> 
+          <h3 class="fw-bold col">Details</h3>
 
-          <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
-          <button class="btn btn-success col"  *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal" data-bs-target="#addfeedbackModal">Give Feedback</button>
+          <div class="col">
+            <a class="btn btn-outline-success" *ngIf="this.userRole == 'CLIENT'" data-bs-toggle="modal"
+              data-bs-target="#addfeedbackModal">Give Feedback</a>
 
 
+            <div class="dropdown" *ngIf="this.userRole != 'CLIENT'">
+              <a class="btn btn-outline-success dropdown-toggle" role="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Actions
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li class="dropdown-item" *ngIf="userRole === 'COACH'">
+                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#attachmentModal"
+                    (click)="addAttachment()">Add Attachments
+                  </a>
+                </li>
 
-          <div class="col dropdown">
-            <a class="btn btn-success dropdown-toggle" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-              aria-expanded="false" *ngIf="this.userRole == 'COACH'">
-              Actions
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown-item" *ngIf="userRole === 'COACH'">
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#attachmentModal"
-                  (click)="addAttachment()">Add Attachments
-                </a>
-              </li>
-              
-              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmsessionModal"
-                  (click)="statusState('CONFIRMED')">Confirm
-                </a>
+                <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
+                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmsessionModal"
+                    (click)="statusState('CONFIRMED')">Confirm
+                  </a>
 
-              </li>
-              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#conductedsessionModal"
-                  (click)="statusState('CONDUCTED')">conducted</a>
-              </li>
-              <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancelsessionModal"
-                  (click)="statusState('CANCELLED')">Cancel</a>
-              </li>
-              <li class="dropdown-item">
-                <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editsessionModal"
-                  (click)="editSession(sessions)">Reschedule</a>
-              </li>
-            </ul>
+                </li>
+                <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
+                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#conductedsessionModal"
+                    (click)="statusState('CONDUCTED')">conducted</a>
+                </li>
+                <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
+                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancelsessionModal"
+                    (click)="statusState('CANCELLED')">Cancel</a>
+                </li>
+                <li class="dropdown-item">
+                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editsessionModal"
+                    (click)="editSession(sessions)">Reschedule</a>
+                </li>
+              </ul>
+            </div>
+
           </div>
+
         </div>
-        <div class="col-md-12" [@fadeIn]>
+
+        <br>
+
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+
+        <div class="col-md-12" [@fadeIn] *ngIf="sessions">
           <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font faded col">Session Ref</h6>
             <p class="col">{{ sessions?.sessionNumber }}</p>
@@ -64,16 +71,12 @@
             <p class="col">{{ sessions?.name }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-semi-bold smaller-font col">Date</h6>
-            <p class="col">{{ sessions?.sessionSchedulesSessionDate }}</p>
-          </div>
-          <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font col">Client name</h6>
             <p class="col">{{ sessions?.clientFullName }}</p>
           </div>
           <div class="row dtl">
-            <h6 class="fw-semi-bold smaller-font faded col">Session type</h6>
-            <p class="col">{{ sessions?.sessionType }}</p>
+            <h6 class="fw-semi-bold smaller-font col">Date</h6>
+            <p class="col">{{ sessions?.sessionSchedulesSessionDate }}</p>
           </div>
           <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font col">Start Time</h6>
@@ -84,23 +87,25 @@
             <p class="col">{{ sessions?.sessionSchedulesEndTime }}</p>
           </div>
           <div class="row dtl">
+            <h6 class="fw-semi-bold smaller-font faded col">Session type</h6>
+            <p class="col">{{ sessions?.sessionType }}</p>
+          </div>
+          <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font col">Status</h6>
             <p class="col">
-              <span _ngcontent-tvo-c211="" class="badge ng-tns-c211-5"
-              [ngClass]="{
+              <span _ngcontent-tvo-c211="" class="badge ng-tns-c211-5" [ngClass]="{
                 'badge-success': sessions?.sessionStatus === 'CONFIRMED',
                 'badge-danger': sessions?.sessionStatus === 'CANCELLED',
                 'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'CONDUCTED'
-              }"
-            >
-              {{ sessions?.sessionStatus }}
-            </span>
-            
-            
+              }">
+                {{ sessions?.sessionStatus }}
+              </span>
+
+
             </p>
           </div>
-          
-          
+
+
           <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font col">Venue</h6>
             <p class="col">{{ sessions?.sessionVenue }}</p>
@@ -118,58 +123,130 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
-        <div class="tabs-section">
-          <button *ngIf="userRole === 'COACH'" class="btn btn-tabs btn-lg fw-bold me-3" (click)="toggleTab('feedback')"
-            [ngClass]="{ 'active-tab': currentTab === 'feedback' }">
-            <span class="d-none d-sm-inline" style="font-size: 20px;">Feedback</span>
-          </button>
-          <button class="btn btn-tabs btn-lg fw-bold" (click)="toggleTab('attachments')"
-            [ngClass]="{ 'active-tab': currentTab === 'attachments' }">
-            <span class="d-none d-sm-inline" style="font-size: 20px;">Attachments</span>
-          </button>
-        </div>
-        
-        
-        <div class="feedback-section" *ngIf="currentTab === 'feedback'" [@fadeIn]>
-          <div class="row">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Session Name</th>
-                  <th scope="col">Client Name</th>
-                  <th scope="col">Availability</th>
-                  <th scope="col">Clarification Score</th>
-                  <th scope="col">Emotional Intelligence</th>
-                  <th scope="col">Listening Skills</th>
-                  <th scope="col">Understanding</th>
-                  <th scope="col">Average</th>
-                  <th scope="col">Comments</th>
-                </tr>
-              </thead>
+        <div class="row justify-content-center">
+          <div class="col-md-7 col-sm-12">
+            <!--Tabs-->
+            <div class="d-none d-lg-block">
+              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
+                role="tablist">
+                <li class="nav-item" (click)="toggleTab('feedback')">
+                  <a class="nav-link" [class.active]="currentTab === 'feedback'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="far fa-comment-alt"
+                      style="color: green"></i> Feedback</a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('attachments')">
+                  <a class="nav-link" [class.active]="currentTab === 'attachments'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fas fa-paperclip" style="color: green"></i> Attachments</a>
+                </li>
+              </ul>
+            </div>
 
-              <tbody>
-                <tr *ngFor="let feedback of feedbacks">
-                  <td>{{ feedback.session.name }}</td>
-                  <td>{{ feedback.client.firstName }}</td>
-                  <td class="text-center">{{ feedback.availabilityScore }}</td>
-                  <td class="text-center">{{ feedback.clarificationScore }}</td>
-                  <td class="text-center">{{ feedback.emotionalIntelligenceScore }}</td>
-                  <td class="text-center">{{ feedback.listeningSkillsScore }}</td>
-                  <td class="text-center">{{ feedback.understandingScore }}</td>
-                  <td class="text-center">{{ feedback.overallScore }}</td>
-                  <td class="text-center" style="margin-top: 0.25rem;">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;transform: translateY(-0.5cm);">
-                      <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                      Comments
-                    </button>
-                  </td>
-                </tr>
-                
-                
-              </tbody>
-              
-            </table>
-            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="show-sm">
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                <li class="nav-item" (click)="toggleTab('feedback')">
+                  <a class="nav-link" [class.active]="currentTab === 'feedback'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="far fa-comment-alt"
+                      style="color: green"></i></a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('attachments')">
+                  <a class="nav-link" [class.active]="currentTab === 'attachments'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fas fa-paperclip" style="color: green"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="feedback-section" *ngIf="currentTab === 'feedback'" [@fadeIn]>
+          <div class="d-none d-lg-block">
+            <div class="row justify-content-center">
+              <table class="table" *ngIf="feedbacks?.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Availability</th>
+                    <th scope="col">Clarification Score</th>
+                    <th scope="col">Emotional Intelligence</th>
+                    <th scope="col">Listening Skills</th>
+                    <th scope="col">Understanding</th>
+                    <th scope="col">Average</th>
+                    <th scope="col">Comments</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let feedback of feedbacks">
+                    <td>{{ feedback.availabilityScore }}</td>
+                    <td>{{ feedback.emotionalIntelligenceScore }}</td>
+                    <td>{{ feedback.clarificationScore }}</td>
+                    <td>{{ feedback.listeningSkillsScore }}</td>
+                    <td>{{ feedback.understandingScore }}</td>
+                    <td>{{ feedback.overallScore }}</td>
+                    <td class="view">
+                      <a data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)">
+                        <i class="far fa-comment-alt"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+
+                </tbody>
+
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
+                No feedbacks Found.
+              </p>
+            </div>
+          </div>
+
+          <div class="show-sm">
+            <div class="pt-3 pb-2 listing-item" *ngFor="let feedback of feedbacks">
+
+              <div class="d-flex justify-content-between">
+                <h4 class="farmer" class="mb-0">
+                  Over all: {{ feedback.overallScore }}
+                </h4>
+
+                <span class="no-word-break">
+                  Emotional Intelligence: {{ feedback.emotionalIntelligenceScore }}
+                </span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <span class="customer-name" class="mb-0">
+                  Clarification: {{ feedback.clarificationScore }}
+                </span>
+                <span class="no-word-break">
+                  <a data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)">
+                    <i class="far fa-comment-alt"></i>
+                  </a>
+                </span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="customer-name" class="mb-0">
+                  Listening Skills: {{ feedback.listeningSkillsScore }}
+                </span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-1">
+                <span class="customer-name" class="mb-0">
+                  Understanding: {{ feedback.understandingScore }}
+                </span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span class="customer-name" class="mb-0">
+                  Availability: {{ feedback.availabilityScore  }}
+                </span>
+              </div>
+            </div>
+
+            <div class="donut-wrapper" *ngIf="loading">
               <div class="donut multi"></div>
             </div>
             <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
@@ -177,28 +254,68 @@
             </p>
           </div>
         </div>
+
         <div class="attachments-section" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-          <div class="row list-container container ">
-            <table class="table">
-              <thead>
-                <th coslpan="1">Attachment No</th>
-                <th coslpan="1">Attachment date</th>
-                <th coslpan="1">Details</th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let attachment of attachmentss">
-                  <td class="text-center">{{ attachment.id }}</td>
-                  <td class="text-center">{{ attachment.createdAt | date : "MMM d, y " }}</td>
-                  <td class="text-center">{{ attachment.links }}</td>
-                  <td>
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
-                      View
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="d-none d-lg-block">
+            <div class="row justify-content-center">
+              <table class="table" *ngIf="attachmentss?.length">
+                <thead>
+                  <th coslpan="1">Attachment No</th>
+                  <th coslpan="1">Attachment date</th>
+                  <th coslpan="1">Details</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let attachment of attachmentss">
+                    <td class="text-center">{{ attachment.id }}</td>
+                    <td class="text-center">{{ attachment.createdAt | date : "MMM d, y " }}</td>
+                    <td class="text-center">{{ attachment.links }}</td>
+                    <td>
+                      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
+                No attachment Found.
+              </p>
+            </div>
+          </div>
+
+          <div class="show-sm">
+            <div class="pt-3 pb-2 listing-item" *ngFor="let attachment of attachmentss">
+              <div class="d-flex justify-content-between">
+                <h4 class="farmer" class="mb-0">
+                  Attachment No: {{ attachment.id }}
+                </h4>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <span class="customer-name" class="mb-0">
+                  Attachment date: {{ attachment.createdAt | date : "MMM d, y " }}
+                </span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-2">
+                <span class="customer-name" class="mb-0">
+                  Details: {{ attachment.links }}
+                </span>
+              </div>
+
+              <div class="d-flex justify-content-between mb-1">
+                <span class="customer-name" class="mb-0">
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
+                    View
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div class="donut-wrapper" *ngIf="loading">
               <div class="donut multi"></div>
             </div>
             <p class="text-muted mt-5" *ngIf="!loading && !attachmentss.length">
@@ -482,7 +599,8 @@
           Your comments and suggestions are also welcome. Thank you for your time and support.</p>
         <form [formGroup]="feebackForm">
           <div class="form-group">
-            <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me personally and professionally:</label>
+            <label for="goalSetting">1. My coach helped me to bring out my goals, values and beliefs as they affect me
+              personally and professionally:</label>
             <div class="form-group__rating">
               <input type="radio" formControlName="understandingScore" value="1" required id="goalSetting1">
               <label for="goalSetting1">1</label>
@@ -622,7 +740,8 @@
             <div class="input-group">
               <input [(ngModel)]="Links.link" type="text" class="form-control input-height" placeholder="Add link"
                 formControlName="link">
-              <button type="button" style="transform: translateY(-0.5cm);" class="btn btn-success btn-match-height" (click)="addLink()">Add</button>
+              <button type="button" style="transform: translateY(-0.5cm);" class="btn btn-success btn-match-height"
+                (click)="addLink()">Add</button>
             </div>
           </div>
 
@@ -642,15 +761,18 @@
           <h3>Files</h3>
           <div class="mb-3">
             <div class="input-group">
-              <input type="file" id="fileInput" multiple (change)="onFileSelected($event)" class="form-control-file input-height">
-              <button class="btn btn-success btn-match-height"style="transform: translateY(-0.5cm);"  type="button" (click)="addFile()">Add</button>
+              <input type="file" id="fileInput" multiple (change)="onFileSelected($event)"
+                class="form-control-file input-height">
+              <button class="btn btn-success btn-match-height" style="transform: translateY(-0.5cm);" type="button"
+                (click)="addFile()">Add</button>
             </div>
           </div>
           <div class="mb-3">
             <ol>
               <li *ngFor="let file of files; let i = index">
                 <span>{{ file.name }}</span>
-                <button type="button" (click)="removeFile(i)" class="btn btn-link text-danger btn-match-height">Remove</button>
+                <button type="button" (click)="removeFile(i)"
+                  class="btn btn-link text-danger btn-match-height">Remove</button>
               </li>
             </ol>
           </div>
@@ -660,7 +782,7 @@
           <button type="button" class="btn btn-secondary btn-small" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-success btn-small" (click)="addAttachment()">Add Attachment</button>
         </div>
-        
+
       </form>
 
     </div>
