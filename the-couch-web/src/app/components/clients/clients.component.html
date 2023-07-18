@@ -68,10 +68,10 @@
             }">{{ client?.clientStatus }}</span>
                 </td>
 
-                <td class="actions">
-                  <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToClientView(client.id)"></i>
-                  <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editClientModal"
-                    (click)="editClient(client)"></i>
+                <td class="view">
+                  <a class="m-1"><i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToClientView(client.id)"></i></a>
+                  <a class="m-1"><i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editClientModal"
+                    (click)="editClient(client)"></i></a>
                   <!-- <i
             class="fa-solid fa-trash-can"
             (click)="suspendClient(client)"
@@ -137,7 +137,7 @@
             {{ client?.firstName + ' ' + client?.lastName | titlecase }}
           </h4>
 
-          <span class="no-word-break">{{ client.clientType }}
+          <span class="no-word-break">{{ client.clientType | titlecase }}
             <a [routerLink]="['/clientView', client.id]"><i class="fa fa-angle-right"></i></a>
           </span>
         </div>

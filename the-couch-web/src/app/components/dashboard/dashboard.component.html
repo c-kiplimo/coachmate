@@ -216,17 +216,16 @@
 
         <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
           <div class="d-none d-lg-block">
-          <div class="card">
-            <div class="card-body">
+            <div class="d-flex justify-content-between">
               <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
               <a [routerLink]="['/contracts']">
                 <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
               </a>
             </div>
-            <div class="upcomingsessionsTable list-container container "> 
+            <div class="row justify-content-center">
               <table class="table" *ngIf="contracts?.length">
                 <thead>
-                  <!-- <th colspan="1">Title</th> -->
+                  <th colspan="1">Name</th>
                   <th colspan="1">Client</th>
                   <th colspan="1">Start Date</th>
                   <th colspan="1">End Date</th>
@@ -235,7 +234,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let contract of contracts">
-                    <!-- <th>{{ contract?.coachingTopic}}</th> -->
+                    <td>{{ contract?.coachingTopic.slice(0, 20) }}</td>
                     <td>{{ contract?.clientFullName }}</td>
                     <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
                     <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
@@ -254,66 +253,17 @@
               </table>
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
-      
-                <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
-                <div class="d-none d-lg-block">
-      
-                  <div class="d-flex justify-content-between">
-                    <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
-                    <a [routerLink]="['/contracts']">
-                      <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                  </div>
-      
-                  <div class="row justify-content-center">
-                    <table class="table" *ngIf="contracts?.length">
-                      <thead>
-                        <!-- <th colspan="1">Title</th> -->
-                        <th colspan="1">Client</th>
-                        <th colspan="1">Start Date</th>
-                        <th colspan="1">End Date</th>
-                        <th colspan="1">Status</th>
-                        <th colspan="1">Actions</th>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let contract of contracts">
-                          <!-- <th>{{ contract?.coachingTopic}}</th> -->
-                          <td>{{ contract?.clientFullName }}</td>
-                          <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
-                          <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
-                          <td>
-                            <span class="badge" [ngClass]="{
-                            'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
-                            'badge-danger': contract?.contractStatus === 'ONGOING',
-                            'badge-primary': contract?.contractStatus === 'NEW'
-                          }">{{ contract?.contractStatus }}</span>
-                          </td>
-                          <td class="view">
-                            <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-      
-                    <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                      <div class="donut multi"></div>
-                    </div>
-                    <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
-                      No Contracts Yet.
-                    </p>
-      
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
         </div>
-        </div>
-        </div>
 
+      </div>
     </div>
   </div>
- 
+</div>
+
 
 <div class="row" *ngIf="this.userRole == 'ORGANIZATION'">
   <div class="col-md-12">
@@ -324,7 +274,8 @@
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
-      <div class="card-body">   <!-- upcomingsessionsTable list-container container -->
+      <div class="card-body">
+        <!-- upcomingsessionsTable list-container container -->
         <table class="table" *ngIf="coachesImpl?.length">
           <thead>
             <th colspan="1">Name</th>

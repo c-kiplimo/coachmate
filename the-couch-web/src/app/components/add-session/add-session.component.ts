@@ -195,7 +195,8 @@ export class AddSessionComponent implements OnInit {
     this.sessionService.addSession(this.formData, params).subscribe((res: any) => {
       console.log(res);
       this.toastrService.success('Session added successfully');
-      this.router.navigate(['/sessions']);
+      //redirect to were you came from
+      window.history.back();
     }, error => {
       console.log(error);
       this.toastrService.error(error.error.message);

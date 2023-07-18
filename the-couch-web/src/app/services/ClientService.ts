@@ -82,7 +82,7 @@ export class ClientService {
       });
 
   }
-  getOneClient(id: number): Observable<any> {
+  getOneClient(id: any): Observable<any> {
     return this.http.get<any>(this.baseURL + 'users/client/' + id, {
       observe: 'response',
     });
@@ -189,7 +189,7 @@ export class ClientService {
   getOrgCoaches(data: any): Observable<any> {
     console.log("get org coaches reached")
     console.log("data", data)
-    return this.http.get(`${this.baseURL}users/coaches`, { params: data })
+    return this.http.get(`${this.baseURL}users/coaches`, { params: data, observe: 'response' })
   }
 
   getOrgClients(id: any): Observable<any> {
