@@ -45,8 +45,8 @@
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Contract</th>
-                    <th scope="col">Venue</th>
                     <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
+                    <th scope="col">Venue</th>
                     <th scope="col">Type</th>
                     <th scope="col">Date</th>
                     <th scope="col">Start Time</th>
@@ -60,8 +60,8 @@
                     *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
                     <td>{{ session?.name }}</td>
                     <td>{{ session?.contractCoachingTopic }}</td>
-                    <td>{{ session?.sessionVenue }}</td>
                     <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
+                    <td>{{ session?.sessionVenue }}</td>
                     <td>{{ session?.sessionType }}</td>
                     <td>{{ session?.sessionSchedulesSessionDate }}</td>
                     <td>{{ session?.sessionSchedulesStartTime }}</td>

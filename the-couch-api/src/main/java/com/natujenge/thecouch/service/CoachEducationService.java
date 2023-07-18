@@ -3,9 +3,10 @@ package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.CoachEducation;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.CoachEducationRepository;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.mapper.CoachEducationMapper;
 import com.natujenge.thecouch.web.rest.dto.CoachEducationDTO;
-import com.querydsl.core.types.Predicate;
+import com.natujenge.thecouch.web.rest.request.CoachEducationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -24,20 +25,36 @@ public class CoachEducationService {
 
     private final CoachEducationRepository coachEducationRepository;
     private final CoachEducationMapper coachEducationMapper;
+    private final UserRepository userRepository;
 
-    public CoachEducationService(CoachEducationRepository coachEducationRepository, CoachEducationMapper coachEducationMapper) {
+    public CoachEducationService(CoachEducationRepository coachEducationRepository, CoachEducationMapper coachEducationMapper, UserRepository userRepository) {
         this.coachEducationRepository = coachEducationRepository;
         this.coachEducationMapper = coachEducationMapper;
+        this.userRepository = userRepository;
     }
 
     //CREATE
-    public CoachEducation createCoachEducation(CoachEducation coachEducation) {
+    public CoachEducation createCoachEducation(CoachEducationRequest coachEducationRequest, Long coachId) {
 
         try{
-            User coach = new User();
-            coachEducation.setCoach(coach);
-            coachEducationRepository.save(coachEducation);
+            log.info("Request to create a new coach education");
 
+            Optional<User> coach = userRepository.findById(coachId);
+            if (coach.isEmpty()) {
+                log.error("Coach with id {} does not exist", coachId);
+                return null;
+            }
+            CoachEducation coachEducation = new CoachEducation();
+            coachEducation.setCoach(coach.get());
+            coachEducation.setCourseName(coachEducationRequest.getCourseName());
+            coachEducation.setProvider(coachEducationRequest.getProvider());
+            coachEducation.setValidTill(coachEducationRequest.getValidTill());
+            coachEducation.setCertificateUrl(coachEducationRequest.getCertificateUrl());
+            coachEducation.setTrainingHours(coachEducationRequest.getTrainingHours());
+            coachEducation.setDateIssued(coachEducationRequest.getDateIssued());
+            coachEducation.setCreatedBy(coachEducationRequest.getCreatedBy());
+
+            coachEducationRepository.save(coachEducation);
             return coachEducation;
         } catch (Exception e) {
             log.error("Error Occurred while creating a new coach education", e);
@@ -57,7 +74,6 @@ public class CoachEducationService {
         }
          if (search != null && !search.isEmpty()) {
             exampleCoachEducation.setCourseName(search);
-            exampleCoachEducation.setProvider(search);
         }
         return exampleCoachEducation;
     }
@@ -68,6 +84,7 @@ public class CoachEducationService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded")
                 .withIgnoreNullValues();
         Example<CoachEducation> example = Example.of(exampleCoachEducation, matcher);
         return coachEducationRepository.findAll(example, pageable).map(coachEducationMapper::toDto);

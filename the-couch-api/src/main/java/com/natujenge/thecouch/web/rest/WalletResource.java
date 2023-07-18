@@ -33,14 +33,35 @@ public class WalletResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("Request to create payment");
         log.info("userDetails{}",userDetails.getId());
+
+        Long coachId = null;
+        Long clientId = null;
+        Long organizationId = null;
+
         try {
-            log.info("Logged in user {} ",userDetails);
-            Long coachId = (userDetails == null) ? null : userDetails.getId();
-            log.info("coach id {}",coachId);
-            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
-            log.info("org id {}",organizationId);
-            Long clientId = (userDetails == null) ? null : userDetails.getId();
-            log.info("client id {}",coachId);
+            log.info("Logged in user {} ", userDetails);
+            String userRole = userDetails.getUserRole().name();
+            switch (userRole) {
+                case "COACH":
+                    coachId = userDetails.getId();
+                    break;
+                case "CLIENT":
+                    clientId = userDetails.getId();
+                    break;
+                case "ORGANIZATION":
+                    organizationId = userDetails.getId();
+                    break;
+                default:
+                    return new ResponseEntity<>(new RestResponse(true, "You are not authorized to perform this action"),
+                            HttpStatus.UNAUTHORIZED);
+            }
+
+//            Long coachId = (userDetails == null) ? null : userDetails.getId();
+//            log.info("coach id {}",coachId);
+//            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
+//            log.info("org id {}",organizationId);
+//            Long clientId = (userDetails == null) ? null : userDetails.getId();
+//            log.info("client id {}",coachId);
 
             if (organizationId != null) {
                 log.info("Request to create payment by organization");

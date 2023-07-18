@@ -33,6 +33,7 @@ throw new Error('Method not implemented.');
 }
   conductedSessionForm!: FormGroup<any>;
   attachmentForm!: FormGroup;
+  attachmentNo: any;
   status!: string;
   orgId: any;
   organizationId: any;
@@ -90,6 +91,12 @@ throw new Error('Method not implemented.');
   orgSession: any;
   currentSession!: any;
   link!: string;
+
+  @ViewChild('stickyMenu')
+  menuElement!: ElementRef;
+  sticky: boolean = false;
+  elementPosition: any;
+
   constructor(
     private clientService: ClientService,
     private http: HttpClient,
@@ -149,6 +156,19 @@ throw new Error('Method not implemented.');
       sessionEndTime: '',
     });
 
+  }
+
+  ngAfterViewInit() {
+    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+  }
+  @HostListener('window:scroll', ['$event'])
+  handleScroll() {
+    const windowScroll = window.pageYOffset;
+    if (windowScroll >= this.elementPosition) {
+      this.sticky = true;
+    } else {
+      this.sticky = false;
+    }
   }
 
   //get feedback for session
@@ -408,13 +428,12 @@ throw new Error('Method not implemented.');
 
 
   addLink() {
-
-    console.log(this.Links);
-    this.links.push(this.Links.link);
-    console.log(this.links);
-    this.Links.link = '';
-    console.log(this.Links);
+    console.log(this.Links.link); 
+    this.links.push(this.Links.link); 
+    this.Links.link = ''; 
+    console.log(this.links); 
   }
+  
 
   removeLink(index: number) {
     this.links.splice(index, 1);
@@ -422,7 +441,7 @@ throw new Error('Method not implemented.');
   addAttachment() {
     const formData = this.attachmentForm.value;
     formData.links = this.links;
-    formData.files = this.files;
+    // formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
       coachId: this.coachId,

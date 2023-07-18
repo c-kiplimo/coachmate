@@ -65,7 +65,7 @@ export class CoachesComponent implements OnInit {
     if(this.userRole == 'ORGANIZATION'){
       this.orgId = this.user.id;
       console.log('ORGANIZATION');
-      this.getCoaches(this.page);
+      // this.getCoaches(this.page);
 
     }
 
@@ -97,7 +97,6 @@ export class CoachesComponent implements OnInit {
 
 
 getCoaches(page: any) {
- 
   this.loading = true;
   this.page = page;
   //if page is 0, don't subtract 1
@@ -151,8 +150,6 @@ resetStatuses(): void {
   navigateToCoachView(id: any) {
     console.log(id)
     this.router.navigate(['/coachView', id]);
-
-
   }
   deleteCoach(client: any) {
  //To be checked

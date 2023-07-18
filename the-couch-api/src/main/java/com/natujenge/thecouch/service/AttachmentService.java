@@ -66,19 +66,19 @@ public class AttachmentService {
         log.info("Processing attachments for session ID: {}", session.getId());
 
         try {
-            List<byte[]> files = attachmentRequest.getFiles();
+//            List<byte[]> files = attachmentRequest.getFiles();
             List<String> links = attachmentRequest.getLinks();
 
-            if (files != null && !files.isEmpty()) {
-                for (byte[] file : files) {
-                    Attachment attachment = new Attachment();
-                    attachment.setSession(session);
-                    attachment.setFiles(List.of(file));
-                    setAttachmentNumber(attachment); // Set the attachment number
-                    // Set other fields as needed...
-                    attachmentRepository.save(attachment);
-                }
-            }
+//            if (files != null && !files.isEmpty()) {
+//                for (byte[] file : files) {
+//                    Attachment attachment = new Attachment();
+//                    attachment.setSession(session);
+//                    attachment.setFiles(List.of(file));
+//                    setAttachmentNumber(attachment); // Set the attachment number
+//                    // Set other fields as needed...
+//                    attachmentRepository.save(attachment);
+//                }
+//            }
 
             if (links != null && !links.isEmpty()) {
                 for (String link : links) {

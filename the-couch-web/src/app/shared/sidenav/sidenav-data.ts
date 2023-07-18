@@ -50,6 +50,12 @@ export const sideNavData = {
         number: 9
     },
     {
+        routeLink: 'coaching-logs',
+        icon: 'fa-solid fa-book',
+        label: 'Coach Log',
+        number: 7
+    },
+    {
         routeLink: 'support',
         icon: 'fa-solid fa-headset',
         label: 'Support',

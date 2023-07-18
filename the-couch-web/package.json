@@ -24,6 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@mobiscroll/angular": "https://npm.mobiscroll.com/@mobiscroll/angular-ivy-trial/-/angular-ivy-trial-5.24.1.tgz",
+    "@sweetalert2/ngx-sweetalert2": "^12.1.0",
     "all": "^0.0.0",
     "angular-calendar": "^0.30.1",
     "angularx-flatpickr": "^7.3.0",
@@ -39,7 +40,10 @@
     "ngx-perfect-scrollbar": "^10.1.1",
     "ngx-toastr": "^15.2.2",
     "rxjs": "~7.5.0",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.7.16",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

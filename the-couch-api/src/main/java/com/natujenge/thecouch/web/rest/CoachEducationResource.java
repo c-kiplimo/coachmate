@@ -1,4 +1,4 @@
-package com.natujenge.thecouch.web.rest.request;
+package com.natujenge.thecouch.web.rest;
 
 
 import com.natujenge.thecouch.domain.CoachEducation;
@@ -7,6 +7,7 @@ import com.natujenge.thecouch.repository.CoachEducationRepository;
 import com.natujenge.thecouch.service.CoachEducationService;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.CoachEducationDTO;
+import com.natujenge.thecouch.web.rest.request.CoachEducationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,11 +64,12 @@ public class CoachEducationResource {
 
     //ADD --- /api/coachEducation
     @PostMapping
-    public ResponseEntity<?> createCoachEducation(@RequestBody CoachEducation coachEducation){
+    public ResponseEntity<?> createCoachEducation(@RequestBody CoachEducationRequest coachEducationRequest,
+                                                  @AuthenticationPrincipal User userDetails) {
         try{
-            log.info("Create CoachEducation request received: {}", coachEducation);
-
-            CoachEducation coachEducationResponse = coachEducationService.createCoachEducation(coachEducation);
+            log.info("Create CoachEducation request received: {}", coachEducationRequest);
+            Long coachId = userDetails.getId();
+            CoachEducation coachEducationResponse = coachEducationService.createCoachEducation(coachEducationRequest, coachId);
             return new ResponseEntity<>(coachEducationResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);

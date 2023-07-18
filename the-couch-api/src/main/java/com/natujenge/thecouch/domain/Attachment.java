@@ -21,8 +21,8 @@ public class Attachment {
     private String attachmentNumber;
 
 
-    @Lob
-    private List<byte[]> files;
+//    @Lob
+//    private List<byte[]> files;
 
     @ElementCollection
     private List<String> links;

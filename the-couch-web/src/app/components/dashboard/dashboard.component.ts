@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   sessions: any;
   orgName: any;
   contracts: any;
+  coachesImpl: any;
   numberOfClients!: number;
   numberOfSessions!: number;
   numberOfContracts!: number;
@@ -72,6 +73,7 @@ export class DashboardComponent implements OnInit {
   coachId!: number;
   clientId!: number;
 
+  currentTab: any = 'sessions';
 
 
   constructor(
@@ -116,7 +118,7 @@ export class DashboardComponent implements OnInit {
       console.log('ORGANIZATION');
       // this.getUserOrg();
       this.getClients(this.page);
-      this.getCoaches(this.page);
+      // this.getCoaches(this.page);
       this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
@@ -124,7 +126,8 @@ export class DashboardComponent implements OnInit {
       // this.getOrgContracts(this.orgId);
       this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      this.getCoaches(this.orgId);
+      // this.getOrgCoaches(this.page);
+      this.getCoachesImpl(this.page)
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -452,9 +455,7 @@ export class DashboardComponent implements OnInit {
   //   );
   // }
 
-
-  getCoaches(page: any) {
- 
+  getCoachesImpl(page: any) {
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -463,6 +464,9 @@ export class DashboardComponent implements OnInit {
     } else {
       page = page - 1;
     }
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
+    }
     const options: any = {
       page: page,
       size: this.pageSize,
@@ -470,24 +474,67 @@ export class DashboardComponent implements OnInit {
       search: this.filters.searchItem,
       sort: 'id,desc',
     };
-  
-   if(this.userRole == 'ORGANIZATION'){
+
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
       options.orgId = this.orgId;
     }
     
-    this.coachService.getCoaches(options).subscribe(
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
       (response) => {
         this.loading = false;
-        this.coaches = response.body;
+        this.coachesImpl = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'COACH') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
         this.totalElements = +response.headers.get('X-Total-Count');
-        this.numberofCoaches =this.coaches.length;
-        console.log('coaches',this.coaches)
+        console.log('clients',this.clients)
       }, (error) => {
         this.loading = false;
         console.log(error)
       }
     )
   }
+
+  // getOrgCoaches(page: any) {
+ 
+  //     this.loading = true;
+  //     this.page = page;
+  //     //if page is 0, don't subtract 1
+  //     if (page === 0 || page < 0) {
+  //       page = 0;
+  //     } else {
+  //       page = page - 1;
+  //     }
+  //     const options: any = {
+  //       page: page,
+  //       size: this.pageSize,
+  //       status: this.filters.status,
+  //       search: this.filters.searchItem,
+  //       sort: 'id,desc',
+  //     };
+    
+  //    if(this.userRole == 'ORGANIZATION'){
+  //       options.orgId = this.orgId;
+  //     }
+      
+  //     this.clientService.getOrgCoaches(options).subscribe(
+  //       (response) => {
+  //         this.loading = false;
+  //         this.orgCoaches = response.body;
+  //         this.totalElements = +response.headers.get('X-Total-Count');
+  //         console.log('coaches',this.orgCoaches)
+  //       }, (error) => {
+  //         this.loading = false;
+  //         console.log(error)
+  //       }
+  //     )
+  // }
   getClientContracts(id: any) {
     // const data = {
     //   clientId: id,
@@ -525,8 +572,11 @@ export class DashboardComponent implements OnInit {
     console.log("contractId on navigate", id);
     this.contractId = id;
     this.router.navigate(['/contractDetail/' + id]);
+  }
 
-
+  navigateToCoachView(id : number) {
+    console.log("coachId on navigate", id);
+    this.router.navigate(['/coachView/' + id]);
   }
 
 
@@ -594,9 +644,10 @@ export class DashboardComponent implements OnInit {
     }
     else (sessions.status === 'CANCELLED')
     return 'badge-success';
-
-
   }
 
+  toggleTab(tab: string): void {
+    this.currentTab = tab;
+  }
 
 }

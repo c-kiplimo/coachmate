@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class AttachmentRequest {
-    private List<byte[]> files; // Allow multiple files to be uploaded
+//    private List<byte[]> files; // Allow multiple files to be uploaded
     private List<String> links;
     private Long sessionId; // This will be used to set the 'Session' relationship
 

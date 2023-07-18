@@ -38,11 +38,13 @@ import { ProfileComponent } from './account-settings/profile/profile.component';
 import { TemplatesComponent } from './account-settings/templates/templates.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { AttachmentsComponent } from './components/attachments/attachments.component';
+import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
+
 
 const routes: Routes = [
   {
-    path:'',
-   component:HomeComponent
+    path: '',
+    component: HomeComponent
   },
   {
     path: 'dashboard',
@@ -54,8 +56,8 @@ const routes: Routes = [
     component: ClientsComponent
   },
   {
-    path:'coaches',
-    component:CoachesComponent
+    path: 'coaches',
+    component: CoachesComponent
   },
   {
     path: 'addclient',
@@ -68,6 +70,7 @@ const routes: Routes = [
   {
     path:'sessionView/:id',
     component:sessionViewComponent
+   
   },
   {
     path: 'signin',
@@ -92,7 +95,7 @@ const routes: Routes = [
 
   {
     path: 'education',
-    component:TrainingsListComponent
+    component: TrainingsListComponent
   },
   {
     path: 'sessions',
@@ -112,40 +115,46 @@ const routes: Routes = [
 
   },
   {
-     path:'contracts',
-     component:contractComponent
+    path: 'contracts',
+    component: contractComponent
   },
   {
-    path:'payment',
-    component:ReceiptsComponent
- },
+    path: 'payment',
+    component: ReceiptsComponent
+  },
   {
-    path:'feedback1',
-   component:FeebackFormComponent
- },
- { path: 'feedback/:sessionId', 
- component: FeebackFormComponent },
+    path: 'feedback1',
+    component: FeebackFormComponent
+  },
+  {
+    path: 'feedback/:sessionId',
+    component: FeebackFormComponent
+  },
 
   {
     path: 'AddTraining',
     component: AddTrainingComponent
   },
   { path: 'reset/request', component: ForgotPaswordComponent },
-  
-  { path: 'registration/confirm', 
-    component: ConfirmedViewComponent },
-
-    { path: 'contractDetail/:id', 
-    component: ContractDetailsComponent },
 
   {
-      path: 'confirmclient/:id/:token',
-      component: ClientConfirmComponent
+    path: 'registration/confirm',
+    component: ConfirmedViewComponent
+  },
+
+  {
+    path: 'contractDetail/:id',
+    component: ContractDetailsComponent
+  },
+
+  {
+    path: 'confirmclient/:id/:token',
+    component: ClientConfirmComponent
   },
   {
     path: 'confirmcoach/:id/:token',
     component: CoachConfirmComponent
-},
+  },
   {
     path: 'addCoach',
     component: AddCoachComponent
@@ -173,8 +182,9 @@ const routes: Routes = [
   { path: 'account-settings/templates', component: TemplatesComponent },
   { path: 'account-settings/payments', component: PaymentsComponent },
   { path: 'AccountSummaryComponent', component: AccountSummaryComponent },
+  { path: 'coaching-logs', component: CoachLogsComponent },
 
-  
+
 ];
 
 @NgModule({

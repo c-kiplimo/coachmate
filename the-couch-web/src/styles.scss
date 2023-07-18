@@ -446,6 +446,7 @@ a {
     letter-spacing: 0.5px;
     transition: all 50ms ease;
     background-color: #FFFFFF;
+    text-decoration: none;
 
     &:hover {
       border: none;
@@ -454,7 +455,7 @@ a {
 
     &.active {
       border: none;
-      border-bottom: 4px solid #00000073;
+      border-bottom: 4px solid #F15B2B !important;
     }
   }
 }

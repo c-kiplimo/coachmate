@@ -1,116 +1,105 @@
 
 <div class="container main-content">
   <h2 class="text-center">Support</h2>
-  <div class="row mb-5">
-    <h4 class="sub-titles">FAQs</h4>
-
-    <!-- test material theme -->
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I create a new coaching session?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I create a new coaching session?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I create a new coaching session?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>
-          To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.
-        </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I register as a coach or as a coaching organisation?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>
-          To register as a coach or client, click on the <a routerLink="/signup" href="">Register</a> button in the home page
-          and fill out the registration form.
-        </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I record a payment?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>
-          To record a payment, click on the  <a routerLink="/record-payment" href="">Add payment</a> button in the account summary page
-          and fill out the details.
-        </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I add a client?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>
-          To add a client, click on the  <a routerLink="/addclient" href="">Add client</a> button in the account summary page
-          and fill out the details.
-        </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            How do I add a contract?
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>
-          To add a contract, click on the  <a routerLink="/contract" href="">Add contract</a> button on the side nav
-          and fill out the details.
-        </p>
-      </mat-expansion-panel>
-    </mat-accordion>
-
-    <!-- <div class="col-md-6">
+  <div class="row col-12 mb-5 accord-container">
+      <div class="card-title"><h4 class="sub-titles">FAQs</h4></div>
+      <div class="card-body">
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I create a new coaching session?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I create a new coaching session?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I create a new coaching session?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I register as a coach or as a coaching organisation?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              To register as a coach or client, click on the <a routerLink="/signup" href="">Register</a> button in the home page
+              and fill out the registration form.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I record a payment?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              To record a payment, click on the  <a routerLink="/record-payment" href="">Add payment</a> button in the account summary page
+              and fill out the details.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I add a client?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              To add a client, click on the  <a routerLink="/addclient" href="">Add client</a> button in the account summary page
+              and fill out the details.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-expansion-panel (opened)="panelOpenState = true"
+                                (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                How do I add a contract?
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              To add a contract, click on the  <a routerLink="/contract" href="">Add contract</a> button on the side nav
+              and fill out the details.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
     </div>
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6 ">
-    </div> -->
   </div>
-  <h2 class="text-center">How to reach us</h2>
+
+  <div class="accord-container">
+    <h2 class="text-center">How to reach us</h2>
   <div class="row">
     <div class="col-6">
       <h4 class="sub-titles">Contact Form</h4>
@@ -194,6 +183,7 @@
         </button>
       </div>
     </div>
-  </div>    
+  </div> 
+  </div>   
 </div>
  
