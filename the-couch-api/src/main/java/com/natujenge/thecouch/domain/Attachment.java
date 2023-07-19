@@ -30,6 +30,8 @@ public class Attachment {
     @ElementCollection
     private List<String> links;
 
+
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
