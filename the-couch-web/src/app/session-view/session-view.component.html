@@ -161,7 +161,7 @@
 
         <br>
 
-        <div class="feedback-section" *ngIf="currentTab === 'feedback'" [@fadeIn]>
+        <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
           <div class="d-none d-lg-block">
             <div class="row justify-content-center">
               <table class="table" *ngIf="feedbacks?.length">
@@ -253,78 +253,83 @@
               No feedbacks Found.
             </p>
           </div>
-        </div>         
-         <div class="attachments-section" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-          
-          <div class="d-flex justify-content-end " >
-              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentModal" (click)="addAttachment()">
-                <i class="fa fa-plus"></i> Attachments
-              </button>
-              </div>
-              <div class="row list-container container">
-            <div class="justify-content-end mb-2"> <!-- Added "d-flex justify-content-end" and "mb-2" classes to align the button to the right and add margin-bottom -->
-              
+        </div>
+
+
+        <div *ngIf="currentTab === 'attachments'" [@fadeIn]>
+
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#attachmentModal">
+              <i class="fa fa-plus"></i> Attachments
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="attachments?.length">
+                <thead>
+                  <th scope="col">Link</th>
+                  <th scope="col">Created At</th>
+                  <th scope="col">Last Updated At</th>
+                  <!-- <th scope="col">Action</th> -->
+                </thead>
+                <tbody>
+                  <tr *ngFor="let attachment of attachments">
+                    <td class="view"><a href="{{ attachment.link }}" target="_blank">{{ attachment.link }}</a></td>
+                    <td>{{ attachment.createdAt | date: "MMM d, y" }}</td>
+                    <td>{{ attachment.lastUpdatedAt | date: "MMM d, y" }}</td>
+                    <!-- <td class="view">
+                      <a><i class="fa-solid fa-trash-can" (click)="deleteAttachment(attachment.id)"></i></a>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+              <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+                No attachment Found.
+              </p>
             </div>
-            <table class="table" *ngIf="attachments?.length">
-              <thead>
-                <th scope="col">Attachment No</th>
-                <th scope="col">Attachment date</th>
-                <th scope="col">Details</th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let attachment of attachments">
-                  <td>{{ attachment.attachmentNo }}</td>
-                  <td>{{ attachment.createdAt | date: "MMM d, y" }}</td>
-                  <td >{{ attachment.links }}</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
-              No attachment Found.
-            </p>
           </div>
         </div>
 
-          <div class="show-sm">
-            <div class="pt-3 pb-2 listing-item" *ngFor="let attachment of attachments">
-              <div class="d-flex justify-content-between">
-                <h4 class="farmer" class="mb-0">
-                  Attachment No: {{ attachment.attachmentNo }}
-                </h4>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span class="customer-name" class="mb-0">
-                  Attachment date: {{ attachment.createdAt | date : "MMM d, y " }}
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <span class="customer-name" class="mb-0">
-                  Details: {{ attachment.links }}
-                </span>
-              </div>
-
-              <div class="d-flex justify-content-between mb-1">
-                <span class="customer-name" class="mb-0">
-                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
-                    View
-                  </button>
-                </span>
-              </div>
+        <div class="show-sm">
+          <div class="pt-3 pb-2 listing-item" *ngFor="let attachment of attachments">
+            <div class="d-flex justify-content-between">
+              <h4 class="farmer" class="mb-0">
+                Attachment No: {{ attachment.attachmentNo }}
+              </h4>
             </div>
 
-            <div class="donut-wrapper" *ngIf="loading">
-              <div class="donut multi"></div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="customer-name" class="mb-0">
+                Attachment date: {{ attachment.createdAt | date : "MMM d, y " }}
+              </span>
             </div>
-            <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
-              No attachment Found.
-            </p>
+
+            <div class="d-flex justify-content-between mb-2">
+              <span class="customer-name" class="mb-0">
+                Details: {{ attachment.links }}
+              </span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-1">
+              <span class="customer-name" class="mb-0">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
+                  View
+                </button>
+              </span>
+            </div>
           </div>
+
+          <div class="donut-wrapper" *ngIf="loading">
+            <div class="donut multi"></div>
+          </div>
+          <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
+            No attachment Found.
+          </p>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 
 <!-- Notification details modal -->
@@ -732,25 +737,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form (submit)="addAttachment()" class="modal-body">
-
         <section>
           <h3>Links</h3>
           <div class="mb-3">
             <div class="input-group">
-              <input [(ngModel)]="Links.link" type="text" name="link" class="form-control input-height" placeholder="Add link"
-                >
-              <button type="button" class="btn btn-success btn-match-height"
-                (click)="addLink()">Add</button>
+              <input [(ngModel)]="addlink" type="text" name="link" class="form-control input-height"
+                placeholder="Add link">
+              <button type="button" class="btn btn-success btn-match-height" [disabled]="!addlink"
+                (click)="addLink()"><i class="fa fa-plus"></i> Add</button>
             </div>
           </div>
 
           <div class="mb-3">
             <ol>
-              <li *ngFor="let link of links; index as i">
-                {{ link }}
-                <button (click)="removeLink(i)" type="button" class="btn btn-link text-danger btn-match-height">
-                  <i class="fa-solid fa-trash-can p-1"></i>Delete
-                </button>
+              <li class="view" *ngFor="let link of links; index as i">
+                {{ link.link?.slice(0, 40) }}
+                  <a><i class="fa-solid fa-trash-can p-1" (click)="removeLink(i)"></i></a>
               </li>
             </ol>
           </div>
@@ -779,7 +781,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-small" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success btn-small" (click)="addAttachment()">Add Attachment</button>
+          <button type="button" class="btn btn-success btn-small" data-bs-dismiss="modal" (click)="addAttachment()">Add Attachment</button>
         </div>
 
       </form>

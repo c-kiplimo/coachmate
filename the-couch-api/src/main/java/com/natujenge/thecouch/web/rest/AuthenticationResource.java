@@ -72,8 +72,7 @@ public class AuthenticationResource {
                 userSession.setUser(user);
                 userSession.setLoggedIn(1);
                 userSessionRepo.save(userSession);
-                log.info("User seesion is null. saved new ");
-
+                log.info("User session is null. saved new ");
             }
 
             log.info("Logging in {}", login);

@@ -217,29 +217,15 @@ export class ClientService {
   }
 
   // ATTACHMENT SERVICES
-  addAttachment(formData: any, options: any): Observable<any> {
-    const data = new FormData();
-  
-    // Check if formData has files attached
-    if (formData.files) {
-      data.append('files', formData.files[0]);
-    }
-  
-    // Append session-related data
-    data.append('sessionId', formData.sessionId);
-    data.append('coachId', formData.coachId);
-    data.append('orgId', formData.orgId);
-    data.append('clientId', formData.clientId);
-    data.append('createdBy', formData.createdBy);
-  
-    return this.http.post<any>(
-      this.baseURL + 'attachments/upload',
-      data,
-      {
-        params: options,
-        observe: 'response',
-      }
-    );
+  addAttachment(list: any, options: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + 'attachments/upload', list, {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  deleteAttachment(id: any): Observable<any> {
+    return this.http.delete(this.baseURL + `attachments/delete-by-id/` + id,);
   }
   
 
