@@ -1,95 +1,115 @@
 <div class="row">
   <div class="col mt-4" style="margin-left: 5px">
     <h5 class="fw-bold">
-      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()"> Back</i>
+      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
+        Back</i
+      >
     </h5>
   </div>
 </div>
-  <div class="container mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="">
-        <h1 class="modal-title fs-5 text-center" id="exampleModalLabel" >
-          Record Payment
-        </h1>
+<div class="row justify-content-center m-2 p-3">
+  <div class="col-md-4">
+    <div class="card card-table justify-content-center align-items-center">
+      <div class="m-3">
+        <h1 class="text-center mb-3">Record Payment</h1>
       </div>
-      <div class="modal-body">
-        <form  ngNativeValidate>
-          <div class="row">
-            <div
-            class=" mb-3 col-md-6">
-              <label for="client">Payment for:</label>
-              <br>
-              <select class="form-select" id="clientId" name="clientId"
-              [(ngModel)]="paymentForm.clientId">
-                  <option selected>Select Client To Record</option>
-                <option *ngFor="let client of clients" value="{{client.id}}">
-                  {{ client.firstName + " " + client.lastName }}
-                </option>
-              </select>
-        </div>
-          <div class=" mb-3 col-md-6 ">
-                <label for="modeOfPayment">Mode of Payment</label>
-                    <br>
-                <select id="modeOfPayment" class="form-select" name="modeOfPayment">
-                    <option selected>Select Payment Mode</option>
-                    <option value="MANUAL">MANUAL</option>
-                    <option value="AUTO">AUTO</option>
-                </select>
-              </div>
-              <div class=" mb-3 col-md-6 ">
-                <label for="extPaymentRef">External Payment Ref</label>
-                <input
-                class="form-control"
-                  type="text"
-                  id="extPaymentRef"
-                  name="extPaymentRef"
-                  [(ngModel)]="paymentForm.extPaymentRef"
-                />
+      <form class="m-3">
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label for="client">Payment for:</label>
+            <br />
+            <select
+              class="form-select"
+              id="clientId"
+              name="clientId"
+              [(ngModel)]="paymentForm.clientId"
+              id="inputGroupSelect01"
+            >
+              <option selected>Select Client To Record</option>
+              <option *ngFor="let client of clients" value="{{ client.id }}">
+                {{ client.firstName + " " + client.lastName }}
+              </option>
+            </select>
           </div>
-              <div class=" mb-3 col-md-6 ">
-                <label for="paymentCurrency">Payment Currency</label>
-                <br>
-      
-                <select id="paymentCurrency" class="form-select" name="paymentCurrency"
-                  [(ngModel)]="paymentForm.paymentCurrency">
-                    <option selected>Select Payment Currency</option>
-                    <option value="KSH">KSH</option>
-                    <option value="USD">USD</option>
-                    <option value="CNY">CNY</option>
-                </select>
-              </div>
+          <div class="mb-3 col-md-12">
+            <label class="form-group-text" for="modeOfPayment"
+              >Mode of Payment</label
+            >
+            <br />
+            <select id="modeOfPayment" class="form-select" name="modeOfPayment">
+              <option selected>Select Payment Mode</option>
+              <option value="MANUAL">MANUAL</option>
+              <option value="AUTO">AUTO</option>
+            </select>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label for="extPaymentRef">External Payment Ref</label>
+            <input
+              class="form-control"
+              type="text"
+              id="extPaymentRef"
+              name="extPaymentRef"
+              [(ngModel)]="paymentForm.extPaymentRef"
+            />
+          </div>
+          <div class="mb-3 col-md-12">
+            <label for="paymentCurrency">Payment Currency</label>
+            <br />
 
-              <div class=" mb-3 col-md-6 ">
-                <label for="description">Description</label>
-                <br>
-                <input
-                class="form-control"
-                  type="text"
-                  id="description"
-                  name="description"
-                  [(ngModel)]="paymentForm.description"
-                />
-              </div>
-              <div class=" mb-3 col-md-6 ">
-        <div>
-        <label for="amount">Amount</label>
-        <input type="number" class="form-control" id="amount" name="amount"
-        [(ngModel)]="paymentForm.amount" />
-      </div>
-      </div>
-      <!-- <div class="form-group form-check">
+            <select
+              id="paymentCurrency"
+              class="form-select"
+              name="paymentCurrency"
+              [(ngModel)]="paymentForm.paymentCurrency"
+            >
+              <option selected>Select Payment Currency</option>
+              <option value="KSH">KSH</option>
+              <option value="USD">USD</option>
+              <option value="CNY">CNY</option>
+            </select>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+        <div class="mb-3 col-md-12">
+          <label for="description">Description</label>
+          <br />
+          <input
+            class="form-control"
+            type="text"
+            id="description"
+            name="description"
+            [(ngModel)]="paymentForm.description"
+          />
+        </div>
+        <div class="mb-3 col-md-12">
+          <label for="amount">Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            id="amount"
+            name="amount"
+            [(ngModel)]="paymentForm.amount"
+          />
+        </div>
+        </div>
+
+        <!-- <div class="form-group form-check">
         <input type="checkbox" class="form-check-input" 
         [(ngModel)]="paymentForm.sendNotification" id="sendNotification">
         <label class="form-check-label" name="sendNotification" for="sendNotification">Send Notification to Client</label>
      </div> -->
-      <div class="modal-footer">
-        <button (click)="recordPayment()"
-          type="submit" class="btn btn-success"
-        >Record 
+
+        <button
+          type="submit"
+          (click)="recordPayment()"
+          type="submit"
+          class="btn btn-signup mb-3 mt-2 p-2 text-center"
+        >
+          Record
         </button>
-      </div>
-      </div>
-        
- 
+      </form>
+    </div>
+  </div>
+</div>
