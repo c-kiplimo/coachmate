@@ -35,6 +35,7 @@ public class AttachmentResource {
     public ResponseEntity<RestResponse> uploadAttachments(
             @RequestParam(name = "sessionId") Long sessionId,
             @ModelAttribute AttachmentRequest attachmentRequest) {
+        log.info("REST request to upload attachments ", attachmentRequest);
 
         try {
             attachmentService.uploadAttachments(sessionId, attachmentRequest);
@@ -50,7 +51,6 @@ public class AttachmentResource {
     // get attachment by session_id
     @GetMapping("/get-by-session-id")
     public ResponseEntity<?> getAttachmentBySessionId(
-            @AuthenticationPrincipal User userDetails,
             @RequestParam(name = "sessionId", required = false) Long sessionId
     ) {
         try {

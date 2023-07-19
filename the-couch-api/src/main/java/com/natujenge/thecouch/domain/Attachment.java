@@ -1,6 +1,6 @@
 package com.natujenge.thecouch.domain;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -8,9 +8,12 @@ import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
-@Table(name="tbl_attachments")
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "tbl_attachments")
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -255,11 +255,15 @@
           </div>
         </div>         
          <div class="attachments-section" *ngIf="currentTab === 'attachments'" [@fadeIn]>
-          <div class="row list-container container">
-            <div class="d-flex justify-content-end mb-2"> <!-- Added "d-flex justify-content-end" and "mb-2" classes to align the button to the right and add margin-bottom -->
+          
+          <div class="d-flex justify-content-end " >
               <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentModal" (click)="addAttachment()">
                 <i class="fa fa-plus"></i> Attachments
               </button>
+              </div>
+              <div class="row list-container container">
+            <div class="justify-content-end mb-2"> <!-- Added "d-flex justify-content-end" and "mb-2" classes to align the button to the right and add margin-bottom -->
+              
             </div>
             <table class="table" *ngIf="attachments?.length">
               <thead>
@@ -733,9 +737,9 @@
           <h3>Links</h3>
           <div class="mb-3">
             <div class="input-group">
-              <input [(ngModel)]="Links.link" type="text" class="form-control input-height" placeholder="Add link"
-                formControlName="link">
-              <button type="button" style="transform: translateY(-0.5cm);" class="btn btn-success btn-match-height"
+              <input [(ngModel)]="Links.link" type="text" name="link" class="form-control input-height" placeholder="Add link"
+                >
+              <button type="button" class="btn btn-success btn-match-height"
                 (click)="addLink()">Add</button>
             </div>
           </div>
@@ -791,7 +795,7 @@
 <div class="modal fade" id="attachmentDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class=" d-flex  modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">
           Attachments
         </h1>

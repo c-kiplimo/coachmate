@@ -77,7 +77,7 @@ throw new Error('Method not implemented.');
   userRole: any;
   orgIdId: any;
   createdBy: any;
-  links: string[] = [];
+  links: any =[];
   files: File[] = [];
   //Add Link Form
   Links = {
@@ -428,9 +428,10 @@ throw new Error('Method not implemented.');
 
 
   addLink() {
+    // this.Links.link="sdfghjfklsdfg"
     console.log(this.Links.link); 
     this.links.push(this.Links.link); 
-    this.Links.link = ''; 
+    // this.Links.link = ''; 
     console.log(this.links); 
   }
   
@@ -441,6 +442,7 @@ throw new Error('Method not implemented.');
   addAttachment() {
     const formData = this.attachmentForm.value;
     formData.links = this.links;
+    console.log(this.links);
     // formData.files = this.files;
     const params = {
       sessionId: this.sessionId,
@@ -452,7 +454,7 @@ throw new Error('Method not implemented.');
     formData.clientId = this.clientId;
     formData.createdBy = this.createdBy;
     console.log(formData);
-    console.log(this.files);
+    // console.log(this.files);
     // Send formData to backend using a service or API
     this.clientService.addAttachment(formData,params).subscribe(
       (response) => {
