@@ -1,12 +1,13 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.natujenge.thecouch.domain.Attachments;
+import com.natujenge.thecouch.domain.Attachment;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.repository.AttachmentsRepository;
+import com.natujenge.thecouch.repository.AttachmentRepository;
 import com.natujenge.thecouch.repository.SessionRepository;
 import com.natujenge.thecouch.service.AttachmentService;
 import com.natujenge.thecouch.service.SessionService;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.request.AttachmentRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,50 +30,40 @@ public class AttachmentResource {
     @Autowired
     SessionRepository sessionRepository;
     @Autowired
-    AttachmentsRepository attachmentsRepository;
+    AttachmentRepository attachmentsRepository;
     @PostMapping(value = "/upload")
-    public ResponseEntity<?> uploadAttachments(
-            @RequestParam(name = "sessionId", required = false) Long sessionId,
-            @RequestParam(name = "files", required = false) MultipartFile[] files,
-            @RequestParam(name = "links", required = false) String[] links) {
+    public ResponseEntity<RestResponse> uploadAttachments(
+            @RequestParam(name = "sessionId") Long sessionId,
+            @ModelAttribute AttachmentRequest attachmentRequest) {
+        log.info("REST request to upload attachments ", attachmentRequest);
+
         try {
-            attachmentService.uploadAttachments(sessionId, files, links);
-            return new ResponseEntity<>(new RestResponse(false, "Attachments uploaded successfully"), HttpStatus.OK);
+            attachmentService.uploadAttachments(sessionId, attachmentRequest);
+            return ResponseEntity.ok().body(new RestResponse(false, "Attachments uploaded successfully"));
         } catch (Exception e) {
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new RestResponse(true, e.getMessage()));
         }
     }
+
 
 
     // get attachment by session_id
     @GetMapping("/get-by-session-id")
     public ResponseEntity<?> getAttachmentBySessionId(
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "sessionId",required = false) Long sessionId
+            @RequestParam(name = "sessionId", required = false) Long sessionId
     ) {
         try {
+            log.debug("REST request to get attachments given session ID: {}", sessionId);
 
-            log.debug(
-                    "REST request to get attachment given session Id {} and coachId {}",
-                    sessionId
-            );
-            try {
-                List<Attachments> attachments = attachmentService.getAttachmentBySessionId(
-                        sessionId
-                );
-                return new ResponseEntity<>(attachments, HttpStatus.OK);
-            } catch (Exception e) {
-                log.error("Error Occurred ", e);
-                return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
+            List<Attachment> attachments = attachmentService.getAttachmentBySessionId(sessionId);
+            return new ResponseEntity<>(attachments, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, "An Error occurred, contact admin"),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Error occurred", e);
+            return new ResponseEntity<>(new RestResponse(true, "An error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 }

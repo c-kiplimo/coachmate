@@ -37,6 +37,7 @@ import { PaymentsComponent } from './account-settings/payments/payments.componen
 import { ProfileComponent } from './account-settings/profile/profile.component';
 import { TemplatesComponent } from './account-settings/templates/templates.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { AttachmentsComponent } from './components/attachments/attachments.component';
 import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
 
 
@@ -63,8 +64,13 @@ const routes: Routes = [
     component: AddClientPageComponent
   },
   {
-    path: 'sessionView/:id',
-    component: sessionViewComponent
+    path: 'attachments',
+    component: AttachmentsComponent
+  },
+  {
+    path:'sessionView/:id',
+    component:sessionViewComponent
+   
   },
   {
     path: 'signin',
