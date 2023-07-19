@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/ApiService';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { ToastrService } from 'ngx-toastr';
 import { style, animate, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-add-objective',
@@ -71,7 +72,8 @@ contractTemplates: any;
     private contractService:ContractsService,
     private formBuilder:FormBuilder,
     private router:Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastrService: ToastrService
     ) { }
 
   ngOnInit(): void {
@@ -248,8 +250,8 @@ contractTemplates: any;
     console.log(data);
     this.contractService.addNewContract(data).subscribe(
       (response: any) => {
-        
-        this.router.navigate(['/contracts']);
+        this.toastrService.success('Contract added successfully');
+        window.history.back();
       }, (error: any) => {
         console.log(error)
       }

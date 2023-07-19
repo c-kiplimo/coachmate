@@ -70,10 +70,11 @@ export class DashboardComponent implements OnInit {
   pageSize: number = 5;
   totalElements: any;
 
+  currentTab = 'sessions';
+
   coachId!: number;
   clientId!: number;
 
-  currentTab: any = 'sessions';
 
 
   constructor(
@@ -117,17 +118,17 @@ export class DashboardComponent implements OnInit {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
-      this.getClients(this.page);
-      // this.getCoaches(this.page);
-      this.getAllContracts(this.page);
+      // this.getClients(this.page);
+      //this.getCoaches(this.page);
+      // this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
       // console.log(this.orgSession);
       // this.getOrgContracts(this.orgId);
-      this.getAllOrgSessions(this.orgId);
+      // this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      // this.getOrgCoaches(this.page);
-      this.getCoachesImpl(this.page)
+      this.getOrgCoaches(this.page);
+      //this.getCoachesImpl(this.page)
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -501,40 +502,40 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  // getOrgCoaches(page: any) {
+  getOrgCoaches(page: any) {
  
-  //     this.loading = true;
-  //     this.page = page;
-  //     //if page is 0, don't subtract 1
-  //     if (page === 0 || page < 0) {
-  //       page = 0;
-  //     } else {
-  //       page = page - 1;
-  //     }
-  //     const options: any = {
-  //       page: page,
-  //       size: this.pageSize,
-  //       status: this.filters.status,
-  //       search: this.filters.searchItem,
-  //       sort: 'id,desc',
-  //     };
+      this.loading = true;
+      this.page = page;
+      //if page is 0, don't subtract 1
+      if (page === 0 || page < 0) {
+        page = 0;
+      } else {
+        page = page - 1;
+      }
+      const options: any = {
+        page: page,
+        size: this.pageSize,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        sort: 'id,desc',
+      };
     
-  //    if(this.userRole == 'ORGANIZATION'){
-  //       options.orgId = this.orgId;
-  //     }
+     if(this.userRole == 'ORGANIZATION'){
+        options.orgId = this.orgId;
+      }
       
-  //     this.clientService.getOrgCoaches(options).subscribe(
-  //       (response) => {
-  //         this.loading = false;
-  //         this.orgCoaches = response.body;
-  //         this.totalElements = +response.headers.get('X-Total-Count');
-  //         console.log('coaches',this.orgCoaches)
-  //       }, (error) => {
-  //         this.loading = false;
-  //         console.log(error)
-  //       }
-  //     )
-  // }
+      this.clientService.getOrgCoaches(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.coachesImpl = response.body;
+          this.totalElements = +response.headers.get('X-Total-Count');
+          console.log('coaches',this.coachesImpl)
+        }, (error) => {
+          this.loading = false;
+          console.log(error)
+        }
+      )
+  }
   getClientContracts(id: any) {
     // const data = {
     //   clientId: id,
