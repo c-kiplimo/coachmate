@@ -217,27 +217,35 @@ export class ClientService {
   }
 
   // ATTACHMENT SERVICES
-  addAttachment(formData: any, options: any, headers: any): Observable<any> {
+  addAttachment(formData: any, options: any): Observable<any> {
     const data = new FormData();
+  
+    // Check if formData has files attached
     if (formData.files) {
-      console.log("file here", formData.files)
       data.append('files', formData.files[0]);
     }
+  
+    // Append session-related data
     data.append('sessionId', formData.sessionId);
+    data.append('coachId', formData.coachId);
+    data.append('orgId', formData.orgId);
+    data.append('clientId', formData.clientId);
+    data.append('createdBy', formData.createdBy);
+  
     return this.http.post<any>(
       this.baseURL + 'attachments/upload',
       data,
       {
         params: options,
         observe: 'response',
-        headers: headers
       }
     );
   }
+  
 
-  getAttachment(params: any): Observable<any> {
+  getAttachment(sessionId: any): Observable<any> {
     return this.http.get(`${this.baseURL}attachments/get-by-session-id`, {
-      params: params,
+      params: { sessionId: sessionId } ,
       observe: 'response'
     })
   }
