@@ -122,6 +122,7 @@ throw new Error('Method not implemented.');
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
       this.coachId = this.user.addedBy.id;
+      this.currentTab = 'attachments';
     }
 
     this.feebackForm = this.formbuilder.group({

@@ -127,7 +127,7 @@
           <div class="col-md-7 col-sm-12">
             <!--Tabs-->
             <div class="d-none d-lg-block">
-              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
                 role="tablist">
                 <li class="nav-item" (click)="toggleTab('feedback')">
                   <a class="nav-link" [class.active]="currentTab === 'feedback'" id="home-tab-just" data-toggle="tab"
@@ -161,7 +161,7 @@
 
         <br>
 
-        <div *ngIf="currentTab === 'feedback'" [@fadeIn]>
+        <div *ngIf="currentTab === 'feedback'">
           <div class="d-none d-lg-block">
             <div class="row justify-content-center">
               <table class="table" *ngIf="feedbacks?.length">
