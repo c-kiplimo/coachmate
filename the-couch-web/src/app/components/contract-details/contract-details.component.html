@@ -3,146 +3,145 @@
   </div>
 </div>
 
-<div class="row justify-content-center" >
-  <!-- <div class="col-3"></div> -->
-  <div class="col-md-8 col-sm-12">
-    <div class="card card-body">
-      <div class="card-header">
-        <h3 class="f-weight fs-6 col">{{ contract.coachingTopic }} Coaching Contract</h3>
-      </div>
-      <div class="row dtl">
-        <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
-        <div class="col dropdown">
-            <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuButton"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Actions</a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <!-- <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editClientModal"
-                (click)="editClient(clients)">
-                <i class="fas fa-edit"></i>
-                Edit
-              </button> -->
-              <li (click)="editContract(contract)" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                data-bs-target="#editContractModal"><i class="fas fa-edit"></i> Edit </a></li>
-              <li (click)="statusState('ACTIVE')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                  data-bs-target="#activateContractModal">Activate </a></li>
-              <li (click)="statusState('SUSPENDED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                  data-bs-target="#suspendContractModal">Suspend </a></li>
-              <li (click)="statusState('CLOSED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                  data-bs-target="#closeContractModal">Close </a></li>
-            </ul>
-        </div>
-      </div>
-          <div class="col-md-12" [@fadeIn]>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title fw-semi-bold  smaller-font ">Contract Id:</span>
-                <p class="value">{{ contract.id }}</p>
-              </div>
-              <div class="d-flex justify-content-between one-detail">
-                <span class="title">Coaching Topic:</span>
-                <span class="value">{{ contract.coachingTopic }}</span>
-              </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Contract Type:</span>
-                <span class="value">{{ contract.coachingCategory }}</span>
-              </div>
-              <div class="d-flex justify-content-between onedetail ">
-                <span class="title">Client Name:</span>
-                <span class="value">{{ contract.client.fullName }}</span>
-              </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Contract Status:</span>
-                <span class="badge-primary" [ngClass]="{
-                  'badge-success': sessions?.sessionStatus === 'CONFIRMED',
-                  'badge-danger': sessions?.sessionStatus === 'CANCELLED',
-                  'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'CONDUCTED'}">{{ contract.contractStatus }}
-                </span>
-              </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Start Date:</span>
-                <span class="value">{{ contract.startDate }}</span>
-              </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">End Date:</span>
-                <span class="value">{{ contract.endDate }}</span>
-              </div>
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Number of Sessions:</span>
-                <span class="value">{{ contract.noOfSessions }}</span>
-              </div>
-              <div *ngIf="contract.coachingCategory === 'INDIVIDUAL'" class="d-flex justify-content-between onedetail">
-                <span class="title">Fees per Session :</span>
-                <span class="value">{{ contract.individualFeesPerSession }}</span>
-              </div>
-              <div  *ngIf="contract.coachingCategory === 'GROUP'" class="d-flex justify-content-between onedetail">
-                <span class="title">Fees per Session:</span>
-                <span class="value">{{ contract.groupFeesPerSession }}</span>
-              </div> 
-              <div class="d-flex justify-content-between onedetail">
-                <span class="title">Total Fees:</span>
-                <span *ngIf="(contract.coachingCategory === 'INDIVIDUAL')"class="value"> 
-                  {{contract.individualFeesPerSession * contract.noOfSessions}}
-                </span>
-                <span *ngIf="(contract.coachingCategory === 'GROUP')"class="value"> 
-                  {{contract.groupFeesPerSession * contract.noOfSessions}}
-                </span>
-              </div>
+  <div class="row justify-content-center" >
+    <div class="col-md-8 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-header">
+            <h5 class=" title f-weight fs-6 col">{{ contract.coachingTopic }}</h5>
           </div>
+          <div class="row dtl">
+            <h4 class="mt-1 fw-semi-bold fs-6 f-weight col">Details</h4>
+            <div class="col">
+              <div class="dropdown">
+                <a class="mt-1 btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">Actions</a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li (click)="editContract(contract)" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+                    data-bs-target="#editContractModal"><i class="fas fa-edit"></i> Edit </a></li>
+                  <li (click)="statusState('ONGOING')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+                      data-bs-target="#activateContractModal">Activate </a></li>
+                  <li (click)="statusState('SIGNED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+                      data-bs-target="#signContractModal">Sign </a></li>
+                  <li (click)="statusState('FINISHED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+                      data-bs-target="#finishContractModal">Finish </a></li>
+                </ul>
+              </div>
+            </div>
+          </div> 
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <div class="col-md-12" [@fadeIn]>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Id</h6>
+              <p class="col calue">{{contract.id}}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Coaching topic</h6>
+              <p class="col value">{{contract.coachingTopic}}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Contract Type:</h6>
+              <p class="col value">{{ contract.coachingCategory }}</p>
+            </div>
+            <div class="row dtl ">
+              <h6 class="title fw-semi-bold col smaller-font">Client Name:</h6>
+              <p class="col value">{{ contract.client.fullName }}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Contract Status:</h6>
+              <p class="col">
+                <span class="badge" [ngClass]="{
+                  'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                  'badge-danger': contract?.contractStatus === 'ONGOING',
+                  'badge-primary': contract?.contractStatus === 'NEW'}">
+                    {{ contract.contractStatus }}
+                </span>
+              </p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Start Date:</h6>
+              <p class="col value">{{ contract.startDate }}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">End Date:</h6>
+              <p class="col value">{{ contract.endDate }}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Number of Sessions:</h6>
+              <p class="col value">{{ contract.noOfSessions }}</p>
+            </div>
+            <div *ngIf="contract.coachingCategory === 'INDIVIDUAL'" class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Fees per Session :</h6>
+              <p class="col value">{{ contract.individualFeesPerSession }}</p>
+            </div>
+            <div *ngIf="contract.coachingCategory === 'GROUP'" class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Fees per Session:</h6>
+              <p class="col value">{{ contract.groupFeesPerSession }}</p>
+            </div> 
+            <div class="row dtl">
+              <h6 class="title fw-semi-bold col smaller-font">Total Fees:</h6>
+              <p *ngIf="(contract.coachingCategory === 'INDIVIDUAL')"class="col value"> 
+                {{contract.individualFeesPerSession * contract.noOfSessions}}
+              </p>
+              <p *ngIf="(contract.coachingCategory === 'GROUP')"class="col value"> 
+                {{contract.groupFeesPerSession * contract.noOfSessions}}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-      <div class="card card-body">
-            <div class="row">
-              <div class="nav-item">
-                <h3 class="text-center card-title " id="contact-tab-just"
-                data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i class="fa-solid fa-calendar-week"
-                style="color: green"></i> Contract Sessions</h3>
-              </div>
-              <div class="col-md-6"></div>
-              <div class="col-md-4"></div>
-              <div *ngIf="sessions.length < contract.noOfSessions" class="col-md-2">
-              <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-outline-success">
-               <i class="fa fa-plus"></i>Add Session
-              </button>
-              </div>
-            </div>
-  
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">session Name</th>
-                    <th scope="col">Session Venue</th>
-                    <th scope="col">Session Type</th>
-                    <th scope="col">session Date</th>
-                    <th scope="col">Starts at</th>
-                    <th scope="col">Ends at</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let session of sessions">
-                    <td>{{ session.name }}</td>
-                    <td>{{ session.sessionVenue }}</td>
-                    <td>{{ session.sessionType }}</td>
-                    <td>{{ session.sessionSchedulesSessionDate }}</td>
-                    <td>{{ session.sessionSchedulesStartTime }}</td>
-                    <td>{{ session.sessionSchedulesEndTime }}</td>
-                    <td class="actions">
-                      <i
-                      (click)="navigateToSessionView(session.id)"
-                      class="fa-solid fa-arrow-up-right-from-square"
-                    ></i>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                <div class="donut multi"></div>
-              </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-                No sessions Found.
-              </p>
+
+  <div class="card card-body">
+    <div class="row">
+      <div class="nav-item">
+        <h3 class="text-center card-title " id="contact-tab-just" data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false">
+          <i class="fa-solid fa-calendar-week" style="color: green"></i> Contract Sessions
+      </h3>
+      </div>
+      <div class="col-md-6"></div>
+      <div class="col-md-4"></div>
+      <div *ngIf="sessions.length < contract.noOfSessions" class="col-md-2">
+        <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-outline-success">
+          <i class="fa fa-plus"></i>Add Session
+        </button>
+      </div>
     </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">session Name</th>
+          <th scope="col">Session Venue</th>
+          <th scope="col">Session Type</th>
+          <th scope="col">session Date</th>
+          <th scope="col">Starts at</th>
+          <th scope="col">Ends at</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let session of sessions">
+          <td>{{ session.name }}</td>
+          <td>{{ session.sessionVenue }}</td>
+          <td>{{ session.sessionType }}</td>
+          <td>{{ session.sessionSchedulesSessionDate }}</td>
+          <td>{{ session.sessionSchedulesStartTime }}</td>
+          <td>{{ session.sessionSchedulesEndTime }}</td>
+          <td class="actions">
+            <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+    </div>
+    <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
+      No sessions Found.
+    </p>
+  </div>
 
   
   <!-- Modal for adding a session -->
@@ -219,7 +218,7 @@
         <div class="modal-body"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()"> Submit</button>
+          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>
@@ -240,24 +239,24 @@
           <form [formGroup]="statusForm">
             <div class="mb-3">
               <label for="exampleInputEmail1">Reason</label>
-              <textarea formControlName="narration" name="narration" class="form-control" id="narration" aria-describedby="narration" placeholder="narration for activating the client">
+              <textarea formControlName="narration" name="narration" class="form-control" id="narration" aria-describedby="narration" placeholder="narration for activating the contract">
               </textarea>
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()"> Submit</button>
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)=" changeContractStatus()"> Submit</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="suspendContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="signContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5">Suspend contract</h1>
+          <h1 class="modal-title fs-5">Sign contract</h1>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -275,13 +274,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()"> Submit</button>
+          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="closeContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="finishContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -303,7 +302,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()"> Submit</button>
+          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>
