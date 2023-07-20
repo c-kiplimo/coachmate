@@ -32,7 +32,6 @@ onLinkChange() {
 throw new Error('Method not implemented.');
 }
   conductedSessionForm!: FormGroup<any>;
-  attachmentForm!: FormGroup;
   attachmentNo: any;
   status!: string;
   orgId: any;
@@ -77,12 +76,10 @@ throw new Error('Method not implemented.');
   userRole: any;
   orgIdId: any;
   createdBy: any;
-  links: any =[];
+  links: any = [];
+  linksObj: any = {};
   files: File[] = [];
-  //Add Link Form
-  Links = {
-    link: ''
-  };
+  addlink: any;
   @ViewChild('attachmentModal', { static: false })
   attachmentModal!: ElementRef;
  
@@ -90,7 +87,6 @@ throw new Error('Method not implemented.');
   OrgData: any;
   orgSession: any;
   currentSession!: any;
-  link!: string;
 
   @ViewChild('stickyMenu')
   menuElement!: ElementRef;
@@ -136,11 +132,7 @@ throw new Error('Method not implemented.');
       availabilityScore: '',
       comments: '',
     });
-    this.attachmentForm = this.formbuilder.group({
-      links: '',
-      files: [[]],
 
-    })
 
     this.getSession();
     this.getFeedback();
@@ -159,7 +151,7 @@ throw new Error('Method not implemented.');
   }
 
   ngAfterViewInit() {
-    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+    this.elementPosition = this.menuElement?.nativeElement?.offsetTop;
   }
   @HostListener('window:scroll', ['$event'])
   handleScroll() {
@@ -188,9 +180,7 @@ throw new Error('Method not implemented.');
     );
   }
   resetForm() {
-    this.link = '';
-    this.links = [];
-    this.files = [];
+    this.addlink = '';
   }
   //get attachment for session
   getAttachment( sessionId: any) {
@@ -198,7 +188,7 @@ throw new Error('Method not implemented.');
     this.loading = true;
     this.clientService.getAttachment(sessionId).subscribe(
       (data: any) => {
-        this.sessions = data.body;
+        this.attachments = data.body;
         console.log(this.attachments);
         this.loading = false;
         console.log("attachments gotten here",this.attachments);
@@ -428,55 +418,45 @@ throw new Error('Method not implemented.');
 
 
   addLink() {
-    // this.Links.link="sdfghjfklsdfg"
-    console.log(this.Links.link); 
-    this.links.push(this.Links.link); 
-    // this.Links.link = ''; 
-    console.log(this.links); 
+    //push object to array
+    let linkObj = {
+      link: this.addlink,
+    };
+    this.links.push(linkObj);
+    this.addlink = '';
   }
   
 
   removeLink(index: number) {
     this.links.splice(index, 1);
   }
+
   addAttachment() {
-    const formData = this.attachmentForm.value;
-    formData.links = this.links;
-    console.log(this.links);
-    // formData.files = this.files;
+    
     const params = {
       sessionId: this.sessionId,
-      coachId: this.coachId,
-    };
-    formData.sessionId = this.sessionId;
-    formData.coachId = this.coachId;
-    formData.orgId =this.orgId;
-    formData.clientId = this.clientId;
-    formData.createdBy = this.createdBy;
-    console.log(formData);
-    // console.log(this.files);
-    // Send formData to backend using a service or API
-    this.clientService.addAttachment(formData,params).subscribe(
+    };    
+    this.clientService.addAttachment(this.links,params).subscribe(
       (response) => {
         console.log(response);
-        // Only show toast notification after successful attachment addition
-        if (response.success) {
-          this.toastrService.success('Attachment added successfully', 'Success!');
-        }
-        // this.attachmentModal.nativeElement.classList.remove('show');
-        // this.attachmentModal.nativeElement.style.display = 'none';
-      },
-      (error) => {
-        console.log(error);
-        this.toastrService.error('Attachment not added', 'Failed!');
+        this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
+        this.getAttachment(this.sessionId);
+        this.attachmentModal.nativeElement.classList.remove('show');
+        this.attachmentModal.nativeElement.style.display = 'none';
       }
     );
   }
 
-
-
-
-
+  deleteAttachment(id: any) {
+    this.clientService.deleteAttachment(id).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Attachment deleted successfully', 'Success!', { timeOut: 8000 });
+        this.getAttachment(this.sessionId);
+      }
+    );
+  }
+  
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -484,16 +464,12 @@ throw new Error('Method not implemented.');
   getSession() {
     this.loading = true;
     this.clientService.getOneSession(this.sessionId).subscribe((res: any) => {
-      console.log("sessionId", this.sessionId);
       this.sessions = res.body;
       console.log(this.sessions);
       this.loading = false;
-
-
     });
-
-
   }
+
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);
