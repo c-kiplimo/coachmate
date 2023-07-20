@@ -215,7 +215,64 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+          <form [formGroup]="updateContractForm">
+            <div class="m-2 col-md-12">
+              <label for="title">Contract Title</label>
+              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
+              class="form-control">
+            </div>
+            <div class="m-2 col-md-12">
+              <label for="category">Contract Category</label>
+              <select class="form-select" name="coachingCategory" id="inputGroupSelect01" formControlName="coachingCategory">
+                <option value="">Select category</option>
+                <option value="INDIVIDUAL">INDIVIDUAL</option>
+                <option value="GROUP">GROUP</option>
+              </select>
+            </div>
+            <div class="m-2 col-md-12">
+              <label class="form-label" for="number">Start Date</label>
+              <input type="date" formControlName="startDate" value="{{contract.startDate}}" id="number" class="form-control" placeholder="date">
+            </div>
+            <div class="m-2 col-md-12">
+              <label class="form-label" for="number">End date</label>
+              <input type="date" formControlName="endDate" value="{{contract.endDate}}" id="number" class="form-control" placeholder="date">
+            </div>
+            <div class="m-2 col-md-12">
+              <label for="number">Number of sessions</label>
+              <input type="number" formControlName="noOfSessions" placeholder="no of sessions" id="number" class="form-control">
+            </div>
+            <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='GROUP'">
+              <label for="number">Group fees per session</label>
+              <input type="number" formControlName="groupFeesPerSession" placeholder="group fees per session" id="number" class="form-control">
+            </div>
+            <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='INDIVIDUAL'">
+              <label for="number">Individual fees per session</label>
+              <input type="number" formControlName="individualFeesPerSession" placeholder="individual fees per session" id="number" class="form-control">
+            </div>
+            <!-- <div class="m-2 col-md-12">
+              <label for="title">Contract Objectives</label>
+              <input type="text" formControlName="objectives" placeholder="Title" id="title" name="coachingTopic"
+              class="form-control">
+            </div>
+            <div class="m-2 col-md-12">
+              <label for="title">Contract Services</label>
+              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
+              class="form-control">
+            </div>
+            <div class="m-2 col-md-12">
+              <label for="title">Contract Practices</label>
+              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
+              class="form-control">
+            </div> -->
+            <div class="m-2 col-md-12">
+              <label for="title">Contract terms and Conditions</label>
+              <input type="text" formControlName="terms_and_conditions" placeholder="terms and conditions" id="title" name="terms_and_conditions"
+              class="form-control">
+            </div>
+            <div class="row p-2"></div>
+          </form>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
@@ -236,13 +293,6 @@
             <p>contract title:</p>
             <span>{{contract.coachingTopic | titlecase}}</span>
           </div>
-          <form [formGroup]="statusForm">
-            <div class="mb-3">
-              <label for="exampleInputEmail1">Reason</label>
-              <textarea formControlName="narration" name="narration" class="form-control" id="narration" aria-describedby="narration" placeholder="narration for activating the contract">
-              </textarea>
-            </div>
-          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -264,13 +314,6 @@
             <p>contract title:</p>
             <span>{{contract.coachingTopic | titlecase}}</span>
           </div>
-          <form [formGroup]="statusForm">
-            <div class="mb-3">
-              <label for="exampleInputEmail1">Reason</label>
-              <textarea formControlName="narration" name="narration" class="form-control" id="narration" aria-describedby="narration" placeholder="narration for activating the client">
-              </textarea>
-            </div>
-          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -292,13 +335,6 @@
             <p>contract title:</p>
             <span>{{contract.coachingTopic | titlecase}}</span>
           </div>
-          <form [formGroup]="statusForm">
-            <div class="mb-3">
-              <label for="exampleInputEmail1">Reason</label>
-              <textarea formControlName="narration" name="narration" class="form-control" id="narration" aria-describedby="narration" placeholder="narration for activating the client">
-              </textarea>
-            </div>
-          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

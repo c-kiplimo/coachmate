@@ -73,9 +73,8 @@ export class ContractDetailsComponent implements OnInit {
   coachSlots: any;
   createSessionClientId: any;
   selectedContract: any;
-  statusForm!: FormGroup;
   contractToBeUpdated: any;
-  updateContract!: FormGroup;
+  updateContractForm!: FormGroup;
 
 
   @ViewChild('yourElement') yourElement!: ElementRef;
@@ -165,7 +164,7 @@ export class ContractDetailsComponent implements OnInit {
 
     });
 
-    this.updateContract = this.formbuilder.group({
+    this.updateContractForm = this.formbuilder.group({
       coachingTopic: '',
       coachingCategory: '',
       startDate:'',
@@ -176,15 +175,9 @@ export class ContractDetailsComponent implements OnInit {
       objectives:'',
       services:'',
       practice:'',
-      note:'',
       terms_and_conditions:'',
     });
 
-    this.statusForm = this.formbuilder.group({
-      narration: 'Test',
-      isSendNotification: true
-    });
-    this.activateCoachForm = this.formbuilder.group({});  // TODO: Create the activateCoachForm 
   }
  
   onContractChange(event: any) {
@@ -335,7 +328,7 @@ editSession(client:any){
     session: any;
     id:any;
     showStatus: any;
-    status: any;
+    status!: string;
 
     editContract(contract: any) {}
 
@@ -347,9 +340,9 @@ editSession(client:any){
       } else if (currentStatus === 'ONGOING') {
         this.showStatus = "ONGOING";
         this.status = "ONGOING";
-      } else if (currentStatus === 'CLOSED') {
-        this.showStatus = "CLOSED";
-        this.status = "CLOSED";
+      } else if (currentStatus === 'FINISHED') {
+        this.showStatus = "FINISHED";
+        this.status = "FINISHED";
       }
     }
 
@@ -359,6 +352,7 @@ editSession(client:any){
         status: this.status,
       }
       console.log(data);
+
       if (this.status === "SIGNED") {
         this.contractService.changeContractStatus(this.contractId, data).subscribe(
           (response) => {
@@ -416,7 +410,6 @@ editSession(client:any){
         );
       }
     }
-
 
   }
         
