@@ -488,13 +488,13 @@ export class DashboardComponent implements OnInit {
       (response) => {
         this.loading = false;
         this.coachesImpl = response.body;
-        for (let client of this.clients) {
+        for (let client of this.coachesImpl) {
           if (client.userRole != 'COACH') {
-            this.clients.splice(this.clients.indexOf(client), 1);
+            this.coachesImpl.splice(this.coachesImpl.indexOf(client), 1);
           }
         }
         this.totalElements = +response.headers.get('X-Total-Count');
-        console.log('clients',this.clients)
+        console.log('clients',this.coachesImpl)
       }, (error) => {
         this.loading = false;
         console.log(error)

@@ -15,6 +15,9 @@ import {SessionsService }  from '../../services/SessionsService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { th } from 'date-fns/locale';
+import { ContractsService } from 'src/app/services/contracts.service';
+import { options } from '@mobiscroll/angular';
 
 
 
@@ -35,11 +38,13 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 export class ContractDetailsComponent implements OnInit {
   addsessionForm!:FormGroup;
   addClient!: FormGroup;
+  activateCoachForm!: FormGroup;
   addSessionForm:any={
 
   }; 
   loading = true;
   itemsPerPage = 20;
+  page: number = 0;
   filters: any = {
     status: '',
     searchItem: '',
@@ -65,8 +70,10 @@ export class ContractDetailsComponent implements OnInit {
   ];
 
   contracts: any;
+  coachSlots: any;
   createSessionClientId: any;
   selectedContract: any;
+  statusForm!: FormGroup;
 
 
   @ViewChild('yourElement') yourElement!: ElementRef;
@@ -75,6 +82,7 @@ export class ContractDetailsComponent implements OnInit {
   numberOfClients!: number; 
   coachSessionData: any;
   coachData: any;
+  coachId: any;
   sessionToBeUpdated: any;
   updateSession: any;
   userDetails: any;
@@ -93,7 +101,7 @@ export class ContractDetailsComponent implements OnInit {
     }
   }
     constructor(
-    private apiService:ClientService,
+    private apiService: ApiService,
     private http: HttpClient,
     private clientService : ClientService,
     private formbuilder: FormBuilder,
@@ -101,6 +109,7 @@ export class ContractDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private sessionService: ClientService,
     private toastrService: ToastrService,
+    private contractService: ContractsService,
    
   ) {}
   ngOnInit(): void {
@@ -113,13 +122,14 @@ export class ContractDetailsComponent implements OnInit {
       const contractId = params['id'];
       console.log("contract id gottten", contractId);
       this.getSessionsBycontractId(contractId);
-
+      this.getCoachSlots(this.page);
   }
   )},
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}'));
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log("CoachData",this.coachData);
+    this.coachId = this.coachData.id;
     this.updateSession = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -150,12 +160,18 @@ export class ContractDetailsComponent implements OnInit {
       sessionBalance:'',
 
     });
+    this.statusForm = this.formbuilder.group({
+      narration: 'Test',
+      isSendNotification: true
+    });
+    this.activateCoachForm = this.formbuilder.group({});  // TODO: Create the activateCoachForm 
   }
  
   onContractChange(event: any) {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
   }
+
   @ViewChild('sessionModal', { static: false })
   sessionModal!: ElementRef;
   addSession () {
@@ -201,11 +217,45 @@ export class ContractDetailsComponent implements OnInit {
       this.sessionModal.nativeElement.style.display = 'none';
       
     });
-    
-    
 }
+
+getCoachSlots(page: number) {
+  const options = {
+    page: page,
+    size: this.itemsPerPage,
+    coachId: this.coachId,
+    sort: 'id,desc',
+    status: false
+  };
+  this.apiService.getCoachSlots(options).subscribe({
+    next: (response) => {
+      this.coachSlots = response.body;
+    }
+  });
+}
+
+getClass(Clients: any) {
+  if (Clients.status === 'SUSPENDED') {
+    return 'badge-warning';
+  } else if (Clients.status === 'ACTIVE') {
+    return 'badge-success';
+  } else {
+    return 'badge-danger';
+  }
+}
+
 @ViewChild('modal', { static: false })
 modal!: ElementRef;
+
+@ViewChild('activateContractModal', { static: false })
+activateContractModal!: ElementRef;
+@ViewChild('editContractModal', { static: false })
+editContractModal!: ElementRef;
+@ViewChild('suspendContractModal', { static: false })
+suspendContractModal!: ElementRef;
+@ViewChild('closeContracttModal', { static: false })
+closeContractModal!: ElementRef;
+
 closeModal() {
   this.modal.nativeElement.style.display = 'none';
   document.body.classList.remove('modal-open');
@@ -246,6 +296,12 @@ editSession(client:any){
       });
     
     }
+
+    selectedSessionSlot(slot: any) {
+      console.log(slot);
+      this.addSessionForm.sessionSchedules = slot;
+    }
+
   deleteSession(id:any, userDetails: any) {
     this.clientService.deleteSession(id).subscribe(response => {
       console.log(response);
@@ -253,15 +309,96 @@ editSession(client:any){
     });
   }
    
-    modalTitle: any;
+    modalTitle = 'Add Session';
     sessionTime: any;
     sessionGoals: any;
     session: any;
     id:any;
-    
-    
+    showStatus: any;
+    status: any;
+
+    editContract(contract: any) {}
+
+    statusState(currentStatus: any) {
+      console.log(currentStatus);
+      if (currentStatus === 'ACTIVE') {
+        this.showStatus = "ACTIVATE";
+        this.status = "ACTIVE";
+      } else if (currentStatus === 'SUSPENDED') {
+        this.showStatus = "SUSPEND";
+        this.status = "SUSPENDED";
+      } else if (currentStatus === 'CLOSED') {
+        this.showStatus = "CLOSE";
+        this.status = "CLOSED";
       }
-    
-    
+    }
+
+    changeContractStatus() {
+      console.log(this.status);
+      if (this.status === "ACTIVE") {
+        const options: any = this.statusForm.value;
+      this.contractService.changeContractStatus(this.contractId, options).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.activateContractModal.nativeElement.classList.remove('show');
+          this.activateContractModal.nativeElement.style.display = 'none';
+
+        }, (error) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.activateContractModal.nativeElement.classList.remove('show');
+          this.activateContractModal.nativeElement.style.display = 'none';
+        }
+      );
+      }
+
+      if (this.status === "SUSPENDED") {
+        const options: any = this.statusForm.value;
+      this.contractService.changeContractStatus(this.contractId, options).subscribe(
+        (res) => {
+          console.log(res);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.suspendContractModal.nativeElement.classList.remove('show');
+          this.suspendContractModal.nativeElement.style.display = 'none';
+        }, (error) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.suspendContractModal.nativeElement.classList.remove('show');
+          this.suspendContractModal.nativeElement.style.display = 'none';
+        }
+      );
+      }
+
+      if (this.status === "CLOSED") {
+        const options: any = this.statusForm.value;
+      this.contractService.changeContractStatus(this.contractId, options).subscribe(
+        (response) => {
+          console.log(response);
+          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.closeContractModal.nativeElement.classList.remove('show');
+          this.closeContractModal.nativeElement.style.display = 'none';
+        }, (error: any) => {
+          console.log(error)
+          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
+          this.closeContractModal.nativeElement.classList.remove('show');
+          this.closeContractModal.nativeElement.style.display = 'none';
+        }
+      );
+      }
+    }
+
+
+  }
+        
 
 
