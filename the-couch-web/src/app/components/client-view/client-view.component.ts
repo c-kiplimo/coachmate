@@ -126,6 +126,7 @@ export class ClientViewComponent implements OnInit {
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
+  coachSlots: any;
 
   constructor(
     private ClientService: ClientService,
@@ -158,6 +159,7 @@ export class ClientViewComponent implements OnInit {
 
     if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
+      this.getCoachSlots(this.page);
     } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
     } else if (this.userRole == 'CLIENT') {
@@ -209,6 +211,22 @@ export class ClientViewComponent implements OnInit {
     });
 
   }
+
+  getCoachSlots(page: number) {
+    const options = {
+      page: page,
+      size: this.itemsPerPage,
+      coachId: this.coachId,
+      sort: 'id,desc',
+      status: false
+    };
+    this.apiService.getCoachSlots(options).subscribe({
+      next: (response) => {
+        this.coachSlots = response.body;
+      }
+    });
+  }
+
   getAllSessions(page: any) {
     this.loading = true;
     this.page = page;
@@ -404,7 +422,7 @@ export class ClientViewComponent implements OnInit {
     this.contractsService.getContracts(options).subscribe(
       (res: any) => {
         console.log("res",res);
-        this.contracts = res.body;              // TODO: remove the stringify
+        this.contracts = res.body;              
         this.totalElements = +res.headers.get('X-Total-Count');
         this.loading = false;
       }, (err: any) => {
@@ -431,6 +449,7 @@ export class ClientViewComponent implements OnInit {
       return 'badge-danger';
     }
   }
+
   @ViewChild('editClientModal', { static: false })
   editClientModal!: ElementRef;
   @ViewChild('activateclientModal', { static: false })
@@ -609,6 +628,12 @@ export class ClientViewComponent implements OnInit {
       }
     )
   }
+
+  selectedSessionSlot(slot: any) {
+    console.log(slot);
+    this.addSessionForm.sessionSchedules = slot;
+  }
+
   addObjective() {
 
     console.log(this.Objectives);

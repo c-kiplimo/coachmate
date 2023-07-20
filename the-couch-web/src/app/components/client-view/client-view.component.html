@@ -123,7 +123,7 @@
       <h6 class="fs-6 f-weight">Notifications</h6>
     </button>
   </div>
-                                                                    <!-- TODO: remove the line below -->
+                                                                   
   <div *ngIf="currentTab === 'sessions'">
     <!-- add session button -->
     <div class="d-flex justify-content-end">
@@ -613,7 +613,7 @@
   </div>
 </div>
 
-<!-- Modal for additing a session -->
+<!-- Modal for adding a session -->
 <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -646,21 +646,6 @@
           </div>
 
           <div class="row p-2">
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">From *</label>
-              <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="sessionStartTime"
-                [(ngModel)]="addSessionForm.sessionStartTime">
-
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">To *</label>
-              <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="sessionEndTime"
-                [(ngModel)]="addSessionForm.sessionEndTime">
-
-            </div>
-
-          </div>
-          <div class="row p-2">
             <div class=" mb-3 col-md-6 ">
               <label class="form-group-text" for="clientType">Session Venue *</label>
               <select class="form-select" id="inputGroupSelect01" name="sessionVenue"
@@ -678,20 +663,28 @@
               </select>
             </div>
           </div>
+
           <div class="row p-2">
             <div class="mb-3 col-md-6">
-              <label for="inputEmail4">Session Date *</label>
-              <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date"
-                name="sessionDate" [(ngModel)]="addSessionForm.sessionDate">
-
+              <p>Available Slots *</p>
+              <div class="form-check" *ngFor="let availableSlot of coachSlots"
+                (click)="selectedSessionSlot(availableSlot)">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                  {{ availableSlot.sessionDate }}
+                  {{ availableSlot.startTime }} -
+                  {{ availableSlot.endTime }}
+                </label>
+              </div>
             </div>
           </div>
+          
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" (click)="closeModal()" data-bs-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success" (click)="addSession()"
-          [disabled]="!addSessionForm.name || !addSessionForm.sessionType || !addSessionForm.sessionStartTime || !addSessionForm.sessionEndTime || !addSessionForm.sessionVenue || !addSessionForm.sessionDate">Add
+          [disabled]="!addSessionForm.name || !addSessionForm.sessionType  || !addSessionForm.sessionVenue">Add
           Session</button>
       </div>
     </div>

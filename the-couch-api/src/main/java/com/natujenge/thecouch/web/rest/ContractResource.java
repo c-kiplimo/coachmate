@@ -79,7 +79,7 @@ public class ContractResource {
     ResponseEntity<Contract> updateContractStatus(
 
                                          @RequestParam("status") ContractStatus contractStatus,
-                                         @PathVariable Long contractId,
+                                         @PathVariable("id") Long contractId,
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
 

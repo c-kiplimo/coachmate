@@ -103,7 +103,7 @@ public class SessionResource {
     @PutMapping(path = "/change-status/{id}")
         // change status active or suspend
     ResponseEntity<SessionDTO> updateSessionStatus(@RequestParam("status") SessionStatus sessionStatus,
-                                                   @PathVariable Long id,
+                                                   @PathVariable("id") Long id,
                                                    @AuthenticationPrincipal User userDetails) {
 
         log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus, userDetails.getId());

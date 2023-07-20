@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { CoachService } from 'src/app/services/CoachService';
+import { ClientService } from 'src/app/services/ClientService';
 
 @Component({
   selector: 'app-coaches',
@@ -34,7 +35,9 @@ export class CoachesComponent implements OnInit {
   updateCoach!: FormGroup;
 
 
-  constructor(private coachService: CoachService, 
+  constructor(
+    private coachService: CoachService, 
+    private ClientService: ClientService,
     private router: Router,
     private toastrService: ToastrService,
     private formbuilder: FormBuilder,) { }
@@ -65,7 +68,7 @@ export class CoachesComponent implements OnInit {
     if(this.userRole == 'ORGANIZATION'){
       this.orgId = this.user.id;
       console.log('ORGANIZATION');
-      // this.getCoaches(this.page);
+      this.getCoaches(this.page);
 
     }
 
@@ -98,36 +101,41 @@ export class CoachesComponent implements OnInit {
 
 getCoaches(page: any) {
   this.loading = true;
-  this.page = page;
-  //if page is 0, don't subtract 1
-  if (page === 0 || page < 0) {
-    page = 0;
-  } else {
-    page = page - 1;
-  }
-  const options: any = {
-    page: page,
-    size: this.pageSize,
-    status: this.filters.status,
-    search: this.filters.searchItem,
-    sort: 'id,desc',
-  };
-
- if(this.userRole == 'ORGANIZATION'){
-    options.orgId = this.orgId;
-  }
-  
-  this.coachService.getCoaches(options).subscribe(
-    (response) => {
-      this.loading = false;
-      this.coaches = response.body;
-      this.totalElements = +response.headers.get('X-Total-Count');
-      console.log('coaches',this.coaches)
-    }, (error) => {
-      this.loading = false;
-      console.log(error)
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
     }
-  )
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+      orgId: this.orgId,
+    };
+    
+    this.ClientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
+      (response) => {
+        this.loading = false;
+        this.coaches = response.body;
+        for (let coach of this.coaches) {
+          if (coach.userRole != 'COACH') {
+            this.coaches.splice(this.coaches.indexOf(coach), 1);
+          }
+        }
+        this.totalElements = +response.headers.get('X-Total-Count');
+        console.log('clients',this.coaches)
+      }, (error) => {
+        this.loading = false;
+        console.log(error)
+      }
+    )
 }
 
 search() {
