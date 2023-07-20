@@ -19,7 +19,6 @@ public class Attachment {
 
     private String link;
 
-
     private LocalDateTime createdAt;
 
     private String createdBy;
