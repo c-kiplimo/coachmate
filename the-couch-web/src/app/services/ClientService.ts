@@ -82,7 +82,7 @@ export class ClientService {
       });
 
   }
-  getOneClient(id: number): Observable<any> {
+  getOneClient(id: any): Observable<any> {
     return this.http.get<any>(this.baseURL + 'users/client/' + id, {
       observe: 'response',
     });
@@ -189,7 +189,7 @@ export class ClientService {
   getOrgCoaches(data: any): Observable<any> {
     console.log("get org coaches reached")
     console.log("data", data)
-    return this.http.get(`${this.baseURL}users/coaches`, { params: data })
+    return this.http.get(`${this.baseURL}users/coaches`, { params: data, observe: 'response' })
   }
 
   getOrgClients(id: any): Observable<any> {
@@ -217,27 +217,21 @@ export class ClientService {
   }
 
   // ATTACHMENT SERVICES
-  addAttachment(formData: any, options: any, headers: any): Observable<any> {
-    const data = new FormData();
-    if (formData.files) {
-      console.log("file here", formData.files)
-      data.append('files', formData.files[0]);
-    }
-    data.append('sessionId', formData.sessionId);
-    return this.http.post<any>(
-      this.baseURL + 'attachments/upload',
-      data,
-      {
-        params: options,
-        observe: 'response',
-        headers: headers
-      }
-    );
+  addAttachment(list: any, options: any): Observable<any> {
+    return this.http.post<any>(this.baseURL + 'attachments/upload', list, {
+      params: options,
+      observe: 'response',
+    });
   }
 
-  getAttachment(params: any): Observable<any> {
+  deleteAttachment(id: any): Observable<any> {
+    return this.http.delete(this.baseURL + `attachments/delete-by-id/` + id,);
+  }
+  
+
+  getAttachment(sessionId: any): Observable<any> {
     return this.http.get(`${this.baseURL}attachments/get-by-session-id`, {
-      params: params,
+      params: { sessionId: sessionId } ,
       observe: 'response'
     })
   }

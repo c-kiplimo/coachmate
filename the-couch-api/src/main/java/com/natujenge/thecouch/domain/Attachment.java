@@ -1,39 +1,35 @@
 package com.natujenge.thecouch.domain;
 
-import lombok.Data;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Table(name = "tbl_sessionResources")
-@Data
+@Getter
+@Setter
 @Entity
-public class Attachments {
+@Table(name = "tbl_attachments")
+public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String  FileName;
-    private String  attachmentNumber;
-    private String  FileType;
-    private Long  FileSize;
-    private  byte[]  FileContent;
-
 
     private String link;
-    private String  linkUrl;
-    private byte[]  file;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
+
     private String createdBy;
+
     private LocalDateTime lastUpdatedAt;
+
     private String lastUpdatedBy;
 
     @ManyToOne
     @JoinColumn(name = "session_id")
-    Session session;
-
+    private Session session;
 
 
 }

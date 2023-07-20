@@ -10,6 +10,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { ApiService } from '../services/ApiService';
 import { FeedbackService } from '../services/feedback.service';
 import { timeout } from 'rxjs';
+import { AttachmentService } from '../services/AttachmentService';
 
 @Component({
   selector: 'app-session-view',
@@ -27,8 +28,11 @@ import { timeout } from 'rxjs';
   ],
 })
 export class sessionViewComponent implements OnInit {
+onLinkChange() {
+throw new Error('Method not implemented.');
+}
   conductedSessionForm!: FormGroup<any>;
-  attachmentForm!: FormGroup;
+  attachmentNo: any;
   status!: string;
   orgId: any;
   organizationId: any;
@@ -38,7 +42,7 @@ export class sessionViewComponent implements OnInit {
   statusForm!: FormGroup;
   modalTitle: any;
   feedbacks: any = [];
-  attachmentss: any = [];
+  attachments: any = [];
   attachment: any;
   coachId: any;
   loadingsession: any;
@@ -72,15 +76,13 @@ export class sessionViewComponent implements OnInit {
   userRole: any;
   orgIdId: any;
   createdBy: any;
-  links: string[] = [];
+  links: any = [];
+  linksObj: any = {};
   files: File[] = [];
-  //Add Link Form
-  Links = {
-    link: ''
-  };
+  addlink: any;
   @ViewChild('attachmentModal', { static: false })
   attachmentModal!: ElementRef;
-  attachments: any;
+ 
   user: any;
   OrgData: any;
   orgSession: any;
@@ -94,6 +96,7 @@ export class sessionViewComponent implements OnInit {
   constructor(
     private clientService: ClientService,
     private http: HttpClient,
+    private attachmentService: AttachmentService,
     private router: Router,
     private route: ActivatedRoute,
     private formbuilder: FormBuilder,
@@ -108,6 +111,8 @@ export class sessionViewComponent implements OnInit {
     this.userRole = this.user.userRole;
     this.route.params.subscribe((params) => {
       this.sessionId = params['id'];
+      const sessionId = params['id'];
+      this.getAttachment(sessionId);
     });
 
     if (this.userRole == 'COACH') {
@@ -127,15 +132,11 @@ export class sessionViewComponent implements OnInit {
       availabilityScore: '',
       comments: '',
     });
-    this.attachmentForm = this.formbuilder.group({
-      links: '',
-      files: [[]],
 
-    })
 
     this.getSession();
     this.getFeedback();
-    this.getAttachment();
+   
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -150,7 +151,7 @@ export class sessionViewComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.elementPosition = this.menuElement.nativeElement.offsetTop;
+    this.elementPosition = this.menuElement?.nativeElement?.offsetTop;
   }
   @HostListener('window:scroll', ['$event'])
   handleScroll() {
@@ -178,20 +179,23 @@ export class sessionViewComponent implements OnInit {
       }
     );
   }
+  resetForm() {
+    this.addlink = '';
+  }
   //get attachment for session
-  getAttachment() {
-    const params = {
-      sessionId: this.sessionId,
-
-    };
-    console.log("session id", params)
-    this.clientService.getAttachment(params).subscribe(
-      (res: any) => {
-        this.attachments = res.body;
-        console.log("attachment is here", this.attachments);
+  getAttachment( sessionId: any) {
+    console.log("session id gotten", sessionId)
+    this.loading = true;
+    this.clientService.getAttachment(sessionId).subscribe(
+      (data: any) => {
+        this.attachments = data.body;
+        console.log(this.attachments);
+        this.loading = false;
+        console.log("attachments gotten here",this.attachments);
       },
-      (error) => {
+      (error: any) => {
         console.log(error);
+        this.loading = false;
       }
     );
   }
@@ -414,54 +418,45 @@ export class sessionViewComponent implements OnInit {
 
 
   addLink() {
-
-    console.log(this.Links);
-    this.links.push(this.Links.link);
-    console.log(this.links);
-    this.Links.link = '';
-    console.log(this.Links);
+    //push object to array
+    let linkObj = {
+      link: this.addlink,
+    };
+    this.links.push(linkObj);
+    this.addlink = '';
   }
+  
 
   removeLink(index: number) {
     this.links.splice(index, 1);
   }
+
   addAttachment() {
-    const boundary = '-------------------------' + Math.random().toString(16).substring(2);
-    const headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data; boundary=' + boundary
-    });
-    const formData = this.attachmentForm.value;
-    formData.links = this.links;
-    formData.files = this.files;
+    
     const params = {
       sessionId: this.sessionId,
-      coachId: this.coachId,
-    };
-    formData.sessionId = this.sessionId;
-    formData.coachId = this.coachId;
-    formData.clientId = this.clientId;
-    formData.createdBy = this.createdBy;
-    console.log(formData);
-    console.log(this.files);
-    // Send formData to backend using a service or API
-    this.clientService.addAttachment(formData, params, headers).subscribe(
+    };    
+    this.clientService.addAttachment(this.links,params).subscribe(
       (response) => {
         console.log(response);
         this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
+        this.getAttachment(this.sessionId);
         this.attachmentModal.nativeElement.classList.remove('show');
         this.attachmentModal.nativeElement.style.display = 'none';
-      },
-      (error) => {
-        console.log(error);
-        this.toastrService.error('Attachment not added', 'Failed!', { timeOut: 8000 });
       }
     );
   }
 
-
-
-
-
+  deleteAttachment(id: any) {
+    this.clientService.deleteAttachment(id).subscribe(
+      (response) => {
+        console.log(response);
+        this.toastrService.success('Attachment deleted successfully', 'Success!', { timeOut: 8000 });
+        this.getAttachment(this.sessionId);
+      }
+    );
+  }
+  
   toggleTab(tab: string): void {
     this.currentTab = tab;
   }
@@ -469,16 +464,12 @@ export class sessionViewComponent implements OnInit {
   getSession() {
     this.loading = true;
     this.clientService.getOneSession(this.sessionId).subscribe((res: any) => {
-      console.log("sessionId", this.sessionId);
       this.sessions = res.body;
       console.log(this.sessions);
       this.loading = false;
-
-
     });
-
-
   }
+
   viewNotification(notification: any): void {
     this.notification = notification;
     console.log(this.notification);

@@ -82,7 +82,7 @@ export class ClientViewComponent implements OnInit {
 
   notificationOptions = [false, true];
   notificationType = ['sms', 'email'];
-  loadingClient = true;
+  loadingClient = false;
   totalLength: any;
   itemsPerPage: number = 20;
   open = false;
@@ -110,7 +110,18 @@ export class ClientViewComponent implements OnInit {
   sessionModal: any;
   contractId: any;
   contract: any;
-  contractForm!: FormGroup;
+  contractForm = {
+    coachId: '',
+    coachingCategory: '',
+    coachingTopic: '',
+    clientId: '',
+    startDate: '',
+    endDate: '',
+    groupFeesPerSession: '',
+    individualFeesPerSession: '',
+    noOfSessions: '',
+    objectives: [] as any,
+  }
   numberOfClients!: number;
   numberOfSessions!: number;
   numberOfContracts!: number;
@@ -169,19 +180,19 @@ export class ClientViewComponent implements OnInit {
     this.getClientData(this.clientId);
 
     if (this.userRole == 'COACH') {
-      this.contractForm = this.formbuilder.group(
-        {
-          coachingCategory: '',
-          coachingTopic: '',
-          clientId: '',
-          startDate: '',
-          endDate: '',
-          groupFeesPerSession: '',
-          individualFeesPerSession: '',
-          noOfSessions: '',
-          objectives: '',
-        }
-      );
+      // this.contractForm = this.formbuilder.group(
+      //   {
+      //     coachingCategory: '',
+      //     coachingTopic: '',
+      //     clientId: '',
+      //     startDate: '',
+      //     endDate: '',
+      //     groupFeesPerSession: '',
+      //     individualFeesPerSession: '',
+      //     noOfSessions: '',
+      //     objectives: '',
+      //   }
+      // );
       this.updateClient = this.formbuilder.group({
 
         firstName: ' ',
@@ -602,8 +613,8 @@ export class ClientViewComponent implements OnInit {
   }
   addContract() {
     console.log('here');
-    console.log(this.contractForm.value);
-    var data = this.contractForm.value;
+    console.log(this.contractForm);
+    var data = this.contractForm;
     data.coachId = this.coachData.id;
     data.objectives = this.objectives;
     data.clientId = this.clientId;
