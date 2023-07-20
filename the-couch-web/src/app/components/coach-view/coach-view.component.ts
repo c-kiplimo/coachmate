@@ -102,7 +102,7 @@ coach: any;
   activateclientModal: any;
   suspendclientModal: any;
   editClientModal: any;
-  //coachToBeUpdated: any;
+  // coachToBeUpdated: any;
   constructor(
     private ClientService: ClientService,
     private router: Router,
