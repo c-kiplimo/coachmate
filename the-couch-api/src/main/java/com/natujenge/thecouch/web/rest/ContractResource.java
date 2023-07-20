@@ -77,7 +77,6 @@ public class ContractResource {
 
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<Contract> updateContractStatus(
-
                                          @RequestParam("status") ContractStatus contractStatus,
                                          @PathVariable("id") Long contractId,
                                          @AuthenticationPrincipal User userDetails) {

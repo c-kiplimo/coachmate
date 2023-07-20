@@ -28,11 +28,10 @@ export class ContractsService {
     );
   }
 
-  changeContractStatus(contractId: any, options: any): Observable<any> {
-    return this.http.put<any>(this.baseURL + 'contracts/changeContractStatus/' + contractId,
+  changeContractStatus(contractId: any, data: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + 'contracts/changeContractStatus/' + contractId +"?status=" + data.status,
     {
       observe: 'response',
-      params: options,
     });
   }
 

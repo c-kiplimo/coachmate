@@ -40,11 +40,13 @@
     padding: 10px;
 }
 .title {
-    margin-left: 10px;
+  margin-left: 10px;
+  font-size: medium;
    
 }
 .value {
-    margin-left: 10px;
+  margin-left: 10px;
+  font-size: medium;
 }
 .onedetail {
     padding: 10px;
@@ -164,8 +166,5 @@
   }
   .badge-danger {
     background-color: red !important;
-  }
-  .badge-primary {
-    background-color: blue !important;
   }
   

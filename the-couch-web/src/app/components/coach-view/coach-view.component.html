@@ -90,226 +90,237 @@
 
 <br>
 
-<div class="card details-card">
-  <div class="d-none d-lg-block">
-    <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
-      <li class="nav-item" (click)="toggleTab('sessions')">
-        <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
-          role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-calendar-week"
-            style="color: green"></i> Sessions</a>
-      </li>
-      <li class="nav-item" (click)="toggleTab('contracts')">
-        <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
-          data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
-            class="fa-solid fa-file-contract" style="color: green"></i> Contracts</a> 
-      </li>
-      <li class="nav-item" (click)="toggleTab('payments')">
-        <a class="nav-link" [class.active]="currentTab === 'payments'" id="contact-tab-just"
-          data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
-            class="fa-solid fa-wallet" style="color: green"></i> Payments</a> 
-      </li>
-      <li class="nav-item" (click)="toggleTab('notifications')">
-        <a class="nav-link" [class.active]="currentTab === 'notifications'" id="contact-tab-just"
-          data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
-            class="far fa-comment-alt" style="color: green"></i> Notifications</a> 
-      </li>
-    </ul>
-  </div>
-
-  <div *ngIf="currentTab === 'sessions'" >
-        <!-- add session button -->
-    <div class="d-flex justify-content-end">
-          <!-- <button class="btn btn-success" *ngIf="!loading" data-bs-toggle="modal" data-bs-target="#sessionModal">
-            Add Session
-          </button> -->
-          <div>
-            <button type="button" *ngIf="!loading" routerLink="/addSession" class="btn btn-outline-success">
-              <i class="fa fa-plus"></i> Add Session
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row justify-content-center">
+          <div class="col-md-7 col-sm-12">
+            <div class="d-none d-lg-block">
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                <li class="nav-item" (click)="toggleTab('sessions')">
+                  <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                      style="color: green"></i> Sessions
+                    </a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('contracts')">
+                  <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa-solid fa-file-contract" style="color: green"></i> Contracts
+                    </a> 
+                </li>
+                <li class="nav-item" (click)="toggleTab('payments')">
+                  <a class="nav-link" [class.active]="currentTab === 'payments'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fas fa-money-check-alt" style="color: green"></i> Payments
+                    </a> 
+                </li>
+                <li class="nav-item" (click)="toggleTab('notifications')">
+                  <a class="nav-link" [class.active]="currentTab === 'notifications'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa fa-bell" style="color: green"></i> Notifications
+                    </a> 
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="currentTab === 'sessions'" >
+          <!-- add session button -->
+      <div class="d-flex justify-content-end">
+            <!-- <button class="btn btn-success" *ngIf="!loading" data-bs-toggle="modal" data-bs-target="#sessionModal">
+              Add Session
+            </button> -->
+            <div>
+              <button type="button" *ngIf="!loading" routerLink="/addSession" class="btn btn-outline-success">
+                <i class="fa fa-plus"></i> Add Session
+              </button>
+            </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table" *ngIf="sessions?.length">
+            <thead>
+              <tr>
+                <th scope="col">session Name</th>
+                <th scope="col">Contract</th>
+                <th scope="col">Session Type</th>
+                <th scope="col">Session Venue</th>
+                <th scope="col">session Date</th>
+                <th scope="col">Starts at</th>
+                <th scope="col">Ends at</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let session of sessions "> <!-- | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements } -->
+                <td>{{ session.name }}</td>
+                <td>{{ session.contractCoachingTopic }}</td> 
+                <td>{{ session.sessionType }}</td>
+                <td>{{ session.sessionVenue }}</td>
+                <td>{{ session.sessionSchedulesSessionDate }}</td>
+                <td>{{ session.sessionSchedulesStartTime }}</td>
+                <td>{{ session.sessionSchedulesEndTime }}</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'badge-success': session.sessionStatus === 'CONFIRMED',
+                    'badge-danger': session.sessionStatus === 'CANCELLED',
+                    'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                  }">{{ session.sessionStatus }}</span>
+                </td>
+                <td class="view">
+                  <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
+            No sessions Found.
+          </p>
+        </div>
+      </div>
+        </div>
+        <div *ngIf="currentTab === 'contracts'" >
+          <!-- add contract button -->
+          <div class="d-flex justify-content-end">
+            <button *ngIf="!loading" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addContractModal">
+              <i class="fa fa-plus"></i> Add contract
             </button>
           </div>
-    </div>
-    
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="sessions?.length">
-          <thead>
-            <tr>
-              <th scope="col">session Name</th>
-              <th scope="col">Contract</th>
-              <th scope="col">Session Type</th>
-              <th scope="col">Session Venue</th>
-              <th scope="col">session Date</th>
-              <th scope="col">Starts at</th>
-              <th scope="col">Ends at</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let session of sessions "> <!-- | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements } -->
-              <td>{{ session.name }}</td>
-              <td>{{ session.contractCoachingTopic }}</td> 
-              <td>{{ session.sessionType }}</td>
-              <td>{{ session.sessionVenue }}</td>
-              <td>{{ session.sessionSchedulesSessionDate }}</td>
-              <td>{{ session.sessionSchedulesStartTime }}</td>
-              <td>{{ session.sessionSchedulesEndTime }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                  'badge-success': session.sessionStatus === 'CONFIRMED',
-                  'badge-danger': session.sessionStatus === 'CANCELLED',
-                  'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
-                }">{{ session.sessionStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+          <div class="row" >
+            <div class="col-md-12">
+              <table class="table table-sm" *ngIf="contracts.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Coaching Category</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">No Of Sessions</th>
+                    <th scope="col">Amount Due</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let contract of contracts">
+                    <td>{{ contract.coachingTopic }}</td>
+                    <td>{{ contract.coachingCategory }}</td>
+                    <td>{{ contract.clientFullName }}</td>
+                    <td>{{ contract.startDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract.endDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract.noOfSessions }}</td>
+                    <td>{{ contract?.amountDue }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                        'badge-danger': contract?.contractStatus === 'ONGOING',
+                        'badge-primary': contract?.contractStatus === 'NEW'
+                      }">{{ contract?.contractStatus }}</span>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+            <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
+              No contracts Found.
+            </p>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-          No sessions Found.
-        </p>
-      </div>
-    </div>
-  </div>
-  
-  <div *ngIf="currentTab === 'contracts'" >
-    <!-- add contract button -->
-    <div class="d-flex justify-content-end">
-      <button *ngIf="!loading" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addContractModal">
-        <i class="fa fa-plus"></i> Add contract
-      </button>
-    </div>
-    <div class="row" >
-      <div class="col-md-12">
-        <table class="table table-sm" *ngIf="contracts.length">
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Coaching Category</th>
-              <th scope="col">Client</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">End Date</th>
-              <th scope="col">No Of Sessions</th>
-              <th scope="col">Amount Due</th>
-              <th scope="col">Status</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let contract of contracts">
-              <td>{{ contract.coachingTopic }}</td>
-              <td>{{ contract.coachingCategory }}</td>
-              <td>{{ contract.clientFullName }}</td>
-              <td>{{ contract.startDate | date : "MMM d, y" }}</td>
-              <td>{{ contract.endDate | date : "MMM d, y" }}</td>
-              <td>{{ contract.noOfSessions }}</td>
-              <td>{{ contract?.amountDue }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                  'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
-                  'badge-danger': contract?.contractStatus === 'ONGOING',
-                  'badge-primary': contract?.contractStatus === 'NEW'
-                }">{{ contract?.contractStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-        <div class="donut multi"></div>
-      </div>
-      <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
-        No contracts Found.
-      </p>
-    </div>
-  </div>
-
-  <div *ngIf="currentTab === 'payments'">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="payments.length">
-          <thead>
-            <th scope="col">Paid by</th>
-            <th scope="col">Date paid</th>
-            <th scope="col">Amount Deposited</th>
-            <th scope="col">Wallet Balance</th>
-            <th scope="col">Payment ref</th>
-            <th scope="col">Actions</th>
-          </thead> 
-          <tbody>
-            <tr *ngFor="let payment of payments | keyvalue" >
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.client.fullName}} </td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.LastUpdatedAt| date : " hh:mm a" }}</td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.amountDeposited}}</td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
-              <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.extPaymentRef }}</td>
-              <td class="view" *ngIf="payment.value.walletBalance != 0">
-                <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)" class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-          <div class="donut multi"></div>
+      
+        <div *ngIf="currentTab === 'payments'">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="payments.length">
+                <thead>
+                  <th scope="col">Paid by</th>
+                  <th scope="col">Date paid</th>
+                  <th scope="col">Amount Deposited</th>
+                  <th scope="col">Wallet Balance</th>
+                  <th scope="col">Payment ref</th>
+                  <th scope="col">Actions</th>
+                </thead> 
+                <tbody>
+                  <tr *ngFor="let payment of payments | keyvalue" >
+                    <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.client.fullName}} </td>
+                    <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.LastUpdatedAt| date : " hh:mm a" }}</td>
+                    <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.amountDeposited}}</td>
+                    <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.walletBalance }}</td>
+                    <td *ngIf="payment.value.walletBalance != 0">{{ payment.value.extPaymentRef }}</td>
+                    <td class="view" *ngIf="payment.value.walletBalance != 0">
+                      <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)" class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !payments.length">
+                No Payments Found.
+              </p>
+            </div>
+          </div>  
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !payments.length">
-          No Payments Found.
-        </p>
-      </div>
-    </div>  
-  </div>
-
-  <div *ngIf="currentTab === 'notifications'">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="notifications.length">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Source Address</th>
-              <th>Destination Address</th>
-              <th>Content</th>
-              <th>Sent At</th>
-              <th>Mode</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let notification of notifications">
-              <td>{{ notification?.subject }}</td>
-              <td>{{ notification?.sourceAddress}}</td>
-              <td>{{ notification?.destinationAddress}}</td>
-              <td>{{ notification?.content}}</td>
-              <td>{{ notification?.sentAt | date : "MMM d, y " }}</td>
-              <td>{{ notification?.notificationMode}}</td>
-              <td>{{ notification?.sendReason}}</td>
-              <td>{{ notification?.status}}</td>
-              <td class="view">
-                <a><i data-bs-toggle="modal" data-bs-target="#notificationModal" (click)="viewNotification(notification)" class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-          <div class="donut multi"></div>
+      
+        <div *ngIf="currentTab === 'notifications'">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="notifications.length">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Source Address</th>
+                    <th>Destination Address</th>
+                    <th>Content</th>
+                    <th>Sent At</th>
+                    <th>Mode</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let notification of notifications">
+                    <td>{{ notification?.subject }}</td>
+                    <td>{{ notification?.sourceAddress}}</td>
+                    <td>{{ notification?.destinationAddress}}</td>
+                    <td>{{ notification?.content}}</td>
+                    <td>{{ notification?.sentAt | date : "MMM d, y " }}</td>
+                    <td>{{ notification?.notificationMode}}</td>
+                    <td>{{ notification?.sendReason}}</td>
+                    <td>{{ notification?.status}}</td>
+                    <td class="view">
+                      <a><i data-bs-toggle="modal" data-bs-target="#notificationModal" (click)="viewNotification(notification)" class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !notifications?.length">
+                No Notifications Found.
+              </p>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !notifications?.length">
-          No Notifications Found.
-        </p>
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- suspend coach modal -->
 <div class="modal fade bd-example-modal-lg" id="suspendclientModal" tabindex="-1" aria-labelledby="exampleModalLabel"
