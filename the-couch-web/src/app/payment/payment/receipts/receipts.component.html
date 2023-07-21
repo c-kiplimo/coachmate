@@ -21,8 +21,8 @@
   <div class="col-md-4">
     <div class="input-group mb-3">
       <input type="text" class="form-control" name="customer"  aria-describedby="button-addon2"
-        [(ngModel)]="filters.searchItem" placeholder="Client Name and Date '2000-10-31'"/>
-      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="filterByClientNameAndDate()"
+        [(ngModel)]="filters.searchItem" placeholder="Client Name "/>
+      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="filterByClientName()"
         (click)="getPaymentsByClientId(this.ClientId)" (click)="getPaymentsByOrganizationId()">Search</button>
     </div>
   </div>

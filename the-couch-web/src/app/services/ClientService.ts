@@ -259,8 +259,8 @@ export class ClientService {
     })
   }
 
-  filterByClientNameAndDate(options:any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByClientNameAndDate`, {
+  filterByClientName(options:any): Observable<any> {
+    return this.http.get(`${this.baseURL}wallet/filterReceipts`, {
       params: options,
       observe: 'response'
     })
