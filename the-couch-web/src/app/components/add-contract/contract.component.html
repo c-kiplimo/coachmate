@@ -22,24 +22,20 @@
         <label for="clientId" class="form-label">Select Client</label>
         <select class="form-select" aria-label="Default select example" formControlName="clientId" required="true">
           <option selected>Select Client you want to make contract with</option>
-
           <!--Loop through clients and form options-->
           <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}
           </option>
-
           <!--Render the create client button if no clients are found-->
-
           <div *ngIf="!clients">
-            <button class="btn btn-success" routerLink="/addclient">
+            <button class="btn btn-outline-success" routerLink="/addclient">
               Create Client
             </button>
           </div>
         </select>
-
-
       </div>
     </div>
     <br>
+
     <h3>Schedule & Fees</h3>
     <div class="row">
       <div class="col">
@@ -73,18 +69,16 @@
         <br>
         <div class="row mb-3">
           <div class="col-12"></div>
-  
           <div class="row">
             <div class="col-6">
               <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Goal"
                 formControlName="objectives" />
             </div>
             <div class="col-6">
-              <button type="button" class="btn btn-success" (click)="addObjective()">
+              <button type="button" class="btn btn-outline-success" (click)="addObjective()">
                 <i class="fa-solid fa-user-plus"></i>Add goal
               </button>
             </div>
-  
           </div>
         </div>
         <div class="row">
@@ -124,14 +118,12 @@
       </div>
     </div>
 
-
-
-
     <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms" aria-expanded="false"
       aria-controls="collapseTerms" (click)="toggleEditingSettings()" [disabled]="disableButton">
       <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
     </button>
-    <br />
+    <br/>
+
     <div class="collapse" id="collapseTerms">
       <div class="row">
         <div class="col-10">
@@ -147,6 +139,7 @@
       </div>
     </div>
     <br>
+
     <div class="input-group mb-3">
       <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePractice"
         aria-expanded="false" aria-controls="collapsePractice" (click)="toggleEditingSettings()"
@@ -179,13 +172,16 @@
       </div>
     </div>
     <br>
+  </form>
+
     <div class="row">
       <div class="col-md-12">
         <div class="d-flex  justify-content-between ">
           <p></p>
-          <button type="button" (click)="addContract()" class="btn btn-success ">
+          <button type="button" (click)="addContract()" class="btn btn-outline-success ">
             Submit
           </button>
         </div>
       </div>
     </div>
+</div>

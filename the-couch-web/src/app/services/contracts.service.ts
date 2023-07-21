@@ -21,7 +21,7 @@ export class ContractsService {
   }
 
   getContracts(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}contracts/filter`, {
+    return this.http.get(this.baseURL + 'contracts/filter', {
       observe: 'response',
       params: options,
     }

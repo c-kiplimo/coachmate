@@ -19,7 +19,6 @@
           Welcome manage your finances here...
         </span>
       </h2>
-      
     </div>
   </div>
   <div class="row  d-flex justify-content-between align-items-center  ">
@@ -27,24 +26,21 @@
     <div class="card-body">
       <h6 class="card-title">Not Paid</h6>
       <h3 class="card-text fw-bold">{{totalDue}} USD</h3>
-      <button type="button" routerLink="/record-payment" class="btn addbtn"><i class="fa fa-plus"></i> Record Payment</button>
-      
+      <button type="button" routerLink="/record-payment" class="btn btn-outline-success"><i class="fa fa-plus"></i> Record Payment</button>
     </div>
 </div>
 <div class="col-4 card text-center top-cards" >
   <div class="card-body">
     <h6 class="card-title">Paid</h6>
     <h3 class="card-text fw-bold">{{amountDeposited}} USD</h3>
-    <button type="button" routerLink="/receipts" class="btn addbtn"><i class="fa fa-plus"></i> See Receipts</button>
-    
+    <button type="button" routerLink="/receipts" class="btn btn-outline-success"><i class="fa fa-plus"></i> See Receipts</button>
   </div>
 </div>
   <div class="col-4 card text-center top-cards" >
       <div class="card-body">
         <h6 class="card-title">Paid Invoices</h6>
         <h3 class="card-text fw-bold">{{invoicesPaid}}%</h3>
-        <button type="button" routerLink="/statement" class="btn addbtn"><i class="fa fa-plus"></i> View Statement</button>
-        
+        <button type="button" routerLink="/statement" class="btn btn-outline-success"><i class="fa fa-plus"></i> View Statement</button>   
       </div>
   </div>
   </div>

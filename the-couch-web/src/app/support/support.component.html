@@ -103,41 +103,18 @@
   <div class="row">
     <div class="col-6">
       <h4 class="sub-titles">Contact Form</h4>
-      <form
-          class="form"
-          [formGroup]="contactForm"
-          (ngSubmit)="contactUsMessage()"
-          ngNativeValidate
-        >
+      <form class="form" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate>
           <div class="row mb-5">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="form_name">Name *</label>
-                <input
-                  formControlName="name"
-                  id="form_name"
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  placeholder="Full name"
-                  required
-                  data-error="Firstname is required."
-                />
+                <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required="true" data-error="Firstname is required."/>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="form_email">Email *</label>
-                <input
-                  formControlName="email"
-                  id="form_email"
-                  type="email"
-                  name="email"
-                  class="form-control"
-                  placeholder="example@mail.com"
-                  data-error="Valid email is required."
-                  required
-                />
+                <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" data-error="Valid email is required."required="true"/>
               </div>
             </div>
           </div>
@@ -145,22 +122,12 @@
             <div class="col-md-12">
               <div class="form-group mt-2">
                 <label for="form_message">Message *</label>
-                <textarea
-                  formControlName="message"
-                  id="form_message"
-                  name="message"
-                  class="form-control"
-                  placeholder="Your message here"
-                  rows="2"
-                  required
-                  data-error="Please, leave us a message."
-                ></textarea>
+                <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="2" required="true" data-error="Please, leave us a message."></textarea>
               </div>
             </div>
 <br>
             <div class="text-center">
-              <button type="submit" class="btn btn-signup mt-3 theEnd btn-success"    [disabled]="!contactForm.valid
-              ">
+              <button type="submit" class="btn mt-3 theEnd btn-outline-success"    [disabled]="!contactForm.valid">
                 Send Message
               </button>
             </div>
@@ -178,7 +145,7 @@
       </p>
       <br>
       <div class="text-center">
-        <button type="submit" class="btn btn-signup mt-3 theEnd btn-success" >
+        <button type="submit" class="btn mt-3 btn-outline-success" >
           Live Chat
         </button>
       </div>

@@ -3,13 +3,10 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div
-        class="card card-table d-flex "
-      >
+        class="card card-table d-flex">
         <div class="">
           <h1 class="modal-title fs-5 text-center"  id="exampleModalLabel">Add New Coach</h1>
-          </div>
-        
-
+        </div>
         <form>
           <div class="row p-2">
             <div class="mb-3 col-md-6">
@@ -54,7 +51,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="newCoach()" [disabled]="
+            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="newCoach()" [disabled]="
             !addCoach.firstName||
             !addCoach.lastName||
             !addCoach.email||

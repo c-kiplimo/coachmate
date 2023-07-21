@@ -150,8 +150,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">{{ modalTitle }}</h5>
-          <button type="button" class="close"class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
           </button>
         </div>
         <div class="modal-body">
@@ -197,7 +197,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button"  class="btn btn-cancel" (click)="closeModal()"data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success"(click)="addSession()">Add Session</button>
+                <button type="button" class="btn btn-outline-success"(click)="addSession()">Add Session</button>
               </div>
             </div>
           </form>
@@ -206,13 +206,14 @@
     </div>
   </div> 
     
+  <!-- Modal for editing contracts -->
   <div class="modal fade" id="editContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Edit contract</h5>
-          <button type="button" class="close"class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
           </button>
         </div>
         <div class="modal-body">
@@ -274,19 +275,20 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Modal for activating a contract  -->
   <div class="modal fade" id="activateContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5">Activate contract</h1>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex justify-content-between">
@@ -295,19 +297,20 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)=" changeContractStatus()"> Submit</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Modal for signing a contract  -->
   <div class="modal fade" id="signContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5">Sign contract</h1>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex justify-content-between">
@@ -316,19 +319,20 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Modal for terminating  a contract  -->
   <div class="modal fade" id="finishContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5">Terminate contract</h1>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex justify-content-between">
@@ -337,7 +341,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>

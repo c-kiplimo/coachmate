@@ -28,7 +28,7 @@
   </div>
 
   <div class="col-md-2">
-    <button type="button" routerLink="/record-payment" class="btn btn-success" *ngIf="this.userRole != 'CLIENT'">
+    <button type="button" routerLink="/record-payment" class="btn btn-outline-success" *ngIf="this.userRole != 'CLIENT'">
       <i class="fa fa-plus"></i>Add Payment
     </button>
   </div>
@@ -79,7 +79,6 @@
 <div class="modal fade" id="invoicemodal" tabindex="-1" role="dialog" aria-labelledby="receiptModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-
       <div class="modal-body" id="invoice">
         <div class="m-2">
           <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 300px;
@@ -119,13 +118,11 @@
               <span class="value">{{ payment.walletBalance}}</span>
             </div>
           </div>
-
         </div>
-
       </div>
       <div class="modal-footer">
-        <button type="button" class="close btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="download btn-add" (click)="savePdf()">
+        <button type="button" class="close btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button class="download btn-outline-success" (click)="savePdf()">
           <i class="fa fa-download"></i>
           Download
         </button>

@@ -54,19 +54,6 @@
     border-radius: 8px;
     border: 1px solid #0a0a0a;
   }
-
-
- 
-  .modal-header{
-    background-color: #1B3A27;
-  
-  
-  }
-
-  .modal-title{
-    background-color: #1B3A27;
-    color: white
-  }
   input[type=checkbox] {
     transform: scale(1.5);
     zoom: 1.5;

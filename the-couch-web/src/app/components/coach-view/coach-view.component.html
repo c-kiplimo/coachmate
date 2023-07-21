@@ -323,15 +323,12 @@
 </div>
 
 <!-- suspend coach modal -->
-<div class="modal fade bd-example-modal-lg" id="suspendclientModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="suspendclientModal" tabindex="-1" aria-labelledby="exampleModalLabel" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-x1">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Suspend Coach
-        </h1>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title">Suspend Coach</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -343,10 +340,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
+        <button type="button" class="btn btn-outline-success" (click)=" changeCoachStatus()">
           Submit
         </button>
       </div>
@@ -355,14 +352,14 @@
 </div>
 
 <!-- Close coach modal -->
-<div class="modal fade bd-example-modal-lg" id="closeclientModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="closeclientModal" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-x1">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">Close coach</h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -381,10 +378,10 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
+        <button type="button" class="btn btn-outline-success" (click)=" changeCoachStatus()">
           Submit
         </button>
       </div>
@@ -397,11 +394,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Activate coach
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5">Activate coach</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -420,10 +414,10 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-secondary btn-success" (click)=" changeCoachStatus()">
+        <button type="button" class="btn btn-outline-success" (click)=" changeCoachStatus()">
           Submit
         </button>
       </div>
@@ -437,8 +431,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Details</h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="payment">
         <div class="d-flex justify-content-between">
@@ -478,7 +471,7 @@
           <span>{{ payment.payment.value.LastUpdatedAt| date : " hh:mm a"}}</span>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
             Close
           </button>
         </div>
@@ -496,7 +489,7 @@
           Notification Details
         </h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
@@ -533,8 +526,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
@@ -574,7 +567,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" (click)="updateCoachDetails(coachToBeUpdated.id)">Save
+        <button type="button" class="btn btn-outline-success" (click)="updateCoachDetails(coachToBeUpdated.id)">Save
           changes</button>
       </div>
     </div>
