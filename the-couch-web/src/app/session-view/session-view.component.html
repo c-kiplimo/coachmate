@@ -694,9 +694,10 @@
 
         </form>
       </div>
+   
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
           changes</button>
       </div>
     </div>
