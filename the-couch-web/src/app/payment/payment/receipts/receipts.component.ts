@@ -90,7 +90,7 @@ payment: any;
       }
     )
   }
-  filterByClientNameAndDate() {
+  filterByClientName() {
     
     const options = {
       page: 1,
@@ -99,7 +99,7 @@ payment: any;
   
     };
     console.log('options', options);
-    this.ClientService.filterByClientNameAndDate(options).subscribe(
+    this.ClientService.filterByClientName(options).subscribe(
       (response) => {
         this.loading = false;
         this.payments = response.body;
