@@ -369,11 +369,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Suspend Client
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5">Suspend Client</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -385,10 +382,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-add" (click)=" changeClientStatus()">
+        <button type="button" class="btn btn-outline-success" (click)=" changeClientStatus()">
           Submit
         </button>
       </div>
@@ -403,8 +400,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">Close client</h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -423,11 +419,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)=" changeClientStatus()">
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)=" changeClientStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -439,11 +435,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Activate client
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5">Activate client</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -460,11 +453,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)="changeClientStatus()">
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)="changeClientStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -477,8 +470,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Details</h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="payment">
         <div class="d-flex justify-content-between">
@@ -518,7 +510,7 @@
           <span>{{ payment.payment.value.LastUpdatedAt| date : " hh:mm a"}}</span>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
             Close
           </button>
         </div>
@@ -532,11 +524,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Notification Details
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Notification Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
@@ -573,8 +562,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
@@ -633,7 +622,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
+        <button type="button" class="btn btn-outline-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
           changes</button>
       </div>
     </div>

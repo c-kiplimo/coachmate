@@ -141,24 +141,16 @@
     background-color: #1B3A27;
     color: white;
   }
-  .modal-header{
-    background-color: #1B3A27;
-  
-  
-  }
+
   .f-weight{
     font-weight: 500;
   }
 
-  .modal-title{
-    background-color: #1B3A27;
-    color: white
-  }
   input[type=checkbox] {
     transform: scale(1.5);
     zoom: 1.5;
   }
-  .badge-warning {
+  /* .badge-warning {
     background-color: yellow !important;
   }
   .badge-success {
@@ -166,5 +158,5 @@
   }
   .badge-danger {
     background-color: red !important;
-  }
+  } */
   

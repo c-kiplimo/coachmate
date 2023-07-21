@@ -39,23 +39,21 @@
           required="true"
         >
           <option selected>Select Client you want to make contract with</option>
-
           <!--Loop through clients and form options-->
           <option *ngFor="let client of clients" value="{{ client.id }}">
             {{ client.firstName }} {{ client.lastName }}
           </option>
-
           <!--Render the create client button if no clients are found-->
-
           <div *ngIf="!clients">
-            <button class="btn btn-success" routerLink="/addclient">
+            <button class="btn btn-outline-success" routerLink="/addclient">
               Create Client
             </button>
           </div>
         </select>
       </div>
     </div>
-    <br />
+    <br>
+
     <h3>Schedule & Fees</h3>
     <div class="row">
       <div class="col">
@@ -99,6 +97,8 @@
               />
             </div>
             <div class="col-6">
+              <button type="button" class="btn btn-outline-success" (click)="addObjective()">
+                <i class="fa-solid fa-user-plus"></i>Add goal
               <button
                 type="button"
                 class="btn btn-outline-success"
@@ -211,19 +211,13 @@
       </div>
     </div>
 
-    <button
-      class="btn"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#collapseTerms"
-      aria-expanded="false"
-      aria-controls="collapseTerms"
-      (click)="toggleEditingSettings()"
-      [disabled]="disableButton"
-    >
+    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms" aria-expanded="false"
+      aria-controls="collapseTerms" (click)="toggleEditingSettings()" [disabled]="disableButton">
+
       <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
     </button>
-    <br />
+    <br/>
+
     <div class="collapse" id="collapseTerms">
       <div class="row">
         <div class="col-10">
@@ -247,7 +241,8 @@
         </div>
       </div>
     </div>
-    <br />
+    <br>
+
     <div class="input-group mb-3">
       <button
         class="btn"
@@ -302,12 +297,15 @@
         </div>
       </div>
     </div>
-    <br />
+    <br>
+  </form>
+
     <div class="row">
       <div class="col-md-12">
         <div class="d-flex justify-content-between">
           <p></p>
-          <button type="button" (click)="addContract()" class="btn btn-success">
+          <button type="button" (click)="addContract()" class="btn btn-outline-success ">
+
             Submit
           </button>
         </div>

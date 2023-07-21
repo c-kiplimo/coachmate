@@ -341,7 +341,7 @@
           Notification Details
         </h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
@@ -378,7 +378,7 @@
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Edit session</h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="editedsessionForm">
@@ -429,7 +429,7 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)="editedSession(currentSession.id)">
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="editedSession(currentSession.id)">
           Update session
         </button>
       </div>
@@ -589,8 +589,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Give Session Feedback</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
@@ -697,7 +697,7 @@
    
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" data-bs-dismiss="modal" class="btn btn-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
+        <button type="button" class="btn btn-outline-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
           changes</button>
       </div>
     </div>
@@ -713,7 +713,7 @@
           feedback Comments
         </h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="feedback">
         <div class="d-flex-column">
@@ -721,7 +721,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
       </div>
@@ -744,7 +744,7 @@
             <div class="input-group">
               <input [(ngModel)]="addlink" type="text" name="link" class="form-control input-height"
                 placeholder="Add link">
-              <button type="button" class="btn btn-success btn-match-height" [disabled]="!addlink"
+              <button type="button" class="btn btn-outline-success btn-match-height" [disabled]="!addlink"
                 (click)="addLink()"><i class="fa fa-plus"></i> Add</button>
             </div>
           </div>
@@ -781,8 +781,8 @@
         </section> -->
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-small" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success btn-small" data-bs-dismiss="modal" (click)="addAttachment()">Add Attachment</button>
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="addAttachment()">Add Attachment</button>
         </div>
 
       </form>
@@ -800,7 +800,7 @@
           Attachments
         </h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="feedback">
         <div class="d-flex-column">
@@ -808,7 +808,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
       </div>
