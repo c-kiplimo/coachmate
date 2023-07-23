@@ -364,9 +364,14 @@ a {
 //MODAL STYLES
 .modal {
   backdrop-filter: blur(2px);
+  padding: 0!important;
 
   .modal-content {
     border-radius: 8px;
+  }
+  //reduce the opacity of the backdrop
+  &.fade .modal-backdrop.show {
+    opacity: 0 !important;
   }
 }
 
@@ -535,12 +540,6 @@ a {
   }
 }
 
-//VIEW MODAL
-.modal-title {
-  color: #198754;
-  font-weight: bolder;
-}
-
 //routes
 .link {
   // color: #4F94E4 !important;
@@ -642,7 +641,7 @@ a {
 
   }
   .faded {
-    color: #00000073;
+    color: #0000002f;
   }
 
   .filter-section-title {
