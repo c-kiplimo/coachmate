@@ -30,13 +30,15 @@
         aria-describedby="button-addon2"
         [(ngModel)]="filters.search"
         placeholder="Client Name. Phone or Email"
+        *ngIf="this.userRole != 'CLIENT'"
       />
       <button
         class="btn btn-outline-success"
         type="button"
         id="button-addon2"
         (click)="getAllPayments(0)"
-      >
+        *ngIf="this.userRole != 'CLIENT'"
+        >
         Search
       </button>
     </div>
@@ -71,7 +73,7 @@
           </thead>
           <tbody class="list-container">
             <tr *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
-              <td>{{ payment?.clientFullName }}</td>
+              <td *ngIf="this.userRole != 'CLIENT'">{{ payment?.clientFullName }}</td>
               <td>{{ payment.amountDeposited }}</td>
               <td>{{ payment.modeOfPayment }}</td>
               <td>{{ payment.walletBalance }}</td>
