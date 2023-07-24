@@ -20,55 +20,43 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_client_wallet")
 public class ClientWallet {
+    public String description;
     @Id
     @GeneratedValue(strategy = GenerationType
-                    .IDENTITY)
+            .IDENTITY)
     Long id;
     // updated on every payment
     @Nullable
     Float walletBalanceBefore;
-
     @Nullable
     Float walletBalance;
     Float amountDeposited;
     Float amountBilled;
+    @OneToOne
+    @JoinColumn(name = "client_id")
+    User client;
+    @OneToOne
+    @JoinColumn(name = "coach_id")
+    User coach;
+    @OneToOne
+    @JoinColumn(name = "organization_id")
+    Organization organization;
     private String clientWalletNumber;
     private String extPaymentRef;
-    public String description;
-
     @Enumerated(EnumType.STRING)
     private ModeOfPayment modeOfPayment;
-
     @Enumerated(EnumType.STRING)
     private PaymentCurrency paymentCurrency;
-
-
     // Management Details
     @CreationTimestamp
-    @Column(nullable = false,name = "created_at")
+    @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
-
-    @Column(nullable = false,name = "created_by")
+    @Column(nullable = false, name = "created_by")
     private String createdBy;
-
     @UpdateTimestamp
     private LocalDate lastUpdatedAt;
     @Enumerated(EnumType.STRING)
     private StatementPeriod statementPeriod;
-
     private String lastUpdatedBy;
-
-    @OneToOne
-    @JoinColumn(name="client_id")
-    User client;
-
-    @OneToOne
-    @JoinColumn(name="coach_id")
-    User coach;
-
-
-    @OneToOne
-    @JoinColumn(name="organization_id")
-    Organization organization;
 
 }

@@ -29,6 +29,12 @@ export class ClientService {
         observe: 'response',
       })
   }
+  getPayments(options: any) {
+    return this.http.get<any>(this.baseURL + 'wallet/filter', {
+      observe: 'response',
+      params: options,
+    });     
+  }
 
 
   getOneSession(id: number): Observable<any> {
@@ -295,7 +301,7 @@ export class ClientService {
   }
 
   //getPaymentByCoachIdAndSelectedPeriod
-  getPaymentsByCoachIdAndSelectedPeriod(options: any): Observable<any> {
+  getPaymentsBySelectedPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`, {
       params: options,
       observe: 'response'
