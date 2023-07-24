@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'src/app/services/ClientService';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -25,12 +25,11 @@ import { th } from 'date-fns/locale';
 })
 
 export class ReceiptsComponent implements OnInit {
-payments: any ;
+
 loadingpayment: any;
 coachId: any;
-organizationId : any;
-loading = false;
-items: any =[];
+orgId : any;
+loading = true;
 page: number =0;
 itemsPerPage = 20;
 filters: any = {
@@ -40,6 +39,7 @@ filters: any = {
 date!: any;
 coachSessionData: any;
 user: any;
+payments: any ;
 showFilters = false;
 organizationData: any;
 userRole: any;
@@ -48,12 +48,14 @@ payment: any;
   client: any;
   User: any;
 statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
-  pageSize: number =15;
-  totalElements: any;
+pageSize: number =15;
+totalElements: any;
+currentPage: string|number|undefined;
 
   constructor(
     private clientService: ClientService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +66,7 @@ statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
     console.log(this.userRole);
 
     if (this.userRole == 'ORGANIZATION') {
-      this.organizationId = this.user.organization.id;
+      this.orgId = this.user.organization.id;
       this.getAllPayments(this.page);
 
     } else if (this.userRole == 'COACH') {
@@ -109,7 +111,7 @@ statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
     const options: any = {
       page: page,
       size: this.pageSize,
-      statementPeriod: this.filters.status,
+      statementPeriod: this.filters.period,
       search: this.filters.search,
       sort: 'id,desc',
     };
@@ -118,13 +120,13 @@ statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      options.organizationId = this.organizationId;
+      options.organizationId = this.orgId;
     }
-
+   console.log(this.coachId)
     this.clientService.getPayments(options).subscribe(
       (response: any) => {
         this.payments = response.body;
-        this.totalElements = +response.headers.get('X-Total-Count');
+        this.totalElements = + response.headers.get('X-Total-Count');
         this.loading = false;
       },
       (error: any) => {

@@ -13,6 +13,6 @@ public interface ClientWalletMapper extends EntityMapper<ClientWalletDTO, Client
     @Mapping(target = "clientFullName", source = "client.fullName")
     @Mapping(target = "clientType", source = "client.clientType")
     @Mapping(target = "clientMsisdn", source = "client.msisdn")
-////            @Override
+          @Override
     ClientWalletDTO toDto(ClientWallet entity);
 }
