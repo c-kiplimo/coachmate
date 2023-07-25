@@ -79,11 +79,10 @@ export class CoachService {
   }
   addCoach(coach: any): Observable<any> {
     console.log(coach)
-    return this.httpClient.post(`${this.baseURL}/users/coach/`, coach,
+    return this.httpClient.post<any>(`${this.baseURL}/users/coach/`, coach,
       { observe: 'response' }).pipe(
         catchError(this.handleError)
       );
-
   }
   // getCoaches(data: any): Observable<any> {
   //   console.log("get org coaches reached")

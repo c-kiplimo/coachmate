@@ -7,6 +7,7 @@
     <div class="col-md-8 col-sm-12">
       <div class="card">
         <div class="card-body">
+          <p>{{this.coachingCategory}}</p>
           <div class="card-header">
             <h5 class=" title f-weight fs-6 col">{{ contract.coachingTopic }}</h5>
           </div>
@@ -20,7 +21,7 @@
                     data-bs-target="#editContractModal"><i class="fas fa-edit"></i> Edit </a></li>
                   <li (click)="statusState('ONGOING')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                       data-bs-target="#activateContractModal">Activate </a></li>
-                  <li (click)="statusState('SIGNED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
+                  <li  (click)="statusState('SIGNED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                       data-bs-target="#signContractModal">Sign </a></li>
                   <li (click)="statusState('FINISHED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
                       data-bs-target="#finishContractModal">Finish </a></li>
@@ -33,8 +34,8 @@
           </div>
           <div class="col-md-12" [@fadeIn]>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Id</h6>
-              <p class="col calue">{{contract.id}}</p>
+              <h6 class="title fw-semi-bold col smaller-font">Contract Number</h6>
+              <p class="col calue">{{contract.contractNumber}}</p>
             </div>
             <div class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Coaching topic</h6>
@@ -53,7 +54,7 @@
               <p class="col">
                 <span class="badge" [ngClass]="{
                   'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
-                  'badge-danger': contract?.contractStatus === 'ONGOING',
+                  'badge-info': contract?.contractStatus === 'ONGOING',
                   'badge-primary': contract?.contractStatus === 'NEW'}">
                     {{ contract.contractStatus }}
                 </span>
@@ -71,20 +72,20 @@
               <h6 class="title fw-semi-bold col smaller-font">Number of Sessions:</h6>
               <p class="col value">{{ contract.noOfSessions }}</p>
             </div>
-            <div *ngIf="contract.coachingCategory === 'INDIVIDUAL'" class="row dtl">
+            <div *ngIf="this.coachingCategory === 'INDIVIDUAL'" class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Fees per Session :</h6>
               <p class="col value">{{ contract.individualFeesPerSession }}</p>
             </div>
-            <div *ngIf="contract.coachingCategory === 'GROUP'" class="row dtl">
+            <div *ngIf="this.coachingCategory === 'GROUP'" class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Fees per Session:</h6>
               <p class="col value">{{ contract.groupFeesPerSession }}</p>
             </div> 
             <div class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Total Fees:</h6>
-              <p *ngIf="(contract.coachingCategory === 'INDIVIDUAL')"class="col value"> 
+              <p *ngIf="this.coachingCategory === 'INDIVIDUAL'"class="col value"> 
                 {{contract.individualFeesPerSession * contract.noOfSessions}}
               </p>
-              <p *ngIf="(contract.coachingCategory === 'GROUP')"class="col value"> 
+              <p *ngIf="this.coachingCategory === 'GROUP'"class="col value"> 
                 {{contract.groupFeesPerSession * contract.noOfSessions}}
               </p>
             </div>
@@ -93,6 +94,7 @@
       </div>
     </div>
   </div>
+<br>
 
   <div class="card card-body">
     <div class="row">
@@ -102,7 +104,7 @@
       </h3>
       </div>
       <div class="col-md-6"></div>
-      <div class="col-md-4"></div>
+      <div class="col-md-4"></div> 
       <div *ngIf="sessions.length < contract.noOfSessions" class="col-md-2">
         <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-outline-success">
           <i class="fa fa-plus"></i>Add Session
@@ -112,7 +114,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">session Name</th>
+          <th colspan="1">session Name</th>
           <th scope="col">Session Venue</th>
           <th scope="col">Session Type</th>
           <th scope="col">session Date</th>
@@ -122,7 +124,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let session of sessions">
+        <tr *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements}">
           <td>{{ session.name }}</td>
           <td>{{ session.sessionVenue }}</td>
           <td>{{ session.sessionType }}</td>
@@ -143,7 +145,6 @@
     </p>
   </div>
 
-  
   <!-- Modal for adding a session -->
   <div class="modal" id="sessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -220,12 +221,12 @@
           <form [formGroup]="updateContractForm">
             <div class="m-2 col-md-12">
               <label for="title">Contract Title</label>
-              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
+              <input type="text" formControlName="coachingTopic" value="{{contractToBeUpdated.coachingTopic}}" placeholder="Title" id="title" name="coachingTopic"
               class="form-control">
             </div>
             <div class="m-2 col-md-12">
               <label for="category">Contract Category</label>
-              <select class="form-select" name="coachingCategory" id="inputGroupSelect01" formControlName="coachingCategory">
+              <select class="form-select" name="coachingCategory" id="inputGroupSelect01" formControlName="coachingCategory" value="{{contractToBeUpdated.coachingCategory}}">
                 <option value="">Select category</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="GROUP">GROUP</option>
@@ -233,23 +234,23 @@
             </div>
             <div class="m-2 col-md-12">
               <label class="form-label" for="number">Start Date</label>
-              <input type="date" formControlName="startDate" value="{{contract.startDate}}" id="number" class="form-control" placeholder="date">
+              <input type="date" formControlName="startDate" value="{{contractToBeUpdated.startDate}}" id="number" class="form-control" placeholder="date">
             </div>
             <div class="m-2 col-md-12">
               <label class="form-label" for="number">End date</label>
-              <input type="date" formControlName="endDate" value="{{contract.endDate}}" id="number" class="form-control" placeholder="date">
+              <input type="date" formControlName="endDate" value="{{contractToBeUpdated.endDate}}" id="number" class="form-control" placeholder="date">
             </div>
             <div class="m-2 col-md-12">
               <label for="number">Number of sessions</label>
-              <input type="number" formControlName="noOfSessions" placeholder="no of sessions" id="number" class="form-control">
+              <input type="number" formControlName="noOfSessions" placeholder="no of sessions" id="number" class="form-control" value="{{contractToBeUpdated.noOfSessions}}">
             </div>
             <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='GROUP'">
               <label for="number">Group fees per session</label>
-              <input type="number" formControlName="groupFeesPerSession" placeholder="group fees per session" id="number" class="form-control">
+              <input type="number" formControlName="groupFeesPerSession" placeholder="group fees per session" id="number" class="form-control" value="{{contractToBeUpdated.groupFessPerSession}}">
             </div>
             <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='INDIVIDUAL'">
               <label for="number">Individual fees per session</label>
-              <input type="number" formControlName="individualFeesPerSession" placeholder="individual fees per session" id="number" class="form-control">
+              <input type="number" formControlName="individualFeesPerSession" placeholder="individual fees per session" id="number" class="form-control" value="{{contractToBeUpdated.individualFeesPerSession}}">
             </div>
             <!-- <div class="m-2 col-md-12">
               <label for="title">Contract Objectives</label>
@@ -268,7 +269,7 @@
             </div> -->
             <div class="m-2 col-md-12">
               <label for="title">Contract terms and Conditions</label>
-              <input type="text" formControlName="terms_and_conditions" placeholder="terms and conditions" id="title" name="terms_and_conditions"
+              <input type="text" formControlName="terms_and_conditions" placeholder="terms and conditions" id="title" name="terms_and_conditions" value="{{contractToBeUpdated.terms_and_conditions}}"
               class="form-control">
             </div>
             <div class="row p-2"></div>
@@ -276,7 +277,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" changeContractStatus()" data-bs-dismiss="modal"> Submit</button>
+          <button type="button" class="btn btn-outline-success" (click)=" updateContract(contractToBeUpdated.id)" data-bs-dismiss="modal"> Submit</button>
         </div>
       </div>
     </div>

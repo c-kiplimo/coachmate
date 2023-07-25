@@ -5,3 +5,8 @@
 .f-weight{
     font-weight: 500;
 }
+.badge-info {
+    background-color: rgba(187, 126, 211, 0.664) !important;
+    color: rgb(171, 19, 231);
+    border-radius: 15px;
+  } 

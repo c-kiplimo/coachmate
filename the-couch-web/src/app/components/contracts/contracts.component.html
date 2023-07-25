@@ -68,7 +68,7 @@
                     <td>
                       <span class="badge" [ngClass]="{
                     'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
-                    'badge-danger': contract?.contractStatus === 'ONGOING',
+                    'badge-info': contract?.contractStatus === 'ONGOING',
                     'badge-primary': contract?.contractStatus === 'NEW'
                   }">{{ contract?.contractStatus }}</span>
                     </td>
