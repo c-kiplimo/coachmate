@@ -18,6 +18,7 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { th } from 'date-fns/locale';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { options } from '@mobiscroll/angular';
+import { error } from 'jquery';
 
 
 
@@ -43,7 +44,7 @@ export class ContractDetailsComponent implements OnInit {
 
   }; 
   loading = true;
-  itemsPerPage = 20;
+  pageSize = 20;
   page: number = 0;
   filters: any = {
     status: '',
@@ -52,7 +53,6 @@ export class ContractDetailsComponent implements OnInit {
   firstName: any;
   lastName: any;
   user: any;
-  newOrderMessage: any;
   addclientForm!: FormGroup;
   clientId: any;
   client: any;
@@ -75,6 +75,9 @@ export class ContractDetailsComponent implements OnInit {
   selectedContract: any;
   contractToBeUpdated: any;
   updateContractForm!: FormGroup;
+  userRole: any;
+  coachingCategory: any;
+  totalElements = 0;
 
 
   @ViewChild('yourElement') yourElement!: ElementRef;
@@ -118,8 +121,10 @@ export class ContractDetailsComponent implements OnInit {
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       this.contractId = id;
+      this.userRole = params['userRole'];
     this.contract = this.clientService.getContract(id).subscribe((data: any) => {
       this.contract = data.body;
+      this.coachingCategory = this.contract.coachingCategory;
       console.log(this.contract);
       const contractId = params['id'];
       console.log("contract id gottten", contractId);
@@ -187,6 +192,7 @@ export class ContractDetailsComponent implements OnInit {
 
   @ViewChild('sessionModal', { static: false })
   sessionModal!: ElementRef;
+
   addSession () {
     this.loading = true;
     console.log(this.addSessionForm);
@@ -235,14 +241,14 @@ export class ContractDetailsComponent implements OnInit {
 getCoachSlots(page: number) {
   const options = {
     page: page,
-    size: this.itemsPerPage,
+    size: this.pageSize,
     coachId: this.coachId,
     sort: 'id,desc',
     status: false
   };
   this.apiService.getCoachSlots(options).subscribe({
     next: (response) => {
-      this.coachSlots = response.body;
+      this.coachSlots = response.body.data;
     }
   });
 }
@@ -255,6 +261,29 @@ getClass(Clients: any) {
   } else {
     return 'badge-danger';
   }
+}
+
+id:any;
+showStatus: any;
+status!: string;
+contractUpdate: any;
+
+editContract(contract: any) {
+  this.contractToBeUpdated = contract;
+
+  this.updateContractForm = this.formbuilder.group({
+    coachingTopic: this.contractToBeUpdated.coachingTopic,
+    coachingCategory: this.contractToBeUpdated.coachingCategory,
+    startDate: this.contractToBeUpdated.startDate,
+    endDate: this.contractToBeUpdated.endDate,
+    groupFeesPerSession: this.contractToBeUpdated.groupFeesPerSession,
+    individualFeesPerSession: this.contractToBeUpdated.individualFeesPerSession,
+    noOfSessions: this.contractToBeUpdated.noOfSessions,
+    objectives: this.contractToBeUpdated.objectives,
+    services: this.contractToBeUpdated.services,
+    practice: this.contractToBeUpdated.practice,
+    terms_and_conditions: this.contractToBeUpdated.terms_and_conditions,
+  });
 }
 
 @ViewChild('modal', { static: false })
@@ -280,6 +309,7 @@ closeModal() {
     this.clientService.getSessionsBycontractId(contractId).subscribe(
       (data: any) => {
         this.sessions = data.body;
+        this.totalElements = +data.headers.get('X-Total-Count');
         console.log(this.sessions);
         this.loading = false;
         console.log("sessions gotten here",this.sessions);
@@ -294,20 +324,6 @@ closeModal() {
 navigateToSessionView(id: any) {
       console.log(id);
       this.router.navigate(['sessionView', id]);
-    }
-editSession(client:any){
-      this.updateSession = this.formbuilder.group({
-        sessionDate:this.sessionToBeUpdated.sessionDate,
-        sessionStartTime: this.sessionToBeUpdated.sessionStartTime,
-        sessionDuration: this.sessionToBeUpdated.sessionDuration,
-        name:this.sessionToBeUpdated.name,
-        sessionType:this.sessionToBeUpdated.sessionType,
-        sessionDetails:this.sessionToBeUpdated.sessionDetails,
-        sessionEndTime:this.sessionToBeUpdated.sessionEndTime,
-        sessionVenue:this.sessionToBeUpdated.sessionVenue,
-        goals:this.sessionToBeUpdated.goals,
-      });
-    
     }
 
     selectedSessionSlot(slot: any) {
@@ -326,11 +342,28 @@ editSession(client:any){
     sessionTime: any;
     sessionGoals: any;
     session: any;
-    id:any;
-    showStatus: any;
-    status!: string;
 
-    editContract(contract: any) {}
+
+    updateContract(id: any) {
+      this.contractToBeUpdated = this.updateContractForm.value;
+      console.log(this.contractToBeUpdated)
+      this.contractService.editContract(id, this.contractToBeUpdated).subscribe(
+        (response) => {
+          console.log(response);
+          this.toastrService.success("Contract updated", "success!", {timeOut: 8000});
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.editContractModal.nativeElement.classList.remove('show');
+          this.editContractModal.nativeElement.style.display('none');
+        }, (error) => {
+          console.log(error);
+          this.toastrService.error('Error', 'Error!', {timeOut: 8000});
+          this.editContractModal.nativeElement.classList.remove('show');
+          this.editContractModal.nativeElement.style.display('none');
+        }
+      );
+    }
 
     statusState(currentStatus: any) {
       console.log(currentStatus);

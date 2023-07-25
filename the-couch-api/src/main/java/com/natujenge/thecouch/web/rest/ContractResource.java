@@ -90,7 +90,7 @@ public class ContractResource {
     // update contract
     @PutMapping(path = "/{id}")
     public ResponseEntity<ContractDTO> updateContract(@PathVariable("id") Long contractId,
-                                                      @RequestBody Contract contract,
+                                                      @RequestBody ContractRequest contract,
                                                       @AuthenticationPrincipal User userDetails){
         log.info("Request to update contract with id {}", contractId);
         try {

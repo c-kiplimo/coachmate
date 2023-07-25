@@ -109,7 +109,7 @@ export class AddCoachComponent implements OnInit {
       },
       error => {
         console.log('error here',error);
-        this.toastrService.error
+        this.toastrService.error('Error', 'Error!', {timeOut: 8000});
       }
     );
   }

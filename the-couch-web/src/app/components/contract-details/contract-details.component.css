@@ -150,13 +150,15 @@
     transform: scale(1.5);
     zoom: 1.5;
   }
-  /* .badge-warning {
-    background-color: yellow !important;
-  }
-  .badge-success {
+   .badge-info {
+    background-color: rgba(187, 126, 211, 0.664) !important;
+    color: rgb(171, 19, 231);
+    border-radius: 15px;
+  } 
+  /* .badge-success {
     background-color: green !important;
   }
   .badge-danger {
     background-color: red !important;
-  } */
+  } */ 
   
