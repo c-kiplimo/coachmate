@@ -70,7 +70,7 @@ export class CoachService {
     console.log("edit coach reached")
     console.log("coach  to be updated here", coachToBeUpdated)
     console.log("coach id here", id)
-    return this.httpClient.put(`${this.baseURL}users/coach/${id}`, coachToBeUpdated)
+    return this.httpClient.put(`${this.baseURL}/users/coach/${id}`, coachToBeUpdated)
   }
   getOneCoach(id: number): Observable<any> {
     return this.httpClient.get<any>(this.baseURL + '/users/coach/' + id, {
