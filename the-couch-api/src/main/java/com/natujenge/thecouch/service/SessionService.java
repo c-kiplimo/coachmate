@@ -216,7 +216,7 @@ public class SessionService {
         Optional<Session> sessionOptional = sessionRepository.findById(id);
 
         if (sessionOptional.isEmpty()) {
-            throw new IllegalStateException("Coach doesn't exist");
+            throw new IllegalStateException("Session doesn't exist");
         }
 
         Session session = sessionOptional.get();

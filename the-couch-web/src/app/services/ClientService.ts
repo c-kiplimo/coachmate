@@ -80,7 +80,7 @@ export class ClientService {
     let options = {
       status: status,
     };
-    return this.http.put<any>(this.baseURL + 'clients/change-status/' + clientId, statusForm,
+    return this.http.put<any>(this.baseURL + 'users/change-status/' + clientId, statusForm,
       {
         params: options,
         observe: "response"
