@@ -2,10 +2,8 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Response;
 import com.natujenge.thecouch.domain.User;
-import com.natujenge.thecouch.service.CoachService;
-import com.natujenge.thecouch.service.RegistrationService;
-import com.natujenge.thecouch.service.ResponseService;
-import com.natujenge.thecouch.service.UserService;
+import com.natujenge.thecouch.service.*;
+import com.natujenge.thecouch.web.rest.dto.InquiryDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ForgotPassword;
@@ -13,6 +11,7 @@ import com.natujenge.thecouch.web.rest.request.RegistrationRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +29,9 @@ public class RegistrationResource {
     private final CoachService coachService;
     private final ResponseService responseService;
     private final UserService userService;
+
+    @Autowired
+    InquiryService inquiryService;
 
 
     @PostMapping
@@ -133,11 +135,11 @@ public class RegistrationResource {
 
     }
     @PostMapping(path = "contact")
-    ResponseEntity<?> getResponse(@RequestBody Response responseRequest) {
-        log.info("request to give response");
+    ResponseEntity<?> saveAndSendInquiry(@RequestBody InquiryDTO inquiryDTO) {
+        log.info("REST Request to save and send  inquiry: {}", inquiryDTO);
 
         try {
-            responseService.saveResponse(responseRequest);
+            inquiryService.saveAndSendEmail(inquiryDTO);
             return new ResponseEntity<>(new RestResponse(false,"Response Received Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
