@@ -15,6 +15,10 @@ import {SessionsService }  from '../../services/SessionsService';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { th } from 'date-fns/locale';
+import { ContractsService } from 'src/app/services/contracts.service';
+import { options } from '@mobiscroll/angular';
+import { error } from 'jquery';
 
 
 
@@ -35,11 +39,13 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 export class ContractDetailsComponent implements OnInit {
   addsessionForm!:FormGroup;
   addClient!: FormGroup;
+  activateCoachForm!: FormGroup;
   addSessionForm:any={
 
   }; 
   loading = true;
-  itemsPerPage = 20;
+  pageSize = 20;
+  page: number = 0;
   filters: any = {
     status: '',
     searchItem: '',
@@ -47,7 +53,6 @@ export class ContractDetailsComponent implements OnInit {
   firstName: any;
   lastName: any;
   user: any;
-  newOrderMessage: any;
   addclientForm!: FormGroup;
   clientId: any;
   client: any;
@@ -65,8 +70,14 @@ export class ContractDetailsComponent implements OnInit {
   ];
 
   contracts: any;
+  coachSlots: any;
   createSessionClientId: any;
   selectedContract: any;
+  contractToBeUpdated: any;
+  updateContractForm!: FormGroup;
+  userRole: any;
+  coachingCategory: any;
+  totalElements = 0;
 
 
   @ViewChild('yourElement') yourElement!: ElementRef;
@@ -75,12 +86,14 @@ export class ContractDetailsComponent implements OnInit {
   numberOfClients!: number; 
   coachSessionData: any;
   coachData: any;
+  coachId: any;
   sessionToBeUpdated: any;
   updateSession: any;
   userDetails: any;
   sessions: any;
   contractId: any;
   contract: any;
+
   @HostListener('document:click', ['$event']) onClick(event: any) {
   console.log(event.target.attributes.id.nodeValue);
 
@@ -93,7 +106,7 @@ export class ContractDetailsComponent implements OnInit {
     }
   }
     constructor(
-    private apiService:ClientService,
+    private apiService: ApiService,
     private http: HttpClient,
     private clientService : ClientService,
     private formbuilder: FormBuilder,
@@ -101,25 +114,29 @@ export class ContractDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private sessionService: ClientService,
     private toastrService: ToastrService,
+    private contractService: ContractsService,
    
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params: { [x: string]: any; }) => {
       const id = params['id'];
       this.contractId = id;
+      this.userRole = params['userRole'];
     this.contract = this.clientService.getContract(id).subscribe((data: any) => {
       this.contract = data.body;
+      this.coachingCategory = this.contract.coachingCategory;
       console.log(this.contract);
       const contractId = params['id'];
       console.log("contract id gottten", contractId);
       this.getSessionsBycontractId(contractId);
-
+      this.getCoachSlots(this.page);
   }
   )},
     this.user = JSON.parse(sessionStorage.getItem('user') || '{}'));
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log("CoachData",this.coachData);
+    this.coachId = this.coachData.id;
     this.updateSession = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -132,6 +149,7 @@ export class ContractDetailsComponent implements OnInit {
       goals:'',
       
     });
+
     this.addsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -150,14 +168,31 @@ export class ContractDetailsComponent implements OnInit {
       sessionBalance:'',
 
     });
+
+    this.updateContractForm = this.formbuilder.group({
+      coachingTopic: '',
+      coachingCategory: '',
+      startDate:'',
+      endDate:'',
+      groupFeesPerSession:'',
+      individualFeesPerSession:'',
+      noOfSessions:'',
+      objectives:'',
+      services:'',
+      practice:'',
+      terms_and_conditions:'',
+    });
+
   }
  
   onContractChange(event: any) {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
   }
+
   @ViewChild('sessionModal', { static: false })
   sessionModal!: ElementRef;
+
   addSession () {
     this.loading = true;
     console.log(this.addSessionForm);
@@ -201,11 +236,68 @@ export class ContractDetailsComponent implements OnInit {
       this.sessionModal.nativeElement.style.display = 'none';
       
     });
-    
-    
 }
+
+getCoachSlots(page: number) {
+  const options = {
+    page: page,
+    size: this.pageSize,
+    coachId: this.coachId,
+    sort: 'id,desc',
+    status: false
+  };
+  this.apiService.getCoachSlots(options).subscribe({
+    next: (response) => {
+      this.coachSlots = response.body.data;
+    }
+  });
+}
+
+getClass(Clients: any) {
+  if (Clients.status === 'SUSPENDED') {
+    return 'badge-warning';
+  } else if (Clients.status === 'ACTIVE') {
+    return 'badge-success';
+  } else {
+    return 'badge-danger';
+  }
+}
+
+id:any;
+showStatus: any;
+status!: string;
+contractUpdate: any;
+
+editContract(contract: any) {
+  this.contractToBeUpdated = contract;
+
+  this.updateContractForm = this.formbuilder.group({
+    coachingTopic: this.contractToBeUpdated.coachingTopic,
+    coachingCategory: this.contractToBeUpdated.coachingCategory,
+    startDate: this.contractToBeUpdated.startDate,
+    endDate: this.contractToBeUpdated.endDate,
+    groupFeesPerSession: this.contractToBeUpdated.groupFeesPerSession,
+    individualFeesPerSession: this.contractToBeUpdated.individualFeesPerSession,
+    noOfSessions: this.contractToBeUpdated.noOfSessions,
+    objectives: this.contractToBeUpdated.objectives,
+    services: this.contractToBeUpdated.services,
+    practice: this.contractToBeUpdated.practice,
+    terms_and_conditions: this.contractToBeUpdated.terms_and_conditions,
+  });
+}
+
 @ViewChild('modal', { static: false })
 modal!: ElementRef;
+
+@ViewChild('activateContractModal', { static: false })
+activateContractModal!: ElementRef;
+@ViewChild('editContractModal', { static: false })
+editContractModal!: ElementRef;
+@ViewChild('signContractModal', { static: false })
+signContractModal!: ElementRef;
+@ViewChild('finishContracttModal', { static: false })
+finishContractModal!: ElementRef;
+
 closeModal() {
   this.modal.nativeElement.style.display = 'none';
   document.body.classList.remove('modal-open');
@@ -217,6 +309,7 @@ closeModal() {
     this.clientService.getSessionsBycontractId(contractId).subscribe(
       (data: any) => {
         this.sessions = data.body;
+        this.totalElements = +data.headers.get('X-Total-Count');
         console.log(this.sessions);
         this.loading = false;
         console.log("sessions gotten here",this.sessions);
@@ -232,20 +325,12 @@ navigateToSessionView(id: any) {
       console.log(id);
       this.router.navigate(['sessionView', id]);
     }
-editSession(client:any){
-      this.updateSession = this.formbuilder.group({
-        sessionDate:this.sessionToBeUpdated.sessionDate,
-        sessionStartTime: this.sessionToBeUpdated.sessionStartTime,
-        sessionDuration: this.sessionToBeUpdated.sessionDuration,
-        name:this.sessionToBeUpdated.name,
-        sessionType:this.sessionToBeUpdated.sessionType,
-        sessionDetails:this.sessionToBeUpdated.sessionDetails,
-        sessionEndTime:this.sessionToBeUpdated.sessionEndTime,
-        sessionVenue:this.sessionToBeUpdated.sessionVenue,
-        goals:this.sessionToBeUpdated.goals,
-      });
-    
+
+    selectedSessionSlot(slot: any) {
+      console.log(slot);
+      this.addSessionForm.sessionSchedules = slot;
     }
+
   deleteSession(id:any, userDetails: any) {
     this.clientService.deleteSession(id).subscribe(response => {
       console.log(response);
@@ -253,15 +338,113 @@ editSession(client:any){
     });
   }
    
-    modalTitle: any;
+    modalTitle = 'Add Session';
     sessionTime: any;
     sessionGoals: any;
     session: any;
-    id:any;
-    
-    
+
+
+    updateContract(id: any) {
+      this.contractToBeUpdated = this.updateContractForm.value;
+      console.log(this.contractToBeUpdated)
+      this.contractService.editContract(id, this.contractToBeUpdated).subscribe(
+        (response) => {
+          console.log(response);
+          this.toastrService.success("Contract updated", "success!", {timeOut: 8000});
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          this.editContractModal.nativeElement.classList.remove('show');
+          this.editContractModal.nativeElement.style.display('none');
+        }, (error) => {
+          console.log(error);
+          this.toastrService.error('Error', 'Error!', {timeOut: 8000});
+          this.editContractModal.nativeElement.classList.remove('show');
+          this.editContractModal.nativeElement.style.display('none');
+        }
+      );
+    }
+
+    statusState(currentStatus: any) {
+      console.log(currentStatus);
+      if (currentStatus === 'SIGNED') {
+        this.showStatus = "SIGNED";
+        this.status = "SIGNED";
+      } else if (currentStatus === 'ONGOING') {
+        this.showStatus = "ONGOING";
+        this.status = "ONGOING";
+      } else if (currentStatus === 'FINISHED') {
+        this.showStatus = "FINISHED";
+        this.status = "FINISHED";
       }
-    
-    
+    }
+
+    changeContractStatus() {
+      console.log(this.status);
+      let data = {
+        status: this.status,
+      }
+      console.log(data);
+
+      if (this.status === "SIGNED") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Signed!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Signed!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
+      }
+
+      if (this.status === "ONGOING") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Activated!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Activated!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
+      }
+
+      if (this.status === "FINISHED") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Terminated!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Terminated!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
+      }
+    }
+
+  }
+        
 
 

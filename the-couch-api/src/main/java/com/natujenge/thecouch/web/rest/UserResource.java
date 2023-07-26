@@ -2,6 +2,8 @@ package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Organization;
 import com.natujenge.thecouch.domain.User;
+import com.natujenge.thecouch.domain.enums.ClientStatus;
+import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
@@ -9,6 +11,7 @@ import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.ClientDTO;
 import com.natujenge.thecouch.web.rest.dto.CoachDTO;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 
@@ -173,14 +176,15 @@ public class UserResource {
         ResponseEntity<?> getOrgClients(@PathVariable("id") Long orgId,
                 @AuthenticationPrincipal User userDetails){
             log.info("Request to get Organization clients");
+            List<User> listResponse;
             try{
-                List<User> listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
-                return new ResponseEntity<>(listResponse, HttpStatus.OK);
+                listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
             } catch (Exception e) {
                 log.error("Error Occurred ", e);
                 return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
         }
         @GetMapping(path = "coaches")
         ResponseEntity<List<CoachDTO>> getCoaches(
@@ -250,6 +254,16 @@ public class UserResource {
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+    @PutMapping(path = "/change-status/{id}")
+        // change status active or suspend
+    ResponseEntity<ClientDTO> updateClientStatus(@RequestParam("status") ClientStatus clientStatus,
+                                                   @PathVariable("id") Long id,
+                                                   @AuthenticationPrincipal User userDetails) {
 
+        log.info("request to change client status with id : {} to status {} by user with id {}", id, clientStatus, userDetails.getId());
+        ClientDTO clientDTO = userService.updateClientStatus(id, clientStatus);
+        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+
+    }
 
     }

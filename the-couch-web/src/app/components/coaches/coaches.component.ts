@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { CoachService } from 'src/app/services/CoachService';
+import { ClientService } from 'src/app/services/ClientService';
 
 @Component({
   selector: 'app-coaches',
@@ -34,7 +35,9 @@ export class CoachesComponent implements OnInit {
   updateCoach!: FormGroup;
 
 
-  constructor(private coachService: CoachService, 
+  constructor(
+    private coachService: CoachService, 
+    private ClientService: ClientService,
     private router: Router,
     private toastrService: ToastrService,
     private formbuilder: FormBuilder,) { }
@@ -45,6 +48,8 @@ export class CoachesComponent implements OnInit {
   coachToBeUpdated!: any;
   organizationSessionData: any;
   organizationData: any;
+  showFilters = false;
+  coachStatuses = ['ACTIVE', 'SUSPENDED', 'CLOSED',,'NEW']
   userRole: any;
   user: any;
   orgId!: number;
@@ -94,41 +99,40 @@ export class CoachesComponent implements OnInit {
 }
 
 
-  
 getCoaches(page: any) {
- 
-  this.loading = true;
-  this.page = page;
-  //if page is 0, don't subtract 1
-  if (page === 0 || page < 0) {
-    page = 0;
-  } else {
-    page = page - 1;
-  }
-  const options: any = {
-    page: page,
-    size: this.pageSize,
-    status: this.filters.status,
-    search: this.filters.searchItem,
-    sort: 'id,desc',
-  };
-
- if(this.userRole == 'ORGANIZATION'){
-    options.orgId = this.orgId;
-  }
-  
-  this.coachService.getCoaches(options).subscribe(
-    (response) => {
-      this.loading = false;
-      this.coaches = response.body;
-      this.totalElements = +response.headers.get('X-Total-Count');
-      console.log('coaches',this.coaches)
-    }, (error) => {
-      this.loading = false;
-      console.log(error)
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
     }
-  )
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+      orgId: this.orgId,
+    };
+    
+    this.ClientService.getOrgCoaches(options).subscribe(  // test the getAllOrgClients endpoint
+      (response) => {
+        this.loading = false;
+        this.coaches = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
+        console.log('clients',this.coaches)
+      }, (error) => {
+        this.loading = false;
+        console.log(error)
+      }
+    )
 }
+
 search() {
   this.page = 0;
   this.getCoaches(this.page);
@@ -137,14 +141,18 @@ filterByStatus() {
   this.page = 0;
   this.getCoaches(this.page);
 }
-  
+toggleFilters() {
+  this.showFilters = !this.showFilters;
+}
+resetStatuses(): void {
+  this.filters.status = 'ALL';
+  this.getCoaches(0);
+}
   
 
   navigateToCoachView(id: any) {
     console.log(id)
     this.router.navigate(['/coachView', id]);
-
-
   }
   deleteCoach(client: any) {
  //To be checked

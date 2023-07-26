@@ -31,7 +31,8 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       // 'Content-Type': 'multipart/form-data',
     };
 
-    const token = sessionStorage.getItem('token');
+    // const token: string | null = sessionStorage.getItem('token');
+    const token: string | null = this.extractToken(sessionStorage.getItem('token') || '');
     // console.log(token);
 
     const request = req.clone({
@@ -50,5 +51,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         return throwError(err.error);
       })
     );
+  }
+
+  extractToken(token: string) {
+    return token.replace("Bearer ", "");
   }
 }

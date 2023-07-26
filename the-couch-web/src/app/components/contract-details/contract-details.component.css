@@ -40,11 +40,13 @@
     padding: 10px;
 }
 .title {
-    margin-left: 10px;
+  margin-left: 10px;
+  font-size: medium;
    
 }
 .value {
-    margin-left: 10px;
+  margin-left: 10px;
+  font-size: medium;
 }
 .onedetail {
     padding: 10px;
@@ -139,33 +141,24 @@
     background-color: #1B3A27;
     color: white;
   }
-  .modal-header{
-    background-color: #1B3A27;
-  
-  
-  }
+
   .f-weight{
     font-weight: 500;
   }
 
-  .modal-title{
-    background-color: #1B3A27;
-    color: white
-  }
   input[type=checkbox] {
     transform: scale(1.5);
     zoom: 1.5;
   }
-  .badge-warning {
-    background-color: yellow !important;
-  }
-  .badge-success {
+   .badge-info {
+    background-color: rgba(187, 126, 211, 0.664) !important;
+    color: rgb(171, 19, 231);
+    border-radius: 15px;
+  } 
+  /* .badge-success {
     background-color: green !important;
   }
   .badge-danger {
     background-color: red !important;
-  }
-  .badge-primary {
-    background-color: blue !important;
-  }
+  } */ 
   

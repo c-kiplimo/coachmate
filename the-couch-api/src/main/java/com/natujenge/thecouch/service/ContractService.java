@@ -111,7 +111,6 @@ public class ContractService {
         Contract savedcontract = null;
         if (user.isPresent()) {
             coach = user.get();
-
             // Save Contract
             Contract contract = new Contract();
 
@@ -126,10 +125,15 @@ public class ContractService {
             contract.setServices(contractRequest.getServices());
             contract.setPractice(contractRequest.getPractice());
             contract.setObjective(contractRequest.getObjectives());
-            if (organizationId != null) {
-                contract.getOrganization().setId(organizationId);
 
+
+            if (organizationId != null) {
+//                assert contract.getOrganization() != null;
+//                contract.getOrganization().setId(organizationId);
+                contract.setOrganization(organizationService.findOrganizationById(organizationId));
             }
+
+
             log.info("coach------{}", coach);
             contract.setCoach(coach);
 
@@ -209,11 +213,9 @@ public class ContractService {
             }
             notification.setSendReason("New Contract Created");
             notification.setContract(savedcontract);
-            // TO DO: add logic to save notification to db
-
+            // TODO: add logic to save notification to db
             notificationRepository.save(notification);
             log.info("Notification saved");
-
         }
         return savedcontract;
     }
@@ -226,9 +228,6 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
-
-
-
 @Transactional
     public Contract updateContractStatus(Long contractId, ContractStatus contractStatus,Long loggedInUSerId){
         Optional<Contract> contractOptional = contractRepository.findById(contractId);
@@ -237,17 +236,23 @@ public class ContractService {
         }
         Contract contract = contractOptional.get();
 
-        if(contractStatus==ContractStatus.SIGNED){
-            if(contract.getContractStatus()==ContractStatus.SIGNED ){
+        if(contractStatus==ContractStatus.SIGNED) {
+            if (contract.getContractStatus() == ContractStatus.SIGNED) {
                 log.info("Contract {} is  is signed", contractId);
                 throw new IllegalStateException("Contract is signed");
 
-            }else{
+            } else {
                 contract.setContractStatus(ContractStatus.SIGNED);
                 contract.setLastUpdatedBy(loggedInUSerId);
-
             }
-
+        } else if (contractStatus == ContractStatus.ONGOING) {
+            if (contract.getContractStatus() == ContractStatus.ONGOING) {
+                log.info("Contract {} is  is ongoing", contractId);
+                throw new IllegalStateException("Contract is ONGOING");
+            } else {
+                contract.setContractStatus(ContractStatus.ONGOING);
+                contract.setLastUpdatedBy(loggedInUSerId);
+            }
         }else if(contractStatus==ContractStatus.FINISHED){
           if(contract.getContractStatus()==ContractStatus.FINISHED){
               log.info("Contract {} is  is finished", contractId);
@@ -255,55 +260,43 @@ public class ContractService {
           }else{
               contract.setContractStatus(ContractStatus.FINISHED);
               contract.setLastUpdatedBy(loggedInUSerId);
-
           }
-
         }
-return  contract;
+        return  contract;
     }
 
-    private Contract createExample(Long userId,Long clientId, UserRole userRole,String search, Long organisationId) {
+    private Contract createExample(Long coachId,Long clientId,String search, ContractStatus status, Long organisationId) {
         Contract  contactExample = new Contract();
-
         User coach=new User();
-
-
+        User client=new User();
+        Organization organization=new Organization();
 
         if (organisationId != null) {
-            contactExample.setCoach(coach);
-
-
-            log.info("org id {}", organisationId);
-            contactExample.getCoach().setOrganization(new Organization());
-            contactExample.getCoach().getOrganization().setId(organisationId);
+            contactExample.setOrganization(organization);
+            assert contactExample.getOrganization() != null;
+            contactExample.getOrganization().setId(organisationId);
         }
-        if (userId != null && userRole.equals(UserRole.COACH)) {
-
+        if (coachId != null) {
             contactExample.setCoach(coach);
-
-            log.info("User role is  {}", userRole);
-            contactExample.getCoach().setId(userId);
-            contactExample.getCoach().setUserRole(userRole);
+            contactExample.getCoach().setId(coachId);
         }
-
-        if (clientId != null || userRole.equals(UserRole.CLIENT)) {
-            User client=new User();
-            log.info("User role is {}", userRole);
+        if (search != null) {
+            contactExample.setClient(client);
+            contactExample.getClient().setFullName(search);
+        }
+        if (status != null) {
+            contactExample.setContractStatus(status);
+        }
+        if (clientId != null) {
             contactExample.setClient(client);
             contactExample.getClient().setId(clientId);
-
         }
-
-
-
-
-
         return contactExample;
     }
 
-    public Page<ContractDTO> filter(Long userId, Long clientId, UserRole userRole, String search, Long organisationId,
+    public Page<ContractDTO> filter(Long coachId, Long clientId, String search, ContractStatus status, Long organisationId,
                                     Pageable pageable) {
-        Contract contract = createExample(userId, clientId, userRole, search, organisationId);
+        Contract contract = createExample(coachId, clientId, search, status, organisationId);
 
         log.info("After example {} ", contract);
         ExampleMatcher matcher = ExampleMatcher.matching()
@@ -318,4 +311,43 @@ return  contract;
 
     }
 
+    public ContractDTO updateContract(Long contractId, ContractRequest contractRequest) {
+        Optional<Contract> contractOptional = contractRepository.findById(contractId);
+        if (contractOptional.isEmpty()) {
+            throw new IllegalStateException("Contract doesn't exist");
+        }
+
+        log.info("Contract {} with id {} found", contractId, contractOptional.get());
+        Contract contract = contractOptional.get();
+
+        if (contractRequest.getCoachingTopic() != null && !contractRequest.getCoachingTopic().isEmpty()) {
+            contract.setCoachingTopic(contractRequest.getCoachingTopic());
+        }
+        if (contractRequest.getStartDate() != null) {
+            contract.setStartDate(contractRequest.getStartDate());
+        }
+        if (contractRequest.getEndDate() != null) {
+            contract.setEndDate(contractRequest.getEndDate());
+        }
+        if (contractRequest.getCoachingCategory() != null) {
+            contract.setCoachingCategory(contractRequest.getCoachingCategory());
+        }
+        if (contractRequest.getNoOfSessions() > 0) {
+            contract.setNoOfSessions(contractRequest.getNoOfSessions());
+        }
+        if (contractRequest.getTerms_and_conditions() != null && !contractRequest.getTerms_and_conditions().isEmpty()) {
+            contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
+        }
+        if (contractRequest.getIndividualFeesPerSession() > 0) {
+            contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
+        }
+        if (contractRequest.getGroupFeesPerSession() > 0) {
+            contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
+        }
+
+        contract = contractRepository.save(contract);
+
+        log.info("Contract {} updated", contract);
+        return contractMapper.toDto(contract);
+    }
 }

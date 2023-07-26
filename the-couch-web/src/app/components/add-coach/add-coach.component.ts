@@ -72,7 +72,7 @@ export class AddCoachComponent implements OnInit {
     const options = {
       orgId: this.orgId,
     }
-    this.coachService.getOrgCoaches(options).subscribe(
+    this.coachService.getCoaches(options).subscribe(
       (response: any) => {
         console.log('here Organization=>', response);
         this.coaches = response;
@@ -109,7 +109,7 @@ export class AddCoachComponent implements OnInit {
       },
       error => {
         console.log('error here',error);
-        this.toastrService.error
+        this.toastrService.error('Error', 'Error!', {timeOut: 8000});
       }
     );
   }

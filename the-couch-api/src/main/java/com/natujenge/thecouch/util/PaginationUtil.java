@@ -31,6 +31,8 @@ public final class PaginationUtil {
     public static <T> HttpHeaders generatePaginationHttpHeaders(UriComponentsBuilder uriBuilder, Page<T> page) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
+        headers.add("Access-Control-Expose-Headers", HEADER_X_TOTAL_COUNT);
+
         int pageNumber = page.getNumber();
         int pageSize = page.getSize();
         StringBuilder link = new StringBuilder();

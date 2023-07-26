@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'src/app/services/ClientService';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ParseSourceFile } from '@angular/compiler';
 import { th } from 'date-fns/locale';
+
+
 
 @Component({
   selector: 'app-receipts',
@@ -23,29 +25,37 @@ import { th } from 'date-fns/locale';
 })
 
 export class ReceiptsComponent implements OnInit {
-payments: any = [];
+
 loadingpayment: any;
-statementPeriod!: string;
 coachId: any;
-organizationId : any;
-loading = false;
+orgId : any;
+loading = true;
+page: number =0;
 itemsPerPage = 20;
 filters: any = {
-  status: '',
-  searchItem: '',
+  period: '',
+  search: '',
 };
+date!: any;
 coachSessionData: any;
 user: any;
+payments: any ;
+showFilters = false;
 organizationData: any;
 userRole: any;
-ClientId: any;
+clientId: any;
 payment: any;
   client: any;
   User: any;
+statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
+pageSize: number =15;
+totalElements: any;
+currentPage: string|number|undefined;
 
   constructor(
-    private ClientService: ClientService,
-    private router: Router
+    private clientService: ClientService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -55,42 +65,77 @@ payment: any;
     this.userRole = this.user.userRole;
     console.log(this.userRole);
 
-    if(this.userRole == 'COACH'){
+    if (this.userRole == 'ORGANIZATION') {
+      this.orgId = this.user.organization.id;
+      this.getAllPayments(this.page);
+
+    } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
-      this.getPaymentsByCoachId();
+      this.getAllPayments(this.page);
 
-    } else if(this.userRole == 'CLIENT'){
-      console.log(this.client);
-      this.ClientId = this.user.id;
-      this.getPaymentsByClientId(this.ClientId);
-
-    }
-    else if(this.userRole == 'ORGANIZATION'){
-      this.organizationId= this.user.id;
-      this.getPaymentsByOrganizationId();
+    } else if (this.userRole == 'CLIENT') {
+      this.clientId = this.user.id;
+      this.getAllPayments(this.page);
     }
   }
-  getPaymentsByOrganizationId() {
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
+
+  filterByStatus(event: any): any {
+    this.page = 0;
+    this.filters.status = event.target.value;
+    this.getAllPayments(this.page);
+  }
+
+  search() {
+    this.page = 0;
+    this.getAllPayments(this.page);
+  }
+  resetPeriod(): void {
+    this.filters.period = 'PER_MONTH';
+    this.getAllPayments(this.page);
+  }
+
+
     
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      orgId: this.user.organization.id,
+  getAllPayments(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      statementPeriod: this.filters.period,
+      search: this.filters.search,
+      sort: 'id,desc',
     };
-    console.log('orgId', options);
-    this.ClientService.getPaymentsByOrganizationId(options).subscribe(
-      (response) => {
-        this.loading = false;
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.organizationId = this.orgId;
+    }
+   console.log(this.coachId)
+    this.clientService.getPayments(options).subscribe(
+      (response: any) => {
         this.payments = response.body;
-        console.log('payments', this.payments);
-      }, (error) => {
+        this.totalElements = + response.headers.get('X-Total-Count');
+        this.loading = false;
+      },
+      (error: any) => {
         console.log(error);
+        this.loading = false;
       }
-    )
+    );
   }
-  filterByClientNameAndDate() {
+  filterByClientName() {
     
     const options = {
       page: 1,
@@ -99,7 +144,7 @@ payment: any;
   
     };
     console.log('options', options);
-    this.ClientService.filterByClientNameAndDate(options).subscribe(
+    this.clientService.filterByClientName(options).subscribe(
       (response) => {
         this.loading = false;
         this.payments = response.body;
@@ -109,50 +154,49 @@ payment: any;
       }
     )
   }
-  getPaymentsByClientId(id: any){
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      // status: this.filters.status,
-      // search: this.filters.searchItem,
-      clientId: id,
-    };
+  // getPaymentsByClientId(id: any){
+  //   const options = {
+  //     page: 1,
+  //     per_page: this.itemsPerPage,
+  //     // status: this.filters.status,
+  //     // search: this.filters.searchItem,
+  //     clientId: id,
+  //   };
 
-    this.loading = true;
-    this.ClientService.getPaymentsByClientId(options).subscribe(
-      (response) => {
-        this.loading = false;
-        this.payments = response.body.data;
-        console.log('payments', this.payments);
-      }, (error) => {
-        console.log(error);
-      }
-    )
-  }
-  // searchPayments() {
-  //   this.getPaymentsByClientId(this.ClientId);
+  //   this.loading = true;
+  //   this.ClientService.getPaymentsByClientId(options).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  //       this.payments = response.body.data;
+  //       console.log('payments', this.payments);
+  //     }, (error) => {
+  //       console.log(error);
+  //     }
+  //   )
   // }
-
-  getPaymentsByCoachId(){
-    
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      coachId: this.coachId,
+  // // searchPayments() {
+  // //   this.getPaymentsByClientId(this.ClientId);
+  // // }
+  // getPaymentsByCoachId(){
+  
+  //   const options = {
+  //     page: 1,
+  //     per_page: this.itemsPerPage,
+  //     coachId: this.coachId,
       
-    };
+  //   };
 
-    this.loading = true;
-    this.ClientService.getPaymentsByCoachId(options).subscribe(
-      (response) => {
-          this.loading = false;
-          this.payments = response.body.data;
-          console.log('payments', this.payments);
-        }, (error) => {
-        console.log(error);
-      }
-    )
-  }
+  //   this.loading = true;
+  //   this.ClientService.getPaymentsByCoachId(options).subscribe(
+  //     (response) => {
+  //         this.loading = false;
+  //         this.payments = response.body.data;
+  //         console.log('payments', this.payments);
+  //       }, (error) => {
+  //       console.log(error);
+  //     }
+  //   )
+  // }
   
 
 
@@ -190,112 +234,8 @@ payment: any;
       }
     );
   }
-      // get payment by client id and selected period
-      getPaymentsByCoachIdAndSelectedPeriod(){
-        
-        const options = {
-          page: 1,
-          per_page: this.itemsPerPage,
-          status: this.filters.status,
-          search: this.filters.searchItem,
-          coachId: this.user.coach.id,
-          statementPeriod: this.statementPeriod,
-        };
-        this.loading = true;
-        this.ClientService.getPaymentsByCoachIdAndSelectedPeriod(options).subscribe(
-          (response) => {
-            this.loading = false;
-            this.payments = response.body.data;
-            console.log('Account statement by client and selected period', this.payments);
-          }, (error) => {
-            console.log(error);
-          }
-        )
-      }
-      // get payment by client id and selected period
-      getPaymentsByClientIdAndSelectedPeriod(id: any){
-        
-        const options = {
-          page: 1,
-          per_page: this.itemsPerPage,
-          status: this.filters.status,
-          search: this.filters.searchItem,
-          client_id: id,
-          statementPeriod: this.statementPeriod,
-        };
-        this.loading = true;
-        this.ClientService.getPaymentsByClientIdAndSelectedPeriod(options).subscribe(
-          (response) => {
-            this.loading = false;
-            this.payments = response.body.data;
-            console.log('Account statement by client and selected period', this.payments);
-          }, (error) => {
-            console.log(error);
-          }
-        )
-      }
-      // get payment by org id and selected period
-      getPaymentsByOrgIdAndSelectedPeriod(){
-        
-        const options = {
-          page: 1,
-          per_page: this.itemsPerPage,
-          status: this.filters.status,
-          search: this.filters.searchItem,
-          org_id: this.user.organization.id,
-          statementPeriod: this.statementPeriod,
-        };
-        this.loading = true;
-        this.ClientService.getPaymentsByOrgIdAndSelectedPeriod(options).subscribe(
-          (response) => {
-            this.loading = false;
-            this.payments = response.body.data;
-            console.log('Account statement by org and selected period', this.payments);
-          }, (error) => {
-            console.log(error);
-          }
-        )
-      }
-
-
-  applyFilter() {
-    switch (this.statementPeriod) {
-      case 'PerMonth':
-        // apply filter for 1 month
-        if (this.user.coach) {
-          this.getPaymentsByCoachIdAndSelectedPeriod();
-        } else if (this.user.organization) {
-          this.getPaymentsByOrgIdAndSelectedPeriod();
-        } else if (this.user.client) {
-          this.getPaymentsByClientIdAndSelectedPeriod(this.user.client.id);
-        }
-        break;
-      case 'Per6Months':
-        // apply filter for 6 months
-        if (this.user.coach) {
-        this.getPaymentsByCoachIdAndSelectedPeriod();
-        } else if (this.user.organization) {
-          this. getPaymentsByOrgIdAndSelectedPeriod();
-        } else if (this.user.client) {
-          this.getPaymentsByClientIdAndSelectedPeriod(this.user.client.id);
-        }
-        break;
-      case 'PerYear':
-        // apply filter for 1 year
-        if (this.user.coach) {
-        this.getPaymentsByCoachIdAndSelectedPeriod();
-        } else if (this.user.organization) {
-          this. getPaymentsByOrgIdAndSelectedPeriod();
-        } else if (this.user.client) {
-          this.getPaymentsByClientIdAndSelectedPeriod(this.user.client.id);
-        }
-        break;
-      default:
-        // no filter applied
-  
-        break;
-    }
-  }
+      
+      
 
 
 

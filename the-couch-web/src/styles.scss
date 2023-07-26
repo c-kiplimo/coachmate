@@ -1,5 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+@use '../src/assets/bottom-nav.scss';
 @import 'ngx-toastr/toastr';
 // Plus imports for other components in your app.
 
@@ -363,9 +364,14 @@ a {
 //MODAL STYLES
 .modal {
   backdrop-filter: blur(2px);
+  padding: 0!important;
 
   .modal-content {
     border-radius: 8px;
+  }
+  //reduce the opacity of the backdrop
+  &.fade .modal-backdrop.show {
+    opacity: 0 !important;
   }
 }
 
@@ -445,6 +451,7 @@ a {
     letter-spacing: 0.5px;
     transition: all 50ms ease;
     background-color: #FFFFFF;
+    text-decoration: none;
 
     &:hover {
       border: none;
@@ -453,7 +460,7 @@ a {
 
     &.active {
       border: none;
-      border-bottom: 4px solid #00000073;
+      border-bottom: 4px solid #F15B2B !important;
     }
   }
 }
@@ -531,12 +538,6 @@ a {
       font-size: 0.9rem !important;
     }
   }
-}
-
-//VIEW MODAL
-.modal-title {
-  color: #198754;
-  font-weight: bolder;
 }
 
 //routes
@@ -640,7 +641,7 @@ a {
 
   }
   .faded {
-    color: #00000073;
+    color: #0000002f;
   }
 
   .filter-section-title {

@@ -4,36 +4,33 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
-@Table(name = "tbl_sessionResources")
+@Table(name = "tbl_coaching_log")
 @Data
 @Entity
-public class Attachments {
+public class CoachingLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String  FileName;
-    private String  attachmentNumber;
-    private String  FileType;
-    private Long  FileSize;
-    private  byte[]  FileContent;
+    private String  noInGroup;
+    private String clientName;
+    private String  clientEmail;
+    private Date startDate;
+    private Date endDate;
 
-
-    private String link;
-    private String  linkUrl;
-    private byte[]  file;
+    private Long paidHours;
+    private Long proBonoHours;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    @Column(nullable = false)
     private String createdBy;
+
     private LocalDateTime lastUpdatedAt;
     private String lastUpdatedBy;
 
     @ManyToOne
-    @JoinColumn(name = "session_id")
-    Session session;
-
-
+    @JoinColumn(name = "coach_id")
+    User coach;
 
 }

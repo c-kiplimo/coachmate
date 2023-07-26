@@ -63,8 +63,8 @@ public class SessionService {
     public Session createSession(Long coachId, Long clientId, Long contractId, Session sessionRequest) throws IllegalArgumentException {
         log.info("Creating new session");
 
-        Optional<User> optionalClient = userRepository.findByIdAndAddedById(clientId, coachId);
-        Optional<Contract> optionalContract = contractRepository.findByIdAndCoachId(contractId, coachId);
+        Optional<User> optionalClient = userRepository.findById(clientId);
+        Optional<Contract> optionalContract = contractRepository.findById(contractId);
         Optional<SessionSchedules> optionalSessionSchedules = sessionSchedulesRepository.findById(sessionRequest.getSessionSchedules().getId());
 
         if (optionalClient.isEmpty()) {
@@ -80,8 +80,6 @@ public class SessionService {
             log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
             throw new IllegalArgumentException("Session Slot no found!");
         }
-        Optional<Organization> optionalOrganization = organizationRepository.findBySuperCoachId(coachId);
-
         // Client
         User client = optionalClient.get();
         // Coach
@@ -108,13 +106,7 @@ public class SessionService {
         String sessionNo = client.getAddedBy().getBusinessName().substring(0, 2) +
                 client.getFirstName().charAt(0) + client.getLastName().charAt(0) + "-" + sessionL;
         sessionRequest.setSessionNumber(sessionNo);
-        if (optionalOrganization.isPresent()) {
-            sessionRequest.setOrgId(optionalOrganization.get().getId());
-        }
-        //set organization id null if not found
-        else {
-            sessionRequest.setOrgId(null);
-        }
+        sessionRequest.setOrganization(sessionRequest.getOrganization());
 
         try {
             sessionSchedulesService.updateBookedState(sessionSchedules.getId());
@@ -224,7 +216,7 @@ public class SessionService {
         Optional<Session> sessionOptional = sessionRepository.findById(id);
 
         if (sessionOptional.isEmpty()) {
-            throw new IllegalStateException("Coach doesn't exist");
+            throw new IllegalStateException("Session doesn't exist");
         }
 
         Session session = sessionOptional.get();
@@ -275,7 +267,8 @@ public class SessionService {
             sessionExample.setSessionStatus(status);
         }
         if (organisationId != null) {
-            sessionExample.setOrgId(organisationId);
+            sessionExample.setOrganization(new Organization());
+            sessionExample.getOrganization().setId(organisationId);
         }
         if (search != null && !search.isEmpty()) {
             sessionExample.setClient(client);

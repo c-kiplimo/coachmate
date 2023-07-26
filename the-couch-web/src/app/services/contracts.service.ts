@@ -21,11 +21,25 @@ export class ContractsService {
   }
 
   getContracts(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}contracts/filter`, {
+    return this.http.get(this.baseURL + 'contracts/filter', {
       observe: 'response',
       params: options,
     }
     );
+  }
+
+  changeContractStatus(contractId: any, data: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + 'contracts/changeContractStatus/' + contractId +"?status=" + data.status,
+    {
+      observe: 'response',
+    });
+  }
+
+  editContract (contractId: number, contract: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + 'contracts/' + contractId, contract, 
+    {
+      observe: 'response',
+    });
   }
 
 }

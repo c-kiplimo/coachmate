@@ -9,8 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClientService } from '../../services/ClientService';
-import { ApiService } from '../../services/ApiService'; 
-import {SessionsService }  from '../../services/SessionsService';
+import { ApiService } from '../../services/ApiService';
+import { SessionsService } from '../../services/SessionsService';
 import { ContractsService } from '../../services/contracts.service';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -31,12 +31,12 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
   ],
 })
 export class AddSessionComponent implements OnInit {
-  
+
   addClient!: FormGroup;
-  addSessionForm:any={
-    sessionType:"INDIVIDUAL",
-    sessionVenue:"VIRTUAL",
-  }; 
+  addSessionForm: any = {
+    sessionType: "INDIVIDUAL",
+    sessionVenue: "VIRTUAL",
+  };
   firstName: any;
   lastName: any;
   user: any;
@@ -45,7 +45,7 @@ export class AddSessionComponent implements OnInit {
   client: any;
   searchTerm = '';
   eventType = '';
-  addNewClient:any;
+  addNewClient: any;
   sessionDate = '';
   sessionStartTime = '';
   sessionDuration = '';
@@ -53,7 +53,7 @@ export class AddSessionComponent implements OnInit {
   open = false;
   showHideMessage = true;
   sessionType = [
-    
+
   ];
 
   coachSlots: any;
@@ -69,32 +69,31 @@ export class AddSessionComponent implements OnInit {
   getContractId: any;
   selectedContract: any;
 
-
   formData = {
-    sessionSchedules: {},
+    sessionSchedules: '',
     sessionDuration: '',
     sessionType: '',
     sessionVenue: '',
-    name:'',
-    sessionDetails:'',
-    attachments:'',
-    notes:'',
-    feedback:'',
-    paymentCurrency:'USD',
-    amountPaid:'',
-    sessionAmount:'',
-    sessionBalance:'',
+    name: '',
+    sessionDetails: '',
+    attachments: '',
+    notes: '',
+    feedback: '',
+    paymentCurrency: 'USD',
+    amountPaid: '',
+    sessionAmount: '',
+    sessionBalance: '',
 
   };
 
-  
+
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
   itemsPerPage: any;
   filters: any;
   clients: any;
-  numberOfClients!: number; 
+  numberOfClients!: number;
   coachSessionData: any;
   coachData: any;
   userRole: any;
@@ -109,10 +108,10 @@ export class AddSessionComponent implements OnInit {
       this.open = false;
     }
   }
-    constructor(
-    private apiService:ApiService,
+  constructor(
+    private apiService: ApiService,
     private http: HttpClient,
-    private clientService : ClientService,
+    private clientService: ClientService,
     private formbuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -120,7 +119,7 @@ export class AddSessionComponent implements OnInit {
     private contractsService: ContractsService,
     private toastrService: ToastrService
   ) {
-    
+
   }
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user');
@@ -129,10 +128,8 @@ export class AddSessionComponent implements OnInit {
     this.userRole = this.user.userRole;
     console.log(this.userRole);
 
-
     if (this.userRole == 'ORGANIZATION') {
-      this.orgId = this.user.id;
-      this.getCoachSlots(this.page);
+      this.orgId = this.user.organization.id;
       this.getContracts(this.page);
       this.getClients();
     } else if (this.userRole == 'COACH') {
@@ -140,28 +137,32 @@ export class AddSessionComponent implements OnInit {
       this.getCoachSlots(this.page);
       this.getContracts(this.page);
       this.getClients();
+    } else if (this.userRole == 'CLIENT') {
+      this.clientId = this.user.id;
+      this.getContracts(this.page);
+      this.getClients();
     }
-   
-
   }
- 
+
   onContractChange(event: any) {
     console.log(event.target.value);
     this.getContractId = event.target.value;
-
     //get client details from contract id
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
     console.log(this.selectedContract);
-
+    this.coachId = this.selectedContract.coachId;
+    //get select contract coach slots
+    this.getCoachSlots(this.page);
   }
+
   @ViewChild('modal', { static: false })
-modal!: ElementRef;
-closeModal() {
-  this.modal.nativeElement.style.display = 'none';
-  document.body.classList.remove('modal-open');
-}
-  
-  getClients(){
+  modal!: ElementRef;
+  closeModal() {
+    this.modal.nativeElement.style.display = 'none';
+    document.body.classList.remove('modal-open');
+  }
+
+  getClients() {
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -181,33 +182,26 @@ closeModal() {
     )
   }
 
-  addSession () {
-    console.log('add button clicked here')
+  addSession() {
     console.log(this.formData);
     if (this.selectedContract) {
       this.addSessionForm.clientId = this.selectedContract.clientId;
     }
-   console.log(this.formData);
-   console.log('add button clicked here')
-   const params = {
+    const params = {
       clientId: this.selectedContract.clientId,
-      
       contractId: this.getContractId,
-      sessionScheduleId: this.formData.sessionSchedules,
-   };
+    };
 
-   console.log(params);
- 
-   this.sessionService.addSession(this.formData, params).subscribe((res:any) => {
-    console.log(res);
-    this.toastrService.success('Session added successfully');
-    this.router.navigate(['/sessions']);
-  }, error => {
-    console.log(error);
-    this.toastrService.error(error.error, 'Maximum sessions reached contact coach');
-    this.router.navigate(['/sessions']);
-  });
-  
+    this.sessionService.addSession(this.formData, params).subscribe((res: any) => {
+      console.log(res);
+      this.toastrService.success('Session added successfully');
+      //redirect to were you came from
+      window.history.back();
+    }, error => {
+      console.log(error);
+      this.toastrService.error(error.error.message);
+    });
+
   }
 
 
@@ -217,15 +211,14 @@ closeModal() {
       size: this.pageSize,
       sort: 'id,desc',
     };
-    if(this.userRole == 'COACH'){
+    if (this.userRole == 'COACH') {
       options.coachId = this.coachId;
-    }else if(this.userRole == 'CLIENT'){
+    } else if (this.userRole == 'CLIENT') {
       options.clientId = this.clientId;
-    }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
-      options.coachId = this.coachId;
+    } else if (this.userRole == 'ORGANIZATION') {
+      options.organisationId = this.orgId;
     }
-    this.contractsService.getContracts(options).subscribe((res:any) => {
+    this.contractsService.getContracts(options).subscribe((res: any) => {
       console.log(res);
       this.contracts = res.body;
     }, (error: any) => {

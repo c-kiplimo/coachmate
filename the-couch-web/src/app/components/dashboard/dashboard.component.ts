@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionsService } from 'src/app/services/SessionsService';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { th } from 'date-fns/locale';
 import { CoachService } from 'src/app/services/CoachService';
 
 
@@ -31,6 +32,7 @@ export class DashboardComponent implements OnInit {
   sessions: any;
   orgName: any;
   contracts: any;
+  coachesImpl: any;
   numberOfClients!: number;
   numberOfSessions!: number;
   numberOfContracts!: number;
@@ -67,6 +69,8 @@ export class DashboardComponent implements OnInit {
   page: number = 0;
   pageSize: number = 5;
   totalElements: any;
+
+  currentTab = 'sessions';
 
   coachId!: number;
   clientId!: number;
@@ -114,14 +118,17 @@ export class DashboardComponent implements OnInit {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
-      this.getOrgClients();
+      // this.getClients(this.page);
+      //this.getCoaches(this.page);
+      // this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
       // console.log(this.orgSession);
-      this.getOrgContracts(this.orgId);
-      this.getAllOrgSessions(this.orgId);
+      // this.getOrgContracts(this.orgId);
+      // this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      // this.getOrgCoaches(this.orgId);
+      // this.getOrgCoaches(this.page);
+      this.getCoachesImpl(this.page);
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -270,17 +277,17 @@ export class DashboardComponent implements OnInit {
       search: this.filters.searchItem,
     };
 
-    this.clientService.getOrgSessions(options, id).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.sessions = response;
-        this.loading = false;
-        this.numberOfSessions = this.sessions.length;
-        (error: any) => {
-          console.log(error);
-        }
-      }
-    );
+    // this.clientService.getOrgSessions(options, id).subscribe(
+    //   (response: any) => {
+    //     console.log(response);
+    //     this.sessions = response;
+    //     this.loading = false;
+    //     this.numberOfSessions = this.sessions.length;
+    //     (error: any) => {
+    //       console.log(error);
+    //     }
+    //   }
+    // );
 
   }
   getNoOfSessions() {
@@ -321,51 +328,51 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getOrgContracts(id: any) {
-    this.loading = true;
-    this.clientService.getOrgContracts(id).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.contracts = response.body;
-        this.loading = false;
-        this.numberOfContracts = this.contracts.length;
-      },
-      (error: any) => {
-        console.log(error);
-      }
-    );
-  }
+  // getOrgContracts(id: any) {
+  //   this.loading = true;
+  //   this.coachService.getContracts(id).subscribe(
+  //     (response: any) => {
+  //       console.log(response);
+  //       this.contracts = response.body;
+  //       this.loading = false;
+  //       this.numberOfContracts = this.contracts.length;
+  //     },
+  //     (error: any) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
-  getOrgClients() {
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-    };
-    const id = this.user.id;
-    this.loading = true;
-    this.clientService.getOrgClients(id).subscribe(
-      (response) => {
-        this.loading = false;
-        this.clients = response.body;
-        console.log(response)
-        console.log('clients', this.clients)
-        this.numberOfClients = this.clients.length;
+  // getOrgClients() {
+  //   const options = {
+  //     page: 1,
+  //     per_page: this.itemsPerPage,
+  //     status: this.filters.status,
+  //     search: this.filters.searchItem,
+  //   };
+  //   const id = this.user.id;
+  //   this.loading = true;
+  //   this.clientService.getOrgClients(id).subscribe(
+  //     (response) => {
+  //       this.loading = false;
+  //       this.clients = response.body;
+  //       console.log(response)
+  //       console.log('clients', this.clients)
+  //       this.numberOfClients = this.clients.length;
 
-      }, (error) => {
-        console.log(error)
-      }
-    )
-  }
+  //     }, (error) => {
+  //       console.log(error)
+  //     }
+  //   )
+  // }
 
   navigateToSessionView(id: any) {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
 
+  
   getClients(page: any) {
- 
     this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
@@ -373,6 +380,9 @@ export class DashboardComponent implements OnInit {
       page = 0;
     } else {
       page = page - 1;
+    }
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
     }
     const options: any = {
       page: page,
@@ -387,13 +397,18 @@ export class DashboardComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      options.coachId = this.coachId;
+      options.orgId = this.orgId;
     }
     
-    this.clientService.getClients(options).subscribe(
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
       (response) => {
         this.loading = false;
         this.clients = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'CLIENT') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
         this.totalElements = +response.headers.get('X-Total-Count');
         this.numberOfClients = this.clients.length;
         console.log('clients',this.clients)
@@ -403,7 +418,6 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-
 
   navigateToTerms(id: any) {
     console.log("contractId on navigate", id);
@@ -442,23 +456,85 @@ export class DashboardComponent implements OnInit {
   //   );
   // }
 
-  getOrgCoaches(id: any) {
-    const data = {
-      orgId: id,
+  getCoachesImpl(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
     }
-    this.coachService.getCoaches(data).subscribe(
-      (response: any) => {
-        console.log('here Organization=> coaches', response);
-        this.coaches = response;
-        console.log(this.coaches);
-        console.log('here Organization=> coaches', response);
-        this.numberofCoaches = this.coaches.length;
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+    };
 
-      },
-      (error: any) => {
-        console.log(error);
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.orgId = this.orgId;
+    }
+    
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
+      (response) => {
+        this.loading = false;
+        this.coachesImpl = response.body;
+        for (let client of this.coachesImpl) {
+          if (client.userRole != 'COACH') {
+            this.coachesImpl.splice(this.coachesImpl.indexOf(client), 1);
+          }
+        }
+        this.totalElements = +response.headers.get('X-Total-Count');
+        console.log('clients',this.coachesImpl)
+      }, (error) => {
+        this.loading = false;
+        console.log(error)
       }
-    );
+    )
+  }
+
+  getOrgCoaches(page: any) {
+ 
+      this.loading = true;
+      this.page = page;
+      //if page is 0, don't subtract 1
+      if (page === 0 || page < 0) {
+        page = 0;
+      } else {
+        page = page - 1;
+      }
+      const options: any = {
+        page: page,
+        size: this.pageSize,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        sort: 'id,desc',
+      };
+    
+     if(this.userRole == 'ORGANIZATION'){
+        options.orgId = this.orgId;
+      }
+      
+      this.clientService.getOrgCoaches(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.coachesImpl = response.body;
+          this.totalElements = +response.headers.get('X-Total-Count');
+          console.log('coaches',this.coachesImpl)
+        }, (error) => {
+          this.loading = false;
+          console.log(error)
+        }
+      )
   }
   getClientContracts(id: any) {
     // const data = {
@@ -497,8 +573,11 @@ export class DashboardComponent implements OnInit {
     console.log("contractId on navigate", id);
     this.contractId = id;
     this.router.navigate(['/contractDetail/' + id]);
+  }
 
-
+  navigateToCoachView(id : number) {
+    console.log("coachId on navigate", id);
+    this.router.navigate(['/coachView/' + id]);
   }
 
 
@@ -566,9 +645,10 @@ export class DashboardComponent implements OnInit {
     }
     else (sessions.status === 'CANCELLED')
     return 'badge-success';
-
-
   }
 
+  toggleTab(tab: string): void {
+    this.currentTab = tab;
+  }
 
 }

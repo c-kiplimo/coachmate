@@ -3,139 +3,247 @@
     <h3 class="fw-semi-bold f-weight fs-5">Coaches</h3>
   </div>
 </div>
-        
-        <div class="row">
-                <div class="col-md-3">
-                  <div class="filters-section">
-                    <div class="wrap">
-                      <select
-                        class="form-control"
-                        name="codes"
-                        [(ngModel)]="filters.status" (change)="filterByStatus()"
-                      >
-                        <option value="" >All statuses</option>
-                        <option value="ACTIVE">ACTIVE</option>
-                        <option value="SUSPENDED">SUSPENDED</option>
-                        <option value="CLOSED">CLOSED</option>
-                      </select>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
-                      aria-label="Name, Phone or Email" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
-                  </div>
-                </div>
-        <div class="col-md-2">
+
+<div class="d-none d-lg-block">
+<div class="row">
+  <div class="col-md-3">
+    <div class="filters-section">
+      <div class="wrap">
+        <select class="form-control" name="codes" [(ngModel)]="filters.status" (change)="filterByStatus()">
+          <option value="">All statuses</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="SUSPENDED">SUSPENDED</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+        aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <button type="button" routerLink="/addCoach" class="btn btn-outline-success">
+      <i class="fa fa-plus"></i> Add Coach
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">        
+        <table class="table" *ngIf="coaches?.length">
+          <thead>
+            <tr>
+              <th scope=" col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone Number</th>
+              <th scope="col">Created On</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let coach of coaches | paginate: { itemsPerPage: pageSize,currentPage:page,totalItems: totalElements}">
+              <td>{{ coach?.fullName| titlecase }}</td>
+              <td>{{ coach?.email }}</td>
+              <td>{{ coach?.msisdn }}</td>
+              <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
+
+              <td>
+                <span class="badge" [ngClass]="{
+                  'badge-success': coach?.coachStatus === 'ACTIVE',
+                  'badge-danger': coach?.coachStatus === 'SUSPENDED' || coach.coachStatus === 'CLOSED',
+                  'badge-primary': coach?.coachStatus=== 'NEW'
+                }">{{ coach?.coachStatus }}</span>
+              </td>
+
+              <td class="actions">
+                <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToCoachView(coach.id)"></i>
+                <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editCoachModal"
+                  (click)="editCoach(coach)"></i>
+                <!-- <i
+                class="fa-solid fa-trash-can"
+                (click)="suspendClient(client)"
+              ></i> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !coaches.length">
+          No coaches Found.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="show-sm">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h3></h3>
+        <div>
           <button type="button" routerLink="/addCoach" class="btn btn-success">
             <i class="fa fa-plus"></i> Add Coach
           </button>
         </div>
       </div>
-          <div class="row">
-            <div class="col-md-10" >
-              <div class="card">
-                <div class="card-body">
-                  <table class="table" *ngIf="coaches?.length">
-              <thead >
-                <tr>
-                <th scope=" col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone Number</th>
-                <th scope="col">Created On</th>
-                <th scope="col">Status</th>
-                <th scope="col">Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let coach of coaches | paginate: { itemsPerPage: pageSize,currentPage:page,totalItems: totalElements}">
-                  <td>{{ coach?.fullName| titlecase }}</td>
-                  <td>{{ coach?.email }}</td>
-                  <td>{{ coach?.msisdn }}</td>
-                  <td>{{ coach?.createdAt | date: "MMM d y"}}</td>
-                  
-                  <td>
-                    <span class="badge" [ngClass]="{
-                  'badge-success': coach?.status === 'ACTIVE',
-                  'badge-danger': coach?.status === 'SUSPENDED' || coach.coachtStatus === 'CLOSED',
-                  'badge-primary': coach?.status=== 'NEW'
-                }">{{ coach?.coachStatus }}</span>
-                  </td>
-    
-                  <td class="actions">
-                    <i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToCoachView(coach.id)"></i>
-                    <i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editCoachModal"
-                      (click)="editCoach(coach)"></i>
-                    <!-- <i
-                class="fa-solid fa-trash-can"
-                (click)="suspendClient(client)"
-              ></i> -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                <div class="donut multi"></div>
-              </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !coaches.length">
-                No coaches Found.
-              </p>
+
+      <div class="row" [@fadeIn]>
+        <div class="col-md-10 mb-2">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+              aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+            <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
           </div>
-              </div>
-            </div>
-            </div>
-            <br>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h5>Coaches</h5>
+        <div (click)="toggleFilters()">
+          Filters
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+            viewBox="0 0 16 16">
+            <path
+              d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </div>
+      </div>
+
+
+      <div class="pt-3 pb-2 listing-item"
+        *ngFor="let coach of coaches  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+        [routerLink]="['/clientView', coach.id]">
+
+
+        <div class="d-flex justify-content-between">
+          <h4 class="farmer" [routerLink]="['/coachView', coach.id]">
+            {{ coach?.fullName | titlecase }}
+          </h4>
+
+          <span class="no-word-break">
+            <a [routerLink]="['/coachView', coach.id]"><i class="fa fa-angle-right"></i></a>
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coach.email | titlecase }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coach.msisdn }}
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-1">
+          <span class="badge" [ngClass]="{
+          'badge-success': coach?.coachStatus === 'ACTIVE',
+          'badge-danger': coach?.coachStatus === 'SUSPENDED' || coach?.coachStatus === 'CLOSED',
+          'badge-primary': coach?.coachStatus === 'NEW'
+        }">{{ coach?.coachStatus }}</span>
+        </div>
+      </div>
+
+
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
+      </div>
+      <div *ngIf="!loading && coaches?.length === 0">
+        <h2 class="text-muted mt-5">No Coaches Found.</h2>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<br>
+
 <div class="text-center" *ngIf="totalElements > 15">
   <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
 </div>
 <br>
 
-          
-        <!-- Edit Client Modal -->
-        <div class="modal fade" id="editCoachModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-x1">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-               <form [formGroup]="updateCoach">
-                <div class="mb-3 form-group">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
-                  value="{{ coachToBeUpdated?.firstName }}"/>
-                </div>
-                <div class="mb-3 form-group">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
-                  value="{{ coachToBeUpdated?.lastName }}">
-                </div>
-                <div class="mb-3 form-group">
-                  <label for="email_address" class="form-label">Email</label>
-        
-                  <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
-        
-                  value="{{ coachToBeUpdated?.email }}">
-                </div>
-                <div class="mb-3 form-group">
-                  <label for="msisdn" class="form-label">Phone Number</label>
-                  <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
-                  value="{{ coachToBeUpdated?.msisdn }}">
-                </div>
-               </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success"
-                (click)="updateCoachDetails(coachToBeUpdated.id)"
-                >Save changes</button>
-              </div>
-            </div>
+<!-- Panel -->
+<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
+
+  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+    <div class="add-options-panel-heading">
+      <h4>Filter options</h4>
+      <span (click)="toggleFilters()">Cancel</span>
+    </div>
+
+
+    <div class="mb-1 border-bottom">
+      <h6 class="filter-section-title">Filter by status</h6>
+      <div class="add-filter-option" 
+        *ngFor="let status of coachStatuses;index as i" (click)="filters.status = status">
+        <span>{{status | titlecase}}</span>
+        <span class="checkbox-border">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="action-buttons mb-4">
+      <button class="btn btn-cancel" (click)="resetStatuses()">Reset</button>
+      <button class="btn btn-submit" (click)="toggleFilters();getCoaches(0)">Submit</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Edit Coach Modal -->
+<div class="modal fade" id="editCoachModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Coach</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="updateCoach">
+          <div class="mb-3 form-group">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+              value="{{ coachToBeUpdated?.firstName }}" />
           </div>
-        </div>
-        
+          <div class="mb-3 form-group">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+              value="{{ coachToBeUpdated?.lastName }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="email_address" class="form-label">Email</label>
+
+            <input type="text" class="form-control" id="email" name="email_address" formControlName="email"
+              value="{{ coachToBeUpdated?.email }}">
+          </div>
+          <div class="mb-3 form-group">
+            <label for="msisdn" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
+              value="{{ coachToBeUpdated?.msisdn }}">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-success" (click)="updateCoachDetails(coachToBeUpdated.id)">Save
+          changes</button>
+      </div>
+    </div>
+  </div>
+</div>

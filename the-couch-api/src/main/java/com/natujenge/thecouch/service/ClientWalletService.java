@@ -10,16 +10,12 @@ import com.natujenge.thecouch.repository.NotificationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
-import com.natujenge.thecouch.web.rest.dto.ClientDTO;
-import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDTO;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -608,7 +604,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> walletPage;
+        Page<ClientWalletDTO> walletPage;
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
@@ -626,7 +622,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> walletPage;
+        Page<ClientWalletDTO> walletPage;
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
@@ -645,7 +641,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> walletPage;
+        Page<ClientWalletDTO> walletPage;
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
@@ -660,7 +656,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDTO> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
                 organizationId,
                 clientId,
                 pageable
@@ -674,7 +670,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDTO> paymentPage =  clientWalletRepository.findByOrganizationIdAndClientId(
                 coachId,
                 clientId,
                 pageable
@@ -682,6 +678,7 @@ public class ClientWalletService {
         return new ListResponse(paymentPage.getContent(), paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                 paymentPage.getTotalElements());
     }
+
     public ListResponse filterByClientName(int page, int perPage, String name) {
 
 
@@ -692,10 +689,10 @@ public class ClientWalletService {
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
 
-        Page<ClientWalletDto> receiptPage = null;
+        Page<ClientWalletDTO> receiptPage = null;
         if(name !=null){
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name),q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage=walletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name),q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
@@ -711,7 +708,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage = null;
+        Page<ClientWalletDTO> paymentPage = null;
 
         if (statementPeriod != null && clientName !=null && search != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
@@ -724,7 +721,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
@@ -734,7 +731,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
@@ -744,7 +741,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -760,21 +757,21 @@ public class ClientWalletService {
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate1Year))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate6Months))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDateMonth))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -788,7 +785,7 @@ public class ClientWalletService {
                             and(qClientWallet.client.email.containsIgnoreCase(search)).
                             and(qClientWallet.client.firstName.containsIgnoreCase(search)).
                             and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -802,7 +799,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
@@ -811,7 +808,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
@@ -820,7 +817,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -837,19 +834,19 @@ public class ClientWalletService {
                     LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate1Year))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate6Months))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDateMonth))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -863,7 +860,7 @@ public class ClientWalletService {
         if ( clientName !=null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
             paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName)
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -874,7 +871,7 @@ public class ClientWalletService {
                             (search).
                             and(qClientWallet.client.firstName.containsIgnoreCase(search)).
                             and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -892,7 +889,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage = null;
+        Page<ClientWalletDTO> paymentPage = null;
 
         if (statementPeriod != null && clientName !=null && search != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
@@ -905,7 +902,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
@@ -915,7 +912,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
@@ -925,7 +922,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -941,21 +938,21 @@ public class ClientWalletService {
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate1Year))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate6Months))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDateMonth))
                                     .and(qClientWallet.client.fullName.containsIgnoreCase(clientName))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -969,7 +966,7 @@ public class ClientWalletService {
                             and(qClientWallet.client.email.containsIgnoreCase(search)).
                             and(qClientWallet.client.firstName.containsIgnoreCase(search)).
                             and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -983,7 +980,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
@@ -992,7 +989,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
@@ -1001,7 +998,7 @@ public class ClientWalletService {
                                     .and(qClientWallet.client.email.containsIgnoreCase(search))
                                     .and(qClientWallet.client.firstName.containsIgnoreCase(search))
                                     .and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -1018,19 +1015,19 @@ public class ClientWalletService {
                     LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate1Year))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate6Months))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDateMonth))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;
@@ -1044,7 +1041,7 @@ public class ClientWalletService {
         if ( clientName !=null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
             paymentPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(clientName)
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -1055,7 +1052,7 @@ public class ClientWalletService {
                                     (search).
                             and(qClientWallet.client.firstName.containsIgnoreCase(search)).
                             and(qClientWallet.client.lastName.containsIgnoreCase(search))
-                    ,q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                    ,q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
@@ -1073,7 +1070,7 @@ public class ClientWalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage = null;
+        Page<ClientWalletDTO> paymentPage = null;
         if(statementPeriod != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
             switch (statementPeriod) {
@@ -1081,19 +1078,19 @@ public class ClientWalletService {
                     LocalDateTime startDate1Year = LocalDateTime.now().minusYears(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate1Year))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_6_MONTHS:
                     LocalDateTime startDate6Months = LocalDateTime.now().minusMonths(6);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDate6Months))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 case PER_MONTH:
                     LocalDateTime startDateMonth = LocalDateTime.now().minusMonths(1);
                     paymentPage = clientWalletRepository.findBy(qClientWallet.statementPeriod.eq(statementPeriod)
                                     .and(qClientWallet.createdAt.after(startDateMonth))
-                            , q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+                            , q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
                     break;
                 default:
                     break;

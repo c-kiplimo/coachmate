@@ -7,7 +7,12 @@
 .sub-titles {
     font-weight: 500;
     font-size: 1.4rem;
+    margin : 10px;
 }
+::ng-deep .mat-accordion .mat-expansion-panel {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+    box-shadow: none !important;
+  }
 mat-expansion-panel {
     border-bottom: 0.2px solid #f5f1f1;
 }
@@ -20,4 +25,9 @@ p {
     font-size: 1.0rem;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     padding-top: 10px;
+}
+
+.accord-container {
+    border: 0.1px solid rgba(70, 69, 69, 0.12);
+    border-radius: 5px;
 }

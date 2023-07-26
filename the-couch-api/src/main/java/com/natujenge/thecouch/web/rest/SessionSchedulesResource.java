@@ -1,22 +1,17 @@
 package com.natujenge.thecouch.web.rest;
 
+import com.natujenge.thecouch.domain.DaysOfTheWeek;
 import com.natujenge.thecouch.domain.SessionSchedules;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.service.SessionSchedulesService;
-import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.util.ResponseUtil;
-import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.web.rest.dto.SessionSchedulesDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,43 +25,85 @@ public class SessionSchedulesResource {
 
     //ADD
     @PostMapping
-    public ResponseEntity<?> createSessionSchedule (@RequestBody SessionSchedules sessionSchedules,
-                                                    @RequestParam("coachId") Long coachId,
-                                                    @AuthenticationPrincipal User userDetails) {
+    public SessionSchedules createSessionSchedule (@RequestBody SessionSchedules sessionSchedules,
+                                                   @RequestParam("coachId") Long coachId,
+                                                   @AuthenticationPrincipal User userDetails) {
         log.info("Request to create session schedule");
         try{
-            SessionSchedules sessionSchedules1 = sessionSchedulesService.createSessionSchedule(coachId, sessionSchedules);
-            return new ResponseEntity<>(new RestResponse(false, "Session schedule Created"), HttpStatus.CREATED);
+            return sessionSchedulesService.createSessionSchedule(coachId, sessionSchedules);
         } catch(Exception e) {
             log.error("Error", e);
-            return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<SessionSchedulesDTO> getSessionSchedulesById(@PathVariable("id") Long id,
-                                                     @AuthenticationPrincipal User userDetails) {
+    public ResponseEntity<SessionSchedules> getSessionSchedulesById(@PathVariable("id") Long id,
+                                                                    @AuthenticationPrincipal User userDetails) {
 
-        Optional<SessionSchedulesDTO> sessionSchedules = sessionSchedulesService.findSessionSchedulesById(id);
+        Optional<SessionSchedules> sessionSchedules = sessionSchedulesService.findSessionSchedulesById(id);
         return ResponseUtil.wrapOrNotFound(sessionSchedules);
 
     }
     //DELETE
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestParam(name = "id") Long id) {
-        sessionSchedulesService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+       return sessionSchedulesService.delete(id);
+
     }
+
     //Get by coach id
     @GetMapping("/filter")
     public ResponseEntity<?> filter (@RequestParam(name = "coachId", required = false) Long coachId,
-                                     @RequestParam(name = "status", required = false) Boolean status,
-                                     @RequestParam(name = "search", required = false) String search,
-                                     Pageable pageable,
-                                     @AuthenticationPrincipal User userDetails) {
-        Page<SessionSchedulesDTO> sessionSchedulesDTOPage = sessionSchedulesService.filter(coachId, status, search, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), sessionSchedulesDTOPage);
-        return ResponseEntity.ok().headers(headers).body(sessionSchedulesDTOPage.getContent());
+                                                     @AuthenticationPrincipal User userDetails) {
+        log.info("Request to filter session schedules");
+        //find all session schedules by coach id
+        List<SessionSchedules> sessionSchedules = sessionSchedulesService.findAllByCoach(coachId);
+        return new ResponseEntity<>(sessionSchedules, HttpStatus.OK);
+
     }
+
+    //update session schedule
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateSessionSchedule (@RequestBody SessionSchedules sessionSchedules,
+                                                    @PathVariable("id") Long id,
+                                                    @AuthenticationPrincipal User userDetails) {
+        log.info("Request to update session schedule");
+        try {
+            SessionSchedules sessionSchedules1 = sessionSchedulesService.updateSessionSchedule(id, sessionSchedules);
+            return new ResponseEntity<>(sessionSchedules1, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    //GET Day of the week
+    @GetMapping("/daysOfTheWeek")
+    public ResponseEntity<?> getDaysOfTheWeek (
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(name = "coachId", required = false) Long coachId) {
+        log.info("Request to get day of the week");
+        //find all session schedules by day of the week
+        List<DaysOfTheWeek> sessionSchedules = sessionSchedulesService.getDaysOfTheWeek(coachId);
+        return new ResponseEntity<>(sessionSchedules, HttpStatus.OK);
+
+    }
+    //update day of the week
+    @PutMapping("/daysOfTheWeek/{id}")
+    public ResponseEntity<?> updateDayOfTheWeek (@RequestBody DaysOfTheWeek daysOfTheWeek,
+                                                 @PathVariable("id") Long id,
+                                                 @AuthenticationPrincipal User userDetails) {
+        log.info("Request to update day of the week");
+        try {
+            DaysOfTheWeek daysOfTheWeek1 = sessionSchedulesService.updateDayOfTheWeek(id, daysOfTheWeek);
+            return new ResponseEntity<>(daysOfTheWeek1, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }

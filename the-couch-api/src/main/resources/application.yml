@@ -10,25 +10,13 @@ spring:
     username: root
     password: N@tujengeroot
 
-    #    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    #    username: root
-    #    password: ninja
-
-    #    url: jdbc:mysql://localhost:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    #    username: root
-    #    password: ninja
-
-    #  url: jdbc:mysql://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    # password: elijah@maria22
-    #username: elijah
-
-
-    #  url: jdbc:mysql://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    # password: elijah@maria22
-    #username: elijah
+#        url: jdbc:mysql://172.18.0.2:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+#        username: root
+#        password: root
 
 
 
+    
 
   jpa:
     hibernate:
@@ -43,10 +31,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  servlet:
-    multipart:
-      max-file-size: 2MB
-      max-request-size: 2MB
+#  servlet:
+#    multipart:
+#
+#      max-file-size: 10MB    # Set the maximum file size if needed
+#      max-request-size: 10MB  # Set the maximum request size if needed
 
 #logging:
 #  level:

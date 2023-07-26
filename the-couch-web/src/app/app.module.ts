@@ -7,6 +7,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './shared/sidenav/sidenav.component';
@@ -43,7 +45,6 @@ import { sessionViewComponent } from './session-view/session-view.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ConfirmedViewComponent } from './components/confirmed-view/confirmed-view.component';
 import { ToastrModule } from 'ngx-toastr';
-import { CoachEducationModule } from './coach-education/coach-education.module';
 import { SharedModule } from 'src/shared/shared.module';
 import { AddTrainingComponent } from './coach-education/add-training/add-training.component';
 import { CoachEducationService } from './services/CoachEducationService';
@@ -73,9 +74,10 @@ import { HeaderComponent } from './shared/header/header.component';
 import { ContractsService } from './services/contracts.service';
 import { FeedbackService } from './services/feedback.service';
 import { NotificationsService } from './services/notifications.service';
-
-
-
+import { TrainingsListComponent } from './coach-education/trainings-list/trainings-list.component';
+import { AttachmentsComponent } from './components/attachments/attachments.component';
+import { CoachLogsService } from './services/coach-logs.service';
+import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
 
 
 @NgModule({
@@ -110,7 +112,7 @@ import { NotificationsService } from './services/notifications.service';
     ContractDetailsComponent,
     GetPeriodPipe,
     AddCoachComponent,
-
+    TrainingsListComponent,
     HomeComponent,
     FeedbackComponent,
     SupportComponent,
@@ -121,14 +123,15 @@ import { NotificationsService } from './services/notifications.service';
     CoachViewComponent,
     CoachesComponent,
     NotificationsComponent,
-    HeaderComponent
+    HeaderComponent,
+    AttachmentsComponent,
+    CoachLogsComponent
 
 
   ],
   imports: [  
     MbscModule, 
     BrowserModule,
-    CoachEducationModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
@@ -166,6 +169,7 @@ import { NotificationsService } from './services/notifications.service';
     ContractsService,
     FeedbackService,
     NotificationsService,
+    CoachLogsService
   ],
   bootstrap: [AppComponent],
 })

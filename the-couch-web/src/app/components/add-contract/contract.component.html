@@ -4,15 +4,27 @@
   <form [formGroup]="contractForm" class="col-10">
     <div class="mb-3 mt-3 description">
       <h3 for="coachingTopic" class="form-label">Coaching Title</h3>
-      <input type="text" class="form-control" id="nucoachingTopicmber" placeholder="Enter the coaching topic"
-        formControlName="coachingTopic" required="true" />
+      <input
+        type="text"
+        class="form-control"
+        id="nucoachingTopicmber"
+        placeholder="Enter the coaching topic"
+        formControlName="coachingTopic"
+        required="true"
+      />
     </div>
-    <br>
+    <br />
     <div class="row">
       <div class="col-6 input-group-prepend">
-        <label for="coachingCategory" class="form-label">Coaching Category</label>
-        <select class="form-select" aria-label="Default select example" formControlName="coachingCategory"
-          required="true">
+        <label for="coachingCategory" class="form-label"
+          >Coaching Category</label
+        >
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="coachingCategory"
+          required="true"
+        >
           <option selected>Select Category</option>
           <option value="INDIVIDUAL">INDIVIDUAL</option>
           <option value="CORPORATE">CORPORATE</option>
@@ -20,79 +32,89 @@
       </div>
       <div class="col-6 input-group-prepend">
         <label for="clientId" class="form-label">Select Client</label>
-        <select class="form-select" aria-label="Default select example" formControlName="clientId" required="true">
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="clientId"
+          required="true"
+        >
           <option selected>Select Client you want to make contract with</option>
-
           <!--Loop through clients and form options-->
-          <option *ngFor="let client of clients" value="{{client.id}}">{{client.firstName}} {{client.lastName}}
+          <option *ngFor="let client of clients" value="{{ client.id }}">
+            {{ client.firstName }} {{ client.lastName }}
           </option>
-
           <!--Render the create client button if no clients are found-->
-
           <div *ngIf="!clients">
-            <button class="btn btn-success" routerLink="/addclient">
+            <button class="btn btn-outline-success" routerLink="/addclient">
               Create Client
             </button>
           </div>
         </select>
-
-
       </div>
     </div>
     <br>
+
     <h3>Schedule & Fees</h3>
     <div class="row">
       <div class="col">
         <label for="number" class="form-label">Start Date</label>
-        <input type="date" class="form-control" placeholder="date" formControlName="startDate" required="true" />
+        <input
+          type="date"
+          class="form-control"
+          placeholder="date"
+          formControlName="startDate"
+          required="true"
+        />
       </div>
       <div class="col">
         <label for="number" class="form-label">End Date</label>
-        <input type="date" class="form-control" placeholder="date" formControlName="endDate" required="true" />
+        <input
+          type="date"
+          class="form-control"
+          placeholder="date"
+          formControlName="endDate"
+          required="true"
+        />
       </div>
     </div>
 
     <div class="mb-3 mt-3">
-      <div class="row">
-        <div *ngIf="contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'" class="col-6">
-          <label for="number" class="form-label">Individual Fees Per Session</label>
-
-
-          <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-            formControlName="individualFeesPerSession" required="true" />
-        </div>
-        <div *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'" class="col-6">
-          <label for="number" class="form-label">Group Fees Per Session</label>
-          <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-            formControlName="groupFeesPerSession" required="true" />
-        </div>
-      </div>
       <section>
-        <br>
+        <br />
         <h3>Coaching Goals</h3>
-        <br>
+        <br />
         <div class="row mb-3">
           <div class="col-12"></div>
-  
+
           <div class="row">
             <div class="col-6">
-              <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Goal"
-                formControlName="objectives" />
+              <input
+                [(ngModel)]="Objectives.objective"
+                type="text"
+                class="form-control"
+                placeholder="Add Goal"
+                formControlName="objectives"
+              />
             </div>
             <div class="col-6">
-              <button type="button" class="btn btn-success" (click)="addObjective()">
+              <button type="button" class="btn btn-outline-success" (click)="addObjective()">
                 <i class="fa-solid fa-user-plus"></i>Add goal
               </button>
             </div>
-  
           </div>
         </div>
         <div class="row">
           <div class="col-10">
             <div class="mb-3">
               <ol>
-                <li *ngFor="let obj of objectives; index as i">{{ obj }} <i (click)="removeObjective(i)" role="button"
-                    class="fa-solid fa-trash-can p-1"></i></li>
+                <li *ngFor="let obj of objectives; index as i">
+                  {{ obj }}
+                  <i
+                    (click)="removeObjective(i)"
+                    role="button"
+                    class="fa-solid fa-trash-can p-1"
+                  ></i>
+                </li>
               </ol>
             </div>
           </div>
@@ -101,67 +123,152 @@
       <div class="row">
         <div class="col-6">
           <label for="number" class="form-label">No. of Sessions:</label>
-          <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions"
-            formControlName="noOfSessions" required="true" />
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter number of Sessions"
+            formControlName="noOfSessions"
+            required="true"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div
+          *ngIf="
+            contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
+          "
+          class="col-6"
+        >
+          <label for="number" class="form-label"
+            >Individual Fees Per Session</label
+          >
+
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter the fee to be paid in USD"
+            formControlName="individualFeesPerSession"
+            required="true"
+          />
+        </div>
+        <div
+          *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'"
+          class="col-6"
+        >
+          <label for="number" class="form-label">Group Fees Per Session</label>
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter the fee to be paid in USD"
+            formControlName="groupFeesPerSession"
+            required="true"
+          />
         </div>
       </div>
     </div>
-   
-    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseService" aria-expanded="false"
-      aria-controls="collapseService" (click)="toggleEditingSettings()" [disabled]="disableButton">
+
+    <button
+      class="btn"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseService"
+      aria-expanded="false"
+      aria-controls="collapseService"
+      (click)="toggleEditingSettings()"
+      [disabled]="disableButton"
+    >
       <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
     </button>
     <div class="collapse" id="collapseService">
       <div class="row">
         <div class="col-10">
           <div class="form-group">
-            <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.servicesTemplate}}</span>
-            <textarea name="servicesTemplate" class="form-control no-box-shadow" id="servicesTemplate"
-              aria-describedby="servicesTemplate" rows="4" formControlName="services" *ngIf="editingSettings" [@fadeIn]
-              [disabled]="isSaving"></textarea>
+            <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+              contractTemplates?.servicesTemplate
+            }}</span>
+            <textarea
+              name="servicesTemplate"
+              class="form-control no-box-shadow"
+              id="servicesTemplate"
+              aria-describedby="servicesTemplate"
+              rows="4"
+              formControlName="services"
+              *ngIf="editingSettings"
+              [@fadeIn]
+              [disabled]="isSaving"
+            ></textarea>
           </div>
         </div>
       </div>
     </div>
 
-
-
-
     <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms" aria-expanded="false"
       aria-controls="collapseTerms" (click)="toggleEditingSettings()" [disabled]="disableButton">
+
       <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
     </button>
-    <br />
+    <br/>
+
     <div class="collapse" id="collapseTerms">
       <div class="row">
         <div class="col-10">
           <div class="form-group">
-            <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.terms_and_conditionsTemplate
-                }}</span>
-            <textarea name="terms_and_conditionsTemplate" class="form-control" id="terms_and_conditionsTemplate"
-              aria-describedby="terms_and_conditionsTemplate" rows="4" formControlName="terms_and_conditions"
-              *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
-                </textarea>
+            <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+              contractTemplates?.terms_and_conditionsTemplate
+            }}</span>
+            <textarea
+              name="terms_and_conditionsTemplate"
+              class="form-control"
+              id="terms_and_conditionsTemplate"
+              aria-describedby="terms_and_conditionsTemplate"
+              rows="4"
+              formControlName="terms_and_conditions"
+              *ngIf="editingSettings"
+              [@fadeIn]
+              [disabled]="isSaving"
+            >
+            </textarea>
           </div>
         </div>
       </div>
     </div>
     <br>
+
     <div class="input-group mb-3">
-      <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePractice"
-        aria-expanded="false" aria-controls="collapsePractice" (click)="toggleEditingSettings()"
-        [disabled]="disableButton">
+      <button
+        class="btn"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapsePractice"
+        aria-expanded="false"
+        aria-controls="collapsePractice"
+        (click)="toggleEditingSettings()"
+        [disabled]="disableButton"
+      >
         <h3>Practice <i class="fa fa-arrow-circle-down"></i></h3>
       </button>
 
       <br />
       <div class="collapse" id="collapsePractice">
         <div class="form-group">
-          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{contractTemplates?.practiceTemplate}}</span>
-          <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
-            aria-describedby="practiceTemplate" rows="4" formControlName="practice" *ngIf="editingSettings" [@fadeIn]
-            [disabled]="isSaving">
-                  </textarea>
+          <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+            contractTemplates?.practiceTemplate
+          }}</span>
+          <textarea
+            name="practiceTemplate"
+            class="form-control"
+            id="practiceTemplate"
+            aria-describedby="practiceTemplate"
+            rows="4"
+            formControlName="practice"
+            *ngIf="editingSettings"
+            [@fadeIn]
+            [disabled]="isSaving"
+          >
+          </textarea>
         </div>
       </div>
     </div>
@@ -172,20 +279,30 @@
           <h3>Note</h3>
         </div>
         <div class="form-group">
-          <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
-            aria-describedby="practiceTemplate" rows="4" formControlName="note">
-                      </textarea>
+          <textarea
+            name="practiceTemplate"
+            class="form-control"
+            id="practiceTemplate"
+            aria-describedby="practiceTemplate"
+            rows="4"
+            formControlName="note"
+          >
+          </textarea>
         </div>
       </div>
     </div>
     <br>
+  </form>
+
     <div class="row">
       <div class="col-md-12">
-        <div class="d-flex  justify-content-between ">
+        <div class="d-flex justify-content-between">
           <p></p>
-          <button type="button" (click)="addContract()" class="btn btn-success ">
+          <button type="button" (click)="addContract()" class="btn btn-outline-success ">
+
             Submit
           </button>
         </div>
       </div>
     </div>
+</div>

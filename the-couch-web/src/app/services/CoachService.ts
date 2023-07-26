@@ -57,7 +57,7 @@ export class CoachService {
   }
 
   getCoaches(options: any): Observable<any> {
-    return this.httpClient.get(`${this.baseURL}users/coaches`,
+    return this.httpClient.get(`${this.baseURL}/users/coaches`,
       {
         params: options,
         observe: 'response',
@@ -70,26 +70,25 @@ export class CoachService {
     console.log("edit coach reached")
     console.log("coach  to be updated here", coachToBeUpdated)
     console.log("coach id here", id)
-    return this.httpClient.put(`${this.baseURL}users/coach/${id}`, coachToBeUpdated)
+    return this.httpClient.put(`${this.baseURL}/users/coach/${id}`, coachToBeUpdated)
   }
   getOneCoach(id: number): Observable<any> {
-    return this.httpClient.get<any>(this.baseURL + 'users/coach/' + id, {
+    return this.httpClient.get<any>(this.baseURL + '/users/coach/' + id, {
       observe: 'response',
     });
   }
   addCoach(coach: any): Observable<any> {
     console.log(coach)
-    return this.httpClient.post(`${this.baseURL}users/coach/`, coach,
+    return this.httpClient.post<any>(`${this.baseURL}/users/coach/`, coach,
       { observe: 'response' }).pipe(
         catchError(this.handleError)
       );
-
   }
-  getOrgCoaches(data: any): Observable<any> {
-    console.log("get org coaches reached")
-    console.log("data", data)
-    return this.httpClient.get(`${this.baseURL}organizations/getCoachesByOrgId`, { params: data })
-  }
+  // getCoaches(data: any): Observable<any> {
+  //   console.log("get org coaches reached")
+  //   console.log("data", data)
+  //   return this.httpClient.get(`${this.baseURL}organizations/getCoachesByOrgId`, { params: data })
+  // }
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An error occurred';
     if (error.error instanceof ErrorEvent) {

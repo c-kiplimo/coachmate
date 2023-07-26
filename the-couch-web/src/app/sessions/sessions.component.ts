@@ -51,10 +51,12 @@ export class SessionsComponent implements OnInit {
   id!: number;
 
   orgId!: number;
+  showFilters = false;
   coachId!: number;
 
   page: number = 0;
   pageSize: number = 15;
+  sessionStatuses = ['CONFIRMED', 'CANCELLED', 'CONDUCTED']
   totalElements: any;
 
   constructor(private apiService: ClientService,
@@ -72,7 +74,7 @@ export class SessionsComponent implements OnInit {
 
 
     if (this.userRole == 'ORGANIZATION') {
-      this.orgId = this.user.id;
+      this.orgId = this.user.organization.id;
       this.getAllSessions(this.page);
 
     } else if (this.userRole == 'COACH') {
@@ -100,10 +102,6 @@ export class SessionsComponent implements OnInit {
       sessionStatus: this.filters.status,
       search: this.filters.searchItem,
       sort: 'id,desc',
-      // coachId: this.coachId,
-      // clientId: this.clientId,
-      //contractId: this.coachData.contractId,
-      //sessionDate: this.filters.sessionDate,
     };
     if(this.userRole == 'COACH'){
       options.coachId = this.coachId;
@@ -126,7 +124,9 @@ export class SessionsComponent implements OnInit {
     );
   }
 
-
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
 
   filterByStatus(event: any): any {
     this.page = 0;
@@ -138,11 +138,18 @@ export class SessionsComponent implements OnInit {
     console.log(id);
     this.router.navigate(['sessionView', id]);
   }
-
+  search() {
+    this.page = 0;
+    this.getAllSessions(this.page);
+  }
 
   onTableDataChange(event: any) {
     this.page = event;
     this.getAllSessions(this.page);
   }
-
+  
+  resetStatuses(): void {
+    this.filters.status = 'CONFIRMED';
+    this.getAllSessions(0);
+  }
 }

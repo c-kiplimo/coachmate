@@ -1,8 +1,6 @@
 <div class="row">
   <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-semi-bold fs-5 f-weight">
-      <i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i> Client
-    </h5>
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Client</h2>
   </div>
 </div>
 
@@ -13,9 +11,10 @@
     <div class="card">
       <div class="card-body">
         <div class="row dtl">
-          <h3 class="fw-semi-bold fs-6 f-weight col">Details</h3>
-          <div class="col dropdown">
-              <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuButton"
+          <h3 class="fw-bold col">Details</h3>
+          <div class="col">
+            <div class="dropdown">
+              <a class="btn btn-outline-success dropdown-toggle" href="#" role="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Actions</a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -25,20 +24,25 @@
                   Edit
                 </button> -->
                 <li (click)="editClient(clients)" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                  data-bs-target="#editClientModal"><i class="fas fa-edit"></i> Edit </a></li>
-                <li (click)="statusState('ACTIVE')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#activateclientModal">Activate </a></li>
-                <li (click)="statusState('SUSPENDED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#suspendclientModal">Suspend </a></li>
-                <li (click)="statusState('CLOSED')" class="dropdown-item"><a class="dropdown-item" data-bs-toggle="modal"
-                    data-bs-target="#closeclientModal">Close </a></li>
+                    data-bs-target="#editClientModal"><i class="fas fa-edit"></i> Edit </a></li>
+                <li (click)="statusState('ACTIVE')" class="dropdown-item"><a class="dropdown-item"
+                    data-bs-toggle="modal" data-bs-target="#activateclientModal">Activate </a></li>
+                <li (click)="statusState('SUSPENDED')" class="dropdown-item"><a class="dropdown-item"
+                    data-bs-toggle="modal" data-bs-target="#suspendclientModal">Suspend </a></li>
+                <li (click)="statusState('CLOSED')" class="dropdown-item"><a class="dropdown-item"
+                    data-bs-toggle="modal" data-bs-target="#closeclientModal">Close </a></li>
               </ul>
+            </div>
           </div>
         </div>
+        <br>
+        <div class="donut-wrapper" *ngIf="loadingClient" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
 
-        <div class="col-md-12" [@fadeIn]>
+        <div class="col-md-12" [@fadeIn] *ngIf="clients">
           <div class="row dtl">
-            <h6 class="fw-semi-bold  faded col smaller-font" >Id</h6>
+            <h6 class="fw-semi-bold  faded col smaller-font">Id</h6>
             <p class="col">{{ clients?.id }}</p>
           </div>
           <div class="row dtl">
@@ -104,225 +108,255 @@
 
 <br>
 
-<div class="card details-card">
-  <div class="tabs-section">
-    <button class="btn btn-tabs " (click)="toggleTab('sessions')"
-      [ngClass]="{ 'active-tab': currentTab === 'sessions' }">
-      <h6 class="fs-6 f-weight">Sessions</h6>
-    </button>
-    <button class="btn btn-tabs" (click)="toggleTab('contracts')"
-      [ngClass]="{ 'active-tab': currentTab === 'contracts' }">
-      <h6 class="fs-6 f-weight">Contracts</h6>
-    </button>
-    <button class="btn btn-tabs" (click)="toggleTab('payments')"
-      [ngClass]="{ 'active-tab': currentTab === 'payments' }">
-      <h6 class="fs-6 f-weight">Payments</h6>
-    </button>
-    <button class="btn btn-tabs" (click)="toggleTab('notifications')"
-      [ngClass]="{ 'active-tab': currentTab === 'notifications' }">
-      <h6 class="fs-6 f-weight">Notifications</h6>
-    </button>
-  </div>
-  <div *ngIf="currentTab === 'sessions'">
-    <!-- add session button -->
-    <div class="d-flex justify-content-end">
-      <button *ngIf="!loading" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sessionModal">
-        Add Session
-      </button>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="sessions?.length">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Contract</th>
-              <th scope="col">Venue</th>
-              <th scope="col">Client</th>
-              <th scope="col">Type</th>
-              <th scope="col">Date</th>
-              <th scope="col">Start Time</th>
-              <th scope="col">End Time</th>
-              <th scope="col">Status</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
-              <td>{{ session?.name }}</td>
-              <td>{{ session?.contractCoachingTopic }}</td>
-              <td>{{ session?.sessionVenue }}</td>
-              <td>{{ session?.clientFullName }}</td>
-              <td>{{ session?.sessionType }}</td>
-              <td>{{ session?.sessionSchedulesSessionDate }}</td>
-              <td>{{ session?.sessionSchedulesStartTime }}</td>
-              <td>{{ session?.sessionSchedulesEndTime }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row justify-content-center">
+          <div class="col-md-7 col-sm-12">
+            <!--Tabs-->
+            <div class="d-none d-lg-block">
+              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
+                role="tablist">
+                <li class="nav-item" (click)="toggleTab('sessions')">
+                  <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                      style="color: green"></i> Sessions</a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('contracts')">
+                  <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa-solid fa-file-contract" style="color: green"></i> Contracts</a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('payments')">
+                  <a class="nav-link" [class.active]="currentTab === 'payments'" id="contact-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="contact-just" aria-selected="false"><i class="fas fa-money-check-alt"
+                      style="color: green"></i> Payments</a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('notifications')">
+                  <a class="nav-link" [class.active]="currentTab === 'notifications'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa fa-bell" style="color: green"></i> Notifications</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="show-sm">
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                <li class="nav-item" (click)="toggleTab('sessions')">
+                  <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                      style="color: green"></i></a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('contracts')">
+                  <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa-solid fa-file-contract" style="color: green"></i></a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('payments')">
+                  <a class="nav-link" [class.active]="currentTab === 'payments'" id="contact-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="contact-just" aria-selected="false"><i class="fas fa-money-check-alt"
+                      style="color: green"></i></a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('notifications')">
+                  <a class="nav-link" [class.active]="currentTab === 'notifications'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa fa-bell" style="color: green"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div *ngIf="currentTab === 'sessions'">
+          <!-- add session button -->
+          <div class="d-flex justify-content-end">
+            <button *ngIf="!loading" class="btn btn-outline-success" [routerLink]="['/addSession']">
+              <i class="fas fa-plus"></i> Add Session
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="sessions?.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Venue</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                    <td>{{ session?.name }}</td>
+                    <td>{{ session?.contractCoachingTopic }}</td>
+                    <td>{{ session?.sessionVenue }}</td>
+                    <td>{{ session?.sessionType | titlecase }}</td>
+                    <td>{{ session?.sessionSchedulesSessionDate }}</td>
+                    <td>{{ session?.sessionSchedulesStartTime }}</td>
+                    <td>{{ session?.sessionSchedulesEndTime }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
                   'badge-success': session.sessionStatus === 'CONFIRMED',
                   'badge-danger': session.sessionStatus === 'CANCELLED',
                   'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
                 }">{{ session.sessionStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
+                No sessions Found.
+              </p>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-          No sessions Found.
-        </p>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="currentTab === 'contracts'">
-    <!-- add contract button -->
-    <div class="d-flex justify-content-end">
-      <button *ngIf="!loading" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addContractModal">
-        Add contract
-      </button>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-sm" *ngIf="contracts.length">
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Category</th>
-              <th scope="col">Client</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">End Date</th>
-              <th scope="col">No Of Sessions</th>
-              <th scope="col">Amount Due</th>
-              <th scope="col">Status</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let contract of contracts | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
-              <td>{{ contract?.coachingTopic}}</td>
-              <td>{{ contract?.coachingCategory }}</td>
-              <td>{{ contract?.clientFullName }}</td>
-              <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
-              <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
-              <td>{{ contract?.noOfSessions}}</td>
-              <td>{{ contract?.amountDue }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
+        <div *ngIf="currentTab === 'contracts'">
+          <!-- add contract button -->
+          <div class="d-flex justify-content-end">
+            <button *ngIf="!loading" class="btn btn-outline-success" [routerLink]="['/add-contract']">
+              <i class="fas fa-plus"></i> Add Contract
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-sm" *ngIf="contracts.length">
+                <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">No Of Sessions</th>
+                    <th scope="col">Amount Due</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let contract of contracts | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                    <td>{{ contract?.coachingTopic}}</td>
+                    <td>{{ contract?.coachingCategory }}</td>
+                    <td>{{ contract?.clientFullName }}</td>
+                    <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract?.noOfSessions}}</td>
+                    <td>{{ contract?.amountDue }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
                   'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
                   'badge-danger': contract?.contractStatus === 'ONGOING',
                   'badge-primary': contract?.contractStatus === 'NEW'
                 }">{{ contract?.contractStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
+                No contracts Found.
+              </p>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !contracts.length">
-          No contracts Found.
-        </p>
-      </div>
-    </div>
-  </div>
 
-  <div class="d-none d-lg-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
-    <!-- <div class="text-end mt-2 d-none d-md-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
-      <button class="btn btn-refresh" >
-        <fa-icon [icon]="refreshIcon"></fa-icon>
-        Refresh
-      </button>
-      <button class="btn btn-refresh me-2"  data-bs-toggle="modal"  data-bs-target="#paymentReminderModal">
-      <fa-icon [icon]="alertIcon"></fa-icon>
-      Remind
-    </button>
-    </div> -->
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="payments.length">
-          <thead>
-            <tr>
-              <th>Payed By</th>
-              <th>Amount In</th>
-              <th>Mode Of Payment</th>
-              <th>Wallet Balance</th>
-              <th>Created On</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        <div class="d-none d-lg-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-success" [routerLink]="['/record-payment']">
+              <i class="fas fa-plus"></i> Add Payment
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="payments?.length">
+                <thead>
+                  <tr>
+                    <th>Mode Of Payment</th>
+                    <th>Amount In</th>
+                    <th>Wallet Balance</th>
+                    <th>Recorded On</th>
+                  </tr>
+                </thead>
 
-          <tbody>
-            <tr *ngFor="let payment of payments">
-              <td>{{ payment?.client?.firstName }}</td>
-              <td>{{ payment?.amountDeposited}}</td>
-              <td>{{ payment?.modeOfPayment}}</td>
-              <td>{{ payment?.walletBalance}}</td>
-              <td>{{ payment?.createdAt | date: "MMM d y" }}</td>
-              <td class="view">
-                <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)"
-                    class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
-          <div class="donut multi"></div>
+                <tbody>
+                  <tr *ngFor="let payment of payments">
+                    <td>{{ payment?.modeOfPayment | titlecase}}</td>
+                    <td>{{ payment?.amountDeposited}}</td>
+                    <td>{{ payment?.walletBalance}}</td>
+                    <td>{{ payment?.createdAt | date: "MMM d y" }}</td>
+                    <!-- <td class="view">
+                      <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)"
+                          class="fas fa-external-link-alt"></i></a>
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loadingClient && !payments?.length">
+                No Payments Found.
+              </p>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loadingClient && !payments.length">
-          No Payments Found.
-        </p>
-      </div>
-    </div>
-  </div>
 
-  <div class="d-none d-lg-block" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table" *ngIf="notifications.length">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Source Address</th>
-              <th>Destination Address</th>
-              <th>Content</th>
-              <th>Sent At</th>
-              <th>Mode</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let notification of notifications">
-              <td>{{ notification?.subject }}</td>
-              <td>{{ notification?.sourceAddress}}</td>
-              <td>{{ notification?.destinationAddress}}</td>
-              <td>{{ notification?.content}}</td>
-              <td>{{ notification?.sentAt | date : "MMM d, y " }}</td>
-              <td>{{ notification?.notificationMode}}</td>
-              <td>{{ notification?.sendReason}}</td>
-              <td>{{ notification?.status}}</td>
-              <td class="view">
-                <a><i data-bs-toggle="modal" data-bs-target="#notificationModal"
-                    (click)="viewNotification(notification)" class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
-          <p class="text-muted mt-5" *ngIf="!notifications?.length">
-            No notifications found.
-          </p>
+        <div class="d-none d-lg-block" *ngIf="currentTab === 'notifications'" [@fadeIn]>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" *ngIf="notifications?.length">
+                <thead>
+                  <tr>
+                    <th>Mode</th>
+                    <th>Source Address</th>
+                    <th>Destination Address</th>
+                    <th>Content</th>
+                    <th>Sent At</th>
+                    <th>Reason</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let notification of notifications">
+                    <td>{{ notification?.notificationMode | titlecase}}</td>
+                    <td>{{ notification?.sourceAddress}}</td>
+                    <td>{{ notification?.destinationAddress}}</td>
+                    <td>{{ notification?.content?.slice(0, 20)}}...</td>
+                    <td>{{ notification?.createdAt | date : "MMM d, y " }}</td>
+                    <td>{{ notification?.sendReason}}</td>
+                    <td class="view">
+                      <a><i data-bs-toggle="modal" data-bs-target="#notificationModal"
+                          (click)="viewNotification(notification)" class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="show-ms" *ngIf="currentTab === 'notifications'" [@fadeIn]>
+                <p class="text-muted mt-5" *ngIf="!notifications?.length">
+                  No notifications found.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -335,11 +369,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Suspend Client
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5">Suspend Client</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -351,10 +382,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-add" (click)=" changeClientStatus()">
+        <button type="button" class="btn btn-outline-success" (click)=" changeClientStatus()">
           Submit
         </button>
       </div>
@@ -369,8 +400,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">Close client</h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
@@ -379,21 +409,21 @@
         clients?.firstName + " " + clients?.lastName | titlecase
       }}</span>
         </div>
-        <form [formGroup]="closeClientForm">
+        <form>
           <div class="mb-3">
             <label for="exampleInputEmail1">Reason</label>
-            <textarea formControlName="narration" name="narration" class="form-control" id="narration"
-              aria-describedby="narration" placeholder="narration for closing the client">
+            <textarea name="narration" class="form-control" id="narration" aria-describedby="narration"
+              placeholder="narration for closing the client">
         </textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)=" changeClientStatus()">
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)=" changeClientStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -405,34 +435,29 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
-          Activate client
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5">Activate client</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="d-flex justify-content-between">
           <p>client Name:</p>
-          <span>{{
-        clients?.firstName + " " + clients?.lastName | titlecase
-      }}</span>
+          <span>{{ clients?.firstName + " " + clients?.lastName }}</span>
         </div>
-        <form [formGroup]="activateClientForm">
+        <form>
           <div class="mb-3">
             <label for="exampleInputEmail1">Reason</label>
-            <textarea formControlName="narration" name="narration" class="form-control" id="narration"
-              aria-describedby="narration" placeholder="narration for activating the client">
+            <textarea name="narration" class="form-control" id="narration" aria-describedby="narration"
+              placeholder="narration for activating the client">
         </textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-add" (click)=" changeClientStatus()">
-          Submit
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
+        </button>
+        <button type="button" class="btn btn-outline-success" (click)="changeClientStatus()">
+          Submit
         </button>
       </div>
     </div>
@@ -445,8 +470,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Details</h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="payment">
         <div class="d-flex justify-content-between">
@@ -486,7 +510,7 @@
           <span>{{ payment.payment.value.LastUpdatedAt| date : " hh:mm a"}}</span>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
             Close
           </button>
         </div>
@@ -500,11 +524,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Notification Details
-        </h1>
-
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Notification Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="notification">
         <div class="d-flex justify-content-between">
@@ -541,49 +562,46 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="updateClient">
+        <form>
           <div class="mb-3 form-group">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" formControlName="firstName"
+            <input type="text" class="form-control" id="firstName" name="firstName"
               value="{{ clientToBeUpdated?.firstName }}" />
           </div>
           <div class="mb-3 form-group">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" formControlName="lastName"
+            <input type="text" class="form-control" id="lastName" name="lastName"
               value="{{ clientToBeUpdated?.lastName }}">
           </div>
           <div class="mb-3 form-group">
             <label for="email_address" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email_address" name="email_address" formControlName="email"
+            <input type="text" class="form-control" id="email_address" name="email_address"
               value="{{ clientToBeUpdated?.email }}">
           </div>
           <div class="mb-3 form-group">
             <label for="msisdn" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="msisdn" name="msisdn" formControlName="msisdn"
-              value="{{ clientToBeUpdated?.msisdn }}">
+            <input type="text" class="form-control" id="msisdn" name="msisdn" value="{{ clientToBeUpdated?.msisdn }}">
           </div>
 
           <div class="mb-3 form-group">
             <label for="physical_address" class="form-label">Address</label>
             <input type="text" class="form-control" id="physical_address" name="physicalAddress"
-              formControlName="physicalAddress" value="{{ clientToBeUpdated?.physicalAddress}}">
+              value="{{ clientToBeUpdated?.physicalAddress}}">
           </div>
           <div class="mb-3 form-group">
             <label for="reason" class="form-label">Reason</label>
-            <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
-              value="{{ clientToBeUpdated?.reason}}">
+            <input type="text" class="form-control" id="reason" name="reason" value="{{ clientToBeUpdated?.reason}}">
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="PaymentMode">Payment Mode</label>
             </div>
-            <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
-              value="{{ clientToBeUpdated?.paymentMode }}">
+            <select class="form-select" id="inputGroupSelect01" value="{{ clientToBeUpdated?.paymentMode }}">
               <option selected>Select Payment Mode</option>
               <option value="PREPAY">PREPAY</option>
               <option value="POSTPAY">POSTPAY</option>
@@ -593,8 +611,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Client Type</label>
             </div>
-            <select class="form-select" id="inputGroupSelect01" formControlName="type"
-              value="{{ clientToBeUpdated?.clientType }}">
+            <select class="form-select" id="inputGroupSelect01" value="{{ clientToBeUpdated?.clientType }}">
               <option selected>Select Client type</option>
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="CORPORATE">CORPORATE</option>
@@ -605,201 +622,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
+        <button type="button" class="btn btn-outline-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
           changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for additing a session -->
-<div class="modal" id="sessionModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Session</h5>
-        <button type="button" class="close" class="btn-close btn-close-white" data-bs-dismiss="modal"
-          aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
-              <label for="sessionname">Session Name *</label>
-              <input [(ngModel)]="addSessionForm.name" type="text" class="form-control" id="name"
-                placeholder="Enter Session Name" name="name">
-
-            </div>
-            <div class="mb-3 col-md-6">
-              <div class="form-group-prepend">
-                <label class="form-group-text" for="clientType">Session Type *</label>
-              </div>
-              <select class="form-select" id="inputGroupSelect01" name="sessionType"
-                [(ngModel)]="addSessionForm.sessionType">
-                <option value="INDIVIDUAL">INDIVIDUAL</option>
-                <option value="GROUP">GROUP</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row p-2">
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">From *</label>
-              <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="sessionStartTime"
-                [(ngModel)]="addSessionForm.sessionStartTime">
-
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">To *</label>
-              <input type="time" class="form-control" id="inputEmail4" placeholder="Time" name="sessionEndTime"
-                [(ngModel)]="addSessionForm.sessionEndTime">
-
-            </div>
-
-          </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
-              <label class="form-group-text" for="clientType">Session Venue *</label>
-              <select class="form-select" id="inputGroupSelect01" name="sessionVenue"
-                [(ngModel)]="addSessionForm.sessionVenue">
-                <option value="VIRTUAL">VIRTUAL</option>
-                <option value="PHYSICAL">PHYSICAL</option>
-              </select>
-            </div>
-            <div class="mb-3 col-md-6">
-              <label for="sessionname">Select Contract *</label>
-              <select [(ngModel)]="selectedContract" class="form-select" formControlName="selectedContract"
-                id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
-                <option *ngFor="let contract of contracts" [value]="contract.id">
-                  {{contract?.coachingTopic}}-{{contract?.client?.fullName}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="row p-2">
-            <div class="mb-3 col-md-6">
-              <label for="inputEmail4">Session Date *</label>
-              <input type="date" variant="success" class="form-control" id="inputEmail4" placeholder="Date"
-                name="sessionDate" [(ngModel)]="addSessionForm.sessionDate">
-
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" (click)="closeModal()" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" (click)="addSession()"
-          [disabled]="!addSessionForm.name || !addSessionForm.sessionType || !addSessionForm.sessionStartTime || !addSessionForm.sessionEndTime || !addSessionForm.sessionVenue || !addSessionForm.sessionDate">Add
-          Session</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- modal for adding contract -->
-<div class="modal" id="addContractModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Contract</h5>
-        <button type="button" class="close" class="btn-close btn-close-white" data-bs-dismiss="modal"
-          aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="contractForm" class="col-10">
-          <div class="mb-3 mt-3 description">
-            <h3 for="coachingTopic" class="form-label">Coaching Title *</h3>
-            <input type="text" class="form-control" id="nucoachingTopicmber" placeholder="Enter the coaching topic"
-              formControlName="coachingTopic" required="true" />
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-6 input-group-prepend">
-              <label for="coachingCategory" class="form-label">Coaching Category *</label>
-              <select class="form-select" aria-label="Default select example" formControlName="coachingCategory"
-                required="true">
-                <option selected>Contract Category</option>
-                <option value="INDIVIDUAL">INDIVIDUAL</option>
-                <option value="CORPORATE">CORPORATE</option>
-
-              </select>
-            </div>
-          </div>
-          <br>
-          <h3>Schedule & Fees</h3>
-          <div class="row">
-            <div class="col">
-              <label for="number" class="form-label">Start Date *</label>
-              <input type="date" class="form-control" placeholder="date" formControlName="startDate" required="true" />
-            </div>
-            <div class="col">
-              <label for="number" class="form-label">End Date *</label>
-              <input type="date" class="form-control" placeholder="date" formControlName="endDate" required="true" />
-            </div>
-          </div>
-
-          <div class="mb-3 mt-3">
-            <div class="row">
-              <div *ngIf="contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'" class="col-6">
-                <label for="number" class="form-label">Individual Fees Per Session *</label>
-                <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-                  formControlName="individualFeesPerSession" required="true" />
-              </div>
-              <div *ngIf="contractForm.controls['coachingCategory'].value == 'CORPORATE'" class="col-6">
-                <label for="number" class="form-label">Group Fees Per Session *</label>
-                <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-                  formControlName="groupFeesPerSession" required="true" />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <label for="number" class="form-label">No. of Sessions: *</label>
-                <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions"
-                  formControlName="noOfSessions" required="true" />
-              </div>
-            </div>
-          </div>
-          <section>
-            <br>
-            <h3>Coaching Goals *</h3>
-            <br>
-            <div class="row mb-3">
-              <div class="col-12"></div>
-
-              <div class="row">
-                <div class="col-6">
-                  <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Objective"
-                    formControlName="objectives" required="true" />
-                </div>
-                <div class="col-6">
-                  <button type="button" class="btn btn-success" (click)="addObjective()">
-                    <i class="fa-solid fa-user-plus"></i>Add objective
-                  </button>
-                </div>
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-10">
-                <div class="mb-3">
-                  <ol>
-                    <li *ngFor="let obj of objectives; index as i">{{ obj }} <i (click)="removeObjective(i)"
-                        role="button" class="fa-solid fa-trash-can p-1"></i></li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </section>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" (click)="closeModal()" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" (click)="addContract()" [disabled]="!contractForm.valid">
-          Add contract</button>
       </div>
     </div>
   </div>

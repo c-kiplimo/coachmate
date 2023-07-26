@@ -99,7 +99,7 @@ export class contractComponent implements OnInit {
     const options: any = {
       page: page,
       size: this.pageSize,
-      sessionStatus: this.filters.status,
+      status: this.filters.status,
       search: this.filters.searchItem,
       sort: 'id,desc',
     };
@@ -109,8 +109,7 @@ export class contractComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
-      options.coachId = this.coachId;
+      options.organisationId = this.orgId;
     }
 
     this.contractsService.getContracts(options).subscribe(

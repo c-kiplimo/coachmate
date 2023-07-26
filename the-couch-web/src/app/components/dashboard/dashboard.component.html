@@ -11,10 +11,9 @@
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/add-contract"><i
           class="fa fa-plus"></i> Add
         Contract</button>
-      
+
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
-          class="fa fa-plus"></i> Add
-        Session</button>
+          class="fa fa-plus"></i> Add Session</button>
     </div>
   </div>
 </div>
@@ -50,123 +49,234 @@
 
 
 <div class="row" *ngIf="this.userRole != 'ORGANIZATION'">
-  <div class="col-6">
-    <div class="card upcomingSessions">
-      <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title  f-weight fw-semi-bold fs-6">Upcoming Sessions</h5>
-        <a [routerLink]="['/sessions']">
-          <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
-        </a>
-      </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
 
+        <div class="row justify-content-center">
+          <div class="col-md-7 col-sm-12">
+            <!--Tabs-->
+            <div class="d-none d-lg-block">
+              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
+                role="tablist">
+                <li class="nav-item" (click)="toggleTab('sessions')">
+                  <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                      style="color: green"></i> Upcoming Sessions</a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('contracts')">
+                  <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa-solid fa-file-contract" style="color: green"></i> Recent Contracts</a>
+                </li>
+              </ul>
+            </div>
 
-      <div class="upcomingsessions list-container container">
-        <table class="table" *ngIf="sessions?.length">
-          <thead>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Venue</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </thead>
-          <tbody class="list-container">
-            <tr *ngFor="let session of sessions">
-              <td>{{ session.name }}</td>
-              <td>{{ session.sessionSchedulesSessionDate  }}</td>
-              <td>{{ session.sessionSchedulesStartTime  }}</td>
-              <td>{{ session.sessionSchedulesEndTime }}</td>
-              <td>{{ session.sessionVenue | titlecase }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                    'badge-success': session.sessionStatus === 'CONFIRMED',
-                    'badge-danger': session.sessionStatus === 'CANCELLED',
-                    'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
-                  }">{{ session.sessionStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+            <div class="show-sm">
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                <li class="nav-item" (click)="toggleTab('sessions')">
+                  <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                    role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                      style="color: green"></i></a>
+                </li>
+                <li class="nav-item" (click)="toggleTab('contracts')">
+                  <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                    data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                      class="fa-solid fa-file-contract" style="color: green"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
-          No Sessions Yet.
-        </p>
-      </div>
 
-    </div>
-  </div>
-  <div class="col-6">
-    <div class="card upcomingSessions">
-      <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
-        <a [routerLink]="['/contracts']">
-          <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
-        </a>
-      </div>
-      <div class="upcomingsessionsTable list-container container ">
-        <table class="table" *ngIf="contracts?.length">
-          <thead>
-            <!-- <th colspan="1">Title</th> -->
-            <th colspan="1">Client</th>
-            <th colspan="1">Start Date</th>
-            <th colspan="1">End Date</th>
-            <th colspan="1">Status</th>
-            <th colspan="1">Actions</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let contract of contracts">
-              <!-- <th>{{ contract?.coachingTopic}}</th> -->
-              <td>{{ contract?.clientFullName }}</td>
-              <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
-              <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                    'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
-                    'badge-danger': contract?.contractStatus === 'ONGOING',
-                    'badge-primary': contract?.contractStatus === 'NEW'
-                  }">{{ contract?.contractStatus }}</span>
-              </td>
-              <td class="view">
-                <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
+        <br>
+
+        <div *ngIf="currentTab === 'sessions'" [@fadeIn]>
+          <div class="d-none d-lg-block">
+
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title  f-weight fw-semi-bold fs-6">Upcoming Sessions</h5>
+              <!-- <a [routerLink]="['/sessions']">
+                <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
+              </a> -->
+              <button type="button" routerLink="/addSession" class="btn btn-success">
+                <i class="fa fa-plus"></i> Add Session
+              </button>
+            </div>
+
+            <div class="row justify-content-center">
+              <table class="table" *ngIf="sessions?.length">
+                <thead>
+                  <th>Name</th>
+                  <th>Contract</th>
+                  <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
+                  <th>Venue</th>
+                  <th>Date</th>
+                  <th>Start Time</th>
+                  <th>End Time</th>
+
+                  <th>Status</th>
+                  <th>Actions</th>
+                </thead>
+                <tbody class="list-container">
+                  <tr *ngFor="let session of sessions">
+                    <td>{{ session?.name }}</td>
+                    <td>{{ session?.contractCoachingTopic.slice(0, 20) }}...</td>
+                    <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
+                    <td>{{ session?.sessionVenue | titlecase }}</td>
+                    <td>{{ session?.sessionSchedulesSessionDate  }}</td>
+                    <td>{{ session?.sessionSchedulesStartTime  }}</td>
+                    <td>{{ session?.sessionSchedulesEndTime }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                    'badge-success': session?.sessionStatus === 'CONFIRMED',
+                    'badge-danger': session?.sessionStatus === 'CANCELLED',
+                    'badge-primary': session?.sessionStatus === 'NEW' || session?.sessionStatus === 'CONDUCTED'
+                  }">{{ session?.sessionStatus }}</span>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/sessionView/', session?.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+              </div>
+              <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
+                No Sessions Yet.
+              </p>
+            </div>
+          </div>
+
+          <div class="show-sm">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2 mb-2">
+                  <h3></h3>
+                  <div>
+                    <button type="button" routerLink="/addSession" class="btn btn-success">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="pt-3 pb-2 listing-item"
+                  *ngFor="let session of sessions  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                  [routerLink]="['/sessionView', session.id]">
+
+
+                  <div class="d-flex justify-content-between">
+                    <h4 class="farmer" [routerLink]="['/sessionView', session.id]">
+                      {{ session?.name | titlecase }}
+                    </h4>
+
+                    <span class="no-word-break">{{ session?.sessionVenue | titlecase }}
+                      <a [routerLink]="['/sessionView', session.id]"><i class="fa fa-angle-right"></i></a>
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="customer-name" class="mb-0">
+                      {{ session?.clientFullName | titlecase }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="customer-name" class="mb-0">
+                      {{ session?.sessionSchedulesSessionDate }}
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="customer-name" class="mb-0">
+                      {{ session?.sessionSchedulesStartTime + ' - ' + session?.sessionSchedulesEndTime }}
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="badge" [ngClass]="{
+                      'badge-success': session.sessionStatus === 'CONFIRMED',
+                      'badge-danger': session.sessionStatus === 'CANCELLED',
+                      'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                    }">{{ session.sessionStatus }}</span>
+                  </div>
+                </div>
+
+                <div class="donut-wrapper" *ngIf="loading">
+                  <div class="donut multi"></div>
+                </div>
+                <div *ngIf="!loading && sessions?.length === 0">
+                  <h2 class="text-muted mt-5">No Sessions Found.</h2>
+                </div>
+
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
-          No Contracts Yet.
-        </p>
+
+        <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
+          <div class="d-none d-lg-block">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
+              <a [routerLink]="['/contracts']">
+                <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
+              </a>
+            </div>
+            <div class="row justify-content-center">
+              <table class="table" *ngIf="contracts?.length">
+                <thead>
+                  <th colspan="1">Name</th>
+                  <th colspan="1">Client</th>
+                  <th colspan="1">Start Date</th>
+                  <th colspan="1">End Date</th>
+                  <th colspan="1">Status</th>
+                  <th colspan="1">Actions</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let contract of contracts">
+                    <td>{{ contract?.coachingTopic.slice(0, 20) }}</td>
+                    <td>{{ contract?.clientFullName }}</td>
+                    <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                          'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                          'badge-danger': contract?.contractStatus === 'ONGOING',
+                          'badge-primary': contract?.contractStatus === 'NEW'
+                        }">{{ contract?.contractStatus }}</span>
+                    </td>
+                    <td class="view">
+                      <a [routerLink]="['/contractDetail/', contract.id]"><i class="fas fa-external-link-alt"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                <div class="donut multi"></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
-
-
-
+ 
 <div class="row" *ngIf="this.userRole == 'ORGANIZATION'">
-  <div class="col-12">
+  <div class="col-md-12">
     <div class="card upcomingSessions">
       <div class="card-body d-flex justify-content-between">
-        <h5 class="card-title fw-semi-bold f-weight fs-6">Coaches</h5>
+        <h3 class="card-title fw-bold">Coaches</h3>
         <a [routerLink]="['/coaches']">
           <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
-
-
-      <div class="upcomingsessions list-container container">
-        <table class="table" *ngIf="coaches?.length">
+      <div class="card-body">
+        <!-- upcomingsessionsTable list-container container -->
+        <table class="table" *ngIf="coachesImpl?.length">
           <thead>
-            <th colspan="1">Full Name</th>
+            <th colspan="1">Name</th>
             <th colspan="1">Email</th>
             <th colspan="1">Phone</th>
             <th colspan="1">Created On</th>
@@ -174,23 +284,22 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let coach of coaches">
+            <tr *ngFor="let coach of coachesImpl">
               <td>{{ coach.fullName }}</td>
-              <td>{{ coach.emailAddress }}</td>
+              <td>{{ coach.email}}</td>
               <td>{{ coach.msisdn }}</td>
               <td>{{ coach.createdAt | date: "MMM d y"}}</td>
 
               <td>
-                  <span class="badge" [ngClass]="{
+                <span class="badge" [ngClass]="{
                     'badge-success': coach?.coachStatus === 'ACTIVE' || coach?.coachStatus === 'NEW',
                     'badge-danger': coach?.coachStatus === 'SUSPENDED',
                     'badge-primary': coach?.coachStatus === 'CLOSED'
                   }">
-                    {{ coach.status }}</span>
+                  {{ coach.coachStatus }}</span>
 
-                </td>
               <td class="view">
-                <a [routerLink]="['/editCoach', coach.id]"><i class="fas fa-external-link-alt"></i></a>
+                <a [routerLink]="['/coachView', coach.id]"><i class="fas fa-external-link-alt"></i></a>
                 <!-- <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button> -->
               </td>
 
@@ -198,11 +307,9 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </div>
-
 
 <div class="row row-height" *ngIf="this.userRole == 'COACH'">
   <!-- <div class="col-3 card text-center top-cards">

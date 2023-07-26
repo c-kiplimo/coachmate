@@ -82,7 +82,7 @@ export class ClientViewComponent implements OnInit {
 
   notificationOptions = [false, true];
   notificationType = ['sms', 'email'];
-  loadingClient = true;
+  loadingClient = false;
   totalLength: any;
   itemsPerPage: number = 20;
   open = false;
@@ -110,7 +110,18 @@ export class ClientViewComponent implements OnInit {
   sessionModal: any;
   contractId: any;
   contract: any;
-  contractForm!: FormGroup;
+  contractForm = {
+    coachId: '',
+    coachingCategory: '',
+    coachingTopic: '',
+    clientId: '',
+    startDate: '',
+    endDate: '',
+    groupFeesPerSession: '',
+    individualFeesPerSession: '',
+    noOfSessions: '',
+    objectives: [] as any,
+  }
   numberOfClients!: number;
   numberOfSessions!: number;
   numberOfContracts!: number;
@@ -126,6 +137,7 @@ export class ClientViewComponent implements OnInit {
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
+  coachSlots: any;
 
   constructor(
     private ClientService: ClientService,
@@ -158,6 +170,7 @@ export class ClientViewComponent implements OnInit {
 
     if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
+      this.getCoachSlots(this.page);
     } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
     } else if (this.userRole == 'CLIENT') {
@@ -167,19 +180,19 @@ export class ClientViewComponent implements OnInit {
     this.getClientData(this.clientId);
 
     if (this.userRole == 'COACH') {
-      this.contractForm = this.formbuilder.group(
-        {
-          coachingCategory: '',
-          coachingTopic: '',
-          clientId: '',
-          startDate: '',
-          endDate: '',
-          groupFeesPerSession: '',
-          individualFeesPerSession: '',
-          noOfSessions: '',
-          objectives: '',
-        }
-      );
+      // this.contractForm = this.formbuilder.group(
+      //   {
+      //     coachingCategory: '',
+      //     coachingTopic: '',
+      //     clientId: '',
+      //     startDate: '',
+      //     endDate: '',
+      //     groupFeesPerSession: '',
+      //     individualFeesPerSession: '',
+      //     noOfSessions: '',
+      //     objectives: '',
+      //   }
+      // );
       this.updateClient = this.formbuilder.group({
 
         firstName: ' ',
@@ -209,6 +222,22 @@ export class ClientViewComponent implements OnInit {
     });
 
   }
+
+  getCoachSlots(page: number) {
+    const options = {
+      page: page,
+      size: this.itemsPerPage,
+      coachId: this.coachId,
+      sort: 'id,desc',
+      status: false
+    };
+    this.apiService.getCoachSlots(options).subscribe({
+      next: (response) => {
+        this.coachSlots = response.body;
+      }
+    });
+  }
+
   getAllSessions(page: any) {
     this.loading = true;
     this.page = page;
@@ -404,7 +433,7 @@ export class ClientViewComponent implements OnInit {
     this.contractsService.getContracts(options).subscribe(
       (res: any) => {
         console.log("res",res);
-        this.contracts = res.body;
+        this.contracts = res.body;              
         this.totalElements = +res.headers.get('X-Total-Count');
         this.loading = false;
       }, (err: any) => {
@@ -431,6 +460,7 @@ export class ClientViewComponent implements OnInit {
       return 'badge-danger';
     }
   }
+
   @ViewChild('editClientModal', { static: false })
   editClientModal!: ElementRef;
   @ViewChild('activateclientModal', { static: false })
@@ -441,6 +471,7 @@ export class ClientViewComponent implements OnInit {
   suspendclientModal!: ElementRef;
   @ViewChild('closeclientModal', { static: false })
   closeclientModal!: ElementRef;
+  
   editClient(client: any) {
     this.clientToBeUpdated = client;
 
@@ -583,8 +614,8 @@ export class ClientViewComponent implements OnInit {
   }
   addContract() {
     console.log('here');
-    console.log(this.contractForm.value);
-    var data = this.contractForm.value;
+    console.log(this.contractForm);
+    var data = this.contractForm;
     data.coachId = this.coachData.id;
     data.objectives = this.objectives;
     data.clientId = this.clientId;
@@ -609,6 +640,12 @@ export class ClientViewComponent implements OnInit {
       }
     )
   }
+
+  selectedSessionSlot(slot: any) {
+    console.log(slot);
+    this.addSessionForm.sessionSchedules = slot;
+  }
+
   addObjective() {
 
     console.log(this.Objectives);

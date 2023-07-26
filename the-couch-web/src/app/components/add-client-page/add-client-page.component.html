@@ -1,54 +1,50 @@
-<div class="container mb-5">
-  <div class="row justify-content-center">
+<div class="row justify-content-center m-2 p-3">
     <div class="col-md-8">
-      <div class="card card-table d-flex">
-        <div class="">
-          <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">
-            Add New Client
-          </h1>
+      <div class="card card-table justify-content-center align-items-center">
+        <div class="m-3">
+          <h1 class="text-center mb-3"> Add New Client</h1>
         </div>
-        <form>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+        <form class="m-3">
+          <div class="row justify-content-center">
+            <div class=" mb-3 col-md-12 ">
               <label for="exampleInputEmail1">First Name *</label>
               <input [(ngModel)]="addClient.firstName" name="firstName" type="text" class="form-control" id="firstname"
                 aria-describedby="emailHelp" placeholder="First name" required />
             </div>
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-12 ">
               <label for="exampleInputEmail1">Last Name *</label>
               <input [(ngModel)]="addClient.lastName" name="lastName" type="lastNname" class="form-control"
                 id="lastName" aria-describedby="emailHelp" placeholder="Last name" required />
             </div>
           </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+          <div class="row justify-content-center">
+            <div class=" mb-3 col-md-12 ">
               <label for="exampleInputPassword1">Mobile no *</label>
               <input required [(ngModel)]="addClient.msisdn" name="msisdn" type="number" class="form-control"
                 id="contact" placeholder="Contact" required
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
             </div>
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-12 ">
               <label for="exampleInputPassword1">Email *</label>
               <input [(ngModel)]="addClient.email" name="email" type="email" class="form-control" id="email"
                 placeholder="Email" required />
             </div>
           </div>
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+          <div class="row justify-content-center">
+            <div class=" mb-3 col-md-12 ">
               <label for="exampleInputPassword1">Address *</label>
               <input [(ngModel)]="addClient.physicalAddress" name="address" type="text" class="form-control" id="adress"
                 placeholder="Address" required />
             </div>
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-12 ">
               <label for="profession">Profession *</label>
               <input type="text" class="form-control" id="profession" name="profession"
                 placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
             </div>
           </div>
-
-          <div class="row p-2">
-            <div class=" mb-3 col-md-6 ">
+          <div class="row justify-content-center">
+            <div class=" mb-3 col-md-12 ">
               <label class="input-group-text" for="paymentMode">Payment Mode *</label>
               <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
                 required>
@@ -57,7 +53,7 @@
                 <option value="POSTPAY">POSTPAY</option>
               </select>
             </div>
-            <div class=" mb-3 col-md-6 ">
+            <div class=" mb-3 col-md-12 ">
               <label class="input-group-text" for="clientType">Client Type *</label>
               <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType"
                 required>
@@ -67,7 +63,7 @@
                 <option value="GROUP">GROUP</option>
               </select>
             </div>
-            <div class=" mb-3 col-md-6 " *ngIf="this.userRole == 'ORGANIZATION'">
+            <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
               <label class="input-group-text" for="coach">Assign Coach *</label>
               <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"
                 (change)="selectedCoach($event)" required>
@@ -76,7 +72,7 @@
               </select>
             </div>
           </div>
-          <div class="row p-2">
+          <div class="row justify-content-center">
             <div class=" mb-3">
               <label for="reason">Reason *</label>
               <input type="text" class="form-control" placeholder="Reason" required name="reason"
@@ -84,8 +80,7 @@
 
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
+          <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
             !addClient.firstName||
             !addClient.lastName||
             !addClient.email||
@@ -95,10 +90,8 @@
             !addClient.clientType||
             !addClient.reason
             ">ADD CLIENT
-            </button>
-          </div>
+          </button>
         </form>
       </div>
     </div>
-  </div>
 </div>

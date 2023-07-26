@@ -1,7 +1,7 @@
 package com.natujenge.thecouch.repository;
 
 import com.natujenge.thecouch.domain.ClientWallet;
-import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -17,16 +17,16 @@ public interface ClientWalletRepository extends PagingAndSortingRepository<Clien
     Optional<ClientWallet> findFirstByCoachIdAndClientIdOrderByIdDesc(long coachId, long clientId);
     Optional<ClientWallet> findFirstByOrganizationIdAndClientIdOrderByIdDesc(long organizationId, long clientId);
 
-    Page<ClientWalletDto> findAllByOrganization_id(Long organizationId, Pageable pageable);
+    Page<ClientWalletDTO> findAllByOrganization_id(Long organizationId, Pageable pageable);
 
-    Page<ClientWalletDto> findAllByCoach_id(Long coachId, Pageable pageable);
+    Page<ClientWalletDTO> findAllByCoach_id(Long coachId, Pageable pageable);
 
-    Page<ClientWalletDto> findAllByClient_id(Long clientId, Pageable pageable);
+    Page<ClientWalletDTO> findAllByClient_id(Long clientId, Pageable pageable);
 
-    Page<ClientWalletDto> findByOrganizationIdAndClientId(Long organizationId, Long clientId, Pageable pageable);
-    Page<ClientWalletDto> findAllByCoach_idAndCreatedAtBetween(Long coachId, LocalDateTime minusMonths, LocalDateTime now, Pageable pageable);
+    Page<ClientWalletDTO> findByOrganizationIdAndClientId(Long organizationId, Long clientId, Pageable pageable);
+    Page<ClientWalletDTO> findAllByCoach_idAndCreatedAtBetween(Long coachId, LocalDateTime minusMonths, LocalDateTime now, Pageable pageable);
 
-    Page<ClientWalletDto> findAllByOrganization_idAndCreatedAtBetween(Long organizationId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
+    Page<ClientWalletDTO> findAllByOrganization_idAndCreatedAtBetween(Long organizationId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
 
-    Page<ClientWalletDto> findAllByClient_idAndCreatedAtBetween(Long clientId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
+    Page<ClientWalletDTO> findAllByClient_idAndCreatedAtBetween(Long clientId, LocalDateTime minusDays, LocalDateTime now, Pageable pageable);
 }

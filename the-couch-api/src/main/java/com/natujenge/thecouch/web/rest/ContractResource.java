@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
@@ -45,11 +46,8 @@ public class ContractResource {
             return new ResponseEntity<>(new RestResponse(true,e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //Get contract by client Id
-
 
     //API TO GET CONTRACTS BY ORG ID
-
     @PostMapping
     public ResponseEntity<Contract> createContract(
             @RequestBody ContractRequest contractRequest,
@@ -61,24 +59,18 @@ public class ContractResource {
             if(userDetails.getOrganization() !=null){
                 organisationId = userDetails.getOrganization().getId();
             }
-            Contract contract = contractService.createContract(userDetails.getId(), contractRequest,organisationId);
-
-            if (contract != null) {
-                return new ResponseEntity(new RestResponse(false, "contract created successfully"), HttpStatus.OK);
-            } else {
-                return new ResponseEntity(new RestResponse(true, "contract not created"), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
+            Contract contract = contractService.createContract(userDetails.getId(), contractRequest, organisationId);
+            return ResponseEntity.created(
+                    ServletUriComponentsBuilder
+                            .fromCurrentRequest()
+                            .path("/{id}")
+                            .buildAndExpand(contract.getId())
+                            .toUri())
+                    .body(contract);
         } catch (Exception e) {
-
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        try {
 
-            Contract contract = null;
-
-
-
-            return new ResponseEntity<>(contract,HttpStatus.CREATED) ;
     }
 
 
@@ -86,14 +78,28 @@ public class ContractResource {
 
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<Contract> updateContractStatus(
-
                                          @RequestParam("status") ContractStatus contractStatus,
-                                         @PathVariable Long contractId,
+                                         @PathVariable("id") Long contractId,
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
 
                 Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId());
         return  ResponseEntity.ok().body(updatedContract);
+    }
+
+    // update contract
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ContractDTO> updateContract(@PathVariable("id") Long contractId,
+                                                      @RequestBody ContractRequest contract,
+                                                      @AuthenticationPrincipal User userDetails){
+        log.info("Request to update contract with id {}", contractId);
+        try {
+            ContractDTO updatedContract = contractService.updateContract(contractId, contract);
+            return ResponseEntity.ok().body(updatedContract);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -115,23 +121,14 @@ public class ContractResource {
 
     @GetMapping("/filter")
     ResponseEntity<List<ContractDTO>> filterContracts(@RequestParam(name = "clientId", required = false) Long clientId,
-
+                                                    @RequestParam(name = "coachId", required = false) Long coachId,
                                                     @RequestParam(name = "search", required = false) String search,
-                                                    @RequestParam(name="organisationId", required = false) Long orgId,
+                                                    @RequestParam(name = "status", required = false) ContractStatus status,
+                                                    @RequestParam(name="organisationId", required = false) Long organisationId,
                                                     Pageable pageable,
                                                     @AuthenticationPrincipal User userDetails) {
-        Long organisationId=null;
-        if (orgId != null) {
-            organisationId = orgId;
-        } else
-            if (userDetails.getOrganization() !=null){
-                organisationId = userDetails.getOrganization().getId();
-            }
 
-        UserRole userRole = userDetails.getUserRole();
-        Long userId= userDetails.getId();
-
-        Page<ContractDTO> contractPage = contractService.filter(userId, clientId , userRole, search, organisationId, pageable);
+        Page<ContractDTO> contractPage = contractService.filter(coachId, clientId, search, status, organisationId, pageable);
         log.info("filtered {}",contractPage.getContent());
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), contractPage);
         return ResponseEntity.ok().headers(headers).body(contractPage.getContent());

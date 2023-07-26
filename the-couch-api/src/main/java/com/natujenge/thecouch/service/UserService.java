@@ -1,9 +1,6 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
-import com.natujenge.thecouch.domain.enums.ClientStatus;
-import com.natujenge.thecouch.domain.enums.CoachStatus;
-import com.natujenge.thecouch.domain.enums.ContentStatus;
-import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.domain.enums.*;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -26,10 +23,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -432,7 +431,7 @@ public class UserService implements UserDetailsService {
         Organization organization = new Organization();
         log.info("Request to get clients by coachId: {}", coachId);
 
-        //userClientExample.setUserRole(UserRole.CLIENT);
+        userClientExample.setUserRole(UserRole.CLIENT);
         if(organizationId != null) {
             userClientExample.setOrganization(organization);
             userClientExample.getOrganization().setId(organizationId);
@@ -455,7 +454,6 @@ public class UserService implements UserDetailsService {
         }
 
         return userClientExample;
-
     }
 
     private User createExample_( String status, String search, Long organizationId) {
@@ -463,7 +461,7 @@ public class UserService implements UserDetailsService {
         Organization organization = new Organization();
         log.info("Request to get coaches by orgId: {}", organizationId);
 
-        //userClientExample.setUserRole(UserRole.COACH);
+        userCoachExample.setUserRole(UserRole.COACH);
         if (organizationId != null) {
             userCoachExample.setOrganization(organization);
             userCoachExample.getOrganization().setId(organizationId);
@@ -520,9 +518,9 @@ public class UserService implements UserDetailsService {
                 .withIgnoreNullValues();
 
         Example<User> example = Example.of(user, matcher);
+        log.info("\nGot coaches {} \n", userRepository.findAll(example, pageable));
         return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }
-
 
     public User editClient(Long clientId, User userDetails, ClientRequest clientRequest) {
         log.info("Request to edit client: {}", clientRequest);
@@ -607,6 +605,37 @@ public class UserService implements UserDetailsService {
         } else {
             throw new IllegalStateException("Invalid Coach");
         }
+    }
+    @Transactional
+    public ClientDTO updateClientStatus(Long id, ClientStatus clientStatus) {
+        log.info("Changing status of client {} to status {}", id, clientStatus);
+        Optional<User> clientOptional = userRepository.findById(id);
+
+        if (clientOptional.isEmpty()) {
+            throw new IllegalStateException("Client doesn't exist");
+        }
+
+        User client = clientOptional.get();
+
+        if (client.getClientStatus() == ClientStatus.SUSPENDED) {
+            log.info("Client {} is in suspended state", id);
+            throw new IllegalStateException("Client is in Suspended State");
+        } else if (Objects.equals(clientStatus, ClientStatus.CLOSED)) {
+            client.setClientStatus(ClientStatus.CLOSED);
+        }
+        else if (Objects.equals(clientStatus, ClientStatus.SUSPENDED)) {
+            client.setClientStatus(ClientStatus.SUSPENDED);
+        } else if (Objects.equals(clientStatus, ClientStatus.ACTIVE)) {
+            client.setClientStatus(ClientStatus.ACTIVE);
+        } else {
+            throw new IllegalStateException("Invalid Status");
+        }
+
+
+        client = userRepository.save(client);
+        log.info("Client with id {} changed status to {}", id, clientStatus);
+        return clientMapper.toDto(client);
+
     }
 
 }

@@ -3,12 +3,21 @@ package com.natujenge.thecouch.web.rest;
 import com.natujenge.thecouch.domain.ClientWallet;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
+import com.natujenge.thecouch.domain.enums.UserRole;
 import com.natujenge.thecouch.service.ClientWalletService;
+import com.natujenge.thecouch.service.WalletService;
+import com.natujenge.thecouch.util.PaginationUtil;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDTO;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.dto.RestResponse;
+import com.natujenge.thecouch.web.rest.dto.SessionDTO;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -23,7 +34,11 @@ import java.net.URI;
 public class WalletResource {
 
     @Autowired
-    ClientWalletService walletService;
+    ClientWalletService clientWalletService;
+
+
+    @Autowired
+    WalletService walletService;
 
 
 
@@ -33,14 +48,35 @@ public class WalletResource {
                                      @AuthenticationPrincipal User userDetails) {
         log.info("Request to create payment");
         log.info("userDetails{}",userDetails.getId());
+
+        Long coachId = null;
+        Long clientId = null;
+        Long organizationId = null;
+
         try {
-            log.info("Logged in user {} ",userDetails);
-            Long coachId = (userDetails == null) ? null : userDetails.getId();
-            log.info("coach id {}",coachId);
-            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
-            log.info("org id {}",organizationId);
-            Long clientId = (userDetails == null) ? null : userDetails.getId();
-            log.info("client id {}",coachId);
+            log.info("Logged in user {} ", userDetails);
+            String userRole = userDetails.getUserRole().name();
+            switch (userRole) {
+                case "COACH":
+                    coachId = userDetails.getId();
+                    break;
+                case "CLIENT":
+                    clientId = userDetails.getId();
+                    break;
+                case "ORGANIZATION":
+                    organizationId = userDetails.getId();
+                    break;
+                default:
+                    return new ResponseEntity<>(new RestResponse(true, "You are not authorized to perform this action"),
+                            HttpStatus.UNAUTHORIZED);
+            }
+
+//            Long coachId = (userDetails == null) ? null : userDetails.getId();
+//            log.info("coach id {}",coachId);
+//            Long organizationId = (userDetails.getOrganization() == null) ? null : userDetails.getOrganization().getId();
+//            log.info("org id {}",organizationId);
+//            Long clientId = (userDetails == null) ? null : userDetails.getId();
+//            log.info("client id {}",coachId);
 
             if (organizationId != null) {
                 log.info("Request to create payment by organization");
@@ -98,59 +134,59 @@ public class WalletResource {
         }
     }
 
-    // Get all payments based on logged-in user
-    @GetMapping
-    ResponseEntity<?> getAllPayments(@RequestParam("per_page") int perPage,
-                                     @RequestParam("page") int page,
-                                     @AuthenticationPrincipal User userDetails) {
-        log.info("Request all payments");
-        try {
-            Long coachId = (userDetails == null) ? null : userDetails.getId();
-            Long organizationId = (userDetails.getOrganization() == null) ? null :
-                    userDetails.getOrganization().getId();
-            Long clientId = (userDetails == null) ? null : userDetails.getId();
-
-
-
-            ListResponse listResponse;
-            if (organizationId != null) {
-                listResponse = walletService.getPaymentsByOrganizationId
-                        (page, perPage, organizationId);
-            } else if (coachId != null) {
-                listResponse = walletService.getPaymentsByCoachId
-                        (page, perPage, coachId);
-            } else {
-                listResponse = walletService.getPaymentsByClientId
-                        (page, perPage, clientId);
-            }
-
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @GetMapping("/filterByCoachId")
-    public ResponseEntity<?> filterByCoachId(
-            @RequestParam("per_page") int perPage,
-            @RequestParam("page") int page,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "coachId") Long coachId
-    ) {
-        try {
-            log.info("Request to get payments by coach Id");
-            ListResponse listResponse = walletService.getPaymentsByCoachId(page, perPage, coachId);
-
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//     Get all payments based on logged-in user
+//    @GetMapping
+//    ResponseEntity<?> getAllPayments(@RequestParam("per_page") int perPage,
+//                                     @RequestParam("page") int page,
+//                                     @AuthenticationPrincipal User userDetails) {
+//        log.info("Request all payments");
+//        try {
+//            Long coachId = (userDetails == null) ? null : userDetails.getId();
+//            Long organizationId = (userDetails.getOrganization() == null) ? null :
+//                    userDetails.getOrganization().getId();
+//            Long clientId = (userDetails == null) ? null : userDetails.getId();
+//
+//
+//
+//            ListResponse listResponse;
+//            if (organizationId != null) {
+//                listResponse = walletService.getPaymentsByOrganizationId
+//                        (page, perPage, organizationId);
+//            } else if (coachId != null) {
+//                listResponse = walletService.getPaymentsByCoachId
+//                        (page, perPage, coachId);
+//            } else {
+//                listResponse = walletService.getPaymentsByClientId
+//                        (page, perPage, clientId);
+//            }
+//
+//            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            log.error("Error ", e);
+//            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+//                    HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//    @GetMapping("/filterByCoachId")
+//    public ResponseEntity<?> filterByCoachId(
+//            @RequestParam("per_page") int perPage,
+//            @RequestParam("page") int page,
+//            @AuthenticationPrincipal User userDetails,
+//            @RequestParam(name = "coachId") Long coachId
+//    ) {
+//        try {
+//            log.info("Request to get payments by coach Id");
+//            ListResponse listResponse = walletService.getPaymentsByCoachId(page, perPage, coachId);
+//
+//            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            log.error("Error occurred ", e);
+//            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+//                    HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
     @GetMapping("/filterByOrgId")
     public ResponseEntity<?> filterByOrgId(
             @RequestParam("per_page") int perPage,
@@ -171,123 +207,19 @@ public class WalletResource {
         }
     }
 
-
-    // Get payments by client id and coach id order by desc
-    @GetMapping("/filter-by-client-id")
-    public ResponseEntity<?> filterPaymentsByClientIdAndCoachId(
-            @RequestParam("per_page") int perPage,
-            @RequestParam("page") int page,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "clientId") Long clientId
-    ) {
-        try {
-
-            log.debug(
-                    "REST request to filter payments given, client id  : {}",
-                    clientId
-            );
-
-            ListResponse listResponse = walletService.getPaymentsByClientId(page, perPage, clientId);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e){
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+    @GetMapping("/filter")
+    public ResponseEntity<List<ClientWalletDTO>> filterPayments(@RequestParam(name = "coachId", required = false) Long coachId,
+                                                           @RequestParam(name = "clientId", required = false) Long clientId,
+                                                           @RequestParam(name = "statementPeriod", required = false) String statementPeriod,
+                                                           @RequestParam(name = "search", required = false) String search,
+                                                           @RequestParam(name="orgId", required = false) Long organizationId,
+                                                           Pageable pageable,
+                                                           @AuthenticationPrincipal User userDetails) {
+        log.info("Request to filter payments");
+        Page<ClientWalletDTO> clientWalletDTOPage = walletService.filter(coachId, clientId, statementPeriod, organizationId, search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), clientWalletDTOPage);
+        return ResponseEntity.ok().headers(headers).body(clientWalletDTOPage.getContent());
     }
-
-
-    @GetMapping("/filterReceipts")
-    public ResponseEntity<ListResponse> filterByClientName(
-            @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int perPage) {
-
-        log.info("Request receipts");
-        try {
-            ListResponse listResponse = walletService.filterByClientName(page, perPage,name);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        }
-        catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    //  get payments by coach id and statement period
-    @GetMapping("/filterByCoachIdAndClientAndStatementPeriod")
-    public ResponseEntity<?> filterByCoachIdAndStatementPeriod(
-            @RequestParam("per_page") int perPage,
-            @RequestParam("page") int page,
-            @RequestParam(name = "search",required = false) String search,
-            @RequestParam(name = "clientName",required = false) String clientName,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
-
-    ) {
-        try {
-            Long coachId = userDetails.getId();
-            log.info("Request to get account statement by coach Id {} and statement period {}", coachId, statementPeriod);
-            ListResponse listResponse = walletService.getPaymentsByCoachIdAndStatementPeriod(page,perPage, coachId,search,clientName, statementPeriod);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //  get payments by client id and statement period
-    @GetMapping("/filterByClientIdAndStatementPeriod")
-    public ResponseEntity<?> filterByClientIdAndStatementPeriod(
-            @RequestParam("per_page") int perPage,
-            @RequestParam("page") int page,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
-
-    ) {
-        try {
-            Long clientId = userDetails.getId();
-            log.info("Request to get account statement by client Id {} and statement period {}", clientId, statementPeriod);
-            ListResponse listResponse = walletService.getPaymentsByClientIdAndStatementPeriod(page,perPage, clientId, statementPeriod);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    //  get payments by organization id and statement period
-    @GetMapping("/filterByOrganizationIdAndClientAndStatementPeriod")
-    public ResponseEntity<?> filterByOrganizationIdAndStatementPeriod(
-            @RequestParam("per_page") int perPage,
-            @RequestParam("page") int page,
-            @RequestParam(name="search", required=false) String search,
-            @RequestParam(name = "clientName",required = false) String clientName,
-            @AuthenticationPrincipal User userDetails,
-            @RequestParam(name = "statement_period",required = false) StatementPeriod statementPeriod
-
-    ) {
-        try {
-            Long organizationId = userDetails.getOrganization().getId();
-            log.info("Request to get account statement by organization Id {} and statement period {}", organizationId, statementPeriod);
-            ListResponse listResponse = walletService.getPaymentsByOrganizationIdAndClientAndStatementPeriod(page,perPage,organizationId, search,clientName, statementPeriod);
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-
-        } catch (Exception e) {
-            log.error("Error occurred ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
 
 
 }
