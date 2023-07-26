@@ -1,5 +1,5 @@
 
-<button (click)="savePdfDesktop()" class="btn btn-submit"><i class="fa fa-download"></i> Download</button>
+<button (click)="savePdfDesktop()" class="btn btn-outline-seccess"><i class="fa fa-download"></i> Download</button>
 <div class="container mb-3" id="statementDesktop">
 <h2 style="text-align: center ;" class="mb-5" >Account Statememt</h2>
 <div class="row">
@@ -59,8 +59,7 @@
 <p class="text-muted mt-5" *ngIf="!loading && !accountStatements.length">
   No Statememt found
 </p>
-<div
-        align="center"
+<div align-items="center"
         *ngIf="totalLength > 20 && payments.length && !loading"
         [@fadeIn]
       >

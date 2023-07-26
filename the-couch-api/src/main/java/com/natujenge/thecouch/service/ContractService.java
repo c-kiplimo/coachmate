@@ -300,7 +300,45 @@ public class ContractService {
         Example<Contract> example = Example.of(contract, matcher);
 
         return contractRepository.findAll(example, pageable).map(contractMapper::toDto);
+//        return contractRepository.findAllByCoachId(coachId, pageable).map(contractMapper::toDto);
 
     }
 
+    public ContractDTO updateContract(Long contractId, Contract contractRequest) {
+        Optional<Contract> contractOptional = contractRepository.findById(contractId);
+        if (contractOptional.isEmpty()) {
+            throw new IllegalStateException("Contract doesn't exist");
+        }
+
+        log.info("Contract {} with id {} found", contractId, contractOptional.get());
+        Contract contract = contractOptional.get();
+
+        if (contractRequest.getCoachingTopic() != null && !contractRequest.getCoachingTopic().isEmpty()) {
+            contract.setCoachingTopic(contractRequest.getCoachingTopic());
+        }
+        if (contractRequest.getStartDate() != null) {
+            contract.setStartDate(contractRequest.getStartDate());
+        }
+        if (contractRequest.getEndDate() != null) {
+            contract.setEndDate(contractRequest.getEndDate());
+        }
+        if (contractRequest.getCoachingCategory() != null) {
+            contract.setCoachingCategory(contractRequest.getCoachingCategory());
+        }
+        if (contractRequest.getNoOfSessions() != null && contractRequest.getNoOfSessions() > 0) {
+            contract.setNoOfSessions(contractRequest.getNoOfSessions());
+        }
+        if (contractRequest.getTerms_and_conditions() != null && !contractRequest.getTerms_and_conditions().isEmpty()) {
+            contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
+        }
+        if (contractRequest.getIndividualFeesPerSession() != null && contractRequest.getIndividualFeesPerSession() > 0) {
+            contract.setIndividualFeesPerSession(contractRequest.getIndividualFeesPerSession());
+        }
+        if (contractRequest.getGroupFeesPerSession() != null && contractRequest.getGroupFeesPerSession() > 0) {
+            contract.setGroupFeesPerSession(contractRequest.getGroupFeesPerSession());
+        }
+
+        contract = contractRepository.save(contract);
+        return contractMapper.toDto(contract);
+    }
 }

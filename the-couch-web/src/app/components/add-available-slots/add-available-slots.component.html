@@ -1,54 +1,61 @@
-<div class="row">
-  <div class="col  mt-4" style="margin-left: 5px;">
-    <h3 class="fw-bold">Availability Slots</h3>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-10">
-  </div>
-  <div class="col-md-2">
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSlotModal">
-      <i class="fa fa-plus"></i> Add Slot
-    </button>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-body">
-        <table class="table" *ngIf="coachSlots?.length">
-          <thead>
-            <tr>
-              <th>Session Date</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Booked</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let slot of coachSlots">
-              <td>{{slot.sessionDate}}</td>
-              <td>{{slot.startTime}}</td>
-              <td>{{slot.endTime}}</td>
-              <td>{{slot.booked}}</td>
-              <td>{{slot.booked}}</td>
-              <td><button type="button" class="btn btn-danger" (click)="deleteSlot(slot)">Delete</button></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-          <div class="donut multi"></div>
-        </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !coachSlots?.length">
-          No Slots Added Yet.
-        </p>
+<div class="row justify-content-center m-2 p-3">
+  <div class="col-md-8">
+    <div class="card card-table justify-content-between m-3">
+      <div class="m-3">
+        <h1 class="fw-bold">Set your weekly hours</h1>
       </div>
+      <div class="donut-wrapper m-3" *ngIf="loading" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+      <div *ngFor="let daySlots of combinedSlots; let i = index">
+        <div class="pt-3 pb-2 border-bottom" *ngFor="let slot of daySlots">
+          <div class="row">
+            <div class="col">
+              <!--day-->
+              <div class="d-flex">
+                <!--check box-->
+                <input class="form-check-input m-2 slots-checkbox" type="checkbox"
+                  [(ngModel)]="slot.dayOfTheWeek.available" (change)="updateDayOfTheWeek(slot.dayOfTheWeek)"
+                  id="flexCheckDefault">
+                <label class="form-check-label m-2" for="flexCheckDefault">
+                  {{ slot?.dayOfTheWeek?.day?.slice(0, 3) }}
+                </label>
+              </div>
+            </div>
+            <div class="col" *ngIf="slot?.dayOfTheWeek?.available">
+              <div class="d-flex m-2" *ngFor="let time of slot?.time; let j = index">
+                <!--time-->
+                <input type="time" variant="success" [(ngModel)]="time.startTime" name="startTime"
+                  class="form-control slots-time" id="inputEmail4" placeholder="Date" name="sessionDate"
+                  (change)="saveSlot(time, slot.dayOfTheWeek)">
+                <p class="m-2">-</p>
+                <input type="time" variant="success" [(ngModel)]="time.endTime" name="endTime"
+                  class="form-control slots-time" id="inputEmail4" placeholder="Date" name="sessionDate"
+                  (change)="saveSlot(time, slot.dayOfTheWeek)">
+                <!--delete icon-->
+                  <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
+              </div>
+            </div>
+            <div class="col" *ngIf="!slot?.dayOfTheWeek?.available">
+              <!--tell the user that this day he is unavailable-->
+              <p class="m-2">Unavailable</p>
+            </div>
+            <div class="col">
+              <div class="d-flex justify-content-end">
+                <!--plus icon-->
+                <button type="button" class="btn btn-outline-success m-1" (click)="addDaySlot(slot.time)" [disabled]="slot?.dayOfTheWeek?.available != true">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
 
 <div class="modal fade" id="addSlotModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-l">
@@ -56,14 +63,14 @@
       <div class="modal-header">
         <h1 class="modal-title fs-5 justify-content-center" id="exampleModalLabel">Add Slots</h1>
 
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">Session Date</label>
-              <input type="date" variant="success" [(ngModel)]="slot.sessionDate" name="sessionDate"
+              <input type="date" variant="success" [(ngModel)]="oneSlot.sessionDate" name="sessionDate"
                 class="form-control" id="inputEmail4" placeholder="Date" name="sessionDate">
 
             </div>
@@ -71,7 +78,7 @@
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">Start Time</label>
-              <input type="time" variant="success" [(ngModel)]="slot.startTime" name="startTime" class="form-control"
+              <input type="time" variant="success" [(ngModel)]="oneSlot.startTime" name="startTime" class="form-control"
                 id="inputEmail4" placeholder="Date" name="sessionDate">
 
             </div>
@@ -79,7 +86,7 @@
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">End Time</label>
-              <input type="time" variant="success" [(ngModel)]="slot.endTime" name="endTime" class="form-control"
+              <input type="time" variant="success" [(ngModel)]="oneSlot.endTime" name="endTime" class="form-control"
                 id="inputEmail4" placeholder="Date" name="sessionDate">
 
             </div>
@@ -90,7 +97,7 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button type="button" class="btn btn-submit" data-bs-dismiss="modal" (click)="addSlot()">
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="addSlot()">
           Add Slot
         </button>
       </div>

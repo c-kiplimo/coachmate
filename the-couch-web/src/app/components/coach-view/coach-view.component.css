@@ -113,26 +113,9 @@ font-size: 15px;
   background-color: #1B3A27;
   color: white;
 }
-.modal-header{
-  background-color: #1B3A27;
 
-
-}
-
-.modal-title{
-  background-color: #1B3A27;
-  color: white
-}
 input[type=checkbox] {
   transform: scale(1.5);
   zoom: 1.5;
 }
-.badge-warning {
-  background-color: rgb(51, 53, 52) !important;
-}
-.badge-success {
-  background-color: green !important;
-}
-.badge-danger {
-  background-color: red !important;
-}
+

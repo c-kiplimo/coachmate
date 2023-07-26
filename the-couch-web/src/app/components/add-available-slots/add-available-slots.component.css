@@ -1,0 +1,48 @@
+.slots-time {
+    width: 200px;
+    margin: 0 auto;
+}
+
+.slots-checkbox {
+    width: 30px;
+    height: 25px;
+}
+
+.delete {
+    color: red;
+    cursor: pointer;
+}
+/* hover effect */
+.delete:hover {
+    color: #4CAF50;
+}
+
+/* Target the checkbox input element */
+input[type="checkbox"].slots-checkbox {
+    /* Hide the default checkbox appearance */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Define the size of the custom checkbox */
+    width: 20px;
+    height: 20px;
+    /* Add custom styles for the checkbox */
+    border: 2px solid #4CAF50; /* Border color */
+    background-color: #fff; /* Background color when unchecked */
+    border-radius: 4px; /* Rounded corners */
+    outline: none; /* Remove the outline when focused */
+    cursor: pointer; /* Show the pointer cursor */
+  }
+  
+  /* Define the custom appearance of the checkbox when it is checked */
+  input[type="checkbox"].slots-checkbox:checked {
+    background-color: #4CAF50; /* Background color when checked */
+    border: 2px solid #4CAF50; /* Border color when checked */
+  }
+  
+  /* Define the custom appearance of the checkbox when it is checked and focused */
+  input[type="checkbox"].slots-checkbox:checked:focus {
+    outline: none; /* Remove the outline when focused */
+    box-shadow: 0 0 0 3px #b4edb6; /* Add a blue shadow when focused */
+  }
+  

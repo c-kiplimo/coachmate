@@ -113,6 +113,7 @@ throw new Error('Method not implemented.');
       this.sessionId = params['id'];
       const sessionId = params['id'];
       this.getAttachment(sessionId);
+      this.getFeedback(sessionId);
     });
 
     if (this.userRole == 'COACH') {
@@ -136,7 +137,7 @@ throw new Error('Method not implemented.');
 
 
     this.getSession();
-    this.getFeedback();
+    
    
     this.editedsessionForm = this.formbuilder.group({
       sessionDate: '',
@@ -165,7 +166,7 @@ throw new Error('Method not implemented.');
   }
 
   //get feedback for session
-  getFeedback() {
+  getFeedback(sessionId: any) {
     const params = {
       sessionId: this.sessionId,
 
@@ -371,8 +372,9 @@ throw new Error('Method not implemented.');
         console.log(response);
         this.toastrService.success('Feedback added successfully', 'Success!', { timeOut: 8000 });
         
-        // Close the feedback form
-        this.closeFeedbackForm();
+      this.getFeedback(this.sessionId);
+      this.addfeedbackModal.nativeElement.classList.remove('show');
+      this.addfeedbackModal.nativeElement.style.display='none';
       },
       (error) => {
         console.log(error);
@@ -381,9 +383,11 @@ throw new Error('Method not implemented.');
     );
   }
   
-  closeFeedbackForm() {
-    this.addfeedbackModal.nativeElement.classList.remove('show');
-    this.addfeedbackModal.nativeElement.style.display = 'none';
+  closeFeedbackFormModal() {
+    if (this.addfeedbackModal && this.addfeedbackModal.nativeElement) {
+      this.addfeedbackModal.nativeElement.classList.remove('show');
+      this.addfeedbackModal.nativeElement.style.display = 'none';
+    }
   }
   
 

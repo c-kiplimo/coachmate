@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.web.rest;
 
 import com.natujenge.thecouch.domain.Contract;
+import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
@@ -77,7 +78,6 @@ public class ContractResource {
 
     @PutMapping(path = "/changeContractStatus/{id}") // change status signed or finished
     ResponseEntity<Contract> updateContractStatus(
-
                                          @RequestParam("status") ContractStatus contractStatus,
                                          @PathVariable("id") Long contractId,
                                          @AuthenticationPrincipal User userDetails) {
@@ -85,6 +85,21 @@ public class ContractResource {
 
                 Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId());
         return  ResponseEntity.ok().body(updatedContract);
+    }
+
+    // update contract
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ContractDTO> updateContract(@PathVariable("id") Long contractId,
+                                                      @RequestBody Contract contract,
+                                                      @AuthenticationPrincipal User userDetails){
+        log.info("Request to update contract with id {}", contractId);
+        try {
+            ContractDTO updatedContract = contractService.updateContract(contractId, contract);
+            return ResponseEntity.ok().body(updatedContract);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

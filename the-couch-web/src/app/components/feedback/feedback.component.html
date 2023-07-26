@@ -4,6 +4,7 @@
     <h3 class="fw-semi-bold fs-5">Feedbacks</h3>
   </div>
 </div>
+
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -54,41 +55,24 @@
       </div>
     </div>
   </div>
-  <!-- feedback details modal -->
-<div
-class="modal fade"
-id="feedbackModal"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-  <div class="modal-header">
-    <h1 class="modal-title fs-5" id="exampleModalLabel">
-      feedback Comments
-    </h1>
 
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body" *ngFor="let feedback of feedbacks">
-    <div class="d-flex-column">
-      <span>{{ feedback.comments }}</span>
+  <!-- feedback details modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">feedback Comments</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngFor="let feedback of feedbacks">
+        <div class="d-flex-column">
+          <span>{{ feedback.comments }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close
+        </button>
+      </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <button type="button" 
-    class="btn btn-secondary" 
-    data-bs-dismiss="modal"
-    >
-      Close
-    </button>
-  </div>
-</div>
-</div>
 </div> 

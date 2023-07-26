@@ -105,19 +105,8 @@
           </div>
         </div>
 
-        <button
-          type="submit"
-          (click)="addSession()"
-          [disabled]="
-            !formData.name ||
-            !formData.sessionSchedules ||
-            !formData.sessionVenue ||
-            !formData.sessionType ||
-            !formData.sessionDetails ||
-            !getContractId
-          "
-          class="btn btn-signup mb-3 mt-2 p-2 text-center"
-        >
+        <button type="submit" (click)="addSession()"[disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionVenue || !formData.sessionType || !formData.sessionDetails || !getContractId"
+          class="btn btn-signup mb-3 mt-2  btn-outline-success text-center">
           Create Session
         </button>
       </form>

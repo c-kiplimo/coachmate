@@ -240,8 +240,9 @@ coach: any;
 
     if(this.userRole == 'COACH'){
       options.coachId = this.coachId;
-    }else if(this.userRole == 'ORGANIZATION'){
-      options.coachId = this.coachId;
+    }
+    if(this.userRole == 'ORGANIZATION'){
+      // options.coachId = this.coachId;
     }
 
     this.ClientService.getSessions(options).subscribe(
@@ -275,12 +276,10 @@ coach: any;
       sort: 'id,desc',
     };
 
-    if(this.userRole == 'COACH'){
+    if(this.userRole === 'COACH'){
       options.coachId = this.coachId;
-    }else if(this.userRole == 'CLIENT'){
-      options.clientId = this.clientId;
-    }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
+    }
+    if(this.userRole === 'ORGANIZATION'){
       options.coachId = this.coachId;
     }
 
@@ -331,7 +330,7 @@ coach: any;
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
-      coachId: this.coachId,  
+      coachId: this.coachId,
     };
 
     this.ClientService.getPaymentsByCoachId(options).subscribe(

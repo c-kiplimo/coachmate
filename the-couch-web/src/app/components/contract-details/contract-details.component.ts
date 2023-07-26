@@ -73,7 +73,8 @@ export class ContractDetailsComponent implements OnInit {
   coachSlots: any;
   createSessionClientId: any;
   selectedContract: any;
-  statusForm!: FormGroup;
+  contractToBeUpdated: any;
+  updateContractForm!: FormGroup;
 
 
   @ViewChild('yourElement') yourElement!: ElementRef;
@@ -89,6 +90,7 @@ export class ContractDetailsComponent implements OnInit {
   sessions: any;
   contractId: any;
   contract: any;
+
   @HostListener('document:click', ['$event']) onClick(event: any) {
   console.log(event.target.attributes.id.nodeValue);
 
@@ -142,6 +144,7 @@ export class ContractDetailsComponent implements OnInit {
       goals:'',
       
     });
+
     this.addsessionForm = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -160,11 +163,21 @@ export class ContractDetailsComponent implements OnInit {
       sessionBalance:'',
 
     });
-    this.statusForm = this.formbuilder.group({
-      narration: 'Test',
-      isSendNotification: true
+
+    this.updateContractForm = this.formbuilder.group({
+      coachingTopic: '',
+      coachingCategory: '',
+      startDate:'',
+      endDate:'',
+      groupFeesPerSession:'',
+      individualFeesPerSession:'',
+      noOfSessions:'',
+      objectives:'',
+      services:'',
+      practice:'',
+      terms_and_conditions:'',
     });
-    this.activateCoachForm = this.formbuilder.group({});  // TODO: Create the activateCoachForm 
+
   }
  
   onContractChange(event: any) {
@@ -251,10 +264,10 @@ modal!: ElementRef;
 activateContractModal!: ElementRef;
 @ViewChild('editContractModal', { static: false })
 editContractModal!: ElementRef;
-@ViewChild('suspendContractModal', { static: false })
-suspendContractModal!: ElementRef;
-@ViewChild('closeContracttModal', { static: false })
-closeContractModal!: ElementRef;
+@ViewChild('signContractModal', { static: false })
+signContractModal!: ElementRef;
+@ViewChild('finishContracttModal', { static: false })
+finishContractModal!: ElementRef;
 
 closeModal() {
   this.modal.nativeElement.style.display = 'none';
@@ -315,88 +328,88 @@ editSession(client:any){
     session: any;
     id:any;
     showStatus: any;
-    status: any;
+    status!: string;
 
     editContract(contract: any) {}
 
     statusState(currentStatus: any) {
       console.log(currentStatus);
-      if (currentStatus === 'ACTIVE') {
-        this.showStatus = "ACTIVATE";
-        this.status = "ACTIVE";
-      } else if (currentStatus === 'SUSPENDED') {
-        this.showStatus = "SUSPEND";
-        this.status = "SUSPENDED";
-      } else if (currentStatus === 'CLOSED') {
-        this.showStatus = "CLOSE";
-        this.status = "CLOSED";
+      if (currentStatus === 'SIGNED') {
+        this.showStatus = "SIGNED";
+        this.status = "SIGNED";
+      } else if (currentStatus === 'ONGOING') {
+        this.showStatus = "ONGOING";
+        this.status = "ONGOING";
+      } else if (currentStatus === 'FINISHED') {
+        this.showStatus = "FINISHED";
+        this.status = "FINISHED";
       }
     }
 
     changeContractStatus() {
       console.log(this.status);
-      if (this.status === "ACTIVE") {
-        const options: any = this.statusForm.value;
-      this.contractService.changeContractStatus(this.contractId, options).subscribe(
-        (res) => {
-          console.log(res);
-          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-          this.activateContractModal.nativeElement.classList.remove('show');
-          this.activateContractModal.nativeElement.style.display = 'none';
+      let data = {
+        status: this.status,
+      }
+      console.log(data);
 
-        }, (error) => {
-          console.log(error)
-          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
-          this.activateContractModal.nativeElement.classList.remove('show');
-          this.activateContractModal.nativeElement.style.display = 'none';
-        }
-      );
+      if (this.status === "SIGNED") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Signed!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Signed!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
       }
 
-      if (this.status === "SUSPENDED") {
-        const options: any = this.statusForm.value;
-      this.contractService.changeContractStatus(this.contractId, options).subscribe(
-        (res) => {
-          console.log(res);
-          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-          this.suspendContractModal.nativeElement.classList.remove('show');
-          this.suspendContractModal.nativeElement.style.display = 'none';
-        }, (error) => {
-          console.log(error)
-          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
-          this.suspendContractModal.nativeElement.classList.remove('show');
-          this.suspendContractModal.nativeElement.style.display = 'none';
-        }
-      );
+      if (this.status === "ONGOING") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Activated!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Activated!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
       }
 
-      if (this.status === "CLOSED") {
-        const options: any = this.statusForm.value;
-      this.contractService.changeContractStatus(this.contractId, options).subscribe(
-        (response) => {
-          console.log(response);
-          this.toastrService.success('Status Changed!', 'Success!', { timeOut: 8000 });
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-          this.closeContractModal.nativeElement.classList.remove('show');
-          this.closeContractModal.nativeElement.style.display = 'none';
-        }, (error: any) => {
-          console.log(error)
-          this.toastrService.success('Status not Changed!', 'Failed!', { timeOut: 8000 });
-          this.closeContractModal.nativeElement.classList.remove('show');
-          this.closeContractModal.nativeElement.style.display = 'none';
-        }
-      );
+      if (this.status === "FINISHED") {
+        this.contractService.changeContractStatus(this.contractId, data).subscribe(
+          (response) => {
+            console.log(response);
+            this.toastrService.success('Contract Terminated!', 'Success!', { timeOut: 8000 });
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }, (error) => {
+            console.log(error)
+            this.toastrService.success('Contract not Terminated!', 'Failed!', { timeOut: 8000 });
+            this.signContractModal.nativeElement.classList.remove('show');
+            this.signContractModal.nativeElement.style.display = 'none';
+          }
+        );
       }
     }
-
 
   }
         

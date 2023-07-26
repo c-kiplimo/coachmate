@@ -1,10 +1,10 @@
 <div class="row justify-content-center m-2 p-3">
-          <div class="col-md-8">
-            <div class="card card-table justify-content-center align-items-center">
-              <div class="m-3">
-                <h1 class="text-center mb-3"> Add New Client</h1>
-              </div>
-              <form class="m-3">
+    <div class="col-md-8">
+      <div class="card card-table justify-content-center align-items-center">
+        <div class="m-3">
+          <h1 class="text-center mb-3"> Add New Client</h1>
+        </div>
+        <form class="m-3">
           <div class="row justify-content-center">
             <div class=" mb-3 col-md-12 ">
               <label for="exampleInputEmail1">First Name *</label>
@@ -43,7 +43,6 @@
                 placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
             </div>
           </div>
-
           <div class="row justify-content-center">
             <div class=" mb-3 col-md-12 ">
               <label class="input-group-text" for="paymentMode">Payment Mode *</label>
@@ -81,7 +80,7 @@
 
             </div>
           </div>
-            <button type="submit" class="btn btn-signup text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
+          <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
             !addClient.firstName||
             !addClient.lastName||
             !addClient.email||
@@ -91,8 +90,8 @@
             !addClient.clientType||
             !addClient.reason
             ">ADD CLIENT
-            </button>
+          </button>
         </form>
       </div>
     </div>
-    </div>
+</div>
