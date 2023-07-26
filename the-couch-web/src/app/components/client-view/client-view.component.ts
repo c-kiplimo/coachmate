@@ -471,6 +471,7 @@ export class ClientViewComponent implements OnInit {
   suspendclientModal!: ElementRef;
   @ViewChild('closeclientModal', { static: false })
   closeclientModal!: ElementRef;
+  
   editClient(client: any) {
     this.clientToBeUpdated = client;
 

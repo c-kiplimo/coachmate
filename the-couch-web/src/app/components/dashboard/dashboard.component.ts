@@ -127,8 +127,7 @@ export class DashboardComponent implements OnInit {
       // this.getOrgContracts(this.orgId);
       // this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      // this.getOrgCoaches(this.page);
-      this.getCoachesImpl(this.page);
+      this.getOrgCoaches(this.page);
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -456,51 +455,6 @@ export class DashboardComponent implements OnInit {
   //   );
   // }
 
-  getCoachesImpl(page: any) {
-    this.loading = true;
-    this.page = page;
-    //if page is 0, don't subtract 1
-    if (page === 0 || page < 0) {
-      page = 0;
-    } else {
-      page = page - 1;
-    }
-    if(this.filters.status == 'ALL'){
-      this.filters.status = '';
-    }
-    const options: any = {
-      page: page,
-      size: this.pageSize,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      sort: 'id,desc',
-    };
-
-    if(this.userRole == 'COACH'){
-      options.coachId = this.coachId;
-    }else if(this.userRole == 'CLIENT'){
-      options.clientId = this.clientId;
-    }else if(this.userRole == 'ORGANIZATION'){
-      options.orgId = this.orgId;
-    }
-    
-    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
-      (response) => {
-        this.loading = false;
-        this.coachesImpl = response.body;
-        for (let client of this.coachesImpl) {
-          if (client.userRole != 'COACH') {
-            this.coachesImpl.splice(this.coachesImpl.indexOf(client), 1);
-          }
-        }
-        this.totalElements = +response.headers.get('X-Total-Count');
-        console.log('clients',this.coachesImpl)
-      }, (error) => {
-        this.loading = false;
-        console.log(error)
-      }
-    )
-  }
 
   getOrgCoaches(page: any) {
  

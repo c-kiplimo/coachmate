@@ -80,7 +80,7 @@ export class ApiService {
   }
   //set new password service
   setNewPassword(newPassword: any): Observable<any> {
-    return this.http.post<any>(this.baseURL + 'registration/forgot', newPassword, {
+    return this.http.post<any>(this.baseURL + '/registration/forgot', newPassword, {
       observe: 'response',
     });
   }

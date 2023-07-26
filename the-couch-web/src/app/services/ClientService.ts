@@ -29,6 +29,12 @@ export class ClientService {
         observe: 'response',
       })
   }
+  getPayments(options: any) {
+    return this.http.get<any>(this.baseURL + 'wallet/filter', {
+      observe: 'response',
+      params: options,
+    });     
+  }
 
 
   getOneSession(id: number): Observable<any> {
@@ -74,7 +80,7 @@ export class ClientService {
     let options = {
       status: status,
     };
-    return this.http.put<any>(this.baseURL + 'clients/change-status/' + clientId, statusForm,
+    return this.http.put<any>(this.baseURL + 'users/change-status/' + clientId, statusForm,
       {
         params: options,
         observe: "response"
@@ -295,7 +301,7 @@ export class ClientService {
   }
 
   //getPaymentByCoachIdAndSelectedPeriod
-  getPaymentsByCoachIdAndSelectedPeriod(options: any): Observable<any> {
+  getPaymentsBySelectedPeriod(options: any): Observable<any> {
     return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`, {
       params: options,
       observe: 'response'
@@ -385,15 +391,7 @@ export class ClientService {
 
 
   //contact us  message
-  contactUsMessage(message: any): Observable<any> {
-    return this.http.post<any>(
-      this.baseURL + 'registration/contact',
-      message,
-      {
-        observe: 'response',
-      }
-    );
-  }
+  
 
   //save settings service
   saveSettings(settingsObject: any): Observable<any> {

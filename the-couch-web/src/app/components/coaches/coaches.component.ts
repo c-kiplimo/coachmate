@@ -100,7 +100,7 @@ export class CoachesComponent implements OnInit {
 
 
 getCoaches(page: any) {
-  this.loading = true;
+    this.loading = true;
     this.page = page;
     //if page is 0, don't subtract 1
     if (page === 0 || page < 0) {
@@ -120,15 +120,10 @@ getCoaches(page: any) {
       orgId: this.orgId,
     };
     
-    this.ClientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
+    this.ClientService.getOrgCoaches(options).subscribe(  // test the getAllOrgClients endpoint
       (response) => {
         this.loading = false;
         this.coaches = response.body;
-        for (let coach of this.coaches) {
-          if (coach.userRole != 'COACH') {
-            this.coaches.splice(this.coaches.indexOf(coach), 1);
-          }
-        }
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.coaches)
       }, (error) => {

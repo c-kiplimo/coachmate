@@ -4,28 +4,21 @@ import com.natujenge.thecouch.config.Constants;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.NotificationMode;
 import com.natujenge.thecouch.domain.enums.StatementPeriod;
-import com.natujenge.thecouch.repository.ClientBillingAccountRepository;
-import com.natujenge.thecouch.repository.ClientWalletRepository;
-import com.natujenge.thecouch.repository.NotificationRepository;
-import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.repository.*;
+import com.natujenge.thecouch.service.mapper.ClientWalletMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationUtil;
-import com.natujenge.thecouch.web.rest.dto.ClientWalletDto;
+import com.natujenge.thecouch.web.rest.dto.ClientWalletDTO;
 import com.natujenge.thecouch.web.rest.dto.ListResponse;
 import com.natujenge.thecouch.web.rest.request.PaymentRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -33,6 +26,7 @@ public class WalletService {
 
 
     private final ClientWalletRepository clientWalletRepository;
+    private final WalletRepository walletRepository;
 
     private final NotificationRepository notificationRepository;
 
@@ -49,11 +43,12 @@ public class WalletService {
 
 
     private final UserRepository userRepository;
-
+private final  ClientWalletMapper clientWalletMapper;
     private final ModelMapper modelMapper;
 
-    public WalletService(ClientWalletRepository clientWalletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, UserRepository userRepository, ModelMapper modelMapper) {
+    public WalletService(ClientWalletRepository clientWalletRepository, WalletRepository walletRepository, NotificationRepository notificationRepository, ClientBillingAccountRepository clientBillingAccountRepository, AccountStatementService accountStatementService, NotificationServiceHTTPClient notificationServiceHTTPClient, NotificationSettingsService notificationSettingsService, UserRepository userRepository, ClientWalletMapper clientWalletMapper, ModelMapper modelMapper) {
         this.clientWalletRepository = clientWalletRepository;
+        this.walletRepository = walletRepository;
         this.notificationRepository = notificationRepository;
         this.clientBillingAccountRepository = clientBillingAccountRepository;
         this.accountStatementService = accountStatementService;
@@ -61,6 +56,7 @@ public class WalletService {
         this.notificationSettingsService = notificationSettingsService;
 
         this.userRepository = userRepository;
+        this.clientWalletMapper = clientWalletMapper;
         this.modelMapper = modelMapper;
     }
 
@@ -463,7 +459,7 @@ public class WalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> walletPage;
+        Page<ClientWalletDTO> walletPage;
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
@@ -474,23 +470,23 @@ public class WalletService {
     }
 
     // Get all payments by coach Id
-    public ListResponse getPaymentsByCoachId(int page, int perPage, Long coachId) {
-        log.info("Get all Payments by Coach id {}", coachId);
-
-        page = page - 1;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page, perPage, sort);
-
-        Page<ClientWalletDto> walletPage;
-
-        // search payments by coach id
-        walletPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
-
-
-        return new ListResponse(walletPage.getContent(),
-                walletPage.getTotalPages(), walletPage.getNumberOfElements(),
-                walletPage.getTotalElements());
-    }
+//    public ListResponse getPaymentsByCoachId(int page, int perPage, Long coachId) {
+//        log.info("Get all Payments by Coach id {}", coachId);
+//
+//        page = page - 1;
+//        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+//        Pageable pageable = PageRequest.of(page, perPage, sort);
+//
+//        Page<ClientWalletDTO> walletPage;
+//
+//        // search payments by coach id
+//        walletPage = clientWalletRepository.findAllByCoach_id(coachId, pageable);
+//
+//
+//        return new ListResponse(walletPage.getContent(),
+//                walletPage.getTotalPages(), walletPage.getNumberOfElements(),
+//                walletPage.getTotalElements());
+//    }
 
     // Get all payments by organization Id
     public ListResponse getPaymentsByClientId(int page, int perPage, Long clientId) {
@@ -500,7 +496,7 @@ public class WalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> walletPage;
+        Page<ClientWalletDTO> walletPage;
 
         // search payments by coach id
         walletPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
@@ -515,7 +511,7 @@ public class WalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDTO> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
                 organizationId,
                 clientId,
                 pageable
@@ -529,7 +525,7 @@ public class WalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
+        Page<ClientWalletDTO> paymentPage = clientWalletRepository.findByOrganizationIdAndClientId(
                 coachId,
                 clientId,
                 pageable
@@ -546,20 +542,20 @@ public class WalletService {
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
 
-        Page<ClientWalletDto> receiptPage = null;
+        Page<ClientWalletDTO> receiptPage = null;
         if (name != null && date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name).and(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay())), q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if (name != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = clientWalletRepository.findBy(qClientWallet.client.fullName.containsIgnoreCase(name), q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
         if (date != null) {
             QClientWallet qClientWallet = QClientWallet.clientWallet;
-            receiptPage = (Page<ClientWalletDto>) clientWalletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDto.class).page(pageable));
+            receiptPage = (Page<ClientWalletDTO>) clientWalletRepository.findBy(qClientWallet.createdAt.eq(LocalDate.from(date.atStartOfDay()).atStartOfDay()), q -> q.sortBy(sort).as(ClientWalletDTO.class).page(pageable));
             return new ListResponse(receiptPage.getContent(), receiptPage.getTotalPages(), receiptPage.getNumberOfElements(), receiptPage.getTotalElements());
         }
 
@@ -575,7 +571,7 @@ public class WalletService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page, perPage, sort);
 
-        Page<ClientWalletDto> paymentPage;
+        Page<ClientWalletDTO> paymentPage;
         // GET BY STATEMENT PERIOD
         if (statementPeriod == StatementPeriod.PER_MONTH) {
             paymentPage = clientWalletRepository.findAllByCoach_idAndCreatedAtBetween(coachId,
@@ -612,28 +608,28 @@ public class WalletService {
         Pageable pageable = PageRequest.of(page, perPage, sort);
         // GET BY STATEMENT PERIOD
         if (statementPeriod == StatementPeriod.PER_MONTH) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_YEAR) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_idAndCreatedAtBetween(organizationId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByOrganization_id(organizationId, pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
@@ -650,28 +646,28 @@ public class WalletService {
         Pageable pageable = PageRequest.of(page, perPage, sort);
         // GET BY STATEMENT PERIOD
         if (statementPeriod == StatementPeriod.PER_MONTH) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusMonths(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_6_MONTHS) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusWeeks(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else if (statementPeriod == StatementPeriod.PER_YEAR) {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_idAndCreatedAtBetween(clientId,
                     LocalDateTime.now().minusDays(1), LocalDateTime.now(), pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
                     paymentPage.getTotalElements());
         } else {
-            Page<ClientWalletDto> paymentPage;
+            Page<ClientWalletDTO> paymentPage;
             paymentPage = clientWalletRepository.findAllByClient_id(clientId, pageable);
             return new ListResponse(paymentPage.getContent(),
                     paymentPage.getTotalPages(), paymentPage.getNumberOfElements(),
@@ -690,4 +686,70 @@ public class WalletService {
         clientWallet.setLastUpdatedAt(LocalDate.from(LocalDateTime.now()));
         clientWalletRepository.save(clientWallet);
     }
+
+    private ClientWallet createExample(Long coachId, Long clientId, String statementPeriod, Long organizationId, String search) {
+        ClientWallet walletExample = new ClientWallet();
+        User client = new User();
+        User coach = new User();
+
+        if (coachId != null) {
+            walletExample.setCoach(coach);
+            walletExample.getCoach().setId(coachId);
+        }
+        if (clientId != null) {
+            walletExample.setClient(client);
+            walletExample.getClient().setId(clientId);
+        }
+
+
+        if (statementPeriod != null && !statementPeriod.isEmpty()) {
+            LocalDateTime startDate;
+            LocalDateTime endDate = LocalDateTime.now(); // Default to the current date and time
+
+            if (statementPeriod.equalsIgnoreCase("PER_MONTH")) {
+                startDate = endDate.minusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+            } else if (statementPeriod.equalsIgnoreCase("PER_6_MONTHS")) {
+                startDate = endDate.minusMonths(6).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+            } else if (statementPeriod.equalsIgnoreCase("PER_YEAR")) {
+                startDate = endDate.minusYears(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+            } else {
+                startDate = endDate.minusDays(29).withHour(0).withMinute(0).withSecond(0);
+            }
+        }
+
+        if (organizationId != null) {
+            walletExample.setOrganization(new Organization());
+            walletExample.getOrganization().setId(organizationId);
+        }
+        if (search != null && !search.isEmpty()) {
+            walletExample.setClient(client);
+            if (search.contains("@")) {
+                walletExample.getClient().setEmail(search);
+            } else if (search.startsWith("+") || search.matches("[0-9]+")) {
+                walletExample.getClient().setMsisdn(search);
+            } else {
+                walletExample.getClient().setFullName(search);
+            }
+        }
+        return walletExample;
+    }
+
+
+    // GetPayments
+
+    public Page<ClientWalletDTO> filter(Long coachId, Long clientId, String statementPeriod,  Long organizationId, String search, Pageable pageable) {
+        ClientWallet clientWallet = createExample(coachId, clientId,  statementPeriod, organizationId, search);
+        log.info("After example {} ", clientWallet);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded", "client.locked", "client.enabled","client.onboarded")
+                .withIgnoreNullValues();
+        Example<ClientWallet> example = Example.of(clientWallet, matcher);
+
+
+        return walletRepository.findAll(example, pageable).map(clientWalletMapper::toDto);
+    }
+
 }

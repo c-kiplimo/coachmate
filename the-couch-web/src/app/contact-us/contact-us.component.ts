@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { ClientService } from '../services/ClientService';
+import { NotificationsService } from '../services/notifications.service';
 
 
 
@@ -25,7 +26,7 @@ export class ContactUsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private notificationsService: ClientService,
+    private notificationsService: NotificationsService,
     private toastrService: ToastrService
   ) { }
 

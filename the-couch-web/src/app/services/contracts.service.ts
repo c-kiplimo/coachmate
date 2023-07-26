@@ -35,4 +35,11 @@ export class ContractsService {
     });
   }
 
+  editContract (contractId: number, contract: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + 'contracts/' + contractId, contract, 
+    {
+      observe: 'response',
+    });
+  }
+
 }
