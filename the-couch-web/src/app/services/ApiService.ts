@@ -217,10 +217,27 @@ export class ApiService {
       observe: 'response',
     });
   }
+
+  //get days of the week
+  getDaysOfWeek(options: any): Observable<any> {
+    return this.http.get<any>(this.baseURL + '/sessionSchedules/daysOfTheWeek', {
+      params: options,
+      observe: 'response',
+    });
+  }
+
+  //update days of the week
+  updateDayOfTheWeek(day: any) {
+    return this.http.put<any>(this.baseURL + '/sessionSchedules/daysOfTheWeek/'+day.id, day, {
+      observe: 'response',
+    });
+  }
+
+  //update slot
+  updateSlot(slot: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + '/sessionSchedules/'+slot.id, slot, {
+      observe: 'response',
+    });
+  }
 }
 
-// {
-//     headers: {
-//         Authorization: `Bearer ${JSON.parse(sessionStorage.getItem('userDetails') as any).token}`
-//       }
-// })

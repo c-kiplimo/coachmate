@@ -1,5 +1,6 @@
 package com.natujenge.thecouch.web.rest.dto;
 
+import com.natujenge.thecouch.domain.DaysOfTheWeek;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,6 +13,10 @@ public class SessionSchedulesDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean booked;
+    private boolean recurring;
+    private boolean dayOfTheWeekAvailable;
+    private DaysOfTheWeek dayOfTheWeek;
+
     private Long coachId;
     private String coachFullName;
     private String coachMsisdn;
