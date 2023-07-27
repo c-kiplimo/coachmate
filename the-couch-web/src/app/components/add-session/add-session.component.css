@@ -26,3 +26,30 @@ fa-icon{
 fa-icon {
     cursor: pointer;
 }
+
+/* your-component.component.css */
+.custom-radio-input {
+    /* Add your custom styles for the radio input here */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 50%;
+  }
+  
+  .custom-radio-input:checked {
+    background-color: #4CAF50;
+  }
+  
+  .custom-label {
+    /* Add your custom styles for the label here */
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  
+  .custom-loop-icon {
+    /* Add your custom styles for the loop icon here */
+    margin-left: 10px;
+    color: #4CAF50; /* Change to the desired color (e.g., green) */
+  }
+  
+  

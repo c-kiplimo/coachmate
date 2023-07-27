@@ -36,9 +36,9 @@ public class Session {
     private SessionStatus sessionStatus;
 
     private String attachments;
-    // session responses
     private String notes;
     private String feedback;
+    private LocalDate sessionDate;
 
     @Enumerated(EnumType.STRING)
     private SessionVenue sessionVenue;
