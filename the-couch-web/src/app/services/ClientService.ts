@@ -252,14 +252,14 @@ export class ClientService {
   }
 
   getPaymentsByCoachId(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByCoachId`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
   }
 
   getPaymentsByClientId(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filter-by-client-id`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -273,7 +273,7 @@ export class ClientService {
   }
 
   getPaymentsByClientIdAndCoachId(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByClientIdAndCoachId`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -287,14 +287,14 @@ export class ClientService {
   }
 
   getPaymentsByOrgIdAndClientId(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByOrgIdAndClientId`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
   }
   // get payment based on user logged in
   getPaymentsByUser(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -302,7 +302,7 @@ export class ClientService {
 
   //getPaymentByCoachIdAndSelectedPeriod
   getPaymentsBySelectedPeriod(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByCoachIdAndStatementPeriod`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -310,7 +310,7 @@ export class ClientService {
 
   //getPaymentByClientIdAndSelectedPeriod
   getPaymentsByClientIdAndSelectedPeriod(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByClientIdAndStatementPeriod`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -319,7 +319,7 @@ export class ClientService {
 
   //getPaymentByOrgIdAndSelectedPeriod
   getPaymentsByOrgIdAndSelectedPeriod(options: any): Observable<any> {
-    return this.http.get(`${this.baseURL}wallet/filterByOrganizationIdAndStatementPeriod`, {
+    return this.http.get(`${this.baseURL}wallet/filter`, {
       params: options,
       observe: 'response'
     })
@@ -395,9 +395,7 @@ export class ClientService {
 
   //save settings service
   saveSettings(settingsObject: any): Observable<any> {
-    return this.http.put<any>(
-      this.baseURL + 'settings',
-      settingsObject,
+    return this.http.put<any>(this.baseURL + 'settings', settingsObject,
       { observe: 'response' }
     );
   }
@@ -416,7 +414,7 @@ export class ClientService {
 
   getNotificationsbyCoachId(options: any): Observable<any> {
     return this.http.get<any>(
-      this.baseURL + 'notification/filter-by-coach-id',
+      this.baseURL + 'notification/filter',
       {
         params: options,
         observe: 'response',

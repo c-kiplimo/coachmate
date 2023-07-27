@@ -118,17 +118,14 @@ export class DashboardComponent implements OnInit {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
       // this.getUserOrg();
-      // this.getClients(this.page);
-      //this.getCoaches(this.page);
-      // this.getAllContracts(this.page);
       // this.orgData = sessionStorage.getItem('Organization');
       // this.orgSession = JSON.parse(this.orgData);
-      // console.log(this.orgSession);
       // this.getOrgContracts(this.orgId);
       // this.getAllOrgSessions(this.orgId);
       // this.getOrgFeedbacks(this.orgId);
-      // this.getOrgCoaches(this.page);
-      this.getCoachesImpl(this.page);
+      this.getAllContracts(this.page)
+      this.getOrgCoaches(this.page);
+      this.getClients(this.page);
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
@@ -206,8 +203,7 @@ export class DashboardComponent implements OnInit {
     }else if(this.userRole == 'CLIENT'){
       options.clientId = this.clientId;
     }else if(this.userRole == 'ORGANIZATION'){
-      //options.orgId = this.orgId;
-      options.coachId = this.coachId;
+      options.orgId = this.orgId;
     }
 
     this.contractsService.getContracts(options).subscribe(
@@ -527,7 +523,7 @@ export class DashboardComponent implements OnInit {
       this.clientService.getOrgCoaches(options).subscribe(
         (response) => {
           this.loading = false;
-          this.coachesImpl = response.body;
+          this.coaches = response.body;
           this.totalElements = +response.headers.get('X-Total-Count');
           console.log('coaches',this.coachesImpl)
         }, (error) => {
@@ -536,6 +532,8 @@ export class DashboardComponent implements OnInit {
         }
       )
   }
+
+
   getClientContracts(id: any) {
     // const data = {
     //   clientId: id,

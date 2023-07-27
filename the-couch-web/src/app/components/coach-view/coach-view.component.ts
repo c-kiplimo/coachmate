@@ -242,7 +242,7 @@ coach: any;
       options.coachId = this.coachId;
     }
     if(this.userRole == 'ORGANIZATION'){
-      // options.coachId = this.coachId;
+      options.coachId = this.coachId;
     }
 
     this.ClientService.getSessions(options).subscribe(
@@ -335,7 +335,7 @@ coach: any;
 
     this.ClientService.getPaymentsByCoachId(options).subscribe(
       (response) => {
-          this.payments = response.body.data;
+          this.payments = response.body;
           console.log('payments', this.payments);
           this.loading = false;
         }, (error) => {
