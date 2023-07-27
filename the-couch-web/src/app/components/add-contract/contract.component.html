@@ -44,13 +44,34 @@
             {{ client.firstName }} {{ client.lastName }}
           </option>
           <!--Render the create client button if no clients are found-->
-          <div *ngIf="!clients">
+          <div *ngIf="!clients.length">
             <button class="btn btn-outline-success" routerLink="/addclient">
               Create Client
             </button>
           </div>
         </select>
       </div>
+
+      <!-- coach select -->
+      <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
+        <label for="coachId" class="form-label">Select Coach</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="coachId"
+          required="true">
+          <option selected>Select Coach to associate contract with</option>
+          <option *ngFor="let coach of OrgCoaches" value="{{ coach.id }}">
+            {{ coach.firstName }} {{ coach.lastName }}
+          </option>
+          <div *ngIf="!OrgCoaches.length">
+            <button class="btn btn-outline-success" routerLink="/addcoach">
+              Create Coach
+            </button>
+          </div>
+        </select>
+      </div> -->
+
     </div>
     <br>
 

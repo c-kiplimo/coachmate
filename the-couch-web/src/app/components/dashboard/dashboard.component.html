@@ -274,7 +274,7 @@
       </div>
       <div class="card-body">
         <!-- upcomingsessionsTable list-container container -->
-        <table class="table" *ngIf="coachesImpl?.length">
+        <table class="table" *ngIf="coaches?.length">
           <thead>
             <th colspan="1">Name</th>
             <th colspan="1">Email</th>
@@ -284,7 +284,7 @@
             <th colspan="1">Actions</th>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let coach of coachesImpl">
+            <tr *ngFor="let coach of coaches">
               <td>{{ coach.fullName }}</td>
               <td>{{ coach.email}}</td>
               <td>{{ coach.msisdn }}</td>
@@ -362,13 +362,13 @@
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
       <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Coaches</h6>
-      <h3 class="card-text fw-bold">{{numberofCoaches}}</h3>
+      <h3 class="card-text fw-bold">{{coaches.length}}</h3>
     </div>
   </div>
   <div class="col-3 card text-center top-cards">
     <div class="card-body">
       <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Clients</h6>
-      <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
+      <h3 class="card-text fw-bold">{{clients.length}}</h3>
     </div>
   </div>
   <div class="col-3 card text-center top-cards">

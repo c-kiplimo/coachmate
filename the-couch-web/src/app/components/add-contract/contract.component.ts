@@ -88,6 +88,7 @@ contractTemplates: any;
    if (this.userRole == 'ORGANIZATION') {
      this.orgId = this.user.organization.id;
      this.getClients(this.page);
+     this.getOrgCoaches(this.page);
 
    } else if (this.userRole == 'COACH') {
      this.coachId = this.user.id;
@@ -111,6 +112,7 @@ contractTemplates: any;
         coachingCategory:'',
         coachingTopic:'',
         clientId:'',
+        // coachId: '',
         startDate:'',
         endDate:'',
         groupFeesPerSession:'',
@@ -184,24 +186,40 @@ contractTemplates: any;
     )
   }
 
-  getOrgCoaches(id: any) {
-    const data = {
-      orgId: id,
-    }
-    this.clientService.getOrgCoaches(data).subscribe(
-      (response: any) => {
-        console.log('here Organization=> coaches', response);
-        this.OrgCoaches = response;
-        console.log(this.OrgCoaches);
-        console.log('here Organization=> coaches', response);
-        this.numberofCoaches = this.OrgCoaches.length;
-       
-      },
-      (error: any) => {
-        console.log(error);
+  getOrgCoaches(page: any) {
+    this.loading = true;
+      this.page = 0;
+      //if page is 0, don't subtract 1
+      if (page === 0 || page < 0) {
+        page = 0;
+      } else {
+        page = page - 1;
       }
-    );
+      const options: any = {
+        page: page,
+        size: this.pageSize,
+        status: this.filters.status,
+        search: this.filters.searchItem,
+        sort: 'id,desc',
+      };
+    
+     if(this.userRole == 'ORGANIZATION'){
+        options.orgId = this.orgId;
+      }
+      
+      this.clientService.getOrgCoaches(options).subscribe(
+        (response) => {
+          this.loading = false;
+          this.OrgCoaches = response.body;
+          this.totalElements = +response.headers.get('X-Total-Count');
+          console.log('coaches',this.OrgCoaches)
+        }, (error) => {
+          this.loading = false;
+          console.log(error)
+        }
+      );
   }
+
   getNoOfContracts(){
     this.clientService.getContracts().subscribe(
       (response:any) =>{
@@ -242,8 +260,12 @@ contractTemplates: any;
     console.log('here');
     console.log(this.contractForm.value);
     var data = this.contractForm.value;
-    data.coachId = this.coachId
     data.organizationId = this.orgId
+    data.coachId = this.coachId
+    // if (this.userRole == 'COACH') {
+    //   data.coachId = this.coachId
+    // }
+    
     //Stringify the objectives array
     let objectives = JSON.stringify(this.objectives);
     data.objectives = objectives;
