@@ -8,6 +8,7 @@ import {
   faEnvelope,
 
 } from '@fortawesome/free-solid-svg-icons';
+import { NotificationsService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-support',
@@ -26,7 +27,7 @@ export class SupportComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private service: ClientService
+    private notificationService: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ title: any;
 contactUsMessage() {
   console.log(this.contactForm.value);
 
-  this.service.contactUsMessage(this.contactForm.value).subscribe({
+  this.notificationService.contactUsMessage(this.contactForm.value).subscribe({
     next: (response: { error: any; body: { message: any; }; }) => {
       console.log(response);
       if (response.error) {

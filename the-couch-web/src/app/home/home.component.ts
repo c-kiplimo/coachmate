@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../services/ClientService';
+import { NotificationsService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private service: ClientService
+    private notificationService: NotificationsService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +44,7 @@ export class HomeComponent implements OnInit {
   contactUsMessage() {
     console.log(this.contactForm.value);
 
-    this.service.contactUsMessage(this.contactForm.value).subscribe({
+    this.notificationService.contactUsMessage(this.contactForm.value).subscribe({
       next: (response: { error: any; body: { message: any; }; }) => {
         console.log(response);
         if (response.error) {

@@ -391,15 +391,7 @@ export class ClientService {
 
 
   //contact us  message
-  contactUsMessage(message: any): Observable<any> {
-    return this.http.post<any>(
-      this.baseURL + 'registration/contact',
-      message,
-      {
-        observe: 'response',
-      }
-    );
-  }
+  
 
   //save settings service
   saveSettings(settingsObject: any): Observable<any> {
