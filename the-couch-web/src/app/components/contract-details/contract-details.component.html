@@ -127,7 +127,10 @@
           <td>{{ session.name }}</td>
           <td>{{ session.sessionVenue }}</td>
           <td>{{ session.sessionType }}</td>
-          <td>{{ session.sessionSchedulesSessionDate }}</td>
+
+          <td *ngIf="session.sessionSchedulesSessionDate">{{ session.sessionSchedulesSessionDate }}</td>
+          <td *ngIf="!session.sessionSchedulesSessionDate">{{ session.sessionDate }}</td>
+
           <td>{{ session.sessionSchedulesStartTime }}</td>
           <td>{{ session.sessionSchedulesEndTime }}</td>
           <td class="actions">
@@ -137,7 +140,7 @@
       </tbody>
     </table>
     <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                <div class="donut multi"></div>
+      <div class="donut multi"></div>
     </div>
     <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
       No sessions Found.
