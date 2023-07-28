@@ -36,6 +36,25 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  securityContent = [
+    {
+      title: 'Our track record',
+      description: 'CoachMatePRO is a product by Meliora Technologies LTD, a software engineering company with a proven track record of delivering high-quality enterprise solutions for banks and Telcos over the past 8 years. You can be assured that CoachMatePRO upholds the same level of data security standards.'
+    },
+    {
+      title: 'Best in class security',
+      description: 'We utilize multiple layers of encryption to ensure the utmost protection of your, & your client’s, critical information, including phone numbers, email addresses, and more. Rest assured that only you have access to this data – not even our team of engineers can view it.'
+    },
+    {
+      title: 'As a matter of policy',
+      description: 'We are committed to protecting your data and will not share it with any third party. Your data will only be used to provide and improve our services to you. Our privacy policy provides guidelines on how to use and protect your data.'
+    },
+    {
+      title: 'We have a lot to lose',
+      description: 'The future of this product relies on the secure and protected storage of your private data. We are dedicated to continuously improving our methods to safeguard your business\'s data.'
+    }
+  ];
+
   clearSessionStorage() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('businessName');
