@@ -21,6 +21,7 @@ public class SessionDTO {
     private Long sessionSchedulesId;
     private Long sessionSchedulesOrgId;
     private LocalDate sessionSchedulesSessionDate;
+    private LocalDate sessionDate;
     private LocalTime sessionSchedulesStartTime;
     private LocalTime sessionSchedulesEndTime;
     private boolean sessionSchedulesBooked;

@@ -151,13 +151,7 @@ export class SchedulesComponent implements OnInit {
   /////////////////////////////////
 
   onSignIn() {
-    this.googleSignInService.signIn().subscribe((success) => {
-      if (success) {
-        // Sign-in successful, you can now access the user's Google information and proceed with other tasks.
-      } else {
-        // Sign-in failed or was canceled.
-      }
-    });
+    this.googleSignInService.signIn();
   }
 
   onSignOut() {

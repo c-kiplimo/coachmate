@@ -28,32 +28,27 @@ export class GoogleSignInService {
       })
 
       gapi.client.load('calendar', 'v3', () => console.log('loaded calendar'));
+      gapi.client.load('people', 'v1', () => console.log('loaded people'));
   });
 }
 
-signIn(): Observable<boolean> {
-  return new Observable<boolean>(observer => {
-    this.auth2Initialized.subscribe(() => {
-      this.auth2.signIn().then((googleUser: any) => {
-        const profile = googleUser.getBasicProfile();
-        const authResponse = googleUser.getAuthResponse();
-        const token = authResponse.id_token;
-        const user = {
-          id: profile.getId(),
-          name: profile.getName(),
-          email: profile.getEmail(),
-          image: profile.getImageUrl(),
-          token: token
-        };
-        sessionStorage.setItem('googleUser', JSON.stringify(user));
-        observer.next(true);
-      }) .catch((error: any) => {
-        observer.next(false);
-        console.log(error);
-      }
-      );
-    });
-  });
+async signIn() {
+  const googleAuth = gapi.auth2.getAuthInstance();
+  const googleUser = googleAuth.currentUser.get();
+
+  const profile = googleUser.getBasicProfile();
+
+  const idToken = googleUser.getAuthResponse().id_token;
+  const accessToken = googleUser.getAuthResponse().access_token;
+
+  sessionStorage.setItem('googleUser', JSON.stringify({
+    profile: profile,
+    idToken: idToken,
+    accessToken: accessToken
+  }));
+
+  
+
 }
 
 signOut() {

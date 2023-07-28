@@ -10,6 +10,7 @@ public interface SessionMapper extends EntityMapper<SessionDTO, Session>  {
     @Mapping(target = "sessionSchedulesId", source = "sessionSchedules.id")
     @Mapping(target = "sessionSchedulesOrgId", source = "sessionSchedules.orgId")
     @Mapping(target = "sessionSchedulesSessionDate", source = "sessionSchedules.sessionDate")
+   // @Mapping(target = "sessionDate", source = "session.sessionDate")
     @Mapping(target = "sessionSchedulesStartTime", source = "sessionSchedules.startTime")
     @Mapping(target = "sessionSchedulesEndTime", source = "sessionSchedules.endTime")
     @Mapping(target = "sessionSchedulesBooked", source = "sessionSchedules.booked")
