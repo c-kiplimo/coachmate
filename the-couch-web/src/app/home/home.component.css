@@ -141,7 +141,7 @@ nav,
 
 /* Logo image styles */
 .welcome-img {
-  height: 90px;
+  height: 60px;
   position: relative;
   top: 2px;
   padding-bottom: 5px;
@@ -164,7 +164,10 @@ nav,
   border-radius: 0;
   margin: 0 1px;
 }
+.logo-img {
+  height: 130px;
 
+}
 
 
 .abt-section {
@@ -199,6 +202,11 @@ nav,
   line-height: 1.8;
 }
 
+.feat {
+  font-size: 0.1rem;
+  line-height: 1.8;
+}
+
 body {
   font-family: Arial, sans-serif;
   font-size: 16px;
@@ -219,7 +227,7 @@ body {
 
 /* Paragraph styles */
 .features-section p {
-  font-size: 1.2rem;
+  font-size: 1.0rem;
 }
 .section-title {
   font-size: 2rem;
@@ -231,43 +239,7 @@ body {
   display: block;
   font-size: 1.0rem;
 }
-.security {
-  scroll-margin-top: 50px!important;
-  padding-top: 10vh;
-  padding-bottom: 13vh;
 
-  .section-description {
-    margin-bottom: 7vh;
-    display: block;
-  }
-
-  .security-item {
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #f1f1f1;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
-    height: 90%;
-    margin-bottom: 20px;
-
-    .security-icon {
-      color: #04540c;
-      font-size: 1.5rem;
-      margin-right: 20px;
-    }
-
-    h4 {
-      color: #3c4043;
-      font-weight: 600;
-    }
-
-    p {
-      color: #5f6063;
-      font-size: 0.9rem;
-    }
-  }
-}
 .section-title {
   font-size: 2rem;
 }
@@ -404,12 +376,64 @@ body {
   text-decoration: underline;
   display: inline;
 }
-.carousel-inner .captions h5 {
-  font-size: 24px;
-  line-height: 1.4; 
+@media (max-width: 767px) {
+  .abt-section {
+    padding: 15px;
+  }
+
+  .abt-section-img {
+    text-align: center;
+  }
+
+  .abt-section-text {
+    text-align: center;
+  }
+
+  .abt-section-text h4 {
+    font-size: 34px;
+    font-weight: bold;
+  }
+
+  .abt-section-text p {
+    font-size: 20px;
+    line-height: 1.6;
+  }
 }
 
-.carousel-inner .captions p {
-  font-size: 20px; 
-  line-height: 1.6;
+.security {
+  scroll-margin-top: 50px!important;
+  padding-top: 10vh;
+  padding-bottom: 13vh;
+}
+
+.security .section-description {
+  margin-bottom: 7vh;
+  display: block;
+}
+
+.security .security-item {
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f1f1;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  height: 90%;
+  margin-bottom: 20px;
+}
+
+.security .security-item .security-icon {
+  color: #04540c;
+  font-size: 1.5rem;
+  margin-right: 20px;
+}
+
+.security .security-item h4 {
+  color: #3c4043;
+  font-weight: 600;
+}
+
+.security .security-item p {
+  color: #5f6063;
+  font-size: 0.9rem;
 }

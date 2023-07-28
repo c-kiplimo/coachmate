@@ -9,6 +9,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../services/ClientService';
 import { NotificationsService } from '../services/notifications.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,11 +21,13 @@ export class HomeComponent implements OnInit {
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
+  sideNavStatus: boolean = false;
  
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    public router: Router
   ) {}
 
   ngOnInit(): void {

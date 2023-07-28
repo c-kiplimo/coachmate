@@ -124,6 +124,9 @@ export class SignUpComponent implements OnInit {
 
     }
   }
+  back() {
+    window.history.back();
+  }
 
   signUp() {
     sessionStorage.setItem('formData', JSON.stringify(this.formData));
