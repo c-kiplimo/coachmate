@@ -437,3 +437,9 @@ body {
   color: #5f6063;
   font-size: 0.9rem;
 }
+@media (max-width: 767px) {
+  
+.security .section-header h3 {
+    line-height: 1.5;
+  }
+}
