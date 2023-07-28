@@ -3,131 +3,131 @@
     <h2 class="fw-bold">Sessions</h2>
   </div>
 </div>
-<p>
 
-<div class="d-none d-lg-block">
-  <div class="row justify-content-center">
-    <div class="col-md-12 col-sm-12">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="filters-section">
-            <div class="wrap">
-              <select class="form-control" name="codes" (change)="filterByStatus($event)">
-                <option value="">Filter By Status</option>
-                <option value="NEW">NEW</option>
-                <option value="CONFIRMED">CONFIRMED</option>
-                <option value="CANCELLED">CANCELLED</option>
-                <option value="CONDUCTED">CONDUCTED</option>
-              </select>
+  <div class="d-none d-lg-block">
+    <div class="row justify-content-center">
+      <div class="col-md-12 col-sm-12">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="filters-section">
+              <div class="wrap">
+                <select class="form-control" name="codes" (change)="filterByStatus($event)">
+                  <option value="">Filter By Status</option>
+                  <option value="NEW">NEW</option>
+                  <option value="CONFIRMED">CONFIRMED</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                  <option value="CONDUCTED">CONDUCTED</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-3">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Client Name, Phone or Email"
-              aria-label="Name, Phone or Email" aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
-            <button class="btn btn-outline-success" type="button" id="button-addon2"
-              (click)="getAllSessions(0)">Search</button>
+          <div class="col-md-3">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Client Name, Phone or Email"
+                aria-label="Name, Phone or Email" aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+              <button class="btn btn-outline-success" type="button" id="button-addon2"
+                (click)="getAllSessions(0)">Search</button>
+            </div>
+          </div>
+
+          <div class="col-md-2 mr-1">
+            <button type="button" routerLink="/addSession" class="btn btn-outline-success">
+              <i class="fa fa-plus"></i> Add Session
+            </button>
           </div>
         </div>
 
-        <div class="col-md-2 mr-1">
-          <button type="button" routerLink="/addSession" class="btn btn-outline-success">
-            <i class="fa fa-plus"></i> Add Session
-          </button>
-        </div>
-      </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="donut-wrapper" *ngIf="loading">
+                  <div class="donut multi"></div>
+                </div>
+                <table class="table" *ngIf="sessions.length">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Contract</th>
+                      <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
+                      <th scope="col">Venue</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Start Time</th>
+                      <th scope="col">End Time</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                      <td>{{ session?.name }}</td>
+                      <td>{{ session?.contractCoachingTopic }}</td>
+                      <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
+                      <td>{{ session?.sessionVenue }}</td>
+                      <td>{{ session?.sessionType }}</td>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-body">
-              <table class="table" *ngIf="sessions.length">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Contract</th>
-                    <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
-                    <th scope="col">Venue</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Start Time</th>
-                    <th scope="col">End Time</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
-                    <td>{{ session?.name }}</td>
-                    <td>{{ session?.contractCoachingTopic }}</td>
-                    <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
-                    <td>{{ session?.sessionVenue }}</td>
-                    <td>{{ session?.sessionType }}</td>
+                      <td *ngIf="session.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
+                      <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
 
-                    <td *ngIf="session.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
-                    <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
-
-                    <td>{{ session?.sessionSchedulesStartTime }}</td>
-                    <td>{{ session?.sessionSchedulesEndTime }}</td>
-                    <td>
-                      <span class="badge" [ngClass]="{
+                      <td>{{ session?.sessionSchedulesStartTime }}</td>
+                      <td>{{ session?.sessionSchedulesEndTime }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="{
                   'badge-success': session.sessionStatus === 'CONFIRMED',
                   'badge-danger': session.sessionStatus === 'CANCELLED',
                   'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
                 }">{{ session.sessionStatus }}</span>
-                    </td>
-                    <td class="view">
-                      <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                <div class="donut multi"></div>
+                      </td>
+                      <td class="view">
+                        <a [routerLink]="['/sessionView/', session.id]"><i class="fas fa-external-link-alt"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+             
+                <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
+                  No sessions Found.
+                </p>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-                No sessions Found.
-              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<br>
-<div class="text-center" *ngIf="totalElements > 15">
-  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
-</div>
-<br>
+  <br>
+  <div class="text-center" *ngIf="totalElements > 15">
+    <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+  </div>
+  <br>
 
-<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
+  <div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
 
-  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
-    <div class="add-options-panel-heading">
-      <h4>Filter options</h4>
-      <span (click)="toggleFilters()">Cancel</span>
-    </div>
+    <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+      <div class="add-options-panel-heading">
+        <h4>Filter options</h4>
+        <span (click)="toggleFilters()">Cancel</span>
+      </div>
 
 
-    <div class="mb-1 border-bottom">
-      <h6 class="filter-section-title">Filter by status</h6>
-      <div class="add-filter-option" 
-        *ngFor="let status of sessionStatuses;index as i" (click)="filters.status = status">
-        <span>{{status | titlecase}}</span>
-        <span class="checkbox-border">
-          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
-        </span>
+      <div class="mb-1 border-bottom">
+        <h6 class="filter-section-title">Filter by status</h6>
+        <div class="add-filter-option" *ngFor="let status of sessionStatuses;index as i"
+          (click)="filters.status = status">
+          <span>{{status | titlecase}}</span>
+          <span class="checkbox-border">
+            <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="action-buttons mb-4">
+        <button class="btn btn-cancel" (click)="resetStatuses()">Reset</button>
+        <button class="btn btn-submit" (click)="toggleFilters();getAllSessions(0)">Submit</button>
       </div>
     </div>
 
-    <div class="action-buttons mb-4">
-      <button class="btn btn-cancel" (click)="resetStatuses()">Reset</button>
-      <button class="btn btn-submit" (click)="toggleFilters();getAllSessions(0)">Submit</button>
-    </div>
   </div>
-
-</div>
