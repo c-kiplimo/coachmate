@@ -78,7 +78,7 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
 import { AttachmentsComponent } from './components/attachments/attachments.component';
 import { CoachLogsService } from './services/coach-logs.service';
 import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -133,7 +133,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [  
     MbscModule, 
     BrowserModule,
-    NgbModule,
+    // NgbModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
