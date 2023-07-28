@@ -33,30 +33,21 @@ import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 export class AddSessionComponent implements OnInit {
 
   addClient!: FormGroup;
-  addSessionForm: any = {
-    sessionType: "INDIVIDUAL",
-    sessionVenue: "VIRTUAL",
-  };
+
   firstName: any;
   lastName: any;
   user: any;
   addclientForm!: FormGroup;
   clientId: any;
   client: any;
-  searchTerm = '';
-  eventType = '';
   addNewClient: any;
-  sessionDate = '';
-  sessionStartTime = '';
-  sessionDuration = '';
   searching = false;
   open = false;
   showHideMessage = true;
-  sessionType = [
-
-  ];
+  sessionType = [];
 
   coachSlots: any;
+  slots: any;
   orgId!: number;
   coachId!: number;
 
@@ -70,7 +61,7 @@ export class AddSessionComponent implements OnInit {
   selectedContract: any;
 
   formData = {
-    sessionSchedules: '',
+    sessionSchedules: {},
     sessionDuration: '',
     sessionType: '',
     sessionVenue: '',
@@ -83,10 +74,8 @@ export class AddSessionComponent implements OnInit {
     amountPaid: '',
     sessionAmount: '',
     sessionBalance: '',
-
+    sessionDate: '',
   };
-
-
 
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
@@ -97,6 +86,15 @@ export class AddSessionComponent implements OnInit {
   coachSessionData: any;
   coachData: any;
   userRole: any;
+
+  loading: boolean = false;
+
+  // displayMonths = 2;
+  // navigation = 'select';
+  // showWeekNumbers = false;
+  // outsideDays = 'visible';
+
+
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
 
@@ -134,9 +132,9 @@ export class AddSessionComponent implements OnInit {
       this.getClients();
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
-      this.getCoachSlots(this.page);
+      this.getCoachSlots();
       this.getContracts(this.page);
-      this.getClients();
+      //this.getClients();
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
       this.getContracts(this.page);
@@ -145,14 +143,13 @@ export class AddSessionComponent implements OnInit {
   }
 
   onContractChange(event: any) {
-    console.log(event.target.value);
     this.getContractId = event.target.value;
     //get client details from contract id
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
     console.log(this.selectedContract);
     this.coachId = this.selectedContract.coachId;
     //get select contract coach slots
-    this.getCoachSlots(this.page);
+    this.getCoachSlots();
   }
 
   @ViewChild('modal', { static: false })
@@ -166,8 +163,8 @@ export class AddSessionComponent implements OnInit {
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
-      status: this.filters.status,
-      search: this.filters.searchItem,
+      status: this.filters?.status,
+      search: this.filters?.searchItem,
     };
     this.clientService.getClients(options).subscribe(
       (response: any) => {
@@ -184,9 +181,7 @@ export class AddSessionComponent implements OnInit {
 
   addSession() {
     console.log(this.formData);
-    if (this.selectedContract) {
-      this.addSessionForm.clientId = this.selectedContract.clientId;
-    }
+
     const params = {
       clientId: this.selectedContract.clientId,
       contractId: this.getContractId,
@@ -195,13 +190,11 @@ export class AddSessionComponent implements OnInit {
     this.sessionService.addSession(this.formData, params).subscribe((res: any) => {
       console.log(res);
       this.toastrService.success('Session added successfully');
-      //redirect to were you came from
       window.history.back();
     }, error => {
       console.log(error);
       this.toastrService.error(error.error.message);
     });
-
   }
 
 
@@ -227,24 +220,52 @@ export class AddSessionComponent implements OnInit {
   }
 
 
-  getCoachSlots(page: number) {
+  getCoachSlots() {
+    this.loading = true;
     const options = {
-      page: page,
-      size: this.pageSize,
       coachId: this.coachId,
-      sort: 'id,desc',
-      status: false
     };
     this.apiService.getCoachSlots(options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
+        this.slots = this.coachSlots;
+        this.loading = false;
       }
     });
   }
 
   selectedSessionSlot(slot: any) {
     console.log(slot);
+    slot.coach = {};
+    slot.dayOfTheWeek.coach = {};
     this.formData.sessionSchedules = slot;
+  }
+
+  onDateSelect(): void {
+    console.log('Selected date:', this.formData.sessionDate);
+    //get day of the week from the selected date
+    let dayOfTheWeek = new Date(this.formData.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
+    console.log(dayOfTheWeek);
+
+    //loop through the coach slots and find slots days of the week that match the selected date and push them to the slots array
+    this.slots = [];
+    this.coachSlots.forEach((slot: any) => {
+      if (slot.dayOfTheWeek.day === dayOfTheWeek.toUpperCase()) {
+        this.slots.push(slot);
+      }
+    }
+    );
+    console.log(this.slots);
+  }
+
+  formatTime(timeString: string): Date {
+    const [hours, minutes, seconds] = timeString.split(':');
+    const date = new Date();
+    date.setHours(Number(hours));
+    date.setMinutes(Number(minutes));
+    date.setSeconds(Number(seconds));
+    //allow return null date is empty or null
+    return date;
   }
 
 }

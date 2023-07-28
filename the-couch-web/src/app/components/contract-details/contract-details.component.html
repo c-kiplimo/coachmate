@@ -7,7 +7,6 @@
     <div class="col-md-8 col-sm-12">
       <div class="card">
         <div class="card-body">
-          <p>{{this.coachingCategory}}</p>
           <div class="card-header">
             <h5 class=" title f-weight fs-6 col">{{ contract.coachingTopic }}</h5>
           </div>
@@ -72,20 +71,20 @@
               <h6 class="title fw-semi-bold col smaller-font">Number of Sessions:</h6>
               <p class="col value">{{ contract.noOfSessions }}</p>
             </div>
-            <div *ngIf="this.coachingCategory === 'INDIVIDUAL'" class="row dtl">
+            <div *ngIf="this.contract.coachingCategory === 'INDIVIDUAL'" class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Fees per Session :</h6>
               <p class="col value">{{ contract.individualFeesPerSession }}</p>
             </div>
-            <div *ngIf="this.coachingCategory === 'GROUP'" class="row dtl">
+            <div *ngIf="this.contract.coachingCategory === 'GROUP'" class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Fees per Session:</h6>
               <p class="col value">{{ contract.groupFeesPerSession }}</p>
             </div> 
             <div class="row dtl">
               <h6 class="title fw-semi-bold col smaller-font">Total Fees:</h6>
-              <p *ngIf="this.coachingCategory === 'INDIVIDUAL'"class="col value"> 
+              <p *ngIf="this.contract.coachingCategory === 'INDIVIDUAL'"class="col value"> 
                 {{contract.individualFeesPerSession * contract.noOfSessions}}
               </p>
-              <p *ngIf="this.coachingCategory === 'GROUP'"class="col value"> 
+              <p *ngIf="this.contract.coachingCategory === 'GROUP'"class="col value"> 
                 {{contract.groupFeesPerSession * contract.noOfSessions}}
               </p>
             </div>
@@ -128,7 +127,10 @@
           <td>{{ session.name }}</td>
           <td>{{ session.sessionVenue }}</td>
           <td>{{ session.sessionType }}</td>
-          <td>{{ session.sessionSchedulesSessionDate }}</td>
+
+          <td *ngIf="session.sessionSchedulesSessionDate">{{ session.sessionSchedulesSessionDate }}</td>
+          <td *ngIf="!session.sessionSchedulesSessionDate">{{ session.sessionDate }}</td>
+
           <td>{{ session.sessionSchedulesStartTime }}</td>
           <td>{{ session.sessionSchedulesEndTime }}</td>
           <td class="actions">
@@ -138,7 +140,7 @@
       </tbody>
     </table>
     <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                <div class="donut multi"></div>
+      <div class="donut multi"></div>
     </div>
     <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
       No sessions Found.
@@ -294,7 +296,7 @@
         <div class="modal-body">
           <div class="d-flex justify-content-between">
             <p>contract title:</p>
-            <span>{{contract.coachingTopic | titlecase}}</span>
+            <span>{{ contract?.coachingTopic | titlecase}}</span>
           </div>
         </div>
         <div class="modal-footer">

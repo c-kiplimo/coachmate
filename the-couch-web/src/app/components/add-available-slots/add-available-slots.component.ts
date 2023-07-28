@@ -39,8 +39,7 @@ export class AddAvailableSlotsComponent implements OnInit {
     sessionDate: '',
     startTime: '',
     endTime: '',
-    dayOfTheWeek: '',
-    dayOfTheWeekAvailable: true,
+    dayOfTheWeek: {},
   }
 
   user: any;
@@ -83,13 +82,29 @@ export class AddAvailableSlotsComponent implements OnInit {
   }
 
   addSlot() {
-    console.log(this.oneSlot);
+    //Determines the name of the day of the week of the date entered
+    let dayOfTheWeek = new Date(this.oneSlot.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
+    //find the day of the week in the array of days of the week return the object
+    let dayOfTheWeekObject = this.dayOfTheWeeks.find((day: any) => day.day === dayOfTheWeek.toUpperCase());
+    //add the day of the week object to the slot object
+    dayOfTheWeekObject.coach = {};
+
+    this.oneSlot.dayOfTheWeek = dayOfTheWeekObject;
+
     const options = {
       coachId: this.user.id,
     };
+
     this.apiService.addSlot(this.oneSlot, options).subscribe({
       next: (response) => {
-        console.log(response);
+        this.toastrService.success('Slot added successfully');
+        //clear the oneSlot object
+        this.oneSlot = {
+          sessionDate: '',
+          startTime: '',
+          endTime: '',
+          dayOfTheWeek: {},
+        }
         this.getCoachSlots(this.page);
       }
     });

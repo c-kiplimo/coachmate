@@ -74,10 +74,17 @@
             <h6 class="fw-semi-bold smaller-font col">Client name</h6>
             <p class="col">{{ sessions?.clientFullName }}</p>
           </div>
-          <div class="row dtl">
+
+          <div class="row dtl" *ngIf="sessions.sessionSchedulesSessionDate">
             <h6 class="fw-semi-bold smaller-font col">Date</h6>
             <p class="col">{{ sessions?.sessionSchedulesSessionDate }}</p>
           </div>
+
+          <div class="row dtl" *ngIf="!sessions.sessionSchedulesSessionDate">
+            <h6 class="fw-semi-bold smaller-font col">Date</h6>
+            <p class="col">{{ sessions?.sessionDate }}</p>
+          </div>
+
           <div class="row dtl">
             <h6 class="fw-semi-bold smaller-font col">Start Time</h6>
             <p class="col">{{ sessions?.sessionSchedulesStartTime }}</p>

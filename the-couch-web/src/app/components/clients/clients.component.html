@@ -126,7 +126,6 @@
         </div>
       </div>
 
-
       <div class="pt-3 pb-2 listing-item"
         *ngFor="let client of clients  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
         [routerLink]="['/clientView', client.id]">

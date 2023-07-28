@@ -42,10 +42,16 @@ public class SessionSchedulesService {
         }
 
         //get day of the week by id
+        if (sessionSchedules.getDayOfTheWeek() != null) {
         DaysOfTheWeek daysOfTheWeek = daysOfTheWeekService.getDaysOfTheWeekById(sessionSchedules.getDayOfTheWeek().getId());
         if (daysOfTheWeek == null) {
             log.warn("Day of the week with id {} not found", sessionSchedules.getDayOfTheWeek().getId());
             throw new IllegalArgumentException("Day of the week not found");
+        } else {
+            sessionSchedules.setDayOfTheWeek(daysOfTheWeek);
+        }
+        } else {
+            sessionSchedules.setDayOfTheWeek(null);
         }
 
         sessionSchedules.setSessionDate(sessionSchedules.getSessionDate());
@@ -54,7 +60,7 @@ public class SessionSchedulesService {
         sessionSchedules.setEndTime(sessionSchedules.getEndTime());
         sessionSchedules.setOrgId(sessionSchedules.getOrgId());
 
-        sessionSchedules.setDayOfTheWeek(daysOfTheWeek);
+
 
         sessionSchedules.setRecurring(sessionSchedules.getSessionDate() == null);
 
@@ -165,7 +171,7 @@ public class SessionSchedulesService {
         sessionSchedules1.setEndTime(sessionSchedules.getEndTime());
         sessionSchedules1.setOrgId(sessionSchedules.getOrgId());
         sessionSchedules1.setBooked(sessionSchedules.isBooked());
-        sessionSchedules1.setRecurring(sessionSchedules.isRecurring());
+        sessionSchedules1.setRecurring(sessionSchedules.getSessionDate() == null);
         sessionSchedules1.setUpdatedAt(LocalDate.now());
 
         return sessionSchedulesRepository.save(sessionSchedules1);

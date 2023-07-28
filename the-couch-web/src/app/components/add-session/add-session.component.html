@@ -8,30 +8,19 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="sessionname">Select Contract *</label>
-            <select
-              [(ngModel)]="selectedContract"
-              class="form-select"
-              formControlName="selectedContract"
-              id="inputGroupSelect01"
-              (change)="onContractChange($event)"
-              name="type"
-            >
-              <option disabled selected value="">Select Contract</option>
-              <option *ngFor="let contract of contracts" [value]="contract.id">
+            <select class="form-select" 
+              id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
+              <option value="" disabled selected>Select Contract</option>
+              <option *ngFor="let contract of contracts" [value]="contract?.id">
                 {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
               </option>
             </select>
           </div>
 
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="clientType"
-              >Session Type *</label
-            >
-            <select
-              class="form-select"
-              name="sessionType"
-              [(ngModel)]="formData.sessionType"
-            >
+            <label class="form-group-text" for="clientType">Session Type *</label>
+            <select class="form-select" name="sessionType" [(ngModel)]="formData.sessionType">
+              <option value="" disabled selected>Select Session Type</option>
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="GROUP">GROUP</option>
             </select>
@@ -41,27 +30,15 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="sessionname">Session Name *</label>
-            <input
-              [(ngModel)]="formData.name"
-              type="text"
-              class="form-control"
-              id="name"
-              placeholder="Enter Session Name"
-              name="name"
-            />
+            <input [(ngModel)]="formData.name" type="text" class="form-control" id="name"
+              placeholder="Enter Session Name" name="name" />
           </div>
 
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="clientType"
-              >Session Venue *</label
-            >
-            <select
-              class="form-select"
-              id="inputGroupSelect01"
-              name="sessionVenue"
-              [(ngModel)]="formData.sessionVenue"
-            >
+            <label class="form-group-text" for="clientType">Session Venue *</label>
+            <select class="form-select" id="inputGroupSelect01" name="sessionVenue" [(ngModel)]="formData.sessionVenue">
               >
+              <option value="" disabled selected>Select Session Venue</option>
               <option value="VIRTUAL">VIRTUAL</option>
               <option value="PHYSICAL">PHYSICAL</option>
             </select>
@@ -71,41 +48,69 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="inputlastname">Session Details</label>
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="formData.sessionDetails"
-              id="inputEmail4"
-              placeholder="Enter Session Description"
-              name="sessionDetails"
-            />
+            <input type="text" class="form-control" [(ngModel)]="formData.sessionDetails" id="inputEmail4"
+              placeholder="Enter Session Description" name="sessionDetails" />
           </div>
         </div>
 
         <div class="row justify-content-center m-2">
           <div class="col-md-12">
-            <p>Available Slots *</p>
-            <div
-              class="form-check"
-              *ngFor="let availableSlot of coachSlots"
-              (click)="selectedSessionSlot(availableSlot)"
-            >
-              <input
-                class="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                id="flexRadioDefault1"
-              />
-              <label class="form-check-label" for="flexRadioDefault1">
-                {{ availableSlot.sessionDate }}
-                {{ availableSlot.startTime }} -
-                {{ availableSlot.endTime }}
+            <!-- your-component.component.html -->
+            <!-- <div class="inline-calendar-container">
+              <ngb-datepicker [(ngModel)]="selectedDate" (dateSelect)="onDateSelect($event)"
+                [displayMonths]="displayMonths" [navigation]="navigation" [showWeekNumbers]="showWeekNumbers"
+                [outsideDays]="outsideDays">
+              </ngb-datepicker>
+            </div> -->
+
+            <!--select date from calender-->
+            <div class="form-group">
+              <label for="date">Select Date</label>
+              <input type="date" class="form-control" id="date" [(ngModel)]="formData.sessionDate" name="date"
+                (change)="onDateSelect()" />
+            </div>
+
+            <!-- Display the selected date if needed -->
+            <p *ngIf="formData.sessionDate">Available slots on: {{ formData.sessionDate | date }}</p>
+
+            <!-- title -->
+            <div class="d-flex mt-2">
+              <h5 class="m-2">select</h5>
+              <h5 class="m-2">Start Time</h5>
+              <h5 class="m-2">End Time</h5>
+              <!-- <h5 class="m-2">Repeating</h5>
+              <h5 class="m-2">Date</h5> -->
+            </div>
+
+            <div class="donut-wrapper m-3" *ngIf="loading" [@fadeIn]>
+              <div class="donut multi"></div>
+            </div>
+
+            <div class="d-flex m-2" *ngFor="let availableSlot of slots" (click)="selectedSessionSlot(availableSlot)">
+
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="flexRadioDefault"
+                id="flexRadioDefault{{availableSlot.id}}" />
+
+              <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
+                {{ availableSlot?.startTime }} -
+              </label>
+              <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
+                {{ availableSlot?.endTime }}
+                <i class="fa fa-repeat custom-loop-icon" *ngIf="availableSlot?.recurring"></i>
+              </label>
+              <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
+                {{ availableSlot?.sessionDate | date:'EEE, yyyy-MM-dd' }}
+                <i class="fa fa-calendar custom-loop-icon" *ngIf="availableSlot?.sessionDate"></i>
               </label>
             </div>
+
+
           </div>
+          
         </div>
 
-        <button type="submit" (click)="addSession()"[disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionVenue || !formData.sessionType || !formData.sessionDetails || !getContractId"
+        <button type="submit" (click)="addSession()"
+          [disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionDate || !formData.sessionVenue || !formData.sessionType || !formData.sessionDetails || !getContractId"
           class="btn btn-signup mb-3 mt-2  btn-outline-success text-center">
           Create Session
         </button>

@@ -98,6 +98,7 @@ public class SessionService {
         sessionRequest.setClient(client);
         sessionRequest.setContract(contract);
         sessionRequest.setSessionSchedules(sessionSchedules);
+        sessionRequest.setSessionDate(sessionSchedules.getSessionDate() != null ? sessionSchedules.getSessionDate() : sessionRequest.getSessionDate());
         sessionRequest.setCreatedBy(coach.getFullName());
         sessionRequest.setLastUpdatedBy(coach.getFullName());
         // session Number Generation

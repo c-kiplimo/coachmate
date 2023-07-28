@@ -1,8 +1,11 @@
 <div class="row justify-content-center m-2 p-3">
   <div class="col-md-8">
     <div class="card card-table justify-content-between m-3">
-      <div class="m-3">
+      <div class="d-flex justify-content-between m-3">
         <h1 class="fw-bold">Set your weekly hours</h1>
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addSlotModal">
+          <i class="fa fa-plus"></i> Add a Date Override
+        </button>
       </div>
       <div class="donut-wrapper m-3" *ngIf="loading" [@fadeIn]>
         <div class="donut multi"></div>
@@ -26,19 +29,19 @@
               <div class="d-flex m-2" *ngFor="let time of slot?.time; let j = index">
                 <!--time-->
                 <input type="time" variant="success" [(ngModel)]="time.startTime" name="startTime"
-                  class="form-control slots-time" id="inputEmail4" placeholder="Date" name="sessionDate"
+                  class="form-control slots-time" id="inputEmail4" placeholder="Start time" name="startTime" step="3600"
                   (change)="saveSlot(time, slot.dayOfTheWeek)">
                 <p class="m-2">-</p>
                 <input type="time" variant="success" [(ngModel)]="time.endTime" name="endTime"
-                  class="form-control slots-time" id="inputEmail4" placeholder="Date" name="sessionDate"
+                  class="form-control slots-time" id="inputEmail4" placeholder="End time" name="endTime"
                   (change)="saveSlot(time, slot.dayOfTheWeek)">
                 <!--delete icon-->
                   <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
               </div>
             </div>
-            <div class="col" *ngIf="!slot?.dayOfTheWeek?.available">
-              <!--tell the user that this day he is unavailable-->
-              <p class="m-2">Unavailable</p>
+            <div class="col">
+              <p class="m-2" *ngIf="!slot?.dayOfTheWeek?.available">Unavailable</p>
+              <p class="m-2" *ngIf="slot?.dayOfTheWeek?.available && slot?.time?.length == 0">Add a slot here</p>
             </div>
             <div class="col">
               <div class="d-flex justify-content-end">
@@ -61,7 +64,7 @@
   <div class="modal-dialog modal-l">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 justify-content-center" id="exampleModalLabel">Add Slots</h1>
+        <h1 class="modal-title fs-5 justify-content-center" id="exampleModalLabel">Add a Fixed Date Slot</h1>
 
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -69,7 +72,7 @@
         <form>
           <div class="row justify-content-center">
             <div class="col">
-              <label for="inputEmail4">Session Date</label>
+              <label for="inputEmail4">Date</label>
               <input type="date" variant="success" [(ngModel)]="oneSlot.sessionDate" name="sessionDate"
                 class="form-control" id="inputEmail4" placeholder="Date" name="sessionDate">
 

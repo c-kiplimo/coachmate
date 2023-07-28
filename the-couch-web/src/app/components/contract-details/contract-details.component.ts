@@ -36,6 +36,7 @@ import { error } from 'jquery';
     ]),
   ],
 })
+
 export class ContractDetailsComponent implements OnInit {
   addsessionForm!:FormGroup;
   addClient!: FormGroup;
@@ -76,36 +77,10 @@ export class ContractDetailsComponent implements OnInit {
   contractToBeUpdated: any;
   updateContractForm!: FormGroup;
   userRole: any;
-  coachingCategory: any;
   totalElements = 0;
 
 
-  @ViewChild('yourElement') yourElement!: ElementRef;
-  createdclient: any;
-  clients: any;
-  numberOfClients!: number; 
-  coachSessionData: any;
-  coachData: any;
-  coachId: any;
-  sessionToBeUpdated: any;
-  updateSession: any;
-  userDetails: any;
-  sessions: any;
-  contractId: any;
-  contract: any;
-
-  @HostListener('document:click', ['$event']) onClick(event: any) {
-  console.log(event.target.attributes.id.nodeValue);
-
-    if (event.target.attributes && event.target.attributes.id) {
-      if (event.target.attributes.id.nodeValue === 'open') {
-        this.open = true;
-      }
-    } else {
-      this.open = false;
-    }
-  }
-    constructor(
+  constructor(
     private apiService: ApiService,
     private http: HttpClient,
     private clientService : ClientService,
@@ -117,26 +92,21 @@ export class ContractDetailsComponent implements OnInit {
     private contractService: ContractsService,
    
   ) {}
-  ngOnInit(): void {
-    this.route.params.subscribe((params: { [x: string]: any; }) => {
-      const id = params['id'];
-      this.contractId = id;
-      this.userRole = params['userRole'];
-    this.contract = this.clientService.getContract(id).subscribe((data: any) => {
-      this.contract = data.body;
-      this.coachingCategory = this.contract.coachingCategory;
-      console.log(this.contract);
-      const contractId = params['id'];
-      console.log("contract id gottten", contractId);
-      this.getSessionsBycontractId(contractId);
-      this.getCoachSlots(this.page);
-  }
-  )},
-    this.user = JSON.parse(sessionStorage.getItem('user') || '{}'));
+
+  ngOnInit() {
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
     console.log("CoachData",this.coachData);
     this.coachId = this.coachData.id;
+
+    this.route.params.subscribe((params: { [x: string]: any; }) => {
+    const id = params['id'];
+    this.contractId = id;
+    this.userRole = this.coachData.userRole;
+  });
+
+  this.getContractData(this.contractId);
+
     this.updateSession = this.formbuilder.group({
       sessionDate: '',
       sessionStartTime: '',
@@ -184,10 +154,54 @@ export class ContractDetailsComponent implements OnInit {
     });
 
   }
+
+  @ViewChild('yourElement') yourElement!: ElementRef;
+  createdclient: any;
+  clients: any;
+  numberOfClients!: number; 
+  coachSessionData: any;
+  coachData: any;
+  coachId: any;
+  sessionToBeUpdated: any;
+  updateSession: any;
+  userDetails: any;
+  sessions: any;
+  contractId: any;
+  contract: any;
+  modalTitle = 'Add Session';
+  sessionTime: any;
+  sessionGoals: any;
+  session: any;
+
+  @HostListener('document:click', ['$event']) onClick(event: any) {
+  console.log(event.target.attributes.id.nodeValue);
+
+    if (event.target.attributes && event.target.attributes.id) {
+      if (event.target.attributes.id.nodeValue === 'open') {
+        this.open = true;
+      }
+    } else {
+      this.open = false;
+    }
+  }
  
   onContractChange(event: any) {
     console.log(event.target.value);
     this.createSessionClientId = event.target.value;
+  }
+
+  getContractData(id: any) {
+    this.loading = true;
+    this.clientService.getContract(id).subscribe((data: any) => {
+      this.contract = data.body;
+      this.loading = false;
+      this.getSessionsBycontractId(this.contractId);
+      this.getCoachSlots(this.page);
+  }, (error) => {
+    console.log(error);
+    this.loading = false;
+  }
+  );
   }
 
   @ViewChild('sessionModal', { static: false })
@@ -237,7 +251,24 @@ export class ContractDetailsComponent implements OnInit {
       
     });
 }
+getSessionsBycontractId(contractId:any){
+  console.log("contract id gottten", contractId);
+  this.loading = true;
+  this.clientService.getSessionsBycontractId(contractId).subscribe(
+    (data: any) => {
+      this.sessions = data.body;
+      this.totalElements = +data.headers.get('X-Total-Count');
+      console.log(this.sessions);
+      this.loading = false;
+      console.log("sessions gotten here",this.sessions);
+    },
+    (error: any) => {
+      console.log(error);
+      this.loading = false;
+    }
+  );
 
+}
 getCoachSlots(page: number) {
   const options = {
     page: page,
@@ -303,24 +334,6 @@ closeModal() {
   document.body.classList.remove('modal-open');
 }
 
-  getSessionsBycontractId(contractId:any){
-    console.log("contract id gottten", contractId);
-    this.loading = true;
-    this.clientService.getSessionsBycontractId(contractId).subscribe(
-      (data: any) => {
-        this.sessions = data.body;
-        this.totalElements = +data.headers.get('X-Total-Count');
-        console.log(this.sessions);
-        this.loading = false;
-        console.log("sessions gotten here",this.sessions);
-      },
-      (error: any) => {
-        console.log(error);
-        this.loading = false;
-      }
-    );
-
-  }
 navigateToSessionView(id: any) {
       console.log(id);
       this.router.navigate(['sessionView', id]);
@@ -338,12 +351,6 @@ navigateToSessionView(id: any) {
     });
   }
    
-    modalTitle = 'Add Session';
-    sessionTime: any;
-    sessionGoals: any;
-    session: any;
-
-
     updateContract(id: any) {
       this.contractToBeUpdated = this.updateContractForm.value;
       console.log(this.contractToBeUpdated)
