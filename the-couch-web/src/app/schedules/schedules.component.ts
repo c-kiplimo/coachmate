@@ -28,6 +28,9 @@ import { EventColor } from 'calendar-utils';
 import { ClientService } from '../services/ClientService';
 import { SessionsService } from '../services/SessionsService';
 
+import { GoogleSignInService } from '../services/google-sign-in.service';
+
+
 import { setOptions, MbscDatepicker } from '@mobiscroll/angular';
 import { Router } from '@angular/router';
 
@@ -119,8 +122,9 @@ export class SchedulesComponent implements OnInit {
 
   constructor(
     private sessionService: SessionsService,
-    private router: Router
-    ) { }
+    private router: Router,
+    private googleSignInService: GoogleSignInService
+  ) { }
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user');
@@ -143,6 +147,18 @@ export class SchedulesComponent implements OnInit {
       this.getSessions(this.page);
     }
   }
+
+  /////////////////////////////////
+
+  onSignIn() {
+    this.googleSignInService.signIn();
+  }
+
+  onSignOut() {
+    this.googleSignInService.signOut();
+  }
+
+  /////////////////////////////////
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -177,10 +193,10 @@ export class SchedulesComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-  //   this.modalData = { event, action };
-  //   this.modal.open(this.modalContent, { size: 'lg' });
+    //   this.modalData = { event, action };
+    //   this.modal.open(this.modalContent, { size: 'lg' });
 
-  //  this.router.navigate(['/terms', this.coachData.id]);
+    //  this.router.navigate(['/terms', this.coachData.id]);
   }
 
   addEvent(): void {
