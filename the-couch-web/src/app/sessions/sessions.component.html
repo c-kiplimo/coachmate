@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row"><p>{{sessions}}</p>
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
@@ -64,7 +64,10 @@
                     <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
                     <td>{{ session?.sessionVenue }}</td>
                     <td>{{ session?.sessionType }}</td>
-                    <td>{{ session?.sessionSchedulesSessionDate }}</td>
+
+                    <td *ngIf="session.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
+                    <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
+
                     <td>{{ session?.sessionSchedulesStartTime }}</td>
                     <td>{{ session?.sessionSchedulesEndTime }}</td>
                     <td>

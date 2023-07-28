@@ -95,13 +95,10 @@
           <div class="d-none d-lg-block">
 
             <div class="d-flex justify-content-between">
-              <h5 class="card-title  f-weight fw-semi-bold fs-6">Upcoming Sessions</h5>
-              <!-- <a [routerLink]="['/sessions']">
+              <div></div>
+              <a [routerLink]="['/sessions']">
                 <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
-              </a> -->
-              <button type="button" routerLink="/addSession" class="btn btn-success">
-                <i class="fa fa-plus"></i> Add Session
-              </button>
+              </a>
             </div>
 
             <div class="row justify-content-center">
@@ -124,7 +121,10 @@
                     <td>{{ session?.contractCoachingTopic.slice(0, 20) }}...</td>
                     <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
                     <td>{{ session?.sessionVenue | titlecase }}</td>
-                    <td>{{ session?.sessionSchedulesSessionDate  }}</td>
+
+                    <td *ngIf="session.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
+                    <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
+
                     <td>{{ session?.sessionSchedulesStartTime  }}</td>
                     <td>{{ session?.sessionSchedulesEndTime }}</td>
                     <td>
@@ -216,7 +216,7 @@
         <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
           <div class="d-none d-lg-block">
             <div class="d-flex justify-content-between">
-              <h5 class="card-title fw-semi-bold f-weight fs-6">Recent Contracts</h5>
+              <div></div>
               <a [routerLink]="['/contracts']">
                 <span class="seeAll float-end">View all <i class="fas fa-arrow-right"></i></span>
               </a>
@@ -226,8 +226,10 @@
                 <thead>
                   <th colspan="1">Name</th>
                   <th colspan="1">Client</th>
+                  <th colspan="1">Category</th>
                   <th colspan="1">Start Date</th>
                   <th colspan="1">End Date</th>
+                  <th colspan="1">No of Sessions</th>
                   <th colspan="1">Status</th>
                   <th colspan="1">Actions</th>
                 </thead>
@@ -235,8 +237,10 @@
                   <tr *ngFor="let contract of contracts">
                     <td>{{ contract?.coachingTopic.slice(0, 20) }}</td>
                     <td>{{ contract?.clientFullName }}</td>
+                    <td>{{ contract?.coachingCategory }}</td>
                     <td>{{ contract?.startDate | date : "MMM d, y" }}</td>
                     <td>{{ contract?.endDate | date : "MMM d, y" }}</td>
+                    <td>{{ contract?.noOfSessions }}</td>
                     <td>
                       <span class="badge" [ngClass]="{
                           'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',

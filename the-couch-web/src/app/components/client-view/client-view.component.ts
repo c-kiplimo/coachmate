@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ClientService } from '../../services/ClientService';
 import { SessionsService } from '../../services/SessionsService';
 import { NotificationsService } from '../../services/notifications.service';
