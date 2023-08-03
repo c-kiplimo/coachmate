@@ -22,6 +22,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.persistence.criteria.JoinType;
 
 
 @Service
@@ -297,23 +299,45 @@ public class SessionService {
 
         if (sessionDate != null) {
             log.info("Session date at {} ", sessionDate);
-            return sessionRepository.findAll(getSpecFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
+            return sessionRepository.findAll(getSpecsFromDatesAndExample(sessionDate, example), pageable).map(sessionMapper::toDto);
         }
         return sessionRepository.findAll(example, pageable).map(sessionMapper::toDto);
     }
-    public Specification<Session> getSpecFromDatesAndExample(
-            LocalDate sessionDate, Example<Session> example) {
 
+
+    public Specification<Session> getSpecsFromDatesAndExample(LocalDate sessionDate, Example<Session> example) {
+        /*
+        Extract the predicates from the example and add the sessionDate predicate
+        Parameters:
+            sessionDate - the sessionDate to match
+            example - the example to use for matching
+
+        Returns:
+            the specification to use for querying
+        * */
         return (Specification<Session>) (root, query, builder) -> {
             final List<Predicate> predicates = new ArrayList<>();
 
             if (sessionDate != null) {
-                predicates.add(builder.equal(root.get("sessionSchedules").get("sessionDate"),sessionDate));
+                // Add the predicate to match sessionDate when not null
+                predicates.add(builder.equal(
+                        root.get("sessionDate"), sessionDate
+                ));
             }
 
-            predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
+            if (example != null) {
+                // Add the predicate to match example when not null
+                predicates.add(QueryByExamplePredicateBuilder.getPredicate(root, builder, example));
+            }
 
-            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+            // Join sessionSchedules and add the predicate when sessionSchedules is not null
+            Join<Object, Object> sessionSchedulesJoin = root.join("sessionSchedules", JoinType.LEFT);
+            predicates.add(builder.or(
+                    builder.equal(sessionSchedulesJoin.get("sessionDate"), sessionDate),
+                    builder.isNull(sessionSchedulesJoin.get("sessionDate"))
+            ));
+
+            return builder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

@@ -3,7 +3,7 @@
     <div class="col  mt-4" style="margin-left: 5px;">
       <h3 class="fw-semi-bold fs-5 f-weight ">Dashboard</h3>
     </div>
-    <div>
+    <!-- <div>
       <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1"
         routerLink="/addCoach"><i class="fa fa-plus"></i> Add Coach</button>
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addclient"><i
@@ -14,32 +14,130 @@
 
       <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
           class="fa fa-plus"></i> Add Session</button>
+    </div> -->
+  </div>
+</div>
+
+<div class="d-flex justify-content-around">
+  <div class="row col-3">
+    <div class="card">
+      <div class="card-body">
+        <!-- boards -->
+        <div class="row m-2">
+          <div class="row m-3" *ngIf="this.userRole == 'ORGANIZATION'">
+            <div class="col-3 text-center">
+              <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Coaches</h6>
+              <h3 class="card-text fw-bold">{{coaches.length}}</h3>
+            </div>
+            <div class="col-3 text-center">
+              <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Clients</h6>
+              <h3 class="card-text fw-bold">{{clients.length}}</h3>
+            </div>
+          </div>
+  
+          <div class="row m-3" *ngIf="this.userRole == 'COACH'">
+            <div class="col-3 text-center">
+                <h6 class="card-title fw-semi-bold f-weight fs-6">Clients</h6>
+                <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
+            </div>
+            <div class="col-3 text-center">
+                <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
+                <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
+            </div>
+            <div class="col-3 text-center">
+                <h6 class="card-title fw-semi-bold f-weight fs-6">Sessions</h6>
+                <h3 class="card-text fw-bold">{{sessions?.length}}</h3>
+            </div>
+          </div>
+
+          <div class="row m-3" *ngIf="this.userRole == 'CLIENT'">
+            <div class="col-3 text-center">
+                <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
+                <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
+            </div>
+            <div class="col-3 text-center">
+                <h6 class="card-title fw-semi-bold f-weight fs-6">Sessions</h6>
+                <h3 class="card-text fw-bold">{{sessions?.length}}</h3>
+            </div>
+          </div>
+        </div>
+        
+        <!-- buttons -->
+        <div class="row">
+            <div class="col-6 d-flex flex-column">
+              <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1"
+                routerLink="/addCoach"><i class="fa fa-plus"></i> Add Coach</button>
+              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addclient"><i
+                class="fa fa-plus"></i> Add Client</button>
+              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/add-contract"><i
+                class="fa fa-plus"></i> Add
+                Contract</button>
+              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
+                class="fa fa-plus"></i> Add Session</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-8">
+    <div class="col-md-12">
+      <div class="card upcomingSessions">
+        <div class="card-body d-flex justify-content-center">
+          <li class="nav-item list-unstyled">
+            <a class="nav-link" [class.active]="true" id="home-tab-just" data-toggle="tab"
+              role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                style="color: green"></i> Today's Sessions</a>
+          </li>
+        </div>
+        <div class="row justify-content-center">
+          <table class="table" *ngIf="todaysSessions?.length">
+            <thead>
+              <th>Name</th>
+              <th>Contract</th>
+              <th scope="col" *ngIf="this.userRole != 'CLIENT'">Client</th>
+              <th>Venue</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+
+              <th>Status</th>
+              <th>Actions</th>
+            </thead>
+            <tbody class="list-container">
+              <tr *ngFor="let session of todaysSessions">
+                <td>{{ session?.name }}</td>
+                <td>{{ session?.contractCoachingTopic.slice(0, 20) }}...</td>
+                <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
+                <td>{{ session?.sessionVenue | titlecase }}</td>
+
+                <td>{{ session?.sessionSchedulesStartTime  }}</td>
+                <td>{{ session?.sessionSchedulesEndTime }}</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                'badge-success': session?.sessionStatus === 'CONFIRMED',
+                'badge-danger': session?.sessionStatus === 'CANCELLED',
+                'badge-primary': session?.sessionStatus === 'NEW' || session?.sessionStatus === 'CONDUCTED'
+              }">{{ session?.sessionStatus }}</span>
+                </td>
+                <td class="view">
+                  <a [routerLink]="['/sessionView/', session?.id]"><i class="fas fa-external-link-alt"></i></a>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <p class="text-muted mt-5" *ngIf="!loading && !todaysSessions?.length">
+            No Sessions Yet.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="row dashboard-banner d-flex justify-content-between align-items-center p-3">
-  <div class="col-10 text-center p-3 mb-10">
-    <h2 class="fw-bold" *ngIf="this.userRole == 'ORGANIZATION'">
-      Hello {{orgName | lowercase }},
-      <span class="fw-light">
-        Welcome back!
-      </span>
-    </h2>
-    <h2 class="fw-bold" *ngIf="this.userRole == 'COACH'">
-      Hello {{user.firstName| lowercase }},
-      <span class="fw-light">
-        Welcome back!
-      </span>
-    </h2>
-    <h2 class="fw-bold" *ngIf="this.userRole == 'CLIENT'">
-      Hello {{user.fullName| lowercase }},
-      <span class="fw-light">
-        Welcome back!
-      </span>
-    </h2>
-  </div>
-</div>
 
 <div class="row">
   <div class="col-10">
@@ -123,7 +221,7 @@
                     <td>{{ session?.sessionVenue | titlecase }}</td>
 
                     <td *ngIf="session.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
-                    <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
+                    <td *ngIf="!session.sessionSchedulesSessionDate">{{ session?.sessionDate}}</td>
 
                     <td>{{ session?.sessionSchedulesStartTime  }}</td>
                     <td>{{ session?.sessionSchedulesEndTime }}</td>
@@ -150,7 +248,7 @@
             </div>
           </div>
 
-          <div class="show-sm">
+          <!-- <div class="show-sm">
             <div class="card">
               <div class="card-body">
                 <div class="d-flex justify-content-between mt-2 mb-2">
@@ -210,7 +308,7 @@
 
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
@@ -306,7 +404,6 @@
                 <a [routerLink]="['/coachView', coach.id]"><i class="fas fa-external-link-alt"></i></a>
                 <!-- <button type="button" class="btn btn-sm btn-success" routerLink="/editclient/{{coach.id}}">View</button> -->
               </td>
-
             </tr>
           </tbody>
         </table>
@@ -315,70 +412,4 @@
   </div>
 </div>
 
-<div class="row row-height" *ngIf="this.userRole == 'COACH'">
-  <!-- <div class="col-3 card text-center top-cards">
-          <div class="card-body">
-            <h6 class="card-title">Upcoming Sessions</h6>
-            <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
-            
-          </div>
-      </div> -->
-  <!-- <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title">Coaching Hours</h6>
-      <h3 class="card-text fw-bold">{{numberOfHours}} hrs {{numberOfMinutes}} mins</h3>
 
-    </div>
-  </div> -->
-  <!-- <div class="col-3 card text-center top-cards" >
-      <div class="card-body">
-        <h6 class="card-title">Coach Education</h6>
-        <h3 class="card-text fw-bold">{{ numberOfHours }} hrs</h3>
-        <button type="button" routerLink="/AddTraining" class="btn addbtn"><i class="fa fa-plus"></i> Add Training</button>
-        
-      </div>
-  </div> -->
-  <!-- <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title">Sessions Created</h6>
-            <h3 class="card-text fw-bold">{{numberOfSessions}}</h3>
-      <h6 class="card-title">Sessions Success Rate</h6>
-      <h3 class="card-text fw-bold">{{success_rate_percent}}%</h3>
-    </div>
-  </div> -->
-  <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title fw-semi-bold f-weight fs-6">Clients</h6>
-      <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
-    </div>
-  </div>
-  <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
-      <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-    </div>
-  </div>
-</div>
-
-<!--ORGANIZATION-->
-<div class="row row-height" *ngIf="this.userRole == 'ORGANIZATION'">
-
-  <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Coaches</h6>
-      <h3 class="card-text fw-bold">{{coaches.length}}</h3>
-    </div>
-  </div>
-  <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Clients</h6>
-      <h3 class="card-text fw-bold">{{clients.length}}</h3>
-    </div>
-  </div>
-  <div class="col-3 card text-center top-cards">
-    <div class="card-body">
-      <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Contracts</h6>
-      <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-    </div>
-  </div>
-</div>

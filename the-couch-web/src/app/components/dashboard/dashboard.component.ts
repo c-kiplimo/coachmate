@@ -8,6 +8,7 @@ import { ContractsService } from 'src/app/services/contracts.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { th } from 'date-fns/locale';
 import { CoachService } from 'src/app/services/CoachService';
+import { set } from 'date-fns';
 
 
 
@@ -75,7 +76,7 @@ export class DashboardComponent implements OnInit {
   coachId!: number;
   clientId!: number;
 
-
+  todaysSessions: any = [];
 
   constructor(
     private clientService: ClientService,
@@ -106,35 +107,19 @@ export class DashboardComponent implements OnInit {
       this.getRecentSessions(this.page);
       this.getAllContracts(this.page);
       this.getClients(this.page);
-
-      // t.getAllContracts
-      // t.getAllContracts
-      // this.getNoOfContracts();
-      // this.getCoachEducation(this.user.id);
-      // this.getCoachFeedbacks(this.user.id);
-      // this.getAllContracts();
-
+      this.filterTodaysSessions(this.page);
     } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
-      // this.getUserOrg();
-      // this.orgData = sessionStorage.getItem('Organization');
-      // this.orgSession = JSON.parse(this.orgData);
-      // this.getOrgContracts(this.orgId);
-      // this.getAllOrgSessions(this.orgId);
-      // this.getOrgFeedbacks(this.orgId);
       this.getAllContracts(this.page)
       this.getOrgCoaches(this.page);
       this.getClients(this.page);
 
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
-
       this.getRecentSessions(this.page);
       this.getAllContracts(this.page);
-      // console.log('not coach');
-      // this.getClientContracts(this.user.id);
-      // this.getClientSessions(this.user.id);
+      this.filterTodaysSessions(this.page);
     }
 
   }
@@ -169,6 +154,44 @@ export class DashboardComponent implements OnInit {
     this.sessionService.getSessions(options).subscribe(
       (response: any) => {
         this.sessions = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
+  }
+
+
+  filterTodaysSessions(page: any) {
+    this.loading = true;
+    let today = new Date().toISOString().slice(0, 10);
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      sessionDate: today,
+      sort: 'id,desc',
+    };
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.orgId = this.orgId;
+    }
+
+    this.sessionService.getSessions(options).subscribe(
+      (response: any) => {
+        this.todaysSessions = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
         this.loading = false;
       },
@@ -451,52 +474,6 @@ export class DashboardComponent implements OnInit {
   //     }
   //   );
   // }
-
-  getCoachesImpl(page: any) {
-    this.loading = true;
-    this.page = page;
-    //if page is 0, don't subtract 1
-    if (page === 0 || page < 0) {
-      page = 0;
-    } else {
-      page = page - 1;
-    }
-    if(this.filters.status == 'ALL'){
-      this.filters.status = '';
-    }
-    const options: any = {
-      page: page,
-      size: this.pageSize,
-      status: this.filters.status,
-      search: this.filters.searchItem,
-      sort: 'id,desc',
-    };
-
-    if(this.userRole == 'COACH'){
-      options.coachId = this.coachId;
-    }else if(this.userRole == 'CLIENT'){
-      options.clientId = this.clientId;
-    }else if(this.userRole == 'ORGANIZATION'){
-      options.orgId = this.orgId;
-    }
-    
-    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
-      (response) => {
-        this.loading = false;
-        this.coachesImpl = response.body;
-        for (let client of this.coachesImpl) {
-          if (client.userRole != 'COACH') {
-            this.coachesImpl.splice(this.coachesImpl.indexOf(client), 1);
-          }
-        }
-        this.totalElements = +response.headers.get('X-Total-Count');
-        console.log('clients',this.coachesImpl)
-      }, (error) => {
-        this.loading = false;
-        console.log(error)
-      }
-    )
-  }
 
   getOrgCoaches(page: any) {
  
