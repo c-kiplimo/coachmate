@@ -246,52 +246,44 @@ body {
 
 .contact {
   padding: 5rem 0;
-  background-color: #116728;
-  
-
-  .container {
-    border-radius: 32px;
-  }
-
-  h3 {
-    color: #fff;
-    font-weight: 600;
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-  }
-
-  p {
-    color: #fff;
-    font-size: 1.2rem;
-
-    a {
-      text-decoration: underline;
-      font-weight: 600;
-      color: #fff;
-    }
-  }
-
-  input,
-  textarea {
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  .btn-submit-form {
-    background-color: #042c0b;
-    color: #fff;
-    letter-spacing: 1px;
-    font-size: 0.9rem;
-    border-radius: 6px;
-    width: 100%;
-    padding: 10px 20px;
-  }
+  background-color: #155022;
 }
+
+.contact .container {
+  border-radius: 32px;
+}
+
+.contact h3 {
+  color: #fff;
+  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.contact p {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.contact p a {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #fff;
+}
+
+.contact input,
+.contact textarea {
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.contact .hidden {
+  display: none;
+}
+
+
+
 
 .footer {
   background-color: #212121;
