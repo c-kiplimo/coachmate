@@ -44,7 +44,7 @@ export class ContractDetailsComponent implements OnInit {
   addSessionForm:any={
 
   }; 
-  loading = true;
+  loading = false;
   pageSize = 20;
   page: number = 0;
   filters: any = {
@@ -78,6 +78,8 @@ export class ContractDetailsComponent implements OnInit {
   updateContractForm!: FormGroup;
   userRole: any;
   totalElements = 0;
+  contractId: any;
+  contract?: any;
 
 
   constructor(
@@ -155,6 +157,20 @@ export class ContractDetailsComponent implements OnInit {
 
   }
 
+  getContractData(id: any) {
+    this.loading = true;
+    this.clientService.getContract(id).subscribe((data: any) => {
+      this.contract = data.body;
+      this.getSessionsBycontractId(this.contractId);
+      this.getCoachSlots(this.page);
+      this.loading = false;
+  }, (error) => {
+    console.log(error);
+    this.loading = false;
+  }
+  );
+  }
+
   @ViewChild('yourElement') yourElement!: ElementRef;
   createdclient: any;
   clients: any;
@@ -165,9 +181,7 @@ export class ContractDetailsComponent implements OnInit {
   sessionToBeUpdated: any;
   updateSession: any;
   userDetails: any;
-  sessions: any;
-  contractId: any;
-  contract: any;
+  sessions?: any;
   modalTitle = 'Add Session';
   sessionTime: any;
   sessionGoals: any;
@@ -190,19 +204,7 @@ export class ContractDetailsComponent implements OnInit {
     this.createSessionClientId = event.target.value;
   }
 
-  getContractData(id: any) {
-    this.loading = true;
-    this.clientService.getContract(id).subscribe((data: any) => {
-      this.contract = data.body;
-      this.loading = false;
-      this.getSessionsBycontractId(this.contractId);
-      this.getCoachSlots(this.page);
-  }, (error) => {
-    console.log(error);
-    this.loading = false;
-  }
-  );
-  }
+  
 
   @ViewChild('sessionModal', { static: false })
   sessionModal!: ElementRef;
