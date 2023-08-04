@@ -125,6 +125,7 @@ public class SessionResource {
         log.info("Request to filter sessions");
         Page<SessionDTO> sessionDtoPage = sessionService.filter(coachId, clientId, contractId, sessionStatus, sessionDate, organisationId, search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), sessionDtoPage);
+        log.info("Filtered sessions {}", sessionDtoPage.getContent());
         return ResponseEntity.ok().headers(headers).body(sessionDtoPage.getContent());
     }
 
