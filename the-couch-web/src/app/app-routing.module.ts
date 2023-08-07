@@ -43,7 +43,7 @@ import { CoachLogsComponent } from './components/coach-logs/coach-logs.component
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomeComponent
   },
   {
