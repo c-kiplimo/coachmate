@@ -6,6 +6,9 @@
     margin: 10px;
     width: 300px;
 }
+.fs-dashboard{
+ font-size: 0.9rem;
+}
 .listing-item {
     padding: 10px 0;
     border-bottom: 3px solid #f1f1f1;
@@ -123,3 +126,6 @@
     font-weight: bold;
     }
     }
+
+
+   
