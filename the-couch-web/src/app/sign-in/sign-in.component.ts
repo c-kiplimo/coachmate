@@ -48,6 +48,9 @@ export class SignInComponent implements OnInit {
           this.router.navigate(['dashboard']);
         }
   }
+  back() {
+    window.history.back();
+  }
 
   userLogin() {
     this.errorMessage = '';

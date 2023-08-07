@@ -9,22 +9,25 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../services/ClientService';
 import { NotificationsService } from '../services/notifications.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   contactIcon = faEnvelope;
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
+  sideNavStatus: boolean = false;
  
   constructor(
     private formBuilder: FormBuilder,
     private toastrService: ToastrService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    public router: Router
   ) {}
 
   ngOnInit(): void {

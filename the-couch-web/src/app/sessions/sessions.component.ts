@@ -27,7 +27,7 @@ export class SessionsComponent implements OnInit {
   rightIcon!: IconProp;
   searchIcon!: IconProp;
   session: any;
-  loading = false;
+  loading: boolean = false;
   itemsPerPage = 20;
   filters: any = {
     status: '',

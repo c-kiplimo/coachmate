@@ -106,9 +106,17 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-body">
+            <div class="d-flex justify-content-end" *ngIf="deleteThisCoachingLogs.length > 0">
+              <!--delete selected-->
+              <button type="button" class="btn btn-outline-danger" (click)="deleteCoachingLog()">Delete Selected</button>
+            </div>
             <table class="table" *ngIf="coachingLogs?.length">
               <thead>
                 <tr>
+                  <!--select all check box-->
+                  <th scope="col" class="check">
+                    <input type="checkbox"  (change)="selectAll($event)" />
+                  </th>
                   <th scope="col">Client</th>
                   <th scope="col">Email</th>
                   <th scope="col">No. in Group</th>
@@ -122,6 +130,10 @@
               <tbody class="list-container">
                 <tr
                   *ngFor="let coachingLog of coachingLogs | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+                  <!--select check box-->
+                  <td class="check">
+                    <input type="checkbox" (change)="selectOne($event, coachingLog.id)" />
+                  </td>
                   <td>{{ coachingLog?.clientName }}</td>
                   <td>{{ coachingLog?.clientEmail }}</td>
                   <td>{{ coachingLog?.noInGroup }}</td>
@@ -131,7 +143,9 @@
                   <td>{{ coachingLog?.proBonoHours }}</td>
                   <td>{{ coachingLog?.createdAt | date :  "dd.MM.y"  }}</td>
                   <td class="view">
-                    <a><i class="fas fa-external-link-alt"></i></a>
+                    <a>
+                      <i class="fas fa-trash-alt" (click)="deleteOne(coachingLog.id)"></i>
+                    </a>
                   </td>
                 </tr>
               </tbody>

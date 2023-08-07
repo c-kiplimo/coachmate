@@ -77,5 +77,21 @@ public class CoachingLogRecource {
             return ResponseEntity.ok().headers(headers).body(coachingLogDTOPage.getContent());
         }
 
+        //delete multiple coaching logs by id
+        @DeleteMapping
+        public ResponseEntity<?> deleteCoachingLogs(
+                @RequestParam(value = "coachingLogIds" , required = false) List<Long> coachingLogIds,
+                @AuthenticationPrincipal User userDetails
+        ) {
+            log.info("Request to delete coaching logs {}", coachingLogIds);
+            Long coachId = userDetails.getId();
+            try {
+                coachingLogService.deleteCoachingLogs(coachingLogIds, coachId);
+                return ResponseEntity.ok().build();
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+
 
 }

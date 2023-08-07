@@ -69,6 +69,8 @@ export class SchedulesComponent implements OnInit {
   user: any;
   clientId: any;
 
+  googleCalendarEvents: any;
+
   orgId!: number;
   coachId!: number;
   loading = true;
@@ -141,11 +143,13 @@ export class SchedulesComponent implements OnInit {
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
       this.getSessions(this.page);
-
+      //this.getCalendarEvents();
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
       this.getSessions(this.page);
     }
+
+    
   }
 
   /////////////////////////////////
@@ -156,6 +160,15 @@ export class SchedulesComponent implements OnInit {
 
   onSignOut() {
     this.googleSignInService.signOut();
+  }
+
+  getCalendarEvents() {
+      this.googleSignInService.getCalendarEvents().subscribe((events: any) => {
+      console.log(events);
+      this.googleCalendarEvents = events;
+      this.setGoogleCalendarEvents(events);
+    }
+    );
   }
 
   /////////////////////////////////
@@ -268,12 +281,11 @@ export class SchedulesComponent implements OnInit {
   }
 
   setCalendarEvents(sessions: any) {
-    console.log('here');
     this.events = [];
     sessions.forEach((session: any) => {
       const event = {
-        start: new Date(`${session.sessionSchedulesSessionDate}T${session.sessionSchedulesStartTime}`),
-        end: new Date(`${session.sessionSchedulesSessionDate}T${session.sessionSchedulesEndTime}`),
+        start: new Date(`${session.sessionSchedulesSessionDate ? session.sessionSchedulesSessionDate : session.sessionDate}T${session.sessionSchedulesStartTime}`),
+        end: new Date(`${session.sessionSchedulesSessionDate ? session.sessionSchedulesSessionDate : session.sessionDate}T${session.sessionSchedulesEndTime}`),
         title: session.name + " with " + session.clientFullName,
         color: { ...colors['green'] },
         actions: this.actions,
@@ -285,6 +297,30 @@ export class SchedulesComponent implements OnInit {
         // draggable: true,
       };
       this.events.push(event);
+      this.view = CalendarView.Month; //Week, Month, Day
+      this.refresh.next();
+    });
+    console.log(this.events);
+  }
+
+  //set google calendar events to the calendar
+  setGoogleCalendarEvents(events: any) {
+    console.log(events);
+    events.forEach((event: any) => {
+      const eventObject = {
+        start: new Date(event.start.dateTime.slice(0, 19)),
+        end: new Date(event.end.dateTime.slice(0, 19)),
+        title: event.summary + " with " + event.attendees[0].displayName,
+        color: { ...colors['green'] },
+        actions: this.actions,
+        allDay: false,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+        // draggable: true,
+      };
+      this.events.push(eventObject);
       this.view = CalendarView.Month; //Week, Month, Day
       this.refresh.next();
     });
