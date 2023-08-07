@@ -8,8 +8,13 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CoachingLogRepository extends PagingAndSortingRepository<CoachingLog, Long>, QuerydslPredicateExecutor<CoachingLog> {
 
     Page<CoachingLog> findAll(Example<CoachingLog> example, Pageable pageable);
+
+    void deleteAllByIdInAndCoachId(List<Long> coachingLogIds, Long coachId);
+
 }

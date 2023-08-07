@@ -22,29 +22,15 @@
     height: 65%;
     padding: 20px;
 }
-    .info{
-        font-size: 12px;
-    }
 
-    .abt-section-img,.abt-section-text{
-        padding: 20px;}
-        h4{
-            color: #1B3A27;
-        }
-        
-     
-    .abt-section-img{
-        border: 1px solid #f8f8f8;
-        background-color: #f4f4f4;
-    }
- fa-icon{
+ fa-icon {
     font-size: 40px;
     color: #1B3A27;
  }
- h4{
+ h4 {
     color:#1B3A27;
  }
- .section-text{
+ .section-text {
     line-height: 150%;
     max-width: 540px;
     margin: 0 auto;
@@ -61,68 +47,6 @@
     max-height: 500px;
 }
 
-   h5{
-    color: #1B3A27;
-   }
-
-.contact-form{
-margin: 0 auto!important;
-  max-width: 1200px!important;
-  width: 80%;
-}
- .form{
-  padding: 40px;
-}
-.btn-signup{
-    background-color: #1B3A27;
-    color: #fff;
-    letter-spacing: 1px;
-    font-size: 0.9rem;
-    border-radius: 4px ;
-}
-hr.half-width{
-    width:50%;
-    margin: 0 auto;
-  }
-
-
-input[type="text"],input[type="email"],textarea{
-  padding: 5px!important;
-  border: none!important;
-  border-radius: 0%;
-  border-bottom: 1px rgb(59, 57, 57) solid!important;
-  margin: 0.75rem !important;
-}
-
-textarea:focus{
-  color: #1B3A27!important;
-  border-bottom: #1B3A27 solid!important;
-  outline: none!important;
-  overflow: hidden!important;
-}
-textarea:hover{
-    border-bottom: #1B3A27 solid!important;
-
-
-}
-input[type=email]:hover{
-    border-bottom: #1B3A27 solid!important;
-}
-input[type=text]:hover{
-    border-bottom: #1B3A27 solid!important;
-
-}
-input[type=text]:focus {
-    outline: none;
-    border-bottom: #1B3A27 solid!important;
-    
-}
-input[type=email]:focus {
-  outline: none;
-  border-bottom: #1B3A27 solid!important;
-}
-/* Common styles for all nav links */
-/* Common styles for all nav links */
 nav,
 .navbar {
   font-weight: 16px !important;
@@ -144,15 +68,6 @@ nav,
   flex-direction: row;
   height: 60px;
   padding-left: 10px;
-}
-
-/* Logo image styles */
-.welcome-img {
-  height: 60px;
-  position: relative;
-  top: 2px;
-  padding-bottom: 5px;
-  padding-left: 20px;
 }
 
 /* Navigation item styles */
@@ -214,11 +129,6 @@ nav,
   line-height: 1.8;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-}
 
 /* Section styles */
 .features-section {
@@ -374,29 +284,6 @@ body {
   color: #fff;
   text-decoration: underline;
   display: inline;
-}
-@media (max-width: 767px) {
-  .abt-section {
-    padding: 15px;
-  }
-
-  .abt-section-img {
-    text-align: center;
-  }
-
-  .abt-section-text {
-    text-align: center;
-  }
-
-  .abt-section-text h4 {
-    font-size: 34px;
-    font-weight: bold;
-  }
-
-  .abt-section-text p {
-    font-size: 20px;
-    line-height: 1.6;
-  }
 }
 
 .security {
