@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: coach-web
+  name: coach-web
+spec:
+  selector:
+    matchLabels:
+      service: coach-web
+  template:
+    metadata:
+      labels:
+        service: coach-web
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: Africa/Nairobi
+        image: melioratech/coach-web:1.0.1
+        imagePullPolicy: Always
+        name: coach-web
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regcred

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: coach-api
+  name: coach-api
+spec:
+  selector:
+    matchLabels:
+      service: coach-api
+  template:
+    metadata:
+      labels:
+        service: coach-api
+    spec:
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -Xmx1024m -Xms64m
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://coach-mysql:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: 'N@tujengeroot'
+        - name: SPRING_JPA_SHOW_SQL
+          value: "false"
+        - name: TZ
+          value: Africa/Nairobi
+        image: melioratech/coach-api:1.0.1
+        name: coach-api
+        ports:
+        - containerPort: 10290
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      imagePullSecrets:
+      - name: regcred
