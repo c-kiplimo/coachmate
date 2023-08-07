@@ -50,14 +50,15 @@
             <p class="col">{{ clients?.firstName + " " + clients?.lastName | titlecase }}</p>
           </div>
 
+          <div class="d-none d-lg-block">
+            <div class="row dtl">  
+              <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
+              <p class="col">{{ clients?.email}}</p>
+            </div>
+          </div>
           <div class="row dtl d-flex d-block d-lg-none">
             <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
             <p class="col">{{ clients?.email?.slice(0, 10)}}...</p>
-          </div>
-          <!-- fix flex direction in this -->
-          <div class="row dtl d-flex d-none d-lg-block">  
-            <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
-            <p class="col">{{ clients?.email}}</p>
           </div>
 
           <div class="row dtl">
@@ -206,7 +207,10 @@
                     <td>{{ session?.contractCoachingTopic }}</td>
                     <td>{{ session?.sessionVenue }}</td>
                     <td>{{ session?.sessionType | titlecase }}</td>
-                    <td>{{ session?.sessionSchedulesSessionDate }}</td>
+
+                    <td *ngIf="session?.sessionSchedulesSessionDate">{{ session?.sessionSchedulesSessionDate }}</td>
+                    <td *ngIf="!session?.sessionSchedulesSessionDate">{{ session?.sessionDate }}</td>
+
                     <td>{{ session?.sessionSchedulesStartTime }}</td>
                     <td>{{ session?.sessionSchedulesEndTime }}</td>
                     <td>

@@ -6,21 +6,13 @@ server:
 
 spring:
   datasource:
-#    url: jdbc:mysql://51.15.141.206:3308/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-#    username: root
-#    password: N@tujengeroot
+    url: jdbc:mysql://51.15.141.206:3308/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
+    username: root
+    password: N@tujengeroot
 
 #        url: jdbc:mysql://172.18.0.2:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
 #        username: root
 #        password: root
-
-    url: jdbc:mariadb://127.0.0.1:3306/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
-    username: elijah
-    password: elijah@maria23
-
-
-
-
 
     
 
