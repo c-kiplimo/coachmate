@@ -70,7 +70,6 @@ private final  ClientWalletMapper clientWalletMapper;
 
         if (optionalClientWallet.isEmpty()) {
             throw new IllegalArgumentException("Specified wallet does not exist!!!");
-
         }
 
         return optionalClientWallet.get();
@@ -675,7 +674,7 @@ private final  ClientWalletMapper clientWalletMapper;
         }
     }
 
-    public void createWallet(long coachId, long clientId) {
+    public ClientWallet createWallet(long coachId, long clientId) {
         log.info("Create wallet for coach Id{} and client Id{}", coachId, clientId);
         ClientWallet clientWallet = new ClientWallet();
         clientWallet.setCoach(userRepository.findById(coachId).orElseThrow(IllegalCallerException::new));
@@ -685,6 +684,7 @@ private final  ClientWalletMapper clientWalletMapper;
         clientWallet.setCreatedAt(LocalDateTime.now());
         clientWallet.setLastUpdatedAt(LocalDate.from(LocalDateTime.now()));
         clientWalletRepository.save(clientWallet);
+        return clientWallet;
     }
 
     private ClientWallet createExample(Long coachId, Long clientId, String statementPeriod, Long organizationId, String search) {

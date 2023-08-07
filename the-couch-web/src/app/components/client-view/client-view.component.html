@@ -49,10 +49,17 @@
             <h6 class="fw-semi-bold  faded col smaller-font">Name</h6>
             <p class="col">{{ clients?.firstName + " " + clients?.lastName | titlecase }}</p>
           </div>
-          <div class="row dtl">
+
+          <div class="row dtl d-flex d-block d-lg-none">
             <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
-            <p class="col">{{ clients?.email }}</p>
+            <p class="col">{{ clients?.email?.slice(0, 10)}}...</p>
           </div>
+          <!-- fix flex direction in this -->
+          <div class="row dtl d-flex d-none d-lg-block">  
+            <h6 class="fw-semi-bold  faded col smaller-font">Email</h6>
+            <p class="col">{{ clients?.email}}</p>
+          </div>
+
           <div class="row dtl">
             <h6 class="fw-semi-bold  faded col smaller-font">Phone number</h6>
             <p class="col">{{ clients?.msisdn }}</p>
@@ -168,7 +175,8 @@
           </div>
         </div>
         <br>
-        <div *ngIf="currentTab === 'sessions'">
+
+        <div *ngIf="currentTab === 'sessions'" class="d-none d-lg-block">
           <!-- add session button -->
           <div class="d-flex justify-content-end">
             <button *ngIf="!loading" class="btn btn-outline-success" [routerLink]="['/addSession']">
@@ -223,7 +231,69 @@
             </div>
           </div>
         </div>
-        <div *ngIf="currentTab === 'contracts'">
+        <div *ngIf="currentTab === 'sessions'" class="show-sm">
+          <div class="card">
+            <div class="d-flex justify-content-end m-2">
+              <div>
+                <button type="button" routerLink="/addsession" class="btn btn-outline-success">
+                  <i class="fa fa-plus"></i> Add Session
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="pt-3 pb-2 listing-item"
+                *ngFor="let session of sessions  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                [routerLink]="['/sessionView', session.id]">
+        
+        
+                <div class="d-flex justify-content-between">
+                  <h4 class="farmer" [routerLink]="['/sessionView', session.id]">
+                    {{ session?.name | titlecase }}
+                  </h4>
+        
+                  <span class="no-word-break">{{ session.contractCoachingTopic | titlecase }}
+                    <a [routerLink]="['/sessionView', session.id]"><i class="fa fa-angle-right"></i></a>
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-2" *ngIf="session?.sessionSchedulesSessionDate">
+                  <span class="customer-name" class="mb-0">
+                    {{ session?.sessionSchedulesSessionDate }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2" *ngIf="!session?.sessionSchedulesSessionDate">
+                  <span class="customer-name" class="mb-0">
+                    {{ session?.sessionDate }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    <i class="fa fa-map-marker-alt"></i>
+                    {{ session?.sessionSchedulesStartTime }} - {{ session?.sessionSchedulesEndTime }}
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="badge" [ngClass]="{
+                    'badge-success': session?.sessionStatus === 'CONFIRMED',
+                    'badge-danger': session?.sessionStatus === 'CANCELLED',
+                    'badge-primary': session?.sessionStatus === 'NEW' || session?.sessionStatus === 'CONDUCTED'
+                }">{{ session.sessionStatus }}</span>
+                </div>
+              </div>
+        
+        
+              <div class="donut-wrapper" *ngIf="loading">
+                <div class="donut multi"></div>
+              </div>
+              <div *ngIf="!loading && session?.length === 0">
+                <h2 class="text-muted mt-5">No Sessions Found.</h2>
+              </div>
+        
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="currentTab === 'contracts'" class="d-none d-lg-block">
           <!-- add contract button -->
           <div class="d-flex justify-content-end">
             <button *ngIf="!loading" class="btn btn-outline-success" [routerLink]="['/add-contract']">
@@ -278,6 +348,61 @@
             </div>
           </div>
         </div>
+        <div *ngIf="currentTab === 'contracts'" class="show-sm">
+          <div class="card">
+            <div class="d-flex justify-content-end m-2">
+              <div>
+                <button type="button" routerLink="/addcontract" class="btn btn-outline-success">
+                  <i class="fa fa-plus"></i> Add Contract
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="pt-3 pb-2 listing-item"
+                *ngFor="let contract of contracts  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                [routerLink]="['/contractDetail/', contract.id]">
+        
+        
+                <div class="d-flex justify-content-between">
+                  <h4 class="farmer" [routerLink]="['/contractDetail/', contract.id]">
+                    {{ contract?.coachingTopic | titlecase }}
+                  </h4>
+        
+                  <span class="no-word-break">{{ contract?.coachingCategory | titlecase }}
+                    <a [routerLink]="['/contractDetail/', contract.id]"><i class="fa fa-angle-right"></i></a>
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-2" >
+                  <span class="customer-name" class="mb-0">
+                    {{ contract?.clientFullName }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    <i class="fa fa-map-marker-alt"></i>
+                    {{ contract?.startDate | date : "MMM d, y"  }} - {{ contract?.endDate | date : "MMM d, y"  }}
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="badge" [ngClass]="{
+                  'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                  'badge-danger': contract?.contractStatus === 'ONGOING',
+                  'badge-primary': contract?.contractStatus === 'NEW'
+                }">{{ contract?.contractStatus }}</span>
+                </div>
+              </div>
+        
+              <div class="donut-wrapper" *ngIf="loading">
+                <div class="donut multi"></div>
+              </div>
+              <div *ngIf="!loading && contracts?.length === 0">
+                <h2 class="text-muted mt-5">No Contracts Found.</h2>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="d-none d-lg-block" *ngIf="currentTab === 'payments'" [@fadeIn]>
           <div class="d-flex justify-content-end">
@@ -303,19 +428,66 @@
                     <td>{{ payment?.amountDeposited}}</td>
                     <td>{{ payment?.walletBalance}}</td>
                     <td>{{ payment?.createdAt | date: "MMM d y" }}</td>
-                    <!-- <td class="view">
+                    <td class="view">
                       <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)"
                           class="fas fa-external-link-alt"></i></a>
-                    </td> -->
+                    </td>
                   </tr>
                 </tbody>
               </table>
               <div class="donut-wrapper" *ngIf="searching" [@fadeIn]>
                 <div class="donut multi"></div>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loadingClient && !payments?.length">
+              <p class="text-muted mt-5" *ngIf="!loading && !payments?.length">
                 No Payments Found.
               </p>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="currentTab === 'payments'" class="show-sm">
+          <div class="card">
+            <div class="d-flex justify-content-end m-2">
+              <div>
+                <button type="button" [routerLink]="['/record-payment']" class="btn btn-outline-success">
+                  <i class="fa fa-plus"></i> Add Payment
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="pt-3 pb-2 listing-item"
+                *ngFor="let payment of payments  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)">
+        
+        
+                <div class="d-flex justify-content-between">
+                  <h4 class="farmer" data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)">
+                    {{ payment?.modeOfPayment | titlecase }}
+                  </h4>
+        
+                  <span class="no-word-break">{{ payment?.amountDeposited }}
+                    <a data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)"><i class="fa fa-angle-right"></i></a>
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-2" >
+                  <span class="customer-name" class="mb-0">
+                    {{ payment?.walletBalance }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    <i class="fa fa-map-marker-alt"></i>
+                    {{ payment?.createdAt | date: "MMM d y"  }}
+                  </span>
+                </div>
+              </div>
+        
+              <div class="donut-wrapper" *ngIf="loading">
+                <div class="donut multi"></div>
+              </div>
+              <div *ngIf="!loading && !payments?.length">
+                <h3 class="text-muted mt-5">No Payments Found.</h3>
+              </div>
             </div>
           </div>
         </div>
@@ -354,6 +526,45 @@
                 <p class="text-muted mt-5" *ngIf="!notifications?.length">
                   No notifications found.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="currentTab === 'notifications'" class="show-sm">
+          <div class="card">
+            <div class="card-body">
+              <div class="pt-3 pb-2 listing-item"
+                *ngFor="let notification of notifications  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                data-bs-toggle="modal" data-bs-target="#notificationModal" (click)="viewNotification(notification)">
+        
+        
+                <div class="d-flex justify-content-between">
+                  <h4 class="farmer" data-bs-toggle="modal" data-bs-target="#notificationModal" (click)="viewNotification(notification)">
+                    {{ notification?.sendReason | titlecase }}
+                  </h4>
+        
+                  <span class="no-word-break">{{ notification?.notificationMode | titlecase }}
+                    <a data-bs-toggle="modal" data-bs-target="#notificationModal" (click)="viewNotification(notification)"><i class="fa fa-angle-right"></i></a>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    {{ notification?.sourceAddress  }} - {{ notification?.destinationAddress  }}
+                  </span>
+                </div>
+        
+                <div class="d-flex justify-content-between mb-2" >
+                  <span class="customer-name" class="mb-0">
+                    {{ notification?.createdAt | date : "MMM d, y " }}</span>
+                </div>
+              </div>
+        
+              <div class="donut-wrapper" *ngIf="loading">
+                <div class="donut multi"></div>
+              </div>
+              <div *ngIf="!loading && !notifications?.length">
+                <h3 class="text-muted mt-5">No Notifications Found.</h3>
               </div>
             </div>
           </div>
@@ -524,7 +735,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Notification Details</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel" *ngIf="notification">{{ notification.sendReason }}</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="notification">
