@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: coach-mysql
+  name: coach-mysql
+spec:
+  selector:
+    matchLabels:
+      service: coach-mysql
+  template:
+    metadata:
+      labels:
+        service: coach-mysql
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: 'N@tujengeroot'
+        - name: MYSQL_DATABASE
+          value: coach
+        - name: TZ
+          value: Africa/Nairobi
+        image: mysql:8.0
+        imagePullPolicy: Always
+        name: coach-mysql
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysqlfiles
+      volumes:
+      - name: mysqlfiles
+        persistentVolumeClaim:
+          claimName: coach-mysql-data
+
