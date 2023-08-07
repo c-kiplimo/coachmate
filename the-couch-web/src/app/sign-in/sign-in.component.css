@@ -34,3 +34,21 @@ fa-icon{
   object-fit: cover;
   opacity: 0.8;
 }
+/* styles.css */
+.back-link {
+  cursor: pointer;
+  transition: all ease;
+  text-decoration: none;
+  color: #156211;
+  display: block;
+}
+
+.back-link fa-icon {
+  font-size: 0.9rem;
+  margin-right: 15px;
+}
+
+.back-link:hover {
+  color: #0c821f;
+  text-decoration: underline;
+}
