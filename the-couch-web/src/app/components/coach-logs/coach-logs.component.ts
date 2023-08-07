@@ -49,6 +49,8 @@ export class CoachLogsComponent implements OnInit {
   coachingLogsFromExcel: any = [];
   showErrorMessage: boolean = false;
 
+  deleteThisCoachingLogs: any = [];
+
   constructor(private coachLogsService: CoachLogsService) { }
 
   ngOnInit(): void {
@@ -203,6 +205,66 @@ export class CoachLogsComponent implements OnInit {
   clearAndClose() {
     this.clearData();
     this.uploadFromExcel = false;
+  }
+
+  //select all checkboxes and push coachingLogs ids of the list to deleteThisCoachingLogs
+  selectAll(event: any) {
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    if (event.target.checked) {
+      checkboxes.forEach((checkbox: any) => {
+        checkbox.checked = true;
+      });
+      for (let i = 0; i < this.coachingLogs.length; i++) {
+        this.deleteThisCoachingLogs.push(this.coachingLogs[i].id);
+      }
+      console.log(this.deleteThisCoachingLogs);
+    } else {
+      checkboxes.forEach((checkbox: any) => {
+        checkbox.checked = false;
+        this.deleteThisCoachingLogs = [];
+      });
+    }
+  }
+  
+  selectOne(event: any, id: any) {
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    if (event.target.checked) {
+      checkboxes.forEach((checkbox: any) => {
+        if (checkbox.value === id) {
+          checkbox.checked = true;
+        }
+      });
+      this.deleteThisCoachingLogs.push(id);
+      console.log(this.deleteThisCoachingLogs);
+    } else {
+      checkboxes.forEach((checkbox: any) => {
+        if (checkbox.value === id) {
+          checkbox.checked = false;
+        }
+      });
+    }
+  }
+
+  deleteOne(id: any) {
+    this.deleteThisCoachingLogs = [];
+    this.deleteThisCoachingLogs.push(id);
+    console.log(this.deleteThisCoachingLogs);
+    this.deleteCoachingLog();
+  }
+
+  deleteCoachingLog() {
+    this.loading = true;
+    const options = {
+      coachingLogIds: this.deleteThisCoachingLogs,
+    };
+    this.coachLogsService.deleteCoachLogs(options).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.loading = false;
+        this.deleteThisCoachingLogs = [];
+        this.getCoachingLogs(0);
+      }
+    });
   }
 
 }

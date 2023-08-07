@@ -23,5 +23,10 @@ export class CoachLogsService {
     });
   }
 
-
+  deleteCoachLogs(options: any): Observable<any> {
+    return this.http.delete<any>(this.baseURL + "coaching-log", {
+      params: options,
+      observe: "response"
+    });
+  }
 }

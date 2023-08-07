@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -85,5 +86,10 @@ public class CoachingLogService {
         Example<CoachingLog> example = Example.of(coachingLog, matcher);
         return coachingLogRepository.findAll(example, pageable).map(coachingLogMapper::toDto);
 
+    }
+
+    public void deleteCoachingLogs(List<Long> coachingLogIds, Long coachId) {
+        log.info("Request to delete coaching logs");
+        coachingLogRepository.deleteAllByIdInAndCoachId(coachingLogIds, coachId);
     }
 }
