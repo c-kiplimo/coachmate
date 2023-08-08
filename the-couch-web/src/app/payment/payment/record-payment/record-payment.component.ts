@@ -107,7 +107,8 @@ export class RecordPaymentComponent implements OnInit {
         this.successMessage = response.message;
       
         this.errorMessage = '';
-        this.router.navigate(['/receipts']);
+        // this.router.navigate(['/receipts']);
+        this.back();
       }
     );
 
