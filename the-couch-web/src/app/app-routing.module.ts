@@ -39,6 +39,8 @@ import { TemplatesComponent } from './account-settings/templates/templates.compo
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { AttachmentsComponent } from './components/attachments/attachments.component';
 import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TermAndConditionsOfUseComponent } from './term-and-conditions-of-use/term-and-conditions-of-use.component';
 
 
 const routes: Routes = [
@@ -168,7 +170,7 @@ const routes: Routes = [
     component: FeedbackComponent
   },
   {
-    path: 'terms/:id',
+    path: 'terms-and-conditions',
     component: TermsAndConditionsPageComponent
   },
   {
@@ -183,7 +185,8 @@ const routes: Routes = [
   { path: 'account-settings/payments', component: PaymentsComponent },
   { path: 'AccountSummaryComponent', component: AccountSummaryComponent },
   { path: 'coaching-logs', component: CoachLogsComponent },
-
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'term-and-conditions-of-use', component: TermAndConditionsOfUseComponent },
 
 ];
 
