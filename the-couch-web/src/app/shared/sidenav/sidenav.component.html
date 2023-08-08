@@ -6,7 +6,6 @@ router.url.includes('signin')
 
     <li class="nav-list-item" *ngFor="let menu of menuData" [ngClass]="{ 'active': menu.number === selectedTabIndex}"
       [routerLink]="[menu.routeLink]">
-
       <a>
         <i class="{{menu.icon}}" data-toggle="tooltip" data-placement="right" title="{{menu.label}}"></i>
 
