@@ -50,7 +50,6 @@
               <span><i class="fa fa-plus"></i></span> Create a Coach
             </h3>
 
-
             <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-client']"><span><i
                   class="fa fa-plus"></i></span> Create a Client</h3>
 
@@ -61,6 +60,17 @@
             <h3 class="badge badge-success" [routerLink]="['/addSession']">
               <span><i class="fa fa-plus"></i></span> Create a Session
             </h3>
+
+            <h3 class="badge badge-warning" *ngIf="this.userRole == 'CLIENT'"
+              [routerLink]="['/schedules']">
+              <span><i class="fa-solid fa-arrow-right"></i></span> Your Calendar
+            </h3>
+
+            <h3 class="badge badge-success" *ngIf="this.userRole == 'CLIENT'"
+            [routerLink]="['/payment']">
+            <span><i class="fa-solid fa-arrow-right"></i></span> Your Payments
+          </h3>
+
           </div>
         </div>
 
@@ -78,7 +88,7 @@
                 style="color: green"></i> Today's Sessions</a>
           </li>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" [@fadeIn] style="height: 180px;">
           <table class="table" *ngIf="todaysSessions?.length">
             <thead>
               <th>Name</th>
@@ -117,9 +127,11 @@
           <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !todaysSessions?.length">
-            No Sessions Today.
-          </p>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !todaysSessions?.length">
+            <p class="text-muted mt-5">
+              No Sessions Today.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -143,8 +155,8 @@
           <div class="col-md-7 col-sm-12">
             <!--Tabs-->
             <div class="d-none d-lg-block">
-              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
-                role="tablist">
+              <!--*ngIf="userRole !== 'CLIENT'"-->
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
                 <li class="nav-item" (click)="toggleTab('sessions')">
                   <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
                     role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
@@ -230,9 +242,11 @@
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
-                No Sessions Yet.
-              </p>
+              <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+                <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
+                  No Sessions Found.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -342,7 +356,11 @@
               </table>
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
-
+              </div>
+              <div class="d-flex justify-content-center" *ngIf="!loading && !contracts?.length">
+                <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
+                  No Contracts Found.
+                </p>
               </div>
             </div>
           </div>
@@ -395,6 +413,14 @@
             </tr>
           </tbody>
         </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <div class="d-flex justify-content-center" *ngIf="!loading && !coaches?.length">
+          <p class="text-muted mt-5" *ngIf="!loading && !coaches?.length">
+            No Coaches Found.
+          </p>
+        </div>
       </div>
     </div>
   </div>
