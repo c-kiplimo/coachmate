@@ -94,6 +94,13 @@ export class AddSessionComponent implements OnInit {
   // showWeekNumbers = false;
   // outsideDays = 'visible';
 
+  currentDate: Date = new Date();
+  daysOfWeek: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  weeks: any[] = []; // This will hold the weeks and their dates
+
+  // Dummy data representing booked sessions
+  bookedSessions: any[] = [];
+
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
@@ -140,7 +147,63 @@ export class AddSessionComponent implements OnInit {
       this.getContracts(this.page);
       this.getClients();
     }
+
+    this.generateCalendar();
   }
+
+  generateCalendar() {
+    const firstDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
+    const daysInMonth = lastDayOfMonth.getDate();
+    const firstDayOfWeek = firstDayOfMonth.getDay();
+
+    let dateCounter = 1;
+    for (let week = 0; week < 6; week++) {
+      const weekDates: any[] = [];
+      for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+        if ((week === 0 && dayOfWeek < firstDayOfWeek) || dateCounter > daysInMonth) {
+          weekDates.push(null);
+        } else {
+          const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), dateCounter);
+          weekDates.push({
+            date: date,
+            day: dateCounter,
+            bookedCount: this.getBookedSessionCount(date)
+          });
+          dateCounter++;
+        }
+      }
+      this.weeks.push(weekDates);
+    }
+  }
+
+  getBookedSessionCount(date: Date): number {
+    const dateString = date.toISOString().split('T')[0];
+    const session = this.bookedSessions.find(session => session.date === dateString);
+    return session ? session.count : 0;
+  }
+
+  prevMonth() {
+    const prevMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
+    this.currentDate = prevMonthDate;
+    this.weeks = []; // Reset weeks array
+    this.generateCalendar();
+  }
+  nextMonth() {
+    const nextMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+    this.currentDate = nextMonthDate;
+    this.weeks = []; // Reset weeks array
+    this.generateCalendar();
+  }
+
+  onDateClick(day: any) {
+    if (day) {
+      console.log('Clicked on date:', day.date);
+      // You can add further logic here, like opening a modal with session details.
+    }
+  }
+  
+  
 
   onContractChange(event: any) {
     this.getContractId = event.target.value;
@@ -230,9 +293,60 @@ export class AddSessionComponent implements OnInit {
         this.coachSlots = response.body;
         this.slots = this.coachSlots;
         this.loading = false;
+        this.prepareCoachSlotsInCalendar(this.coachSlots);
       }
     });
   }
+
+  prepareCoachSlotsInCalendar(coachSlots: any) {
+    
+      //from now on to 3 months, get days of the week, get the dates, number of slots per day and push them to the bookedSessions
+     //now date
+      let startDate = Date.now();
+      let endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 3);
+      let dates = this.getDates(startDate, endDate);
+      console.log(coachSlots);
+      dates.forEach((date: any) => {
+        coachSlots.forEach((slot: any) => {
+          if (slot.dayOfTheWeek.day.toUpperCase() === date.dayOfTheWeek.toUpperCase() && slot.dayOfTheWeek.available === true) {
+          if (this.bookedSessions.length > 0) {
+            if (this.bookedSessions.find((session: any) => session.date === slot.dayOfTheWeek.day)) {
+              this.bookedSessions.find((session: any) => session.date === slot.dayOfTheWeek.day).count += 1;
+            } else {
+              this.bookedSessions.push({
+                date: date.date,
+                day: date.dayOfTheWeek,
+                count: 1
+              });
+            }
+          } else {
+            this.bookedSessions.push({
+              date: date.date,
+              day: date.dayOfTheWeek,
+              count: 1
+            });
+          }
+        }
+      });
+    });
+    console.log(this.bookedSessions);
+  }
+
+  getDates(startDate: any, endDate: any) {
+    let dates: any[] = [];
+    let currentDate = startDate;
+    while (currentDate <= endDate) {
+      dates.push({
+        date: this.formatDateToYYYYMMDD(currentDate),
+        dayOfTheWeek:  new Date(this.formatDateToYYYYMMDD(currentDate)).toLocaleDateString('en-US', { weekday: 'long' }),
+      });
+      currentDate += 24 * 60 * 60 * 1000;
+    }
+    console.log("dates", dates)
+    return dates;
+  }
+
 
   selectedSessionSlot(slot: any) {
     console.log(slot);
@@ -241,7 +355,10 @@ export class AddSessionComponent implements OnInit {
     this.formData.sessionSchedules = slot;
   }
 
-  onDateSelect(): void {
+  onDateSelect(day: any): void {
+    console.log(day);
+    //format Wed Aug 16 2023 00:00:00 GMT+0300 (East Africa Time) to 2023-08-16
+    this.formData.sessionDate = this.formatDateToYYYYMMDD(day.date)
     console.log('Selected date:', this.formData.sessionDate);
     //get day of the week from the selected date
     let dayOfTheWeek = new Date(this.formData.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
@@ -258,6 +375,15 @@ export class AddSessionComponent implements OnInit {
     console.log(this.slots);
   }
 
+  formatDateToYYYYMMDD(inputDate: any) {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+  
   formatTime(timeString: string): Date {
     const [hours, minutes, seconds] = timeString.split(':');
     const date = new Date();

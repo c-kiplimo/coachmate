@@ -52,4 +52,76 @@ fa-icon {
     color: #4CAF50; /* Change to the desired color (e.g., green) */
   }
   
+
+  .calendar {
+    /* Add styling as needed */
+  }
+  
+  .calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none; /* Remove table border */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .day-header {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .week {
+    
+  }
+  .week :hover{
+    background-color: none;
+  }
+  
+  .day-cell {
+    width: 14.2857%; /* Each cell takes 1/7th of the width */
+    text-align: center;
+    padding: 5px;
+    /* use a circular border radius to create a circle */
+    border-radius: 5px;
+    cursor: pointer;
+    background-color:#EEFDEC;
+    margin: 2px;
+  }
+  .day-cell:hover{
+    background-color: #4CAF50;
+    color: white !important;
+  }
+
+  .day-cell.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: #ffffff;
+  }
+
+  .date-wrapper {
+    transition: background-color 0.3s ease-in-out; /* Add smooth transition */
+    user-select: none; /* Disable text selection on hover */
+  }
+  
+  .empty {
+    visibility: hidden;
+  }
+  
+  .booked {
+    background-color: 4CAF50;
+  }
+  
+  .date {
+    font-weight: bold;
+  }
+  
+  .booked-count {
+    font-size: 0.8em;
+  }
+  
+  
   
