@@ -294,19 +294,32 @@ export class ClientViewComponent implements OnInit {
       this.searching = false;
     });
   }
-  getPaymentsByClientId(id: any) {
+  getPaymentsByClientId(page: any) {
+    this.loading = true;
+    this.page = page;
+
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+
     const options = {
-      page: 1,
+      page: page,
       per_page: this.itemsPerPage,
       // status: this.filters.status,
-      // search: this.filters.searchItem,
-      clientId: id,
+      search: this.filters.searchItem,
+      clientId: this.clientId,
     };
 
-    this.loading = true;
     this.ClientService.getPaymentsByClientId(options).subscribe(
       (response) => {
-        this.payments = response.body.data;
+        this.payments = response.body;
+        for (let p of this.payments) {
+          if (p.extPaymentRef == null) {
+            this.payments.splice(p, 1);
+          }
+        }
         console.log('payments', this.payments);
         this.loading = false;
       }, (error) => {
@@ -398,7 +411,7 @@ export class ClientViewComponent implements OnInit {
       this.getAllSessions(this.page = 0);
       this.getAllContracts(this.page = 0);
       this.getNotifications(this.page = 0);
-      this.getPaymentsByClientId(id);
+      this.getPaymentsByClientId(this.page);
     },
       (error: any) => {
         console.log(error);
@@ -602,8 +615,9 @@ export class ClientViewComponent implements OnInit {
     this.router.navigate([type, entityObj.id]);
   }
   viewPayment(payment: any): void {
-    this.payment = payment.value;
-    this.paymentId = this.payment.id;
+    this.payment = payment;
+    // this.paymentId = this.payment.id;
+    console.log(this.payment);
   }
 
   getContracts(id: any) {

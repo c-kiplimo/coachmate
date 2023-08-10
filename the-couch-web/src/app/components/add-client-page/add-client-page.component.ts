@@ -40,6 +40,7 @@ export class AddClientPageComponent implements OnInit {
   };
   orgId: any;
   coachSessionData: any;
+  coachId: any;
 
   constructor(
     private ClientService: ClientService,
@@ -62,6 +63,7 @@ export class AddClientPageComponent implements OnInit {
       this.getOrgCoaches(this.orgId);
       console.log('org id=>', this.orgId);
     }
+    this.coachId = this.coachData.id;
 
 
 

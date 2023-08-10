@@ -15,6 +15,7 @@ import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -321,10 +322,19 @@ public class UserService implements UserDetailsService {
         clientWallet.setCreatedBy(userDetails.getFullName());
         clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
+        clientWallet.setCoach(saveClient.getAddedBy()); //TODO: change to coach
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
         // Create client Billing Account
+        ClientBillingAccount clientBillingAccount = getClientBillingAccount(userDetails, organization, saveClient);
+        clientBillingAccountService.createBillingAccount(clientBillingAccount);
+        log.info("Client Billing Account created Successfully!");
+        return saveClient;
+    }
+
+    @NotNull
+    private static ClientBillingAccount getClientBillingAccount(User userDetails, Organization organization, User saveClient) {
         ClientBillingAccount clientBillingAccount = new ClientBillingAccount();
 
         if (organization != null) {
@@ -332,11 +342,10 @@ public class UserService implements UserDetailsService {
             clientBillingAccount.setOrganization(organization);
         }
         clientBillingAccount.setClient(saveClient);
+        clientBillingAccount.setCoach(saveClient.getAddedBy()); //TODO: change to coach
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccount.setCreatedBy(userDetails.getMsisdn());
-        clientBillingAccountService.createBillingAccount(clientBillingAccount);
-        log.info("Client Billing Account created Successfully!");
-        return saveClient;
+        return clientBillingAccount;
     }
 
     public List<User> getClientByOrgId(Long id, UserRole userRole) {

@@ -113,7 +113,7 @@
     </div>
   </div>
 </div>
-
+<p>{{payments}}</p>
 <br>
 
 <div class="row">
@@ -420,6 +420,7 @@
                 <thead>
                   <tr>
                     <th>Mode Of Payment</th>
+                    <th>Payment Reference</th>
                     <th>Amount In</th>
                     <th>Wallet Balance</th>
                     <th>Recorded On</th>
@@ -429,11 +430,12 @@
                 <tbody>
                   <tr *ngFor="let payment of payments">
                     <td>{{ payment?.modeOfPayment | titlecase}}</td>
+                    <td>{{ payment?.extPaymentRef}}</td>
                     <td>{{ payment?.amountDeposited}}</td>
                     <td>{{ payment?.walletBalance}}</td>
                     <td>{{ payment?.createdAt | date: "MMM d y" }}</td>
                     <td class="view">
-                      <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewPayment(payment)"
+                      <a><i data-bs-toggle="modal" data-bs-target="#paymentModal" (click)="viewPayment(payment)"
                           class="fas fa-external-link-alt"></i></a>
                     </td>
                   </tr>
@@ -694,11 +696,11 @@
         </div>
         <div class="d-flex justify-content-between">
           <p>Client:</p>
-          <span>{{ payment.client.firstName | titlecase}}</span>
+          <span>{{ payment.clientFullName | titlecase}}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Coach:</p>
-          <span>{{ payment.coach.businessName}}</span>
+          <span>{{ payment.createdBy}}</span>
         </div>
         <div class="d-flex justify-content-between">
           <p>Payment Currency:</p>
@@ -722,7 +724,7 @@
         </div>
         <div class="d-flex justify-content-between">
           <p>Payment Time:</p>
-          <span>{{ payment.payment.value.LastUpdatedAt| date : " hh:mm a"}}</span>
+          <span>{{ payment.createdAt| date : " hh:mm a"}}</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
