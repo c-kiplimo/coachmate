@@ -88,7 +88,7 @@
                 style="color: green"></i> Today's Sessions</a>
           </li>
         </div>
-        <div class="row justify-content-center" [@fadeIn] style="height: 180px;">
+        <div class="row justify-content-center d-none d-lg-block" [@fadeIn] style="height: 180px;">
           <table class="table" *ngIf="todaysSessions?.length">
             <thead>
               <th>Name</th>
@@ -133,10 +133,68 @@
             </p>
           </div>
         </div>
+
+        <div class="show-sm">
+          <div class="d-flex justify-content-end mt-2 mb-2">
+            <div>
+              <button type="button" routerLink="/addSession" class="btn btn-outline-success">
+                    <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-3 pb-2 listing-item"
+                *ngFor="let session of todaysSessions  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                [routerLink]="['/sessionView', session.id]">
+
+
+                <div class="d-flex justify-content-between">
+                  <h4 class="farmer" [routerLink]="['/sessionView', session.id]">
+                    {{ session?.name | titlecase }}
+                  </h4>
+
+                  <span class="no-word-break">{{ session?.sessionVenue | titlecase }}
+                    <a [routerLink]="['/sessionView', session.id]"><i class="fa fa-angle-right"></i></a>
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    {{ session?.clientFullName | titlecase }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0" *ngIf="session?.sessionSchedulesSessionDate">
+                    {{ session?.sessionSchedulesSessionDate }}
+                  </span>
+                  <span class="customer-name" class="mb-0" *ngIf="!session?.sessionSchedulesSessionDate">
+                    {{ session?.sessionDate }}
+                  </span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="customer-name" class="mb-0">
+                    {{ session?.sessionSchedulesStartTime + ' - ' + session?.sessionSchedulesEndTime }}
+                  </span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="badge" [ngClass]="{
+                    'badge-success': session.sessionStatus === 'CONFIRMED',
+                    'badge-danger': session.sessionStatus === 'CANCELLED',
+                    'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                  }">{{ session.sessionStatus }}</span>
+                </div>
+          </div>
+
+          <div class="donut-wrapper" *ngIf="loading">
+                <div class="donut multi"></div>
+          </div>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !todaysSessions?.length">
+                <h2 class="text-muted mt-5">No Sessions Today.</h2>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
 <div class="row">
@@ -256,7 +314,7 @@
                 <div class="d-flex justify-content-between mt-2 mb-2">
                   <h3></h3>
                   <div>
-                    <button type="button" routerLink="/addSession" class="btn btn-success">
+                    <button type="button" routerLink="/addSession" class="btn btn-outline-success">
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
@@ -282,8 +340,11 @@
                       {{ session?.clientFullName | titlecase }}</span>
                   </div>
                   <div class="d-flex justify-content-between mb-2">
-                    <span class="customer-name" class="mb-0">
+                    <span class="customer-name" class="mb-0" *ngIf="session?.sessionSchedulesSessionDate">
                       {{ session?.sessionSchedulesSessionDate }}
+                    </span>
+                    <span class="customer-name" class="mb-0" *ngIf="!session?.sessionSchedulesSessionDate">
+                      {{ session?.sessionDate }}
                     </span>
                   </div>
                   <div class="d-flex justify-content-between mb-2">
@@ -361,6 +422,64 @@
                 <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
                   No Contracts Found.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="show-sm">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between mt-2 mb-2">
+                  <h3></h3>
+                  <div>
+                    <button type="button" routerLink="/add-contract" class="btn btn-outline-success">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+          
+                <div class="pt-3 pb-2 listing-item"
+                  *ngFor="let contract of contracts  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+                  [routerLink]="['/contractDetail/', contract.id]">
+          
+                  <div class="d-flex justify-content-between">
+                    <h4 class="farmer" [routerLink]="['/contractDetail/', contract.id]">
+                      {{ contract.coachingTopic | titlecase }}
+                    </h4>
+          
+                    <span class="no-word-break">{{ contract.coachingCategory | titlecase }}
+                      <a [routerLink]="['/contractDetail/', contract.id]"><i class="fa fa-angle-right"></i></a>
+                    </span>
+                  </div>
+          
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="customer-name" class="mb-0"><i class="fa-solid fa-user" style="color: #078d20;"></i>
+                      {{ contract.clientFullName | titlecase }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="customer-name" class="mb-0">
+                      <i class="fa-regular fa-calendar-days" style="color: #078d20;"></i>
+                      {{ contract.startDate | date : "MMM d, y" }} - {{ contract.endDate | date : "MMM d, y" }}
+                    </span>
+                  </div>
+          
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="badge" [ngClass]="{
+                      'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+                      'badge-info': contract?.contractStatus === 'ONGOING',
+                      'badge-primary': contract?.contractStatus === 'NEW'
+                  }">{{ contract?.contractStatus }}</span>
+                  </div>
+                </div>
+          
+          
+                <div class="donut-wrapper" *ngIf="loading">
+                  <div class="donut multi"></div>
+                </div>
+                <div *ngIf="!loading && contracts?.length === 0">
+                  <h2 class="text-muted mt-5">No Contracts Found.</h2>
+                </div>
+          
               </div>
             </div>
           </div>
