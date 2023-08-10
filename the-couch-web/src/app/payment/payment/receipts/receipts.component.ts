@@ -51,6 +51,7 @@ statementPeriod = ['PER_MONTH','PER_6_MONTHS','PER_YEAR',]
 pageSize: number =15;
 totalElements: any;
 currentPage: string|number|undefined;
+today: Date = new Date();
 
   constructor(
     private clientService: ClientService,
@@ -71,6 +72,7 @@ currentPage: string|number|undefined;
 
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
+      this.clientId = this.user.clientId;
       this.getAllPayments(this.page);
 
     } else if (this.userRole == 'CLIENT') {
@@ -197,6 +199,21 @@ currentPage: string|number|undefined;
   //     }
   //   )
   // }
+
+  // TODO: retrieve client by id from payment and display in invoice
+  getClient(id: any) {
+    this.loading = true;
+    this.clientService.getOneClient(id).subscribe(
+      (response: any) => {
+        this.client = response.body;
+        this.loading = false;
+      },
+      (error: any) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
+  }
   
 
 

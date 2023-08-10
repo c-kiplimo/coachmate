@@ -105,7 +105,7 @@
     </div>
     <div class="row justify-content-end">
       <div *ngIf="sessions?.length <= contract?.noOfSessions" class="col-md-2">
-        <button type="button"  data-bs-toggle="modal" data-bs-target="#sessionModal" class="btn btn-outline-success">
+        <button type="button"  routerLink="/addSession" class="btn btn-outline-success">
           <i class="fa fa-plus"></i>Add Session
         </button>
       </div>
