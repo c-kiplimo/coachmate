@@ -92,8 +92,116 @@
   </div>
 </div>
 
+<div class="show-sm">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h3></h3>
+        <div>
+          <button type="button" routerLink="/add-contract" class="btn btn-outline-success">
+            <i class="fa fa-plus"></i> Add Contract
+          </button>
+        </div>
+      </div>
+
+      <div class="row" [@fadeIn]>
+        <div class="col-md-10 mb-2">
+          <div class="input-group">
+            <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+              aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+            <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllContracts(0)">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h5>Contracts</h5>
+        <div (click)="toggleFilters()">
+          Filters
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+            viewBox="0 0 16 16">
+            <path
+              d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="pt-3 pb-2 listing-item"
+        *ngFor="let contract of contracts  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+        [routerLink]="['/contractDetail/', contract.id]">
+
+        <div class="d-flex justify-content-between">
+          <h4 class="farmer" [routerLink]="['/contractDetail/', contract.id]">
+            {{ contract.coachingTopic | titlecase }}
+          </h4>
+
+          <span class="no-word-break">{{ contract.coachingCategory | titlecase }}
+            <a [routerLink]="['/contractDetail/', contract.id]"><i class="fa fa-angle-right"></i></a>
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0"><i class="fa-solid fa-user" style="color: #078d20;"></i>
+            {{ contract.clientFullName | titlecase }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            <i class="fa-regular fa-calendar-days" style="color: #078d20;"></i>
+            {{ contract.startDate | date : "MMM d, y" }} - {{ contract.endDate | date : "MMM d, y" }}
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-1">
+          <span class="badge" [ngClass]="{
+            'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
+            'badge-info': contract?.contractStatus === 'ONGOING',
+            'badge-primary': contract?.contractStatus === 'NEW'
+        }">{{ contract?.contractStatus }}</span>
+        </div>
+      </div>
+
+
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
+      </div>
+      <div *ngIf="!loading && contracts?.length === 0">
+        <h2 class="text-muted mt-5">No Contracts Found.</h2>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <br>
 <div class="text-center" *ngIf="totalElements > 15">
   <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+
+<!-- Panel -->
+<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
+
+  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+    <div class="add-options-panel-heading">
+      <h4>Filter status</h4>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+
+    <div class="mb-1 border-bottom">
+      <div class="add-filter-option" 
+        *ngFor="let status of contractStatuses;index as i" (click)="filters.status = status">
+        <span>{{status | titlecase}}</span>
+        <span class="checkbox-border">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="action-buttons mb-4">
+      <button class="btn btn-cancel" (click)="toggleFilters();resetStatuses()">Reset</button>
+      <button class="btn btn-outline-success" (click)="toggleFilters();getAllContracts(0)">Filter</button>
+    </div>
+  </div>
+
 </div>
 <br>
