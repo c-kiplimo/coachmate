@@ -1,3 +1,48 @@
+.quicklinks {
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.quicklinks h3 {
+    cursor: pointer;
+    border-radius: 10px;
+    width: 190px;
+    padding: 5px;
+
+
+    text-decoration: none;
+    background-color: #FAF9F8;
+    color: #0000009b;
+}
+
+.quicklinks h3:hover {
+    text-decoration: none;
+    background-color: #FAF9F8;
+    color: #ffffffdc;
+}
+
+
+.stats {
+    text-align: center;
+    justify-content: center;
+}
+
+.stats h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stats p {
+    text-align: center;
+}
+
+.faded {
+    color: #00000073;
+}
+
+
 .row-height {
     /* height: 150px; */
     margin: 10px;
@@ -5,6 +50,9 @@
 .top-cards {
     margin: 10px;
     width: 300px;
+}
+.fs-dashboard{
+ font-size: 0.95rem;
 }
 .listing-item {
     padding: 10px 0;
@@ -123,3 +171,6 @@
     font-weight: bold;
     }
     }
+
+
+   

@@ -78,6 +78,8 @@ import { TrainingsListComponent } from './coach-education/trainings-list/trainin
 import { AttachmentsComponent } from './components/attachments/attachments.component';
 import { CoachLogsService } from './services/coach-logs.service';
 import { CoachLogsComponent } from './components/coach-logs/coach-logs.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { TermAndConditionsOfUseComponent } from './term-and-conditions-of-use/term-and-conditions-of-use.component';
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -126,7 +128,9 @@ import { CoachLogsComponent } from './components/coach-logs/coach-logs.component
     NotificationsComponent,
     HeaderComponent,
     AttachmentsComponent,
-    CoachLogsComponent
+    CoachLogsComponent,
+    PrivacyPolicyComponent,
+    TermAndConditionsOfUseComponent
 
 
   ],

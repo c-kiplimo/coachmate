@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: coach-api
+  name: coach-api
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: "10290"
+    port: 10290
+    protocol: TCP
+    targetPort: 10290
+  selector:
+    service: coach-api
+  type: ClusterIP

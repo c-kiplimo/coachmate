@@ -35,8 +35,3 @@ spring:
 #      max-file-size: 10MB    # Set the maximum file size if needed
 #      max-request-size: 10MB  # Set the maximum request size if needed
 
-#logging:
-#  level:
-#    org.hibernate.SQL: info
-#    org.hibernate.type: trace
-#    com.natujenge.thecouch: info

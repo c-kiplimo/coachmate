@@ -18,79 +18,77 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-around">
-  <div class="row col-3">
+<div class="row d-flex justify-content-around">
+  <div class="col-md-4 col-sm-12">
     <div class="card">
       <div class="card-body">
         <!-- boards -->
-        <div class="row m-2">
-          <div class="row m-3" *ngIf="this.userRole == 'ORGANIZATION'">
-            <div class="col-3 text-center">
-              <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Coaches</h6>
-              <h3 class="card-text fw-bold">{{coaches.length}}</h3>
-            </div>
-            <div class="col-3 text-center">
-              <h6 class="card-title fw-semi-bold f-weight fs-6">Number of Clients</h6>
-              <h3 class="card-text fw-bold">{{clients.length}}</h3>
-            </div>
-          </div>
-  
-          <div class="row m-3" *ngIf="this.userRole == 'COACH'">
-            <div class="col-3 text-center">
-                <h6 class="card-title fw-semi-bold f-weight fs-6">Clients</h6>
-                <h3 class="card-text fw-bold">{{numberOfClients}}</h3>
-            </div>
-            <div class="col-3 text-center">
-                <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
-                <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-            </div>
-            <div class="col-3 text-center">
-                <h6 class="card-title fw-semi-bold f-weight fs-6">Sessions</h6>
-                <h3 class="card-text fw-bold">{{sessions?.length}}</h3>
-            </div>
-          </div>
-
-          <div class="row m-3" *ngIf="this.userRole == 'CLIENT'">
-            <div class="col-3 text-center">
-                <h6 class="card-title fw-semi-bold f-weight fs-6">Contracts</h6>
-                <h3 class="card-text fw-bold">{{numberOfContracts}}</h3>
-            </div>
-            <div class="col-3 text-center">
-                <h6 class="card-title fw-semi-bold f-weight fs-6">Sessions</h6>
-                <h3 class="card-text fw-bold">{{sessions?.length}}</h3>
-            </div>
-          </div>
-        </div>
-        
-        <!-- buttons -->
         <div class="row">
-            <div class="col-6 d-flex flex-column">
-              <button *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'" class="btn btn-outline-success m-1"
-                routerLink="/addCoach"><i class="fa fa-plus"></i> Add Coach</button>
-              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addclient"><i
-                class="fa fa-plus"></i> Add Client</button>
-              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/add-contract"><i
-                class="fa fa-plus"></i> Add
-                Contract</button>
-              <button *ngIf="this.userRole != 'CLIENT'" class="btn btn-outline-success m-1" routerLink="/addSession"><i
-                class="fa fa-plus"></i> Add Session</button>
-            </div>
+          <div class="col stats" *ngIf="this.userRole == 'ORGANIZATION'">
+            <p class="faded">Coaches</p>
+            <h2 class="card-title">{{ coaches?.length }}</h2>
+          </div>
+          <div class="col stats" *ngIf="this.userRole != 'CLIENT'">
+            <p class="faded">Clients</p>
+            <h2 class="card-title">{{ numberOfClients }}</h2>
+          </div>
+          <div class="col stats" *ngIf="this.userRole == 'CLIENT'">
+            <p class="faded">Contracts</p>
+            <h2 class="card-title">{{ numberOfContracts }}</h2>
+          </div>
+          <div class="col stats">
+            <p class="faded">Sessions</p>
+            <h2 class="card-title">{{ sessions?.length }}</h2>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col quicklinks">
+
+            <h3 class="badge badge-success" *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'"
+              [routerLink]="['/addclient']">
+              <span><i class="fa fa-plus"></i></span> Create a Coach
+            </h3>
+
+            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-client']"><span><i
+                  class="fa fa-plus"></i></span> Create a Client</h3>
+
+            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-contract']">
+              <span><i class="fa fa-plus"></i></span> Create a Contract
+            </h3>
+
+            <h3 class="badge badge-success" [routerLink]="['/addSession']">
+              <span><i class="fa fa-plus"></i></span> Create a Session
+            </h3>
+
+            <h3 class="badge badge-warning" *ngIf="this.userRole == 'CLIENT'"
+              [routerLink]="['/schedules']">
+              <span><i class="fa-solid fa-arrow-right"></i></span> Your Calendar
+            </h3>
+
+            <h3 class="badge badge-success" *ngIf="this.userRole == 'CLIENT'"
+            [routerLink]="['/payment']">
+            <span><i class="fa-solid fa-arrow-right"></i></span> Your Payments
+          </h3>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
-  <div class="col-8">
+  <div class="col-md-8 col-sm-12">
     <div class="col-md-12">
       <div class="card upcomingSessions">
         <div class="card-body d-flex justify-content-center">
           <li class="nav-item list-unstyled">
-            <a class="nav-link" [class.active]="true" id="home-tab-just" data-toggle="tab"
-              role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+            <a class="nav-link" [class.active]="true" id="home-tab-just" data-toggle="tab" role="tab"
+              aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
                 style="color: green"></i> Today's Sessions</a>
           </li>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" [@fadeIn] style="height: 180px;">
           <table class="table" *ngIf="todaysSessions?.length">
             <thead>
               <th>Name</th>
@@ -129,9 +127,11 @@
           <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !todaysSessions?.length">
-            No Sessions Today.
-          </p>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !todaysSessions?.length">
+            <p class="text-muted mt-5">
+              No Sessions Today.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -155,8 +155,8 @@
           <div class="col-md-7 col-sm-12">
             <!--Tabs-->
             <div class="d-none d-lg-block">
-              <ul *ngIf="userRole !== 'CLIENT'" class="nav nav-tabs md-tabs nav-justified" id="myTabJust"
-                role="tablist">
+              <!--*ngIf="userRole !== 'CLIENT'"-->
+              <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
                 <li class="nav-item" (click)="toggleTab('sessions')">
                   <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
                     role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
@@ -242,13 +242,15 @@
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
-                No Sessions Yet.
-              </p>
+              <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+                <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
+                  No Sessions Found.
+                </p>
+              </div>
             </div>
           </div>
 
-          <!-- <div class="show-sm">
+          <div class="show-sm">
             <div class="card">
               <div class="card-body">
                 <div class="d-flex justify-content-between mt-2 mb-2">
@@ -308,7 +310,7 @@
 
               </div>
             </div>
-          </div> -->
+          </div>
         </div>
 
         <div *ngIf="currentTab === 'contracts'" [@fadeIn]>
@@ -354,7 +356,11 @@
               </table>
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
-
+              </div>
+              <div class="d-flex justify-content-center" *ngIf="!loading && !contracts?.length">
+                <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
+                  No Contracts Found.
+                </p>
               </div>
             </div>
           </div>
@@ -364,7 +370,7 @@
     </div>
   </div>
 </div>
- 
+
 <div class="row" *ngIf="this.userRole == 'ORGANIZATION'">
   <div class="col-md-12">
     <div class="card upcomingSessions">
@@ -407,9 +413,15 @@
             </tr>
           </tbody>
         </table>
+        <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+          <div class="donut multi"></div>
+        </div>
+        <div class="d-flex justify-content-center" *ngIf="!loading && !coaches?.length">
+          <p class="text-muted mt-5" *ngIf="!loading && !coaches?.length">
+            No Coaches Found.
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-
