@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.*;
+import com.natujenge.thecouch.domain.enums.ContractStatus;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.domain.enums.SessionType;
 import com.natujenge.thecouch.domain.enums.SessionVenue;
@@ -81,6 +82,10 @@ public class SessionService {
         if (optionalSessionSchedules.isEmpty()) {
             log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
             throw new IllegalArgumentException("Session Slot no found!");
+        }
+        if (optionalContract.get().getContractStatus() == ContractStatus.NEW) {
+            log.warn("Contract with id {} is in NEW state", contractId);
+            throw new IllegalArgumentException("Contract is in not signed!");
         }
         // Client
         User client = optionalClient.get();

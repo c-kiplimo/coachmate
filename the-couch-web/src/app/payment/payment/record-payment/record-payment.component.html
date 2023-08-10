@@ -47,13 +47,7 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="extPaymentRef">External Payment Ref</label>
-            <input
-              class="form-control"
-              type="text"
-              id="extPaymentRef"
-              name="extPaymentRef"
-              [(ngModel)]="paymentForm.extPaymentRef"
-            />
+            <input class="form-control" type="text" id="extPaymentRef" name="extPaymentRef" [(ngModel)]="paymentForm.extPaymentRef" required/>
           </div>
           <div class="mb-3 col-md-12">
             <label for="paymentCurrency">Payment Currency</label>
@@ -102,7 +96,7 @@
         <label class="form-check-label" name="sendNotification" for="sendNotification">Send Notification to Client</label>
      </div> -->
 
-        <button type="submit" (click)="recordPayment()" type="submit" class="btn btn-outline-success mb-3 mt-2 p-2 text-center">
+        <button type="submit" (click)="recordPayment()" type="submit" class="btn btn-outline-success mb-3 mt-2 p-2 text-center" [disabled]="!paymentForm.extPaymentRef">
           Record
         </button>
       </form>

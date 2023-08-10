@@ -53,16 +53,24 @@
             </tr>
           </thead>
           <tbody class="list-container">
-            <tr
-              *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
-              <td *ngIf="this.userRole != 'CLIENT'">{{ payment?.clientFullName }}</td>
-              <td>{{ payment.amountDeposited }}</td>
-              <td>{{ payment.modeOfPayment }}</td>
-              <td>{{ payment.walletBalance }}</td>
-              <td>{{ payment.createdAt | date : "MMM d y" }}</td>
-              <td class="view">
-                <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="savePdf()"
-                    class="fa fa-download"></i></a>
+            <tr *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
+              <td *ngIf="this.userRole != 'CLIENT'" data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment?.clientFullName }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.amountDeposited }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.modeOfPayment }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.walletBalance }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.createdAt | date : "MMM d y" }}</td>
+              <td>
+                <!-- <div class="view">
+                  <i
+                    data-bs-toggle="modal"
+                    data-bs-target="#invoicemodal"
+                    (click)="viewInvoice(payment)"
+                    class="fa-solid fa-arrow-up-right-from-square"
+                  ></i>
+                </div> -->
+                <div class="view">
+                  <i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)" class="fa fa-download"></i>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -70,9 +78,9 @@
         <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
           <div class="donut multi"></div>
         </div>
-        <div class="d-flex justify-content-center" *ngIf="payments.length == 0 && !loading">
-          <p class="fw-semi-bold fs-5 f-weight">No payments found</p>
-        </div>
+        <p class="text-muted mt-5" *ngIf="!loading && !payments?.length">
+          No receipts Found.
+        </p>
       </div>
     </div>
   </div>
@@ -80,56 +88,56 @@
 
 <!-- invoice modal -->
 <div class="modal fade" id="invoicemodal" tabindex="-1" role="dialog" aria-labelledby="receiptModal" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <div class="row d-flex justify-content-end">
+          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="width: 300px; height: 200px; padding-top: 0%; margin-top: 0%"/>
+        </div>
+      </div>
       <div class="modal-body" id="invoice">
         <div class="m-2">
-          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo"
-            style="width: 300px; height: 200px; padding-top: 0%; margin-top: 0%" />
+          <div class="row">
+            <div class="d-flex justify-content-between">
+              <div class="col-3 d-flex flex-column">
+                <span class="title">Billed to</span>
+                <span class="title">{{payment?.clientFullName}}</span>
+              </div>
+              <div class="col-4 d-flex flex-column">
+                <div class="d-flex justify-content-between">
+                  <span>Payment Ref: </span>
+                  <span>{{payment?.extPaymentRef}}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Receipt Date: </span>
+                  <span>{{today | date : "MMM d y"}}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Payment Date: </span>
+                  <span>{{payment?.createdAt | date : "MMM d y"}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <div class="customer-details" *ngIf="payment">
-            <div class="d-flex justify-content-between">
-              <span class="title">payment No</span>
-              <span class="value">{{ payment.extPaymentRef }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Customer name</span>
-              <span class="value">{{ payment.client.firstName }}</span>
-            </div>
+          <hr>
+          <div class="row" *ngIf="payment">
             <div class="d-flex justify-content-between">
               <span class="title">Mode of payment</span>
               <span class="value">{{ payment.modeOfPayment }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span class="title">paymented on</span>
-              <span class="value">{{
-                payment.createdAt | date : "MMM d y"
-              }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Description</span>
-              <span class="value">{{ payment.description }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">payment amount</span>
-              <span class="value">{{ payment.amountBilled }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
               <span class="title">Amount paid</span>
               <span class="value">{{ payment.amountDeposited }}</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="title">Wallet Balance</span>
-              <span class="value">{{ payment.walletBalance }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="close btn-cancel" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button class="download btn-outline-success" (click)="savePdf()">
+        <button class="btn btn-outline-success" (click)="savePdf()">
           <i class="fa fa-download"></i>
           Download
         </button>
