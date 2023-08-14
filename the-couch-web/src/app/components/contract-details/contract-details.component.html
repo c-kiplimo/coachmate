@@ -133,8 +133,8 @@
 
           <td>{{ session?.sessionSchedulesStartTime }}</td>
           <td>{{ session?.sessionSchedulesEndTime }}</td>
-          <td class="actions">
-            <i (click)="navigateToSessionView(session.id)" class="fa-solid fa-arrow-up-right-from-square"></i>
+          <td class="actions action-cursor">
+            <i (click)="navigateToSessionView(session.id)" class="fas fa-external-link-alt" style="color: #078d20;"></i>
           </td>
         </tr>
       </tbody>
@@ -198,7 +198,7 @@
             <span class="badge" [ngClass]="{
               'badge-success': session.sessionStatus === 'CONFIRMED',
               'badge-danger': session.sessionStatus === 'CANCELLED',
-              'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+              'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'COMPLETED'
             }">{{ session?.sessionStatus }}</span>
           </div>
         </div>

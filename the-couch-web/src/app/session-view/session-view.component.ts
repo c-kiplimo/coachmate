@@ -270,9 +270,9 @@ throw new Error('Method not implemented.');
     } else if (currentstatus === 'CANCELLED') {
       this.showStatus = "CANCELLED";
       this.status = "CANCELLED";
-    } else if (currentstatus === 'CONDUCTED') {
-      this.showStatus = "CONDUCTED";
-      this.status = "CONDUCTED";
+    } else if (currentstatus === 'COMPLETED') {
+      this.showStatus = "COMPLETED";
+      this.status = "COMPLETED";
     }
 
   }
@@ -323,7 +323,7 @@ throw new Error('Method not implemented.');
       );
     }
 
-    if (this.status === "CONDUCTED") {
+    if (this.status === "COMPLETED") {
       this.clientService.changeSession(this.sessionId, data).subscribe(
         (res) => {
           console.log(res);

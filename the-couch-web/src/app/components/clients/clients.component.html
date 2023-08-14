@@ -186,13 +186,12 @@
 
   <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
     <div class="add-options-panel-heading">
-      <h4>Filter options</h4>
-      <span (click)="toggleFilters()">Cancel</span>
+      <h4>Filter Status</h4>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
 
 
     <div class="mb-1 border-bottom">
-      <h6 class="filter-section-title">Filter by status</h6>
       <div class="add-filter-option" 
         *ngFor="let status of clientStatuses;index as i" (click)="filters.status = status">
         <span>{{status | titlecase}}</span>
@@ -203,8 +202,8 @@
     </div>
 
     <div class="action-buttons mb-4">
-      <button class="btn btn-cancel" (click)="resetStatuses()">Reset</button>
-      <button class="btn btn-submit" (click)="toggleFilters();getClients(0)">Submit</button>
+      <button class="btn btn-cancel" (click)="toggleFilters();resetStatuses()">Reset</button>
+      <button class="btn btn-outline-success" (click)="toggleFilters();getClients(0)">Filter</button>
     </div>
   </div>
 

@@ -217,7 +217,7 @@
                       <span class="badge" [ngClass]="{
                   'badge-success': session.sessionStatus === 'CONFIRMED',
                   'badge-danger': session.sessionStatus === 'CANCELLED',
-                  'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+                  'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'COMPLETED'
                 }">{{ session.sessionStatus }}</span>
                     </td>
                     <td class="view">
@@ -280,7 +280,7 @@
                   <span class="badge" [ngClass]="{
                     'badge-success': session?.sessionStatus === 'CONFIRMED',
                     'badge-danger': session?.sessionStatus === 'CANCELLED',
-                    'badge-primary': session?.sessionStatus === 'NEW' || session?.sessionStatus === 'CONDUCTED'
+                    'badge-primary': session?.sessionStatus === 'NEW' || session?.sessionStatus === 'COMPLETED'
                 }">{{ session.sessionStatus }}</span>
                 </div>
               </div>

@@ -38,7 +38,7 @@
                 </li>
                 <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                   <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#conductedsessionModal"
-                    (click)="statusState('CONDUCTED')">conducted</a>
+                    (click)="statusState('COMPLETED')">Complete</a>
                 </li>
                 <li *ngIf="this.userRole == 'COACH'" class="dropdown-item">
                   <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancelsessionModal"
@@ -103,7 +103,7 @@
               <span _ngcontent-tvo-c211="" class="badge ng-tns-c211-5" [ngClass]="{
                 'badge-success': sessions?.sessionStatus === 'CONFIRMED',
                 'badge-danger': sessions?.sessionStatus === 'CANCELLED',
-                'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'CONDUCTED'
+                'badge-primary': sessions?.sessionStatus === 'NEW' || sessions?.sessionStatus === 'COMPLETED'
               }">
                 {{ sessions?.sessionStatus }}
               </span>
@@ -487,7 +487,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">
-          set session as conducted
+          set session as completed
         </h1>
 
         <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

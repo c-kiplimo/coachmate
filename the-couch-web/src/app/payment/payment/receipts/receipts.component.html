@@ -4,40 +4,42 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-3">
-    <div class="filters-section">
-      <div class="wrap">
-        <select class="form-control" name="codes" (change)="filterByStatus($event)">
-          <option value="" selected>Filter By Period</option>
-          <option value="PER_MONTH">1 month</option>
-          <option value="PER_6_MONTHS">6 months</option>
-          <option value="PER_YEAR">1 year</option>
-        </select>
+<div class="d-none d-lg-block">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="filters-section">
+        <div class="wrap">
+          <select class="form-control" name="codes" (change)="filterByStatus($event)">
+            <option value="" selected>Filter By Period</option>
+            <option value="PER_MONTH">1 month</option>
+            <option value="PER_6_MONTHS">6 months</option>
+            <option value="PER_YEAR">1 year</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" aria-describedby="button-addon2" [(ngModel)]="filters.search"
-        placeholder="Client Name. Phone or Email" *ngIf="this.userRole != 'CLIENT'" />
-      <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllPayments(0)"
+  
+    <div class="col-md-4">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" aria-describedby="button-addon2" [(ngModel)]="filters.search"
+          placeholder="Client Name. Phone or Email" *ngIf="this.userRole != 'CLIENT'" />
+        <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllPayments(0)"
+          *ngIf="this.userRole != 'CLIENT'">
+          Search
+        </button>
+      </div>
+    </div>
+  
+    <div class="col-md-2">
+      <button type="button" routerLink="/record-payment" class="btn btn-outline-success"
         *ngIf="this.userRole != 'CLIENT'">
-        Search
+        <i class="fa fa-plus"></i>Add Payment
       </button>
     </div>
   </div>
-
-  <div class="col-md-2">
-    <button type="button" routerLink="/record-payment" class="btn btn-outline-success"
-      *ngIf="this.userRole != 'CLIENT'">
-      <i class="fa fa-plus"></i>Add Payment
-    </button>
-  </div>
 </div>
 
-<div class="row">
+<div class="row d-none d-lg-block">
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
@@ -81,6 +83,80 @@
         <p class="text-muted mt-5" *ngIf="!loading && !payments?.length">
           No receipts Found.
         </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="show-sm">
+  <div class="card">
+    <div class="card-body">
+      <div class="row" [@fadeIn]>
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-describedby="button-addon2" [(ngModel)]="filters.search"
+              placeholder="Client Name. Phone or Email" *ngIf="this.userRole != 'CLIENT'" />
+            <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="getAllPayments(0)"
+              *ngIf="this.userRole != 'CLIENT'">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-2 mb-2">
+        <div (click)="toggleFilters()">
+          Filters
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+            viewBox="0 0 16 16">
+            <path
+              d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-end mt-2 mb-2">
+            <div>
+              <button type="button" routerLink="/record-payment" class="btn btn-outline-success" *ngIf="this.userRole != 'CLIENT'">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+  
+          <div class="pt-3 pb-2 listing-item" *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}"
+            data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
+
+            <div class="d-flex justify-content-between">
+              <h4 class="farmer" *ngIf="this.userRole != 'CLIENT'">
+                {{ payment?.clientFullName | titlecase }}
+              </h4>
+  
+              <span class="no-word-break">{{ payment?.modeOfPayment | titlecase }}
+                <a data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)"><i class="fa fa-angle-right"></i></a>
+              </span>
+            </div>
+  
+            <div class="d-flex justify-content-between mb-2">
+              <span class="customer-name" class="mb-0">
+                {{ payment?.amountDeposited }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="customer-name" class="mb-0">
+                {{ payment?.createdAt | date : "MMM d y"  }}
+              </span>
+            </div>
+          </div>
+  
+          <div class="donut-wrapper" *ngIf="loading">
+            <div class="donut multi"></div>
+          </div>
+          <div *ngIf="!loading && !payments?.length">
+            <h2 class="text-muted mt-5">No Payments Found.</h2>
+          </div>
+  
+        </div>
       </div>
     </div>
   </div>
@@ -144,4 +220,32 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- filter modal  -->
+<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
+
+  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+    <div class="add-options-panel-heading">
+      <h4>Filter Status</h4>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+
+    <div class="mb-1 border-bottom">
+      <div class="add-filter-option" *ngFor="let period of statementPeriod;index as i"
+        (click)="filters.status = period">
+        <span>{{period | titlecase}}</span>
+        <span class="checkbox-border">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':period === filters.status}"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="action-buttons mb-4">
+      <button class="btn btn-cancel" (click)="toggleFilters();resetPeriod()">Reset</button>
+      <button class="btn btn-outline-success" (click)="toggleFilters();filterByStatus(0)">Filter</button>
+    </div>
+  </div>
+
 </div>

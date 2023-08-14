@@ -10,8 +10,6 @@ import com.natujenge.thecouch.service.mapper.SessionMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.NotificationHelper;
 import com.natujenge.thecouch.web.rest.dto.SessionDTO;
-import com.natujenge.thecouch.web.rest.request.SessionRequest;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -27,7 +25,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -234,14 +231,14 @@ public class SessionService {
             throw new IllegalStateException("Session is in Cancelled State");
         } else if (Objects.equals(sessionStatus, SessionStatus.CONFIRMED)) {
             session.setSessionStatus(SessionStatus.CONFIRMED);
-        } else if (Objects.equals(sessionStatus, SessionStatus.CONDUCTED)) {
-            session.setSessionStatus(SessionStatus.CONDUCTED);
+        } else if (Objects.equals(sessionStatus, SessionStatus.COMPLETED)) {
+            session.setSessionStatus(SessionStatus.COMPLETED);
         } else if (Objects.equals(sessionStatus, SessionStatus.CANCELLED)) {
             session.setSessionStatus(SessionStatus.CANCELLED);
         } else if (session.getSessionStatus() == SessionStatus.CONFIRMED) {
             session.setSessionStatus(SessionStatus.CONFIRMED);
-        } else if (session.getSessionStatus() == SessionStatus.CONDUCTED) {
-            session.setSessionStatus(SessionStatus.CONDUCTED);
+        } else if (session.getSessionStatus() == SessionStatus.COMPLETED) {
+            session.setSessionStatus(SessionStatus.COMPLETED);
         }
         session = sessionRepository.save(session);
         log.info("Session with id {} changed status to {}", id, sessionStatus);
