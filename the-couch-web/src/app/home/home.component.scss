@@ -88,7 +88,7 @@ nav,
 }
 .logo-img {
   height: 130px;
-
+ 
 }
 
 
@@ -97,6 +97,9 @@ nav,
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+}
+.transparent-logo {
+  transition: opacity 0.5s ease;
 }
 
 .abt-section-img {

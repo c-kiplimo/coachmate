@@ -95,7 +95,7 @@
   </div>
 <br>
 
-  <div class="card card-body">
+  <div class="card card-body d-none d-lg-block">
     <div class="card-body d-flex justify-content-center">
       <li class="nav-item list-unstyled">
         <a class="nav-link" [class.active]="true" id="home-tab-just" data-toggle="tab"
@@ -145,6 +145,74 @@
     <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
       No sessions Found.
     </p>
+  </div>
+
+  <div class="show-sm">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-body d-flex justify-content-center">
+          <li class="nav-item list-unstyled">
+            <a class="nav-link" [class.active]="true" id="home-tab-just" data-toggle="tab"
+              role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                style="color: green"></i> Sessions </a>
+          </li>
+        </div>
+        <div class="d-flex justify-content-end mt-2 mb-2">
+          <div *ngIf="sessions?.length <= contract?.noOfSessions" class="col-md-2">
+            <button type="button"  routerLink="/addSession" class="btn btn-outline-success">
+              <i class="fa fa-plus"></i>Add Session
+            </button>
+          </div>
+        </div>
+  
+        <div class="pt-3 pb-2 listing-item" *ngFor="let session of sessions | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements}"
+          (click)="navigateToSessionView(session.id)">
+  
+          <div class="d-flex justify-content-between">
+            <h4 class="farmer" (click)="navigateToSessionView(session.id)">
+              {{ session?.name | titlecase }}
+            </h4>
+  
+            <span class="no-word-break">{{ session?.sessionType | titlecase }}
+              <a (click)="navigateToSessionView(session.id)"><i class="fa fa-angle-right"></i></a>
+            </span>
+          </div>
+  
+          <div class="d-flex justify-content-between mb-2">
+            <span class="customer-name" class="mb-0"><i class="fa fa-map-marker-alt" style="color: #078d20;"></i>
+              {{ session?.sessionVenue| titlecase }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="customer-name" class="mb-0" *ngIf="session?.sessionSchedulesSessionDate">
+              <i class="fa-regular fa-calendar-days" style="color: #078d20;"></i>
+              {{ session?.sessionSchedulesSessionDate}}, {{session?.sessionSchedulesStartTime}} - {{session?.sessionSchedulesEndTime}}
+            </span>
+            <span class="customer-name" class="mb-0" *ngIf="!session?.sessionSchedulesSessionDate">
+              <i class="fa-regular fa-calendar-days" style="color: #078d20;"></i>
+              {{ session?.sessionDate}}, {{session?.sessionSchedulesStartTime}} - {{session?.sessionSchedulesEndTime}}
+            </span>
+          </div>
+  
+          <div class="d-flex justify-content-between mb-1">
+            <span class="badge" [ngClass]="{
+              'badge-success': session.sessionStatus === 'CONFIRMED',
+              'badge-danger': session.sessionStatus === 'CANCELLED',
+              'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'CONDUCTED'
+            }">{{ session?.sessionStatus }}</span>
+          </div>
+        </div>
+  
+  
+        <div class="donut-wrapper" *ngIf="loading">
+          <div class="donut multi"></div>
+        </div>
+        <div *ngIf="!loading && sessions?.length === 0">
+          <h2 class="text-muted mt-5">No Sessions Found.</h2>
+        </div>
+  
+      </div>
+    </div>
   </div>
 
   <!-- Modal for adding a session -->

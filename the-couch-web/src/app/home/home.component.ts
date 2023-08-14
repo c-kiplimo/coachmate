@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   faChevronLeft,
@@ -63,6 +63,17 @@ export class HomeComponent implements OnInit {
     sessionStorage.removeItem('businessName');
     sessionStorage.removeItem('user');
   }
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const scrollPosition = window.scrollY;
+    const maxScroll = 200; // Adjust as needed
+    const opacity = 1 - (scrollPosition / maxScroll);
+
+    const logoImgElement = document.querySelector('.logo-img') as HTMLElement;
+    if (logoImgElement) {
+      logoImgElement.style.opacity = opacity.toFixed(2);
+    }
+  }
   contactUsMessage() {
     console.log(this.contactForm.value);
 
@@ -83,5 +94,7 @@ export class HomeComponent implements OnInit {
       },
     });
   }
+
+  
 
 }

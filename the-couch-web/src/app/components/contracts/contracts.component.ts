@@ -42,6 +42,8 @@ export class contractComponent implements OnInit {
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
+  showFilters: boolean = false;
+  contractStatuses: any = ['SIGNED', 'NEW', 'FINISHED', 'ONGOING']
   
 
   constructor(private clientService: ClientService,
@@ -129,6 +131,15 @@ export class contractComponent implements OnInit {
   onTableDataChange(event: any) {
     this.page = event;
     this.getAllContracts(this.page);
+  }
+
+  resetStatuses(): void {
+    this.filters.status = '';
+    this.getAllContracts(this.page);
+  }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
   }
 
 }
