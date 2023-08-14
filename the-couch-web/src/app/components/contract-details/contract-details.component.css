@@ -155,10 +155,6 @@
     color: rgb(171, 19, 231);
     border-radius: 15px;
   } 
-  /* .badge-success {
-    background-color: green !important;
+  .action-cursor {
+    cursor: pointer;
   }
-  .badge-danger {
-    background-color: red !important;
-  } */ 
-  

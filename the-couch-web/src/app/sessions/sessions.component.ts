@@ -56,7 +56,7 @@ export class SessionsComponent implements OnInit {
 
   page: number = 0;
   pageSize: number = 15;
-  sessionStatuses = ['CONFIRMED', 'CANCELLED', 'CONDUCTED']
+  sessionStatuses = ['CONFIRMED', 'CANCELLED', 'COMPLETED']
   totalElements: any;
 
   constructor(private apiService: ClientService,
@@ -149,7 +149,7 @@ export class SessionsComponent implements OnInit {
   }
   
   resetStatuses(): void {
-    this.filters.status = 'CONFIRMED';
-    this.getAllSessions(0);
+    this.filters.status = '';
+    this.getAllSessions(this.page);
   }
 }

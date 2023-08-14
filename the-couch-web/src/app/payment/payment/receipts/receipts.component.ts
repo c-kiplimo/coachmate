@@ -95,7 +95,7 @@ today: Date = new Date();
     this.getAllPayments(this.page);
   }
   resetPeriod(): void {
-    this.filters.period = 'PER_MONTH';
+    this.filters.period = '';
     this.getAllPayments(this.page);
   }
 
