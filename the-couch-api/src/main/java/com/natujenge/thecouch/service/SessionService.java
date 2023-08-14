@@ -46,8 +46,9 @@ public class SessionService {
     private final SessionSchedulesService sessionSchedulesService;
     private final UserRepository userRepository;
     private final SessionMapper sessionMapper;
+    private final  CoachingLogService coachingLogService;
 
-    public SessionService(JdbcTemplate jdbcTemplate, SessionRepository sessionRepository, ContractRepository contractRepository, OrganizationRepository organizationRepository, SessionSchedulesRepository sessionSchedulesRepository, NotificationServiceHTTPClient notificationServiceHTTPClient, SessionSchedulesService sessionSchedulesService, UserRepository userRepository, SessionMapper sessionMapper) {
+    public SessionService(JdbcTemplate jdbcTemplate, SessionRepository sessionRepository, ContractRepository contractRepository, OrganizationRepository organizationRepository, SessionSchedulesRepository sessionSchedulesRepository, NotificationServiceHTTPClient notificationServiceHTTPClient, SessionSchedulesService sessionSchedulesService, UserRepository userRepository, SessionMapper sessionMapper, CoachingLogService coachingLogService) {
         this.jdbcTemplate = jdbcTemplate;
         this.sessionRepository = sessionRepository;
         this.contractRepository = contractRepository;
@@ -57,6 +58,7 @@ public class SessionService {
         this.sessionSchedulesService = sessionSchedulesService;
         this.userRepository = userRepository;
         this.sessionMapper = sessionMapper;
+        this.coachingLogService = coachingLogService;
     }
 
     //CREATE NEW SESSION
@@ -233,6 +235,7 @@ public class SessionService {
             session.setSessionStatus(SessionStatus.CONFIRMED);
         } else if (Objects.equals(sessionStatus, SessionStatus.COMPLETED)) {
             session.setSessionStatus(SessionStatus.COMPLETED);
+            updateCoachLog(session);
         } else if (Objects.equals(sessionStatus, SessionStatus.CANCELLED)) {
             session.setSessionStatus(SessionStatus.CANCELLED);
         } else if (session.getSessionStatus() == SessionStatus.CONFIRMED) {
@@ -341,6 +344,19 @@ public class SessionService {
 
             return builder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    private void updateCoachLog(Session session) {
+        /*
+        * Trigger the update of the coach log for the session in the coaching log service
+        * Parameters:
+        *  session - the session to update the coach log for
+        * Returns: void
+        * The session service layer cannot access coaching repository directly
+        * thus the need to delegate the update of the coach log to the coaching log service
+        * */
+        log.info("Updating coach log for session {}", session.getId());
+        coachingLogService.updateCoachLog(session);
     }
 
 }
