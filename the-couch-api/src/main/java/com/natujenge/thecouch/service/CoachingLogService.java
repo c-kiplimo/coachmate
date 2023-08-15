@@ -1,6 +1,7 @@
 package com.natujenge.thecouch.service;
 
 import com.natujenge.thecouch.domain.CoachingLog;
+import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.repository.CoachingLogRepository;
 import com.natujenge.thecouch.repository.UserRepository;
@@ -15,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -91,5 +95,46 @@ public class CoachingLogService {
     public void deleteCoachingLogs(List<Long> coachingLogIds, Long coachId) {
         log.info("Request to delete coaching logs");
         coachingLogRepository.deleteAllByIdInAndCoachId(coachingLogIds, coachId);
+    }
+
+    public void updateCoachLog(Session session) {
+        /*
+        Creates a coaching log from a session once the session is marked as COMPLETED
+        params: session
+           extract the following from the session
+              client details, coach details, session date, session time, paid hours
+           and sets the details to the coaching log
+        returns: void
+        * */
+        CoachingLog coachingLog = new CoachingLog();
+        coachingLog.setClientName(session.getName());
+        coachingLog.setClientEmail(session.getClient().getEmail());
+        coachingLog.setNoInGroup(session.getSessionNumber());
+        coachingLog.setLastUpdatedBy(session.getCoach().getFullName());
+        if (session.getSessionSchedules().getSessionDate() != null) {
+            coachingLog.setStartDate(Date.valueOf(session.getSessionSchedules().getSessionDate()));
+            coachingLog.setEndDate(Date.valueOf(LocalDateTime.now().toLocalDate()));
+        } else {
+            coachingLog.setStartDate(Date.valueOf(session.getSessionDate()));
+            coachingLog.setEndDate(Date.valueOf(session.getSessionDate()));
+            // TODO: set paid hours over recurring sessions
+        }
+        coachingLog.setPaidHours(getTimeDelta(session.getSessionSchedules().getEndTime(), session.getSessionSchedules().getStartTime()));
+
+        coachingLog.setCreatedBy(session.getCoach().getFullName());
+        coachingLog.setCreatedAt(LocalDateTime.now());
+        coachingLog.setCoach(session.getCoach());
+
+        log.info("Coaching log to be saved: {}", coachingLog);
+        coachingLogRepository.save(coachingLog);
+    }
+
+    private Long getTimeDelta(LocalTime endTime, LocalTime startTime) {
+        /*
+        * calculates the time difference between two LocalTime objects and returns the difference in hours
+        * params: endTime, startTime
+        * returns: Long (hours)
+        * */
+        return ChronoUnit.MINUTES.between(startTime, endTime) / 60;
     }
 }

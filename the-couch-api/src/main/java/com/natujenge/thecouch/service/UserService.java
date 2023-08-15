@@ -322,7 +322,7 @@ public class UserService implements UserDetailsService {
         clientWallet.setCreatedBy(userDetails.getFullName());
         clientWallet.setClient(saveClient);
         clientWallet.setWalletBalance(Float.valueOf(0));
-        clientWallet.setCoach(saveClient.getAddedBy()); //TODO: change to coach
+        clientWallet.setCoach(saveClient.getAddedBy());
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
 
@@ -342,7 +342,7 @@ public class UserService implements UserDetailsService {
             clientBillingAccount.setOrganization(organization);
         }
         clientBillingAccount.setClient(saveClient);
-        clientBillingAccount.setCoach(saveClient.getAddedBy()); //TODO: change to coach
+        clientBillingAccount.setCoach(saveClient.getAddedBy());
         clientBillingAccount.setAmountBilled((float) 0);
         clientBillingAccount.setCreatedBy(userDetails.getMsisdn());
         return clientBillingAccount;
