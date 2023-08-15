@@ -219,6 +219,11 @@
                 <span class="customer-name" class="mb-0">
                   Overall: {{ feedback.overallScore }}
                 </span>
+                <span class="no-word-break">
+                  <a data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)">
+                    <i class="far fa-comment-alt"></i>
+                  </a>
+                </span>
               </div>
               <div class="d-flex justify-content-between mb-2">
               <span class="customer-name">
@@ -230,11 +235,7 @@
                 <span class="customer-name" class="mb-0">
                   Clarification: {{ feedback.clarificationScore }}
                 </span>
-                <span class="no-word-break">
-                  <a data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)">
-                    <i class="far fa-comment-alt"></i>
-                  </a>
-                </span>
+               
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span class="customer-name" class="mb-0">
