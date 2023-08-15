@@ -215,12 +215,13 @@
           <div class="show-sm">
             <div class="pt-3 pb-2 listing-item" *ngFor="let feedback of feedbacks">
 
-              <div class="d-flex justify-content-between">
-                <h4 class="farmer" class="mb-0">
-                  Over all: {{ feedback.overallScore }}
-                </h4>
-
-                <span class="no-word-break">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="customer-name" class="mb-0">
+                  Overall: {{ feedback.overallScore }}
+                </span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+              <span class="customer-name">
                   Emotional Intelligence: {{ feedback.emotionalIntelligenceScore }}
                 </span>
               </div>
@@ -264,7 +265,7 @@
 
 
         <div *ngIf="currentTab === 'attachments'" [@fadeIn]>
-
+        <div class="d-none d-lg-block">
           <div class="d-flex justify-content-end">
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#attachmentModal">
               <i class="fa fa-plus"></i> Attachments
@@ -296,43 +297,45 @@
             </div>
           </div>
         </div>
+      
 
         <div class="show-sm">
+          <!-- Loop through the list of attachments and display their details -->
           <div class="pt-3 pb-2 listing-item" *ngFor="let attachment of attachments">
             <div class="d-flex justify-content-between">
-              <h4 class="farmer" class="mb-0">
-                Attachment No: {{ attachment.attachmentNo }}
-              </h4>
+              <!-- Display Attachment Date -->
+              <h4 class="farmer mb-0">Attachment Date:</h4>
+              <span class="customer-name">{{ attachment.createdAt | date : "MMM d, y" }}</span>
             </div>
-
-            <div class="d-flex justify-content-between mb-2">
-              <span class="customer-name" class="mb-0">
-                Attachment date: {{ attachment.createdAt | date : "MMM d, y " }}
-              </span>
+        
+            <div class="d-flex flex-column mt-2">
+              <!-- Display Attachment Details -->
+              <h4 class="farmer mb-0">Details:</h4>
+              <span class="customer-name">{{ attachment.link }}</span>
             </div>
-
-            <div class="d-flex justify-content-between mb-2">
-              <span class="customer-name" class="mb-0">
-                Details: {{ attachment.links }}
-              </span>
-            </div>
-
-            <div class="d-flex justify-content-between mb-1">
-              <span class="customer-name" class="mb-0">
+        
+            <div class="d-flex justify-content-between mt-2">
+              <!-- Button to view attachment details in a modal -->
+              <span class="customer-name">
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#attachmentDetailModal">
                   View
                 </button>
               </span>
             </div>
           </div>
-
-          <div class="donut-wrapper" *ngIf="loading">
+        
+          <!-- Loading indicator -->
+          <div class="donut-wrapper mt-3" *ngIf="loading">
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !attachments.length">
-            No attachment Found.
+        
+          <!-- No attachment found message -->
+          <p class="text-muted mt-4" *ngIf="!loading && !attachments.length">
+            No attachments found.
           </p>
         </div>
+        
+        
       </div>
     </div>
   </div>
@@ -735,6 +738,31 @@
   </div>
 </div>
 
+
+<!-- attachment details modal -->
+<div class="modal fade" id="attachmentDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class=" d-flex  modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Attachments
+        </h1>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="feedback">
+        <div class="d-flex-column">
+          <span>{{ feedback.comments }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- add attachment modal -->
 <div class="modal fade" id="attachmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -793,31 +821,6 @@
 
       </form>
 
-    </div>
-  </div>
-</div>
-
-<!-- attachment details modal -->
-<div class="modal fade" id="attachmentDetailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class=" d-flex  modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Attachments
-        </h1>
-
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" *ngIf="feedback">
-        <div class="d-flex-column">
-          <span>{{ feedback.comments }}</span>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
     </div>
   </div>
 </div>
