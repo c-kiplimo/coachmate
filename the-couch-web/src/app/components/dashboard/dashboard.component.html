@@ -46,11 +46,11 @@
           <div class="col quicklinks">
 
             <h3 class="badge badge-success" *ngIf="this.userRole != 'COACH' && this.userRole != 'CLIENT'"
-              [routerLink]="['/addclient']">
+              [routerLink]="['/addCoach']">
               <span><i class="fa fa-plus"></i></span> Create a Coach
             </h3>
 
-            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-client']"><span><i
+            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/addClient']"><span><i
                   class="fa fa-plus"></i></span> Create a Client</h3>
 
             <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-contract']">
