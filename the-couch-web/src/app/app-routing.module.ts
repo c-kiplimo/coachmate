@@ -62,7 +62,7 @@ const routes: Routes = [
     component: CoachesComponent
   },
   {
-    path: 'addclient',
+    path: 'addClient',
     component: AddClientPageComponent
   },
   {
