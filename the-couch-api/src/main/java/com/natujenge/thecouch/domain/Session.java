@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class Session {
     @Enumerated(EnumType.STRING)
     private SessionStatus sessionStatus;
 
+//    private Long proBonoHours;
     private String attachments;
     private String notes;
     private String feedback;

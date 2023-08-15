@@ -165,10 +165,138 @@
 </div>
 
 <div class="show-sm">
+  <div class="row col-md-3 m-1">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Client Name" aria-label="Client name"
+        aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+      <button class="btn btn-outline-success" type="button" id="button-addon2"
+        (click)="getCoachingLogs(0)">Search</button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between m-1">
+    <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="fromExcel()">
+      <i class="fas fa-file-upload"></i> Upload from Excel
+    </button>
+    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCoachLogs">
+      <i class="fa fa-plus"></i> Add Coaching Log
+    </button>
+  </div>
+  <div class="row" *ngIf="uploadFromExcel">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <p></p>
+            <span class="close"><i class="fas fa-times" (click)="clearAndClose()"></i></span>
+          </div>
+          <!--Title-->
+          <div class="d-flex justify-content-center m-3">
+            <h4 class="card-title">Upload Excel file (.xlsx or .xls)</h4>
+          </div>
+          <!--accept excels only-->
+          <div class="d-flex justify-content-center m-3">
+            <input type="file" id="fileInput" class="file-upload-input" (change)="onFileChange($event)"
+              accept=".xlsx, .xls" />
+          </div>
+          <div class="d-flex justify-content-center m-3" *ngIf="showErrorMessage">
+            <!--error message-->
+            <p class="text-danger">Make sure you data is clean and try again!!!</p>
+          </div>
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+          <br />
+          <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
+            <h2 class="card-title">Preview</h2>
+          </div>
+          <table class="table" *ngIf="excelData?.length > 0">
+            <!--show excelData here-->
+            <thead>
+              <tr>
+                <th *ngFor="let header of headerRow" scope="col">{{ header }}</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="list-container">
+              <tr *ngFor="let row of excelData; let i = index">
+                <td> {{ row['Client’s Name'] }}</td>
+                <td> {{ row['Email Address'] }}</td>
+                <td> {{ row['No. in Group'] }}</td>
+                <td> {{ row['Start Date'] }}</td>
+                <td> {{ row['End Date'] }}</td>
+                <td> {{ row['Paid Hours'] }}</td>
+                <td> {{ row['Pro-bono Hours'] }}</td>
+                <td class="view">
+                  <!--Actions-->
+                  <a (click)="deleteRow(i)"><i class="fas fa-trash-alt"></i></a>
+                </td>
 
+              </tr>
+            </tbody>
+
+          </table>
+          <br>
+
+          <div class="d-flex justify-content-between" *ngIf="excelData?.length > 0">
+            <button type="button" class="btn btn-cancel" (click)="clearData()">Cancel</button>
+            <button type="button" class="btn btn-success" (click)="uploadExcel()"><i
+                class="fas fa-file-upload"></i> Upload</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="pt-3 pb-2 listing-item"
+        *ngFor="let coachingLog of coachingLogs  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }">
+
+        <div class="d-flex justify-content-between">
+          <h4 class="farmer">
+            {{ coachingLog?.clientName | titlecase }}
+          </h4>
+
+          <span class="no-word-break">{{ coachingLog?.noInGroup}}
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coachingLog?.clientEmail | titlecase }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ coachingLog?.createdAt | date: "dd.MM.yy" }}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="customer-name" class="mb-0">
+            {{ coachingLog?.StartDate | date: "dd.MM.yy" + ' - ' + coachingLog?.endDate | date: "dd.MM.yy" }}
+          </span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-1">
+          <span class="customer-name" class="mb-0">
+            {{ coachingLog?.paidHours }} Paid Hours
+          </span>
+          <span class="customer-name" class="mb-0">
+            {{ coachingLog?.proBonoHours }} Pro-bono Hours
+          </span>
+        </div>
+      </div>
+
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
+      </div>
+      <div *ngIf="!loading && !coachingLogs?.length">
+        <h2 class="text-muted mt-5">No Logs Found.</h2>
+      </div>
+
+    </div>
+  </div>
 </div>
-
-
 
 <br>
 <div class="text-center" *ngIf="totalElements > 20">

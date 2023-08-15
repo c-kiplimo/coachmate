@@ -41,6 +41,12 @@ export class SupportComponent implements OnInit {
 
 title: any;
 contactUsMessage() {
+  if (this.contactForm.invalid) {
+    // If the form is invalid, display an error and return
+    this.toastrService.error('Please fill in all required fields', 'Form Error');
+    return;
+  }
+
   console.log(this.contactForm.value);
 
   this.notificationService.contactUsMessage(this.contactForm.value).subscribe({

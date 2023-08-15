@@ -1,6 +1,5 @@
 package com.natujenge.thecouch.web.rest;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.natujenge.thecouch.domain.Contract;
 import com.natujenge.thecouch.domain.Session;
 import com.natujenge.thecouch.domain.User;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,12 +102,12 @@ public class SessionResource {
         // change status active or suspend
     ResponseEntity<SessionDTO> updateSessionStatus(@RequestParam("status") SessionStatus sessionStatus,
                                                    @PathVariable("id") Long id,
+                                                   @RequestParam(name="proBonoHours", required = false) Long proBonoHours,
                                                    @AuthenticationPrincipal User userDetails) {
 
-        log.info("request to change session status with id : {} to status {} by coach with id {}", id, sessionStatus, userDetails.getId());
-        SessionDTO sessionDTO = sessionService.updateSessionStatus(id, sessionStatus);
+        log.info("request to change session status with id : {} to status {} by coach with id {} and proBono hours {}", id, sessionStatus, userDetails.getId(), proBonoHours);
+        SessionDTO sessionDTO = sessionService.updateSessionStatus(id, sessionStatus, proBonoHours);
         return new ResponseEntity<>(sessionDTO, HttpStatus.OK);
-
     }
 
     @GetMapping("/filter")

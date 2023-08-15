@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -97,7 +98,7 @@ public class CoachingLogService {
         coachingLogRepository.deleteAllByIdInAndCoachId(coachingLogIds, coachId);
     }
 
-    public void updateCoachLog(Session session) {
+    public void updateCoachLog(Session session, Long proBonoHours) {
         /*
         Creates a coaching log from a session once the session is marked as COMPLETED
         params: session
@@ -120,6 +121,7 @@ public class CoachingLogService {
             // TODO: set paid hours over recurring sessions
         }
         coachingLog.setPaidHours(getTimeDelta(session.getSessionSchedules().getEndTime(), session.getSessionSchedules().getStartTime()));
+        coachingLog.setProBonoHours(Objects.requireNonNullElse(proBonoHours, 0L));
 
         coachingLog.setCreatedBy(session.getCoach().getFullName());
         coachingLog.setCreatedAt(LocalDateTime.now());

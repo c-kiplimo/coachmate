@@ -168,12 +168,12 @@ export class ClientService {
     return this.http.get(`${this.baseURL}sessions/clientSessions/` + clientId, { observe: 'response' })
   }
 
-  changeSession(coachId: any, data: any): Observable<any> {
+  changeSession(coachId: any, data: any, options: any): Observable<any> {
     console.log("change session status reached")
     console.log("client id", coachId)
     console.log("data status", data.status)
     return this.http.put<any>(
-      this.baseURL + 'sessions/change-status/' + coachId + "?status=" + data.status,
+      this.baseURL + 'sessions/change-status/' + coachId + "?status=" + data.status +"&proBonoHours=" + options.proBonoHours,
       {
         observe: 'response',
       }

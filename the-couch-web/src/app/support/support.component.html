@@ -20,30 +20,6 @@
                                 (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                How do I create a new coaching session?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I create a new coaching session?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
                 How do I register as a coach or as a coaching organisation?
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -97,60 +73,41 @@
         </mat-accordion>
     </div>
   </div>
-
   <div class="accord-container">
-    <h2 class="text-center">How to reach us</h2>
-  <div class="row">
-    <div class="col-6">
-      <h4 class="sub-titles">Contact Form</h4>
-      <form class="form" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate>
-          <div class="row mb-5">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="form_name">Name *</label>
-                <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required="true" data-error="Firstname is required."/>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="form_email">Email *</label>
-                <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" data-error="Valid email is required."required="true"/>
-              </div>
-            </div>
+    <h4 class="sub-titles text-center">Contact Form</h4>
+    <form class="form" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="form_name">Name *</label>
+            <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required />
           </div>
-          <div class="row" >
-            <div class="col-md-12">
-              <div class="form-group mt-2">
-                <label for="form_message">Message *</label>
-                <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="2" required="true" data-error="Please, leave us a message."></textarea>
-              </div>
-            </div>
-<br>
-            <div class="text-center">
-              <button type="submit" class="btn mt-3 theEnd btn-outline-success"    [disabled]="!contactForm.valid">
-                Send Message
-              </button>
-            </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="form_email">Email *</label>
+            <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" required />
           </div>
-      </form>
-    </div>
-    <div class="col-6">
-      <h5 class="sub-titles">Call Us</h5>
-      <p style="margin-top: 15px;">If you prefer to speak with us on the phone, please call us at:</p>
-      <p><strong>070000000</strong></p>
-      <hr><br>
-      <h4>Live Chat Support</h4>
-      <p>If you have any further questions or need support, please click the "Live Chat" button below to chat with a
-        customer support representative.
-      </p>
-      <br>
-      <div class="text-center">
-        <button type="submit" class="btn mt-3 btn-outline-success" >
-          Live Chat
-        </button>
+        </div>
       </div>
-    </div>
-  </div> 
-  </div>   
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="form_message">Message *</label>
+            <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <button type="submit" class="btn btn-outline-success" [disabled]="!contactForm.valid">
+              Send Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
- 
+  
