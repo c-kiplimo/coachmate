@@ -218,7 +218,7 @@ public class SessionService {
 
     }
     @Transactional
-    public SessionDTO updateSessionStatus(Long id, SessionStatus sessionStatus) {
+    public SessionDTO updateSessionStatus(Long id, SessionStatus sessionStatus, Long proBonoHours) {
         log.info("Changing status of session {} to status {}", id, sessionStatus);
         Optional<Session> sessionOptional = sessionRepository.findById(id);
 
@@ -235,7 +235,7 @@ public class SessionService {
             session.setSessionStatus(SessionStatus.CONFIRMED);
         } else if (Objects.equals(sessionStatus, SessionStatus.COMPLETED)) {
             session.setSessionStatus(SessionStatus.COMPLETED);
-            updateCoachLog(session);
+            updateCoachLog(session, proBonoHours);
         } else if (Objects.equals(sessionStatus, SessionStatus.CANCELLED)) {
             session.setSessionStatus(SessionStatus.CANCELLED);
         } else if (session.getSessionStatus() == SessionStatus.CONFIRMED) {
@@ -346,7 +346,7 @@ public class SessionService {
         };
     }
 
-    private void updateCoachLog(Session session) {
+    private void updateCoachLog(Session session, Long proBonoHours) {
         /*
         * Trigger the update of the coach log for the session in the coaching log service
         * Parameters:
@@ -356,7 +356,7 @@ public class SessionService {
         * thus the need to delegate the update of the coach log to the coaching log service
         * */
         log.info("Updating coach log for session {}", session.getId());
-        coachingLogService.updateCoachLog(session);
+        coachingLogService.updateCoachLog(session, proBonoHours);
     }
 
 }

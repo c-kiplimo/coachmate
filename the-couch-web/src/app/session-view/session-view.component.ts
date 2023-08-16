@@ -92,6 +92,7 @@ throw new Error('Method not implemented.');
   menuElement!: ElementRef;
   sticky: boolean = false;
   elementPosition: any;
+  proBonoHoursForm!: FormGroup<any>;
 
   constructor(
     private clientService: ClientService,
@@ -102,7 +103,7 @@ throw new Error('Method not implemented.');
     private formbuilder: FormBuilder,
     private apiService: ApiService,
     private feedbackService: FeedbackService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) {}
 
   ngOnInit() {
     this.coachSessionData = sessionStorage.getItem('user');
@@ -150,6 +151,9 @@ throw new Error('Method not implemented.');
       sessionEndTime: '',
     });
 
+    this.proBonoHoursForm = this.formbuilder.group({
+      proBonoHours: [0],
+    });
   }
 
   ngAfterViewInit() {
@@ -218,6 +222,7 @@ throw new Error('Method not implemented.');
 
     });
   }
+
   @ViewChild('editsessionModal', { static: false })
   editsessionModal!: ElementRef;
   @ViewChild('addfeedbackModal', { static: false })
@@ -282,9 +287,13 @@ throw new Error('Method not implemented.');
 
       status: this.status,
     }
-    console.log(data);
+
+    let options = {
+      proBonoHours: this.proBonoHoursForm.value.proBonoHours,
+    };
+
     if (this.status === "CONFIRMED") {
-      this.clientService.changeSession(this.sessionId, data).subscribe(
+      this.clientService.changeSession(this.sessionId, data, options).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('session confirmed!', 'Success!', { timeOut: 8000 });
@@ -304,7 +313,8 @@ throw new Error('Method not implemented.');
     }
 
     if (this.status === "CANCELLED") {
-      this.clientService.changeSession(this.sessionId, data).subscribe(
+      console.log(options.proBonoHours);
+      this.clientService.changeSession(this.sessionId, data, options).subscribe(
         (res) => {
           console.log(res);
           this.toastrService.success('cancelled successfully', 'Success!', { timeOut: 8000 });
@@ -324,9 +334,8 @@ throw new Error('Method not implemented.');
     }
 
     if (this.status === "COMPLETED") {
-      this.clientService.changeSession(this.sessionId, data).subscribe(
+      this.clientService.changeSession(this.sessionId, data, options).subscribe(
         (res) => {
-          console.log(res);
           this.toastrService.success('Status changed successfully', 'Success!', { timeOut: 8000 });
           setTimeout(() => {
             location.reload();
@@ -335,7 +344,6 @@ throw new Error('Method not implemented.');
           this.conductedsessionModal.nativeElement.style.display = 'none';
 
         }, (error) => {
-          console.log(error)
           this.toastrService.error('Status changed failed', 'Failed!', { timeOut: 8000 });
           this.conductedsessionModal.nativeElement.classList.remove('show');
           this.conductedsessionModal.nativeElement.style.display = 'none';
@@ -364,12 +372,8 @@ throw new Error('Method not implemented.');
       clientId: this.clientId,
     };
     
-    console.log(params);
-    console.log(this.feebackForm.value);
-    
     this.feedbackService.addFeedback(this.feebackForm.value, params).subscribe(
       (response) => {
-        console.log(response);
         this.toastrService.success('Feedback added successfully', 'Success!', { timeOut: 8000 });
         
       this.getFeedback(this.sessionId);
@@ -377,7 +381,6 @@ throw new Error('Method not implemented.');
       this.addfeedbackModal.nativeElement.style.display='none';
       },
       (error) => {
-        console.log(error);
         this.toastrService.error('Feedback not added', 'Failed!', { timeOut: 8000 });
       }
     );

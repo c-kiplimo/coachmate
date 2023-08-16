@@ -484,14 +484,14 @@
   </div>
 </div>
 
-<!-- conducted session modal -->
+<!-- complete session modal -->
 <div class="modal fade bd-example-modal-lg" id="conductedsessionModal" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5">
-          set session as completed
+          Complete session {{ sessions?.name }}
         </h1>
 
         <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -504,16 +504,18 @@
               | titlecase
           }}</span>
         </div>
-        <div class="d-flex justify-content-between">
-          <p>Session name</p>
-          <span>{{ sessions?.name }}</span>
+        <div class="row d-flex justify-content-between">
+          <form [formGroup]="proBonoHoursForm">
+            <label for="proBonoHours">No of Probono hours *</label>
+            <input formControlName="proBonoHours" value="0" id="name" name="proBonoHours" type="number" class="form-control" required />
+          </form>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)=" changeSessionStatus()">
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="changeSessionStatus()">
           Submit
         </button>
       </div>

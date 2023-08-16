@@ -32,7 +32,7 @@
             <p class="faded">Clients</p>
             <h2 class="card-title">{{ numberOfClients }}</h2>
           </div>
-          <div class="col stats" *ngIf="this.userRole == 'CLIENT'">
+          <div class="col stats" *ngIf="this.userRole != 'ORGANIZATION'">
             <p class="faded">Contracts</p>
             <h2 class="card-title">{{ numberOfContracts }}</h2>
           </div>
@@ -302,7 +302,7 @@
               </div>
               <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
                 <p class="text-muted mt-5" *ngIf="!loading && !sessions?.length">
-                  No Sessions Found.
+                  No Upcoming Sessions.
                 </p>
               </div>
             </div>
@@ -366,7 +366,7 @@
                   <div class="donut multi"></div>
                 </div>
                 <div *ngIf="!loading && sessions?.length === 0">
-                  <h2 class="text-muted mt-5">No Sessions Found.</h2>
+                  <h2 class="text-muted mt-5">No Upcoming Sessions.</h2>
                 </div>
 
               </div>
