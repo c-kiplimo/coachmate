@@ -4,12 +4,12 @@
       <div class="m-3">
         <h1 class="text-center mb-3">Add session</h1>
       </div>
+
       <form class="m-3">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="sessionname">Select Contract *</label>
-            <select class="form-select" 
-              id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
+            <select class="form-select" id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
               <option value="" disabled selected>Select Contract</option>
               <option *ngFor="let contract of contracts" [value]="contract?.id">
                 {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
@@ -18,30 +18,39 @@
           </div>
 
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="clientType">Session Type *</label>
-            <select class="form-select" name="sessionType" [(ngModel)]="formData.sessionType">
-              <option value="" disabled selected>Select Session Type</option>
-              <option value="INDIVIDUAL">INDIVIDUAL</option>
-              <option value="GROUP">GROUP</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
             <label for="sessionname">Session Name *</label>
             <input [(ngModel)]="formData.name" type="text" class="form-control" id="name"
               placeholder="Enter Session Name" name="name" />
           </div>
 
           <div class="mb-3 col-md-12">
+            <label class="form-group-text" for="clientType">Session Type *</label>
+          </div>
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionType"
+              id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="formData.sessionType" />
+            <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
+          </div>
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionType"
+              id="flexRadioDefault2" value="GROUP" [(ngModel)]="formData.sessionType" />
+            <label class="form-group-text m-2" for="clientType">GROUP</label>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
             <label class="form-group-text" for="clientType">Session Venue *</label>
-            <select class="form-select" id="inputGroupSelect01" name="sessionVenue" [(ngModel)]="formData.sessionVenue">
-              >
-              <option value="" disabled selected>Select Session Venue</option>
-              <option value="VIRTUAL">VIRTUAL</option>
-              <option value="PHYSICAL">PHYSICAL</option>
-            </select>
+          </div>
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
+              id="flexRadioDefault1" value="VIRTUAL" [(ngModel)]="formData.sessionVenue" />
+            <label class="form-group-text m-2" for="clientType">VIRTUAL</label>
+          </div>
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
+              id="flexRadioDefault2" value="PHYSICAL" [(ngModel)]="formData.sessionVenue" />
+            <label class="form-group-text m-2" for="clientType">PHYSICAL</label>
           </div>
         </div>
 
@@ -65,9 +74,36 @@
 
             <!--select date from calender-->
             <div class="form-group">
-              <label for="date">Select Date</label>
-              <input type="date" class="form-control" id="date" [(ngModel)]="formData.sessionDate" name="date"
-                (change)="onDateSelect()" />
+              <label for="date">Select Date & Time that works for you</label>
+            </div>
+
+            <div class="calendar">
+              <div class="header">
+                <button class="btn btn-outline-success" (click)="prevMonth()">Previous</button>
+                <h2>{{ currentDate | date: 'MMMM yyyy' }}</h2>
+                <button class="btn btn-outline-success" (click)="nextMonth()">Next</button>
+              </div>
+              <table class="calendar-table">
+                <thead>
+                  <tr>
+                    <th *ngFor="let day of daysOfWeek" class="day-header">{{ day }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let week of weeks" class="week">
+                    <ng-container *ngFor="let day of week">
+                      <td class="day-cell" [class.empty]="!day" [class.booked]="day && day.bookedCount > 0"
+                        [class.disabled]="day && day.bookedCount < 1"
+                        (click)="day.bookedCount > 0 ? onDateSelect(day) : null">
+                        <div class="date-wrapper">
+                          <div class="date">{{ day ? day?.day : '' }}</div>
+                          <div class="booked-count">{{ day?.bookedCount ? day?.bookedCount : '_' }}</div>
+                        </div>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <!-- Display the selected date if needed -->
@@ -106,7 +142,7 @@
 
 
           </div>
-          
+
         </div>
 
         <button type="submit" (click)="addSession()"
