@@ -14,24 +14,25 @@
       />
     </div>
     <br />
+
     <div class="row">
       <div class="col-6 input-group-prepend">
-        <label for="coachingCategory" class="form-label"
-          >Coaching Category</label
-        >
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          formControlName="coachingCategory"
-          required="true"
-        >
-          <option selected>Select Category</option>
-          <option value="INDIVIDUAL">INDIVIDUAL</option>
-          <option value="CORPORATE">CORPORATE</option>
-        </select>
+        <H3 for="coachingCategory" class="form-label">Coaching Category</H3>
+        <div class="row">
+          <div class="col-6 input-group-prepend">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+              id="flexRadioDefault1" value="INDIVIDUAL" formControlName="coachingCategory" />
+            <label class="form-group-text m-2" for="coachingCategory">INDIVIDUAL</label>
+          </div>
+          <div class="col-6 input-group-prepend">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+              id="flexRadioDefault2" value="CORPORATE" formControlName="coachingCategory" />
+            <label class="form-group-text m-2" for="coachingCategory">CORPORATE</label>
+          </div>
+        </div>
       </div>
       <div class="col-6 input-group-prepend">
-        <label for="clientId" class="form-label">Select Client</label>
+        <H3 for="clientId" class="form-label">Select Client</H3>
         <select
           class="form-select"
           aria-label="Default select example"

@@ -61,11 +61,9 @@ today: Date = new Date();
 
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
-    console.log(this.coachSessionData)
     this.user = JSON.parse(this.coachSessionData);
     this.userRole = this.user.userRole;
-    console.log(this.userRole);
-
+      
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
       this.getAllPayments(this.page);
@@ -124,15 +122,18 @@ today: Date = new Date();
     }else if(this.userRole == 'ORGANIZATION'){
       options.organizationId = this.orgId;
     }
-   console.log(this.coachId)
     this.clientService.getPayments(options).subscribe(
       (response: any) => {
         this.payments = response.body;
+        for (let i = this.payments.length - 1; i >= 0; i--) {
+          if (this.payments[i].modeOfPayment === null) {
+            this.payments.splice(i, 1);
+          }
+      }
         this.totalElements = + response.headers.get('X-Total-Count');
         this.loading = false;
       },
       (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );
@@ -150,9 +151,8 @@ today: Date = new Date();
       (response) => {
         this.loading = false;
         this.payments = response.body;
-        console.log('payments', this.payments);
       }, (error) => {
-        console.log(error);
+        this.loading = false;
       }
     )
   }
@@ -209,7 +209,6 @@ today: Date = new Date();
         this.loading = false;
       },
       (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );
@@ -219,7 +218,6 @@ today: Date = new Date();
 
   viewInvoice(payment: any): void {
     this.payment = payment;
-    console.log(this.payment);
   }
   savePdf() {
     let DATA: any = document.getElementById('invoice');

@@ -32,17 +32,23 @@
               </option>
             </select>
           </div>
+
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="modeOfPayment"
-              >Mode of Payment</label
-            >
-            <br />
-            <select id="modeOfPayment" class="form-select" name="modeOfPayment">
-              <option selected>Select Payment Mode</option>
-              <option value="MANUAL">MANUAL</option>
-              <option value="AUTO">AUTO</option>
-            </select>
+            <label class="form-group-text" for="modeOfPayment">Mode of Payment</label>
+            <div class="row">
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="modeOfPayment"
+                  id="flexRadioDefault1" value="AUTO" [(ngModel)]="paymentForm.modeOfPayment" />
+                <label class="form-group-text m-2" for="modeOfPayment">AUTO</label>
+              </div>
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="modeOfPayment"
+                  id="flexRadioDefault2" value="MANUAL" [(ngModel)]="paymentForm.modeOfPayment" />
+                <label class="form-group-text m-2" for="modeOfPayment">MANUAL</label>
+              </div>
+            </div>
           </div>
+
         </div>
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
@@ -51,19 +57,23 @@
           </div>
           <div class="mb-3 col-md-12">
             <label for="paymentCurrency">Payment Currency</label>
-            <br />
-
-            <select
-              id="paymentCurrency"
-              class="form-select"
-              name="paymentCurrency"
-              [(ngModel)]="paymentForm.paymentCurrency"
-            >
-              <option selected>Select Payment Currency</option>
-              <option value="KSH">KSH</option>
-              <option value="USD">USD</option>
-              <option value="CNY">CNY</option>
-            </select>
+            <div class="row">
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentCurrency"
+                  id="flexRadioDefault1" value="KSH" [(ngModel)]="paymentForm.paymentCurrency" />
+                <label class="form-group-text m-2" for="paymentCurrency">KSH</label>
+              </div>
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentCurrency"
+                  id="flexRadioDefault2" value="USD" [(ngModel)]="paymentForm.paymentCurrency" />
+                <label class="form-group-text m-2" for="paymentCurrency">USD</label>
+              </div>
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentCurrency"
+                  id="flexRadioDefault2" value="CNY" [(ngModel)]="paymentForm.paymentCurrency" />
+                <label class="form-group-text m-2" for="paymentCurrency">CNY</label>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row justify-content-center">

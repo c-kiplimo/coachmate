@@ -110,7 +110,7 @@
         </button>
       </div>
     </div>
-    <table class="table">
+    <table class="table" *ngIf="sessions.length">
       <thead>
         <tr>
           <th colspan="1">session Name</th>
@@ -142,9 +142,11 @@
     <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
       <div class="donut multi"></div>
     </div>
-    <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-      No sessions Found.
-    </p>
+    <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+      <p class="text-muted mt-5">
+        No Sessions Found.
+      </p>
+    </div>
   </div>
 
   <div class="show-sm">

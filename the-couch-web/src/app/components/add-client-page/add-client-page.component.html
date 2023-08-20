@@ -4,7 +4,7 @@
         <div class="m-3">
           <h1 class="text-center mb-3"> Add New Client</h1>
         </div>
-        <form class="m-3"> <p>{{coachId}}</p>
+        <form class="m-3">
           <div class="row justify-content-center">
             <div class=" mb-3 col-md-12 ">
               <label for="exampleInputEmail1">First Name *</label>
@@ -44,7 +44,22 @@
             </div>
           </div>
           <div class="row justify-content-center">
-            <div class=" mb-3 col-md-12 ">
+            <div class="row justify-content-center">
+              <div class="mb-3 col-md-12">
+                <label class="form-group-text" for="paymentMode">Client Type *</label>
+              </div>
+              <div class="mb-3 col-md-12">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                  id="flexRadioDefault1" value="PREPAY" [(ngModel)]="addClient.paymentMode"/>
+                <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
+              </div>
+              <div class="mb-3 col-md-12">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                  id="flexRadioDefault2" value="POSTPAY" [(ngModel)]="addClient.paymentMode"/>
+                <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
+              </div>
+            </div>
+            <!-- <div class=" mb-3 col-md-12 ">
               <label class="input-group-text" for="paymentMode">Payment Mode *</label>
               <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
                 required>
@@ -52,8 +67,33 @@
                 <option value="PREPAY">PREPAY</option>
                 <option value="POSTPAY">POSTPAY</option>
               </select>
+            </div> -->
+
+            <div class="row justify-content-center">
+              <div class="mb-3 col-md-12">
+                <label class="form-group-text" for="clientType">Client Type *</label>
+              </div>
+              <div class="row">
+                <div class="col-6 input-group-prepend">
+                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                    id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="addClient.clientType" />
+                  <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
+                </div>
+                <div class="col-6 input-group-prepend">
+                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                    id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="addClient.clientType" />
+                  <label class="form-group-text m-2" for="clientType">CORPORATE</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="mb-3 col-md-12">
+                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                    id="flexRadioDefault2" value="GROUP" [(ngModel)]="addClient.clientType" />
+                  <label class="form-group-text m-2" for="clientType">GROUP</label>
+                </div>
+              </div>
             </div>
-            <div class=" mb-3 col-md-12 ">
+            <!-- <div class=" mb-3 col-md-12 ">
               <label class="input-group-text" for="clientType">Client Type *</label>
               <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType"
                 required>
@@ -62,7 +102,8 @@
                 <option value="CORPORATE">CORPORATE</option>
                 <option value="GROUP">GROUP</option>
               </select>
-            </div>
+            </div> -->
+
             <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
               <label class="input-group-text" for="coach">Assign Coach *</label>
               <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"

@@ -52,16 +52,11 @@ export class AddClientPageComponent implements OnInit {
   ngOnInit(): void {
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
     this.userRole = this.coachData.userRole;
-    console.log(this.userRole);
-    console.log('user role=>', this.userRole);
-    console.log('coach data=>', this.coachData);
 
     if(this.userRole == 'ORGANIZATION'){
       this.orgId = this.coachData.organization.id;
       this.getOrgCoaches(this.orgId);
-      console.log('org id=>', this.orgId);
     }
     this.coachId = this.coachData.id;
 
@@ -75,18 +70,15 @@ export class AddClientPageComponent implements OnInit {
     }
     this.ClientService.getOrgCoaches(options).subscribe(
       (response: any) => {
-        console.log('here Organization=>', response);
         this.OrgCoaches = response;
-        console.log(this.OrgCoaches);
       },
       (error: any) => {
-        console.log(error);
+        this.toastrService.error('Error getting coaches', 'Error!');
       }
     );
   }
 
   selectedCoach(event: any) {
-    console.log(event.target.value);
     this.selectedCoachId = event.target.value;
   }
 
@@ -107,17 +99,14 @@ export class AddClientPageComponent implements OnInit {
     details.organizationId = this.coachData?.organization?.id;
     details.coachId = this.coachData.id;
   }
-    console.log(details);
 
     console.log('add client form=>', details);
     this.ClientService.addClient(details).subscribe(
       (response: any) => {
-        console.log(response);
         this.toastrService.success('Client added!', 'Success!');
         this.router.navigate(['/clients']);
       },
       error => {
-        console.log('error here',error);
         this.toastrService.error
       }
     );
