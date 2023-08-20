@@ -56,9 +56,7 @@ export class RecordPaymentComponent implements OnInit {
   ngOnInit() {
     this.coachSessionData = sessionStorage.getItem('user'); 
     this.coachData = JSON.parse(this.coachSessionData);
-    console.log(this.coachData);
     this.userRole = this.coachData.userRole;
-    console.log(this.userRole);
 
  if(this.userRole == 'COACH'){
     this.coachId = this.coachData.id;
@@ -77,20 +75,15 @@ export class RecordPaymentComponent implements OnInit {
   }
   getUser() {
     this.coachId = this.coachData.id;
-    console.log(this.coachId);
   }
   getUserOrg() {
     this.orgId = this.coachData.id;
-    console.log(this.orgId);
   }
   getUserClient() {
     this.clientId = this.coachData.id;
-    console.log(this.clientId);
   }
 
   recordPayment() {
-    console.log(this.paymentForm);
-
     const data = this.paymentForm;
     if(this.userRole == 'CLIENT'){
       data.clientId = this.clientId;  
@@ -103,7 +96,6 @@ export class RecordPaymentComponent implements OnInit {
 
     this.clientService.recordPayment(this.paymentForm).subscribe(
       (response: any) => {
-        console.log(response);
         this.successMessage = response.message;
       
         this.errorMessage = '';
@@ -135,10 +127,8 @@ export class RecordPaymentComponent implements OnInit {
     this.clientService.getClients(options).subscribe(
       (response: any) => {
         this.clients = response.body;
-        console.log("clients",this.clients);
         this.loading = false;
       }, (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );
@@ -157,10 +147,8 @@ export class RecordPaymentComponent implements OnInit {
       (response) => {
         this.loading = false;
         this.clients = response.body;
-        console.log(response)
-        console.log('clients',this.clients)
       }, (error) => {
-        console.log(error)
+        this.loading = false;
       }
     )
   }
@@ -190,10 +178,8 @@ export class RecordPaymentComponent implements OnInit {
             this.clients.splice(this.clients.indexOf(client), 1);
           }
         }
-        console.log("clients",this.clients);
         this.loading = false;
       }, (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );

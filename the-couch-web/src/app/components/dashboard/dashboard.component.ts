@@ -94,9 +94,7 @@ export class DashboardComponent implements OnInit {
 
     if(this.userData != null){
     this.user = JSON.parse(this.userData);
-    console.log(this.user);
     this.userRole = this.user.userRole;
-    console.log(this.userRole);
     } else {
       this.router.navigate(['/signin']);
     }
@@ -158,7 +156,6 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       },
       (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );
@@ -196,7 +193,6 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       },
       (error: any) => {
-        console.log(error);
         this.loading = false;
       }
     );
@@ -231,12 +227,10 @@ export class DashboardComponent implements OnInit {
 
     this.contractsService.getContracts(options).subscribe(
       (res: any) => {
-        console.log("res",res);
         this.contracts = res.body;
         this.loading = false;
         this.numberOfContracts = this.contracts.length;
       }, (err: any) => {
-        console.log(err);
         this.loading = false;
       }
     );
@@ -247,9 +241,7 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
     this.clientService.getCoachFeedbacks(coachId).subscribe(
       (response: any) => {
-        console.log(response);
         this.feedbacks = response.body;
-        console.log(this.feedbacks);
         let totalScore = 0;
 
         for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
@@ -269,9 +261,7 @@ export class DashboardComponent implements OnInit {
     this.loading = true;
     this.clientService.getOrgFeedbacks(orgId).subscribe(
       (response: any) => {
-        console.log(response);
         this.feedbacks = response.body;
-        console.log(this.feedbacks);
         let totalScore = 0;
 
         for (let i = 0; i < Math.max(this.feedbacks.length, 1); i++) {
@@ -318,7 +308,6 @@ export class DashboardComponent implements OnInit {
     };
     this.clientService.getSessions(options).subscribe(
       (response: any) => {
-        console.log('here=>', response);
         this.sessions = response.body.data;
         this.numberOfSessions = response.body.totalElements;
         let totalMinutes = 0;
@@ -342,51 +331,13 @@ export class DashboardComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+        this.loading = false;
       }
     );
   }
 
-  // getOrgContracts(id: any) {
-  //   this.loading = true;
-  //   this.coachService.getContracts(id).subscribe(
-  //     (response: any) => {
-  //       console.log(response);
-  //       this.contracts = response.body;
-  //       this.loading = false;
-  //       this.numberOfContracts = this.contracts.length;
-  //     },
-  //     (error: any) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-
-  // getOrgClients() {
-  //   const options = {
-  //     page: 1,
-  //     per_page: this.itemsPerPage,
-  //     status: this.filters.status,
-  //     search: this.filters.searchItem,
-  //   };
-  //   const id = this.user.id;
-  //   this.loading = true;
-  //   this.clientService.getOrgClients(id).subscribe(
-  //     (response) => {
-  //       this.loading = false;
-  //       this.clients = response.body;
-  //       console.log(response)
-  //       console.log('clients', this.clients)
-  //       this.numberOfClients = this.clients.length;
-
-  //     }, (error) => {
-  //       console.log(error)
-  //     }
-  //   )
-  // }
 
   navigateToSessionView(id: any) {
-    console.log(id);
     this.router.navigate(['sessionView', id]);
   }
 
@@ -430,16 +381,13 @@ export class DashboardComponent implements OnInit {
         }
         this.totalElements = +response.headers.get('X-Total-Count');
         this.numberOfClients = this.clients.length;
-        console.log('clients',this.clients)
       }, (error) => {
         this.loading = false;
-        console.log(error)
       }
     )
   }
 
   navigateToTerms(id: any) {
-    console.log("contractId on navigate", id);
     this.contractId = id;
     if (this.userRole == 'COACH') {
 
@@ -451,29 +399,6 @@ export class DashboardComponent implements OnInit {
 
 
   }
-  // getOrganization(id: any) {
-  //   const data = {
-  //     superCoachId: id,
-  //   }
-  //   this.clientService.getOrganization(data).subscribe(
-  //     (response: any) => {
-  //       console.log('here Organization=>', response);
-  //       this.Organization = response.body;
-  //       console.log(this.Organization);
-  //       console.log('here Organization=>', response);
-
-
-
-
-  //       sessionStorage.setItem('Organization', JSON.stringify(this.Organization));
-
-
-  //     },
-  //     (error: any) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
 
   getOrgCoaches(page: any) {
  
@@ -502,10 +427,8 @@ export class DashboardComponent implements OnInit {
           this.loading = false;
           this.coaches = response.body;
           this.totalElements = +response.headers.get('X-Total-Count');
-          console.log('coaches',this.coachesImpl)
         }, (error) => {
           this.loading = false;
-          console.log(error)
         }
       )
   }
@@ -517,13 +440,11 @@ export class DashboardComponent implements OnInit {
     // }
     this.clientService.getContractsByClientId(id).subscribe(
       (response: any) => {
-        console.log('here contracts=>', response);
         this.contracts = response.body;
-        console.log(this.contracts);
 
       },
       (error: any) => {
-        console.log(error);
+        this.loading = false;
       }
     );
   }
@@ -545,20 +466,17 @@ export class DashboardComponent implements OnInit {
 
 
   navigateToContractDetail(id: any) {
-    console.log("contractId on navigate", id);
     this.contractId = id;
     this.router.navigate(['/contractDetail/' + id]);
   }
 
   navigateToCoachView(id : number) {
-    console.log("coachId on navigate", id);
     this.router.navigate(['/coachView/' + id]);
   }
 
 
   getUser() {
     this.user = JSON.parse(sessionStorage.getItem('user') as any);
-    console.log(this.user);
   }
   // getUserOrg() {
   //   this.User = JSON.parse(sessionStorage.getItem('user') as any);
@@ -575,12 +493,10 @@ export class DashboardComponent implements OnInit {
 
     this.CoachEducationService.getCoachEducation(options).subscribe(
       (response: any) => {
-
-        console.log(response);
         this.coachEducationData = response;
         this.calculateNumberOfHours(this.coachEducationData);
       }, (error: any) => {
-        console.log(error);
+        this.loading = false;
       }
     )
 
@@ -599,13 +515,12 @@ export class DashboardComponent implements OnInit {
 
     this.clientService.getClientSessions(id).subscribe(
       (response: any) => {
-        console.log(response);
         this.sessions = response.body;
-        console.log(this.sessions.body);
         this.numberOfSessions = this.sessions.length;
+        this.loading = false;
       },
       (error: any) => {
-        console.log(error);
+        this.loading = false;
       }
     );
 

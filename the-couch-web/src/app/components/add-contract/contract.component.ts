@@ -82,8 +82,6 @@ contractTemplates: any;
    this.user = JSON.parse(this.coachSessionData);
 
    this.userRole = this.user.userRole;
-   console.log(this.userRole);
-
 
    if (this.userRole == 'ORGANIZATION') {
      this.orgId = this.user.organization.id;
@@ -136,7 +134,6 @@ contractTemplates: any;
     this.contractTemplate = JSON.parse(
       sessionStorage.getItem('contractTemplate') || '{}'
     );
-    console.log(this.contractTemplate);
   }
   toggleEditingSettings(): void {
     this.editingSettings = !this.editingSettings;
@@ -176,12 +173,10 @@ contractTemplates: any;
       (response) => {
         this.loading = false;
         this.clients = response.body;
-        this.totalElements = +response.headers.get('X-Total-Count');
-        console.log('clients',this.clients)
-        
+        this.totalElements = +response.headers.get('X-Total-Count');        
       }, (error) => {
         this.loading = false;
-        console.log(error)
+        this.toastrService.error('Error getting clients', error.message);
       }
     )
   }
@@ -212,25 +207,22 @@ contractTemplates: any;
           this.loading = false;
           this.OrgCoaches = response.body;
           this.totalElements = +response.headers.get('X-Total-Count');
-          console.log('coaches',this.OrgCoaches)
         }, (error) => {
           this.loading = false;
-          console.log(error)
-        }
+          this.toastrService.error('Error getting coaches', error.message);        }
       );
   }
 
   getNoOfContracts(){
+    this.loading = true;
     this.clientService.getContracts().subscribe(
       (response:any) =>{
-        console.log(response)
         this.contracts = response
-        this.numberOfContracts = this.contracts.length;
-        console.log(this.numberOfContracts)
-        
+        this.numberOfContracts = this.contracts.length;        
       },
       (error: any) => {
-        console.log(error)
+        this.toastrService.error('Error getting contracts', error.message);
+        this.loading = false;
       }
     )
   }
@@ -244,21 +236,16 @@ contractTemplates: any;
     this.clientService.getOrgClients(this.organizationId).subscribe(
       (response) => {
         this.clients = response.body;
-        console.log(response)
-        console.log('clients',this.clients)
         this.numberOfClients = this.clients.length;
   
       }, (error) => {
-        console.log(error)
+        this.toastrService.error('Error getting clients', error.message);
       }
     )
   }
   
   addContract(){
     //this.contractTemplates = this.user.contractTemplate;
-    console.log(this.contractTemplates);
-    console.log('here');
-    console.log(this.contractForm.value);
     var data = this.contractForm.value;
     data.organizationId = this.orgId
     data.coachId = this.coachId
@@ -269,22 +256,18 @@ contractTemplates: any;
     //Stringify the objectives array
     let objectives = JSON.stringify(this.objectives);
     data.objectives = objectives;
-    console.log(data);
     this.contractService.addNewContract(data).subscribe(
       (response: any) => {
         this.toastrService.success('Contract added successfully');
         window.history.back();
       }, (error: any) => {
-        console.log(error)
-      }
+        this.toastrService.error('Error adding contract', error.message);      }
     )
   }
 
   addObjective(){
     
-    console.log(this.Objectives);
     this.objectives.push(this.Objectives.objective);
-    console.log(this.objectives);
     this.Objectives.objective = '';
   }
 

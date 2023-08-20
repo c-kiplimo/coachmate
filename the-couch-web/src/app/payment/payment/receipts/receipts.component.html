@@ -57,7 +57,7 @@
           <tbody class="list-container">
             <tr *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
               <td *ngIf="this.userRole != 'CLIENT'" data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment?.clientFullName }}</td>
-              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.amountDeposited }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.amountDeposited + " " + payment.paymentCurrency }}</td>
               <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.modeOfPayment }}</td>
               <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.walletBalance }}</td>
               <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.createdAt | date : "MMM d y" }}</td>

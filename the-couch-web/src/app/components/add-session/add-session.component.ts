@@ -149,42 +149,37 @@ export class AddSessionComponent implements OnInit {
     }
 
   }
-
+  
   generateCalendar() {
+    this.weeks = []; // Reset weeks
     const firstDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
     const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
     const daysInMonth = lastDayOfMonth.getDate();
-    const firstDayOfWeek = (firstDayOfMonth.getDay() - 1 + 7) % 7; // Adjust to start with Sunday (0) and Monday (1)
-  
-    let dateCounter = 0; // Start from 0
+    const firstDayOfWeek = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
+    
+    let dateCounter = 1; // Start from 1 (first day of the month)
     for (let week = 0; week < 6; week++) {
       const weekDates: any[] = [];
       for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-        if ((week === 0 && dayOfWeek < firstDayOfWeek) || dateCounter >= daysInMonth) {
+        if ((week === 0 && dayOfWeek < firstDayOfWeek) || dateCounter > daysInMonth) {
           weekDates.push(null);
         } else {
-          const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), dateCounter + 1);
+          const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), dateCounter);
           date.setUTCHours(0, 0, 0, 0); // Set time to midnight in UTC
           weekDates.push({
-            date: date.toISOString().split('T')[0],
-            day: dateCounter + 1, // Increment by 1
-            bookedCount: this.getBookedSessionCount(date) // Use dateCounter directly
+            date: date.toISOString().split('T')[0], // Convert date to string in yyyy-mm-dd format
+            day: dateCounter,
+            bookedCount: this.getBookedSessionCount(date) // Corrected to use the current date
           });
           dateCounter++;
         }
       }
       this.weeks.push(weekDates);
-      console.log("weeks: ", week, this.weeks);
     }
   }
   
-  
-
-
   getBookedSessionCount(date: Date): number {
     const dateString = date.toISOString().split('T')[0];    // Convert date to string in yyyy-mm-dd format
-    console.log(dateString);
-    console.log(this.bookedSessions);
     let session = this.bookedSessions.find(session => session.date === dateString);
     return session ? session.count : 0;
   }
@@ -192,30 +187,18 @@ export class AddSessionComponent implements OnInit {
   prevMonth() {
     const prevMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
     this.currentDate = prevMonthDate;
-    this.weeks = []; // Reset weeks array
     this.generateCalendar();
   }
   nextMonth() {
     const nextMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
     this.currentDate = nextMonthDate;
-    this.weeks = []; // Reset weeks array
     this.generateCalendar();
   }
-
-  onDateClick(day: any) {
-    if (day) {
-      console.log('Clicked on date:', day.date);
-      // You can add further logic here, like opening a modal with session details.
-    }
-  }
-
-
 
   onContractChange(event: any) {
     this.getContractId = event.target.value;
     //get client details from contract id
     this.selectedContract = this.contracts.find((contract: any) => contract.id == event.target.value);
-    console.log(this.selectedContract);
     this.coachId = this.selectedContract.coachId;
     //get select contract coach slots
     this.getCoachSlots();
@@ -229,6 +212,7 @@ export class AddSessionComponent implements OnInit {
   }
 
   getClients() {
+    this.loading = true;
     const options = {
       page: 1,
       per_page: this.itemsPerPage,
@@ -237,37 +221,33 @@ export class AddSessionComponent implements OnInit {
     };
     this.clientService.getClients(options).subscribe(
       (response: any) => {
-        console.log(response.body.data);
-        console.log("here");
         this.clients = response.body.data;
         this.numberOfClients = this.clients.length;
-        console.log(this.numberOfClients)
+        this.loading = false;
       }, (error: any) => {
-        console.log(error)
+        this.toastrService.error('Error getting clients', error.message);
+        this.loading = false;
       }
     )
   }
 
   addSession() {
-    console.log(this.formData);
-
     const params = {
       clientId: this.selectedContract.clientId,
       contractId: this.getContractId,
     };
 
     this.sessionService.addSession(this.formData, params).subscribe((res: any) => {
-      console.log(res);
       this.toastrService.success('Session added successfully');
       window.history.back();
     }, error => {
-      console.log(error);
       this.toastrService.error(error.error.message);
     });
   }
 
 
   getContracts(page: number) {
+    this.loading = true;
     const options: any = {
       page: page,
       size: this.pageSize,
@@ -281,10 +261,12 @@ export class AddSessionComponent implements OnInit {
       options.organisationId = this.orgId;
     }
     this.contractsService.getContracts(options).subscribe((res: any) => {
-      console.log(res);
       this.contracts = res.body;
+      this.totalElements = res.body.totalElements;
+      this.loading = false;
     }, (error: any) => {
-      console.log(error);
+      this.toastrService.error('Error getting contracts', error.message);
+      this.loading = false;
     });
   }
 
@@ -297,7 +279,6 @@ export class AddSessionComponent implements OnInit {
     this.apiService.getCoachSlots(options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
-        this.slots = this.coachSlots;
         this.loading = false;
         this.prepareCoachSlotsInCalendar(this.coachSlots);
       }
@@ -305,17 +286,15 @@ export class AddSessionComponent implements OnInit {
   }
 
   prepareCoachSlotsInCalendar(coachSlots: any) {
-
+    this.bookedSessions = [];
     let startDate = Date.now();
     let endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 3);
     let dates = this.getDates(startDate, endDate);
-    console.log(coachSlots);
     dates.forEach((date: any) => {
       coachSlots.forEach((slot: any) => {
         if (slot.dayOfTheWeek.day.toUpperCase() === date.dayOfTheWeek.toUpperCase() && slot.dayOfTheWeek.available === true) {
           //check if the date is already in the bookedSessions array
-          console.log(date.date);
           if (this.bookedSessions !== undefined && this.bookedSessions.length > 0) {
             let dateObj = this.findDate(date.date);
             if (dateObj) {
@@ -338,7 +317,6 @@ export class AddSessionComponent implements OnInit {
       });
     });
     this.generateCalendar();
-    console.log("bookedSessions", this.bookedSessions);
   }
 
   findDate(dateToFind: any) {
@@ -355,26 +333,21 @@ export class AddSessionComponent implements OnInit {
       });
       currentDate += 24 * 60 * 60 * 1000;
     }
-    console.log("dates", dates)
     return dates;
   }
 
 
   selectedSessionSlot(slot: any) {
-    console.log(slot);
     slot.coach = {};
     slot.dayOfTheWeek.coach = {};
     this.formData.sessionSchedules = slot;
   }
 
   onDateSelect(day: any): void {
-    console.log(day);
     //format Wed Aug 16 2023 00:00:00 GMT+0300 (East Africa Time) to 2023-08-16
     this.formData.sessionDate = this.formatDateToYYYYMMDD(day.date)
-    console.log('Selected date:', this.formData.sessionDate);
     //get day of the week from the selected date
     let dayOfTheWeek = new Date(this.formData.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
-    console.log(dayOfTheWeek);
 
     //loop through the coach slots and find slots days of the week that match the selected date and push them to the slots array
     this.slots = [];
@@ -384,7 +357,6 @@ export class AddSessionComponent implements OnInit {
       }
     }
     );
-    console.log(this.slots);
   }
 
   formatDateToYYYYMMDD(inputDate: any) {

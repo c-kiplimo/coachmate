@@ -77,10 +77,8 @@ export class CoachLogsComponent implements OnInit {
     this.coachLogsService.getCoachLogs(options).subscribe((response: any) => {
       this.coachingLogs = response.body;
       this.totalElements = response.headers.get('X-Total-Count');
-      console.log('response', response);
       this.loading = false;
     }, (error: any) => {
-      console.log(error);
       this.loading = false;
     }
     );
@@ -94,12 +92,10 @@ export class CoachLogsComponent implements OnInit {
   }
 
   addCoachingLog() {
-    console.log(this.coachingLog);
     this.loading = true;
     let log = [this.coachingLog]
     this.coachLogsService.addCoachLogs(log).subscribe({
       next: (response) => {
-        console.log(response);
         this.loading = false;
         this.getCoachingLogs(0);
       }
@@ -129,15 +125,7 @@ export class CoachLogsComponent implements OnInit {
 
         //get header row
         this.headerRow = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]], { header: 1 })[0];
-        console.log('Header row', this.headerRow);
         this.excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]]);
-        console.log('Excel data', this.excelData);
-
-        console.log('Header row', this.headerRow);
-
-        console.log('Data', this.coachingLogs);
-
-
       };
 
       reader.readAsArrayBuffer(file);
@@ -166,17 +154,14 @@ export class CoachLogsComponent implements OnInit {
     }
     );
 
-    console.log('Coaching logs', this.coachingLogsFromExcel);
 
     this.coachLogsService.addCoachLogs(this.coachingLogsFromExcel).subscribe({
       next: (response) => {
-        console.log(response);
         this.loading = false;
         this.showErrorMessage = false;
         this.clearAndClose();
         this.getCoachingLogs(0);
       }, error: (error) => {
-        console.log(error);
         this.loading = false;
         this.coachingLogsFromExcel = [];
         this.showErrorMessage = true;
@@ -217,7 +202,6 @@ export class CoachLogsComponent implements OnInit {
       for (let i = 0; i < this.coachingLogs.length; i++) {
         this.deleteThisCoachingLogs.push(this.coachingLogs[i].id);
       }
-      console.log(this.deleteThisCoachingLogs);
     } else {
       checkboxes.forEach((checkbox: any) => {
         checkbox.checked = false;
@@ -235,7 +219,6 @@ export class CoachLogsComponent implements OnInit {
         }
       });
       this.deleteThisCoachingLogs.push(id);
-      console.log(this.deleteThisCoachingLogs);
     } else {
       checkboxes.forEach((checkbox: any) => {
         if (checkbox.value === id) {
@@ -248,7 +231,6 @@ export class CoachLogsComponent implements OnInit {
   deleteOne(id: any) {
     this.deleteThisCoachingLogs = [];
     this.deleteThisCoachingLogs.push(id);
-    console.log(this.deleteThisCoachingLogs);
     this.deleteCoachingLog();
   }
 
@@ -259,7 +241,6 @@ export class CoachLogsComponent implements OnInit {
     };
     this.coachLogsService.deleteCoachLogs(options).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.loading = false;
         this.deleteThisCoachingLogs = [];
         this.getCoachingLogs(0);
