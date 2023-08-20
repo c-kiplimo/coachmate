@@ -149,38 +149,36 @@ export class AddSessionComponent implements OnInit {
     }
 
   }
-
+  
   generateCalendar() {
+    this.weeks = []; // Reset weeks
     const firstDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
     const lastDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
     const daysInMonth = lastDayOfMonth.getDate();
-    const firstDayOfWeek = (firstDayOfMonth.getDay() - 1 + 7) % 7; // Adjust to start with Sunday (0) and Monday (1)
-  
-    let dateCounter = 0; // Start from 0
+    const firstDayOfWeek = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
+    console.log("firstDayOfWeek: ", firstDayOfWeek);
+    
+    let dateCounter = 1; // Start from 1 (first day of the month)
     for (let week = 0; week < 6; week++) {
       const weekDates: any[] = [];
       for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-        if ((week === 0 && dayOfWeek < firstDayOfWeek) || dateCounter >= daysInMonth) {
+        if ((week === 0 && dayOfWeek < firstDayOfWeek) || dateCounter > daysInMonth) {
           weekDates.push(null);
         } else {
-          const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), dateCounter + 1);
+          const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), dateCounter);
           date.setUTCHours(0, 0, 0, 0); // Set time to midnight in UTC
           weekDates.push({
-            date: date.toISOString().split('T')[0],
-            day: dateCounter + 1, // Increment by 1
-            bookedCount: this.getBookedSessionCount(date) // Use dateCounter directly
+            date: date.toISOString().split('T')[0], // Convert date to string in yyyy-mm-dd format
+            day: dateCounter,
+            bookedCount: this.getBookedSessionCount(date) // Corrected to use the current date
           });
           dateCounter++;
         }
       }
       this.weeks.push(weekDates);
-      console.log("weeks: ", week, this.weeks);
     }
   }
   
-  
-
-
   getBookedSessionCount(date: Date): number {
     const dateString = date.toISOString().split('T')[0];    // Convert date to string in yyyy-mm-dd format
     console.log(dateString);
@@ -192,24 +190,13 @@ export class AddSessionComponent implements OnInit {
   prevMonth() {
     const prevMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
     this.currentDate = prevMonthDate;
-    this.weeks = []; // Reset weeks array
     this.generateCalendar();
   }
   nextMonth() {
     const nextMonthDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
     this.currentDate = nextMonthDate;
-    this.weeks = []; // Reset weeks array
     this.generateCalendar();
   }
-
-  onDateClick(day: any) {
-    if (day) {
-      console.log('Clicked on date:', day.date);
-      // You can add further logic here, like opening a modal with session details.
-    }
-  }
-
-
 
   onContractChange(event: any) {
     this.getContractId = event.target.value;
@@ -297,7 +284,6 @@ export class AddSessionComponent implements OnInit {
     this.apiService.getCoachSlots(options).subscribe({
       next: (response) => {
         this.coachSlots = response.body;
-        this.slots = this.coachSlots;
         this.loading = false;
         this.prepareCoachSlotsInCalendar(this.coachSlots);
       }
@@ -305,7 +291,7 @@ export class AddSessionComponent implements OnInit {
   }
 
   prepareCoachSlotsInCalendar(coachSlots: any) {
-
+    this.bookedSessions = [];
     let startDate = Date.now();
     let endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 3);
