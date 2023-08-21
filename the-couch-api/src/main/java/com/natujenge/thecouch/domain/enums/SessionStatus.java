@@ -4,5 +4,5 @@ public enum SessionStatus {
     CONFIRMED,
     CANCELLED,
     NEW,
-    COMPLETED
+    COMPLETED,
 }
