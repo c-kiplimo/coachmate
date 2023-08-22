@@ -1,64 +1,8 @@
-<<<<<<< HEAD
-<div class="row mb-3">
-  <h1 id="title" class="text-center">Coaching Agreement</h1>
-  <div class="col-1"></div>
-  <form [formGroup]="contractForm" class="col-10">
-    <div class="mb-3 mt-3 description">
-      <h3 for="coachingTopic" class="form-label">Coaching Title</h3>
-      <input
-        type="text"
-        class="form-control"
-        id="nucoachingTopicmber"
-        placeholder="Enter the coaching topic"
-        formControlName="coachingTopic"
-        required="true"
-      />
-    </div>
-    <br />
-
-    <div class="row">
-      <div class="col-6 input-group-prepend">
-        <H3 for="coachingCategory" class="form-label">Coaching Category</H3>
-        <div class="row">
-          <div class="col-6 input-group-prepend">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
-              id="flexRadioDefault1" value="INDIVIDUAL" formControlName="coachingCategory" />
-            <label class="form-group-text m-2" for="coachingCategory">INDIVIDUAL</label>
-          </div>
-          <div class="col-6 input-group-prepend">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
-              id="flexRadioDefault2" value="CORPORATE" formControlName="coachingCategory" />
-            <label class="form-group-text m-2" for="coachingCategory">CORPORATE</label>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 input-group-prepend">
-        <H3 for="clientId" class="form-label">Select Client</H3>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          formControlName="clientId"
-          required="true"
-        >
-          <option selected>Select Client you want to make contract with</option>
-          <!--Loop through clients and form options-->
-          <option *ngFor="let client of clients" value="{{ client.id }}">
-            {{ client.firstName }} {{ client.lastName }}
-          </option>
-          <!--Render the create client button if no clients are found-->
-          <div *ngIf="!clients.length">
-            <button class="btn btn-outline-success" routerLink="/addclient">
-              Create Client
-            </button>
-          </div>
-        </select>
-=======
 <div class="row justify-content-center m-2 p-3">
   <div class="col-md-8">
     <div class="card card-table justify-content-center align-items-center">
       <div class="m-3">
         <h1 class="text-center mb-3">Coaching Agreement</h1>
->>>>>>> web-101
       </div>
 
       <form [formGroup]="contractForm" class="m-3">

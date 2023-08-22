@@ -1,305 +1,138 @@
 <div class="row justify-content-center m-2 p-3">
-    <div class="col-md-8">
-      <div class="card card-table justify-content-center align-items-center">
-        <div class="m-3">
-          <h1 class="text-center mb-3"> Add New Client</h1>
-        </div>
-        <form class="m-3">
-          <div class="row justify-content-center">
-            <div class=" mb-3 col-md-12 ">
-              <label for="exampleInputEmail1">First Name *</label>
-              <input [(ngModel)]="addClient.firstName" name="firstName" type="text" class="form-control" id="firstname"
-                aria-describedby="emailHelp" placeholder="First name" required />
-            </div>
-            <div class=" mb-3 col-md-12 ">
-              <label for="exampleInputEmail1">Last Name *</label>
-              <input [(ngModel)]="addClient.lastName" name="lastName" type="lastNname" class="form-control"
-                id="lastName" aria-describedby="emailHelp" placeholder="Last name" required />
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class=" mb-3 col-md-12 ">
-              <label for="exampleInputPassword1">Mobile no *</label>
-              <input required [(ngModel)]="addClient.msisdn" name="msisdn" type="number" class="form-control"
-                id="contact" placeholder="Contact" required
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
-            </div>
-            <div class=" mb-3 col-md-12 ">
-              <label for="exampleInputPassword1">Email *</label>
-              <input [(ngModel)]="addClient.email" name="email" type="email" class="form-control" id="email"
-                placeholder="Email" required />
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class=" mb-3 col-md-12 ">
-              <label for="exampleInputPassword1">Address *</label>
-              <input [(ngModel)]="addClient.physicalAddress" name="address" type="text" class="form-control" id="adress"
-                placeholder="Address" required />
-            </div>
-            <div class=" mb-3 col-md-12 ">
-              <label for="profession">Profession *</label>
-              <input type="text" class="form-control" id="profession" name="profession"
-                placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="row justify-content-center">
-              <div class="mb-3 col-md-12">
-                <label class="form-group-text" for="paymentMode">Client Type *</label>
-              </div>
-              <div class="mb-3 col-md-12">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
-                  id="flexRadioDefault1" value="PREPAY" [(ngModel)]="addClient.paymentMode"/>
-                <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
-              </div>
-              <div class="mb-3 col-md-12">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
-                  id="flexRadioDefault2" value="POSTPAY" [(ngModel)]="addClient.paymentMode"/>
-                <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
-              </div>
-            </div>
-            <!-- <div class=" mb-3 col-md-12 ">
-              <label class="input-group-text" for="paymentMode">Payment Mode *</label>
-              <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
-                required>
-                <option selected>Select Payment Mode</option>
-                <option value="PREPAY">PREPAY</option>
-                <option value="POSTPAY">POSTPAY</option>
-              </select>
-            </div> -->
-
-            <div class="row justify-content-center">
-              <div class="mb-3 col-md-12">
-                <label class="form-group-text" for="clientType">Client Type *</label>
-              </div>
-              <div class="row">
-                <div class="col-6 input-group-prepend">
-                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                    id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="addClient.clientType" />
-                  <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
-                </div>
-                <div class="col-6 input-group-prepend">
-                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                    id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="addClient.clientType" />
-                  <label class="form-group-text m-2" for="clientType">CORPORATE</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="mb-3 col-md-12">
-                  <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                    id="flexRadioDefault2" value="GROUP" [(ngModel)]="addClient.clientType" />
-                  <label class="form-group-text m-2" for="clientType">GROUP</label>
-                </div>
-              </div>
-            </div>
-            <!-- <div class=" mb-3 col-md-12 ">
-              <label class="input-group-text" for="clientType">Client Type *</label>
-              <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType"
-                required>
-                <option selected>Select Client type</option>
-                <option value="INDIVIDUAL">INDIVIDUAL</option>
-                <option value="CORPORATE">CORPORATE</option>
-                <option value="GROUP">GROUP</option>
-              </select>
-            </div> -->
-
-            <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
-              <label class="input-group-text" for="coach">Assign Coach *</label>
-              <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"
-                (change)="selectedCoach($event)" required>
-                <option *ngFor="let coach of OrgCoaches" [value]="coach.id">{{coach.firstName}} {{coach.lastName}}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class=" mb-3">
-              <label for="reason">Reason *</label>
-              <input type="text" class="form-control" placeholder="Reason" required name="reason"
-                [(ngModel)]="addClient.reason">
-
-            </div>
-          </div>
-          <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
-            !addClient.firstName||
-            !addClient.lastName||
-            !addClient.email||
-            !addClient.msisdn||
-            !addClient.physicalAddress||
-            !addClient.paymentMode||
-            !addClient.clientType||
-            !addClient.reason
-            ">ADD CLIENT
-          </button>
-        </form>
+  <div class="col-md-8">
+    <div class="card card-table justify-content-center align-items-center">
+      <div class="m-3">
+        <h1 class="text-center mb-3"> Add New Client</h1>
       </div>
       <form class="m-3">
-
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="exampleInputEmail1">First Name *</label>
-            <input
-              [(ngModel)]="addClient.firstName"
-              name="firstName"
-              type="text"
-              class="form-control"
-              id="firstname"
-              aria-describedby="emailHelp"
-              placeholder="First name"
-              required
-            />
+            <input [(ngModel)]="addClient.firstName" name="firstName" type="text" class="form-control" id="firstname"
+              aria-describedby="emailHelp" placeholder="First name" required />
           </div>
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="exampleInputEmail1">Last Name *</label>
-            <input
-              [(ngModel)]="addClient.lastName"
-              name="lastName"
-              type="lastNname"
-              class="form-control"
-              id="lastName"
-              aria-describedby="emailHelp"
-              placeholder="Last name"
-              required
-            />
+            <input [(ngModel)]="addClient.lastName" name="lastName" type="lastNname" class="form-control"
+              id="lastName" aria-describedby="emailHelp" placeholder="Last name" required />
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="exampleInputPassword1">Mobile no *</label>
-            <input
-              required
-              [(ngModel)]="addClient.msisdn"
-              name="msisdn"
-              type="number"
-              class="form-control"
-              id="contact"
-              placeholder="Contact"
-              required
+            <input required [(ngModel)]="addClient.msisdn" name="msisdn" type="number" class="form-control"
+              id="contact" placeholder="Contact" required
               oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
-            />
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
           </div>
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="exampleInputPassword1">Email *</label>
-            <input
-              [(ngModel)]="addClient.email"
-              name="email"
-              type="email"
-              class="form-control"
-              id="email"
-              placeholder="Email"
-              required
-            />
+            <input [(ngModel)]="addClient.email" name="email" type="email" class="form-control" id="email"
+              placeholder="Email" required />
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="exampleInputPassword1">Address *</label>
-            <input
-              [(ngModel)]="addClient.physicalAddress"
-              name="address"
-              type="text"
-              class="form-control"
-              id="adress"
-              placeholder="Address"
-              required
-            />
+            <input [(ngModel)]="addClient.physicalAddress" name="address" type="text" class="form-control" id="adress"
+              placeholder="Address" required />
           </div>
-          <div class="mb-3 col-md-12">
+          <div class=" mb-3 col-md-12 ">
             <label for="profession">Profession *</label>
-            <input
-              type="text"
-              class="form-control"
-              id="profession"
-              name="profession"
-              placeholder="Enter Client Profession"
-              [(ngModel)]="addClient.profession"
-              required
-            />
+            <input type="text" class="form-control" id="profession" name="profession"
+              placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <label class="input-group-text" for="paymentMode"
-              >Payment Mode *</label
-            >
-            <select
-              class="form-select"
-              name="paymentMode"
-              id="inputGroupSelect01"
-              [(ngModel)]="addClient.paymentMode"
-              required
-            >
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-12">
+              <label class="form-group-text" for="paymentMode">Client Type *</label>
+            </div>
+            <div class="mb-3 col-md-12">
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                id="flexRadioDefault1" value="PREPAY" [(ngModel)]="addClient.paymentMode"/>
+              <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
+            </div>
+            <div class="mb-3 col-md-12">
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                id="flexRadioDefault2" value="POSTPAY" [(ngModel)]="addClient.paymentMode"/>
+              <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
+            </div>
+          </div>
+          <!-- <div class=" mb-3 col-md-12 ">
+            <label class="input-group-text" for="paymentMode">Payment Mode *</label>
+            <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
+              required>
               <option selected>Select Payment Mode</option>
               <option value="PREPAY">PREPAY</option>
               <option value="POSTPAY">POSTPAY</option>
             </select>
+          </div> -->
+
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-12">
+              <label class="form-group-text" for="clientType">Client Type *</label>
+            </div>
+            <div class="row">
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="addClient.clientType" />
+                <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
+              </div>
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="addClient.clientType" />
+                <label class="form-group-text m-2" for="clientType">CORPORATE</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 col-md-12">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault2" value="GROUP" [(ngModel)]="addClient.clientType" />
+                <label class="form-group-text m-2" for="clientType">GROUP</label>
+              </div>
+            </div>
           </div>
-          <div class="mb-3 col-md-12">
-            <label class="input-group-text" for="clientType"
-              >Client Type *</label
-            >
-            <select
-              class="form-select"
-              id="inputGroupSelect01"
-              name="clientType"
-              [(ngModel)]="addClient.clientType"
-              required
-            >
+          <!-- <div class=" mb-3 col-md-12 ">
+            <label class="input-group-text" for="clientType">Client Type *</label>
+            <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType"
+              required>
               <option selected>Select Client type</option>
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="CORPORATE">CORPORATE</option>
               <option value="GROUP">GROUP</option>
             </select>
-          </div>
-          <div class="mb-3 col-md-12" *ngIf="this.userRole == 'ORGANIZATION'">
+          </div> -->
+
+          <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
             <label class="input-group-text" for="coach">Assign Coach *</label>
-            <select
-              class="form-select"
-              id="inputGroupSelect01"
-              [(ngModel)]="addClient.id"
-              (change)="selectedCoach($event)"
-              required
-            >
-              <option *ngFor="let coach of OrgCoaches" [value]="coach.id">
-                {{ coach.firstName }} {{ coach.lastName }}
+            <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"
+              (change)="selectedCoach($event)" required>
+              <option *ngFor="let coach of OrgCoaches" [value]="coach.id">{{coach.firstName}} {{coach.lastName}}
               </option>
             </select>
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="mb-3">
+          <div class=" mb-3">
             <label for="reason">Reason *</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Reason"
-              required
-              name="reason"
-              [(ngModel)]="addClient.reason"
-            />
+            <input type="text" class="form-control" placeholder="Reason" required name="reason"
+              [(ngModel)]="addClient.reason">
+
           </div>
         </div>
-        <button
-          type="submit"
-          class="btn btn-signup btn-outline-success text-center"
-          data-bs-dismiss="modal"
-          (click)="newClient()"
-          [disabled]="
-            !addClient.firstName ||
-            !addClient.lastName ||
-            !addClient.email ||
-            !addClient.msisdn ||
-            !addClient.physicalAddress ||
-            !addClient.paymentMode ||
-            !addClient.clientType ||
-            !addClient.reason
-          "
-        >
-          ADD CLIENT
+        <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
+          !addClient.firstName||
+          !addClient.lastName||
+          !addClient.email||
+          !addClient.msisdn||
+          !addClient.physicalAddress||
+          !addClient.paymentMode||
+          !addClient.clientType||
+          !addClient.reason
+          ">ADD CLIENT
         </button>
       </form>
     </div>
   </div>
-
+</div>
