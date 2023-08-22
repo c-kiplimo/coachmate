@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mysql://163.172.141.131:30806/coach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
     username: root
-    password: natujenge
+    password: N@tujengeroot
 
     #        url: jdbc:mysql://172.18.0.2:3306/thecoach?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
     #        username: root
