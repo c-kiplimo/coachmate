@@ -4,10 +4,11 @@
       <div class="m-3">
         <h1 class="text-center mb-3">Coaching Agreement</h1>
       </div>
+
       <form [formGroup]="contractForm" class="m-3">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-            <h3 for="coachingTopic" class="form-label">Coaching Title</h3>
+            <label for="coachingTopic" class="form-label">Coaching Title</label>
             <input
               type="text"
               class="form-control"
@@ -20,60 +21,72 @@
         </div>
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-            <label for="coachingCategory" class="form-label"
-              >Coaching Category</label
-            >
-          </div>
-          <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
-              id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="contractForm.controls['coachingCategory']" />
-            <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
-          </div>
-          <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
-              id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="contractForm.controls['coachingCategory']"/>
-            <label class="form-group-text m-2" for="clientType">CORPORATE</label>
+            <div class="col-6 input-group-prepend">
+              <H3 for="coachingCategory" class="form-label"
+                >Coaching Category</H3
+              >
+              <div class="row">
+                <div class="col-6 input-group-prepend">
+                  <input
+                    class="form-check-input m-2 custom-radio-input"
+                    type="radio"
+                    name="coachingCategory"
+                    id="flexRadioDefault1"
+                    value="INDIVIDUAL"
+                    formControlName="coachingCategory"
+                  />
+                  <label class="form-group-text m-2" for="coachingCategory"
+                    >INDIVIDUAL</label
+                  >
+                </div>
+                <div class="col-6 input-group-prepend">
+                  <input
+                    class="form-check-input m-2 custom-radio-input"
+                    type="radio"
+                    name="coachingCategory"
+                    id="flexRadioDefault2"
+                    value="CORPORATE"
+                    formControlName="coachingCategory"
+                  />
+                  <label class="form-group-text m-2" for="coachingCategory"
+                    >CORPORATE</label
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-            <!-- <select
-              class="form-select"
-              aria-label="Default select example"
-              formControlName="coachingCategory"
-              required="true"
-            >
-              <option selected>Select Category</option>
-              <option value="INDIVIDUAL">INDIVIDUAL</option>
-              <option value="CORPORATE">CORPORATE</option>
-            </select>
-          </div> -->
-       
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-            <label for="clientId" class="form-label">Select Client</label>
-            <select
-              class="form-select"
-              aria-label="Default select example"
-              formControlName="clientId"
-              required="true"
-            >
-              <option selected>
-                Select Client you want to make contract with
-              </option>
-              <!--Loop through clients and form options-->
-              <option *ngFor="let client of clients" value="{{ client.id }}">
-                {{ client.firstName }} {{ client.lastName }}
-              </option>
-              <!--Render the create client button if no clients are found-->
-              <div *ngIf="!clients.length">
-                <button class="btn btn-outline-success" routerLink="/addclient">
-                  Create Client
-                </button>
-              </div>
-            </select>
-          </div>
+              <H3 for="clientId" class="form-label">Select Client</H3>
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                formControlName="clientId"
+                required="true"
+              >
+                <option selected>
+                  Select Client you want to make contract with
+                </option>
+                <!--Loop through clients and form options-->
+                <option *ngFor="let client of clients" value="{{ client.id }}">
+                  {{ client.firstName }} {{ client.lastName }}
+                </option>
+                <!--Render the create client button if no clients are found-->
+                <div *ngIf="!clients.length">
+                  <button
+                    class="btn btn-outline-success"
+                    routerLink="/addclient"
+                  >
+                    Create Client
+                  </button>
+                </div>
+              </select>
+            </div>
         </div>
-      <!-- coach select -->
-      <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
+
+          <!-- coach select -->
+          <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
         <label for="coachId" class="form-label">Select Coach</label>
         <select
           class="form-select"
@@ -91,15 +104,12 @@
           </div>
         </select>
       </div> -->
-<!-- 
-    </div>
-    <br>
+        
+        
 
-    <h3>Schedule & Fees</h3> -->
-
-            
-          <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
+        <h3>Schedule & Fees</h3>
+        <div class="row">
+          <div class="col">
             <label for="number" class="form-label">Start Date</label>
             <input
               type="date"
@@ -109,7 +119,7 @@
               required="true"
             />
           </div>
-          <div class="mb-3 col-md-12">
+          <div class="col">
             <label for="number" class="form-label">End Date</label>
             <input
               type="date"
@@ -119,58 +129,55 @@
               required="true"
             />
           </div>
-          </div>
-        <div class="row justify-content-center">
-          
-            <section>
-             
-              <label for="number" class="form-label">Coaching Goals</label>
-           
-                <!-- <div class="col-12"></div> -->
-                <div class=" row mb-3 col-md-12">
-                <!-- <div class="row"> -->
-                  <div class="col-6">
-                    <input
-                      [(ngModel)]="Objectives.objective"
-                      type="text"
-                      class="form-control"
-                      placeholder="Add Goal"
-                      formControlName="objectives"
-                    />
-                  </div>
-                  <div class="col-6">
-                    <button
-                      type="button"
-                      class="btn btn-outline-success"
-                      (click)="addObjective()"
-                    >
-                      <i class="fa-solid fa-user-plus"></i>Add goal
-                    </button>
-                  </div>
-                </div>
-              
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-3">
-                    <ol>
-                      <li *ngFor="let obj of objectives; index as i">
-                        {{ obj }}
-                        <i
-                          (click)="removeObjective(i)"
-                          role="button"
-                          class="fa-solid fa-trash-can p-1"
-                        ></i>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
-              <!-- </div> -->
-                </div>
-            </section>
         </div>
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-          <div class="row ">
+
+        <div class="mb-3 mt-3">
+          <section>
+            <br />
+            <h3>Coaching Goals</h3>
+            <br />
+            <div class="row mb-3">
+              <div class="col-12"></div>
+
+              <div class="row">
+                <div class="col-6">
+                  <input
+                    [(ngModel)]="Objectives.objective"
+                    type="text"
+                    class="form-control"
+                    placeholder="Add Goal"
+                    formControlName="objectives"
+                  />
+                </div>
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    (click)="addObjective()"
+                  >
+                    <i class="fa-solid fa-user-plus"></i>Add goal
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-10">
+                <div class="mb-3">
+                  <ol>
+                    <li *ngFor="let obj of objectives; index as i">
+                      {{ obj }}
+                      <i
+                        (click)="removeObjective(i)"
+                        role="button"
+                        class="fa-solid fa-trash-can p-1"
+                      ></i>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div class="row">
             <div class="col-6">
               <label for="number" class="form-label">No. of Sessions:</label>
               <input
@@ -222,9 +229,7 @@
               />
             </div>
           </div>
-          </div>
         </div>
-        
 
         <button
           class="btn"
@@ -356,19 +361,19 @@
         </div>
         <br />
       </form>
-    </div>    
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="d-flex justify-content-between">
-          <p></p>
-          <button
-            type="button"
-            (click)="addContract()"
-            class="btn btn-outline-success"
-          >
-            Submit
-          </button>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-between">
+            <p></p>
+            <button
+              type="button"
+              (click)="addContract()"
+              class="btn btn-outline-success"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </div>
     </div>
