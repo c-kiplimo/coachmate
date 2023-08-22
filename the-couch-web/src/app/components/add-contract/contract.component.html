@@ -58,35 +58,32 @@
         </div>
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-              <H3 for="clientId" class="form-label">Select Client</H3>
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                formControlName="clientId"
-                required="true"
-              >
-                <option selected>
-                  Select Client you want to make contract with
-                </option>
-                <!--Loop through clients and form options-->
-                <option *ngFor="let client of clients" value="{{ client.id }}">
-                  {{ client.firstName }} {{ client.lastName }}
-                </option>
-                <!--Render the create client button if no clients are found-->
-                <div *ngIf="!clients.length">
-                  <button
-                    class="btn btn-outline-success"
-                    routerLink="/addclient"
-                  >
-                    Create Client
-                  </button>
-                </div>
-              </select>
-            </div>
+            <H3 for="clientId" class="form-label">Select Client</H3>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="clientId"
+              required="true"
+            >
+              <option selected>
+                Select Client you want to make contract with
+              </option>
+              <!--Loop through clients and form options-->
+              <option *ngFor="let client of clients" value="{{ client.id }}">
+                {{ client.firstName }} {{ client.lastName }}
+              </option>
+              <!--Render the create client button if no clients are found-->
+              <div *ngIf="!clients.length">
+                <button class="btn btn-outline-success" routerLink="/addclient">
+                  Create Client
+                </button>
+              </div>
+            </select>
+          </div>
         </div>
 
-          <!-- coach select -->
-          <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
+        <!-- coach select -->
+        <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
         <label for="coachId" class="form-label">Select Coach</label>
         <select
           class="form-select"
@@ -104,10 +101,7 @@
           </div>
         </select>
       </div> -->
-        
-        
 
-        <h3>Schedule & Fees</h3>
         <div class="row">
           <div class="col">
             <label for="number" class="form-label">Start Date</label>
@@ -130,55 +124,57 @@
             />
           </div>
         </div>
-
-        <div class="mb-3 mt-3">
-          <section>
-            <br />
-            <h3>Coaching Goals</h3>
-            <br />
-            <div class="row mb-3">
-              <div class="col-12"></div>
-
+        <!-- <div class="row justify-content-center">
+          <div class="mb-3 mt-3"> -->
+            <section>
+                <div class="col-12"></div>
+                <br>
+                <div class="row justify-content-center">
+                  <div class="col">
+                    <label for="coachingGoals" class="form-label"
+                >Coaching Goals</label
+              >
+                    <input
+                      [(ngModel)]="Objectives.objective"
+                      type="text"
+                      class="form-control"
+                      placeholder="Add Goal"
+                      formControlName="objectives"
+                    />
+                  </div>
+                  
+                  <div class="col-6 mt-4">
+                    <button
+                      type="button"
+                      class="btn btn-outline-success"
+                      (click)="addObjective()"
+                    >
+                      <i class="fa-solid fa-user-plus"></i>Add goal
+                    </button>
+                  </div>
+                </div>
               <div class="row">
-                <div class="col-6">
-                  <input
-                    [(ngModel)]="Objectives.objective"
-                    type="text"
-                    class="form-control"
-                    placeholder="Add Goal"
-                    formControlName="objectives"
-                  />
-                </div>
-                <div class="col-6">
-                  <button
-                    type="button"
-                    class="btn btn-outline-success"
-                    (click)="addObjective()"
-                  >
-                    <i class="fa-solid fa-user-plus"></i>Add goal
-                  </button>
+                <div class="col-10">
+                  <div class="mb-3">
+                    <ol>
+                      <li *ngFor="let obj of objectives; index as i">
+                        {{ obj }}
+                        <i
+                          (click)="removeObjective(i)"
+                          role="button"
+                          class="fa-solid fa-trash-can p-1"
+                        ></i>
+                      </li>
+                    </ol>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-10">
-                <div class="mb-3">
-                  <ol>
-                    <li *ngFor="let obj of objectives; index as i">
-                      {{ obj }}
-                      <i
-                        (click)="removeObjective(i)"
-                        role="button"
-                        class="fa-solid fa-trash-can p-1"
-                      ></i>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </section>
-          <div class="row">
-            <div class="col-6">
+            </section>
+        
+        
+
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
               <label for="number" class="form-label">No. of Sessions:</label>
               <input
                 type="number"
@@ -190,12 +186,12 @@
               />
             </div>
           </div>
-          <div class="row">
+          <div class="row justify-content-center">
             <div
               *ngIf="
                 contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
               "
-              class="col-6"
+              class="mb-3 col-md-12"
             >
               <label for="number" class="form-label"
                 >Individual Fees Per Session</label
@@ -214,7 +210,7 @@
               *ngIf="
                 contractForm.controls['coachingCategory'].value == 'CORPORATE'
               "
-              class="col-6"
+              class="mb-3 col-md-12"
             >
               <label for="number" class="form-label"
                 >Group Fees Per Session</label
@@ -229,7 +225,7 @@
               />
             </div>
           </div>
-        </div>
+        
 
         <button
           class="btn"
