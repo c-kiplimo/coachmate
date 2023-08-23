@@ -45,6 +45,8 @@ public class Contract {
     private String note;
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
+    private Boolean coachSigned;
+    private Boolean clientSigned;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 

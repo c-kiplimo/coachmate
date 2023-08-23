@@ -83,7 +83,7 @@ public class ContractResource {
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
 
-                Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId());
+                Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId(), userDetails.getUserRole());
         return  ResponseEntity.ok().body(updatedContract);
     }
 
