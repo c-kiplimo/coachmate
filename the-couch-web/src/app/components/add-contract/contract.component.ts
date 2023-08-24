@@ -49,7 +49,6 @@ coachingCategory: any;
   organizationId: any;
   OrgCoaches: any;
   numberofCoaches: any;
-  editingSettings = false;
   isSaving = false;
   disableButton = false;
   saveSuccess = false;
@@ -65,6 +64,7 @@ contractTemplates: any;
   totalElements: any;
   loading = false;
   clientId: any;
+editingSettings = false;
 
 
   constructor(private clientService : ClientService,
@@ -135,15 +135,27 @@ contractTemplates: any;
       sessionStorage.getItem('contractTemplate') || '{}'
     );
   }
-  toggleEditingSettings(): void {
-    this.editingSettings = !this.editingSettings;
-    this.disableButton = true;
+  toggleEditingSettings(target: string): void {
+    const isServiceSection = target === 'collapseService';
+    const isTermsSection = target === 'collapseTerms';
+    const isPracticeSection = target === 'collapsePractice';
+  
+    if ((isServiceSection || isTermsSection || isPracticeSection) && !this.editingSettings) {
+      this.editingSettings = true;
+    } else if ((isServiceSection || isTermsSection || isPracticeSection) && this.editingSettings) {
+      this.editingSettings = false;
+    }
+  
     this.setFields();
-
+  
+    this.disableButton = true;
+  
     setTimeout(() => {
       this.disableButton = false;
     }, 2000);
   }
+  
+  
   getClients(page: number){
     this.loading = true;
     this.page = page;
