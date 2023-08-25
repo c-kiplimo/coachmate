@@ -366,10 +366,12 @@ public class ContractService {
         return contractMapper.toDto(contract);
     }
 
-    // add event listener to activate contract when coach both coach and client sign the contract
-//    @EventListener
-//    public void onApplicationEvent(ContractSignedEvent event) {
-//        log.info("Contract {} is signed by both coach and client", event.getContractId());
-//        updateContractStatus(event.getContractId(), ContractStatus.SIGNED, event.getLoggedInUserId(), event.getUserRole());
-//    }
+    public void checkAndUpdateContractStatus() {
+        contractRepository.findAll().forEach(contract -> {
+            if (contract.getCoachSigned() != null && contract.getClientSigned() != null && contract.getContractStatus() != ContractStatus.SIGNED) {
+                contract.setContractStatus(ContractStatus.SIGNED);
+                contractRepository.save(contract);
+            }
+        });
+    }
 }

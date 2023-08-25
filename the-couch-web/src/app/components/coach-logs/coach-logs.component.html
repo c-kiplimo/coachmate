@@ -153,9 +153,11 @@
             <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
               <div class="donut multi"></div>
             </div>
-            <p class="text-muted mt-5" *ngIf="!loading && !coachingLogs?.length">
-              No coaching logs Found.
-            </p>
+            <div class="d-flex justify-content-center" *ngIf="!loading && !coachingLogs?.length">
+              <p class="text-muted mt-5">
+                No coaching logs Found.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -290,8 +292,10 @@
       <div class="donut-wrapper" *ngIf="loading">
         <div class="donut multi"></div>
       </div>
-      <div *ngIf="!loading && !coachingLogs?.length">
-        <h2 class="text-muted mt-5">No Logs Found.</h2>
+      <div class="d-flex justify-content-center" *ngIf="!loading && !coachingLogs?.length">
+        <p class="text-muted mt-5">
+          No coaching logs Found.
+        </p>
       </div>
 
     </div>

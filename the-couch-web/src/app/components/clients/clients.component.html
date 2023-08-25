@@ -83,9 +83,11 @@
           <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !clients.length">
-            No Clients Found.
-          </p>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !clients.length">
+            <p class="text-muted mt-5">
+              No Clients Found.
+            </p>
+          </div>
         </div>
       </div>
     </div>

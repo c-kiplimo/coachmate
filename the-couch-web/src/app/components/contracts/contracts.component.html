@@ -164,8 +164,8 @@
       <div class="donut-wrapper" *ngIf="loading">
         <div class="donut multi"></div>
       </div>
-      <div *ngIf="!loading && contracts?.length === 0">
-        <h2 class="text-muted mt-5">No Contracts Found.</h2>
+      <div class="d-flex justify-content-center" *ngIf="!loading && !contracts?.length">
+        <p class="text-muted mt-5">No Contracts Found.</p>
       </div>
 
     </div>

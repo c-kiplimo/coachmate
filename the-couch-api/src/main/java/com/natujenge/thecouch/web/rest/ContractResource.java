@@ -39,6 +39,7 @@ public class ContractResource {
                                              @AuthenticationPrincipal User userDetails) {
         try{
            // Long coachId = userDetails.getCoach().getId();
+            contractService.checkAndUpdateContractStatus();
             Contract contract = contractService.findContractById(contractId);
             return new ResponseEntity<>(contract, HttpStatus.OK);
 

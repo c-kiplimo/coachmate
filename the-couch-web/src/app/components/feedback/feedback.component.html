@@ -48,9 +48,11 @@
           <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
             <div class="donut multi"></div>
           </div>
-          <p class="text-muted mt-5" *ngIf="!loading && !feedbacks?.length">
-            No feedbacks Found.
-          </p>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !feedbacks?.length">
+            <p class="text-muted mt-5">
+              No feedbacks Found.
+            </p>
+          </div>
         </div>
       </div>
     </div>

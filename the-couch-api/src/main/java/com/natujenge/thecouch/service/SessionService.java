@@ -82,7 +82,7 @@ public class SessionService {
             log.warn("Session slot with Id {} not found", sessionRequest.getSessionSchedules().getId());
             throw new IllegalArgumentException("Session Slot no found!");
         }
-        if (optionalContract.get().getContractStatus() == ContractStatus.NEW) {
+        if (optionalContract.get().getContractStatus() != ContractStatus.SIGNED) {
             log.warn("Contract with id {} is in NEW state", contractId);
             throw new IllegalArgumentException("Contract is in not signed!");
         }
