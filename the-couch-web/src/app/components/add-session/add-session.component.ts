@@ -241,7 +241,7 @@ export class AddSessionComponent implements OnInit {
       this.toastrService.success('Session added successfully');
       window.history.back();
     }, error => {
-      this.toastrService.error(error.error.message);
+      this.toastrService.error("Contract is not signed", "Error adding session");
     });
   }
 

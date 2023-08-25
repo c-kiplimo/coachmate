@@ -80,9 +80,11 @@
         <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
           <div class="donut multi"></div>
         </div>
-        <p class="text-muted mt-5" *ngIf="!loading && !payments?.length">
-          No receipts Found.
-        </p>
+        <div class="d-flex justify-content-center" *ngIf="!loading && !payments?.length">
+          <p class="text-muted mt-5">
+            No receipts Found.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -152,8 +154,10 @@
           <div class="donut-wrapper" *ngIf="loading">
             <div class="donut multi"></div>
           </div>
-          <div *ngIf="!loading && !payments?.length">
-            <h2 class="text-muted mt-5">No Payments Found.</h2>
+          <div class="d-flex justify-content-center" *ngIf="!loading && !payments?.length">
+            <p class="text-muted mt-5">
+              No receipts Found.
+            </p>
           </div>
   
         </div>
