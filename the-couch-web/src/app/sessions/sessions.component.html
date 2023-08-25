@@ -86,10 +86,14 @@
                     </tr>
                   </tbody>
                 </table>
-             
-                <p class="text-muted mt-5" *ngIf="!loading && !sessions.length">
-                  No sessions Found.
-                </p>
+                <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                  <div class="donut multi"></div>
+                </div>
+                <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+                  <p class="text-muted mt-5">
+                    No Sessions Found.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -174,10 +178,11 @@
         <div class="donut-wrapper" *ngIf="loading">
           <div class="donut multi"></div>
         </div>
-        <div *ngIf="!loading && sessions?.length === 0">
-          <h2 class="text-muted mt-5">No Sessions Found.</h2>
+        <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+          <p class="text-muted mt-5">
+            No Sessions Found.
+          </p>
         </div>
-
       </div>
     </div>
   </div>

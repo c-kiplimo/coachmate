@@ -21,14 +21,13 @@ import com.natujenge.thecouch.web.rest.dto.ContractDTO;
 import com.natujenge.thecouch.web.rest.request.ContractRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -62,12 +61,12 @@ public class ContractService {
     private final CoachBillingAccountService coachBillingAccountService;
 
     public ContractService(SessionRepository sessionRepository, ContractMapper contractMapper,
-            OrganizationService organizationService, ContractRepository contractRepository, UserService userService,
-            NotificationRepository notificationRepository,
-            UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
-            NotificationSettingsService notificationSettingsService,
-            ClientBillingAccountService clientBillingAccountService,
-            NotificationService notificationService, CoachBillingAccountService coachBillingAccountService) {
+                           OrganizationService organizationService, ContractRepository contractRepository, UserService userService,
+                           NotificationRepository notificationRepository,
+                           UserRepository userRepository, NotificationServiceHTTPClient notificationServiceHTTPClient,
+                           NotificationSettingsService notificationSettingsService,
+                           ClientBillingAccountService clientBillingAccountService,
+                           NotificationService notificationService, CoachBillingAccountService coachBillingAccountService) {
         this.sessionRepository = sessionRepository;
         this.contractMapper = contractMapper;
         this.organizationService = organizationService;
@@ -95,7 +94,8 @@ public class ContractService {
         }
         return optionalContract.get();
     }
-    public Contract createContract(Long coachId, ContractRequest contractRequest,Long organizationId) {
+
+    public Contract createContract(Long coachId, ContractRequest contractRequest, Long organizationId) {
 
         // Get Client
         log.info("Client id:{}", contractRequest);
@@ -184,7 +184,7 @@ public class ContractService {
             // replacement to get content
             String smsContent = NotificationUtil.generateContentFromTemplate(smsTemplate, replacementVariables);
             String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS; // TO-DO get this value from cooperative
-                                                                         // settings
+            // settings
             String referenceId = savedcontract.getId().toString();
             String msisdn = savedcontract.getClient().getMsisdn();
 
@@ -228,48 +228,63 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
-@Transactional
-    public Contract updateContractStatus(Long contractId, ContractStatus contractStatus,Long loggedInUSerId){
+    @Transactional
+    public Contract updateContractStatus(Long contractId, ContractStatus contractStatus, Long loggedInUSerId, UserRole userRole) {
         Optional<Contract> contractOptional = contractRepository.findById(contractId);
         if (contractOptional.isEmpty()) {
             throw new IllegalStateException("Contract doesn't exist");
         }
         Contract contract = contractOptional.get();
 
-        if(contractStatus==ContractStatus.SIGNED) {
+        if (contractStatus == ContractStatus.SIGNED) {
             if (contract.getContractStatus() == ContractStatus.SIGNED) {
                 log.info("Contract {} is  is signed", contractId);
                 throw new IllegalStateException("Contract is signed");
 
             } else {
-                contract.setContractStatus(ContractStatus.SIGNED);
-                contract.setLastUpdatedBy(loggedInUSerId);
+                if (contract.getCoachSigned() != null && contract.getClientSigned() != null) {
+                    contract.setContractStatus(ContractStatus.SIGNED);
+                    contract.setLastUpdatedBy(loggedInUSerId);
+                } else {
+                    if (userRole == UserRole.CLIENT) {
+                        contract.setClientSigned(true);
+                        contract.setLastUpdatedBy(loggedInUSerId);
+                    } else if (userRole == UserRole.COACH) {
+                        contract.setCoachSigned(true);
+                        contract.setLastUpdatedBy(loggedInUSerId);
+                    }
+                }
             }
         } else if (contractStatus == ContractStatus.ONGOING) {
-            if (contract.getContractStatus() == ContractStatus.ONGOING) {
-                log.info("Contract {} is  is ongoing", contractId);
-                throw new IllegalStateException("Contract is ONGOING");
+            if (!(contract.getCoachSigned() && contract.getClientSigned())) {
+                log.info("Contract {} is  is not signed", contractId);
+                throw new IllegalStateException("Contract is not signed");
             } else {
-                contract.setContractStatus(ContractStatus.ONGOING);
+                if (contract.getContractStatus() == ContractStatus.ONGOING) {
+                    log.info("Contract {} is  is ongoing", contractId);
+                    throw new IllegalStateException("Contract is ONGOING");
+                } else {
+                    contract.setContractStatus(ContractStatus.ONGOING);
+                    contract.setLastUpdatedBy(loggedInUSerId);
+                }
+            }
+        } else if (contractStatus == ContractStatus.FINISHED) {
+            if (contract.getContractStatus() == ContractStatus.FINISHED) {
+                log.info("Contract {} is  is finished", contractId);
+                throw new IllegalStateException("Contract is FINISHED");
+            } else {
+                contract.setContractStatus(ContractStatus.FINISHED);
                 contract.setLastUpdatedBy(loggedInUSerId);
             }
-        }else if(contractStatus==ContractStatus.FINISHED){
-          if(contract.getContractStatus()==ContractStatus.FINISHED){
-              log.info("Contract {} is  is finished", contractId);
-              throw new IllegalStateException("Contract is FINISHED");
-          }else{
-              contract.setContractStatus(ContractStatus.FINISHED);
-              contract.setLastUpdatedBy(loggedInUSerId);
-          }
         }
-        return  contract;
+        return contract;
     }
 
-    private Contract createExample(Long coachId,Long clientId,String search, ContractStatus status, Long organisationId) {
-        Contract  contactExample = new Contract();
-        User coach=new User();
-        User client=new User();
-        Organization organization=new Organization();
+    private Contract createExample(Long coachId, Long clientId, String search, ContractStatus status, Long organisationId) {
+        Contract contactExample = new Contract();
+        User coach = new User();
+        User client = new User();
+        Organization organization = new Organization();
 
         if (organisationId != null) {
             contactExample.setOrganization(organization);
@@ -302,7 +317,7 @@ public class ContractService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths("coach.locked", "coach.enabled","coach.onboarded","client.locked", "client.enabled","client.onboarded")
+                .withIgnorePaths("coach.locked", "coach.enabled", "coach.onboarded", "client.locked", "client.enabled", "client.onboarded")
                 .withIgnoreNullValues();
 
         Example<Contract> example = Example.of(contract, matcher);
@@ -349,5 +364,14 @@ public class ContractService {
 
         log.info("Contract {} updated", contract);
         return contractMapper.toDto(contract);
+    }
+
+    public void checkAndUpdateContractStatus() {
+        contractRepository.findAll().forEach(contract -> {
+            if (contract.getCoachSigned() != null && contract.getClientSigned() != null && contract.getContractStatus() != ContractStatus.SIGNED) {
+                contract.setContractStatus(ContractStatus.SIGNED);
+                contractRepository.save(contract);
+            }
+        });
     }
 }

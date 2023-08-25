@@ -39,6 +39,7 @@ public class ContractResource {
                                              @AuthenticationPrincipal User userDetails) {
         try{
            // Long coachId = userDetails.getCoach().getId();
+            contractService.checkAndUpdateContractStatus();
             Contract contract = contractService.findContractById(contractId);
             return new ResponseEntity<>(contract, HttpStatus.OK);
 
@@ -83,7 +84,7 @@ public class ContractResource {
                                          @AuthenticationPrincipal User userDetails) {
         log.info("Request to update contract status to {}", contractStatus);
 
-                Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId());
+                Contract updatedContract=contractService.updateContractStatus(contractId,contractStatus, userDetails.getId(), userDetails.getUserRole());
         return  ResponseEntity.ok().body(updatedContract);
     }
 
