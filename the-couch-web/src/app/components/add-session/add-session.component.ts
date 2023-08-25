@@ -12,6 +12,7 @@ import { ClientService } from '../../services/ClientService';
 import { ApiService } from '../../services/ApiService';
 import { SessionsService } from '../../services/SessionsService';
 import { ContractsService } from '../../services/contracts.service';
+import { CalendlyService } from 'src/app/services/calendly.service';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -122,7 +123,8 @@ export class AddSessionComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private sessionService: ClientService,
     private contractsService: ContractsService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private calendlyService: CalendlyService
   ) {
 
   }
@@ -148,7 +150,9 @@ export class AddSessionComponent implements OnInit {
       this.getClients();
     }
 
+    
   }
+
   
   generateCalendar() {
     this.weeks = []; // Reset weeks
