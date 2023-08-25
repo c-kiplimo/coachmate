@@ -179,26 +179,22 @@
         <div class="m-2">
           <div class="row">
             <div class="d-flex justify-content-between">
-              <div class="col-3 d-flex flex-column">
-                <span class="title">Billed to</span>
-                <span class="title">{{payment?.clientFullName}}</span>
+              <span class="title">Billed to</span>
+              <span class="value">{{ payment?.clientFullName }}</span>
+            </div>
+              <div class="d-flex justify-content-between">
+                <span class="title">Payment Ref:</span>
+                <span class="value">{{ payment?.extPaymentRef }}</span>
               </div>
-              <div class="col-4 d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                  <span>Payment Ref: </span>
-                  <span>{{payment?.extPaymentRef}}</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <span>Receipt Date: </span>
-                  <span>{{today | date : "MMM d y"}}</span>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <span>Payment Date: </span>
-                  <span>{{payment?.createdAt | date : "MMM d y"}}</span>
-                </div>
+              <div class="d-flex justify-content-between">
+                <span class="title">Receipt Date:</span>
+                <span class="value">{{ today | date: "MMM d y" }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="title">Payment Date:</span>
+                <span class="value">{{ payment?.createdAt | date: "MMM d y" }}</span>
               </div>
             </div>
-          </div>
 
           <hr>
           <div class="row" *ngIf="payment">
@@ -225,6 +221,10 @@
     </div>
   </div>
 </div>
+
+
+
+
 
 <!-- filter modal  -->
 <div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
