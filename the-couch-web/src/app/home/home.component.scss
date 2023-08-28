@@ -227,8 +227,9 @@ nav {
 }
 
 .contact {
-  padding: 5rem 0;
-  background-color: #f2f5f3
+  padding: 5rem 2rem;
+  background-color: rgb(218, 241, 218);
+  // padding: 20px;
 }
 
 .contact .container {
@@ -324,7 +325,7 @@ nav {
   width: 55px;
   padding-top: 10px;
   border-radius: 50%;
-  border: 2px solid #f1f1f133;
+  border: 2px  #e8ccc533;
   transition: all 0.2s;
 }
 
