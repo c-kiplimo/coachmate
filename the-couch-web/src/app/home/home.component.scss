@@ -55,7 +55,7 @@ nav,
   padding: 0;
 }
 .btn-signup1{
-  background-color: #22b45a;
+  background-color: #0f8239;
   color: #fff;
   letter-spacing: 1px;
   font-size: 0.9rem;
@@ -144,9 +144,9 @@ nav {
   justify-content: center;
   align-items: center;
 }
-// .transparent-logo {
-//   transition: opacity 0.5s ease;
-// }
+.transparent-logo {
+  transition: opacity 0.5s ease;
+}
 
 .btn-auth {
   margin-left: 10px;
@@ -228,7 +228,7 @@ nav {
 
 .contact {
   padding: 5rem 0;
-  background-color: #155022;
+  background-color: #f7f7f7
 }
 
 .contact .container {
@@ -236,21 +236,21 @@ nav {
 }
 
 .contact h3 {
-  color: #fff;
+  color:  #5f6063;
   font-weight: 600;
   font-size: 2.5rem;
   margin-bottom: 30px;
 }
 
 .contact p {
-  color: #fff;
+  color:  #000205;
   font-size: 1.2rem;
 }
 
 .contact p a {
   text-decoration: underline;
   font-weight: 600;
-  color: #fff;
+  color: #010204;
 }
 
 .contact input,
@@ -268,20 +268,22 @@ nav {
 
 
 .footer {
-  background-color: #212121;
+  background-color: #fff;
   padding-top: 6rem;
   padding-bottom: 0;
+  display: block;
+  text-align: center;
 }
 
 .footer h5 {
-  color: #fff;
+  color: #000208;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
 .footer a,
 .footer p {
-  color: #fff;
+  color:#000103;
   font-size: 0.9rem;
 }
 
@@ -306,7 +308,7 @@ nav {
 
 .footer .logo-description {
   font-size: 1.5rem;
-  color: #fff;
+  color: #000000;
 }
 
 .footer .social-networks {
@@ -342,11 +344,11 @@ nav {
 
 .footer .footer-text-container .footer-text {
   font-size: 0.9rem;
-  color: #fff;
+  color: #000104;
 }
 
 .footer .footer-text-container .footer-text a {
-  color: #fff;
+  color: #000001;
   text-decoration: underline;
   display: inline;
 }

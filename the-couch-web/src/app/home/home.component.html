@@ -77,7 +77,7 @@
     <img
       src="../../assets/images/CoachMatePRO-Transparent.png"
       alt="Logo"
-      class="welcome-img logo-img me-2"
+      class="welcome-img logo-img me-2 transparent-logo"
     />
     <div class="d-flex justify-content-between">
       <button
@@ -103,7 +103,6 @@
 
 <div class="container-fluid mb-5" id="section">
   <div class="container">
-    <hr class="half-width" />
     <section class="abt-section pb-3 mt-5 mb-5" id="home">
       <div class="container">
         <div class="row align-items-center">
@@ -133,7 +132,6 @@
       </div>
     </section>
 
-    <hr class="half-width" />
     <section class="features-section" id="features">
       <div class="section-header text-center">
         <h3 class="section-title">Features</h3>
@@ -292,8 +290,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <hr class="half-width" />
   <div class="contact" id="contact">
     <div class="container">
       <div class="row align-items-md-center">
@@ -367,11 +363,10 @@
       </div>
     </div>
   </div>
-
-  <div class="footer">
+  <div class="footer d-none d-lg-block">
     <div class="row">
-      <div class="col-12 text col-lg-3"></div>
-      <div class="col col-12-ms col-lg-3 mb-3 lead">
+      <div class="col-12 text"></div>
+      <div class=" col-lg-3 mb-3 lead">
         <h5 style="font-size: 24px">Explore</h5>
         <a href="/home#">Home</a>
         <a href="/home#features">Features</a>
@@ -410,9 +405,46 @@
         </div>
       </div>
     </div>
-
+   
+    <hr class="half-width" />
     <div class="footer-text-container">
       <span class="footer-text">Copyright © 2023 Powered By Natujenge</span>
     </div>
   </div>
+  <div class="footer show-sm">
+    <div class="row">
+      <div class="col-12 mb-3 lead">
+        <h5 style="font-size: 24px">Explore</h5>
+        <a href="/home#">Home</a>
+        <a href="/home#features">Features</a>
+        <a href="/home#security">Security</a>
+        <a href="/home#contact">Contact us</a>
+      </div>
+      <div class="col-12 mb-3 lead">
+        <h5 style="font-size: 24px">Account</h5>
+        <a [routerLink]="'/terms-and-conditions'" target="_blank">Terms & conditions</a>
+        <a [routerLink]="'/privacy-policy'" target="_blank">Privacy policy</a>
+      </div>
+      <div class="col-12 mb-3 lead">
+        <h5 style="font-size: 24px">Get in touch</h5>
+        <p class="mb-0">You can write us on:</p>
+        <a class="mb-0" href="">hello@coachmatepro.app</a>
+        <p>Or use our social links to reach us</p>
+        <div class="social-networks">
+          <a href="https://www.facebook.com/KimunyaMugo" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.linkedin.com/in/kimunya/?locale=en_US" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://twitter.com/@KimunyaMugo" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://api.whatsapp.com/send?phone=+254723786191" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <hr class="half-width" />
+    
+    <div class="footer-text-container">
+      <span class="footer-text">Copyright © 2023 Powered By Natujenge</span>
+    </div>
+  </div>
+  
+</div>
 </div>
