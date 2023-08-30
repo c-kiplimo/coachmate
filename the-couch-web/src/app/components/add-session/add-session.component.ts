@@ -16,6 +16,7 @@ import { CalendlyService } from 'src/app/services/calendly.service';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { GoogleSignInService } from 'src/app/services/google-sign-in.service';
 
 @Component({
   selector: 'app-add-session',
@@ -124,7 +125,8 @@ export class AddSessionComponent implements OnInit {
     private sessionService: ClientService,
     private contractsService: ContractsService,
     private toastrService: ToastrService,
-    private calendlyService: CalendlyService
+    private calendlyService: CalendlyService,
+    private googleSignInService: GoogleSignInService,
   ) {
 
   }
@@ -152,7 +154,6 @@ export class AddSessionComponent implements OnInit {
 
     
   }
-
   
   generateCalendar() {
     this.weeks = []; // Reset weeks
@@ -243,10 +244,68 @@ export class AddSessionComponent implements OnInit {
 
     this.sessionService.addSession(this.formData, params).subscribe((res: any) => {
       this.toastrService.success('Session added successfully');
-      window.history.back();
+      this.addThisSessionToGoogleCalendar(this.formData);
+      //window.history.back();
     }, error => {
       this.toastrService.error("Contract is not signed", "Error adding session");
     });
+  }
+
+  addThisSessionToGoogleCalendar(session: any) {
+    //add event to google calendar
+    const event = {
+      summary: session?.name || '',
+      location: session?.sessionVenue || '',
+      description: session?.sessionDetails || '',
+      start: {
+        dateTime: session?.sessionDate + 'T' + this.formatTimeForEvent(session?.sessionSchedules?.startTime),
+        timeZone: 'Africa/Nairobi',
+      },
+      end: {
+        dateTime: session?.sessionDate + 'T' + this.formatTimeForEvent(session?.sessionSchedules?.endTime),
+        timeZone: 'Africa/Nairobi',
+      },
+      attendees: [
+        { email: this.selectedContract?.coachEmail },
+        { email: this.selectedContract?.clientEmail },
+      ],
+      recurrence: ['RRULE:FREQ=DAILY;COUNT=1'],
+      reminders: {
+        useDefault: false,
+        overrides: [
+          { method: 'email', minutes: 24 * 60 },
+          { method: 'popup', minutes: 10 },
+        ],
+      },
+      conferenceData: {
+        createRequest: {
+          requestID: this.generateUniqueID(),
+          conferenceSolutionKey: { type: 'hangoutsMeet' },
+        },
+      },
+    };
+
+    this.googleSignInService.addEventToGoogleCalendar(event).subscribe((res: any) => {
+      this.toastrService.success('Session added to google calendar');
+      window.history.back();
+    }, (error: any) => {
+      this.toastrService.error('Error adding session to google calendar', error.message);
+      window.history.back();
+    });
+    
+  }
+
+  generateUniqueID() {
+    return this.selectedContract?.clientId + '-' + this.selectedContract?.coachId + '-' + this.selectedContract?.id + '-' + Date.now().toString() + Math.random().toString(36).substring(7);
+  }
+
+  formatTimeForEvent(time: any) {
+    //the result should be like 16:00:00+03:00
+    let timeString = time.split(':');
+    let hours = timeString[0];
+    let minutes = timeString[1];
+    let seconds = timeString[2];
+    return hours + ':' + minutes + ':' + seconds + '+03:00';
   }
 
 

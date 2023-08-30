@@ -46,11 +46,13 @@ public class ContractDTO {
     private String clientFirstName;
     private String clientLastName;
     private String clientBusinessName;
+    private String clientEmail;
 
     private Long coachId;
     private String coachFullName;
     private String coachFirstName;
     private String coachLastName;
     private String coachBusinessName;
+    private String coachEmail;
 
 }
