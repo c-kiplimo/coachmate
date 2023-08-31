@@ -17,12 +17,14 @@ public interface ContractMapper extends EntityMapper<ContractDTO, Contract> {
     @Mapping(target = "clientFullName", source = "client.fullName")
     @Mapping(target = "clientFirstName", source = "client.firstName")
     @Mapping(target = "clientLastName", source = "client.lastName")
+    @Mapping(target = "clientEmail", source = "client.email")
     @Mapping(target = "clientBusinessName", source = "client.businessName")
     @Mapping(target = "coachId", source = "coach.id")
     @Mapping(target = "coachFullName", source = "coach.fullName")
     @Mapping(target = "coachFirstName", source = "coach.firstName")
     @Mapping(target = "coachLastName", source = "coach.lastName")
     @Mapping(target = "coachBusinessName", source = "coach.businessName")
+    @Mapping(target = "coachEmail", source = "coach.email")
 
     ContractDTO toDto(Contract Entity);
 }

@@ -647,4 +647,28 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public void saveGoogleAuthData(String googleAuthData, User userDetails) {
+        log.info("Request to save google auth data: {}", googleAuthData);
+        Optional<User> userOptional = userRepository.findById(userDetails.getId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setGoogle(googleAuthData);
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
+
+    public void removeGoogleAuthData(User userDetails) {
+        log.info("Request to remove google auth data");
+        Optional<User> userOptional = userRepository.findById(userDetails.getId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setGoogle(null);
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
+
 }

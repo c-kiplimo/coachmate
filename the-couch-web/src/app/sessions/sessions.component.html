@@ -1,50 +1,92 @@
 <div class="row">
-  <div class="col mt-4" style="margin-left: 5px">
+  <div class="col d-flex justify-content-between mt-4" style="margin-left: 5px">
     <h2 class="fw-semi-bold f-weight fs-5">Sessions</h2>
+    <button class="google-calendar-connect-button"
+    (click)="googleCalenderConnected ? disconnectGoogleCalender() : connectToGoogleCalendar()">
+    <img src="../../assets/images/Google_Calendar_icon_(2020).svg" alt="Google Calendar Logo"
+      class="google-calendar-logo">
+    {{ googleCalenderConnected ? 'Disconnect' : 'Connect' }}
+  </button>
   </div>
 </div>
 
-  <div class="d-none d-lg-block">
-    <div class="row justify-content-center">
-      <div class="col-md-12 col-sm-12">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="filters-section">
-              <div class="wrap">
-                <select class="form-control" name="codes" (change)="filterByStatus($event)">
-                  <option value="">Filter By Status</option>
-                  <option value="NEW">NEW</option>
-                  <option value="CONFIRMED">CONFIRMED</option>
-                  <option value="CANCELLED">CANCELLED</option>
-                  <option value="COMPLETED">COMPLETED</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Client Name, Phone or Email"
-                aria-label="Name, Phone or Email" aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
-              <button class="btn btn-outline-success" type="button" id="button-addon2"
-                (click)="getAllSessions(0)">Search</button>
-            </div>
-          </div>
+<br />
 
-          <div class="col-md-2 mr-1">
-            <button type="button" routerLink="/addSession" class="btn btn-outline-success">
-              <i class="fa fa-plus"></i> Add Session
-            </button>
+<div class="d-none d-lg-block">
+  <div class="row justify-content-center">
+    <div class="col-md-12 col-sm-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="filters-section">
+            <div class="wrap">
+              <select class="form-control" name="codes" (change)="filterByStatus($event)">
+                <option value="">Filter By Status</option>
+                <option value="NEW">NEW</option>
+                <option value="CONFIRMED">CONFIRMED</option>
+                <option value="CANCELLED">CANCELLED</option>
+                <option value="COMPLETED">COMPLETED</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Client Name, Phone or Email"
+              aria-label="Name, Phone or Email" aria-describedby="button-addon2" [(ngModel)]="filters.searchItem">
+            <button class="btn btn-outline-success" type="button" id="button-addon2"
+              (click)="getAllSessions(0)">Search</button>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="donut-wrapper" *ngIf="loading">
-                  <div class="donut multi"></div>
+        <div class="col-md-2">
+          <button type="button" routerLink="/addSession" class="btn btn-outline-success">
+            <i class="fa fa-plus"></i> Add Session
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="row justify-content-center">
+                <div class="col-md-7 col-sm-12">
+                  <!--Tabs-->
+                  <!--*ngIf="userRole !== 'CLIENT'"-->
+                  <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                    <li class="nav-item" (click)="toggleTab('sessions')">
+                      <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just"
+                        data-toggle="tab" role="tab" aria-controls="home-just" aria-selected="true"><i
+                          class="fa-solid fa-chalkboard-user" style="color: green"></i> Sessions</a>
+                    </li>
+                    <li class="nav-item" (click)="toggleTab('google')">
+                      <a class="nav-link" [class.active]="currentTab === 'google'" id="contact-tab-just"
+                        data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                          class="fa-solid fa-file-contract" style="color: green"></i> Google Calender</a>
+                    </li>
+                  </ul>
+                  <!--       
+                  <div class="show-sm">
+                    <ul class="nav nav-tabs md-tabs nav-justified" id="myTabJust" role="tablist">
+                      <li class="nav-item" (click)="toggleTab('sessions')">
+                        <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
+                          role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
+                            style="color: green"></i></a>
+                      </li>
+                      <li class="nav-item" (click)="toggleTab('contracts')">
+                        <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
+                          data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
+                            class="fa-solid fa-file-contract" style="color: green"></i></a>
+                      </li>
+                    </ul>
+                  </div> -->
                 </div>
-                <table class="table" *ngIf="sessions.length">
+              </div>
+
+              <br>
+              <div *ngIf="currentTab === 'sessions'">
+                <table class="table" *ngIf="sessions?.length">
                   <thead>
                     <tr>
                       <th scope="col">Name</th>
@@ -95,128 +137,165 @@
                   </p>
                 </div>
               </div>
+
+              <div *ngIf="currentTab === 'google'">
+                <table class="table" *ngIf="googleCalendarEvents?.length">
+                  <thead>
+                    <tr>
+                      <th scope="col">Summary</th>
+                      <th scope="col">Start Time</th>
+                      <th scope="col">End Time</th>
+                      <th scope="col">Google meet link</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let event of googleCalendarEvents">
+                      <td>{{ event?.summary }}</td>
+                      <td>{{ event?.start?.dateTime | date:'medium' }}</td>
+                      <td>{{ event?.end?.dateTime | date:'medium' }}</td>
+                      <td class="view"><a [href]="event?.hangoutLink" target="_blank">{{ event?.hangoutLink }}</a></td>
+                      <td>
+                        <span class="badge" [ngClass]="{
+                  'badge-success': event.status === 'confirmed',
+                  'badge-danger': event.status === 'cancelled',
+                  'badge-primary': event.status === 'tentative'
+                }">{{ event.status }}</span>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div>
+
+              </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="show-sm">
-    <div class="row" [@fadeIn]>
-      <div class="col-md-10 mb-2">
-        <div class="input-group">
-          <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
-            aria-label="Name, Phone or Email" aria-describedby="button-addon2">
-          <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
-        </div>
+<div class="show-sm">
+  <div class="row" [@fadeIn]>
+    <div class="col-md-10 mb-2">
+      <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="filters.searchItem" placeholder="Name, Phone or Email"
+          aria-label="Name, Phone or Email" aria-describedby="button-addon2">
+        <button class="btn btn-outline-success" type="button" id="button-addon2" (click)="search()">Search</button>
       </div>
     </div>
-    <div class="d-flex justify-content-end mt-2 mb-2">
-      <div (click)="toggleFilters()">
-        Filters
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
-          viewBox="0 0 16 16">
-          <path
-            d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
-        </svg>
-      </div>
+  </div>
+  <div class="d-flex justify-content-end mt-2 mb-2">
+    <div (click)="toggleFilters()">
+      Filters
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+        viewBox="0 0 16 16">
+        <path
+          d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+      </svg>
     </div>
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between mt-2 mb-2">
-          <h3></h3>
-          <div>
-            <button type="button" routerLink="/addSession" class="btn btn-outline-success">
-              <i class="fa fa-plus"></i>
-            </button>
-          </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between mt-2 mb-2">
+        <h3></h3>
+        <div>
+          <button type="button" routerLink="/addSession" class="btn btn-outline-success">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-3 pb-2 listing-item"
+        *ngFor="let session of sessions  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
+        [routerLink]="['/sessionView', session.id]">
+
+
+        <div class="d-flex justify-content-between">
+          <h4 class="farmer" [routerLink]="['/sessionView', session.id]">
+            {{ session?.name | titlecase }}
+          </h4>
+
+          <span class="no-word-break">{{ session?.sessionVenue | titlecase }}
+            <a [routerLink]="['/sessionView', session.id]"><i class="fa fa-angle-right"></i></a>
+          </span>
         </div>
 
-        <div class="pt-3 pb-2 listing-item"
-          *ngFor="let session of sessions  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
-          [routerLink]="['/sessionView', session.id]">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ session?.clientFullName | titlecase }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0" *ngIf="session?.sessionSchedulesSessionDate">
+            {{ session?.sessionSchedulesSessionDate }}
+          </span>
+          <span class="customer-name" class="mb-0" *ngIf="!session?.sessionSchedulesSessionDate">
+            {{ session?.sessionDate }}
+          </span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="customer-name" class="mb-0">
+            {{ session?.sessionSchedulesStartTime + ' - ' + session?.sessionSchedulesEndTime }}
+          </span>
+        </div>
 
-
-          <div class="d-flex justify-content-between">
-            <h4 class="farmer" [routerLink]="['/sessionView', session.id]">
-              {{ session?.name | titlecase }}
-            </h4>
-
-            <span class="no-word-break">{{ session?.sessionVenue | titlecase }}
-              <a [routerLink]="['/sessionView', session.id]"><i class="fa fa-angle-right"></i></a>
-            </span>
-          </div>
-
-          <div class="d-flex justify-content-between mb-2">
-            <span class="customer-name" class="mb-0">
-              {{ session?.clientFullName | titlecase }}</span>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <span class="customer-name" class="mb-0" *ngIf="session?.sessionSchedulesSessionDate">
-              {{ session?.sessionSchedulesSessionDate }}
-            </span>
-            <span class="customer-name" class="mb-0" *ngIf="!session?.sessionSchedulesSessionDate">
-              {{ session?.sessionDate }}
-            </span>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <span class="customer-name" class="mb-0">
-              {{ session?.sessionSchedulesStartTime + ' - ' + session?.sessionSchedulesEndTime }}
-            </span>
-          </div>
-
-          <div class="d-flex justify-content-between mb-1">
-            <span class="badge" [ngClass]="{
+        <div class="d-flex justify-content-between mb-1">
+          <span class="badge" [ngClass]="{
               'badge-success': session.sessionStatus === 'CONFIRMED',
               'badge-danger': session.sessionStatus === 'CANCELLED',
               'badge-primary': session.sessionStatus === 'NEW' || session.sessionStatus === 'COMPLETED'
             }">{{ session.sessionStatus }}</span>
-          </div>
         </div>
+      </div>
 
-        <div class="donut-wrapper" *ngIf="loading">
-          <div class="donut multi"></div>
-        </div>
-        <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
-          <p class="text-muted mt-5">
-            No Sessions Found.
-          </p>
-        </div>
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
+      </div>
+      <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
+        <p class="text-muted mt-5">
+          No Sessions Found.
+        </p>
       </div>
     </div>
   </div>
+</div>
 
-  <br>
-  <div class="text-center" *ngIf="totalElements > 15">
-    <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
-  </div>
-  <br>
+<br>
+<div class="text-center" *ngIf="totalElements > 15">
+  <pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+</div>
+<br>
 
-  <!-- filter panel  -->
-  <div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
+<!-- filter panel  -->
+<div class="add-options-container show-sm" [ngClass]="{'active-panel':showFilters}">
 
-    <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
-      <div class="add-options-panel-heading">
-        <h4>Filter Status</h4>
-        <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+  <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
+    <div class="add-options-panel-heading">
+      <h4>Filter Status</h4>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
 
 
-      <div class="mb-1 border-bottom">
-        <div class="add-filter-option" *ngFor="let status of sessionStatuses;index as i"
-          (click)="filters.status = status">
-          <span>{{status | titlecase}}</span>
-          <span class="checkbox-border">
-            <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
-          </span>
-        </div>
-      </div>
-
-      <div class="action-buttons mb-4">
-        <button class="btn btn-cancel" (click)="toggleFilters();resetStatuses()">Reset</button>
-        <button class="btn btn-outline-success" (click)="toggleFilters();getAllSessions(0)">Filter</button>
+    <div class="mb-1 border-bottom">
+      <div class="add-filter-option" *ngFor="let status of sessionStatuses;index as i"
+        (click)="filters.status = status">
+        <span>{{status | titlecase}}</span>
+        <span class="checkbox-border">
+          <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
+        </span>
       </div>
     </div>
 
+    <div class="action-buttons mb-4">
+      <button class="btn btn-cancel" (click)="toggleFilters();resetStatuses()">Reset</button>
+      <button class="btn btn-outline-success" (click)="toggleFilters();getAllSessions(0)">Filter</button>
+    </div>
   </div>
+
+</div>
