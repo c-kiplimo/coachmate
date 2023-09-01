@@ -154,7 +154,10 @@ export class AddSessionComponent implements OnInit {
 
     
   }
-  
+  back() {
+    window.history.back();
+  }
+
   generateCalendar() {
     this.weeks = []; // Reset weeks
     const firstDayOfMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);

@@ -64,6 +64,11 @@ export class AddClientPageComponent implements OnInit {
 
   }
 
+  back() {
+    window.history.back();
+  }
+
+
   getOrgCoaches(id: any) {
     const options = {
       orgId: this.orgId,
