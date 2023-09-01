@@ -100,23 +100,43 @@ export class SidnavComponent implements OnInit {
 
       if (this.userRole == 'COACH') {
         this.menuData = this.sideNavMenu.navDataforCoach;
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd) {
+            this.currentRouteUrl = event.url;
+            this.sideNavMenu.navDataforCoach.forEach((element) => {
+              if (this.currentRouteUrl.includes(element.routeLink)) {
+                this.selectedTabIndex = element.number;
+              }
+            })
+          }
+        });
       } else if (this.userRole == 'ORGANIZATION') {
         this.menuData = this.sideNavMenu.navDataforOrg;;
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd) {
+            this.currentRouteUrl = event.url;
+            this.sideNavMenu.navDataforOrg.forEach((element) => {
+              if (this.currentRouteUrl.includes(element.routeLink)) {
+                this.selectedTabIndex = element.number;
+              }
+            })
+          }
+        });
       } else if (this.userRole == 'CLIENT') {
         this.menuData = this.sideNavMenu.navDataforClient;
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd) {
+            this.currentRouteUrl = event.url;
+            this.sideNavMenu.navDataforClient.forEach((element) => {
+              if (this.currentRouteUrl.includes(element.routeLink)) {
+                this.selectedTabIndex = element.number;
+              }
+            })
+          }
+        });
       }
     }
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.currentRouteUrl = event.url;
-        this.sideNavMenu.navDataforOrg.forEach((element) => {
-          if (this.currentRouteUrl.includes(element.routeLink)) {
-            this.selectedTabIndex = element.number;
-          }
-        })
-      }
-    });
 
   }
 

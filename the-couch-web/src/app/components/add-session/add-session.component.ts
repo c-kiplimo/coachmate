@@ -290,7 +290,7 @@ export class AddSessionComponent implements OnInit {
       window.history.back();
     }, (error: any) => {
       this.toastrService.error('Error adding session to google calendar', error.message);
-      window.history.back();
+      window.history.back();  
     });
     
   }
