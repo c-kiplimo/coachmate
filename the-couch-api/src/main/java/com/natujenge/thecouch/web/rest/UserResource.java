@@ -266,4 +266,22 @@ public class UserResource {
 
     }
 
+    //save google auth data to user, the data is the same as the one returned by google after successful login
+    @PostMapping(path = "/google-auth")
+    ResponseEntity<?> saveGoogleAuthData(@RequestBody String googleAuthData,
+                                         @AuthenticationPrincipal User userDetails) {
+        log.info("request to save google auth data for user with id {}", userDetails.getId());
+        userService.saveGoogleAuthData(googleAuthData, userDetails);
+        return new ResponseEntity<>(new RestResponse(false, "Google auth data saved successfully"), HttpStatus.OK);
+    }
+
+    //Remove google auth data from user
+    @DeleteMapping(path = "/google-auth")
+    ResponseEntity<?> removeGoogleAuthData(@AuthenticationPrincipal User userDetails) {
+        log.info("request to remove google auth data for user with id {}", userDetails.getId());
+        userService.removeGoogleAuthData(userDetails);
+        return new ResponseEntity<>(new RestResponse(false, "Google auth data removed successfully"), HttpStatus.OK);
+    }
+
+
     }

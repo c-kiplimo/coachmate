@@ -881,6 +881,30 @@ select {
 
 }
 
+.google-calendar-connect-button {
+  align-items: center;
+  padding: 10px 20px;
+  color: #34A652;
+  border: 1px solid #34A652;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-calendar-connect-button:hover {
+  background-color: #34A652; /* Darker shade on hover */
+  color: white;
+}
+
+.google-calendar-logo {
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  margin-right: 10px;
+}
+
 
 @import "@mobiscroll/angular/dist/css/mobiscroll.scss";
 html, body { height: 100%; }

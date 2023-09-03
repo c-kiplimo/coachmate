@@ -87,6 +87,8 @@ public class User implements UserDetails {
     @JoinColumn(name="org_id")
     Organization organization;
 
+    private String google;
+
 //    @ManyToOne
 //    @JoinColumn(name="notification_settings_id")
 //    NotificationSettings notificationSettings;

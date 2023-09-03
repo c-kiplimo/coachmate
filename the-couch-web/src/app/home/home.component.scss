@@ -55,42 +55,88 @@ nav,
   padding: 0;
 }
 .btn-signup1{
-  background-color: #22b45a;
+  background-color: #0f8239;
   color: #fff;
   letter-spacing: 1px;
   font-size: 0.9rem;
   border-radius: 4px ;
 }
 
-/* Navbar styles */
+nav {
+  font-weight: 16px!important;
+}
+
 .navbar {
-  display: flex;
   flex-direction: row;
+  // border-bottom: 1px solid #e1e1e1;
   height: 60px;
-  padding-left: 10px;
+  font-size: 16px!important;
+  z-index: 2;
+  padding: 0;
+
+  // .welcome-img {
+  //   height: 60px;
+  //   position: relative;
+  //   top: 2px;
+  //   padding-bottom: 5px;
+  //   padding-left: 10px;
+  // }
+
+  .nav-item {
+    margin: 0 10px;
+    display: flex;
+    padding: 12px;
+    font-weight: 16px!important;
+  }
+
+  .nav-link {
+    font-weight: 500;
+    letter-spacing: 1px;
+    border: none!important;
+    border-radius: 0;
+    margin: 0 1px;
+  }
 }
 
-/* Navigation item styles */
-.nav-item {
-  margin: 0 10px;
-  display: flex;
-  padding: 12px;
-  font-weight: 16px !important;
-}
+.navbar-on-home {
+  background-color: #fff!important;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)!important;
 
-/* Navigation link styles */
-.nav-link {
-  font-weight: 500;
-  letter-spacing: 1px;
-  border: none !important;
-  border-radius: 0;
-  margin: 0 1px;
+  .welcome-img {
+    background-color: #fff;
+  }
+
+  .collapse {
+    background-color: #fff;
+  }
+
+  .nav-link {
+    color: #5f6063;
+
+    &:hover {
+      background-color: #fff;
+      color: #3c4043;
+    }
+  }
 }
 .logo-img {
   height: 130px;
  
 }
+.nav-btns {
+  margin: 0 10px;
+  padding: 14px;
+  font-weight: 16px!important;
+}
 
+.active-link {
+  background-color: #4b6050;
+}
+
+.home-active-link {
+  color: #257631!important;
+  font-weight: 600!important;
+}
 
 .abt-section {
   display: flex;
@@ -98,9 +144,25 @@ nav,
   justify-content: center;
   align-items: center;
 }
-// .transparent-logo {
-//   transition: opacity 0.5s ease;
-// }
+.transparent-logo {
+  transition: opacity 0.5s ease;
+}
+
+.btn-auth {
+  margin-left: 10px;
+  padding: 5px 15px;
+  background-color: #fff;
+  color: #257631;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #257631;
+}
+
+.btn-auth-reg {
+  background-color: #257631;
+  color: #fff;
+}
 
 .abt-section-img {
   flex: 0 0 40%;
@@ -165,8 +227,9 @@ nav,
 }
 
 .contact {
-  padding: 5rem 0;
-  background-color: #155022;
+  padding: 5rem 2rem;
+  background-color: rgb(218, 241, 218);
+  // padding: 20px;
 }
 
 .contact .container {
@@ -174,21 +237,21 @@ nav,
 }
 
 .contact h3 {
-  color: #fff;
+  color:  #5f6063;
   font-weight: 600;
   font-size: 2.5rem;
   margin-bottom: 30px;
 }
 
 .contact p {
-  color: #fff;
+  color:  #000205;
   font-size: 1.2rem;
 }
 
 .contact p a {
   text-decoration: underline;
   font-weight: 600;
-  color: #fff;
+  color: #010204;
 }
 
 .contact input,
@@ -206,20 +269,22 @@ nav,
 
 
 .footer {
-  background-color: #212121;
+  background-color: #eeebeb;
   padding-top: 6rem;
   padding-bottom: 0;
+  display: block;
+  text-align: center;
 }
 
 .footer h5 {
-  color: #fff;
+  color: #000208;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
 .footer a,
 .footer p {
-  color: #fff;
+  color:#000103;
   font-size: 0.9rem;
 }
 
@@ -244,7 +309,7 @@ nav,
 
 .footer .logo-description {
   font-size: 1.5rem;
-  color: #fff;
+  color: #000000;
 }
 
 .footer .social-networks {
@@ -260,7 +325,7 @@ nav,
   width: 55px;
   padding-top: 10px;
   border-radius: 50%;
-  border: 2px solid #f1f1f133;
+  border: 2px  #e8ccc533;
   transition: all 0.2s;
 }
 
@@ -280,11 +345,11 @@ nav,
 
 .footer .footer-text-container .footer-text {
   font-size: 0.9rem;
-  color: #fff;
+  color: #000104;
 }
 
 .footer .footer-text-container .footer-text a {
-  color: #fff;
+  color: #000001;
   text-decoration: underline;
   display: inline;
 }

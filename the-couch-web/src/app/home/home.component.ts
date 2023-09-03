@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
   rightIcon = faChevronRight;
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
-  sideNavStatus: boolean = false;
  
   constructor(
     private formBuilder: FormBuilder,

@@ -3,6 +3,7 @@ import { ClientService } from '../services/ClientService';
 import { SessionsService } from '../services/SessionsService';
 import { Router, ActivatedRoute } from '@angular/router';
 import { style, animate, transition, trigger } from '@angular/animations';
+import { GoogleSignInService } from '../services/google-sign-in.service';
 
 import { id } from 'date-fns/locale';
 
@@ -34,7 +35,7 @@ export class SessionsComponent implements OnInit {
     searchItem: '',
   };
   filterOptions!: boolean;
-  currentTab!: string;
+  currentTab = 'sessions';
   totalLength!: number;
   noOfSessions: any;
   backIcon!: IconProp;
@@ -59,9 +60,13 @@ export class SessionsComponent implements OnInit {
   sessionStatuses = ['CONFIRMED', 'CANCELLED', 'COMPLETED']
   totalElements: any;
 
+  googleCalendarEvents: any;
+  googleCalenderConnected: boolean = false;
+
   constructor(private apiService: ClientService,
     private router: Router,
     private sessionService: SessionsService,
+    private googleSignInService: GoogleSignInService,
     private activatedRoute: ActivatedRoute) { }
 
 
@@ -87,6 +92,35 @@ export class SessionsComponent implements OnInit {
     }
   }
 
+  connectToGoogleCalendar() {
+    this.googleSignInService.signIn().then((res: any) => {
+      console.log(res);
+      this.googleCalenderConnected = true;
+      this.getCalendarEvents();
+    }).catch((err: any) => {
+      console.log(err);
+      this.googleCalenderConnected = false;
+    });
+  }
+
+  disconnectGoogleCalender() {
+    this.googleSignInService.signOut();
+    this.googleCalenderConnected = false;
+  }
+
+  getCalendarEvents() {
+    this.googleSignInService.getCalendarEvents().subscribe((events: any) => {
+    console.log(events);
+    this.googleCalendarEvents = events;
+    this.googleCalenderConnected = true;
+  }
+  );
+}
+
+toggleTab(tab: string): void {
+  this.currentTab = tab;
+}
+
   getAllSessions(page: any) {
     this.loading = true;
     this.page = page;
@@ -103,11 +137,11 @@ export class SessionsComponent implements OnInit {
       search: this.filters.searchItem,
       sort: 'id,desc',
     };
-    if(this.userRole == 'COACH'){
+    if (this.userRole == 'COACH') {
       options.coachId = this.coachId;
-    }else if(this.userRole == 'CLIENT'){
+    } else if (this.userRole == 'CLIENT') {
       options.clientId = this.clientId;
-    }else if(this.userRole == 'ORGANIZATION'){
+    } else if (this.userRole == 'ORGANIZATION') {
       options.orgId = this.orgId;
     }
 
@@ -116,6 +150,10 @@ export class SessionsComponent implements OnInit {
         this.sessions = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
         this.loading = false;
+        
+        setTimeout(() => {
+          this.getCalendarEvents();
+        }, 3000);
       },
       (error: any) => {
         console.log(error);
@@ -147,7 +185,7 @@ export class SessionsComponent implements OnInit {
     this.page = event;
     this.getAllSessions(this.page);
   }
-  
+
   resetStatuses(): void {
     this.filters.status = '';
     this.getAllSessions(this.page);

@@ -70,6 +70,7 @@ export class SchedulesComponent implements OnInit {
   clientId: any;
 
   googleCalendarEvents: any;
+  googleCalenderConnected: boolean = false;
 
   orgId!: number;
   coachId!: number;
@@ -142,32 +143,12 @@ export class SchedulesComponent implements OnInit {
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
       this.getSessions(this.page);
-      //this.getCalendarEvents();
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
       this.getSessions(this.page);
     }
 
     
-  }
-
-  /////////////////////////////////
-
-  onSignIn() {
-    this.googleSignInService.signIn();
-  }
-
-  onSignOut() {
-    this.googleSignInService.signOut();
-  }
-
-  getCalendarEvents() {
-      this.googleSignInService.getCalendarEvents().subscribe((events: any) => {
-      console.log(events);
-      this.googleCalendarEvents = events;
-      this.setGoogleCalendarEvents(events);
-    }
-    );
   }
 
   /////////////////////////////////
@@ -271,6 +252,11 @@ export class SchedulesComponent implements OnInit {
         this.sessions = response.body;
         this.setCalendarEvents(this.sessions);
         this.loading = false;
+
+        setTimeout(() => {
+          this.getCalendarEvents();
+        }, 3000);
+
       },
       (error: any) => {
         console.log(error);
@@ -285,7 +271,7 @@ export class SchedulesComponent implements OnInit {
       const event = {
         start: new Date(`${session.sessionSchedulesSessionDate ? session.sessionSchedulesSessionDate : session.sessionDate}T${session.sessionSchedulesStartTime}`),
         end: new Date(`${session.sessionSchedulesSessionDate ? session.sessionSchedulesSessionDate : session.sessionDate}T${session.sessionSchedulesEndTime}`),
-        title: session.name + " with " + session.clientFullName,
+        title: session?.name + " with " + session?.clientFullName,
         color: { ...colors['green'] },
         actions: this.actions,
         allDay: false,
@@ -302,14 +288,39 @@ export class SchedulesComponent implements OnInit {
     console.log(this.events);
   }
 
+  connectToGoogleCalendar() {
+    this.googleSignInService.signIn().then((res: any) => {
+      console.log(res);
+      this.googleCalenderConnected = true;
+      this.getCalendarEvents();
+    }).catch((err: any) => {
+      console.log(err);
+      this.googleCalenderConnected = false;
+    });
+  }
+
+  disconnectGoogleCalender() {
+    this.googleSignInService.signOut();
+    this.googleCalenderConnected = false;
+  }
+
+  getCalendarEvents() {
+    this.googleSignInService.getCalendarEvents().subscribe((events: any) => {
+    console.log(events);
+    this.googleCalendarEvents = events;
+    this.setGoogleCalendarEvents(this.googleCalendarEvents);
+    this.googleCalenderConnected = true;
+  }
+  );
+}
+
   //set google calendar events to the calendar
   setGoogleCalendarEvents(events: any) {
-    console.log(events);
-    events.forEach((event: any) => {
+    events?.forEach((event: any) => {
       const eventObject = {
-        start: new Date(event.start.dateTime.slice(0, 19)),
-        end: new Date(event.end.dateTime.slice(0, 19)),
-        title: event.summary + " with " + event.attendees[0].displayName,
+        start: new Date(event?.start?.dateTime?.slice(0, 19)),
+        end: new Date(event?.end?.dateTime?.slice(0, 19)),
+        title: event?.summary + " (from your Google Calendar)",
         color: { ...colors['green'] },
         actions: this.actions,
         allDay: false,
@@ -323,7 +334,6 @@ export class SchedulesComponent implements OnInit {
       this.view = CalendarView.Month; //Week, Month, Day
       this.refresh.next();
     });
-    console.log(this.events);
   }
 
 }
