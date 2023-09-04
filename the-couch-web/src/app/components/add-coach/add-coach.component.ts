@@ -68,6 +68,10 @@ export class AddCoachComponent implements OnInit {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
+
+  back() {
+    window.history.back();
+  }
   getCoaches(id: any) {
     const options = {
       orgId: this.orgId,

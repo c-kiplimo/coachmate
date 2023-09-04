@@ -130,6 +130,10 @@ editingSettings = false;
     this.contractTemplates[template] = this.user.coach.contractTemplates[template];
   }
 
+  back() {
+    window.history.back();
+  }
+
   setFields(): void {
     this.contractTemplate = JSON.parse(
       sessionStorage.getItem('contractTemplate') || '{}'
@@ -286,9 +290,7 @@ editingSettings = false;
   removeObjective(index: number){
     this.objectives.splice(index, 1);
   }
-  back() {
-    window.history.back();
-  }
+ 
   reload() {
     location.reload();
   }

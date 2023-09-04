@@ -34,23 +34,23 @@
           </div>
           <div class="col-md-12" [@fadeIn]>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Number</h6>
-              <p class="col calue">{{contract?.contractNumber}}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Contract Number</h6>
+              <p class="col ">{{contract?.contractNumber}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Coaching topic</h6>
-              <p class="col value">{{contract?.coachingTopic}}</p>
+              <h6 class="fw-semi-bold col smaller-font">Coaching topic</h6>
+              <p class="col ">{{contract?.coachingTopic}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Type:</h6>
-              <p class="col value">{{ contract?.coachingCategory }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Contract Type:</h6>
+              <p class="col">{{ contract?.coachingCategory }}</p>
             </div>
             <div class="row dtl ">
-              <h6 class="title fw-semi-bold col smaller-font">Client Name:</h6>
-              <p class="col value">{{ contract?.client.fullName }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Client Name:</h6>
+              <p class="col ">{{ contract?.client.fullName }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Status:</h6>
+              <h6 class="fw-semi-bold col smaller-font ">Contract Status:</h6>
               <p class="col">
                 <span class="badge" [ngClass]="{
                   'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
@@ -61,27 +61,27 @@
               </p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Start Date:</h6>
-              <p class="col value">{{ contract?.startDate }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Start Date:</h6>
+              <p class="col ">{{ contract?.startDate }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">End Date:</h6>
-              <p class="col value">{{ contract?.endDate }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">End Date:</h6>
+              <p class="col">{{ contract?.endDate }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Number of Sessions:</h6>
-              <p class="col value">{{ contract?.noOfSessions }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Number of Sessions:</h6>
+              <p class="col">{{ contract?.noOfSessions }}</p>
             </div>
             <div *ngIf="this.contract?.coachingCategory === 'INDIVIDUAL'" class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Fees per Session :</h6>
-              <p class="col value">{{ contract?.individualFeesPerSession }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Fees per Session :</h6>
+              <p class="col ">{{ contract?.individualFeesPerSession }}</p>
             </div>
             <div *ngIf="this.contract?.coachingCategory === 'GROUP'" class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Fees per Session:</h6>
-              <p class="col value">{{ contract?.groupFeesPerSession }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Fees per Session:</h6>
+              <p class="col ">{{ contract?.groupFeesPerSession }}</p>
             </div> 
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Total Fees:</h6>
+              <h6 class="fw-semi-bold col smaller-font ">Total Fees:</h6>
               <p *ngIf="this.contract?.coachingCategory === 'INDIVIDUAL'"class="col value"> 
                 {{contract?.individualFeesPerSession * contract?.noOfSessions}}
               </p>

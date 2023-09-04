@@ -257,7 +257,22 @@
             <input type="text" class="form-control" id="reason" name="reason" formControlName="reason"
               value="{{ clientToBeUpdated?.reason}}">
           </div>
-          <div class="input-group mb-3">
+          <div class="mb-3 col-md-12">
+            <label for="clientType">Payment Mode</label>
+            <div class="row">
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="PaymentMode"
+                  id="flexRadioDefault1" value="POSTPAY" formControlName="PaymentMode" />
+                <label class="form-group-text m-2" for="PaymentMode">POSTPAY</label>
+              </div>
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="PaymentMode"
+                  id="flexRadioDefault1" value="PREPAY" formControlName="PaymentMode" />
+                <label class="form-group-text m-2" for="PaymentMode">PREPAY</label>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="input-group mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="PaymentMode">Payment Mode</label>
             </div>
@@ -268,8 +283,28 @@
               <option value="PREPAY">PREPAY</option>
               <option value="POSTPAY">POSTPAY</option>
             </select>
+          </div> -->
+          <div class="mb-3 col-md-12">
+            <label for="clientType">Client Type</label>
+            <div class="row">
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
+                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="type" />
+                <label class="form-group-text m-2" for="type">INDIVIDUAL</label>
+              </div>
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
+                  id="flexRadioDefault1" value="CORPORATE" formControlName="type" />
+                <label class="form-group-text m-2" for="type">CORPORATE</label>
+              </div>
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
+                  id="flexRadioDefault1" value="GROUP" formControlName="type" />
+                <label class="form-group-text m-2" for="type">GROUP</label>
+              </div>
+            </div>
           </div>
-          <div class="input-group">
+          <!-- <div class="input-group">
             <div class="input-group-prepend">
               <label class="input-group-text" for="clientType">Client Type</label>
             </div>
@@ -280,7 +315,7 @@
               <option value="CORPORATE">CORPORATE</option>
               <option value="GROUP">GROUP</option>
             </select>
-          </div>
+          </div> -->
         </form>
       </div>
       <div class="modal-footer">

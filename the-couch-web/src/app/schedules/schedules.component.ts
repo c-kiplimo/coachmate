@@ -80,7 +80,6 @@ export class SchedulesComponent implements OnInit {
   pageSize: number = 100;
   totalElements: any;
 
-
   @ViewChild('modalContent', { static: true }) modalContent:
     | TemplateRef<any>
     | undefined;
@@ -336,4 +335,5 @@ export class SchedulesComponent implements OnInit {
       this.refresh.next();
     });
   }
+
 }
