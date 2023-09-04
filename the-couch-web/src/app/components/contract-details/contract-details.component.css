@@ -158,3 +158,8 @@
   .action-cursor {
     cursor: pointer;
   }
+
+  .smaller-font{
+    font-size: 15px;
+   
+  }
