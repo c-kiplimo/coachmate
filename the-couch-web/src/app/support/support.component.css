@@ -31,3 +31,13 @@ p {
     border: 0.1px solid rgba(70, 69, 69, 0.12);
     border-radius: 5px;
 }
+.form-mat {
+    justify-content: center;
+    min-width: none;
+    max-width: 100%;
+    width: 100%;
+}
+.f-wide {
+    margin: 0px 5px;
+    width: 98%;
+}
