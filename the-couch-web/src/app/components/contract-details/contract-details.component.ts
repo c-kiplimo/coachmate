@@ -19,6 +19,7 @@ import { th } from 'date-fns/locale';
 import { ContractsService } from 'src/app/services/contracts.service';
 import { options } from '@mobiscroll/angular';
 import { error } from 'jquery';
+import {  ChangeDetectorRef } from '@angular/core';
 
 
 
@@ -92,6 +93,7 @@ export class ContractDetailsComponent implements OnInit {
     private sessionService: ClientService,
     private toastrService: ToastrService,
     private contractService: ContractsService,
+    private cd: ChangeDetectorRef
    
   ) {}
 
@@ -155,6 +157,16 @@ export class ContractDetailsComponent implements OnInit {
       terms_and_conditions:'',
     });
 
+  }
+
+  getFeesPerSession(): number | null {
+    if (this.contract?.coachingCategory === 'INDIVIDUAL') {
+      return this.contract?.individualFeesPerSession;
+    } else if (this.contract?.coachingCategory === 'GROUP') {
+      return this.contract?.groupFeesPerSession;
+    } else {
+      return null;
+    }
   }
 
   getContractData(id: any) {
@@ -271,6 +283,10 @@ getSessionsBycontractId(contractId:any){
   );
 
 }
+back() {
+  window.history.back();
+}
+
 getCoachSlots(page: number) {
   const options = {
     page: page,
@@ -285,6 +301,17 @@ getCoachSlots(page: number) {
     }
   });
 }
+calculateTotalFees() {
+  if (this.contract && this.contract.coachingCategory) {
+    if (this.contract.coachingCategory === 'INDIVIDUAL') {
+      return this.contract.individualFeesPerSession * this.contract.noOfSessions;
+    } else if (this.contract.coachingCategory === 'GROUP') {
+      return this.contract.groupFeesPerSession * this.contract.noOfSessions;
+    }
+  }
+  return ""; 
+}
+
 
 getClass(Clients: any) {
   if (Clients.status === 'SUSPENDED') {
@@ -317,6 +344,8 @@ editContract(contract: any) {
     practice: this.contractToBeUpdated.practice,
     terms_and_conditions: this.contractToBeUpdated.terms_and_conditions,
   });
+  this.cd.detectChanges();
+  this.calculateTotalFees();
 }
 
 @ViewChild('modal', { static: false })
@@ -372,6 +401,8 @@ navigateToSessionView(id: any) {
           this.editContractModal.nativeElement.style.display('none');
         }
       );
+      this.cd.detectChanges();
+      this.calculateTotalFees();
     }
 
     statusState(currentStatus: any) {
