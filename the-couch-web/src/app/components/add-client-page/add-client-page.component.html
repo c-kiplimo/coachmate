@@ -53,7 +53,7 @@
               placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
           </div>
         </div>
-        <div class="row justify-content-center">
+        
           <div class="row justify-content-center">
             <div class="mb-3 col-md-12">
               <label class="form-group-text" for="paymentMode">Client Type *</label>
@@ -113,7 +113,7 @@
               <option value="GROUP">GROUP</option>
             </select>
           </div> -->
-
+          <div class="row justify-content-center">
           <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
             <label class="input-group-text" for="coach">Assign Coach *</label>
             <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"

@@ -1,15 +1,15 @@
 <div class="row">
-  <div class="col  mt-2" style="margin-left: 15px;">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Contracts</h2>
   </div>
 </div>
+
+<br>
 
   <div class="row justify-content-center" >
     <div class="col-md-8 col-sm-12">
       <div class="card">
         <div class="card-body">
-          <div class="card-header">
-            <h5 class=" title f-weight fs-6 col">{{ contract?.coachingTopic }}</h5>
-          </div>
           <div class="row dtl">
             <h4 class="mt-1 fw-semi-bold fs-6 f-weight col">Details</h4>
             <div class="col d-flex ">
@@ -34,23 +34,23 @@
           </div>
           <div class="col-md-12" [@fadeIn]>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Number</h6>
-              <p class="col calue">{{contract?.contractNumber}}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Contract Number</h6>
+              <p class="col ">{{contract?.contractNumber}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Coaching topic</h6>
-              <p class="col value">{{contract?.coachingTopic}}</p>
+              <h6 class="fw-semi-bold col smaller-font">Coaching topic</h6>
+              <p class="col ">{{contract?.coachingTopic}}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Type:</h6>
-              <p class="col value">{{ contract?.coachingCategory }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Contract Type:</h6>
+              <p class="col">{{ contract?.coachingCategory }}</p>
             </div>
             <div class="row dtl ">
-              <h6 class="title fw-semi-bold col smaller-font">Client Name:</h6>
-              <p class="col value">{{ contract?.client.fullName }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">Client Name:</h6>
+              <p class="col ">{{ contract?.client.fullName }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Contract Status:</h6>
+              <h6 class="fw-semi-bold col smaller-font ">Contract Status:</h6>
               <p class="col">
                 <span class="badge" [ngClass]="{
                   'badge-success': contract?.contractStatus === 'SIGNED' || contract?.contractStatus === 'FINISHED',
@@ -61,33 +61,24 @@
               </p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Start Date:</h6>
-              <p class="col value">{{ contract?.startDate }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Start Date:</h6>
+              <p class="col ">{{ contract?.startDate }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">End Date:</h6>
-              <p class="col value">{{ contract?.endDate }}</p>
+              <h6 class=" fw-semi-bold col smaller-font ">End Date:</h6>
+              <p class="col">{{ contract?.endDate }}</p>
             </div>
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Number of Sessions:</h6>
-              <p class="col value">{{ contract?.noOfSessions }}</p>
+              <h6 class="fw-semi-bold col smaller-font ">Number of Sessions:</h6>
+              <p class="col">{{ contract?.noOfSessions }}</p>
             </div>
-            <div *ngIf="this.contract?.coachingCategory === 'INDIVIDUAL'" class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Fees per Session :</h6>
-              <p class="col value">{{ contract?.individualFeesPerSession }}</p>
-            </div>
-            <div *ngIf="this.contract?.coachingCategory === 'GROUP'" class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Fees per Session:</h6>
-              <p class="col value">{{ contract?.groupFeesPerSession }}</p>
-            </div> 
             <div class="row dtl">
-              <h6 class="title fw-semi-bold col smaller-font">Total Fees:</h6>
-              <p *ngIf="this.contract?.coachingCategory === 'INDIVIDUAL'"class="col value"> 
-                {{contract?.individualFeesPerSession * contract?.noOfSessions}}
-              </p>
-              <p *ngIf="this.contract?.coachingCategory === 'GROUP'"class="col value"> 
-                {{contract?.groupFeesPerSession * contract?.noOfSessions}}
-              </p>
+              <h6 class="fw-semi-bold col smaller-font">Fees per Session :</h6>
+              <p class="col">{{ getFeesPerSession() }}</p>
+            </div>
+            <div class="row dtl">
+              <h6 class="fw-semi-bold col smaller-font">Total Fees:</h6>
+              <p class="col">{{ calculateTotalFees() }}</p>
             </div>
           </div>
         </div>
@@ -281,80 +272,65 @@
   </div> 
     
   <!-- Modal for editing contracts -->
-  <div class="modal fade" id="editContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+  <div class="modal fade" id="editContractModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-x1">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit contract</h5>
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit contract</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true"></span>
           </button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="updateContractForm">
-            <div class="m-2 col-md-12">
-              <label for="title">Contract Title</label>
-              <input type="text" formControlName="coachingTopic" value="{{contractToBeUpdated.coachingTopic}}" placeholder="Title" id="title" name="coachingTopic"
-              class="form-control">
+          <form>
+            <div class="mb-3 form-group">
+              <label for="title" class="form-label">Contract Title</label>
+              <input type="text"   class="form-control"   formControlName="coachingTopic" value="{{contractToBeUpdated.coachingTopic}}" placeholder="Title" id="title" name="coachingTopic">
             </div>
-            <div class="m-2 col-md-12">
-              <label for="category">Contract Category</label>
-              <select class="form-select" name="coachingCategory" id="inputGroupSelect01" formControlName="coachingCategory" value="{{contractToBeUpdated.coachingCategory}}">
-                <option value="">Select category</option>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend ">
+                <label class="input-group-text" for="category">Contract Category</label>
+              </div>
+              <select class="form-select " name="coachingCategory" id="inputGroupSelect01" value="{{contractToBeUpdated.coachingCategory}}">
+                <option selected>Select category</option>
                 <option value="INDIVIDUAL">INDIVIDUAL</option>
                 <option value="GROUP">GROUP</option>
               </select>
             </div>
-            <div class="m-2 col-md-12">
+            <div class="mb-3 form-group">
               <label class="form-label" for="number">Start Date</label>
               <input type="date" formControlName="startDate" value="{{contractToBeUpdated.startDate}}" id="number" class="form-control" placeholder="date">
             </div>
-            <div class="m-2 col-md-12">
+            <div class="mb-3 form-group">
               <label class="form-label" for="number">End date</label>
               <input type="date" formControlName="endDate" value="{{contractToBeUpdated.endDate}}" id="number" class="form-control" placeholder="date">
             </div>
-            <div class="m-2 col-md-12">
-              <label for="number">Number of sessions</label>
+            <div class="mb-3 form-group">
+              <label for="number" class="form-label">Number of sessions</label>
               <input type="number" formControlName="noOfSessions" placeholder="no of sessions" id="number" class="form-control" value="{{contractToBeUpdated.noOfSessions}}">
             </div>
-            <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='GROUP'">
-              <label for="number">Group fees per session</label>
+            <div class="mb-3 form-group" *ngIf="updateContractForm.controls['coachingCategory'].value =='GROUP'">
+              <label for="number" class="form-label">Group fees per session</label>
               <input type="number" formControlName="groupFeesPerSession" placeholder="group fees per session" id="number" class="form-control" value="{{contractToBeUpdated.groupFessPerSession}}">
             </div>
-            <div class="m-2 col-md-12" *ngIf="updateContractForm.controls['coachingCategory'].value =='INDIVIDUAL'">
-              <label for="number">Individual fees per session</label>
+            <div class="mb-3 form-group" *ngIf="updateContractForm.controls['coachingCategory'].value =='INDIVIDUAL'">
+              <label for="number" class="form-label">Individual fees per session</label>
               <input type="number" formControlName="individualFeesPerSession" placeholder="individual fees per session" id="number" class="form-control" value="{{contractToBeUpdated.individualFeesPerSession}}">
             </div>
-            <!-- <div class="m-2 col-md-12">
-              <label for="title">Contract Objectives</label>
-              <input type="text" formControlName="objectives" placeholder="Title" id="title" name="coachingTopic"
-              class="form-control">
+            <div class="mb-3 form-group">
+              <label for="title" class="form-label">Contract terms and Conditions</label>
+              <input type="text" formControlName="terms_and_conditions" placeholder="terms and conditions" id="title" name="terms_and_conditions" value="{{contractToBeUpdated.terms_and_conditions}}" class="form-control">
             </div>
-            <div class="m-2 col-md-12">
-              <label for="title">Contract Services</label>
-              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
-              class="form-control">
-            </div>
-            <div class="m-2 col-md-12">
-              <label for="title">Contract Practices</label>
-              <input type="text" formControlName="coachingTopic" placeholder="Title" id="title" name="coachingTopic"
-              class="form-control">
-            </div> -->
-            <div class="m-2 col-md-12">
-              <label for="title">Contract terms and Conditions</label>
-              <input type="text" formControlName="terms_and_conditions" placeholder="terms and conditions" id="title" name="terms_and_conditions" value="{{contractToBeUpdated.terms_and_conditions}}"
-              class="form-control">
-            </div>
-            <div class="row p-2"></div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-outline-success" (click)=" updateContract(contractToBeUpdated.id)" data-bs-dismiss="modal"> Submit</button>
+          <button type="button" class="btn btn-outline-success" (click)="updateContract(contractToBeUpdated.id)" data-bs-dismiss="modal">Submit</button>
         </div>
       </div>
     </div>
   </div>
+  
 
   <!-- Modal for activating a contract  -->
   <div class="modal fade" id="activateContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

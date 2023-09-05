@@ -73,12 +73,7 @@
     background-color:red;
     }
 
-  .form-control{
-    width: 85%;
-  }
-  .form-select{
-    width: 85%;
-  }
+  
   .client-orders-card{
     padding: 30px;
     border-radius: 8px;
@@ -157,4 +152,16 @@
   } 
   .action-cursor {
     cursor: pointer;
+  }
+
+  .smaller-font{
+    font-size: 15px;
+   
+  }
+
+  .form-control{
+    width: 100%;
+  }
+  .form-select{
+    width: 50%;
   }
