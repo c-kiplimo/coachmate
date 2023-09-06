@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidnavComponent } from './shared/sidenav/sidenav.component';
@@ -130,8 +129,7 @@ import { TermAndConditionsOfUseComponent } from './term-and-conditions-of-use/te
     AttachmentsComponent,
     CoachLogsComponent,
     PrivacyPolicyComponent,
-    TermAndConditionsOfUseComponent
-
+    TermAndConditionsOfUseComponent,
 
   ],
   imports: [  

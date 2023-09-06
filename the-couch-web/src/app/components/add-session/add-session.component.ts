@@ -103,6 +103,7 @@ export class AddSessionComponent implements OnInit {
   // Dummy data representing booked sessions
   bookedSessions: any[] = [];
 
+  DATA_URL =''
 
   @HostListener('document:click', ['$event']) onClick(event: any) {
     // console.log(event.target.attributes.id.nodeValue);
