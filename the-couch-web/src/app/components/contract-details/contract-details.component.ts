@@ -110,6 +110,7 @@ export class ContractDetailsComponent implements OnInit {
   });
 
   this.getContractData(this.contractId);
+  this.getSessionsBycontractId(this.contractId);
 
     this.updateSession = this.formbuilder.group({
       sessionDate: '',
@@ -173,7 +174,6 @@ export class ContractDetailsComponent implements OnInit {
     this.loading = true;
     this.clientService.getContract(id).subscribe((data: any) => {
       this.contract = data.body;
-      this.getSessionsBycontractId(this.contractId);
       this.getCoachSlots(this.page);
       this.loading = false;
   }, (error) => {
@@ -344,8 +344,6 @@ editContract(contract: any) {
     practice: this.contractToBeUpdated.practice,
     terms_and_conditions: this.contractToBeUpdated.terms_and_conditions,
   });
-  this.cd.detectChanges();
-  this.calculateTotalFees();
 }
 
 @ViewChild('modal', { static: false })
@@ -389,9 +387,10 @@ navigateToSessionView(id: any) {
         (response) => {
           console.log(response);
           this.toastrService.success("Contract updated", "success!", {timeOut: 8000});
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
+          // setTimeout(() => {
+          //   location.reload();
+          // }, 1000);
+          this.getContractData(this.contractId);
           this.editContractModal.nativeElement.classList.remove('show');
           this.editContractModal.nativeElement.style.display('none');
         }, (error) => {
