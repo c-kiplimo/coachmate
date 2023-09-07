@@ -1,125 +1,73 @@
-
-<div class="container main-content">
-  <h2 class="text-center  fw-semi-bold f-weight fs-5">Support</h2>
-  <!-- <div class="row col-12 mb-5 accord-container">
-      <div class="card-title"><h4 class="sub-titles">FAQs</h4></div>
-      <div class="card-body">
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I create a new coaching session?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>To create a new coaching session click the  <a routerLink="/addSession" href="">Add session</a>  button. Fill in the required information and click "Save" to create the new session.</p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I register as a coach or as a coaching organisation?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              To register as a coach or client, click on the <a routerLink="/signup" href="">Register</a> button in the home page
-              and fill out the registration form.
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I record a payment?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              To record a payment, click on the  <a routerLink="/record-payment" href="">Add payment</a> button in the account summary page
-              and fill out the details.
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I add a client?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              To add a client, click on the  <a routerLink="/addclient" href="">Add client</a> button in the account summary page
-              and fill out the details.
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                How do I add a contract?
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              To add a contract, click on the  <a routerLink="/contract" href="">Add contract</a> button on the side nav
-              and fill out the details.
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
-  </div> -->
-  <div class="accord-container">
-    <h4 class="sub-titles text-center">Contact Form</h4>
-    <form class="form-mat" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate>
-      <mat-form-field class="f-wide">
-        <mat-label>Name</mat-label>
-        <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required />
-      </mat-form-field>
-      <mat-form-field class="f-wide">
-        <mat-label>Email</mat-label>
-        <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" required />
-      </mat-form-field>
-      <mat-form-field class="f-wide">
-        <mat-label>Message</mat-label>
-        <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
-      </mat-form-field>
-      <!-- <div class="row mb-4">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="form_name">Name *</label>
-            <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="form_email">Email *</label>
-            <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" required />
-          </div>
-        </div>
-      </div> -->
-      <!-- <div class="row mb-4">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label for="form_message">Message *</label>
-            <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
-          </div>
-        </div>
-      </div> -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="text-center">
-            <button type="submit" class="btn btn-outline-success" [disabled]="!contactForm.valid">
-              Send Message
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+<div class="row">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h5 class="fw-bold">
+      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
+        Back
+      </i>
+    </h5>
   </div>
 </div>
-  
+<div class="row justify-content-center m-2 p-3">
+  <div class="col-md-8">
+    <div class="card card-table justify-content-center align-items-center">
+      <div class="m-3">
+        <h1 class="text-center mb-3">Contact Form</h1>
+      </div>
+      <form class="m-3">
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label for="exampleInputEmail1">Name *</label>
+            <input
+              formControlName="name"
+              id="form_name"
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Full name"
+              required
+            />
+          </div>
+          <div class="mb-3 col-md-12">
+            <label for="exampleInputPassword1">Email *</label>
+            <input
+              formControlName="email"
+              id="form_email"
+              type="email"
+              name="email"
+              class="form-control"
+              placeholder="example@mail.com"
+              required
+            />
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label for="message">Message *</label>
+            <textarea
+              formControlName="message"
+              id="form_message"
+              name="message"
+              class="form-control"
+              placeholder="Your message here"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn btn-outline-success form-control"
+                [disabled]="!contactForm.valid"
+              >
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
