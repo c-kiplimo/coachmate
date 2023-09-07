@@ -40,6 +40,9 @@ export class SupportComponent implements OnInit {
 
 
 title: any;
+back() {
+  window.history.back();
+}
 contactUsMessage() {
   if (this.contactForm.invalid) {
     // If the form is invalid, display an error and return
