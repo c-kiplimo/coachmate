@@ -16,9 +16,9 @@ export class ContactUsComponent implements OnInit {
   feedbackForm!: FormGroup;
   field: any;
   feedbackField = [
-    "ORDER",
+    "SESSIONS",
     "NOTIFICATIONS",
-    "CUSTOMERS",
+    "CONTRACTS",
     "SETTINGS",
     "OTHER"
   ];

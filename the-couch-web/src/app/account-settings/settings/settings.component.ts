@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -6,17 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
+  businessName: any;
 
-  constructor() { }
+  constructor(public router : Router) { }
 
   ngOnInit(): void {
     
   }
-
-  logOut(): void {
+  logOut() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('businessName');
     sessionStorage.removeItem('user');
-    sessionStorage.removeItem('notificationSettings');
+    this.businessName = '';
+    this.router.navigate(['signin']);
+
+  }
+  back() {
+    window.history.back()
   }
 }
+
