@@ -4,6 +4,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { data } from 'jquery';
 import { emptySlots } from './emptySlots';
 import { ToastrService } from 'ngx-toastr';
+import { CalendlyService } from 'src/app/services/calendly.service';
+import { LoginService } from 'src/app/services/LoginService';
 
 @Component({
   selector: 'app-add-available-slots',
@@ -50,6 +52,8 @@ export class AddAvailableSlotsComponent implements OnInit {
 
   coachSlots: any = [];
   loading = true;
+  settingCalendlyUsername = true;
+  calendlyUsername = '';
 
   page: number = 0;
   pageSize: number = 15;
@@ -58,7 +62,9 @@ export class AddAvailableSlotsComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private calendlyService: CalendlyService,
+    private loginService: LoginService
   ) { }
 
   ngOnInit(): void {
@@ -67,8 +73,8 @@ export class AddAvailableSlotsComponent implements OnInit {
     this.user = JSON.parse(this.coachSessionData);
 
     this.userRole = this.user.userRole;
-    console.log(this.userRole);
 
+    this.calendlyUsername = this.user?.calendlyUsername;
 
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.id;
@@ -80,6 +86,40 @@ export class AddAvailableSlotsComponent implements OnInit {
     this.getDaysOfWeek();
 
   }
+
+  createCalendlyHtml() {
+    let calendlyHtml = this.calendlyService.createCalendlyHtml('Preview your', this.calendlyUsername);
+
+    
+    // Step 8: Add the HTML snippet to the DOM.
+    // Check if the element with id 'calendly' exists in the document
+    const calendlyElement = document.getElementById('calendly');
+
+    if (calendlyElement) {
+      // The element exists, so set its innerHTML
+      calendlyElement.innerHTML = calendlyHtml;
+    } else {
+      // The element doesn't exist, handle the error or take appropriate action
+      console.error("Element with id 'calendly' not found in the document.");
+    }
+
+  }
+
+  submitCalendlyUsername() {
+    this.settingCalendlyUsername = true;
+
+    this.loginService.setCalendlyUsername(this.calendlyUsername).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.user.calendlyUsername = this.calendlyUsername;
+        sessionStorage.setItem('user', JSON.stringify(this.user));
+        this.settingCalendlyUsername = false;
+        this.toastrService.success('Calendly username saved successfully');
+        this.createCalendlyHtml();
+      }
+    });
+  }
+
 
   addSlot() {
     //Determines the name of the day of the week of the date entered
@@ -257,7 +297,7 @@ export class AddAvailableSlotsComponent implements OnInit {
 
           //remove index j from slotTimes array
           slotTimes.splice(j, 1);
-        
+
           this.toastrService.success('Slot deleted successfully');
         }
       });
@@ -310,7 +350,7 @@ export class AddAvailableSlotsComponent implements OnInit {
     console.log(slot);
     dayOfTheWeek.coach = {};
     slot.dayOfTheWeek = dayOfTheWeek;
-  
+
     this.apiService.updateSlot(slot).subscribe({
       next: (response) => {
         console.log(response);

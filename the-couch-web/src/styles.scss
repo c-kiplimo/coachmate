@@ -905,6 +905,13 @@ select {
   margin-right: 10px;
 }
 
+  .calendly-logo {
+    width: 120px;
+  }
+
+  .calendly {
+    cursor: pointer;
+  }
 
 @import "@mobiscroll/angular/dist/css/mobiscroll.scss";
 html, body { height: 100%; }

@@ -36,7 +36,7 @@
                   class="form-control slots-time" id="inputEmail4" placeholder="End time" name="endTime"
                   (change)="saveSlot(time, slot.dayOfTheWeek)">
                 <!--delete icon-->
-                  <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
+                <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
               </div>
             </div>
             <div class="col">
@@ -46,12 +46,56 @@
             <div class="col">
               <div class="d-flex justify-content-end">
                 <!--plus icon-->
-                <button type="button" class="btn btn-outline-success m-1" (click)="addDaySlot(slot.time)" [disabled]="slot?.dayOfTheWeek?.available != true">
+                <button type="button" class="btn btn-outline-success m-1" (click)="addDaySlot(slot.time)"
+                  [disabled]="slot?.dayOfTheWeek?.available != true">
                   <i class="fa fa-plus"></i>
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center m-2 p-3">
+  <div class="col-md-8">
+    <div class="card card-table justify-content-between m-3 pb-5">
+      <div class="d-flex justify-content-between m-3">
+        <h1 class="fw-bold">Connect to Calendly</h1>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <!--calendly username-->
+          <div class="form-group">
+            <label for="calendlyUsername">Calendly Username *</label>
+            <small class="form-text text-muted">(Enter your Calendly username to connect your account)</small>
+            <input type="text" class="form-control" id="calendlyUsername" placeholder="Calendly Username"
+              [(ngModel)]="calendlyUsername" (keyup)="createCalendlyHtml()" />
+          </div>
+        </div>
+      </div>
+
+      <!--preview if it is connected-->
+      <div class="row" *ngIf="calendlyUsername">
+        <div class="col">
+          <div id="calendly">
+            <!-- Calendly inline widget comes here -->
+          </div>
+        </div>
+      </div>
+
+      <!--if it works submit-->
+      <div class="row" *ngIf="calendlyUsername">
+        <div class="col">
+          <small class="form-text text-muted">(If the preview is working, click submit to save your Calendly
+            username)</small>
+          <button type="button" class="btn btn-outline-success m-1" (click)="submitCalendlyUsername()">
+            Submit
+          </button>
         </div>
       </div>
 
