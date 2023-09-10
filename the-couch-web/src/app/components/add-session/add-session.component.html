@@ -1,19 +1,18 @@
-<div class="row">
-  <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
-      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
-        Back</i
-      >
-    </h5>
+<div class="d-flex justify-content-between">
+  <div class="mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Add session</h2>
+  </div>
+  <div class="mt-4" style="margin-right: 10px" id="calendly">
+    <!-- Calendly inline widget comes here -->
   </div>
 </div>
 
 <div class="row justify-content-center m-2 p-3">
-  <div class="col-md-8">
+  <div class="col-md-8 col-sm-12">
     <div class="card card-table justify-content-center align-items-center">
-      <div class="m-3">
+      <!-- <div class="m-3">
         <h1 class="text-center mb-3">Add session</h1>
-      </div>
+      </div> -->
       <form class="m-3">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
@@ -135,9 +134,9 @@
 
               <div>
                 <input class="form-check-input m-2 custom-radio-input" type="radio" name="flexRadioDefault"
-                id="flexRadioDefault{{availableSlot.id}}"
-                [disabled]="availableSlot?.sessionDate && availableSlot?.sessionDate !== formData.sessionDate" />
-         
+                  id="flexRadioDefault{{availableSlot.id}}"
+                  [disabled]="availableSlot?.sessionDate && availableSlot?.sessionDate !== formData.sessionDate" />
+
                 <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
                   {{ availableSlot?.startTime }} -
                 </label>
@@ -150,23 +149,12 @@
                   <i class="fa fa-calendar custom-loop-icon" *ngIf="availableSlot?.sessionDate"></i>
                 </label>
               </div>
-              
+
             </div>
 
 
           </div>
 
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <!--embed calendly-->
-            <!-- Calendly link widget begin -->
-            <!-- <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-            <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
-            <a href="" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/gmunywoki'});return false;">Schedule time with me</a> -->
-            <!-- Calendly link widget end -->
-          </div>
         </div>
 
         <button type="submit" (click)="addSession()"
