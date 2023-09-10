@@ -38,6 +38,7 @@ coachData: any;
     });
     
   }
+
   back() {
     window.history.back();
   }
