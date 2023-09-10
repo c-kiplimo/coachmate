@@ -1,11 +1,20 @@
-<div class="container mt-4 mb-5">
-  <div class="row">
+<div class="row">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h5 class="fw-bold">
+      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
+        Back
+      </i>
+    </h5>
+  </div>
+</div>
 
-    <div class="col-md-6 mb-4">
+<div class="container mt-5 mb-3">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
       <div class="settings-card p-3 border rounded">
-        <h4 class="mb-3">Account Settings</h4>
+        <h4 class="mb-3 fw-semi-bold fs-4 f-weight text-center">Account Settings</h4>
         <div class="settings-item d-flex justify-content-between align-items-center" [routerLink]="'/account-settings/profile'">
-          <span class="title">Business Profile</span>
+          <span class="title fw-semi-bold f-weight">Business Profile</span>
           <span class="icon"><i class="fas fa-angle-right"></i></span>
         </div>
         <!-- <div class="settings-item d-flex justify-content-between align-items-center" [routerLink]="'/account-settings/payments'">
@@ -45,13 +54,24 @@
           <span class="icon"><i class="fas fa-envelope"></i></span>
         </div>
         -->
-
-        <div class="settings-item d-flex justify-content-between align-items-center" (click)="logOut()" [routerLink]="'/login'">
-          <span class="title">Log Out</span>
-          <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+            <div class="settings-item d-flex justify-content-between align-items-center" [routerLink]="'/contact'">
+              <span class="title">Feedback</span>
+              <span class="icon"><i class="fas fa-envelope"></i></span>
+            </div>
+    
+            <!--
+            <div class="settings-item d-flex justify-content-between align-items-center" [routerLink]="'/contact'">
+              <span class="title">Subscription</span>
+              <span class="icon"><i class="fas fa-envelope"></i></span>
+            </div>
+            -->
+    
+            <div class="settings-item d-flex justify-content-between align-items-center" (click)="logOut()" >
+              <span class="title">Log Out</span>
+              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
-</div>
