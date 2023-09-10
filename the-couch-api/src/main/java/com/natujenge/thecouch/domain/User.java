@@ -88,6 +88,7 @@ public class User implements UserDetails {
     Organization organization;
 
     private String google;
+    private String calendlyUsername;
 
 //    @ManyToOne
 //    @JoinColumn(name="notification_settings_id")

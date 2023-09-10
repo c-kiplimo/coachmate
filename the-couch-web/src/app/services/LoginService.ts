@@ -73,5 +73,20 @@ export class LoginService {
             { observe: 'response' }
           );
         }
+
+        setCalendlyUsername(username: any): Observable<any> {
+          return this.http.post<any>(
+            this.baseURL+ 'users/calendly-username',
+            username,
+            { observe: 'response' }
+          );
+        }
+
+        getAddedBy(id: any): Observable<any> {
+          return this.http.get<any>(
+            this.baseURL+ 'users/added-by/'+id,
+            { observe: 'response' }
+          );
+        }
 }
 
