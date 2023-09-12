@@ -39,10 +39,9 @@ coachData: any;
     
   }
 
-back(){
-  window.history.back();
-}
-
+  back() {
+    window.history.back();
+  }
 
   addTraining() {
     var addCourse = this.addTrainingForm.value;
