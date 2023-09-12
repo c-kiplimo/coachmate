@@ -55,12 +55,12 @@ export const sideNavData = {
         label: 'Coach Log',
         number: 7
     },
-    {
-        routeLink: 'support',
-        icon: 'fa-solid fa-headset',
-        label: 'Support',
-        number: 10
-    },
+    // {
+    //     routeLink: 'support',
+    //     icon: 'fa-solid fa-headset',
+    //     label: 'Support',
+    //     number: 10
+    // },
     {
         routeLink: 'settings',
         icon: 'fa-solid fa-gear',
@@ -111,12 +111,12 @@ navDataforOrg: [
         label: 'Feedback',
         number: 9
     },
-    {
-        routeLink: 'support',
-        icon: 'fa-solid fa-headset',
-        label: 'Support',
-        number: 10
-    },
+    // {
+    //     routeLink: 'support',
+    //     icon: 'fa-solid fa-headset',
+    //     label: 'Support',
+    //     number: 10
+    // },
     {
         routeLink: 'settings',
         icon: 'fa-solid fa-gear',
