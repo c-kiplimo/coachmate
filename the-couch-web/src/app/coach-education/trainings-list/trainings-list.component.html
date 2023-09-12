@@ -192,20 +192,20 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="editCoachEducationForm">
-              <div class="row p-2">
-                <div class=" mb-3 col-md-6 ">
+        <form [formGroup]="editCoachEducationForm" class="m-3">
+              <div class="row justify-content-center">
+                <div class=" mb-3 col-md-12 ">
                   <label for="courseName">Course Name *</label>
                   <input formControlName="courseName" value="{{currentCoachEducation?.courseName}}" name="courseName"
                     type="text" class="form-control" id="courseName" required />
                 </div>
-                <div class="mb-3  col">
+                <div class="mb-3  col-md-12">
                   <label for="provider">Provider *</label>
                   <input formControlName="provider" value="{{currentCoachEducation?.provider}}" name="provider"
                     type="text" class="form-control" id="provider" required />
                 </div>
               </div>
-              <div class="row p-2">
+              <div class="row justify-content-center">
                 <div class="mb-3 col-md-6">
                   <label for="dateIssued">Date Issued*</label>
                   <input formControlName="dateIssued" value="{{currentCoachEducation?.dateIssued}}" name="dateIssued"
@@ -218,22 +218,22 @@
                 </div>
 
               </div>
-              <div class="row p-2">
-                <div class="mb-3 col-md-6">
+              <div class="row justify-content-center">
+                <div class="mb-3 col-md-12">
                   <label for="trainingHours" class="form-label">Training Hours *</label>
                   <input formControlName="trainingHours" value="{{currentCoachEducation?.trainingHours}}"
                     name="trainingHours" type="number" class="form-control" required placeholder="eg 45hrs" />
                 </div>
-                <div class="mb-3  col">
+                <div class="mb-3  col-md-12">
                   <label for="provider">Certficate Url</label>
                   <input formControlName="certificateUrl" value="{{currentCoachEducation?.certificateUrl}}"
                     name="certificateUrl" type="text" class="form-control" id="certificateUrl" required />
                 </div>
-                <div class="mb-3 col-md-6 form-group">
+                <!-- <div class="mb-3 col-md-6 form-group">
                   <label for="certficate" class="form-label">certficate</label>
                   <input type="file" value="{{currentCoachEducation?.certificate}}" class="form-control"
                     name="certificate" placeholder="upload your certificate">
-                </div>
+                </div> -->
 
               </div>
 
