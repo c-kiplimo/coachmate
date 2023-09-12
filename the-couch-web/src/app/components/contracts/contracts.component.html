@@ -81,9 +81,11 @@
               <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
                 <div class="donut multi"></div>
               </div>
-              <p class="text-muted mt-5" *ngIf="!loading && !contracts?.length">
-                No Contracts Yet.
-              </p>
+              <div class="d-flex justify-content-center" *ngIf="!loading && !contracts?.length">
+                <p class="text-muted mt-5">
+                  No Contracts Yet.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -141,8 +143,8 @@
         </div>
 
         <div class="d-flex justify-content-between mb-2">
-          <span class="customer-name" class="mb-0"><i class="fa-solid fa-user" style="color: #078d20;"></i>
-            {{ contract.clientFullName | titlecase }}</span>
+          <span class="customer-name" class="mb-0"><i class="fa-solid fa-user" style="color: #078d20;" ></i>
+            {{ contract.coachFullName | titlecase }}</span>
         </div>
         <div class="d-flex justify-content-between mb-2">
           <span class="customer-name" class="mb-0">

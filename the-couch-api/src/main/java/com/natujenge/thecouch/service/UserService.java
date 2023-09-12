@@ -671,4 +671,26 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public void addCalendlyUsername(String calendlyUsername, User userDetails) {
+        log.info("Request to add calendly username: {}", calendlyUsername);
+        Optional<User> userOptional = userRepository.findById(userDetails.getId());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setCalendlyUsername(calendlyUsername);
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
+
+    public User getAddedBy(Long id) {
+        log.info("Request to get added by: {}", id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getAddedBy();
+        } else {
+            throw new IllegalStateException("User not found");
+        }
+    }
 }

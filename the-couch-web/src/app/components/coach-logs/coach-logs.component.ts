@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { style, animate, transition, trigger } from '@angular/animations';
 import { CoachLogsService } from '../../services/coach-logs.service';
+import { ClientService } from '../../services/ClientService';
 import * as XLSX from 'xlsx';
 import { HttpResponse } from '@angular/common/http';
+import { th } from 'date-fns/locale';
 // import Swal from 'sweetalert2';
 
 @Component({
@@ -23,8 +25,7 @@ export class CoachLogsComponent implements OnInit {
 
   coachingLog = {
     noInGroup: '',
-    clientName: '',
-    clientEmail: '',
+    clientId: '',
     startDate: '',
     endDate: '',
     paidHours: '',
@@ -50,12 +51,20 @@ export class CoachLogsComponent implements OnInit {
   showErrorMessage: boolean = false;
 
   deleteThisCoachingLogs: any = [];
+  clients: any;
+  coachId: any;
 
-  constructor(private coachLogsService: CoachLogsService) { }
+  constructor(
+    private coachLogsService: CoachLogsService,
+    private clientService: ClientService,
+    ) { }
 
   ngOnInit(): void {
 
+    this.coachId = JSON.parse(sessionStorage.getItem('user')!).id;
+    this.userRole = JSON.parse(sessionStorage.getItem('user')!).userRole;
     this.getCoachingLogs(0);
+    this.getClients(0);
   }
 
   getCoachingLogs(page: any) {
@@ -246,6 +255,46 @@ export class CoachLogsComponent implements OnInit {
         this.getCoachingLogs(0);
       }
     });
+  }
+
+  getClients(page: any) {
+    this.loading = true;
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    if(this.filters.status == 'ALL'){
+      this.filters.status = '';
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
+    };
+
+    if (this.userRole == 'COACH') {
+      options.coachId = this.coachId;
+    }
+    
+    this.clientService.getClients(options).subscribe(  // test the getAllOrgClients endpoint
+      (response) => {
+        this.loading = false;
+        this.clients = response.body;
+        for (let client of this.clients) {
+          if (client.userRole != 'CLIENT') {
+            this.clients.splice(this.clients.indexOf(client), 1);
+          }
+        }
+        this.totalElements = +response.headers.get('X-Total-Count');
+      }, (error) => {
+        this.loading = false;
+      }
+    )
   }
 
 }

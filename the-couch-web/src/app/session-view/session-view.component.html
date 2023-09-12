@@ -267,11 +267,11 @@
 
         <div *ngIf="currentTab === 'attachments'" [@fadeIn]>
         <div class="d-none d-lg-block">
-          <div class="d-flex justify-content-end">
+          <!-- <div class="d-flex justify-content-end">
             <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#attachmentModal">
               <i class="fa fa-plus"></i> Attachments
             </button>
-          </div>
+          </div> -->
           <div class="row">
             <div class="col-md-12">
               <table class="table" *ngIf="attachments?.length">
@@ -709,7 +709,7 @@
    
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()">Save
+        <button type="button" class="btn btn-outline-success" [disabled]="!feebackForm.valid" (click)="giveFeedback()" data-bs-dismiss="modal">Save
           changes</button>
       </div>
     </div>

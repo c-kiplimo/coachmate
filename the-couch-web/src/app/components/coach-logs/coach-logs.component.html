@@ -300,7 +300,7 @@
 
     </div>
   </div>
-</div>
+</div> 
 
 <br>
 <div class="text-center" *ngIf="totalElements > 20">
@@ -323,14 +323,23 @@
         <form>
           <div class="mb-3 form-group">
             <label for="name" class="form-label">Client's Name</label>
-            <input type="text" class="form-control" [(ngModel)]="coachingLog.clientName" id="name" name="clientName"
-              placeholder="john doe" />
+            <!-- <input type="text" class="form-control" [(ngModel)]="coachingLog.clientName" id="name" name="clientName"
+              placeholder="john doe" /> -->
+              <select class="form-select" aria-label="Default select example" [(ngModel)]="coachingLog.clientId" id="clientId" name="clientId" required="true">
+              <option selected>
+                Select Client you want to make contract with
+              </option>
+              <!--Loop through clients and form options-->
+              <option *ngFor="let client of clients" value="{{ client.id }}">
+                {{ client.firstName }} {{ client.lastName }}
+              </option>
+            </select>
           </div>
-          <div class="mb-3 form-group">
+          <!-- <div class="mb-3 form-group">
             <label for="email" class="form-label">Email Address</label>
             <input type="email" class="form-control" [(ngModel)]="coachingLog.clientEmail" id="email" name="clientEmail"
               placeholder="johndoe@gmail.com" />
-          </div>
+          </div> -->
           <div class="mb-3 form-group">
             <label for="noInGroup" class="form-label">No. in Group</label>
             <input type="text" class="form-control" [(ngModel)]="coachingLog.noInGroup" id="noInGroup"

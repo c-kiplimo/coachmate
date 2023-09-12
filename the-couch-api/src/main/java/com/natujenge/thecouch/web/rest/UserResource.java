@@ -40,225 +40,224 @@ public class UserResource {
     private final RegistrationService registrationService;
 
 
-
-
-
-
     public UserResource(ModelMapper modelMapper, UserService userService, RegistrationService registrationService) {
-            this.modelMapper = modelMapper;
-            this.userService = userService;
-            this.registrationService = registrationService;
+        this.modelMapper = modelMapper;
+        this.userService = userService;
+        this.registrationService = registrationService;
+    }
+
+    //api to create a coach by organization
+    @PostMapping(path = "/coach")
+    ResponseEntity<?> addNewCoach(@RequestBody RegistrationRequest registrationRequest,
+                                  @AuthenticationPrincipal User userDetails) {
+
+        try {
+            Organization organization = userDetails.getOrganization();
+            log.info("request to add new coach by organization{}", organization.getId());
+            registrationService.addCoach(organization, registrationRequest);
+
+            return new ResponseEntity<>(new RestResponse(false,
+                    "Coach by organization  created"), HttpStatus.OK);
+
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        //api to create a coach by organization
-        @PostMapping(path = "/coach")
-        ResponseEntity<?> addNewCoach(@RequestBody RegistrationRequest registrationRequest,
-                @AuthenticationPrincipal User userDetails) {
+    //api to create a client user
+    @PostMapping
+    ResponseEntity<?> addNewClient(@RequestBody ClientRequest clientRequest,
+                                   @AuthenticationPrincipal User userDetails) {
+        log.info("request to add new client");
+        try {
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
 
-            try {
-                Organization organization = userDetails.getOrganization();
-                log.info("request to add new coach by organization{}",organization.getId());
-                registrationService.addCoach(organization, registrationRequest);
-
-                return new ResponseEntity<>(new RestResponse(false,
-                        "Coach by organization  created"), HttpStatus.OK);
-
-            } catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        //api to create a client user
-        @PostMapping
-        ResponseEntity<?> addNewClient(@RequestBody ClientRequest clientRequest,
-                @AuthenticationPrincipal User userDetails) {
-            log.info("request to add new client");
-            try {
-                Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
-
-                User newClientUser;
-                if(organization.isPresent()){
-                    newClientUser = userService.addNewClient(userDetails,
-                            organization.get(),
-                            clientRequest);
-                } else {
-                    newClientUser = userService.addNewClient(userDetails,
-                            null, clientRequest);
-                }
-
-                if (newClientUser != null) {
-                    ClientRequest response = modelMapper.map(newClientUser, ClientRequest.class);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(new RestResponse(true,
-                            "Client not created"), HttpStatus.OK);
-                }
-            }  catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        //GET CLIENTS By ORG ID or COACH ID
-        @GetMapping(path = "clients")
-        ResponseEntity<List<ClientDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
-                @RequestParam(name = "coachId", required = false) Long coachId,
-                @RequestParam(name = "status", required = false) String status,
-                @RequestParam(name = "search", required = false) String search,
-                Pageable pageable,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to get clients {}, " , coachId);
-            Long organizationId = null;
-            if (userDetails.getOrganization() != null) {
-                organizationId = userDetails.getOrganization().getId();
-            }
-            Page<ClientDTO> clientDtoPage = userService.getClients(coachId, status, search, organizationId, pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), clientDtoPage);
-            return ResponseEntity.ok().headers(headers).body(clientDtoPage.getContent());
-        }
-
-
-        //GET CLIENT BY ID
-        @GetMapping(path = "client/{id}")
-        ResponseEntity<?> getClientById(@PathVariable("id") Long clientId,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to get client {}", clientId);
-            try{
-                User client = userService.getClientById(clientId, userDetails);
-                if(client != null){
-                    ClientDTO response = modelMapper.map(client, ClientDTO.class);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(new RestResponse(true,
-                            "Client not found"), HttpStatus.OK);
-                }
-            } catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        //EDIT CLIENT
-        @PutMapping(path = "client/{id}")
-        ResponseEntity<?> editClient(@PathVariable("id") Long clientId,
-                @RequestBody ClientRequest clientRequest,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to edit client {}", clientId);
-            try{
-                Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
-                User editedClient;
-                if(organization.isPresent()){
-                    editedClient = userService.editClient(clientId, userDetails, clientRequest);
-                } else {
-                    editedClient = userService.editClient(clientId, userDetails, clientRequest);
-                }
-
-                if(editedClient != null){
-                    ClientRequest response = modelMapper.map(editedClient, ClientRequest.class);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(new RestResponse(true,
-                            "Client not edited"), HttpStatus.OK);
-                }
-            } catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        //API TO GET CLIENTS BY ORG ID
-        @GetMapping(path = "getOrgClients/{id}")
-        ResponseEntity<?> getOrgClients(@PathVariable("id") Long orgId,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to get Organization clients");
-            List<User> listResponse;
-            try{
-                listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
-            } catch (Exception e) {
-                log.error("Error Occurred ", e);
-                return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
-        }
-        @GetMapping(path = "coaches")
-        ResponseEntity<List<CoachDTO>> getCoaches(
-                @RequestParam(name = "orgId", required = false) Long organizationId,
-                @RequestParam(name = "status", required = false) String status,
-                @RequestParam(name = "search", required = false) String search,
-                Pageable pageable,
-                @AuthenticationPrincipal User userDetails
-    ) {
-            log.info("Request to get coaches");
-            if (userDetails != null && userDetails.getOrganization() != null) {
-                organizationId = userDetails.getOrganization().getId();
+            User newClientUser;
+            if (organization.isPresent()) {
+                newClientUser = userService.addNewClient(userDetails,
+                        organization.get(),
+                        clientRequest);
             } else {
-                // Return an appropriate response or throw an exception for unauthorized access
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                newClientUser = userService.addNewClient(userDetails,
+                        null, clientRequest);
             }
 
-            // Only return coaches created by the logged in user's organization
-            Page<CoachDTO> coachDtoPage = userService.getCoaches(status, search, organizationId, pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), coachDtoPage);
-            return ResponseEntity.ok().headers(headers).body(coachDtoPage.getContent());
+            if (newClientUser != null) {
+                ClientRequest response = modelMapper.map(newClientUser, ClientRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not created"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //GET CLIENTS By ORG ID or COACH ID
+    @GetMapping(path = "clients")
+    ResponseEntity<List<ClientDTO>> getClients(@RequestParam(name = "orgId", required = false) Long orgId,
+                                               @RequestParam(name = "coachId", required = false) Long coachId,
+                                               @RequestParam(name = "status", required = false) String status,
+                                               @RequestParam(name = "search", required = false) String search,
+                                               Pageable pageable,
+                                               @AuthenticationPrincipal User userDetails) {
+        log.info("Request to get clients {}, ", coachId);
+        Long organizationId = null;
+        if (userDetails.getOrganization() != null) {
+            organizationId = userDetails.getOrganization().getId();
+        }
+        Page<ClientDTO> clientDtoPage = userService.getClients(coachId, status, search, organizationId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), clientDtoPage);
+        return ResponseEntity.ok().headers(headers).body(clientDtoPage.getContent());
+    }
+
+
+    //GET CLIENT BY ID
+    @GetMapping(path = "client/{id}")
+    ResponseEntity<?> getClientById(@PathVariable("id") Long clientId,
+                                    @AuthenticationPrincipal User userDetails) {
+        log.info("Request to get client {}", clientId);
+        try {
+            User client = userService.getClientById(clientId, userDetails);
+            if (client != null) {
+                ClientDTO response = modelMapper.map(client, ClientDTO.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not found"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //EDIT CLIENT
+    @PutMapping(path = "client/{id}")
+    ResponseEntity<?> editClient(@PathVariable("id") Long clientId,
+                                 @RequestBody ClientRequest clientRequest,
+                                 @AuthenticationPrincipal User userDetails) {
+        log.info("Request to edit client {}", clientId);
+        try {
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
+            User editedClient;
+            if (organization.isPresent()) {
+                editedClient = userService.editClient(clientId, userDetails, clientRequest);
+            } else {
+                editedClient = userService.editClient(clientId, userDetails, clientRequest);
+            }
+
+            if (editedClient != null) {
+                ClientRequest response = modelMapper.map(editedClient, ClientRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not edited"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //API TO GET CLIENTS BY ORG ID
+    @GetMapping(path = "getOrgClients/{id}")
+    ResponseEntity<?> getOrgClients(@PathVariable("id") Long orgId,
+                                    @AuthenticationPrincipal User userDetails) {
+        log.info("Request to get Organization clients");
+        List<User> listResponse;
+        try {
+            listResponse = userService.getClientByOrgId(orgId, UserRole.CLIENT);
+        } catch (Exception e) {
+            log.error("Error Occurred ", e);
+            return new ResponseEntity<>(new RestResponse(true, "Error Occurred"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(listResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "coaches")
+    ResponseEntity<List<CoachDTO>> getCoaches(
+            @RequestParam(name = "orgId", required = false) Long organizationId,
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "search", required = false) String search,
+            Pageable pageable,
+            @AuthenticationPrincipal User userDetails
+    ) {
+        log.info("Request to get coaches");
+        if (userDetails != null && userDetails.getOrganization() != null) {
+            organizationId = userDetails.getOrganization().getId();
+        } else {
+            // Return an appropriate response or throw an exception for unauthorized access
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        @PutMapping(path = "coach/{id}")
-        ResponseEntity<?> editCoach(@PathVariable("id") Long coachId,
-                @RequestBody CoachRequest coachRequest,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to edit coach {}", coachId);
-            try{
-                Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
-                User editedCoach;
-                if(organization.isPresent()){
-                    editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
-                } else {
-                    editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
-                }
+        // Only return coaches created by the logged in user's organization
+        Page<CoachDTO> coachDtoPage = userService.getCoaches(status, search, organizationId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), coachDtoPage);
+        return ResponseEntity.ok().headers(headers).body(coachDtoPage.getContent());
+    }
 
-                if(editedCoach != null){
-                    CoachRequest response = modelMapper.map(editedCoach, CoachRequest.class);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(new RestResponse(true,
-                            "Coach not edited"), HttpStatus.OK);
-                }
-            } catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+    @PutMapping(path = "coach/{id}")
+    ResponseEntity<?> editCoach(@PathVariable("id") Long coachId,
+                                @RequestBody CoachRequest coachRequest,
+                                @AuthenticationPrincipal User userDetails) {
+        log.info("Request to edit coach {}", coachId);
+        try {
+            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
+            User editedCoach;
+            if (organization.isPresent()) {
+                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
+            } else {
+                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
             }
-        }
-        @GetMapping(path = "coach/{id}")
-        ResponseEntity<?> getCoachById(@PathVariable("id") Long coachId,
-                @AuthenticationPrincipal User userDetails){
-            log.info("Request to get client {}", coachId);
-            try{
-                User coach = userService.getCoachById(coachId, userDetails);
-                if(coach != null){
-                    CoachDTO response = modelMapper.map(coach, CoachDTO.class);
-                    return new ResponseEntity<>(response, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(new RestResponse(true,
-                            "Client not found"), HttpStatus.OK);
-                }
-            } catch (Exception e) {
-                log.error("Error ", e);
-                return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+
+            if (editedCoach != null) {
+                CoachRequest response = modelMapper.map(editedCoach, CoachRequest.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Coach not edited"), HttpStatus.OK);
             }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(path = "coach/{id}")
+    ResponseEntity<?> getCoachById(@PathVariable("id") Long coachId,
+                                   @AuthenticationPrincipal User userDetails) {
+        log.info("Request to get client {}", coachId);
+        try {
+            User coach = userService.getCoachById(coachId, userDetails);
+            if (coach != null) {
+                CoachDTO response = modelMapper.map(coach, CoachDTO.class);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new RestResponse(true,
+                        "Client not found"), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping(path = "/change-status/{id}")
         // change status active or suspend
     ResponseEntity<ClientDTO> updateClientStatus(@RequestParam("status") ClientStatus clientStatus,
-                                                   @PathVariable("id") Long id,
-                                                   @AuthenticationPrincipal User userDetails) {
+                                                 @PathVariable("id") Long id,
+                                                 @AuthenticationPrincipal User userDetails) {
 
         log.info("request to change client status with id : {} to status {} by user with id {}", id, clientStatus, userDetails.getId());
         ClientDTO clientDTO = userService.updateClientStatus(id, clientStatus);
@@ -283,5 +282,21 @@ public class UserResource {
         return new ResponseEntity<>(new RestResponse(false, "Google auth data removed successfully"), HttpStatus.OK);
     }
 
-
+    //add calendlyUsername to user
+    @PostMapping(path = "/calendly-username")
+    ResponseEntity<?> addCalendlyUsername(@RequestBody String calendlyUsername,
+                                          @AuthenticationPrincipal User userDetails) {
+        log.info("request to add calendly username for user with id {}", userDetails.getId());
+        userService.addCalendlyUsername(calendlyUsername, userDetails);
+        return new ResponseEntity<>(new RestResponse(false, "Calendly username added successfully"), HttpStatus.OK);
     }
+
+    //Get who added a client user
+    @GetMapping(path = "/added-by/{id}")
+    ResponseEntity<?> getAddedBy(@PathVariable("id") Long id,
+                                  @AuthenticationPrincipal User userDetails) {
+        log.info("request to get who added a client user with id {}", id);
+        User user = userService.getAddedBy(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+}

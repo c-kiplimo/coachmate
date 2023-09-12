@@ -17,6 +17,7 @@ import { style, animate, transition, trigger } from '@angular/animations';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { GoogleSignInService } from 'src/app/services/google-sign-in.service';
+import { LoginService } from 'src/app/services/LoginService';
 
 @Component({
   selector: 'app-add-session',
@@ -128,6 +129,7 @@ export class AddSessionComponent implements OnInit {
     private toastrService: ToastrService,
     private calendlyService: CalendlyService,
     private googleSignInService: GoogleSignInService,
+    private loginService: LoginService
   ) {
 
   }
@@ -142,21 +144,48 @@ export class AddSessionComponent implements OnInit {
       this.orgId = this.user.organization.id;
       this.getContracts(this.page);
       this.getClients();
+
+      if (this.user?.calendlyUsername !== null) {
+        this.createCalendlyHtml(this.user?.calendlyUsername);
+      }
+
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
       this.getCoachSlots();
       this.getContracts(this.page);
-      //this.getClients();
+
+      if (this.user?.calendlyUsername !== null) {
+        this.createCalendlyHtml(this.user?.calendlyUsername);
+      }
+
     } else if (this.userRole == 'CLIENT') {
       this.clientId = this.user.id;
       this.getContracts(this.page);
-      this.getClients();
+      this.getAddedBy(this.clientId);
     }
 
     
   }
+
   back() {
     window.history.back();
+  }
+
+  createCalendlyHtml(calendlyUsername: any) {
+    let calendlyHtml = this.calendlyService.createCalendlyHtml('Schedule with', calendlyUsername);
+
+    // Step 8: Add the HTML snippet to the DOM.
+    // Check if the element with id 'calendly' exists in the document
+    const calendlyElement = document.getElementById('calendly');
+
+    if (calendlyElement) {
+      // The element exists, so set its innerHTML
+      calendlyElement.innerHTML = calendlyHtml;
+    } else {
+      // The element doesn't exist, handle the error or take appropriate action
+      console.error("Element with id 'calendly' not found in the document.");
+    }
+
   }
 
   generateCalendar() {
@@ -443,6 +472,16 @@ export class AddSessionComponent implements OnInit {
     date.setSeconds(Number(seconds));
     //allow return null date is empty or null
     return date;
+  }
+
+  getAddedBy(clientId: any) {
+    this.loginService.getAddedBy(clientId).subscribe((res: any) => {
+      if (res?.body?.calendlyUsername !== null) {
+        this.createCalendlyHtml(res?.body?.calendlyUsername);
+      }
+    }, (error: any) => {
+      this.toastrService.error('Error getting coach details', error.message);
+    });
   }
 
 }
