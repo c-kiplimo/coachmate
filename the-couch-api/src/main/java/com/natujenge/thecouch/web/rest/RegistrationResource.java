@@ -135,11 +135,12 @@ public class RegistrationResource {
 
     }
     @PostMapping(path = "contact")
-    ResponseEntity<?> saveAndSendInquiry(@RequestBody InquiryDTO inquiryDTO) {
+    ResponseEntity<?> saveAndSendInquiry(@RequestBody InquiryDTO inquiryDTO,
+                                         @RequestParam("clientId") Long clientId) {
         log.info("REST Request to save and send  inquiry: {}", inquiryDTO);
 
         try {
-            inquiryService.saveAndSendEmail(inquiryDTO);
+            inquiryService.saveAndSendEmail(inquiryDTO, clientId);
             return new ResponseEntity<>(new RestResponse(false,"Response Received Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

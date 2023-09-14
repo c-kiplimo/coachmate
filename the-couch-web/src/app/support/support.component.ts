@@ -22,6 +22,15 @@ export class SupportComponent implements OnInit {
   leftIcon = faChevronLeft;
   contactForm!: FormGroup;
   panelOpenState = false;
+  user: any;
+  clientId!: number;
+  topics = [
+    "SESSIONS",
+    "NOTIFICATIONS",
+    "CONTRACTS",
+    "SETTINGS",
+    "OTHER"
+  ]
 
 
   constructor(
@@ -31,9 +40,10 @@ export class SupportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.user = JSON.parse(sessionStorage.getItem('user')!);
+    this.clientId = this.user.id; 
     this.contactForm = this.formBuilder.group({
-      name: '',
-      email: '',
+      topic: '',
       message: '',
     });
   }
@@ -50,13 +60,13 @@ contactUsMessage() {
     return;
   }
 
-  console.log(this.contactForm.value);
+  let options = {
+    clientId: this.clientId,
+  }
 
-  this.notificationService.contactUsMessage(this.contactForm.value).subscribe({
+  this.notificationService.contactUsMessage(this.contactForm.value, options).subscribe({
     next: (response: { error: any; body: { message: any; }; }) => {
-      console.log(response);
       if (response.error) {
-        console.log(response.body.message);
       } else {
         this.contactForm.reset();
         this.toastrService.success(

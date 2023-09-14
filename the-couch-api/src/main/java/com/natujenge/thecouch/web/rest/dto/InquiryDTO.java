@@ -9,6 +9,7 @@ public class InquiryDTO {
     private String email;
     private String phoneNumber;
     private String message;
+    private String topic;
     private LocalDateTime createdAt;
 
     public Long getId() {

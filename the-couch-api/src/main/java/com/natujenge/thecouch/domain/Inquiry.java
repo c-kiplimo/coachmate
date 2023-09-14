@@ -14,6 +14,7 @@ public class Inquiry {
     private String name;
     private String email;
     private String phoneNumber;
+    private String topic;
     @Column(length = 1000)
     private String message;
     @CreationTimestamp

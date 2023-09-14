@@ -6,6 +6,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -151,6 +152,7 @@ import { TermAndConditionsOfUseComponent } from './term-and-conditions-of-use/te
     SharedModule,
     MatFormFieldModule,
     MatExpansionModule,
+    MatSelectModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
