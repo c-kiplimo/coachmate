@@ -28,11 +28,12 @@ export class NotificationsService {
 
     }
 
-    contactUsMessage(message: any): Observable<any> {
+    contactUsMessage(message: any, options: any): Observable<any> {
         return this.http.post<any>(
           this.baseURL + 'registration/contact',
           message,
           {
+            params: options,
             observe: 'response',
           }
         );
