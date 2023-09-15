@@ -275,7 +275,7 @@
                   <th>Actions</th>
                 </thead>
                 <tbody class="list-container">
-                  <tr *ngFor="let session of sessions">
+                  <tr *ngFor="let session of upcomingSessions">
                     <td>{{ session?.name }}</td>
                     <td>{{ session?.contractCoachingTopic.slice(0, 20) }}...</td>
                     <td *ngIf="this.userRole != 'CLIENT'">{{ session?.clientFullName }}</td>
