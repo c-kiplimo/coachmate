@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientService } from '../../services/ClientService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../services/ApiService';
@@ -74,7 +74,27 @@ editingSettings = false;
     private router:Router,
     private route: ActivatedRoute,
     private toastrService: ToastrService
-    ) { }
+    ) { 
+      // this.contractForm = this.formBuilder.group(
+      //   {
+      //     coachingCategory:'',
+      //     coachingTopic:'',
+      //     clientId:'',
+      //     // coachId: '',
+      //     startDate:['', Validators.required, this.pastDateValidator],
+      //     endDate: ['', Validators.required, this.pastDateValidator],
+      //     groupFeesPerSession:'',
+      //     individualFeesPerSession:'',
+      //     noOfSessions:'',
+      //     objectives:'',
+      //     services:'',
+      //     practice:'',
+      //     note:'',
+      //     terms_and_conditions:'',
+       
+      //   }
+      // );
+    }
 
   ngOnInit(): void {
    // this.contractTemplates = this.user.contractTemplate;
@@ -111,8 +131,8 @@ editingSettings = false;
         coachingTopic:'',
         clientId:'',
         // coachId: '',
-        startDate:'',
-        endDate:'',
+        startDate:['', [Validators.required, this.pastDateValidator()]],
+        endDate: ['', [Validators.required, this.pastDateValidator()]],
         groupFeesPerSession:'',
         individualFeesPerSession:'',
         noOfSessions:'',
@@ -126,6 +146,21 @@ editingSettings = false;
     );
     this.coachingCategory=this.contractForm
   }
+
+  pastDateValidator() {
+    return (control: any) => {
+      const selectedDate = new Date(control.value);
+      const currentDate = new Date();
+
+      // Check if the selected date is in the past
+      if (selectedDate < currentDate) {
+        return { pastDate: true };
+      }
+
+      return null;
+    };
+  };
+
   resetTemplate(template: string): void {
     this.contractTemplates[template] = this.user.coach.contractTemplates[template];
   }

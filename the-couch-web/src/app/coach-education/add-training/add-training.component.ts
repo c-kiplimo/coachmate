@@ -30,14 +30,28 @@ coachData: any;
     this.addTrainingForm = this.formbuilder.group({
       courseName: ['', Validators.required],
       provider: ['', Validators.required],
-      dateIssued: ['', Validators.required],
-      validTill: ['', Validators.required],
+      dateIssued: ['', [Validators.required, this.pastDateValidator()]],
+      validTill: ['', [Validators.required, this.pastDateValidator()]],
       trainingHours: ['', Validators.required],
       certificate:'',
       certificateUrl: ''
     });
     
   }
+
+  pastDateValidator() {
+    return (control: any) => {
+      const selectedDate = new Date(control.value);
+      const currentDate = new Date();
+
+      // Check if the selected date is in the past
+      if (selectedDate < currentDate) {
+        return { pastDate: true };
+      }
+
+      return null;
+    };
+  };
 
   back() {
     window.history.back();
