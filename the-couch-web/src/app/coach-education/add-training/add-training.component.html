@@ -61,6 +61,9 @@
                 class="form-control"
                 required
               />
+              <div *ngIf="addTrainingForm.get('dateIssued')?.hasError('pastDate')">
+                <small class="text-danger">Please select a future date.</small>
+              </div>
             </div>
             <div class="mb-3 col-md-6">
               <label for="validTill">Valid till*</label>
@@ -71,6 +74,9 @@
                 class="form-control"
                 required
               />
+              <div *ngIf="addTrainingForm.get('validTill')?.hasError('pastDate')">
+                <small class="text-danger">Please select a future date.</small>
+              </div>
             </div>
           </div>
           <div class="row justify-content-center">
