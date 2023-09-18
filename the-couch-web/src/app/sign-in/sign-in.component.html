@@ -1,16 +1,11 @@
 <div class="row justify-content-center">
-  <!-- <div class="col-md-6">
-    <img src="../../../assets/images/pexels-thirdman-5318490.jpg" alt="" class="login_photo">
-
-  </div> -->
-
   <div class="col-md-4">
     <a class="py-3 ps-1 back-link login-back-link" routerLink="/home">
       <fa-icon [icon]="backIcon"></fa-icon> Go to website
     </a>
-    <div class=" justify-content-center">
+    <div class="card card-table d-flex justify-content-center align-items-center">
       <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" style="width: 200px;">
-      <h4 class="text-center">Login</h4>
+      <h4 class="text-center">Sign in</h4>
       <div class="alert alert-danger" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
