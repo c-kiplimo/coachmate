@@ -75,7 +75,7 @@ export class AddClientPageComponent implements OnInit {
     }
     this.ClientService.getOrgCoaches(options).subscribe(
       (response: any) => {
-        this.OrgCoaches = response;
+        this.OrgCoaches = response.body;
       },
       (error: any) => {
         this.toastrService.error('Error getting coaches', 'Error!');
@@ -105,7 +105,6 @@ export class AddClientPageComponent implements OnInit {
     details.coachId = this.coachData.id;
   }
 
-    console.log('add client form=>', details);
     this.ClientService.addClient(details).subscribe(
       (response: any) => {
         this.toastrService.success('Client added!', 'Success!');
