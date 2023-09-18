@@ -143,7 +143,7 @@ export class AddSessionComponent implements OnInit {
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
       this.getContracts(this.page);
-      this.getClients();
+      //this.getClients();
 
       if (this.user?.calendlyUsername !== null) {
         this.createCalendlyHtml(this.user?.calendlyUsername);
