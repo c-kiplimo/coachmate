@@ -302,7 +302,7 @@ public class UserService implements UserDetailsService {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Your coachMatePro Account Has Been Created.";
         String content = "Hey, use this link to confirm your account and set your password," +
-                host+"/confirmclient/"+saveClient.getId()+"/"+token;
+                "https://coachmate.pro/confirmclient/"+saveClient.getId()+"/"+token;
         notificationServiceHTTPClient.sendEmail(saveClient.getEmail(),subject, content, false);
         notificationServiceHTTPClient.sendSMS(saveClient.getMsisdn(), subject, content, String.valueOf(false));
 
