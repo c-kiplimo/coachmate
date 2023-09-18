@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit {
   clientId!: number;
 
   todaysSessions: any = [];
+  upcomingSessions: any = [];
 
   constructor(
     private clientService: ClientService,
@@ -106,6 +107,7 @@ export class DashboardComponent implements OnInit {
       this.getAllContracts(this.page);
       this.getClients(this.page);
       this.filterTodaysSessions(this.page);
+      this.filterUpcomingSessions(this.page);
     } else if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
       console.log('ORGANIZATION');
@@ -118,6 +120,7 @@ export class DashboardComponent implements OnInit {
       this.getRecentSessions(this.page);
       this.getAllContracts(this.page);
       this.filterTodaysSessions(this.page);
+      this.filterUpcomingSessions(this.page);
     }
 
   }
@@ -160,8 +163,67 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
-
+  filterUpcomingSessions(page: any) {
+    this.loading = true;
+  
+   
+    let startDate = new Date();
+   
+  
+ 
+    let endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 6); 
+  
+    const options: any = {
+      page: 0, 
+      size: this.pageSize,
+      sessionStartDate: startDate.toISOString().slice(0, 10), 
+      sessionEndDate: endDate.toISOString().slice(0, 10), 
+      sort: 'id,desc', 
+    };
+  
+    if (this.userRole == 'COACH') {
+      options.coachId = this.coachId;
+    } else if (this.userRole == 'CLIENT') {
+      options.clientId = this.clientId;
+    } else if (this.userRole == 'ORGANIZATION') {
+      options.orgId = this.orgId;
+    }
+  
+    this.sessionService.getSessions(options).subscribe(
+      (response: any) => {
+        
+        const allSessions = response.body;
+  
+        
+        const futureSessions = allSessions.filter((session: any) => {
+          const sessionDate = new Date(session.sessionDate);
+          return sessionDate >= startDate;
+        });
+  
+        
+        futureSessions.sort((a: any, b: any) => {
+          const dateA = new Date(a.sessionDate).getTime();
+          const dateB = new Date(b.sessionDate).getTime();
+          return dateA - dateB;
+        });
+  
+        
+        this.upcomingSessions = futureSessions;
+  
+        
+        this.totalElements = futureSessions.length as number;
+  
+        this.loading = false;
+      },
+      (error: any) => {
+        this.loading = false;
+      }
+    );
+  }
+  
+  
+  
   filterTodaysSessions(page: any) {
     this.loading = true;
     let today = new Date().toISOString().slice(0, 10);
