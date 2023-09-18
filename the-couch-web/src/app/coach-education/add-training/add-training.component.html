@@ -1,114 +1,129 @@
-<div class="row">
-  <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
-      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
-        Back</i
-      >
-    </h5>
+<div class="container mb-5">
+  <div class="row">
+    <div class="col mt-4" style="margin-left: 5px">
+      <h5 class="fw-bold">
+        <i
+          class="fas fa-chevron-left pe-5 pt-3 back-icon back"
+          (click)="back()"
+        >
+          Back</i
+        >
+      </h5>
+    </div>
   </div>
-</div>
 
-
-
-<div class="row justify-content-center m-2 p-3">
-  <div class="col-md-4">
-    <div
-      class="card card-table  justify-content-center align-items-center"
-    >
-      <div class="m-3">
-        <h1 class="text-center mb-3">Add training</h1>
-      </div>
-      <form class="m-3">
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <label for="courseName">Course Name *</label>
-            <input
-              formControlName="courseName"
-              name="courseName"
-              type="text"
-              class="form-control"
-              id="courseName"
-              required
-            />
-          </div>
-          <div class="mb-3 co-md-12">
-            <label for="provider">Provider *</label>
-            <input
-              formControlName="provider"
-              name="provider"
-              type="text"
-              class="form-control"
-              id="provider"
-              required
-            />
-          </div>
+  <div class="row justify-content-center m-2 p-3">
+    <div class="col-md-8">
+      <div class="card card-table justify-content-center align-items-center">
+        <!-- <div>
+          <img
+            src="../../../assets/images/CoachMatePRO.png"
+            alt="logo"
+            class="logo"
+            style="width: 150px; height: 100px; padding-top: 0%; margin-top: 0%"
+          />
+        </div> -->
+        <div class="m-3">
+          <h1 class="text-center mb-3">Add training</h1>
         </div>
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <label for="dateIssued">Date Issued*</label>
-            <input
-              formControlName="dateIssued"
-              name="dateIssued"
-              type="date"
-              class="form-control"
-              required
-            />
+        <form [formGroup]="addTrainingForm" class="m-3">
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-12">
+              <label for="courseName">Course Name *</label>
+              <input
+                formControlName="courseName"
+                name="courseName"
+                type="text"
+                class="form-control"
+                id="courseName"
+                required
+              />
+            </div>
+            <div class="mb-3 col-md-12">
+              <label for="provider">Provider *</label>
+              <input
+                formControlName="provider"
+                name="provider"
+                type="text"
+                class="form-control"
+                id="provider"
+                required
+              />
+            </div>
           </div>
-          <div class="mb-3 col-md-12">
-            <label for="validTill">Valid till*</label>
-            <input
-              formControlName="validTill"
-              name="validTill"
-              type="date"
-              class="form-control"
-              required
-            />
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-6">
+              <label for="dateIssued">Date Issued*</label>
+              <input
+                formControlName="dateIssued"
+                name="dateIssued"
+                type="date"
+                class="form-control"
+                required
+              />
+              <div *ngIf="addTrainingForm.get('dateIssued')?.hasError('pastDate')">
+                <small class="text-danger">Please select a future date.</small>
+              </div>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="validTill">Valid till*</label>
+              <input
+                formControlName="validTill"
+                name="validTill"
+                type="date"
+                class="form-control"
+                required
+              />
+              <div *ngIf="addTrainingForm.get('validTill')?.hasError('pastDate')">
+                <small class="text-danger">Please select a future date.</small>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <label for="trainingHours" class="form-label"
-              >Training Hours *</label
+          <div class="row justify-content-center">
+            <div class="mb-3 col-md-12">
+              <label for="trainingHours" class="form-label"
+                >Training Hours *</label
+              >
+              <input
+                formControlName="trainingHours"
+                name="trainingHours"
+                type="number"
+                class="form-control"
+                required
+                placeholder="eg 45hrs"
+              />
+            </div>
+            <div class="mb-3 col-md-12">
+              <label for="provider">Certficate Url</label>
+              <input
+                formControlName="certificateUrl"
+                name="certificateUrl"
+                type="text"
+                class="form-control"
+                id="certificateUrl"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              routerLink="/education"
             >
-            <input
-              formControlName="trainingHours"
-              name="trainingHours"
-              type="number"
-              class="form-control"
-              required
-              placeholder="eg 45hrs"
-            />
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+              (click)="addTraining()"
+              [disabled]="addTrainingForm.invalid"
+            >
+              ADD
+            </button>
           </div>
-          <div class="mb-3 col-md-12">
-            <label for="provider">Certficate Url</label>
-            <input
-              formControlName="certificateUrl"
-              name="certificateUrl"
-              type="text"
-              class="form-control"
-              id="certificateUrl"
-            />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-cancel"
-            routerLink="/education"
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            class="btn btn-outline-success"
-            data-bs-dismiss="modal"
-            (click)="addTraining()"
-            [disabled]="addTrainingForm.invalid"
-          >
-            ADD
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </div>

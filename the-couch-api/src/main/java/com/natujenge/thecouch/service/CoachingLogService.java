@@ -43,20 +43,30 @@ public class CoachingLogService {
     ) {
         //find coach by id
         User coach = userRepository.findById(coachId).orElse(null);
+        User client = userRepository.findUserById(coachingLogRequest.getClientId()).orElse(null);
+
         if (coach == null) {
             throw new IllegalArgumentException("Coach with id " + coachId + " not found");
         }
+        if (client == null) {
+            throw new IllegalArgumentException("Client not found!");
+        }
 
         log.info("Request to create coaching log , service layer");
+
         CoachingLog coachingLog = new CoachingLog();
-        coachingLog.setClientName(coachingLogRequest.getClientName());
-        coachingLog.setClientEmail(coachingLogRequest.getClientEmail());
+
+        coachingLog.setClientName(client.getFullName());
+        coachingLog.setClientEmail(client.getEmail());
         coachingLog.setNoInGroup(coachingLogRequest.getNoInGroup());
         coachingLog.setStartDate(coachingLogRequest.getStartDate());
         coachingLog.setEndDate(coachingLogRequest.getEndDate());
-
         coachingLog.setPaidHours(coachingLogRequest.getPaidHours());
-        coachingLog.setProBonoHours(coachingLogRequest.getProBonoHours());
+        if (coachingLog.getProBonoHours() != null) {
+            coachingLog.setProBonoHours(coachingLogRequest.getProBonoHours());
+        } else {
+            coachingLog.setProBonoHours(0L);
+        }
 
         coachingLog.setCreatedBy(coach.getFullName());
         coachingLog.setCreatedAt(LocalDateTime.now());

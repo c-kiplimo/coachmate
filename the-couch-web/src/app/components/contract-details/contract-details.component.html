@@ -302,7 +302,23 @@
             <input type="text" class="form-control" formControlName="coachingTopic"
               value="{{contractToBeUpdated?.coachingTopic}}" placeholder="Title" id="title" name="coachingTopic">
           </div>
-          <div class="input-group mb-3">
+
+          <div class="mb-3 col-md-12">
+            <label for="clientType">Contract Category</label>
+            <div class="row">
+              <div class="col-4 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="coachingCategory" />
+                <label class="form-group-text m-2" for="coachingCategory">INDIVIDUAL</label>
+              </div>
+              <div class="col-3 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+                  id="flexRadioDefault1" value="GROUP" formControlName="coachingCategory" />
+                <label class="form-group-text m-2" for="coachingCategory">GROUP</label>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="input-group mb-3">
             <div class="input-group-prepend ">
               <label class="input-group-text" for="category">Contract Category</label>
             </div>
@@ -312,7 +328,8 @@
               <option value="INDIVIDUAL">INDIVIDUAL</option>
               <option value="GROUP">GROUP</option>
             </select>
-          </div>
+          </div> -->
+
           <div class="mb-3 form-group">
             <label class="form-label" for="number">Start Date</label>
             <input type="date" formControlName="startDate" value="{{contractToBeUpdated?.startDate}}" id="number"

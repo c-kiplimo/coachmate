@@ -76,7 +76,9 @@ export class HomeComponent implements OnInit {
   contactUsMessage() {
     console.log(this.contactForm.value);
 
-    this.notificationService.contactUsMessage(this.contactForm.value).subscribe({
+    let options = null;
+
+    this.notificationService.contactUsMessage(this.contactForm.value, null).subscribe({
       next: (response: { error: any; body: { message: any; }; }) => {
         console.log(response);
         if (response.error) {

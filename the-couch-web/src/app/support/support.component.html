@@ -73,43 +73,24 @@
         </mat-accordion>
       </div>
   </div> -->
-      <div class="accord-container">
+      <div class="row col-12 mb-5 accord-container">
         <h4 class="sub-titles text-center">Contact Form</h4>
-        <form class="form-mat" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate>
-          <mat-form-field class="f-wide">
-            <mat-label>Name</mat-label>
-            <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required />
-          </mat-form-field>
-          <mat-form-field class="f-wide">
-            <mat-label>Email</mat-label>
-            <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" required />
-          </mat-form-field>
-          <mat-form-field class="f-wide">
-            <mat-label>Message</mat-label>
-            <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
-          </mat-form-field>
-          <!-- <div class="row mb-4">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="form_name">Name *</label>
-                <input formControlName="name" id="form_name" type="text" name="name" class="form-control" placeholder="Full name" required />
-              </div>
+        <form class="" [formGroup]="contactForm" (ngSubmit)="contactUsMessage()" ngNativeValidate role="form">
+          <div class="form-inner justify-content-center">
+            <div class="f-wide">
+              <label>Your topic of inquiry / feedback</label>
+              <select formControlName="topic" required data-error="Please specify your need." id="form_need" name="need" class="form-control" rows="2">
+                <option value="" selected disabled> ---select a field--- </option>
+                <option  *ngFor="let field of topics" [value]="field" >
+                  {{ field | titlecase }}
+                </option>
+              </select>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="form_email">Email *</label>
-                <input formControlName="email" id="form_email" type="email" name="email" class="form-control" placeholder="example@mail.com" required />
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="row mb-4">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="form_message">Message *</label>
-                <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
-              </div>
-            </div>
-          </div> -->
+            <mat-form-field class="f-wide">
+              <mat-label>Message</mat-label>
+              <textarea formControlName="message" id="form_message" name="message" class="form-control" placeholder="Your message here" rows="3" required></textarea>
+            </mat-form-field>
+          </div>
           <div class="row">
             <div class="col-md-12">
               <div class="text-center">
@@ -121,6 +102,6 @@
           </div>
         </form>
       </div>
-</div>
 
+</div>
   

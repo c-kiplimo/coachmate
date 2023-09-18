@@ -10,7 +10,7 @@ import { NotificationsService } from '../services/notifications.service';
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.scss']
+  styleUrls: ['./contact-us.component.css']
 })
 export class ContactUsComponent implements OnInit {
   feedbackForm!: FormGroup;
@@ -40,16 +40,16 @@ export class ContactUsComponent implements OnInit {
   sendFeedback() {
     console.log(this.feedbackForm.value)
 
-    this.notificationsService.contactUsMessage(this.feedbackForm.value).subscribe({
+    let options = null;
+    this.notificationsService.contactUsMessage(this.feedbackForm.value, options).subscribe({
       next: (response) => {
-        console.log(response);
         if (response.error) {
-          console.log(response.body.message);
         } else {
           this.toastrService.success(
             'Thank you for the feedback',
             'Message sent successfully'
           );
+          this.back();
         }
       }, error: (error: any): any => {
         this.toastrService.error(
