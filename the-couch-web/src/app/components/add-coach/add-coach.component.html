@@ -58,15 +58,14 @@
                 placeholder="Email" required />
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="newCoach()" [disabled]="
+       
+            <button type="submit" class="btn btn-signup   btn-outline-success" data-bs-dismiss="modal" (click)="newCoach()" [disabled]="
             !addCoach.firstName||
             !addCoach.lastName||
             !addCoach.email||
             !addCoach.msisdn
             ">ADD COACH
             </button>
-          </div>
         </form>
       </div>
     </div>
