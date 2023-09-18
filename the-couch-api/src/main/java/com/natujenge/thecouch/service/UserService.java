@@ -319,9 +319,10 @@ public class UserService implements UserDetailsService {
             clientWallet.setOrganization(organization);
         }
 
+        assert userDetails != null;
         clientWallet.setCreatedBy(userDetails.getFullName());
         clientWallet.setClient(saveClient);
-        clientWallet.setWalletBalance(Float.valueOf(0));
+        clientWallet.setWalletBalance((float) 0);
         clientWallet.setCoach(saveClient.getAddedBy());
         clientWalletRepository.save(clientWallet);
         log.info("Client Wallet created Successfully!");
