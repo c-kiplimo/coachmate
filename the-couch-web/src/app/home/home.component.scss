@@ -68,19 +68,10 @@ nav {
 
 .navbar {
   flex-direction: row;
-  // border-bottom: 1px solid #e1e1e1;
-  height: 60px;
+  height: 80px;
   font-size: 16px!important;
   z-index: 2;
   padding: 0;
-
-  // .welcome-img {
-  //   height: 60px;
-  //   position: relative;
-  //   top: 2px;
-  //   padding-bottom: 5px;
-  //   padding-left: 10px;
-  // }
 
   .nav-item {
     margin: 0 10px;
@@ -102,10 +93,6 @@ nav {
   background-color: #fff!important;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)!important;
 
-  .welcome-img {
-    background-color: #fff;
-  }
-
   .collapse {
     background-color: #fff;
   }
@@ -120,9 +107,10 @@ nav {
   }
 }
 .logo-img {
-  height: 130px;
- 
+  height: 100px;
+  position: sticky;
 }
+
 .nav-btns {
   margin: 0 10px;
   padding: 14px;
@@ -143,9 +131,6 @@ nav {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-}
-.transparent-logo {
-  transition: opacity 0.5s ease;
 }
 
 .btn-auth {
@@ -173,6 +158,8 @@ nav {
 .abt-section-text {
   flex: 0 0 40%; /* Adjusted to match the image container */
   text-align: left;
+  background-color: #fff;
+  padding: 30px;
 }
 
 .display-4 {
@@ -190,6 +177,9 @@ nav {
   line-height: 1.8;
 }
 
+.section {
+  width: 80vw;
+}
 
 /* Section styles */
 .features-section {
