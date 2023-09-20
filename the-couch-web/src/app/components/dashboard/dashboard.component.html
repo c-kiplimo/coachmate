@@ -48,15 +48,16 @@
               <span><i class="fa fa-plus"></i></span> Create a Coach
             </h3>
         
-            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/addClient']">
-              <span><i class="fa fa-plus"></i></span> Create a Client
-            </h3>
+          
       
         
             <h3 class="badge badge-success" [routerLink]="['/addSession']">
               <span><i class="fa fa-plus"></i></span> Create a Session
             </h3>
           
+            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/addClient']">
+              <span><i class="fa fa-plus"></i></span> Create a Client
+            </h3>
         
             <h3 class="badge badge-warning" *ngIf="this.userRole == 'CLIENT'" [routerLink]="['/schedules']">
               <span><i class="fa-solid fa-arrow-right"></i></span> Your Calendar
@@ -67,11 +68,12 @@
             </h3>
           </div>
           <div class="col quicklinks">
-            <h3 class="badge badge-warning" *ngIf="this.userRole == 'COACH'" [routerLink]="['/addAvailableSlots']">
-              <span><i class="fa fa-plus"></i></span> Set Availability
-            </h3>
+            
             <h3 class="badge badge-success" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/add-contract']">
               <span><i class="fa fa-plus"></i></span> Create a Contract
+            </h3>
+            <h3 class="badge badge-warning" *ngIf="this.userRole != 'CLIENT'" [routerLink]="['/addAvailableSlots']">
+              <span><i class="fa fa-plus"></i></span> Set Availability
             </h3>
           </div>
         </div>

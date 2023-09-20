@@ -143,7 +143,7 @@ export class AddSessionComponent implements OnInit {
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
       this.getContracts(this.page);
-      //this.getClients();
+      // this.getClients();
 
       if (this.user?.calendlyUsername !== null) {
         this.createCalendlyHtml(this.user?.calendlyUsername);
@@ -257,6 +257,7 @@ export class AddSessionComponent implements OnInit {
       status: this.filters?.status,
       search: this.filters?.searchItem,
     };
+
     this.clientService.getClients(options).subscribe(
       (response: any) => {
         this.clients = response.body.data;
