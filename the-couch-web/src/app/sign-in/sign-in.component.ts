@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoginService } from '../services/LoginService';
 import { Router, ActivatedRoute } from '@angular/router';
+import { style, animate, transition, trigger } from '@angular/animations';
+
+
 import {
   faArrowLeft,
   faArrowRight,
@@ -16,8 +19,18 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.css'],
+  styleUrls: ['./sign-in.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(300, style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
+
 export class SignInComponent implements OnInit {
   errorMessage = '';
   loginSuccess = false;

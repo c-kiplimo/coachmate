@@ -58,12 +58,12 @@
                     <li class="nav-item" (click)="toggleTab('sessions')">
                       <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just"
                         data-toggle="tab" role="tab" aria-controls="home-just" aria-selected="true"><i
-                          class="fa-solid fa-chalkboard-user" style="color: green"></i> Sessions</a>
+                          class="fa-solid fa-chalkboard-user" style="color: #EF4813"></i> Sessions</a>
                     </li>
                     <li class="nav-item" (click)="toggleTab('google')">
                       <a class="nav-link" [class.active]="currentTab === 'google'" id="contact-tab-just"
                         data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
-                          class="fa-solid fa-file-contract" style="color: green"></i> Google Calender</a>
+                          class="fa-solid fa-file-contract" style="color: #EF4813"></i> Google Calender</a>
                     </li>
                   </ul>
                   <!--       
@@ -72,12 +72,12 @@
                       <li class="nav-item" (click)="toggleTab('sessions')">
                         <a class="nav-link" [class.active]="currentTab === 'sessions'" id="home-tab-just" data-toggle="tab"
                           role="tab" aria-controls="home-just" aria-selected="true"><i class="fa-solid fa-chalkboard-user"
-                            style="color: green"></i></a>
+                            style="color: #EF4813"></i></a>
                       </li>
                       <li class="nav-item" (click)="toggleTab('contracts')">
                         <a class="nav-link" [class.active]="currentTab === 'contracts'" id="contact-tab-just"
                           data-toggle="tab" role="tab" aria-controls="contact-just" aria-selected="false"><i
-                            class="fa-solid fa-file-contract" style="color: green"></i></a>
+                            class="fa-solid fa-file-contract" style="color: #EF4813"></i></a>
                       </li>
                     </ul>
                   </div> -->
@@ -86,6 +86,9 @@
 
               <br>
               <div *ngIf="currentTab === 'sessions'">
+                <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+                  <div class="donut multi"></div>
+                </div>
                 <table class="table" *ngIf="sessions?.length">
                   <thead>
                     <tr>
@@ -128,9 +131,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-                  <div class="donut multi"></div>
-                </div>
+
                 <div class="d-flex justify-content-center" *ngIf="!loading && !sessions?.length">
                   <p class="text-muted mt-5">
                     No Sessions Found.

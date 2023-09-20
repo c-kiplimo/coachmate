@@ -123,7 +123,7 @@
 
       <div class="pt-3 pb-2 listing-item"
         *ngFor="let coach of coaches  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: totalElements }"
-        [routerLink]="['/clientView', coach.id]">
+        [routerLink]="['/coachView', coach.id]">
 
 
         <div class="d-flex justify-content-between">
