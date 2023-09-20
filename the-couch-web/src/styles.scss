@@ -151,6 +151,18 @@ label {
   margin-bottom: 5px!important;
 }
 
+/* your-component.component.css */
+.custom-radio-input {
+  /* Add your custom styles for the radio input here */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #EF4813;
+  border-radius: 50%;
+}
+
+.custom-radio-input:checked {
+  background-color: #EF4813;
+}
 
 #advanced-search-button {
   border-top-left-radius: 0px;
@@ -309,7 +321,7 @@ a {
 
 .badge-warning {
   background-color: #fff2de;
-  color: #a76807 !important;
+  color: #EF4813 !important;
 }
 
 .no-word-break {
@@ -551,7 +563,7 @@ a {
 
     &.active {
       border: none;
-      border-bottom: 4px solid #F15B2B !important;
+      border-bottom: 4px solid #f3a68e !important;
     }
   }
 }
@@ -654,7 +666,7 @@ a {
 }
 
 .seeAll {
-  color: #198754 !important;
+  color: #EF4813 !important;
   font-size: bold !important;
   cursor: pointer;
 }

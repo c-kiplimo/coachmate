@@ -26,19 +26,6 @@ fa-icon{
 fa-icon {
     cursor: pointer;
 }
-
-/* your-component.component.css */
-.custom-radio-input {
-    /* Add your custom styles for the radio input here */
-    width: 20px;
-    height: 20px;
-    border: 2px solid #4CAF50;
-    border-radius: 50%;
-  }
-  
-  .custom-radio-input:checked {
-    background-color: #4CAF50;
-  }
   
   .custom-label {
     /* Add your custom styles for the label here */
