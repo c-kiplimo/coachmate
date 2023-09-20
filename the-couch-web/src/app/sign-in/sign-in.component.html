@@ -1,21 +1,24 @@
-<div class="row justify-content-center">
-  <div class="col-md-4">
+<div class="container login-page" [@fadeIn]>
+  <div class="col-md-6">
     <a class="py-3 ps-1 back-link login-back-link" routerLink="/home">
       <fa-icon [icon]="backIcon"></fa-icon> Go to website
     </a>
-    <div class="card card-table d-flex justify-content-center align-items-center">
-      <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" style="width: 200px;">
-      <h4 class="text-center">Sign in</h4>
-      <div class="alert alert-danger" *ngIf="errorMessage">
+    <div class="card card-table text-center">
+      <div class="card-body">
+      <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" style="width: 150px;">
+      <h3 class="mb-4">Sign in</h3>
+
+      <div class="alert alert-danger" *ngIf="errorMessage" [@fadeIn]>
         {{ errorMessage }}
       </div>
+
       <form #loginForm="ngForm" (ngSubmit)="userLogin()">
-        <div class="mb-3">
+        <div class="mb-3 text-start">
           <label for="email">Email</label>
           <input [(ngModel)]="formData.username" name="username" type="text" class="form-control" id="email"
             aria-describedby="emailHelp" placeholder="eg user@gmail.com" required />
         </div>
-        <div class="form-group mb-3">
+        <div class="form-group mb-1 text-start">
           <label for="password">Password</label>
           <div class="input-group">
             <input [(ngModel)]="formData.password" [type]="fieldTextType ? 'text' : 'password'" name="password"
@@ -36,14 +39,19 @@
           <div class="donut multi"></div>
         </div>
 
-        <button type="submit" class="btn-signup btn-outline-success mt-2 mb-5" [disabled]="
+        <div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
+          <a class="to-forgot-password text-end" routerLink="/reset/request">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-outline-success btn-signup mt-2 mb-5" [disabled]="
             !formData.username ||
             !formData.password">
-          Login
+          {{ loading ? 'Logging in...' : 'Login' }}
         </button>
       </form>
-      <p><a routerLink="/reset/request" class="link">Forgot Password?</a></p>
-      <p>Don't have an account?<a routerLink="/signup" class="link"> Register</a></p>
+      
+      <p class="to-register">Don't have an account?<a routerLink="/signup"> Register</a></p>
+      </div>
     </div>
   </div>
 </div>

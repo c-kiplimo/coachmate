@@ -1,6 +1,9 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '../src/assets/bottom-nav.scss';
+@import './assets/css/font-montserrat.css';
+@import './assets/css/font-inter.css'; // @import url('https://fonts.googleapis.com/css2?family=Asap:wght@400;500;700&family=Poppins:wght@100;200;300;400;500;600&display=swap');
+@import './assets/css/font-roboto.css'; 
 @import 'ngx-toastr/toastr';
 // Plus imports for other components in your app.
 
@@ -14,6 +17,10 @@
 html,
 body {
   height: 100%;
+  scroll-behavior: smooth !important;
+  letter-spacing: 0.5px;
+  font-size: 1em;
+  font-family: 'Inter', sans-serif!important;
 }
 
 body {
@@ -48,10 +55,7 @@ select:focus,
 select:hover,
 textarea:active,
 textarea:focus,
-textarea:hover // .btn:active,
-
-// .btn.active 
-  {
+textarea:hover {
   border: 2px solid #5f60631a !important;
 }
 
@@ -60,6 +64,93 @@ button:active {
   outline: none !important;
 
 }
+
+
+/* Set the background and border color to #98E179 */
+.btn-outline-success {
+  color: #EF4813; /* Text color for the success button */
+  border-color: #EF4813; /* Border color for the success button */
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover and focus */
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+  background-color: #f3a68e; /* Background color on hover and focus */
+  color: #fff; /* Text color on hover and focus */
+  border-color: #f3a68e; /* Border color on hover and focus */
+  box-shadow: none; /* Optional: Removes the shadow */
+
+}
+
+/* Remove the shadow */
+.btn-outline-success {
+  box-shadow: none; /* Remove the shadow from the button */
+}
+
+/* Add padding, font size, and rounded corners for better appearance */
+.btn-outline-success {
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px; /* Adjust font size as needed */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Remove the default outline on focus (optional) */
+.btn-outline-success:focus {
+  outline: none;
+}
+
+.btn-signup {
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 100%;
+  height: 42px;
+  border-radius: 6px;
+  background-color: #EF4813;
+  border: none;
+  transition: all ease;
+  box-shadow: none;
+}
+
+.btn-signup:hover,
+.btn-signup:focus {
+  background-color: #f3a68e;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-signup:active {
+  background-color: #f3a68e;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-signup:disabled {
+  background-color: #e1e1e1;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-signup:disabled:hover {
+  background-color: #e1e1e1;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+
+label {
+  color: #5f6063;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 5px!important;
+}
+
 
 #advanced-search-button {
   border-top-left-radius: 0px;

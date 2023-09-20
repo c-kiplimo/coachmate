@@ -26,19 +26,19 @@
         <div class="row">
           <div class="col stats" *ngIf="this.userRole == 'ORGANIZATION'">
             <p class="faded">Coaches</p>
-            <h2 class="card-title">{{ coaches?.length }}</h2>
+            <h2 class="card-title">{{ coaches?.length ?? 0 }}</h2>
           </div>
           <div class="col stats" *ngIf="this.userRole != 'CLIENT'">
             <p class="faded">Clients</p>
-            <h2 class="card-title">{{ numberOfClients }}</h2>
+            <h2 class="card-title">{{ numberOfClients ? numberOfClients : 0 }}</h2>
           </div>
           <div class="col stats" *ngIf="this.userRole != 'ORGANIZATION'">
             <p class="faded">Contracts</p>
-            <h2 class="card-title">{{ numberOfContracts }}</h2>
+            <h2 class="card-title">{{ numberOfContracts ? numberOfContracts : 0 }}</h2>
           </div>
           <div class="col stats">
             <p class="faded">Sessions</p>
-            <h2 class="card-title">{{ sessions?.length }}</h2>
+            <h2 class="card-title">{{ sessions?.length ?? 0 }}</h2>
           </div>
         </div>
 
