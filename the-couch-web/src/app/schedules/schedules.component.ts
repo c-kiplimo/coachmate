@@ -166,6 +166,7 @@ export class SchedulesComponent implements OnInit {
       this.viewDate = date;
     }
   }
+ 
 
   eventTimesChanged({
     event,
