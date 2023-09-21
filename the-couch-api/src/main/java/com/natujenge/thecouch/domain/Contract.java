@@ -47,6 +47,7 @@ public class Contract {
     private ContractStatus contractStatus;
     private Boolean coachSigned;
     private Boolean clientSigned;
+    private Boolean organizationSigned;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 

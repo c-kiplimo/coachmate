@@ -242,18 +242,23 @@ public class ContractService {
                 throw new IllegalStateException("Contract is signed");
 
             } else {
-                if (contract.getCoachSigned() != null && contract.getClientSigned() != null) {
-                    contract.setContractStatus(ContractStatus.SIGNED);
-                    contract.setLastUpdatedBy(loggedInUSerId);
-                } else {
-                    if (userRole == UserRole.CLIENT) {
-                        contract.setClientSigned(true);
+                    if ((contract.getCoachSigned() != null && contract.getClientSigned() != null)
+                    || (contract.getCoachSigned() != null && contract.getOrganizationSigned() != null)
+                    || (contract.getClientSigned() != null && contract.getOrganizationSigned() != null)) {
+                        contract.setContractStatus(ContractStatus.SIGNED);
                         contract.setLastUpdatedBy(loggedInUSerId);
-                    } else if (userRole == UserRole.COACH) {
-                        contract.setCoachSigned(true);
-                        contract.setLastUpdatedBy(loggedInUSerId);
+                    } else {
+                        if (userRole == UserRole.CLIENT) {
+                            contract.setClientSigned(true);
+                            contract.setLastUpdatedBy(loggedInUSerId);
+                        } else if (userRole == UserRole.COACH) {
+                            contract.setCoachSigned(true);
+                            contract.setLastUpdatedBy(loggedInUSerId);
+                        } else if (userRole == UserRole.ORGANIZATION) {
+                            contract.setOrganizationSigned(true);
+                            contract.setLastUpdatedBy(loggedInUSerId);
+                        }
                     }
-                }
             }
         } else if (contractStatus == ContractStatus.ONGOING) {
             if (!(contract.getCoachSigned() && contract.getClientSigned())) {
@@ -368,7 +373,10 @@ public class ContractService {
 
     public void checkAndUpdateContractStatus() {
         contractRepository.findAll().forEach(contract -> {
-            if (contract.getCoachSigned() != null && contract.getClientSigned() != null && contract.getContractStatus() != ContractStatus.SIGNED) {
+            if ((contract.getCoachSigned() != null && contract.getClientSigned() != null)
+                    || (contract.getCoachSigned() != null && contract.getOrganizationSigned() != null)
+                    || (contract.getClientSigned() != null && contract.getOrganizationSigned() != null) &&
+                    (contract.getContractStatus() != ContractStatus.SIGNED)) {
                 contract.setContractStatus(ContractStatus.SIGNED);
                 contractRepository.save(contract);
             }
