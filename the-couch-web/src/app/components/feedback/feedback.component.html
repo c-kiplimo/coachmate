@@ -1,11 +1,11 @@
 
 <div class="row">
-  <div class="col  mt-4" style="margin-left: 5px;">
+  <div class="col  mt-4 m-3" style="margin-left: 5px;">
     <h2 class="fw-semi-bold f-weight fs-5">Feedbacks</h2>
   </div>
 </div>
 
-  <div class="row">
+  <div class="row d-none  d-lg-block">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
@@ -57,6 +57,67 @@
       </div>
     </div>
   </div>
+
+  <!-- mobile view -->
+  <div class="show-sm">
+    <div class="pt-3 pb-2 listing-item m-2" *ngFor="let feedback of feedbacks"> 
+      <div class="d-flex justify-content-between m-2">
+        <h4 class="farmer">
+          {{ feedback?.client.firstName | titlecase }}
+        </h4>
+
+        <span class="no-word-break">{{ feedback?.session.name | titlecase }}
+          <a data-bs-toggle="modal" data-bs-target="#feedbackModal" (click)="viewComment(feedback)">
+            <i class="far fa-comment-alt"></i>
+          </a>
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-between mb-2 m-2">
+        <span class="customer-name" class="mb-0">
+          Overall: {{ feedback.overallScore }}
+        </span>
+       
+      </div>
+      <div class="d-flex justify-content-between mb-2 m-2">
+      <span class="customer-name">
+          Emotional Intelligence: {{ feedback.emotionalIntelligenceScore }}
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-between mb-2 m-2">
+        <span class="customer-name" class="mb-0">
+          Clarification: {{ feedback.clarificationScore }}
+        </span>
+       
+      </div>
+      <div class="d-flex justify-content-between mb-2 m-2">
+        <span class="customer-name" class="mb-0">
+          Listening Skills: {{ feedback.listeningSkillsScore }}
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-between mb-1 m-2">
+        <span class="customer-name" class="mb-0">
+          Understanding: {{ feedback.understandingScore }}
+        </span>
+      </div>
+      <div class="d-flex justify-content-between mb-1 m-2">
+        <span class="customer-name" class="mb-0">
+          Availability: {{ feedback.availabilityScore  }}
+        </span>
+      </div>
+    </div>
+
+    <div class="donut-wrapper" *ngIf="loading">
+      <div class="donut multi"></div>
+    </div>
+    <p class="text-muted mt-5" *ngIf="!loading && !feedbacks.length">
+      No feedbacks Found.
+    </p>
+  </div>
+
+
 
   <!-- feedback details modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
