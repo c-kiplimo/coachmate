@@ -1,15 +1,37 @@
+.home {
+  width: 100%;
+  align-items: center;
+}
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  width: 100%;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
+  margin-right: 0;
+  margin-left: 0;
+}
+
 .container-fluid{
     background-color: #ffffff;
     position: relative;
     color: #5C656D;
+    margin-left: 0px; 
 }
 
+.section {
+    top: 0; /* Position it at the top of the viewport */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0; /* Position it at the bottom of the viewport */
+    z-index: 1; /* Ensure it stays above other elements */
+    position: relative;
+    margin-left: 0px;
+    margin-right: 10px;
+    padding: 0px;
+}
 
 .hero-section{
     position: relative;
     padding: 30px;
-
-
 }
 .hero-text{
     position: absolute;
@@ -47,13 +69,6 @@
     max-height: 500px;
 }
 
-nav,
-.navbar {
-  font-weight: 16px !important;
-  font-size: 16px !important;
-  z-index: 2;
-  padding: 0;
-}
 .btn-signup1{
   background-color: #0f8239;
   color: #fff;
@@ -68,53 +83,47 @@ nav {
 
 .navbar {
   flex-direction: row;
-  height: 80px;
+  height: 60px;
   font-size: 16px!important;
   z-index: 2;
   padding: 0;
+  //bottom shadow
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 
   .nav-item {
     margin: 0 10px;
     display: flex;
-    padding: 12px;
     font-weight: 16px!important;
   }
 
   .nav-link {
     font-weight: 500;
     letter-spacing: 1px;
-    border: none!important;
+    border: none !important;
     border-radius: 0;
     margin: 0 1px;
+    background-color: inherit;
   }
 }
 
-.navbar-on-home {
-  background-color: #fff!important;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)!important;
-
-  .collapse {
-    background-color: #fff;
-  }
-
-  .nav-link {
-    color: #5f6063;
-
-    &:hover {
-      background-color: #fff;
-      color: #3c4043;
-    }
+.login-reg-buttons {
+  button {
+    height: 40px;
   }
 }
-.logo-img {
-  height: 100px;
-  position: sticky;
+
+.logo {
+  height: 110px;
+
 }
 
-.nav-btns {
-  margin: 0 10px;
-  padding: 14px;
-  font-weight: 16px!important;
+@media screen and (max-width: 500px) {
+  .logo {
+    height: 80px;
+    padding: 0px;
+    margin: 0px;
+  }
+  
 }
 
 .active-link {
@@ -122,7 +131,7 @@ nav {
 }
 
 .home-active-link {
-  color: #257631!important;
+  color: #EF4813!important;
   font-weight: 600!important;
 }
 
@@ -132,18 +141,6 @@ nav {
   justify-content: center;
   align-items: center;
 }
-
-.btn-auth {
-  margin-left: 10px;
-  padding: 5px 15px;
-  background-color: #fff;
-  color: #257631;
-  letter-spacing: 1px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid #257631;
-}
-
 
 .abt-section-img {
   flex: 0 0 40%;
@@ -162,6 +159,21 @@ nav {
   padding: 30px;
 }
 
+// @media screen and (max-width: 500px) {
+//   .abt-section {
+//     flex-direction: column;
+//   }
+
+//   .abt-section-img {
+//     flex: 0 0 100%;
+//   }
+
+//   .abt-section-text {
+//     flex: 0 0 100%;
+//     margin: 10px;
+//   }
+// }
+
 .display-4 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -175,10 +187,6 @@ nav {
 .feat {
   font-size: 0.1rem;
   line-height: 1.8;
-}
-
-.section {
-  width: 80vw;
 }
 
 /* Section styles */
@@ -215,7 +223,6 @@ nav {
 .contact {
   padding: 5rem 2rem;
   background-color: rgb(218, 241, 218);
-  // padding: 20px;
 }
 
 .contact .container {
@@ -250,8 +257,6 @@ nav {
 .contact .hidden {
   display: none;
 }
-
-
 
 
 .footer {
@@ -340,14 +345,9 @@ nav {
   display: inline;
 }
 
-.security {
-  scroll-margin-top: 50px!important;
-  padding-top: 10vh;
-  padding-bottom: 13vh;
-}
 
 .security .section-description {
-  margin-bottom: 7vh;
+  margin-bottom: 7px;
   display: block;
 }
 
@@ -363,23 +363,7 @@ nav {
 }
 
 .security .security-item .security-icon {
-  color: #04540c;
+  color: #EF4813;
   font-size: 1.5rem;
   margin-right: 20px;
-}
-
-.security .security-item h4 {
-  color: #3c4043;
-  font-weight: 600;
-}
-
-.security .security-item p {
-  color: #5f6063;
-  font-size: 0.9rem;
-}
-@media (max-width: 767px) {
-  
-.security .section-header h3 {
-    line-height: 1.5;
-  }
 }
