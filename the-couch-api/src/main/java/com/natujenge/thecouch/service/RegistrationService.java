@@ -539,9 +539,9 @@ public class RegistrationService {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Coach Account Creation";
         String content = "Hello " + coachRequest.getFirstName() + ", use this link to confirm your account and set your password," +
-                " http://localhost:4200/confirmcoach/"+response.get(0)+"/"+token;
+                "https://coachmate.pro/confirmcoach/"+response.get(0)+"/"+token;
         notificationServiceHTTPClient.sendEmail(coachRequest.getEmail() ,subject, content, false);
-        notificationServiceHTTPClient.sendSMS(coachRequest.getMsisdn(),content,"COACH-1234");
+        notificationServiceHTTPClient.sendSMS(coachRequest.getMsisdn(),content,"coachMatePro-1234");
         log.info(content);
         log.info("Coach registered");
 
@@ -792,7 +792,7 @@ public class RegistrationService {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Confirm Your CoachMatePro Account.";
         String content = "Hey, use this link to confirm your CoachMatePro account and set your password," +
-                host +"/confirmcoach/"+savedCoach.getId()+"/"+token;
+                "https://coachmate.pro/confirmcoach/"+savedCoach.getId()+"/"+token;
         notificationServiceHTTPClient.sendEmail(savedCoach.getEmail(),subject, content, false);
         notificationServiceHTTPClient.sendSMS(savedCoach.getMsisdn(), subject, content, String.valueOf(false));
 
