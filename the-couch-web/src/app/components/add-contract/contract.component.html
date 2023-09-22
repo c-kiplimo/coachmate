@@ -1,79 +1,43 @@
-<div class="row">
-  <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
-      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
-        Back</i
-      >
-    </h5>
+<div class="d-flex justify-content-between">
+  <div class="mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Create a Contract
+    </h2>
   </div>
 </div>
 
 <div class="row justify-content-center m-1">
-  <div class="col-md-8 col-sm-12">
+  <div class="col-md-6 col-sm-12">
     <div class="card card-table justify-content-center align-items-center">
-      <div class="m-3">
-        <h1 class="text-center mb-3">Coaching Agreement</h1>
-      </div>
-
       <form [formGroup]="contractForm" class="m-2">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="coachingTopic" class="form-label">Coaching Title</label>
-            <input
-              type="text"
-              class="form-control"
-              id="nucoachingTopicmber"
-              placeholder="Enter the coaching topic"
-              formControlName="coachingTopic"
-              required="true"
-            />
+            <input type="text" class="form-control" id="nucoachingTopicmber" placeholder="Enter the coaching topic"
+              formControlName="coachingTopic" required="true" />
           </div>
           <div class="mb-3 col-md-12">
             <div class="col-6 input-group-prepend">
-              <H3 for="coachingCategory" class="form-label"
-                >Coaching Category</H3
-              >
+              <H3 for="coachingCategory" class="form-label">Coaching Category</H3>
             </div>
-              <div class="row">
-                <div class="col-6 input-group-prepend">
-                  <input
-                    class="form-check-input m-2 custom-radio-input"
-                    type="radio"
-                    name="coachingCategory"
-                    id="flexRadioDefault1"
-                    value="INDIVIDUAL"
-                    formControlName="coachingCategory"
-                  />
-                  <label class="form-group-text m-2" for="coachingCategory"
-                    >INDIVIDUAL</label
-                  >
-                </div>
-                <div class="col-6 input-group-prepend">
-                  <input
-                    class="form-check-input m-2 custom-radio-input"
-                    type="radio"
-                    name="coachingCategory"
-                    id="flexRadioDefault2"
-                    value="CORPORATE"
-                    formControlName="coachingCategory"
-                  />
-                  <label class="form-group-text m-2" for="coachingCategory"
-                    >CORPORATE</label
-                  >
-                </div>
+            <div class="row">
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="coachingCategory" />
+                <label class="form-group-text m-2" for="coachingCategory">INDIVIDUAL</label>
+              </div>
+              <div class="col-6 input-group-prepend">
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
+                  id="flexRadioDefault2" value="CORPORATE" formControlName="coachingCategory" />
+                <label class="form-group-text m-2" for="coachingCategory">CORPORATE</label>
               </div>
             </div>
           </div>
-        
+        </div>
+
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <H3 for="clientId" class="form-label">Select Client</H3>
-            <select
-              class="form-select"
-              aria-label="Default select example"
-              formControlName="clientId"
-              required="true"
-            >
+            <select class="form-select" aria-label="Default select example" formControlName="clientId" required="true">
               <option selected>
                 Select Client you want to make contract with
               </option>
@@ -114,26 +78,14 @@
         <div class="row">
           <div class="col">
             <label for="number" class="form-label">Start Date</label>
-            <input
-              type="date"
-              class="form-control"
-              placeholder="date"
-              formControlName="startDate"
-              required="true"
-            />
+            <input type="date" class="form-control" placeholder="date" formControlName="startDate" required="true" />
             <div *ngIf="contractForm.get('startDate')?.hasError('pastDate')">
               <small class="text-danger">Please select a future date.</small>
             </div>
           </div>
           <div class="col">
             <label for="number" class="form-label">End Date</label>
-            <input
-              type="date"
-              class="form-control"
-              placeholder="date"
-              formControlName="endDate"
-              required="true"
-            />
+            <input type="date" class="form-control" placeholder="date" formControlName="endDate" required="true" />
             <div *ngIf="contractForm.get('endDate')?.hasError('pastDate')">
               <small class="text-danger">Please select a future date.</small>
             </div>
@@ -141,117 +93,67 @@
         </div>
         <!-- <div class="row justify-content-center">
           <div class="mb-3 mt-3"> -->
-            <section>
-                <div class="col-12"></div>
-                <br>
-                <div class="row justify-content-center">
-                  <div class="col">
-                    <label for="coachingGoals" class="form-label"
-                >Coaching Goals</label
-              >
-                    <input
-                      [(ngModel)]="Objectives.objective"
-                      type="text"
-                      class="form-control"
-                      placeholder="Add Goal"
-                      formControlName="objectives"
-                    />
-                  </div>
-                  
-                  <div class="col-6 mt-4">
-                    <button
-                      type="button"
-                      class="btn btn-outline-success"
-                      (click)="addObjective()"
-                    >
-                      <i class="fa-solid fa-user-plus"></i>Add goal
-                    </button>
-                  </div>
-                </div>
-              <div class="row">
-                <div class="col-10">
-                  <div class="mb-3">
-                    <ol>
-                      <li *ngFor="let obj of objectives; index as i">
-                        {{ obj }}
-                        <i
-                          (click)="removeObjective(i)"
-                          role="button"
-                          class="fa-solid fa-trash-can p-1"
-                        ></i>
-                      </li>
-                    </ol>
-                  </div>
-                </div>
+        <section>
+          <div class="col-12"></div>
+          <br>
+          <div class="row justify-content-center">
+            <div class="col">
+              <label for="coachingGoals" class="form-label">Coaching Goals</label>
+              <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Goal"
+                formControlName="objectives" />
+            </div>
+
+            <div class="col-6 mt-4">
+              <button type="button" class="btn btn-outline-success" (click)="addObjective()">
+                <i class="fas fa-plus"></i> Add Goal
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-10">
+              <div class="mb-3">
+                <ol>
+                  <li *ngFor="let obj of objectives; index as i">
+                    {{ obj }}
+                    <i (click)="removeObjective(i)" role="button" class="fa-solid fa-trash-can p-1"></i>
+                  </li>
+                </ol>
               </div>
-            </section>
-        
-        
+            </div>
+          </div>
+        </section>
+
+
 
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-              <label for="number" class="form-label">No. of Sessions:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="number"
-                placeholder="Enter number of Sessions"
-                formControlName="noOfSessions"
-                required="true"
-              />
-            </div>
+            <label for="number" class="form-label">No. of Sessions:</label>
+            <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions"
+              formControlName="noOfSessions" required="true" />
           </div>
-          <div class="row justify-content-center">
-            <div
-              *ngIf="
+        </div>
+        <div class="row justify-content-center">
+          <div *ngIf="
                 contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
-              "
-              class="mb-3 col-md-12"
-            >
-              <label for="number" class="form-label"
-                >Individual Fees Per Session</label
-              >
+              " class="mb-3 col-md-12">
+            <label for="number" class="form-label">Individual Fees Per Session</label>
 
-              <input
-                type="number"
-                class="form-control"
-                id="number"
-                placeholder="Enter the fee to be paid in USD"
-                formControlName="individualFeesPerSession"
-                required="true"
-              />
-            </div>
-            <div
-              *ngIf="
-                contractForm.controls['coachingCategory'].value == 'CORPORATE'
-              "
-              class="mb-3 col-md-12"
-            >
-              <label for="number" class="form-label"
-                >Group Fees Per Session</label
-              >
-              <input
-                type="number"
-                class="form-control"
-                id="number"
-                placeholder="Enter the fee to be paid in USD"
-                formControlName="groupFeesPerSession"
-                required="true"
-              />
-            </div>
+            <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
+              formControlName="individualFeesPerSession" required="true" />
           </div>
-        
+          <div *ngIf="
+                contractForm.controls['coachingCategory'].value == 'CORPORATE'
+              " class="mb-3 col-md-12">
+            <label for="number" class="form-label">Group Fees Per Session</label>
+            <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
+              formControlName="groupFeesPerSession" required="true" />
+          </div>
+        </div>
 
-        <button
-          class="btn"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapseService"
-          aria-expanded="false"
-          aria-controls="collapseService"
-          (click)="toggleEditingSettings('collapseService')"
-          [disabled]="disableButton"
-        >
+
+        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseService"
+          aria-expanded="false" aria-controls="collapseService" (click)="toggleEditingSettings('collapseService')"
+          [disabled]="disableButton">
           <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
         <div class="collapse" id="collapseService">
@@ -261,32 +163,17 @@
                 <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                   contractTemplates?.servicesTemplate
                 }}</span>
-                <textarea
-                  name="servicesTemplate"
-                  class="form-control no-box-shadow"
-                  id="servicesTemplate"
-                  aria-describedby="servicesTemplate"
-                  rows="4"
-                  formControlName="services"
-                  *ngIf="editingSettings"
-                  [@fadeIn]
-                  [disabled]="isSaving"
-                ></textarea>
+                <textarea name="servicesTemplate" class="form-control no-box-shadow" id="servicesTemplate"
+                  aria-describedby="servicesTemplate" rows="4" formControlName="services" *ngIf="editingSettings"
+                  [@fadeIn] [disabled]="isSaving"></textarea>
               </div>
             </div>
           </div>
         </div>
 
-        <button
-          class="btn"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapseTerms"
-          aria-expanded="false"
-          aria-controls="collapseTerms"
-          (click)="toggleEditingSettings('collapseTerms')"
-          [disabled]="disableButton"
-        >
+        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms"
+          aria-expanded="false" aria-controls="collapseTerms" (click)="toggleEditingSettings('collapseTerms')"
+          [disabled]="disableButton">
           <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
         <br />
@@ -298,17 +185,9 @@
                 <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                   contractTemplates?.terms_and_conditionsTemplate
                 }}</span>
-                <textarea
-                  name="terms_and_conditionsTemplate"
-                  class="form-control"
-                  id="terms_and_conditionsTemplate"
-                  aria-describedby="terms_and_conditionsTemplate"
-                  rows="4"
-                  formControlName="terms_and_conditions"
-                  *ngIf="editingSettings"
-                  [@fadeIn]
-                  [disabled]="isSaving"
-                >
+                <textarea name="terms_and_conditionsTemplate" class="form-control" id="terms_and_conditionsTemplate"
+                  aria-describedby="terms_and_conditionsTemplate" rows="4" formControlName="terms_and_conditions"
+                  *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
                 </textarea>
               </div>
             </div>
@@ -317,16 +196,9 @@
         <br />
 
         <div class="input-group mb-3">
-          <button
-            class="btn"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapsePractice"
-            aria-expanded="false"
-            aria-controls="collapsePractice"
-            (click)="toggleEditingSettings('collapsePractice')"
-            [disabled]="disableButton"
-          >
+          <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePractice"
+            aria-expanded="false" aria-controls="collapsePractice" (click)="toggleEditingSettings('collapsePractice')"
+            [disabled]="disableButton">
             <h3>Practice <i class="fa fa-arrow-circle-down"></i></h3>
           </button>
 
@@ -336,17 +208,9 @@
               <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                 contractTemplates?.practiceTemplate
               }}</span>
-              <textarea
-                name="practiceTemplate"
-                class="form-control"
-                id="practiceTemplate"
-                aria-describedby="practiceTemplate"
-                rows="4"
-                formControlName="practice"
-                *ngIf="editingSettings"
-                [@fadeIn]
-                [disabled]="isSaving"
-              >
+              <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
+                aria-describedby="practiceTemplate" rows="4" formControlName="practice" *ngIf="editingSettings"
+                [@fadeIn] [disabled]="isSaving">
               </textarea>
             </div>
           </div>
@@ -358,26 +222,16 @@
               <h3>Note</h3>
             </div>
             <div class="form-group">
-              <textarea
-                name="practiceTemplate"
-                class="form-control"
-                id="practiceTemplate"
-                aria-describedby="practiceTemplate"
-                rows="4"
-                formControlName="note"
-              >
+              <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
+                aria-describedby="practiceTemplate" rows="4" formControlName="note">
               </textarea>
             </div>
           </div>
         </div>
         <br>
-        <button
-              type="submit"
-              (click)="addContract()"
-              class="btn btn-signup btn-outline-success text-center"
-            >
-              Submit
-            </button>
+        <button type="submit" (click)="addContract()" class="btn btn-signup btn-outline-success text-center">
+          Submit
+        </button>
 
       </form>
 

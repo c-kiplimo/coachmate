@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-  
+
     <div class="col-md-4">
       <div class="input-group mb-3">
         <input type="text" class="form-control" aria-describedby="button-addon2" [(ngModel)]="filters.search"
@@ -29,7 +29,7 @@
         </button>
       </div>
     </div>
-  
+
     <div class="col-md-2">
       <button type="button" routerLink="/record-payment" class="btn btn-outline-success"
         *ngIf="this.userRole != 'CLIENT'">
@@ -43,7 +43,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body">
-        <table class="table" *ngIf="payments.length > 0">
+        <table class="table" *ngIf="payments?.length > 0">
           <thead>
             <tr>
               <th scope="col" *ngIf="this.userRole != 'CLIENT'">Payed By</th>
@@ -55,12 +55,18 @@
             </tr>
           </thead>
           <tbody class="list-container">
-            <tr *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
-              <td *ngIf="this.userRole != 'CLIENT'" data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment?.clientFullName }}</td>
-              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.amountDeposited + " " + payment.paymentCurrency }}</td>
-              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.modeOfPayment }}</td>
-              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.walletBalance }}</td>
-              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">{{ payment.createdAt | date : "MMM d y" }}</td>
+            <tr
+              *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}">
+              <td *ngIf="this.userRole != 'CLIENT'" data-bs-toggle="modal" data-bs-target="#invoicemodal"
+                (click)="viewInvoice(payment)">{{ payment?.clientFullName }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
+                {{ payment.amountDeposited + " " + payment.paymentCurrency }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
+                {{ payment.modeOfPayment }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
+                {{ payment.walletBalance }}</td>
+              <td data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
+                {{ payment.createdAt | date : "MMM d y" }}</td>
               <td>
                 <!-- <div class="view">
                   <i
@@ -71,7 +77,8 @@
                   ></i>
                 </div> -->
                 <div class="view">
-                  <i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)" class="fa fa-download"></i>
+                  <a><i data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)"
+                      class="fa fa-download"></i></a>
                 </div>
               </td>
             </tr>
@@ -121,25 +128,28 @@
         <div class="card-body">
           <div class="d-flex justify-content-end mt-2 mb-2">
             <div>
-              <button type="button" routerLink="/record-payment" class="btn btn-outline-success" *ngIf="this.userRole != 'CLIENT'">
+              <button type="button" routerLink="/record-payment" class="btn btn-outline-success"
+                *ngIf="this.userRole != 'CLIENT'">
                 <i class="fa fa-plus"></i>
               </button>
             </div>
           </div>
-  
-          <div class="pt-3 pb-2 listing-item" *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}"
+
+          <div class="pt-3 pb-2 listing-item"
+            *ngFor="let payment of payments | paginate: {itemsPerPage: pageSize,currentPage:page,totalItems:totalElements}"
             data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)">
 
             <div class="d-flex justify-content-between">
               <h4 class="farmer" *ngIf="this.userRole != 'CLIENT'">
                 {{ payment?.clientFullName | titlecase }}
               </h4>
-  
+
               <span class="no-word-break">{{ payment?.modeOfPayment | titlecase }}
-                <a data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)"><i class="fa fa-angle-right"></i></a>
+                <a data-bs-toggle="modal" data-bs-target="#invoicemodal" (click)="viewInvoice(payment)"><i
+                    class="fa fa-angle-right"></i></a>
               </span>
             </div>
-  
+
             <div class="d-flex justify-content-between mb-2">
               <span class="customer-name" class="mb-0">
                 {{ payment?.amountDeposited }}</span>
@@ -150,7 +160,7 @@
               </span>
             </div>
           </div>
-  
+
           <div class="donut-wrapper" *ngIf="loading">
             <div class="donut multi"></div>
           </div>
@@ -159,7 +169,7 @@
               No receipts Found.
             </p>
           </div>
-  
+
         </div>
       </div>
     </div>
@@ -172,7 +182,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="row d-flex justify-content-end">
-          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="width: 300px; height: 200px; padding-top: 0%; margin-top: 0%"/>
+          <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo"
+            style="width: 300px; height: 200px; padding-top: 0%; margin-top: 0%" />
         </div>
       </div>
       <div class="modal-body" id="invoice">
@@ -182,19 +193,19 @@
               <span class="title">Billed to</span>
               <span class="value">{{ payment?.clientFullName }}</span>
             </div>
-              <div class="d-flex justify-content-between">
-                <span class="title">Payment Ref:</span>
-                <span class="value">{{ payment?.extPaymentRef }}</span>
-              </div>
-              <div class="d-flex justify-content-between">
-                <span class="title">Receipt Date:</span>
-                <span class="value">{{ today | date: "MMM d y" }}</span>
-              </div>
-              <div class="d-flex justify-content-between">
-                <span class="title">Payment Date:</span>
-                <span class="value">{{ payment?.createdAt | date: "MMM d y" }}</span>
-              </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Payment Ref:</span>
+              <span class="value">{{ payment?.extPaymentRef }}</span>
             </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Receipt Date:</span>
+              <span class="value">{{ today | date: "MMM d y" }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="title">Payment Date:</span>
+              <span class="value">{{ payment?.createdAt | date: "MMM d y" }}</span>
+            </div>
+          </div>
 
           <hr>
           <div class="row" *ngIf="payment">
@@ -232,7 +243,8 @@
   <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
     <div class="add-options-panel-heading">
       <h4>Filter Status</h4>
-      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal"
+        aria-label="Close"></button>
     </div>
 
 
