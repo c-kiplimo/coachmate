@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
   securityContent = [
     {
       title: 'Our track record',
-      description: 'CoachMatePRO is a product by Meliora Technologies LTD, a software engineering company with a proven track record of delivering high-quality enterprise solutions for banks and Telcos over the past 8 years. You can be assured that CoachMatePRO upholds the same level of data security standards.'
+      description: 'Our tech partner, Meliora Technologies Ltd (https://www.meliora.co.ke), is a software engineering company with a proven track record of delivering high-quality enterprise solutions for banks and telcos for over 8 years. You can be assured that CoachMatePRO upholds the same level of international data security standards.'
     },
     {
       title: 'Best in class security',
