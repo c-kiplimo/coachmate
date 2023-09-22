@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { GoogleSignInService } from './services/google-sign-in.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit {
   hideHeaderAndSideNav: boolean = false;
   user: any;
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, private googleSignInService: GoogleSignInService) { }
 
   ngOnInit(): void {
     // Subscribe to the NavigationEnd event to update the layout visibility on route changes
@@ -29,6 +30,8 @@ export class AppComponent implements OnInit {
 
   
     this.hideHeaderAndSideNav = this.user != null;
+    
+    this.googleSignInService.initializeAuth2();
   }
 
   shouldShowLayout(): boolean {

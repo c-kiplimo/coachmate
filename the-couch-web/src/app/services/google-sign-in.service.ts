@@ -18,10 +18,10 @@ export class GoogleSignInService {
 
 
   constructor(private toastrService: ToastrService, private http: HttpClient) {
-    this.initializeAuth2();
+
   }
 
-  private initializeAuth2() {
+  initializeAuth2() {
     gapi.load('client', () => {
       console.log('loaded client');
 
@@ -112,6 +112,13 @@ export class GoogleSignInService {
 
   getCalendarEvents(): Observable<any> {
 
+    //check if gapiauth2 is initialized
+    if (!this.auth2Initialized) {
+      setTimeout(() => {
+        this.getCalendarEvents();
+      }
+        , 1000);
+    }
     return from(
       gapi.client.calendar.events.list({
         calendarId: 'primary',
@@ -139,5 +146,5 @@ export class GoogleSignInService {
     );
   }
 
-  
+
 }

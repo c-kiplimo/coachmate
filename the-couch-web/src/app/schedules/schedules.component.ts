@@ -148,7 +148,8 @@ export class SchedulesComponent implements OnInit {
       this.getSessions(this.page);
     }
 
-    
+    this.getCalendarEvents();
+
   }
 
   /////////////////////////////////
@@ -253,11 +254,6 @@ export class SchedulesComponent implements OnInit {
         this.sessions = response.body;
         this.setCalendarEvents(this.sessions);
         this.loading = false;
-
-        setTimeout(() => {
-          this.getCalendarEvents();
-        }, 3000);
-
       },
       (error: any) => {
         console.log(error);
@@ -286,7 +282,7 @@ export class SchedulesComponent implements OnInit {
       this.view = CalendarView.Month; //Week, Month, Day
       this.refresh.next();
     });
-    console.log(this.events);
+    //console.log(this.events);
   }
 
   connectToGoogleCalendar() {
@@ -307,7 +303,7 @@ export class SchedulesComponent implements OnInit {
 
   getCalendarEvents() {
     this.googleSignInService.getCalendarEvents().subscribe((events: any) => {
-    console.log(events);
+    //console.log(events);
     this.googleCalendarEvents = events;
     this.setGoogleCalendarEvents(this.googleCalendarEvents);
     this.googleCalenderConnected = true;
