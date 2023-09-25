@@ -71,6 +71,8 @@ button:active {
   color: #EF4813; /* Text color for the success button */
   border-color: #EF4813; /* Border color for the success button */
   transition: all 0.3s ease-in-out; /* Smooth transition for hover and focus */
+  box-shadow: none; /* Optional: Removes the shadow */
+  
 }
 
 .btn-outline-success:hover,
@@ -79,19 +81,13 @@ button:active {
   color: #fff; /* Text color on hover and focus */
   border-color: #f3a68e; /* Border color on hover and focus */
   box-shadow: none; /* Optional: Removes the shadow */
-
 }
 
-/* Remove the shadow */
-.btn-outline-success {
-  box-shadow: none; /* Remove the shadow from the button */
-}
-
-/* Add padding, font size, and rounded corners for better appearance */
-.btn-outline-success {
-  padding: 10px 20px; /* Adjust padding as needed */
-  font-size: 16px; /* Adjust font size as needed */
-  border-radius: 5px; /* Rounded corners */
+.btn-outline-success:active {
+  background-color: #f3a68e; /* Background color when clicked */
+  color: #fff; /* Text color when clicked */
+  border-color: #f3a68e; /* Border color when clicked */
+  box-shadow: none; /* Optional: Removes the shadow */
 }
 
 /* Remove the default outline on focus (optional) */
@@ -987,8 +983,8 @@ select {
 .google-calendar-connect-button {
   align-items: center;
   padding: 10px 20px;
-  color: #34A652;
-  border: 1px solid #34A652;
+  color: #EF4813;
+  border: 1px solid #EF4813;
   border-radius: 5px;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -998,7 +994,7 @@ select {
 }
 
 .google-calendar-connect-button:hover {
-  background-color: #34A652; /* Darker shade on hover */
+  background-color: #EF4813; /* Darker shade on hover */
   color: white;
 }
 
