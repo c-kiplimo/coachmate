@@ -26,6 +26,7 @@ export class AddContractComponent implements OnInit{
   clients: any;
   sessions:any;
   contracts:any;
+  selectedCoachId: any;
   numberOfClients!: number;
   numberOfSessions!:number;
   numberOfContracts!:number;
@@ -43,6 +44,27 @@ export class AddContractComponent implements OnInit{
   Objectives = {
     objective: ''
   };
+  addClient = {
+    firstName: ' ',
+    lastName: ' ',
+    clientType: '',
+    msisdn: ' ',
+    email: ' ',
+    physicalAddress: '',
+    profession: ' ',
+    paymentMode: ' ',
+    reason: '',
+    id: '',
+    createdBy: '',
+    status: '',
+    password: '',
+    coachId: '',
+    organizationId: '',
+
+  };
+  orgId: any;
+  coachId: any;
+  error: any;
 coachingCategory: any;
   backIcon!: IconProp;
   userRole: any;
@@ -56,8 +78,7 @@ contractTemplates: any;
   user: any;
   contractTemplate: any;
 
-  orgId!: number;
-  coachId!: number;
+  
 
   page: number = 0;
   pageSize: number = 15;
@@ -167,6 +188,9 @@ editingSettings = false;
 
   back() {
     window.history.back();
+  }
+  selectedCoach(event: any) {
+    this.selectedCoachId = event.target.value;
   }
 
   setFields(): void {
@@ -329,5 +353,41 @@ editingSettings = false;
   reload() {
     location.reload();
   }
+
+  newClient() {
+    var details = this.addClient;
+    details.createdBy = this.coachData.fullName;
+    details.status = 'NEW';
+    details.password = '12345678';
+  
+    if (this.userRole == 'ORGANIZATION') {
+      details.organizationId = this.orgId;
+      details.coachId = this.selectedCoachId;
+    } else if (this.userRole == 'COACH') {
+      details.organizationId = this.coachData?.organization?.id;
+      details.coachId = this.coachData.id;
+    }
+  
+    this.clientService.addClient(details).subscribe(
+      (response: any) => {
+        //check if response has error
+        if (response.error) {
+          this.toastrService.error('Error adding client', 'Error!');
+          console.log(response.error);
+          this.error = response.error;
+        } else {
+          this.toastrService.success('Client added successfully', 'Success!');
+          // Remove the redirect to '/clients' here
+        }
+      },
+      (error: any) => {
+        this.toastrService.error('Error adding client', 'Error!');
+        console.log(error);
+        this.error = error?.error?.message;
+      }
+    );
+  }
+  
+
 
 }
