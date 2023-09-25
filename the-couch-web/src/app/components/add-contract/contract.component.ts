@@ -312,7 +312,8 @@ editingSettings = false;
         this.toastrService.success('Contract added successfully');
         window.history.back();
       }, (error: any) => {
-        this.toastrService.error('Error adding contract', error.message);      }
+        this.toastrService.error('Error adding contract', 'Failed');
+      }
     )
   }
 
