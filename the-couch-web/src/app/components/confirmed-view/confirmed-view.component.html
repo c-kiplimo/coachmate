@@ -1,9 +1,8 @@
-<div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card card-table text-center">
+      <div class="col-md-6 col-sm-12">
+        <div class="card card-table justify-content-center align-items-center">
           <div class="my-auto">
-            <h1 class="text-center mb-3">Registration Confirmation</h1>
+            <h1 class="text-center mb-3 mt-3">Registration Confirmation</h1>
             <div class="alert alert-danger" *ngIf="errorMessage">
               {{ errorMessage }}
             </div>
@@ -13,45 +12,31 @@
             <p class="mb-3" *ngIf="!confirmationSuccess">
               An OTP has been sent to the phone number used to register,enter it
               below to confirm<br />
-             
+
             </p>
             <p id="timer" *ngIf="!isCountdownOver">OTP will expire in: <span>{{time}}</span></p>
-            <p id="timer"*ngIf="isCountdownOver">OTP has Expired</p> 
-  
+            <p id="timer" *ngIf="isCountdownOver">OTP has Expired</p>
+
             <button type="button" (click)="resendOtp()" class="btn btn-resend-otp mt-2 mb-3" *ngIf="isCountdownOver">
               Resend OTP
             </button>
             <div class="text-center otp-input">
               <label for="otp"> Confirm account: </label>
-              <input
-                [(ngModel)]="token"
-                class="form-control mb-5"
-                name="otp "
-                id="otp"
-                required
-                type="text"
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-              />
+              <input [(ngModel)]="token" class="form-control mb-5" name="otp " id="otp" required type="text"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
             </div>
-            <button
-              type="submit"
-              class="btn btn-outline-success mt-2 mb-5"
-              (click)="confirmMobileNumber()"
-            >
+            <button type="submit" class="btn btn-signup btn-outline-success mt-2 mb-5" (click)="confirmMobileNumber()">
               Confirm
             </button>
-            
-            <p *ngIf="confirmationSuccess">
-              Proceed To <a [routerLink]="'/signin'">Login</a>
+
+            <p class="to-register" *ngIf="confirmationSuccess">
+              Proceed to <a [routerLink]="'/signin'">Login</a>
             </p>
-  
-            <p *ngIf="errorMessage">
-              Proceed To <a [routerLink]="'/signin'"> Login </a>
+
+            <p class="to-register" *ngIf="errorMessage">
+              Proceed to <a [routerLink]="'/signin'"> Login </a>
             </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  
