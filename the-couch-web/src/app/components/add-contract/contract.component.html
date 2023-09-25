@@ -1,59 +1,105 @@
-<div class="d-flex justify-content-between">
-  <div class="mt-4" style="margin-left: 5px">
-    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Create a Contract
-    </h2>
+<div class="row">
+  <div class="col mt-4" style="margin-left: 5px">
+    <h5 class="fw-bold">
+      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
+        Back</i
+      >
+    </h5>
   </div>
 </div>
 
 <div class="row justify-content-center m-1">
-  <div class="col-md-6 col-sm-12">
+  <div class="col-md-8 col-sm-12">
     <div class="card card-table justify-content-center align-items-center">
+      <div class="m-3">
+        <h1 class="text-center mb-3">Coaching Agreement</h1>
+      </div>
+
       <form [formGroup]="contractForm" class="m-2">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="coachingTopic" class="form-label">Coaching Title</label>
-            <input type="text" class="form-control" id="nucoachingTopicmber" placeholder="Enter the coaching topic"
-              formControlName="coachingTopic" required="true" />
+            <input
+              type="text"
+              class="form-control"
+              id="nucoachingTopicmber"
+              placeholder="Enter the coaching topic"
+              formControlName="coachingTopic"
+              required="true"
+            />
           </div>
           <div class="mb-3 col-md-12">
             <div class="col-6 input-group-prepend">
-              <H3 for="coachingCategory" class="form-label">Coaching Category</H3>
+              <H3 for="coachingCategory" class="form-label"
+                >Coaching Category</H3
+              >
             </div>
             <div class="row">
               <div class="col-6 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
-                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="coachingCategory" />
-                <label class="form-group-text m-2" for="coachingCategory">INDIVIDUAL</label>
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="coachingCategory"
+                  id="flexRadioDefault1"
+                  value="INDIVIDUAL"
+                  formControlName="coachingCategory"
+                />
+                <label class="form-group-text m-2" for="coachingCategory"
+                  >INDIVIDUAL</label
+                >
               </div>
               <div class="col-6 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="coachingCategory"
-                  id="flexRadioDefault2" value="CORPORATE" formControlName="coachingCategory" />
-                <label class="form-group-text m-2" for="coachingCategory">CORPORATE</label>
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="coachingCategory"
+                  id="flexRadioDefault2"
+                  value="CORPORATE"
+                  formControlName="coachingCategory"
+                />
+                <label class="form-group-text m-2" for="coachingCategory"
+                  >CORPORATE</label
+                >
               </div>
             </div>
           </div>
         </div>
 
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <H3 for="clientId" class="form-label">Select Client</H3>
-            <select class="form-select" aria-label="Default select example" formControlName="clientId" required="true">
+         
+          <div class="col-6 mt-2">
+            <label for="clientId" class="form-label mt-2">Select Client</label>
+          </div>
+          <div class="col-6 mt-2 text-end">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-toggle="modal" data-bs-target="#addClient"
+            >
+              <i class="fa-solid"></i> Add Client
+            </button>
+          </div>
+          <div class="col-12 mt-2 mb-3">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="clientId"
+              required="true"
+            >
+              <!-- Loop through clients and form options -->
               <option selected>
-                Select Client you want to make contract with
+                Select Client you want to make a contract with
               </option>
-              <!--Loop through clients and form options-->
               <option *ngFor="let client of clients" value="{{ client.id }}">
                 {{ client.firstName }} {{ client.lastName }}
               </option>
-              <!--Render the create client button if no clients are found-->
-              <div *ngIf="!clients.length">
-                <button class="btn btn-outline-success" routerLink="/addclient">
-                  Create Client
-                </button>
-              </div>
             </select>
           </div>
-        </div>
+          </div>
+      
+        
+        
+        
 
         <!-- coach select -->
         <!-- <div class="col-6 input-group-prepend" *ngIf="this.userRole == 'ORGANIZATION'">
@@ -78,14 +124,26 @@
         <div class="row">
           <div class="col">
             <label for="number" class="form-label">Start Date</label>
-            <input type="date" class="form-control" placeholder="date" formControlName="startDate" required="true" />
+            <input
+              type="date"
+              class="form-control"
+              placeholder="date"
+              formControlName="startDate"
+              required="true"
+            />
             <div *ngIf="contractForm.get('startDate')?.hasError('pastDate')">
               <small class="text-danger">Please select a future date.</small>
             </div>
           </div>
           <div class="col">
             <label for="number" class="form-label">End Date</label>
-            <input type="date" class="form-control" placeholder="date" formControlName="endDate" required="true" />
+            <input
+              type="date"
+              class="form-control"
+              placeholder="date"
+              formControlName="endDate"
+              required="true"
+            />
             <div *ngIf="contractForm.get('endDate')?.hasError('pastDate')">
               <small class="text-danger">Please select a future date.</small>
             </div>
@@ -95,17 +153,28 @@
           <div class="mb-3 mt-3"> -->
         <section>
           <div class="col-12"></div>
-          <br>
+          <br />
           <div class="row justify-content-center">
             <div class="col">
-              <label for="coachingGoals" class="form-label">Coaching Goals</label>
-              <input [(ngModel)]="Objectives.objective" type="text" class="form-control" placeholder="Add Goal"
-                formControlName="objectives" />
+              <label for="coachingGoals" class="form-label"
+                >Coaching Goals</label
+              >
+              <input
+                [(ngModel)]="Objectives.objective"
+                type="text"
+                class="form-control"
+                placeholder="Add Goal"
+                formControlName="objectives"
+              />
             </div>
 
             <div class="col-6 mt-4">
-              <button type="button" class="btn btn-outline-success" (click)="addObjective()">
-                <i class="fas fa-plus"></i> Add Goal
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                (click)="addObjective()"
+              >
+                <i class="fa-solid fa-user-plus"></i>Add goal
               </button>
             </div>
           </div>
@@ -115,7 +184,11 @@
                 <ol>
                   <li *ngFor="let obj of objectives; index as i">
                     {{ obj }}
-                    <i (click)="removeObjective(i)" role="button" class="fa-solid fa-trash-can p-1"></i>
+                    <i
+                      (click)="removeObjective(i)"
+                      role="button"
+                      class="fa-solid fa-trash-can p-1"
+                    ></i>
                   </li>
                 </ol>
               </div>
@@ -123,37 +196,69 @@
           </div>
         </section>
 
-
-
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="number" class="form-label">No. of Sessions:</label>
-            <input type="number" class="form-control" id="number" placeholder="Enter number of Sessions"
-              formControlName="noOfSessions" required="true" />
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter number of Sessions"
+              formControlName="noOfSessions"
+              required="true"
+            />
           </div>
         </div>
         <div class="row justify-content-center">
-          <div *ngIf="
-                contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
-              " class="mb-3 col-md-12">
-            <label for="number" class="form-label">Individual Fees Per Session</label>
+          <div
+            *ngIf="
+              contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
+            "
+            class="mb-3 col-md-12"
+          >
+            <label for="number" class="form-label"
+              >Individual Fees Per Session</label
+            >
 
-            <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-              formControlName="individualFeesPerSession" required="true" />
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter the fee to be paid in USD"
+              formControlName="individualFeesPerSession"
+              required="true"
+            />
           </div>
-          <div *ngIf="
-                contractForm.controls['coachingCategory'].value == 'CORPORATE'
-              " class="mb-3 col-md-12">
-            <label for="number" class="form-label">Group Fees Per Session</label>
-            <input type="number" class="form-control" id="number" placeholder="Enter the fee to be paid in USD"
-              formControlName="groupFeesPerSession" required="true" />
+          <div
+            *ngIf="
+              contractForm.controls['coachingCategory'].value == 'CORPORATE'
+            "
+            class="mb-3 col-md-12"
+          >
+            <label for="number" class="form-label"
+              >Group Fees Per Session</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter the fee to be paid in USD"
+              formControlName="groupFeesPerSession"
+              required="true"
+            />
           </div>
         </div>
 
-
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseService"
-          aria-expanded="false" aria-controls="collapseService" (click)="toggleEditingSettings('collapseService')"
-          [disabled]="disableButton">
+        <button
+          class="btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseService"
+          aria-expanded="false"
+          aria-controls="collapseService"
+          (click)="toggleEditingSettings('collapseService')"
+          [disabled]="disableButton"
+        >
           <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
         <div class="collapse" id="collapseService">
@@ -163,17 +268,32 @@
                 <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                   contractTemplates?.servicesTemplate
                 }}</span>
-                <textarea name="servicesTemplate" class="form-control no-box-shadow" id="servicesTemplate"
-                  aria-describedby="servicesTemplate" rows="4" formControlName="services" *ngIf="editingSettings"
-                  [@fadeIn] [disabled]="isSaving"></textarea>
+                <textarea
+                  name="servicesTemplate"
+                  class="form-control no-box-shadow"
+                  id="servicesTemplate"
+                  aria-describedby="servicesTemplate"
+                  rows="4"
+                  formControlName="services"
+                  *ngIf="editingSettings"
+                  [@fadeIn]
+                  [disabled]="isSaving"
+                ></textarea>
               </div>
             </div>
           </div>
         </div>
 
-        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerms"
-          aria-expanded="false" aria-controls="collapseTerms" (click)="toggleEditingSettings('collapseTerms')"
-          [disabled]="disableButton">
+        <button
+          class="btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTerms"
+          aria-expanded="false"
+          aria-controls="collapseTerms"
+          (click)="toggleEditingSettings('collapseTerms')"
+          [disabled]="disableButton"
+        >
           <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
         </button>
         <br />
@@ -185,9 +305,17 @@
                 <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                   contractTemplates?.terms_and_conditionsTemplate
                 }}</span>
-                <textarea name="terms_and_conditionsTemplate" class="form-control" id="terms_and_conditionsTemplate"
-                  aria-describedby="terms_and_conditionsTemplate" rows="4" formControlName="terms_and_conditions"
-                  *ngIf="editingSettings" [@fadeIn] [disabled]="isSaving">
+                <textarea
+                  name="terms_and_conditionsTemplate"
+                  class="form-control"
+                  id="terms_and_conditionsTemplate"
+                  aria-describedby="terms_and_conditionsTemplate"
+                  rows="4"
+                  formControlName="terms_and_conditions"
+                  *ngIf="editingSettings"
+                  [@fadeIn]
+                  [disabled]="isSaving"
+                >
                 </textarea>
               </div>
             </div>
@@ -196,9 +324,16 @@
         <br />
 
         <div class="input-group mb-3">
-          <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePractice"
-            aria-expanded="false" aria-controls="collapsePractice" (click)="toggleEditingSettings('collapsePractice')"
-            [disabled]="disableButton">
+          <button
+            class="btn"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePractice"
+            aria-expanded="false"
+            aria-controls="collapsePractice"
+            (click)="toggleEditingSettings('collapsePractice')"
+            [disabled]="disableButton"
+          >
             <h3>Practice <i class="fa fa-arrow-circle-down"></i></h3>
           </button>
 
@@ -208,9 +343,17 @@
               <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
                 contractTemplates?.practiceTemplate
               }}</span>
-              <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
-                aria-describedby="practiceTemplate" rows="4" formControlName="practice" *ngIf="editingSettings"
-                [@fadeIn] [disabled]="isSaving">
+              <textarea
+                name="practiceTemplate"
+                class="form-control"
+                id="practiceTemplate"
+                aria-describedby="practiceTemplate"
+                rows="4"
+                formControlName="practice"
+                *ngIf="editingSettings"
+                [@fadeIn]
+                [disabled]="isSaving"
+              >
               </textarea>
             </div>
           </div>
@@ -222,17 +365,26 @@
               <h3>Note</h3>
             </div>
             <div class="form-group">
-              <textarea name="practiceTemplate" class="form-control" id="practiceTemplate"
-                aria-describedby="practiceTemplate" rows="4" formControlName="note">
+              <textarea
+                name="practiceTemplate"
+                class="form-control"
+                id="practiceTemplate"
+                aria-describedby="practiceTemplate"
+                rows="4"
+                formControlName="note"
+              >
               </textarea>
             </div>
           </div>
         </div>
-        <br>
-        <button type="submit" (click)="addContract()" class="btn btn-signup btn-outline-success text-center">
+        <br />
+        <button
+          type="submit"
+          (click)="addContract()"
+          class="btn btn-signup btn-outline-success text-center"
+        >
           Submit
         </button>
-
       </form>
 
       <!-- <div class="row">
@@ -243,6 +395,263 @@
           </div>
         </div>
       </div> -->
+    </div>
+  </div>
+</div>
+
+<!-- Add client -->
+<div
+  class="modal"
+  id="addClient"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="exampleModalLongTitle">Add Client</h5>
+        <button
+          type="button"
+          class="btn btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="exampleInputEmail1">First Name *</label>
+              <input
+                [(ngModel)]="addClient.firstName"
+                name="firstName"
+                type="text"
+                class="form-control"
+                id="firstname"
+                aria-describedby="emailHelp"
+                placeholder="First name"
+                required
+              />
+            </div>
+            <div class="mb-3 form-group">
+              <label for="exampleInputEmail1">Last Name *</label>
+              <input
+                [(ngModel)]="addClient.lastName"
+                name="lastName"
+                type="lastNname"
+                class="form-control"
+                id="lastName"
+                aria-describedby="emailHelp"
+                placeholder="Last name"
+                required
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="exampleInputPassword1">Mobile no *</label>
+              <input
+                required
+                [(ngModel)]="addClient.msisdn"
+                name="msisdn"
+                type="number"
+                class="form-control"
+                id="contact"
+                placeholder="Contact"
+                required
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
+              />
+            </div>
+            <div class="mb-3 form-group">
+              <label for="exampleInputPassword1">Email *</label>
+              <input
+                [(ngModel)]="addClient.email"
+                name="email"
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Email"
+                required
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="exampleInputPassword1">Address *</label>
+              <input
+                [(ngModel)]="addClient.physicalAddress"
+                name="address"
+                type="text"
+                class="form-control"
+                id="adress"
+                placeholder="Address"
+                required
+              />
+            </div>
+            <div class="mb-3 form-group">
+              <label for="profession">Profession *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="profession"
+                name="profession"
+                placeholder="Enter Client Profession"
+                [(ngModel)]="addClient.profession"
+                required
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label class="form-group-text" for="paymentMode"
+                >Payment Mode  *</label
+              >
+            </div>
+            <div class="mb-3 form-group">
+              <input
+                class="form-check-input m-2 custom-radio-input"
+                type="radio"
+                name="paymentMode"
+                id="flexRadioDefault1"
+                value="PREPAY"
+                [(ngModel)]="addClient.paymentMode"
+              />
+              <label class="form-group-text m-2" for="paymentMode"
+                >PREPAY</label
+              >
+            </div>
+            <div class="mb-3 form-group">
+              <input
+                class="form-check-input m-2 custom-radio-input"
+                type="radio"
+                name="paymentMode"
+                id="flexRadioDefault2"
+                value="POSTPAY"
+                [(ngModel)]="addClient.paymentMode"
+              />
+              <label class="form-group-text m-2" for="paymentMode"
+                >POSTPAY</label
+              >
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label class="form-group-text" for="clientType"
+                >Client Type *</label
+              >
+            </div>
+            <div class="row">
+              <div class="col-6 input-group-prepend">
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="clientType"
+                  id="flexRadioDefault1"
+                  value="INDIVIDUAL"
+                  [(ngModel)]="addClient.clientType"
+                />
+                <label class="form-group-text m-2" for="clientType"
+                  >INDIVIDUAL</label
+                >
+              </div>
+              <div class="col-6 input-group-prepend">
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="clientType"
+                  id="flexRadioDefault2"
+                  value="CORPORATE"
+                  [(ngModel)]="addClient.clientType"
+                />
+                <label class="form-group-text m-2" for="clientType"
+                  >CORPORATE</label
+                >
+              </div>
+            </div>
+            <div class="row">
+              <div class="mb-3 form-group">
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="clientType"
+                  id="flexRadioDefault2"
+                  value="GROUP"
+                  [(ngModel)]="addClient.clientType"
+                />
+                <label class="form-group-text m-2" for="clientType"
+                  >GROUP</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div
+              class="mb-3 form-group"
+              *ngIf="this.userRole == 'ORGANIZATION'"
+            >
+              <label class="input-group-text" for="coach">Assign Coach *</label>
+              <select
+                class="form-select"
+                id="inputGroupSelect01"
+                [(ngModel)]="addClient.id"
+                (change)="selectedCoach($event)"
+                required
+              >
+                <option *ngFor="let coach of OrgCoaches" [value]="coach.id">
+                  {{ coach.firstName }} {{ coach.lastName }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="reason">Reason *</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Reason"
+                required
+                name="reason"
+                [(ngModel)]="addClient.reason"
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <div class="alert alert-danger" role="alert" *ngIf="error">
+                {{ error }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          data-bs-dismiss="modal"
+          (click)="newClient()"
+          [disabled]="
+            !addClient.firstName ||
+            !addClient.lastName ||
+            !addClient.email ||
+            !addClient.msisdn ||
+            !addClient.physicalAddress ||
+            !addClient.paymentMode ||
+            !addClient.clientType
+          "
+        >
+          ADD
+        </button>
+      </div>
     </div>
   </div>
 </div>
