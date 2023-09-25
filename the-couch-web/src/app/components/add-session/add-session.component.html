@@ -16,13 +16,20 @@
       <form class="m-3">
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-            <label for="sessionname">Select Contract *</label>
-            <select class="form-select" id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
-              <option value="" disabled selected>Select Contract</option>
-              <option *ngFor="let contract of contracts" [value]="contract?.id">
-                {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
-              </option>
-            </select>
+            <div class="slt-btn">
+              <div class="col-md-10">
+                <label for="sessionname">Select Contract *</label>
+                <select class="form-select" id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
+                  <option value="" disabled selected>Select Contract</option>
+                  <option *ngFor="let contract of contracts" [value]="contract?.id">
+                    {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-14">
+                <button type="button" mat-raised-button class="btn btn-outline-success" [routerLink]="['/add-contract']">Add Contract</button>
+              </div>
+            </div>
           </div>
 
           <div class="mb-3 col-md-12">
