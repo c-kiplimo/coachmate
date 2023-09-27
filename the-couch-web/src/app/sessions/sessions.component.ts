@@ -62,6 +62,7 @@ export class SessionsComponent implements OnInit {
 
   googleCalendarEvents: any;
   googleCalenderConnected: boolean = false;
+event: any;
 
   constructor(private apiService: ClientService,
     private router: Router,
