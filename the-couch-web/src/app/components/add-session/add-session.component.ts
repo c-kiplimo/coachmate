@@ -14,7 +14,7 @@ import { SessionsService } from '../../services/SessionsService';
 import { ContractsService } from '../../services/contracts.service';
 import { CalendlyService } from 'src/app/services/calendly.service';
 import { style, animate, transition, trigger } from '@angular/animations';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { fromEvent, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { GoogleSignInService } from 'src/app/services/google-sign-in.service';
 import { LoginService } from 'src/app/services/LoginService';
@@ -36,28 +36,36 @@ import { LoginService } from 'src/app/services/LoginService';
 export class AddSessionComponent implements OnInit {
 
   addClient!: FormGroup;
-
+  contractForm!: FormGroup;
   firstName: any;
   lastName: any;
   user: any;
   addclientForm!: FormGroup;
+  objectives: string[] = [];
   clientId: any;
   client: any;
   addNewClient: any;
   searching = false;
+  contractTemplates: any;
+  isSaving = false;
+  disableButton = false;
   open = false;
   showHideMessage = true;
   sessionType = [];
-
+  contractTemplate: any;
+  Objectives = {
+    objective: ''
+  };
   coachSlots: any;
   slots: any;
   orgId!: number;
+  coachingCategory: any;
   coachId!: number;
 
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
-
+  editingSettings = false;
 
   contracts: any;
   getContractId: any;
@@ -122,10 +130,11 @@ export class AddSessionComponent implements OnInit {
     private http: HttpClient,
     private clientService: ClientService,
     private formbuilder: FormBuilder,
+    private formBuilder:FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private sessionService: ClientService,
-    private contractsService: ContractsService,
+    private contractService: ContractsService,
     private toastrService: ToastrService,
     private calendlyService: CalendlyService,
     private googleSignInService: GoogleSignInService,
@@ -142,6 +151,7 @@ export class AddSessionComponent implements OnInit {
 
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.organization.id;
+      this.getClients(this.page);
       this.getContracts(this.page);
       // this.getClients();
 
@@ -153,6 +163,7 @@ export class AddSessionComponent implements OnInit {
       this.coachId = this.user.id;
       this.getCoachSlots();
       this.getContracts(this.page);
+      this.getClients(this.page);
 
       if (this.user?.calendlyUsername !== null) {
         this.createCalendlyHtml(this.user?.calendlyUsername);
@@ -163,12 +174,79 @@ export class AddSessionComponent implements OnInit {
       this.getContracts(this.page);
       this.getAddedBy(this.clientId);
     }
-
+    this.contractForm = this.formBuilder.group(
+      {
+        coachingCategory:'',
+        coachingTopic:'',
+        clientId:'',
+        // coachId: '',
+        startDate:['', [Validators.required, this.pastDateValidator()]],
+        endDate: ['', [Validators.required, this.pastDateValidator()]],
+        groupFeesPerSession:'',
+        individualFeesPerSession:'',
+        noOfSessions:'',
+        objectives:'',
+        services:'',
+        practice:'',
+        note:'',
+        terms_and_conditions:'',
+     
+      }
+    );
+    this.coachingCategory=this.contractForm
     
   }
 
+  pastDateValidator() {
+    return (control: any) => {
+      const selectedDate = new Date(control.value);
+      const currentDate = new Date();
+
+      // Check if the selected date is in the past
+      if (selectedDate < currentDate) {
+        return { pastDate: true };
+      }
+
+      return null;
+    };
+  };
+
+
   back() {
     window.history.back();
+  }
+  toggleEditingSettings(target: string): void {
+    const isServiceSection = target === 'collapseService';
+    const isTermsSection = target === 'collapseTerms';
+    const isPracticeSection = target === 'collapsePractice';
+  
+    if ((isServiceSection || isTermsSection || isPracticeSection) && !this.editingSettings) {
+      this.editingSettings = true;
+    } else if ((isServiceSection || isTermsSection || isPracticeSection) && this.editingSettings) {
+      this.editingSettings = false;
+    }
+  
+    this.setFields();
+  
+    this.disableButton = true;
+  
+    setTimeout(() => {
+      this.disableButton = false;
+    }, 2000);
+  }
+  addObjective(){
+    
+    this.objectives.push(this.Objectives.objective);
+    this.Objectives.objective = '';
+  }
+
+  removeObjective(index: number){
+    this.objectives.splice(index, 1);
+  }
+  setFields(): void {
+    this.contractTemplate = JSON.parse(
+      sessionStorage.getItem('contractTemplate') || '{}'
+    );
   }
 
   createCalendlyHtml(calendlyUsername: any) {
@@ -215,6 +293,27 @@ export class AddSessionComponent implements OnInit {
       this.weeks.push(weekDates);
     }
   }
+  addContract(){
+    //this.contractTemplates = this.user.contractTemplate;
+    var data = this.contractForm.value;
+    data.organizationId = this.orgId
+    data.coachId = this.coachId
+    // if (this.userRole == 'COACH') {
+    //   data.coachId = this.coachId
+    // }
+    
+    //Stringify the objectives array
+    let objectives = JSON.stringify(this.objectives);
+    data.objectives = objectives;
+    this.contractService.addNewContract(data).subscribe(
+      (response: any) => {
+        this.toastrService.success('Contract added successfully');
+        window.history.back();
+      }, (error: any) => {
+        this.toastrService.error('Error adding contract', 'Failed');
+      }
+    )
+  }
   
   getBookedSessionCount(date: Date): number {
     const dateString = date.toISOString().split('T')[0];    // Convert date to string in yyyy-mm-dd format
@@ -249,7 +348,7 @@ export class AddSessionComponent implements OnInit {
     document.body.classList.remove('modal-open');
   }
 
-  getClients() {
+  getClients(page: number) {
     this.loading = true;
     const options = {
       page: 1,
@@ -357,7 +456,7 @@ export class AddSessionComponent implements OnInit {
     } else if (this.userRole == 'ORGANIZATION') {
       options.organisationId = this.orgId;
     }
-    this.contractsService.getContracts(options).subscribe((res: any) => {
+    this.contractService.getContracts(options).subscribe((res: any) => {
       this.contracts = res.body;
       this.totalElements = res.body.totalElements;
       this.loading = false;
