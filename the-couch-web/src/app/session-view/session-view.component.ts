@@ -421,19 +421,23 @@ throw new Error('Method not implemented.');
   }
 
   addAttachment() {
-    
     const params = {
       sessionId: this.sessionId,
     };    
-    this.clientService.addAttachment(this.links,params).subscribe(
+    
+    this.clientService.addAttachment(this.links, params).subscribe(
       (response) => {
-        this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
-        this.getAttachment(this.sessionId);
-        this.attachmentModal.nativeElement.classList.remove('show');
-        this.attachmentModal.nativeElement.style.display = 'none';
+        if (response && response.success) {
+          this.toastrService.success('Attachment added successfully', 'Success!', { timeOut: 8000 });
+          this.getAttachment(this.sessionId);
+          this.attachmentModal.nativeElement.classList.remove('show');
+          this.attachmentModal.nativeElement.style.display = 'none';
+        }
       }
     );
   }
+  
+  
 
   deleteAttachment(id: any) {
     this.clientService.deleteAttachment(id).subscribe(
