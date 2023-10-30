@@ -664,6 +664,7 @@ public class RegistrationService {
         String encodedPassword = passwordEncoder.encode(forgotPassword.getPassword());
 
         // Set details
+        user.setLocked(true);
         user.setPassword(encodedPassword);
 
         // save the User in the database
