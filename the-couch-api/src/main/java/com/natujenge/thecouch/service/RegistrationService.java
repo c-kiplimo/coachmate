@@ -665,6 +665,7 @@ public class RegistrationService {
 
         // Set details
         user.setLocked(true);
+        user.setEnabled(true);
         user.setPassword(encodedPassword);
 
         // save the User in the database
