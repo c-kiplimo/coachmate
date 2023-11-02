@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -135,12 +136,23 @@ public class RegistrationResource {
 
     }
     @PostMapping(path = "contact")
-    ResponseEntity<?> saveAndSendInquiry(@RequestBody InquiryDTO inquiryDTO,
-                                         @RequestParam("clientId") Long clientId) {
+    ResponseEntity<?> saveAndSendInquiry(@RequestBody InquiryDTO inquiryDTO){
         log.info("REST Request to save and send  inquiry: {}", inquiryDTO);
 
         try {
-            inquiryService.saveAndSendEmail(inquiryDTO, clientId);
+            inquiryService.saveAndSendEmail(inquiryDTO);
+            return new ResponseEntity<>(new RestResponse(false,"Response Received Successfully"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping(path = "suport")
+    ResponseEntity<?> suport(@RequestBody InquiryDTO inquiryDTO,
+                             @AuthenticationPrincipal User user){
+        log.info("REST Request to save and send  inquiry: {}", inquiryDTO);
+
+        try {
+            inquiryService.support(inquiryDTO,user);
             return new ResponseEntity<>(new RestResponse(false,"Response Received Successfully"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new RestResponse(true, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
