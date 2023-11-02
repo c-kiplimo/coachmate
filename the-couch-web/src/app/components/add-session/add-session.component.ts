@@ -363,7 +363,7 @@ export class AddSessionComponent implements OnInit {
         this.numberOfClients = this.clients.length;
         this.loading = false;
       }, (error: any) => {
-        this.toastrService.error('Error getting clients', error.message);
+        console.error('Error getting clients', error); 
         this.loading = false;
       }
     )

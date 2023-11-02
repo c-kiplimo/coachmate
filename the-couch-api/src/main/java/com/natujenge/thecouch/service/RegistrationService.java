@@ -664,11 +664,10 @@ public class RegistrationService {
         String encodedPassword = passwordEncoder.encode(forgotPassword.getPassword());
 
         // Set details
-        user.setLocked(true);
-        user.setEnabled(true);
         user.setPassword(encodedPassword);
 
         // save the User in the database
+        user.setEnabled(true);
         userRepository.save(user);
         log.info("User Updated Successfully");
 
