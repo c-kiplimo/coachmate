@@ -4,6 +4,7 @@ import com.natujenge.thecouch.domain.enums.*;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
 import com.natujenge.thecouch.repository.UserRepository;
+import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.mapper.ClientMapper;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
 import com.natujenge.thecouch.service.mapper.UserMapper;
@@ -693,5 +694,21 @@ public class UserService implements UserDetailsService {
         } else {
             throw new IllegalStateException("User not found");
         }
+    }
+
+    @Transactional
+    public UserDTO save(UserDTO userDTO){
+        if (userDTO.getId()== null){
+            userDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+            userDTO.setCreatedAt(LocalDateTime.now());
+        } else {
+            userDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+            userDTO.setLastUpdatedAt(LocalDateTime.now());
+        }
+
+        User user = userMapper.toEntity(userDTO);
+        user = userRepository.save(user);
+
+        return userMapper.toDto(user);
     }
 }

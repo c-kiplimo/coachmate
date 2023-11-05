@@ -5,13 +5,12 @@ import com.natujenge.thecouch.domain.User;
 import com.natujenge.thecouch.domain.enums.ClientStatus;
 import com.natujenge.thecouch.domain.enums.SessionStatus;
 import com.natujenge.thecouch.domain.enums.UserRole;
+import com.natujenge.thecouch.exception.BadRequestException;
+import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
 import com.natujenge.thecouch.util.PaginationUtil;
-import com.natujenge.thecouch.web.rest.dto.ClientDTO;
-import com.natujenge.thecouch.web.rest.dto.CoachDTO;
-import com.natujenge.thecouch.web.rest.dto.RestResponse;
-import com.natujenge.thecouch.web.rest.dto.SessionDTO;
+import com.natujenge.thecouch.web.rest.dto.*;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
 import com.natujenge.thecouch.web.rest.request.CoachRequest;
 
@@ -29,21 +28,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
 @Slf4j
 @RequestMapping(path = "/api/users")
 public class UserResource {
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final RegistrationService registrationService;
 
 
-    public UserResource(ModelMapper modelMapper, UserService userService, RegistrationService registrationService) {
+    public UserResource(ModelMapper modelMapper, UserService userService, RegistrationService registrationService,
+                        UserRepository userRepository) {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.registrationService = registrationService;
+        this.userRepository = userRepository;
     }
 
     //api to create a coach by organization
@@ -298,5 +301,21 @@ public class UserResource {
         log.info("request to get who added a client user with id {}", id);
         User user = userService.getAddedBy(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    @PutMapping(path="{id}")
+    ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) throws BadRequestException {
+        log.info("Request to update user with id : {}", id);
+
+        if (!Objects.equals(userDTO.getId(), id)){
+            throw  new BadRequestException("ID is not valid");
+        }
+
+        if (!userRepository.existsById(id)){
+            throw  new BadRequestException("User with id "+id+" does not exists");
+        }
+        userDTO.setFullName(userDTO.getFirstName()+" "+userDTO.getLastName());
+
+        UserDTO result = userService.save(userDTO);
+        return ResponseEntity.ok().body(result);
     }
 }
