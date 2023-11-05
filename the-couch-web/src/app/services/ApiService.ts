@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Observable, throwError, VirtualTimeScheduler } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -100,6 +100,9 @@ export class ApiService {
         observe: 'response',
       }
     );
+  }
+  editUserProfile(user: any): Observable<any> {
+    return this.http.put<any>(this.baseURL + '/users/' + user.id, user, { observe: 'response' });
   }
   //send feedback
   sendFeedback(feedback: any): Observable<any> {
@@ -238,6 +241,17 @@ export class ApiService {
     return this.http.put<any>(this.baseURL + '/sessionSchedules/'+slot.id, slot, {
       observe: 'response',
     });
+  }
+  uploadLogo(logo: File): Observable<any> {
+    const formData: FormData = new FormData();
+
+    formData.append('file', logo);
+
+    const req = new HttpRequest('POST', this.baseURL + '/users/logo', formData, {
+      reportProgress: true
+    });
+
+    return this.http.request(req);
   }
 }
 

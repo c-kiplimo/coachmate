@@ -9,6 +9,7 @@ import com.natujenge.thecouch.exception.BadRequestException;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
+import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.*;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
@@ -25,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -317,5 +319,10 @@ public class UserResource {
 
         UserDTO result = userService.save(userDTO);
         return ResponseEntity.ok().body(result);
+    }
+    @PostMapping("/logo")
+    public ResponseEntity<UploadResponse> uploadLogo(@RequestParam(value = "file") MultipartFile file){
+        log.info("REST Request to upload user Logo");
+        return ResponseEntity.ok().body(FileUtil.uploadFile(file, log));
     }
 }
