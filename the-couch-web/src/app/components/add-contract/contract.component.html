@@ -68,7 +68,9 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <H3 for="clientId" class="form-label">Select Client</H3>
-            <select
+            <div class="row justify-content-between">
+              <div class="col">
+                <select
               class="form-select"
               aria-label="Default select example"
               formControlName="clientId"
@@ -87,7 +89,14 @@
                   Create Client
                 </button>
               </div>
-            </select>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button type="button" routerLink="/addClient" class="btn btn-outline-success">
+                  <i class="fa-solid fa-user-plus"></i> Add Client
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
