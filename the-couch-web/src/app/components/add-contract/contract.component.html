@@ -66,34 +66,37 @@
         </div>
 
         <div class="row justify-content-center">
-          <div class="col-6 mt-2">
-            <label for="clientId" class="form-label mt-2">Select Client</label>
-          </div>
-          <div class="col-6 mt-2 text-end">
-            <button
-              type="button"
-              class="btn btn-outline-success"
-              data-bs-toggle="modal"
-              data-bs-target="#addClient"
-            >
-              <i class="fa fa-plus"></i> Add Client
-            </button>
-          </div>
-          <div class="col-12 mt-2 mb-3">
-            <select
+          <div class="mb-3 col-md-12">
+            <H3 for="clientId" class="form-label">Select Client</H3>
+            <div class="row justify-content-between">
+              <div class="col">
+                <select
               class="form-select"
               aria-label="Default select example"
               formControlName="clientId"
               required="true"
             >
-              <!-- Loop through clients and form options -->
               <option selected>
-                Select Client you want to make a contract with
+                Select Client you want to make contract with
               </option>
+              <!--Loop through clients and form options-->
               <option *ngFor="let client of clients" value="{{ client.id }}">
                 {{ client.firstName }} {{ client.lastName }}
               </option>
-            </select>
+              <!--Render the create client button if no clients are found-->
+              <div *ngIf="!clients.length">
+                <button class="btn btn-outline-success" routerLink="/addclient">
+                  Create Client
+                </button>
+              </div>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <button type="button" routerLink="/addClient" class="btn btn-outline-success">
+                  <i class="fa-solid fa-user-plus"></i> Add Client
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
