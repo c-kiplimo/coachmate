@@ -1,15 +1,105 @@
-.btn btn-outline-success:active {
-  color: #fff;
-  background: #5c6ac4 !important;
-  padding-top: 8px;
-  padding-bottom: 6px;
-  border-radius: 4px;
-  vertical-align: middle;
-  border: none;
-  min-width: 120px;
-  margin: 2px 0;
+.btn-back {
+  background-color: #e1e1e1;
+  color: #3c4043;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  padding: 0 20px;
 }
-.smaller-font{
-  font-size: 15px;
- 
+.btn-add {
+  background-color: #f15715!important;
+  color: #fff!important;
+  letter-spacing: 1px!important;
+  font-size: 0.9rem!important;
+  font-weight: 600!important;
+  border-radius: 4px!important;
+  height: 35px!important;
+
+  fa-icon {
+    margin-right: 5px;
+    color: #fff!important;
+  }
+}
+.btn {
+  font-weight: 600;
+  font-size: 0.87rem;
+  border-radius: 4px;
+  color: #fff;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+}
+
+.customer-details .d-flex {
+  border-bottom: 1px solid #f1f1f1;
+  padding: 20px 0;
+}
+
+.customer-details .d-flex .title {
+  color: #5f6063;
+  font-weight: 500;
+}
+
+.customer-details input,
+.customer-details select {
+  width: 40%!important;
+  padding: 8px; /* Added padding */
+  border: 1px solid #f1f1f1; /* Added border */
+  border-radius: 8px; /* Added border radius */
+}
+
+.customer-details .d-flex .description {
+  color: #3c4043;
+  font-size: medium;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.current-image-holder {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 20px 0; /* Added padding */
+  margin: 20px 0; /* Added margin */
+}
+
+.current-image-holder .current-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e1e1e1;
+  margin: 10px 20px 10px 0;
+}
+
+.image-holder {
+  height: 100px;
+  width: 100px;
+  margin: 10px 0;
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 4px;
+  position: relative;
+}
+.card-table {
+  padding: 60px 60px;
+  border-radius: 20px!important;
+  border: 1px solid #f1f1f1!important;
+  margin-bottom: 30px;
+  min-height: 80px;
+
+  .title {
+    font-weight: 400;
+    color: #5f6063;
+  }
+}
+
+/* Add styles for .fa-camera, .image-meta-data, and .uploading-message as needed */
+
+@media (max-width: 700px) {
+  .customer-details .d-flex input,
+  .customer-details select {
+    width: 100%!important;
+    display: block;
+    margin: 10px 0;
+  }
 }
