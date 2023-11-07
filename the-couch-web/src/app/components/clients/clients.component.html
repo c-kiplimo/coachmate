@@ -1,6 +1,15 @@
-<div class="row">
+<div class="row d-none d-lg-block">
   <div class="col  mt-2" style="margin-left: 5px;">
     <h3 class="fw-semi-bold f-weight fs-5">Clients</h3>
+  </div>
+</div>
+
+<div class="show-sm m-2">
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="fw-semi-bold f-weight fs-5">Clients</h3>
+    <button type="button" routerLink="/addClient" class="btn btn-outline-success">
+      <i class="fa fa-plus"></i>
+    </button>
   </div>
 </div>
 
@@ -37,6 +46,10 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
+          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
+            <div class="donut multi"></div>
+          </div>
+
           <table class="table" *ngIf="clients?.length">
             <thead>
               <tr>
@@ -69,9 +82,10 @@
                 </td>
 
                 <td class="view">
-                  <a class="m-1"><i class="fa-solid fa-arrow-up-right-from-square" (click)="navigateToClientView(client.id)"></i></a>
-                  <a class="m-1"><i class="fa-solid fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#editClientModal"
-                    (click)="editClient(client)"></i></a>
+                  <a class="m-1"><i class="fa-solid fa-arrow-up-right-from-square"
+                      (click)="navigateToClientView(client.id)"></i></a>
+                  <a class="m-1"><i class="fa-solid fa-pen-to-square" data-bs-toggle="modal"
+                      data-bs-target="#editClientModal" (click)="editClient(client)"></i></a>
                   <!-- <i
             class="fa-solid fa-trash-can"
             (click)="suspendClient(client)"
@@ -80,9 +94,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="donut-wrapper" *ngIf="loading" [@fadeIn]>
-            <div class="donut multi"></div>
-          </div>
+
           <div class="d-flex justify-content-center" *ngIf="!loading && !clients.length">
             <p class="text-muted mt-5">
               No Clients Found.
@@ -97,15 +109,6 @@
 <div class="show-sm">
   <div class="card">
     <div class="card-body">
-      <div class="d-flex justify-content-between mt-2 mb-2">
-        <h3></h3>
-        <div>
-          <button type="button" routerLink="/addclient" class="btn btn-outline-success">
-            <i class="fa fa-plus"></i> Add Client
-          </button>
-        </div>
-      </div>
-
       <div class="row" [@fadeIn]>
         <div class="col-md-10 mb-2">
           <div class="input-group">
@@ -126,6 +129,10 @@
               d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
           </svg>
         </div>
+      </div>
+
+      <div class="donut-wrapper" *ngIf="loading">
+        <div class="donut multi"></div>
       </div>
 
       <div class="pt-3 pb-2 listing-item"
@@ -163,10 +170,6 @@
         </div>
       </div>
 
-
-      <div class="donut-wrapper" *ngIf="loading">
-        <div class="donut multi"></div>
-      </div>
       <div *ngIf="!loading && clients?.length === 0">
         <h2 class="text-muted mt-5">No Clients Found.</h2>
       </div>
@@ -189,13 +192,13 @@
   <div class="add-options-panel" *ngIf="showFilters" [@fadeIn]>
     <div class="add-options-panel-heading">
       <h4>Filter Status</h4>
-      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal" aria-label="Close"></button>
+      <button type="button" class="btn-close" (click)="toggleFilters()" data-bs-dismiss="modal"
+        aria-label="Close"></button>
     </div>
 
 
     <div class="mb-1 border-bottom">
-      <div class="add-filter-option" 
-        *ngFor="let status of clientStatuses;index as i" (click)="filters.status = status">
+      <div class="add-filter-option" *ngFor="let status of clientStatuses;index as i" (click)="filters.status = status">
         <span>{{status | titlecase}}</span>
         <span class="checkbox-border">
           <span class="checkbox-circle" [ngClass]="{'active-checkbox-circle':status === filters.status}"></span>
@@ -261,20 +264,20 @@
             <label for="clientType">Payment Mode</label>
             <div class="row">
               <div class="col-4 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="PaymentMode"
-                  id="flexRadioDefault1" value="POSTPAY" formControlName="PaymentMode" />
-                <label class="form-group-text m-2" for="PaymentMode">POSTPAY</label>
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                  id="flexRadioDefault1" value="POSTPAY" formControlName="paymentMode" />
+                <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
               </div>
               <div class="col-4 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="PaymentMode"
-                  id="flexRadioDefault1" value="PREPAY" formControlName="PaymentMode" />
-                <label class="form-group-text m-2" for="PaymentMode">PREPAY</label>
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+                  id="flexRadioDefault1" value="PREPAY" formControlName="paymentMode" />
+                <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
               </div>
             </div>
           </div>
           <!-- <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="PaymentMode">Payment Mode</label>
+              <label class="input-group-text" for="paymentMode">Payment Mode</label>
             </div>
 
             <select class="form-select" id="inputGroupSelect01" formControlName="paymentMode"
@@ -288,19 +291,19 @@
             <label for="clientType">Client Type</label>
             <div class="row">
               <div class="col-4 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
-                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="type" />
-                <label class="form-group-text m-2" for="type">INDIVIDUAL</label>
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault1" value="INDIVIDUAL" formControlName="clientType" />
+                <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
               </div>
               <div class="col-4 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
-                  id="flexRadioDefault1" value="CORPORATE" formControlName="type" />
-                <label class="form-group-text m-2" for="type">CORPORATE</label>
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault1" value="CORPORATE" formControlName="clientType" />
+                <label class="form-group-text m-2" for="clientType">CORPORATE</label>
               </div>
               <div class="col-4 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="type"
-                  id="flexRadioDefault1" value="GROUP" formControlName="type" />
-                <label class="form-group-text m-2" for="type">GROUP</label>
+                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                  id="flexRadioDefault1" value="GROUP" formControlName="clientType" />
+                <label class="form-group-text m-2" for="clientType">GROUP</label>
               </div>
             </div>
           </div>
@@ -319,7 +322,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-cancel" id="update-cancel" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-outline-success" (click)="updateClientDetails(clientToBeUpdated.id)">Save
           changes</button>
       </div>

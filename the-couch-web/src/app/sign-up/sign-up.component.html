@@ -4,118 +4,59 @@
       <a class="py-3 ps-1 back-link login-back-link" routerLink="/home">
         <fa-icon [icon]="backIcon"></fa-icon> Go to website
       </a>
-      <div
-        class="card card-table d-flex justify-content-center align-items-center"
-      >
+      <div class="card card-table d-flex justify-content-center align-items-center">
         <div class="">
-          <!-- <img src="../../../assets/images/CoachMatePRO.png" alt="logo" class="logo" style="  width: 200px;
-          height: 100px; padding-top: 0%; margin-top: 0%;"> -->
           <h1 class="text-center mb-3">Register</h1>
-          <!-- <h6 class="mb-3">Register</h6> -->
-          <!-- <button type="button" class="btn btn-primary mb-3">
-            <fa-icon [icon]="googleIcon"></fa-icon> with Google
-          </button> -->
-          <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-          <h5>Or</h5> -->
-          <!-- <hr /> -->
           <div class="alert alert-danger" *ngIf="errorMessage">
             {{ errorMessage }}
           </div>
         </div>
-    
-        <form
-          *ngIf="!registrationSuccess"
-          #registrationForm="ngForm"
-          (ngSubmit)="validateEmail()"
-          ngNativeValidate
-        >
+
+        <form *ngIf="!registrationSuccess" #registrationForm="ngForm" (ngSubmit)="validateEmail()" ngNativeValidate>
           <div class="row p-2">
             <div class="mb-3 col-12">
               <label for="userRole">Register as *</label>
-              <select
-                [(ngModel)]="formData.userRole"
-                class="form-select"
-                id="inputGroupSelect01"
-                name="userRole"
-                placeholder="Get Registered As"
-                required>
+              <select [(ngModel)]="formData.userRole" class="form-select" id="inputGroupSelect01" name="userRole"
+                placeholder="Get Registered As" required>
                 <option value="COACH">INDIVIDUAL COACH</option>
                 <option value="ORGANIZATION">ORGANIZATION</option>
               </select>
             </div>
             <div class="mb-3 col-12">
               <label for="businessName">Business or Organization Name *</label>
-              <input
-                [(ngModel)]="formData.businessName"
-                name="businessName"
-                placeholder="eg. Meliora"
-                type="text"
-                class="form-control"
-                required
-              />
+              <input [(ngModel)]="formData.businessName" name="businessName" placeholder="eg. Meliora" type="text"
+                class="form-control" required />
             </div>
 
             <div class="mb-3 col-md-6">
               <label for="fullname">First Name *</label>
-              <input
-                [(ngModel)]="formData.firstName"
-                name="firstName"
-                type="text"
-                class="form-control"
-                placeholder="Enter User First Name"
-                id="firstame"
-                required
-              />
+              <input [(ngModel)]="formData.firstName" name="firstName" type="text" class="form-control"
+                placeholder="Enter User First Name" id="firstame" required />
             </div>
             <div class="mb-3 col">
               <label for="fullname">Last Name *</label>
-              <input
-                [(ngModel)]="formData.lastName"
-                
-                name="lastName"
-                type="text"
-                placeholder="Enter User Last Name"
-                class="form-control"
-                id="lastName"
-                required
-              />
+              <input [(ngModel)]="formData.lastName" name="lastName" type="text" placeholder="Enter User Last Name"
+                class="form-control" id="lastName" required />
             </div>
           </div>
-      
+
           <div class="row p-2">
             <div class="mb-3 col-md-6">
-              <label for="email"
-                >Email address *
+              <label for="email">Email address *
                 <small class="redText ms-2" *ngIf="emailInvalid">
-                  Invalid Email</small
-                >
+                  Invalid Email</small>
               </label>
-              <input
-                [ngClass]="emailInvalid ? 'input-error' : ''"
-                [(ngModel)]="formData.email"
-                name="email"
-                type="email"
-                class="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                placeholder="Enter User Email Address"
-                required
-              />
+              <input [ngClass]="emailInvalid ? 'input-error' : ''" [(ngModel)]="formData.email" name="email"
+                type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="Enter User Email Address" required />
             </div>
             <div class="mb-3 col-md-6">
               <label for="phonenumber" class="form-label">Phone Number *</label>
-              <input
-                [(ngModel)]="formData.msisdn"
-                name="msisdn"
-                type="text"
-                class="form-control"
-                required
+              <input [(ngModel)]="formData.msisdn" name="msisdn" type="text" class="form-control" required
                 placeholder="eg. 0700123456"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
-                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');"
-                
-              />
-              
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
+
             </div>
           </div>
 
@@ -127,112 +68,61 @@
                   {{ passwordErrorMessage }}</small>
               </label>
               <div class="input-group">
-                <input
-                (focus)="onPasswordFocus()"
-                (blur)="onPasswordBlur()"
-                #yourElement
-                [type]="fieldTextType ? 'text' : 'password'"
-                [ngClass]="
+                <input (focus)="onPasswordFocus()" (blur)="onPasswordBlur()" #yourElement
+                  [type]="fieldTextType ? 'text' : 'password'" [ngClass]="
                   passwordInvalid && formData.password.length
                     ? 'input-error'
                     : ''
-                "
-                [(ngModel)]="formData.password"
-                (ngModelChange)="validatePasswordRule()"
-                name="password"
-                type="password"
-                class="form-control border-end-0 border"
-                id="password"
-                placeholder="Password"
-                required
-                />
+                " [(ngModel)]="formData.password" (ngModelChange)="validatePasswordRule()" name="password"
+                  type="password" class="form-control border-end-0 border" id="password" placeholder="Password"
+                  required />
                 <span class="input-group-append">
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="fieldTextType"
-                  >
-                    <fa-icon
-                      [icon]="eyeIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
+                  <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="fieldTextType">
+                    <fa-icon [icon]="eyeIcon" (click)="toggleFieldTextType()"></fa-icon>
                   </span>
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="!fieldTextType"
-                  >
-                    <fa-icon
-                      [icon]="eyeSlashIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
+                  <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="!fieldTextType">
+                    <fa-icon [icon]="eyeSlashIcon" (click)="toggleFieldTextType()"></fa-icon>
                   </span>
                 </span>
               </div>
             </div>
-        
+
             <div class="mb-3 col-md-6 form-group">
               <label for="Password">Confirm Password *
                 <br>
                 <small class="redText ms-2" *ngIf="passwordInvalid">
                   {{ passwordErrorMessage }}</small>
-            </label
-              >
+              </label>
               <div class="input-group">
-            
-                <input
-                  [type]="fieldTextType ? 'text' : 'password'"
-                  [ngClass]="passwordInvalid ? 'input-error' : ''"
-                  [(ngModel)]="formData.passwordConfirm"
-                  (ngModelChange)="passwordInvalid = false"
-                  (ngModelChange)="validatePasswordRule()"
-                  
-                  required
-                  name="password"
-                  type="password"
-                  class="form-control border-end-0 border"
-                  id="exampleInputPassword1"
-                  placeholder="Confirm Password"
-                />
+
+                <input [type]="fieldTextType ? 'text' : 'password'" [ngClass]="passwordInvalid ? 'input-error' : ''"
+                  [(ngModel)]="formData.passwordConfirm" (ngModelChange)="passwordInvalid = false"
+                  (ngModelChange)="validatePasswordRule()" required name="password" type="password"
+                  class="form-control border-end-0 border" id="exampleInputPassword1" placeholder="Confirm Password" />
                 <span class="input-group-append">
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="fieldTextType"
-                  >
-                    <fa-icon
-                      [icon]="eyeIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
+                  <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="fieldTextType">
+                    <fa-icon [icon]="eyeIcon" (click)="toggleFieldTextType()"></fa-icon>
                   </span>
-                  <span
-                    class="input-group-text bg-transparent ms-n3 border-start-0 border"
-                    *ngIf="!fieldTextType"
-                  >
-                    <fa-icon
-                      [icon]="eyeSlashIcon"
-                      (click)="toggleFieldTextType()"
-                    ></fa-icon>
+                  <span class="input-group-text bg-transparent ms-n3 border-start-0 border" *ngIf="!fieldTextType">
+                    <fa-icon [icon]="eyeSlashIcon" (click)="toggleFieldTextType()"></fa-icon>
                   </span>
                 </span>
               </div>
             </div>
           </div>
-          <button
-            type="submit"
-            class="btn-outline-success btn-signup mb-3 mt-2 p-2"
-            [disabled]="
+          <button type="submit" class="btn-outline-success btn-signup mb-3 mt-2 p-2" [disabled]="
               !formData.password ||
               !formData.email ||
               !formData.businessName ||
               !formData.msisdn ||
               !formData.firstName ||
               !formData.lastName
-            "
-          >
+            ">
             SUBMIT
           </button>
         </form>
         <div>
-          <span
-            >
+          <span>
             <a routerLink="/signin" href="">Proceed to Login</a>
           </span>
         </div>

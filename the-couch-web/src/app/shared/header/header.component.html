@@ -3,18 +3,19 @@ router.url.includes('signin')">
   <div class=" side-nav-button p-2 me-3 text-light bars" (click)="SideNavToggle()">
     <i class="fas fa-bars"></i>
   </div>
-  <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="logo" />
+  <img src="../../../assets/images/CoachMatePRO-Transparent.png" alt="logo" class="d-none d-lg-block logo"/>
   <!-- <a class="navbar-brand brand-name brand" href="">CoachMatePRO</a> -->
 
   <div class="navbar-collapse"></div>
   <!-- <i class="fas fa-user-circle"></i> -->
   <div class="profile-logo dropdown">
     <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
-      <img src="../../../assets/images/cat_user.png" height="30px" /> {{user?.firstName}} ({{user?.userRole}})
+      <img src="../../../assets/images/cat_user.png" height="30px" /> {{user?.firstName}}
+      <!-- <span class="d-none d-lg-none">{{user?.firstName}} ({{user?.userRole}})</span> -->
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu dropdown-menu-end">
       <li><a [routerLink]="['account-settings/profile']" class="dropdown-item">View Profile</a></li>
-      <li class="dropdown-item"><button class="btn btn-success ml-5 pl-5" (click)="logOut()">Log Out</button></li>
+      <li class="dropdown-item"><button class="btn btn-outline-success ml-5 pl-5" (click)="logOut()">Log Out</button></li>
     </ul>
   </div>
 </nav>

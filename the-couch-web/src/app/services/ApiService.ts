@@ -110,9 +110,9 @@ export class ApiService {
 
 
   //contact us  message
-  contactUsMessage(message: any): Observable<any> {
+  support(message: any): Observable<any> {
     return this.http.post<any>(
-      this.baseURL + '/v1/registration/contact',
+      this.baseURL + '/registration/support',
       message,
       {
         observe: 'response',

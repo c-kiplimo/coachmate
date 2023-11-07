@@ -1,0 +1,6 @@
+.active {
+    background-color: #f3a68e; /* Background color when clicked */
+    color: #fff; /* Text color when clicked */
+    border-color: #f3a68e; /* Border color when clicked */
+    box-shadow: none; 
+}

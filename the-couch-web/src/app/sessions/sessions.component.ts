@@ -62,6 +62,7 @@ export class SessionsComponent implements OnInit {
 
   googleCalendarEvents: any;
   googleCalenderConnected: boolean = false;
+event: any;
 
   constructor(private apiService: ClientService,
     private router: Router,
@@ -90,6 +91,8 @@ export class SessionsComponent implements OnInit {
       this.clientId = this.user.id;
       this.getAllSessions(this.page);
     }
+    
+    this.getCalendarEvents();
   }
 
   connectToGoogleCalendar() {
@@ -150,10 +153,6 @@ toggleTab(tab: string): void {
         this.sessions = response.body;
         this.totalElements = +response.headers.get('X-Total-Count');
         this.loading = false;
-        
-        setTimeout(() => {
-          this.getCalendarEvents();
-        }, 3000);
       },
       (error: any) => {
         console.log(error);

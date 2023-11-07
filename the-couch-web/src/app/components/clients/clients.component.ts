@@ -89,11 +89,8 @@ export class ClientsComponent implements OnInit {
     profession: ' ',
     paymentMode: ' ',
     reason: '',
-
     });
-
-    this.getClients(this.page);
-    
+  
   }
   getClass(client: any) {
     if (client.status === 'SUSPENDED') {
@@ -138,11 +135,11 @@ export class ClientsComponent implements OnInit {
       (response) => {
         this.loading = false;
         this.clients = response.body;
-        for (let client of this.clients) {
-          if (client.userRole != 'CLIENT') {
-            this.clients.splice(this.clients.indexOf(client), 1);
-          }
-        }
+        // for (let client of this.clients) {
+        //   if (client.userRole != 'CLIENT') {
+        //     this.clients.splice(this.clients.indexOf(client), 1);
+        //   }
+        // }
         this.totalElements = +response.headers.get('X-Total-Count');
         console.log('clients',this.clients)
       }, (error) => {
@@ -199,16 +196,11 @@ editClientModal!: ElementRef;
     this.clientToBeUpdated = this.updateClient.value;
     console.log(this.clientToBeUpdated)
     console.log(id)  
-    this.clientService.editClient(this.clientToBeUpdated,id).subscribe(
+    this.clientService.editClient(this.clientToBeUpdated, id).subscribe(
       (data) => {
-        console.log(data)
         this.toastrService.success('Client Updated', 'Success!');
-        setTimeout(() => {
-          location.reload();
-        }, 1000);
-        this.editClientModal.nativeElement.classList.remove('show');
-        this.editClientModal.nativeElement.style.display = 'none';
-
+        this.getClients(this.page);
+        document.getElementById('update-cancel')?.click();
       }, (error) => {
         console.log(error)
       }

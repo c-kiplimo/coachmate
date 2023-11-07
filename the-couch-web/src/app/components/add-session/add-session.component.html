@@ -1,70 +1,122 @@
 <div class="d-flex justify-content-between">
   <div class="mt-4" style="margin-left: 5px">
-    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Add session</h2>
+    <h2 class="fw-bold">
+      <i
+        class="fas fa-chevron-left pe-3 pt-1 back-icon back"
+        (click)="back()"
+      ></i
+      >Add session
+    </h2>
   </div>
   <div class="mt-4" style="margin-right: 10px" id="calendly">
     <!-- Calendly inline widget comes here -->
   </div>
 </div>
 
-<div class="row justify-content-center m-2 p-3">
-  <div class="col-md-8 col-sm-12">
+<div class="row justify-content-center">
+  <div class="col-md-6 col-sm-12">
     <div class="card card-table justify-content-center align-items-center">
       <!-- <div class="m-3">
         <h1 class="text-center mb-3">Add session</h1>
       </div> -->
-      <form class="m-3">
+      <form class="m-2">
         <div class="row justify-content-center">
-          <div class="mb-3 col-md-12">
-            <div class="slt-btn">
-              <div class="col-md-10">
-                <label for="sessionname">Select Contract *</label>
-                <select class="form-select" id="inputGroupSelect01" (change)="onContractChange($event)" name="type">
-                  <option value="" disabled selected>Select Contract</option>
-                  <option *ngFor="let contract of contracts" [value]="contract?.id">
-                    {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-14">
-                <button type="button" mat-raised-button class="btn btn-outline-success" [routerLink]="['/add-contract']">Add Contract</button>
-              </div>
-            </div>
+          <div class="col-6 mt-2">
+            <label for="sessionname">Select Contract *</label>
+          </div>
+          <div class="col-6 mt-2 text-end">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              data-bs-toggle="modal"
+              data-bs-target="#addContract"
+            >
+              <i class="fa fa-plus"></i> Add Conract
+            </button>
+          </div>
+          <div class="col-12 mt-2 mb-3">
+            <select
+              class="form-select"
+              id="inputGroupSelect01"
+              (change)="onContractChange($event)"
+              name="type"
+            >
+              <option value="" disabled selected>Select Contract</option>
+              <option *ngFor="let contract of contracts" [value]="contract?.id">
+                {{ contract?.coachingTopic }}-{{ contract?.clientFirstName }}
+              </option>
+            </select>
           </div>
 
           <div class="mb-3 col-md-12">
             <label for="sessionname">Session Name *</label>
-            <input [(ngModel)]="formData.name" type="text" class="form-control" id="name"
-              placeholder="Enter Session Name" name="name" />
+            <input
+              [(ngModel)]="formData.name"
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Enter Session Name"
+              name="name"
+            />
           </div>
 
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="clientType">Session Type *</label>
+            <label class="form-group-text" for="clientType"
+              >Session Type *</label
+            >
           </div>
           <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionType"
-              id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="formData.sessionType" />
-            <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
+            <input
+              class="form-check-input m-2 custom-radio-input"
+              type="radio"
+              name="sessionType"
+              id="flexRadioDefault1"
+              value="INDIVIDUAL"
+              [(ngModel)]="formData.sessionType"
+            />
+            <label class="form-group-text m-2" for="clientType"
+              >INDIVIDUAL</label
+            >
           </div>
           <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionType"
-              id="flexRadioDefault2" value="GROUP" [(ngModel)]="formData.sessionType" />
+            <input
+              class="form-check-input m-2 custom-radio-input"
+              type="radio"
+              name="sessionType"
+              id="flexRadioDefault2"
+              value="GROUP"
+              [(ngModel)]="formData.sessionType"
+            />
             <label class="form-group-text m-2" for="clientType">GROUP</label>
           </div>
         </div>
 
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
-            <label class="form-group-text" for="clientType">Session Venue *</label>
+            <label class="form-group-text" for="clientType"
+              >Session Venue *</label
+            >
           </div>
           <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
-              id="flexRadioDefault1" value="VIRTUAL" [(ngModel)]="formData.sessionVenue" />
+            <input
+              class="form-check-input m-2 custom-radio-input"
+              type="radio"
+              name="sessionVenue"
+              id="flexRadioDefault1"
+              value="VIRTUAL"
+              [(ngModel)]="formData.sessionVenue"
+            />
             <label class="form-group-text m-2" for="clientType">VIRTUAL</label>
           </div>
           <div class="mb-3 col-md-12">
-            <input class="form-check-input m-2 custom-radio-input" type="radio" name="sessionVenue"
-              id="flexRadioDefault2" value="PHYSICAL" [(ngModel)]="formData.sessionVenue" />
+            <input
+              class="form-check-input m-2 custom-radio-input"
+              type="radio"
+              name="sessionVenue"
+              id="flexRadioDefault2"
+              value="PHYSICAL"
+              [(ngModel)]="formData.sessionVenue"
+            />
             <label class="form-group-text m-2" for="clientType">PHYSICAL</label>
           </div>
         </div>
@@ -72,8 +124,14 @@
         <div class="row justify-content-center">
           <div class="mb-3 col-md-12">
             <label for="inputlastname">Session Details</label>
-            <input type="text" class="form-control" [(ngModel)]="formData.sessionDetails" id="inputEmail4"
-              placeholder="Enter Session Description" name="sessionDetails" />
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="formData.sessionDetails"
+              id="inputEmail4"
+              placeholder="Enter Session Description"
+              name="sessionDetails"
+            />
           </div>
         </div>
 
@@ -94,25 +152,39 @@
 
             <div class="calendar">
               <div class="header">
-                <button class="btn btn-outline-success" (click)="prevMonth()">Previous</button>
-                <h2>{{ currentDate | date: 'MMMM yyyy' }}</h2>
-                <button class="btn btn-outline-success" (click)="nextMonth()">Next</button>
+                <button class="btn btn-outline-success" (click)="prevMonth()">
+                  Previous
+                </button>
+                <h2>{{ currentDate | date : "MMMM yyyy" }}</h2>
+                <button class="btn btn-outline-success" (click)="nextMonth()">
+                  Next
+                </button>
               </div>
               <table class="calendar-table">
                 <thead>
                   <tr>
-                    <th *ngFor="let day of daysOfWeek" class="day-header">{{ day }}</th>
+                    <th *ngFor="let day of daysOfWeek" class="day-header">
+                      {{ day }}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let week of weeks" class="week">
                     <ng-container *ngFor="let day of week">
-                      <td class="day-cell" [class.empty]="!day" [class.booked]="day && day.bookedCount > 0"
+                      <td
+                        class="day-cell"
+                        [class.empty]="!day"
+                        [class.booked]="day && day.bookedCount > 0"
                         [class.disabled]="day && day.bookedCount < 1"
-                        (click)="day.bookedCount > 0 ? onDateSelect(day) : null">
+                        (click)="day.bookedCount > 0 ? onDateSelect(day) : null"
+                      >
                         <div class="date-wrapper">
-                          <div class="date">{{ day ? day?.date.slice(-2) : '' }}</div>
-                          <div class="booked-count">{{ day?.bookedCount ? day?.bookedCount : '_' }}</div>
+                          <div class="date">
+                            {{ day ? day?.date.slice(-2) : "" }}
+                          </div>
+                          <div class="booked-count">
+                            {{ day?.bookedCount ? day?.bookedCount : "_" }}
+                          </div>
                         </div>
                       </td>
                     </ng-container>
@@ -122,7 +194,9 @@
             </div>
 
             <!-- Display the selected date if needed -->
-            <p *ngIf="formData.sessionDate">Available slots on: {{ formData.sessionDate | date }}</p>
+            <p *ngIf="formData.sessionDate">
+              Available slots on: {{ formData.sessionDate | date }}
+            </p>
 
             <!-- title -->
             <!-- <div class="d-flex mt-2">
@@ -137,39 +211,435 @@
               <div class="donut multi"></div>
             </div>
 
-            <div class="d-flex m-2" *ngFor="let availableSlot of slots" (click)="selectedSessionSlot(availableSlot)">
-
+            <div
+              class="d-flex m-2"
+              *ngFor="let availableSlot of slots"
+              (click)="selectedSessionSlot(availableSlot)"
+            >
               <div>
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="flexRadioDefault"
-                  id="flexRadioDefault{{availableSlot.id}}"
-                  [disabled]="availableSlot?.sessionDate && availableSlot?.sessionDate !== formData.sessionDate" />
+                <input
+                  class="form-check-input m-2 custom-radio-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="flexRadioDefault{{ availableSlot.id }}"
+                  [disabled]="
+                    availableSlot?.sessionDate &&
+                    availableSlot?.sessionDate !== formData.sessionDate
+                  "
+                />
 
-                <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
+                <label
+                  class="form-check-label m-2 custom-label"
+                  for="flexRadioDefault{{ availableSlot.id }}"
+                >
                   {{ availableSlot?.startTime }} -
                 </label>
-                <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
+                <label
+                  class="form-check-label m-2 custom-label"
+                  for="flexRadioDefault{{ availableSlot.id }}"
+                >
                   {{ availableSlot?.endTime }}
-                  <i class="fa fa-repeat custom-loop-icon" *ngIf="availableSlot?.recurring"></i>
+                  <i
+                    class="fa fa-repeat custom-loop-icon"
+                    *ngIf="availableSlot?.recurring"
+                  ></i>
                 </label>
-                <label class="form-check-label m-2 custom-label" for="flexRadioDefault{{availableSlot.id}}">
-                  {{ availableSlot?.sessionDate | date:'EEE, yyyy-MM-dd' }}
-                  <i class="fa fa-calendar custom-loop-icon" *ngIf="availableSlot?.sessionDate"></i>
+                <label
+                  class="form-check-label m-2 custom-label"
+                  for="flexRadioDefault{{ availableSlot.id }}"
+                >
+                  {{ availableSlot?.sessionDate | date : "EEE, yyyy-MM-dd" }}
+                  <i
+                    class="fa fa-calendar custom-loop-icon"
+                    *ngIf="availableSlot?.sessionDate"
+                  ></i>
                 </label>
               </div>
-
             </div>
-
-
           </div>
-
         </div>
 
-        <button type="submit" (click)="addSession()"
-          [disabled]="!formData.name || !formData.sessionSchedules || !formData.sessionDate || !formData.sessionVenue || !formData.sessionType || !formData.sessionDetails || !getContractId"
-          class="btn btn-signup mb-3 mt-2  btn-outline-success text-center">
+        <button
+          type="submit"
+          (click)="addSession()"
+          [disabled]="
+            !formData.name ||
+            !formData.sessionSchedules ||
+            !formData.sessionDate ||
+            !formData.sessionVenue ||
+            !formData.sessionType ||
+            !formData.sessionDetails ||
+            !getContractId
+          "
+          class="btn btn-signup mb-3 mt-2 btn-outline-success text-center"
+        >
           Create Session
         </button>
       </form>
+    </div>
+  </div>
+</div>
+<div
+  class="modal"
+  id="addContract"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-x1">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="exampleModalLongTitle">Add Contract</h5>
+        <button
+          type="button"
+          class="btn btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="coachingTopic" class="form-label"
+                >Coaching Title</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="nucoachingTopicmber"
+                placeholder="Enter the coaching topic"
+                formControlName="coachingTopic"
+                required="true"
+              />
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="coachingCategory" class="form-label"
+                >Coaching Category</label
+              >
+            </div>
+            <div class="mb-3 form-group">
+              <input
+                class="form-check-input m-2 custom-radio-input"
+                type="radio"
+                name="coachingCategory"
+                id="flexRadioDefault1"
+                value="INDIVIDUAL"
+                formControlName="coachingCategory"
+              />
+              <label class="form-group-text m-2" for="coachingCategory"
+                >INDIVIDUAL</label
+              >
+            </div>
+            <div class="mb-3 form-group">
+              <input
+                class="form-check-input m-2 custom-radio-input"
+                type="radio"
+                name="coachingCategory"
+                id="flexRadioDefault2"
+                value="CORPORATE"
+                formControlName="coachingCategory"
+              />
+              <label class="form-group-text m-2" for="coachingCategory"
+                >CORPORATE</label
+              >
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+                <label for="clientId" class="form-label mt-2">Select Client</label>
+              
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  formControlName="clientId"
+                  required="true"
+                >
+                  <!-- Loop through clients and form options -->
+                  <option selected>
+                    Select Client you want to make a contract with
+                  </option>
+                  <option *ngFor="let client of clients" value="{{ client.id }}">
+                    {{ client.firstName }} {{ client.lastName }}
+                  </option>
+                </select>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <div class="row">
+                <div class="col">
+                  <label for="number" class="form-label">Start Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="date"
+                    formControlName="startDate"
+                    required="true"
+                  />
+                  <div *ngIf="contractForm.get('startDate')?.hasError('pastDate')">
+                    <small class="text-danger">Please select a future date.</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <label for="number" class="form-label">End Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="date"
+                    formControlName="endDate"
+                    required="true"
+                  />
+                  <div *ngIf="contractForm.get('endDate')?.hasError('pastDate')">
+                    <small class="text-danger">Please select a future date.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <section>
+                <div class="col-12"></div>
+                <br />
+                <div class="row justify-content-center">
+                  <div class="col">
+                    <label for="coachingGoals" class="form-label"
+                      >Coaching Goals</label
+                    >
+                    <input
+                      [(ngModel)]="Objectives.objective"
+                      type="text"
+                      class="form-control"
+                      placeholder="Add Goal"
+                      formControlName="objectives"
+                    />
+                  </div>
+      
+                  <div class="col-6 mt-4">
+                    <button
+                      type="button"
+                      class="btn btn-outline-success"
+                      (click)="addObjective()"
+                    >
+                      <i class="fa fa-plus"></i>Add goal
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-10">
+                    <div class="mb-3">
+                      <ol>
+                        <li *ngFor="let obj of objectives; index as i">
+                          {{ obj }}
+                          <i
+                            (click)="removeObjective(i)"
+                            role="button"
+                            class="fa-solid fa-trash-can p-1"
+                          ></i>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="mb-3 form-group">
+              <label for="number" class="form-label">No. of Sessions:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter number of Sessions"
+              formControlName="noOfSessions"
+              required="true"
+            />
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div
+            *ngIf="
+              contractForm.controls['coachingCategory'].value == 'INDIVIDUAL'
+            "
+            class="mb-3 form-group"
+          >
+            <label for="number" class="form-label"
+              >Individual Fees Per Session</label
+            >
+
+            <input
+              type="number"
+              class="form-control"
+              id="number"
+              placeholder="Enter the fee to be paid in USD"
+              formControlName="individualFeesPerSession"
+              required="true"
+            />
+          </div>
+          <div
+          *ngIf="
+            contractForm.controls['coachingCategory'].value == 'CORPORATE'
+          "
+          class="mb-3 form-group"
+        >
+          <label for="number" class="form-label"
+            >Group Fees Per Session</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="number"
+            placeholder="Enter the fee to be paid in USD"
+            formControlName="groupFeesPerSession"
+            required="true"
+          />
+        </div>
+      </div>
+      <button
+          class="btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseService"
+          aria-expanded="false"
+          aria-controls="collapseService"
+          (click)="toggleEditingSettings('collapseService')"
+          [disabled]="disableButton"
+        >
+          <h3>Services <i class="fa fa-arrow-circle-down"></i></h3>
+        </button>
+        <div class="collapse" id="collapseService">
+          <div class="row">
+            <div class="col-10">
+              <div class="form-group">
+                <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+                  contractTemplates?.servicesTemplate
+                }}</span>
+                <textarea
+                  name="servicesTemplate"
+                  class="form-control no-box-shadow"
+                  id="servicesTemplate"
+                  aria-describedby="servicesTemplate"
+                  rows="4"
+                  formControlName="services"
+                  *ngIf="editingSettings"
+                  [@fadeIn]
+                  [disabled]="isSaving"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="btn"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTerms"
+          aria-expanded="false"
+          aria-controls="collapseTerms"
+          (click)="toggleEditingSettings('collapseTerms')"
+          [disabled]="disableButton"
+        >
+          <h3>Terms & Conditions <i class="fa fa-arrow-circle-down"></i></h3>
+        </button>
+        <br />
+
+        <div class="collapse" id="collapseTerms">
+          <div class="row">
+            <div class="col-10">
+              <div class="form-group">
+                <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+                  contractTemplates?.terms_and_conditionsTemplate
+                }}</span>
+                <textarea
+                  name="terms_and_conditionsTemplate"
+                  class="form-control"
+                  id="terms_and_conditionsTemplate"
+                  aria-describedby="terms_and_conditionsTemplate"
+                  rows="4"
+                  formControlName="terms_and_conditions"
+                  *ngIf="editingSettings"
+                  [@fadeIn]
+                  [disabled]="isSaving"
+                >
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <div class="input-group mb-3">
+          <button
+            class="btn"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePractice"
+            aria-expanded="false"
+            aria-controls="collapsePractice"
+            (click)="toggleEditingSettings('collapsePractice')"
+            [disabled]="disableButton"
+          >
+            <h3>Practice <i class="fa fa-arrow-circle-down"></i></h3>
+          </button>
+
+          <br />
+          <div class="collapse" id="collapsePractice">
+            <div class="form-group">
+              <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+                contractTemplates?.practiceTemplate
+              }}</span>
+              <textarea
+                name="practiceTemplate"
+                class="form-control"
+                id="practiceTemplate"
+                aria-describedby="practiceTemplate"
+                rows="4"
+                formControlName="practice"
+                *ngIf="editingSettings"
+                [@fadeIn]
+                [disabled]="isSaving"
+              >
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="input-group mb-3">
+              <h3>Note</h3>
+            </div>
+            <div class="form-group">
+              <textarea
+                name="practiceTemplate"
+                class="form-control"
+                id="practiceTemplate"
+                aria-describedby="practiceTemplate"
+                rows="4"
+                formControlName="note"
+              >
+              </textarea>
+            </div>
+          </div>
+        </div>
+        <br />
+        <button
+          type="submit"
+          (click)="addContract()"
+          class="btn btn-signup btn-outline-success text-center"
+        >
+          Submit
+        </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
