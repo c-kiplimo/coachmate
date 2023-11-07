@@ -14,7 +14,7 @@ public class OrganizationDTO {
     private String email;
     private String address; //remove
     private String firstName;
-    private String secondName;
+    private String lastName;
     private String fullName;
     private OrganizationSubscription subscription;
     private PaymentDetails paymentDetails;
@@ -39,4 +39,29 @@ public class OrganizationDTO {
 
     private List<User> coaches;
 
+    @Override
+    public String toString() {
+        return "OrganizationDTO{" +
+                "id=" + id +
+                ", orgName='" + orgName + '\'' +
+                ", msisdn='" + msisdn + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", subscription=" + subscription +
+                ", paymentDetails=" + paymentDetails +
+                ", notification=" + notification +
+                ", notificationSettings=" + notificationSettings +
+                ", superCoachId=" + superCoachId +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", lastUpdatedBy='" + lastUpdatedBy + '\'' +
+                ", clients=" + clients +
+                ", coaches=" + coaches +
+                '}';
+    }
 }
