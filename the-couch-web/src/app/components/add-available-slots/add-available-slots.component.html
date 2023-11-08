@@ -27,16 +27,19 @@
             </div>
             <div class="col" *ngIf="slot?.dayOfTheWeek?.available">
               <div class="d-flex m-2" *ngFor="let time of slot?.time; let j = index">
-                <select [(ngModel)]="selectedStartTime" name="startTime" class="form-select slots-time" (change)="updateEndTimes()">
-                  <option *ngFor="let allowedTime of allowedTimes" [value]="allowedTime">{{ allowedTime }}</option>
-                </select>
+                <!--time-->
+                <input type="time" variant="success" [(ngModel)]="time.startTime" name="startTime"
+                  class="form-control slots-time" id="inputStartTime" placeholder="Start time" name="startTime" step="1800"
+                  (change)="saveSlot(time, slot.dayOfTheWeek)">
                 <p class="m-2">-</p>
-                <select [(ngModel)]="oneSlot.endTime" name="endTime" class="form-select slots-time">
-                  <option *ngFor="let endTime of availableEndTimes" [value]="endTime">{{ endTime }}</option>
-                </select>
+                <input type="time" variant="success" [(ngModel)]="time.endTime" name="endTime"
+                  class="form-control slots-time" id="inputEndTime" placeholder="End time" name="endTime"
+                  (change)="saveSlot(time, slot.dayOfTheWeek)">
+                <!--delete icon-->
                 <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
               </div>
             </div>
+            
             <div class="col">
               <p class="m-2" *ngIf="!slot?.dayOfTheWeek?.available">Unavailable</p>
               <p class="m-2" *ngIf="slot?.dayOfTheWeek?.available && slot?.time?.length == 0">Add a slot here</p>
