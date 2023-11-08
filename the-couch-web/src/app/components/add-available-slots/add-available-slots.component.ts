@@ -1,3 +1,4 @@
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/ApiService';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { data } from 'jquery';
@@ -5,7 +6,6 @@ import { emptySlots } from './emptySlots';
 import { ToastrService } from 'ngx-toastr';
 import { CalendlyService } from 'src/app/services/calendly.service';
 import { LoginService } from 'src/app/services/LoginService';
-import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-add-available-slots',
@@ -22,7 +22,9 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class AddAvailableSlotsComponent implements OnInit {
-  slots: any = [];
+
+  slots: any = [
+  ];
 
   sunday: any = [];
   monday: any = [];
@@ -40,7 +42,7 @@ export class AddAvailableSlotsComponent implements OnInit {
     startTime: '',
     endTime: '',
     dayOfTheWeek: {},
-  };
+  }
 
   user: any;
   coachSessionData: any;
@@ -56,21 +58,17 @@ export class AddAvailableSlotsComponent implements OnInit {
   page: number = 0;
   pageSize: number = 15;
   totalElements: any;
-  allowedTimes: string[] = [];
-  availableEndTimes: string[] = this.allowedTimes.slice();
-  selectedStartTime: string = ''; // Declare the selectedStartTime property here
-  selectedEndTime: string = ''; 
 
-  
 
   constructor(
     private apiService: ApiService,
     private toastrService: ToastrService,
     private calendlyService: CalendlyService,
     private loginService: LoginService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+
     this.coachSessionData = sessionStorage.getItem('user');
     this.user = JSON.parse(this.coachSessionData);
 
@@ -80,143 +78,80 @@ export class AddAvailableSlotsComponent implements OnInit {
 
     if (this.userRole == 'ORGANIZATION') {
       this.orgId = this.user.id;
+
     } else if (this.userRole == 'COACH') {
       this.coachId = this.user.id;
     }
 
     this.getDaysOfWeek();
+    
 
-    
-    for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const formattedHour = hour.toString().padStart(2, '0');
-        const formattedMinute = minute.toString().padStart(2, '0');
-        this.allowedTimes.push(`${formattedHour}:${formattedMinute}`);
-      }
-    }
-    
-    
-    
-    
   }
 
   createCalendlyHtml() {
-    let calendlyHtml = this.calendlyService.createCalendlyHtml(
-      'Preview your',
-      this.calendlyUsername
-    );
+    let calendlyHtml = this.calendlyService.createCalendlyHtml('Preview your', this.calendlyUsername);
 
+    
+    // Step 8: Add the HTML snippet to the DOM.
+    // Check if the element with id 'calendly' exists in the document
     const calendlyElement = document.getElementById('calendly');
 
     if (calendlyElement) {
+      // The element exists, so set its innerHTML
       calendlyElement.innerHTML = calendlyHtml;
     } else {
+      // The element doesn't exist, handle the error or take appropriate action
       console.error("Element with id 'calendly' not found in the document.");
     }
+
   }
-  updateEndTimes() {
-    if (this.selectedStartTime) {
-      const startTimeIndex = this.allowedTimes.indexOf(this.selectedStartTime);
-      if (startTimeIndex !== -1) {
-        // Update available end times to include only times greater than or equal to the selected start time
-        this.availableEndTimes = this.allowedTimes.slice(startTimeIndex);
-      }
-    } else {
-      // If no start time is selected, reset the available end times to all allowed times
-      this.availableEndTimes = this.allowedTimes.slice();
-    }
-  }
+
 
   submitCalendlyUsername() {
     this.settingCalendlyUsername = true;
 
     this.loginService.setCalendlyUsername(this.calendlyUsername).subscribe({
       next: (response: any) => {
+        console.log(response);
         this.user.calendlyUsername = this.calendlyUsername;
         sessionStorage.setItem('user', JSON.stringify(this.user));
         this.settingCalendlyUsername = false;
         this.toastrService.success('Calendly username saved successfully');
         this.createCalendlyHtml();
-      },
+      }
     });
   }
+
+
   addSlot() {
-    if (this.oneSlot.sessionDate && this.oneSlot.startTime && this.oneSlot.endTime) {
-      const formattedStartTime = this.oneSlot.startTime;
-      const formattedEndTime = this.oneSlot.endTime;
-  
-      const startTimeDate = new Date(`2000-01-01T${formattedStartTime}`);
-      const endTimeDate = new Date(`2000-01-01T${formattedEndTime}`);
-  
-      // Filter allowedTimes to remove times that are less than the selected startTime
-      const filteredAllowedTimes = this.allowedTimes.filter(time => {
-        const timeDate = new Date(`2000-01-01T${time}`);
-        return timeDate >= startTimeDate;
-      });
-  
-      if (filteredAllowedTimes.includes(this.oneSlot.startTime) && filteredAllowedTimes.includes(this.oneSlot.endTime) && endTimeDate > startTimeDate) {
-        const dayOfTheWeek = new Date(this.oneSlot.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
-        const dayOfTheWeekObject = this.dayOfTheWeeks.find((day: any) => day.day === dayOfTheWeek.toUpperCase());
-  
-        dayOfTheWeekObject.coach = {
-          startTime: formattedStartTime,
-          endTime: formattedEndTime,
-        };
-  
-        this.oneSlot.dayOfTheWeek = dayOfTheWeekObject;
-  
-        const options = {
-          coachId: this.user.id,
-        };
-  
-        this.apiService.addSlot(this.oneSlot, options).subscribe({
-          next: (response) => {
-            const slotMessage = dayOfTheWeekObject.coach.startTime === formattedStartTime ? 'Slot Updated' : 'Slot Added';
-  
-            const newSlot = { ...this.oneSlot };
-            this.slots.push(newSlot);
-  
-            this.toastrService.success(`${slotMessage} successfully`);
-          },
-          error: (error) => {
-            this.toastrService.error('Failed to add/update slot. Please check the selected time format.');
-          },
-        });
-      } else {
-        if (!(endTimeDate > startTimeDate)) {
-          this.toastrService.error('End time must be greater than the start time.');
-        } else {
-          this.toastrService.error('Please select valid start and end times from the allowed times.');
+    //Determines the name of the day of the week of the date entered
+    let dayOfTheWeek = new Date(this.oneSlot.sessionDate).toLocaleDateString('en-US', { weekday: 'long' });
+    //find the day of the week in the array of days of the week return the object
+    let dayOfTheWeekObject = this.dayOfTheWeeks.find((day: any) => day.day === dayOfTheWeek.toUpperCase());
+    //add the day of the week object to the slot object
+    dayOfTheWeekObject.coach = {};
+
+    this.oneSlot.dayOfTheWeek = dayOfTheWeekObject;
+
+    const options = {
+      coachId: this.user.id,
+    };
+
+    this.apiService.addSlot(this.oneSlot, options).subscribe({
+      next: (response) => {
+        this.toastrService.success('Slot added successfully');
+        //clear the oneSlot object
+        this.oneSlot = {
+          sessionDate: '',
+          startTime: '',
+          endTime: '',
+          dayOfTheWeek: {},
         }
+        this.getCoachSlots(this.page);
       }
-    } else {
-      this.toastrService.error('Please provide both start and end times.');
-    }
+    });
+
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  formatTime(time: string): string {
-    const [formattedHour, minutePart] = time.split(':');
-    const [hourPart, amPm] = formattedHour.split(' ');
-  
-    const hour = (amPm === 'PM' ? (parseInt(hourPart) === 12 ? 12 : parseInt(hourPart) + 12) : parseInt(hourPart)).toString().padStart(2, '0');
-    const minute = minutePart;
-  
-    return `${hour}:${minute}`;
-  }
-  
 
   getCoachSlots(page: number) {
     this.combinedSlots = [];
@@ -231,11 +166,10 @@ export class AddAvailableSlotsComponent implements OnInit {
       next: (response) => {
         this.processData(response.body);
         this.loading = false;
-      },
-      error: (error) => {
+      }, error: (error) => {
         console.log(error);
         this.loading = false;
-      },
+      }
     });
   }
 
@@ -313,7 +247,6 @@ export class AddAvailableSlotsComponent implements OnInit {
       }
 
     }
-  
 
     //update the empty slots with the slots that have been booked
     emptySlots.sunday[0].dayOfTheWeek = this.dayOfTheWeeks[0];
