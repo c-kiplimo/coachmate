@@ -117,7 +117,10 @@ public class SessionService {
 
         try {
             sessionSchedulesService.updateBookedState(sessionSchedules.getId());
-            return sessionRepository.save(sessionRequest);
+            Session createdSession = sessionRepository.save(sessionRequest);
+//            send notification to client
+            NotificationHelper.sendSessionCreatedNotificationToClient(createdSession);
+            return createdSession;
         } catch (Exception e) {
             log.error("Error occurred ", e);
             throw new IllegalArgumentException(e.getMessage());
@@ -138,7 +141,7 @@ public class SessionService {
             log.info("Session with id {} found", sessionId);
             Session session = sessionOptional.get();
 
-            if (sessionRequest.getName() != null && sessionRequest.getName().length() > 0) {
+            if (sessionRequest.getName() != null && !sessionRequest.getName().isEmpty()) {
                 session.setName(sessionRequest.getName());
             }
 
@@ -150,7 +153,7 @@ public class SessionService {
                 session.setSessionStatus(sessionRequest.getSessionStatus());
             }
 
-            if (sessionRequest.getNotes() != null && session.getNotes().length() > 0) {
+            if (sessionRequest.getNotes() != null && !session.getNotes().isEmpty()) {
                 session.setNotes(sessionRequest.getNotes());
             }
 
