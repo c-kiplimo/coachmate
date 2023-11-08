@@ -1,99 +1,248 @@
-<br>
-<div class="row justify-content-center text-center">
-  <div class="col-md-12">
-    <div class="row justify-content-center">
+<div class="container-fluid mt-3 mb-5">
+  <div class="sticky-top mb-3" [ngClass]="{'sticky-top-with-banner':bannerPresent , 'sticky-top-without-banner':!bannerPresent}">
+    <div class="d-flex justify-content-between page-title p-3">
+      <a class="back-navigation" (click)="back()">
+        <i class="fas fa-chevron-left pe-3 pt-1 back-icon"></i>
+        User profile
+      </a>
 
-      <div class="col-md-9">
-        <div class="card">
-          <div class="card-body">
-              <img src="../../../assets/images/cat_user.png" alt="Generic placeholder image"
-                class="img-fluid img-thumbnail mt-4 mb-2" style="width: 100px; border-radius: 50%;" />
-              <h4 class="fw-semi-bold fs-5">{{ user.firstName }}</h4>
-              <h6 class="fw-semi-bold smaller-font">{{ user.userRole }}</h6>
-
-           
-            <hr>
-            <div class="row justify-content-center">
-              <div class="col-md-4">
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">First Name</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.firstName | titlecase }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Last Name</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.lastName | titlecase }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Phone Number</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.msisdn }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Email </h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.email }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">{{ user?.docTypeName }}</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.docId }}
-                  </span>
-                </div>
-              </div>
-              <div class="col-md-2">
-
-              </div>
-
-              <div class="col-md-4">
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Status</h6>
-                  <span class="badge" [ngClass]="{
-                    'badge-success': user.coachStatus === 'ACTIVE',
-                    'badge-danger': user.coachStatus === 'SUSPENDED',
-                    'badge-primary': user.coachStatus === 'NEW'
-                  }">{{ user.coachStatus }}</span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">User role</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.userRole }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Organisation</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.businessName }}
-                  </span>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Created At</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.createdAt | date: 'EEE d MMMM y, h:mm a' }}
-                  </span>
-                </div>
-                <div *ngIf="user.updatedAt != null" class="d-flex justify-content-between mb-2">
-                  <h6 class="faded smaller-font">Updated At</h6>
-                  <span class="customer-name" class="mb-0">
-                    {{ user?.updatedAt | date: 'dd/MM/yyyy' }}
-                  </span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
+  <div class="container customer-details">
+    <div class="card card-table" style="padding: 10px; margin: 10px;">
+      <div class="alert alert-success" *ngIf="saveSuccess" [@fadeIn]>
+        <span>Profile changes saved succesfully</span>
+      </div>
 
+      <div
+        class="d-flex justify-content-between align-items-center border-bottom p-2"
+        *ngIf="!editingSettings"
+        [@fadeIn]
+      >
+        <h2 class="fw-semi-bold">Overview</h2>
 
-  <!---Edit profile Modal-->
+        <button
+          class="btn btn-add"
+          (click)="toggleEditingSettings()"
+          [disabled]="disableButton"
+        >
+          Edit
+        </button>
+      </div>
 
-  <!--End of Modal-->
+      <div class="donut-wrapper" *ngIf="isSaving" [@fadeIn]>
+        <div class="donut multi"></div>
+      </div>
+
+      <div class="logo p-2">
+        <div class="current-image-holder" *ngIf="!editingSettings" [@fadeIn]>
+          <img
+            class="current-logo"
+            [src]="
+              !user?.userSettings?.logoUrl?.length
+                ? '../../../assets/images/user.png'
+                : user?.userSettings?.logoUrl
+            "
+            alt="logo"
+          />
+        </div>
+      
+        <div *ngIf="editingSettings" [@fadeIn]>
+          <div class="d-flex">
+            <div class="me-5">
+              <div class="image-holder">
+                <div class="custom-file-div text-center">
+                  <div class="image-container" *ngIf="imageSrc">
+                    <img [src]="imageSrc" />
+                  </div>
+                  <!-- Use a placeholder image here -->
+                  <div class="wrap" [@fadeIn]>
+                    <img
+                      src="../../../assets/images/user.png"
+                      alt="Placeholder"
+                      class="placeholder-image"
+                    />
+                    <!-- <input
+                      type="file"
+                      class="custom-file-input"
+                      (change)="onThumbnailChange($event)"
+                      accept=".png, .jpg, .jpeg"
+                      id="uploadfile"
+                      name="file"
+                    /> -->
+                  </div>
+                </div>
+                <span><i class="fas fa-camera"></i></span>
+              </div>
+            </div>
+      
+            <div class="">
+              <div class="image-meta-data" *ngIf="thumbnailName" [@fadeIn]>
+                <h5 class="sub-section-title">Image details</h5>
+                <div class="">
+                  <span class="d-block">{{ thumbnailName }}</span>
+                  <small
+                    ><strong
+                      >{{
+                        currentThumbnailUpload?.size >= 1000000
+                          ? (currentThumbnailUpload?.size / 1000000
+                              | number : "1.2-2") + " MB"
+                          : (currentThumbnailUpload?.size / 1000
+                              | number : "1.2-2") + " kb"
+                      }}
+                    </strong></small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <span
+            *ngIf="wrongFileFormat || fileTooLarge"
+            class="uploading-message d-block my-2"
+            [ngClass]="{ redText: wrongFileFormat || fileTooLarge }"
+            [innerHTML]="message"
+          ></span>
+        </div>
+      </div>
+      
+
+      <div
+      class="d-flex justify-content-between p-3"
+      [ngClass]="{ 'flex-column-sm': editingSettings }"
+      *ngIf="userRole === 'COACH' || userRole === 'ORGANIZATION'"
+    >
+      <span class="title fs-6">Business name</span>
+      <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+        this.user.businessName
+      }}</span>
+      <input
+        *ngIf="editingSettings"
+        [@fadeIn]
+        [(ngModel)]="user.businessName"
+        type="text"
+        class="form-control select-dropdown"
+        name="businessName"
+        [disabled]="isSaving"
+      />
+    </div>
+    
+    
+
+      <div
+        class="d-flex justify-content-between p-3"
+        [ngClass]="{ 'flex-column-sm': editingSettings }"
+      >
+        <span class="title fs-6">First name</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+          this.user.firstName
+        }}</span>
+        <input
+          *ngIf="editingSettings"
+          [@fadeIn]
+          [(ngModel)]="user.firstName"
+          type="text"
+          class="form-control select-dropdown"
+          name="firstName"
+          [disabled]="isSaving"
+        />
+      </div>
+
+      <div
+        class="d-flex justify-content-between p-3"
+        [ngClass]="{ 'flex-column-sm': editingSettings }"
+      >
+        <span class="title fs-6">Last name</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+          this.user.lastName
+        }}</span>
+        <input
+          *ngIf="editingSettings"
+          [@fadeIn]
+          [(ngModel)]="user.lastName"
+          type="text"
+          class="form-control select-dropdown"
+          name="lastName"
+          [disabled]="isSaving"
+        />
+      </div>
+
+      <div
+        class="d-flex justify-content-between p-3"
+        [ngClass]="{ 'flex-column-sm': editingSettings }"
+      >
+        <span class="title fs-6" for="displayName">Phone number</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+          this.user.msisdn
+        }}</span>
+        <input
+          *ngIf="editingSettings"
+          [@fadeIn]
+          [(ngModel)]="user.msisdn"
+          type="text"
+          class="form-control select-dropdown"
+          name="phonenumber"
+          [disabled]="isSaving"
+        />
+      </div>
+
+      <div
+        class="d-flex justify-content-between border-0 p-3"
+        [ngClass]="{ 'flex-column-sm': editingSettings }"
+      >
+        <span class="title fs-6" for="displayName">Email</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{
+          this.user.email
+        }}</span>
+        <input
+          *ngIf="editingSettings"
+          [@fadeIn]
+          [(ngModel)]="user.email "
+          type="text"
+          class="form-control select-dropdown"
+          name="email"
+          [disabled]="true"
+        />
+      </div>
+      
+      <div class="d-flex justify-content-between border-0 p-3" [ngClass]="{ 'flex-column-sm': editingSettings }">
+        <span class="title fs-6" for="displayName">User Role</span>
+        <span class="description" *ngIf="!editingSettings" [@fadeIn]>{{ userRole }}</span>
+        <input
+          *ngIf="editingSettings"
+          [@fadeIn]
+          [(ngModel)]="userRole"
+          type="text"
+          class="form-control select-dropdown"
+          name="userRole"
+          [disabled]="true"
+        />
+      </div>
+      
+      
+
+      <div
+        class="d-flex justify-content-end border-0 mt-3"
+        *ngIf="editingSettings"
+        [@fadeIn]
+      >
+        <button
+          class="btn btn-back"
+          (click)="toggleEditingSettings()"
+          [disabled]="disableButton || isSaving"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-add ms-2"
+          (click)="saveProfileSettings()"
+          [disabled]="disableButton || isSaving"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

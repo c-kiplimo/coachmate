@@ -1,18 +1,20 @@
 package com.natujenge.thecouch.service;
 import com.natujenge.thecouch.domain.*;
 import com.natujenge.thecouch.domain.enums.*;
+import com.natujenge.thecouch.exception.UserNotFoundException;
 import com.natujenge.thecouch.repository.ClientWalletRepository;
 import com.natujenge.thecouch.repository.ContractTemplatesRepository;
+import com.natujenge.thecouch.repository.OrganizationRepository;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.security.SecurityUtils;
 import com.natujenge.thecouch.service.mapper.ClientMapper;
 import com.natujenge.thecouch.service.mapper.CoachMapper;
+import com.natujenge.thecouch.service.mapper.OrganizationMapper;
 import com.natujenge.thecouch.service.mapper.UserMapper;
 import com.natujenge.thecouch.service.notification.NotificationServiceHTTPClient;
 import com.natujenge.thecouch.util.OnBoardCoachUtil;
 import com.natujenge.thecouch.web.rest.dto.*;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
-import com.natujenge.thecouch.web.rest.request.CoachRequest;
 import com.natujenge.thecouch.web.rest.request.ContractTemplatesRequest;
 import com.natujenge.thecouch.web.rest.request.UserTokenConfirmRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +38,11 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserService implements UserDetailsService {
+    private final OrganizationRepository organizationRepository;
     private final static String USER_NOT_FOUND_MSG = "User with Email %s not found!";
     private final static String USER_EXISTS = "Email %s Taken!";
     private final CoachMapper coachMapper;
+    private final OrganizationMapper organizationMapper;
     private final UserRepository userRepository;
     private final RegistrationService registrationService;
     private final ClientWalletRepository clientWalletRepository;
@@ -53,7 +57,8 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final ClientMapper clientMapper;
 
-    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService, UserMapper userMapper, ClientMapper clientMapper) {
+    public UserService(CoachMapper coachMapper, UserRepository userRepository, @Lazy RegistrationService registrationService, ClientWalletRepository clientWalletRepository, ClientBillingAccountService clientBillingAccountService, PaymentDetailsService paymentDetailsService, CoachSettingsService coachSettingsService, NotificationSettingsService notificationSettingsService, ContractTemplatesRepository contractTemplatesRepository, PasswordEncoder passwordEncoder, ConfirmationTokenService confirmationTokenService, UserMapper userMapper, ClientMapper clientMapper,
+                       OrganizationRepository organizationRepository, OrganizationMapper organizationMapper) {
         this.coachMapper = coachMapper;
         this.userRepository = userRepository;
         this.registrationService = registrationService;
@@ -67,6 +72,8 @@ public class UserService implements UserDetailsService {
         this.confirmationTokenService = confirmationTokenService;
         this.userMapper = userMapper;
         this.clientMapper = clientMapper;
+        this.organizationRepository = organizationRepository;
+        this.organizationMapper = organizationMapper;
     }
 
     public User enableAppUser(String email) {
@@ -90,7 +97,6 @@ public class UserService implements UserDetailsService {
         enableAppUser(user.getMsisdn());
         return;
     }
-
 
 
     //Client as User
@@ -124,7 +130,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
+                LocalDateTime.now().plusMinutes(60 * 48), // expires after 2 days of generation
                 user
         );
 
@@ -141,7 +147,7 @@ public class UserService implements UserDetailsService {
 
 
     // Coach as user
-    public List<Object> signupCoachAsUser(User user ) {
+    public List<Object> signupCoachAsUser(User user) {
         log.info("Signing up coach as user");
         boolean userEmailExists = userRepository.findByEmail(user.getEmail())
                 .isPresent();
@@ -167,7 +173,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(60*48),
+                LocalDateTime.now().plusMinutes(60 * 48),
                 user
         );
 
@@ -181,11 +187,12 @@ public class UserService implements UserDetailsService {
         return response;
 
     }
+
     public void updateUser(User registeredUser) {
         log.info("Request to update user : {}", registeredUser.getFirstName());
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findUserByUsername(registeredUser.getUsername()));
 
-        if(optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             throw new IllegalStateException("User with username " + registeredUser.getUsername() + " not found!");
         }
 
@@ -221,6 +228,7 @@ public class UserService implements UserDetailsService {
 
         return userRepository.findByMsisdn(msisdn);
     }
+
     public Optional<UserDTO> findByUsernameDto(Long userId) {
         log.info("User ID Serv   {} ", userId);
         return userRepository.findById(userId).map(userMapper::toDto);
@@ -228,12 +236,12 @@ public class UserService implements UserDetailsService {
     }
 
     // check if client exists
-    public boolean doesUserExistByEmailAddress(String emailAddress){
+    public boolean doesUserExistByEmailAddress(String emailAddress) {
         Optional<User> client = userRepository.findUserByEmail(emailAddress);
         return client.isPresent();
     }
 
-    public User addNewClient(User userDetails,Organization organization,
+    public User addNewClient(User userDetails, Organization organization,
                              ClientRequest clientRequest) {
         log.info("add a new client");
         // Check if client already exists
@@ -288,7 +296,7 @@ public class UserService implements UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(60*48), // expires after 2 days of generation
+                LocalDateTime.now().plusMinutes(60 * 48), // expires after 2 days of generation
                 user
         );
 
@@ -303,8 +311,8 @@ public class UserService implements UserDetailsService {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         String subject = "Your coachMatePro Account Has Been Created.";
         String content = "Hey, use this link to confirm your account and set your password," +
-                "https://coachmate.pro/confirmclient/"+saveClient.getId()+"/"+token;
-        notificationServiceHTTPClient.sendEmail(saveClient.getEmail(),subject, content, false);
+                "https://coachmate.pro/confirmclient/" + saveClient.getId() + "/" + token;
+        notificationServiceHTTPClient.sendEmail(saveClient.getEmail(), subject, content, false);
         notificationServiceHTTPClient.sendSMS(saveClient.getMsisdn(), subject, content, String.valueOf(false));
 
         log.info(" client saved");
@@ -360,16 +368,16 @@ public class UserService implements UserDetailsService {
 
     private void savePaymentDetails(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO) {
         PaymentDetailsDTO savedPaymentDetailsDTO = paymentDetailsService.findTopByCoachId(coachDTO.getId());
-        if (savedPaymentDetailsDTO == null){
+        if (savedPaymentDetailsDTO == null) {
             savedPaymentDetailsDTO = new PaymentDetailsDTO();
         }
         PaymentDetailsDTO paymentDetailsDTO = OnBoardCoachUtil.extractPaymentData(onBoardCoachDTO, coachDTO, savedPaymentDetailsDTO);
         paymentDetailsService.save(paymentDetailsDTO);
     }
 
-    private void saveSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO){
+    private void saveSettings(OnBoardCoachDTO onBoardCoachDTO, CoachDTO coachDTO) {
         CoachSettingsDTO coachSettingsDTO = coachSettingsService.findTopByCoachId(coachDTO.getId());
-        if (coachSettingsDTO == null){
+        if (coachSettingsDTO == null) {
             coachSettingsDTO = new CoachSettingsDTO();
         }
 
@@ -385,7 +393,7 @@ public class UserService implements UserDetailsService {
             notificationSettingsDTO = notificationSettingsDTOOptional.get();
         }
 
-        NotificationSettingsDTO notificationSettings = OnBoardCoachUtil.extractNotificationSettings(onBoardCoachDTO, coachDTO,notificationSettingsDTO);
+        NotificationSettingsDTO notificationSettings = OnBoardCoachUtil.extractNotificationSettings(onBoardCoachDTO, coachDTO, notificationSettingsDTO);
         notificationSettingsService.save(notificationSettings);
     }
 
@@ -398,7 +406,6 @@ public class UserService implements UserDetailsService {
         contractTemplate.setTerms_and_conditionsTemplate(contractTemplatesRequest.getTerms_and_conditionsTemplate());
         return contractTemplatesRepository.save(contractTemplate);
     }
-
 
 
     public Optional<User> confirmClientTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
@@ -436,14 +443,14 @@ public class UserService implements UserDetailsService {
     }
 
     //Example for getting clients
-    private User createExample (Long coachId, String status, String search, Long organizationId) {
+    private User createExample(Long coachId, String status, String search, Long organizationId) {
         User userClientExample = new User();
         User userCoach = new User();
         Organization organization = new Organization();
         log.info("Request to get clients by coachId: {}", coachId);
 
         userClientExample.setUserRole(UserRole.CLIENT);
-        if(organizationId != null) {
+        if (organizationId != null) {
             userClientExample.setOrganization(organization);
             userClientExample.getOrganization().setId(organizationId);
         }
@@ -455,7 +462,7 @@ public class UserService implements UserDetailsService {
             userClientExample.setClientStatus(ClientStatus.valueOf(status));
         }
         if (search != null && !search.isEmpty()) {
-            if(search.contains("@")) {
+            if (search.contains("@")) {
                 userClientExample.setEmail(search);
             } else if (search.startsWith("+") || search.matches("[0-9]+")) {
                 userClientExample.setMsisdn(search);
@@ -467,7 +474,7 @@ public class UserService implements UserDetailsService {
         return userClientExample;
     }
 
-    private User createExample_( String status, String search, Long organizationId) {
+    private User createExample_(String status, String search, Long organizationId) {
         User userCoachExample = new User();
         Organization organization = new Organization();
         log.info("Request to get coaches by orgId: {}", organizationId);
@@ -507,13 +514,14 @@ public class UserService implements UserDetailsService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths("locked", "enabled","onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
+                .withIgnorePaths("locked", "enabled", "onboarded", "addedBy.locked", "addedBy.enabled", "addedBy.onboarded")
                 .withIgnoreNullValues();
         Example<User> example = Example.of(user, matcher);
 
         //return example
         return userRepository.findAll(example, pageable).map(clientMapper::toDto);
     }
+
     public Page<CoachDTO> getCoaches(
             String status,
             String search,
@@ -533,44 +541,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll(example, pageable).map(coachMapper::toDto);
     }
 
-    public User editClient(Long clientId, User userDetails, ClientRequest clientRequest) {
-        log.info("Request to edit client: {}", clientRequest);
-        Optional<User> userOptional = userRepository.findById(clientId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setFullName(clientRequest.getFirstName() + " " + clientRequest.getLastName());
-            user.setFirstName(clientRequest.getFirstName());
-            user.setLastName(clientRequest.getLastName());
-            user.setMsisdn(clientRequest.getMsisdn());
-            user.setEmail(clientRequest.getEmail());
-            user.setPhysicalAddress(clientRequest.getPhysicalAddress());
-            user.setReason(clientRequest.getReason());
-            user.setPaymentMode(clientRequest.getPaymentMode());
-            user.setClientType(clientRequest.getClientType());
-            user.setLastUpdatedBy(userDetails.getFullName());
-            user.setLastUpdatedAt(LocalDateTime.now());
-            return userRepository.save(user);
-        } else {
-            throw new IllegalStateException("Client not found");
-        }
-    }
-    public User editCoach(Long coachId, User userDetails, CoachRequest coachRequest) {
-        log.info("Request to edit coach: {}", coachRequest);
-        Optional<User> userOptional = userRepository.findById(coachId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setFullName(coachRequest.getFirstName() + " " + coachRequest.getLastName());
-            user.setFirstName(coachRequest.getFirstName());
-            user.setLastName(coachRequest.getLastName());
-            user.setMsisdn(coachRequest.getMsisdn());
-            user.setEmail(coachRequest.getEmail());
-            user.setLastUpdatedBy(userDetails.getFullName());
-            user.setLastUpdatedAt(LocalDateTime.now());
-            return userRepository.save(user);
-        } else {
-            throw new IllegalStateException("Coach not found");
-        }
-    }
     public User getClientById(Long clientId, User userDetails) {
         log.info("Request to get client by id: {}", clientId);
         Optional<User> userOptional = userRepository.findById(clientId);
@@ -578,12 +548,12 @@ public class UserService implements UserDetailsService {
     }
 
 
-
     public User getCoachById(Long coachId, User userDetails) {
         log.info("Request to get coach by id: {}", coachId);
         Optional<User> userOptional = userRepository.findById(coachId);
         return userOptional.orElseThrow(() -> new IllegalStateException("Coach not found"));
     }
+
     public Optional<User> confirmCoachTokenAndUpdatePassword(UserTokenConfirmRequest userTokenConfirmRequest) {
         log.info("Request to confirm coach token and update password: {}", userTokenConfirmRequest);
         Optional<User> userOptional = userRepository.findById(userTokenConfirmRequest.getId());
@@ -617,6 +587,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Invalid Coach");
         }
     }
+
     @Transactional
     public ClientDTO updateClientStatus(Long id, ClientStatus clientStatus) {
         log.info("Changing status of client {} to status {}", id, clientStatus);
@@ -633,8 +604,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Client is in Suspended State");
         } else if (Objects.equals(clientStatus, ClientStatus.CLOSED)) {
             client.setClientStatus(ClientStatus.CLOSED);
-        }
-        else if (Objects.equals(clientStatus, ClientStatus.SUSPENDED)) {
+        } else if (Objects.equals(clientStatus, ClientStatus.SUSPENDED)) {
             client.setClientStatus(ClientStatus.SUSPENDED);
         } else if (Objects.equals(clientStatus, ClientStatus.ACTIVE)) {
             client.setClientStatus(ClientStatus.ACTIVE);
@@ -696,19 +666,86 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Transactional
-    public UserDTO save(UserDTO userDTO){
-        if (userDTO.getId()== null){
-            userDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
-            userDTO.setCreatedAt(LocalDateTime.now());
+    public CoachDTO saveCoach(CoachDTO coachDTO) {
+        User existingUser = userRepository.findById(coachDTO.getId()).orElse(null);
+
+        if (existingUser != null) {
+            if (coachDTO.getId() == null) {
+                coachDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+                coachDTO.setCreatedAt(LocalDateTime.now());
+            } else {
+                coachDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+                coachDTO.setLastUpdatedAt(LocalDateTime.now());
+            }
+
+            existingUser.setBusinessName(coachDTO.getBusinessName());
+            existingUser.setFirstName(coachDTO.getFirstName());
+            existingUser.setLastName(coachDTO.getLastName());
+            existingUser.setEmail(coachDTO.getEmail());
+            existingUser.setMsisdn(coachDTO.getMsisdn());
+            existingUser.setFullName(coachDTO.getFirstName() + ' ' + coachDTO.getLastName());
+
+            userRepository.save(existingUser);
         } else {
-            userDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
-            userDTO.setLastUpdatedAt(LocalDateTime.now());
+            throw new UserNotFoundException("User with ID " + coachDTO.getId() + " not found");
         }
 
-        User user = userMapper.toEntity(userDTO);
-        user = userRepository.save(user);
+        return coachDTO;
+    }
 
-        return userMapper.toDto(user);
+    public ClientDTO saveClient(ClientDTO clientDTO) {
+        User existingUser = userRepository.findById(clientDTO.getId()).orElse(null);
+
+        if (existingUser != null) {
+            if (clientDTO.getId() == null) {
+                clientDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+                clientDTO.setCreatedAt(LocalDateTime.now());
+            } else {
+                clientDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+                clientDTO.setLastUpdatedAt(LocalDateTime.now());
+            }
+
+            existingUser.setMsisdn(clientDTO.getMsisdn());
+            existingUser.setFirstName(clientDTO.getFirstName());
+            existingUser.setLastName(clientDTO.getLastName());
+            existingUser.setEmail(clientDTO.getEmail());
+            existingUser.setFullName(clientDTO.getFirstName() + ' ' + clientDTO.getLastName());
+
+
+            // Update other client-related properties...
+
+            userRepository.save(existingUser);
+        } else {
+            throw new UserNotFoundException("User with ID " + clientDTO.getId() + " not found");
+        }
+
+        return clientDTO;
+    }
+
+    public OrganizationDTO saveOrganization(OrganizationDTO organizationDTO) {
+        User existingUser = userRepository.findById(organizationDTO.getId()).orElse(null);
+        if (existingUser != null) {
+            if (organizationDTO.getId() == null) {
+                organizationDTO.setCreatedBy(SecurityUtils.getCurrentUsername());
+                organizationDTO.setCreatedAt(LocalDateTime.now());
+            } else {
+                organizationDTO.setLastUpdatedBy(SecurityUtils.getCurrentUsername());
+                organizationDTO.setLastUpdatedAt(LocalDateTime.now());
+            }
+
+            existingUser.setMsisdn(organizationDTO.getMsisdn());
+            existingUser.setFirstName(organizationDTO.getFirstName());
+            existingUser.setLastName(organizationDTO.getLastName());
+            existingUser.setEmail(organizationDTO.getEmail());
+            existingUser.setFullName(organizationDTO.getFirstName() + ' ' + organizationDTO.getLastName());
+            existingUser.setBusinessName(organizationDTO.getOrgName());
+
+
+            userRepository.save(existingUser);
+        } else {
+            throw new UserNotFoundException("User with ID " + organizationDTO.getId() + " not found");
+        }
+
+return organizationDTO;
     }
 }

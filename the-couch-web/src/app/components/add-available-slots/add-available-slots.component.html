@@ -27,15 +27,13 @@
             </div>
             <div class="col" *ngIf="slot?.dayOfTheWeek?.available">
               <div class="d-flex m-2" *ngFor="let time of slot?.time; let j = index">
-                <!--time-->
-                <input type="time" variant="success" [(ngModel)]="time.startTime" name="startTime"
-                  class="form-control slots-time" id="inputEmail4" placeholder="Start time" name="startTime" step="3600"
-                  (change)="saveSlot(time, slot.dayOfTheWeek)">
+                <select [(ngModel)]="selectedStartTime" name="startTime" class="form-select slots-time" (change)="updateEndTimes()">
+                  <option *ngFor="let allowedTime of allowedTimes" [value]="allowedTime">{{ allowedTime }}</option>
+                </select>
                 <p class="m-2">-</p>
-                <input type="time" variant="success" [(ngModel)]="time.endTime" name="endTime"
-                  class="form-control slots-time" id="inputEmail4" placeholder="End time" name="endTime"
-                  (change)="saveSlot(time, slot.dayOfTheWeek)">
-                <!--delete icon-->
+                <select [(ngModel)]="oneSlot.endTime" name="endTime" class="form-select slots-time">
+                  <option *ngFor="let endTime of availableEndTimes" [value]="endTime">{{ endTime }}</option>
+                </select>
                 <i class="fa fa-trash m-2 p-2 delete" (click)="deleteSlot(time, slot?.time, j)"></i>
               </div>
             </div>
@@ -55,10 +53,11 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
+
+
 
 <div class="row justify-content-center m-2 p-3">
   <div class="col-md-8">
@@ -72,9 +71,17 @@
           <!--calendly username-->
           <div class="form-group">
             <label for="calendlyUsername">Calendly Username *</label>
-            <small class="form-text text-muted">(Enter your Calendly username to connect your account)</small>
-            <input type="text" class="form-control" id="calendlyUsername" placeholder="Calendly Username"
-              [(ngModel)]="calendlyUsername" (keyup)="createCalendlyHtml()" />
+            <small class="form-text text-muted"
+              >(Enter your Calendly username to connect your account)</small
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="calendlyUsername"
+              placeholder="Calendly Username"
+              [(ngModel)]="calendlyUsername"
+              (keyup)="createCalendlyHtml()"
+            />
           </div>
         </div>
       </div>
@@ -91,51 +98,92 @@
       <!--if it works submit-->
       <div class="row" *ngIf="calendlyUsername">
         <div class="col">
-          <small class="form-text text-muted">(If the preview is working, click submit to save your Calendly
-            username)</small>
-          <button type="button" class="btn btn-outline-success m-1" (click)="submitCalendlyUsername()">
+          <small class="form-text text-muted"
+            >(If the preview is working, click submit to save your Calendly
+            username)</small
+          >
+          <button
+            type="button"
+            class="btn btn-outline-success m-1"
+            (click)="submitCalendlyUsername()"
+          >
             Submit
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-
-<div class="modal fade" id="addSlotModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="addSlotModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-l">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 justify-content-center" id="exampleModalLabel">Add a Fixed Date Slot</h1>
+        <h1
+          class="modal-title fs-5 justify-content-center"
+          id="exampleModalLabel"
+        >
+          Add a Fixed Date Slot
+        </h1>
 
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">Date</label>
-              <input type="date" variant="success" [(ngModel)]="oneSlot.sessionDate" name="sessionDate"
-                class="form-control" id="inputEmail4" placeholder="Date" name="sessionDate">
-
+              <input
+                type="date"
+                variant="success"
+                [(ngModel)]="oneSlot.sessionDate"
+                name="sessionDate"
+                class="form-control"
+                id="inputEmail4"
+                placeholder="Date"
+                name="sessionDate"
+              />
             </div>
           </div>
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">Start Time</label>
-              <input type="time" variant="success" [(ngModel)]="oneSlot.startTime" name="startTime" class="form-control"
-                id="inputEmail4" placeholder="Date" name="sessionDate">
-
+              <input
+                type="time"
+                variant="success"
+                [(ngModel)]="oneSlot.startTime"
+                name="startTime"
+                class="form-control"
+                id="inputEmail4"
+                placeholder="Date"
+                name="sessionDate"
+              />
             </div>
           </div>
           <div class="row justify-content-center">
             <div class="col">
               <label for="inputEmail4">End Time</label>
-              <input type="time" variant="success" [(ngModel)]="oneSlot.endTime" name="endTime" class="form-control"
-                id="inputEmail4" placeholder="Date" name="sessionDate">
-
+              <input
+                type="time"
+                variant="success"
+                [(ngModel)]="oneSlot.endTime"
+                name="endTime"
+                class="form-control"
+                id="inputEmail4"
+                placeholder="Date"
+                name="sessionDate"
+              />
             </div>
           </div>
         </form>
@@ -144,7 +192,12 @@
         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" (click)="addSlot()">
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          data-bs-dismiss="modal"
+          (click)="addSlot()"
+        >
           Add Slot
         </button>
       </div>

@@ -9,6 +9,7 @@ import com.natujenge.thecouch.exception.BadRequestException;
 import com.natujenge.thecouch.repository.UserRepository;
 import com.natujenge.thecouch.service.RegistrationService;
 import com.natujenge.thecouch.service.UserService;
+import com.natujenge.thecouch.util.FileUtil;
 import com.natujenge.thecouch.util.PaginationUtil;
 import com.natujenge.thecouch.web.rest.dto.*;
 import com.natujenge.thecouch.web.rest.request.ClientRequest;
@@ -25,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -141,34 +143,7 @@ public class UserResource {
         }
     }
 
-    //EDIT CLIENT
-    @PutMapping(path = "client/{id}")
-    ResponseEntity<?> editClient(@PathVariable("id") Long clientId,
-                                 @RequestBody ClientRequest clientRequest,
-                                 @AuthenticationPrincipal User userDetails) {
-        log.info("Request to edit client {}", clientId);
-        try {
-            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
-            User editedClient;
-            if (organization.isPresent()) {
-                editedClient = userService.editClient(clientId, userDetails, clientRequest);
-            } else {
-                editedClient = userService.editClient(clientId, userDetails, clientRequest);
-            }
 
-            if (editedClient != null) {
-                ClientRequest response = modelMapper.map(editedClient, ClientRequest.class);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new RestResponse(true,
-                        "Client not edited"), HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     //API TO GET CLIENTS BY ORG ID
     @GetMapping(path = "getOrgClients/{id}")
@@ -208,33 +183,7 @@ public class UserResource {
         return ResponseEntity.ok().headers(headers).body(coachDtoPage.getContent());
     }
 
-    @PutMapping(path = "coach/{id}")
-    ResponseEntity<?> editCoach(@PathVariable("id") Long coachId,
-                                @RequestBody CoachRequest coachRequest,
-                                @AuthenticationPrincipal User userDetails) {
-        log.info("Request to edit coach {}", coachId);
-        try {
-            Optional<Organization> organization = Optional.ofNullable(userDetails.getOrganization());
-            User editedCoach;
-            if (organization.isPresent()) {
-                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
-            } else {
-                editedCoach = userService.editCoach(coachId, userDetails, coachRequest);
-            }
 
-            if (editedCoach != null) {
-                CoachRequest response = modelMapper.map(editedCoach, CoachRequest.class);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new RestResponse(true,
-                        "Coach not edited"), HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            log.error("Error ", e);
-            return new ResponseEntity<>(new RestResponse(true, e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @GetMapping(path = "coach/{id}")
     ResponseEntity<?> getCoachById(@PathVariable("id") Long coachId,
@@ -302,20 +251,61 @@ public class UserResource {
         User user = userService.getAddedBy(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    @PutMapping(path="{id}")
-    ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long id) throws BadRequestException {
-        log.info("Request to update user with id : {}", id);
 
-        if (!Objects.equals(userDTO.getId(), id)){
-            throw  new BadRequestException("ID is not valid");
+    @PostMapping("/logo")
+    public ResponseEntity<UploadResponse> uploadLogo(@RequestParam(value = "file") MultipartFile file){
+        log.info("REST Request to upload user Logo");
+        return ResponseEntity.ok().body(FileUtil.uploadFile(file, log));
+    }
+    @PutMapping(path = "organization/{id}")
+    ResponseEntity<OrganizationDTO> updateOrganization(@RequestBody OrganizationDTO organizationDTO,
+                                                       @PathVariable Long id) throws BadRequestException {
+        log.info("Request to update organization with id : {}", id);
+
+        if (!Objects.equals(organizationDTO.getId(), id)) {
+            throw new BadRequestException("ID is not valid");
         }
 
-        if (!userRepository.existsById(id)){
-            throw  new BadRequestException("User with id "+id+" does not exists");
+        if (!userRepository.existsById(id)) {
+            throw new BadRequestException("Organization with id " + id + " does not exists");
         }
-        userDTO.setFullName(userDTO.getFirstName()+" "+userDTO.getLastName());
+        organizationDTO.setFullName(organizationDTO.getFirstName() + " " + organizationDTO.getLastName());
 
-        UserDTO result = userService.save(userDTO);
+        OrganizationDTO result = userService.saveOrganization(organizationDTO);
+        return ResponseEntity.ok().body(result);
+
+    }
+    @PutMapping(path="coaches/{id}")
+    ResponseEntity<CoachDTO> updateCoach(@RequestBody CoachDTO coachDTO,
+                                         @PathVariable Long id) throws BadRequestException {
+        log.info("Request to update coach with id : {}", id);
+
+        if (!Objects.equals(coachDTO.getId(), id)) {
+            throw new BadRequestException("ID is not valid");
+        }
+
+        if (!userRepository.existsById(id)) {
+            throw new BadRequestException("Coach with id " + id + " does not exists");
+        }
+        coachDTO.setFullName(coachDTO.getFirstName() + " " + coachDTO.getLastName());
+
+        CoachDTO result = userService.saveCoach(coachDTO);
+        return ResponseEntity.ok().body(result);
+    }
+    @PutMapping(path="clients/{id}")
+    ResponseEntity<ClientDTO> updateClient(@RequestBody ClientDTO clientDTO,
+                                           @PathVariable Long id) throws BadRequestException {
+        log.info("Request to update client with id : {}", id);
+
+        if (!Objects.equals(clientDTO.getId(), id)) {
+            throw new BadRequestException("ID is not valid");
+        }
+
+        if (!userRepository.existsById(id)) {
+            throw new BadRequestException("Client with id " + id + " does not exists");
+        }
+       clientDTO.setFullName(clientDTO.getFirstName() + " " + clientDTO.getLastName());
+        ClientDTO result = userService.saveClient(clientDTO);
         return ResponseEntity.ok().body(result);
     }
 }

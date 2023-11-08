@@ -163,5 +163,11 @@ navDataforClient: [
         label: 'Support',
         number: 10
     },
+    // {
+    //     routeLink: 'settings',
+    //     icon: 'fa-solid fa-gear',
+    //     label: 'Settings',
+    //     number: 11
+    // },
 ]
 };
