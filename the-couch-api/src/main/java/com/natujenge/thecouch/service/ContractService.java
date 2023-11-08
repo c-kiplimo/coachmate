@@ -127,6 +127,7 @@ public class ContractService {
             contract.setObjective(contractRequest.getObjectives());
 
 
+
             if (organizationId != null) {
 //                assert contract.getOrganization() != null;
 //                contract.getOrganization().setId(organizationId);
@@ -136,6 +137,7 @@ public class ContractService {
 
             log.info("coach------{}", coach);
             contract.setCoach(coach);
+            contract.setClient(client);
 
             contract.setTerms_and_conditions(contractRequest.getTerms_and_conditions());
 
@@ -187,6 +189,7 @@ public class ContractService {
             // settings
             String referenceId = savedcontract.getId().toString();
             String msisdn = savedcontract.getClient().getMsisdn();
+            String email=savedcontract.getClient().getEmail();
 
             log.info("about to send message to Client content: {}, from: {}, to: {}, ref id {}", smsContent,
                     sourceAddress, msisdn, referenceId);
@@ -196,7 +199,7 @@ public class ContractService {
             log.info("sms sent ");
 
             // sendEmail
-            notificationServiceHTTPClient.sendEmail(client.getEmail(), "Contract Created", smsContent, false);
+            notificationServiceHTTPClient.sendEmail(email, "Contract Created", smsContent, false);
             log.info("Email sent");
 
             // create notification object and send it
