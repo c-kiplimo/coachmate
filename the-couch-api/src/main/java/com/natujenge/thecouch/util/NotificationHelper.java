@@ -83,9 +83,9 @@ public class NotificationHelper {
     public static void sendSessionCreatedNotificationToClient(Session createdSession) {
         String smsContent;
 
-        smsContent = "Hello " + createdSession.getClient().getFirstName()+",\n You have a new session" + createdSession.getName()+"with " +
-                " coach: " + createdSession.getCoach().getFullName() + "\n The session will be " + createdSession.getSessionVenue()+ " at "
-                + createdSession.getSessionSchedules().getStartTime() + "to " + createdSession.getSessionSchedules().getEndTime() + "\n See you there!";
+        smsContent = "Hello " + createdSession.getClient().getFirstName()+",\n You have a new session   " + createdSession.getName()+"  with " +
+                " coach  " + createdSession.getCoach().getFullName() + "\n The session will be " + createdSession.getSessionVenue()+ " at "
+                + createdSession.getSessionSchedules().getStartTime() + "  to  " + createdSession.getSessionSchedules().getEndTime() + "\n See you there!";
         // SHORTCODE
         String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS;
         String referenceId = createdSession.getId().toString();
