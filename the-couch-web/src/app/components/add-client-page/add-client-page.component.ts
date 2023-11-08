@@ -41,6 +41,7 @@ export class AddClientPageComponent implements OnInit {
   orgId: any;
   coachSessionData: any;
   coachId: any;
+  error: any;
 
   constructor(
     private ClientService: ClientService,
@@ -107,12 +108,21 @@ export class AddClientPageComponent implements OnInit {
 
     this.ClientService.addClient(details).subscribe(
       (response: any) => {
-        this.toastrService.success('Client added!', 'Success!');
-        // this.router.navigate(['/clients']);
-        this.back();
+        //check if response has error
+        if (response.error) {
+          this.toastrService.error('Error adding client', 'Error!');
+          console.log(response.error);
+          this.error = response.error;
+        } else {
+          this.toastrService.success('Client added successfully', 'Success!');
+//           this.router.navigate(['/clients']);
+          this.back();
+        }
       },
-      error => {
-        this.toastrService.error
+      (error: any) => {
+        this.toastrService.error('Error adding client', 'Error!');
+        console.log(error);
+        this.error = error?.error?.message;
       }
     );
   }

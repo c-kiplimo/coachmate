@@ -42,7 +42,11 @@
     margin-left: 10px;
     text-align: center;
     line-height: 25px;
-    color: #242322;
+    color: #495057;
+}
+
+.nav-list-item:hover i {
+    color: #EF4813;
 }
 
 .nav-list-item span {
@@ -52,7 +56,7 @@
 
 a {
     text-decoration: none;
-    color: #242322;
+    color: #495057;
 }
 
 .active {

@@ -1,19 +1,12 @@
-<div class="row">
-  <div class="col mt-4" style="margin-left: 5px">
-    <h5 class="fw-bold">
-      <i class="fas fa-chevron-left pe-5 pt-3 back-icon back" (click)="back()">
-        Back</i
-      >
-    </h5>
+<div class="d-flex justify-content-between">
+  <div class="mt-4" style="margin-left: 5px">
+    <h2 class="fw-bold"><i class="fas fa-chevron-left pe-3 pt-1 back-icon back" (click)="back()"></i>Add client</h2>
   </div>
 </div>
 
-<div class="row justify-content-center m-2 p-3">
-  <div class="col-md-8">
+<div class="row justify-content-center">
+  <div class="col-md-6 col-sm-12">
     <div class="card card-table justify-content-center align-items-center">
-      <div class="m-3">
-        <h1 class="text-center mb-3"> Add New Client</h1>
-      </div>
       <form class="m-3">
         <div class="row justify-content-center">
           <div class=" mb-3 col-md-12 ">
@@ -23,15 +16,15 @@
           </div>
           <div class=" mb-3 col-md-12 ">
             <label for="exampleInputEmail1">Last Name *</label>
-            <input [(ngModel)]="addClient.lastName" name="lastName" type="lastNname" class="form-control"
-              id="lastName" aria-describedby="emailHelp" placeholder="Last name" required />
+            <input [(ngModel)]="addClient.lastName" name="lastName" type="lastNname" class="form-control" id="lastName"
+              aria-describedby="emailHelp" placeholder="Last name" required />
           </div>
         </div>
         <div class="row justify-content-center">
           <div class=" mb-3 col-md-12 ">
             <label for="exampleInputPassword1">Mobile no *</label>
-            <input required [(ngModel)]="addClient.msisdn" name="msisdn" type="number" class="form-control"
-              id="contact" placeholder="Contact" required
+            <input required [(ngModel)]="addClient.msisdn" name="msisdn" type="number" class="form-control" id="contact"
+              placeholder="Contact" required
               oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
               oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^0/,254).replace(/^7/,2547).replace(/(\..*)\./g, '$1');" />
           </div>
@@ -53,23 +46,23 @@
               placeholder="Enter Client Profession" [(ngModel)]="addClient.profession" required>
           </div>
         </div>
-        
-          <div class="row justify-content-center">
-            <div class="mb-3 col-md-12">
-              <label class="form-group-text" for="paymentMode">Client Type *</label>
-            </div>
-            <div class="mb-3 col-md-12">
-              <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
-                id="flexRadioDefault1" value="PREPAY" [(ngModel)]="addClient.paymentMode"/>
-              <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
-            </div>
-            <div class="mb-3 col-md-12">
-              <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
-                id="flexRadioDefault2" value="POSTPAY" [(ngModel)]="addClient.paymentMode"/>
-              <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
-            </div>
+
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label class="form-group-text" for="paymentMode">Payment Mode *</label>
           </div>
-          <!-- <div class=" mb-3 col-md-12 ">
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+              id="flexRadioDefault1" value="PREPAY" [(ngModel)]="addClient.paymentMode" />
+            <label class="form-group-text m-2" for="paymentMode">PREPAY</label>
+          </div>
+          <div class="mb-3 col-md-12">
+            <input class="form-check-input m-2 custom-radio-input" type="radio" name="paymentMode"
+              id="flexRadioDefault2" value="POSTPAY" [(ngModel)]="addClient.paymentMode" />
+            <label class="form-group-text m-2" for="paymentMode">POSTPAY</label>
+          </div>
+        </div>
+        <!-- <div class=" mb-3 col-md-12 ">
             <label class="input-group-text" for="paymentMode">Payment Mode *</label>
             <select class="form-select" name="paymentMode" id="inputGroupSelect01" [(ngModel)]="addClient.paymentMode"
               required>
@@ -79,31 +72,31 @@
             </select>
           </div> -->
 
-          <div class="row justify-content-center">
-            <div class="mb-3 col-md-12">
-              <label class="form-group-text" for="clientType">Client Type *</label>
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <label class="form-group-text" for="clientType">Client Type *</label>
+          </div>
+          <div class="row">
+            <div class="col-6 input-group-prepend">
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="addClient.clientType" />
+              <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
             </div>
-            <div class="row">
-              <div class="col-6 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                  id="flexRadioDefault1" value="INDIVIDUAL" [(ngModel)]="addClient.clientType" />
-                <label class="form-group-text m-2" for="clientType">INDIVIDUAL</label>
-              </div>
-              <div class="col-6 input-group-prepend">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                  id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="addClient.clientType" />
-                <label class="form-group-text m-2" for="clientType">CORPORATE</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 col-md-12">
-                <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
-                  id="flexRadioDefault2" value="GROUP" [(ngModel)]="addClient.clientType" />
-                <label class="form-group-text m-2" for="clientType">GROUP</label>
-              </div>
+            <div class="col-6 input-group-prepend">
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                id="flexRadioDefault2" value="CORPORATE" [(ngModel)]="addClient.clientType" />
+              <label class="form-group-text m-2" for="clientType">CORPORATE</label>
             </div>
           </div>
-          <!-- <div class=" mb-3 col-md-12 ">
+          <div class="row">
+            <div class="mb-3 col-md-12">
+              <input class="form-check-input m-2 custom-radio-input" type="radio" name="clientType"
+                id="flexRadioDefault2" value="GROUP" [(ngModel)]="addClient.clientType" />
+              <label class="form-group-text m-2" for="clientType">GROUP</label>
+            </div>
+          </div>
+        </div>
+        <!-- <div class=" mb-3 col-md-12 ">
             <label class="input-group-text" for="clientType">Client Type *</label>
             <select class="form-select" id="inputGroupSelect01" name="clientType" [(ngModel)]="addClient.clientType"
               required>
@@ -113,7 +106,7 @@
               <option value="GROUP">GROUP</option>
             </select>
           </div> -->
-          <div class="row justify-content-center">
+        <div class="row justify-content-center">
           <div class=" mb-3 col-md-12 " *ngIf="this.userRole == 'ORGANIZATION'">
             <label class="input-group-text" for="coach">Assign Coach *</label>
             <select class="form-select" id="inputGroupSelect01" [(ngModel)]="addClient.id"
@@ -131,15 +124,24 @@
 
           </div>
         </div>
-        <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal" (click)="newClient()" [disabled]="
+
+        <!--error-->
+        <div class="row justify-content-center">
+          <div class="mb-3 col-md-12">
+            <div class="alert alert-danger" role="alert" *ngIf="error">
+              {{error}}
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-signup btn-outline-success text-center" data-bs-dismiss="modal"
+          (click)="newClient()" [disabled]="
           !addClient.firstName||
           !addClient.lastName||
           !addClient.email||
           !addClient.msisdn||
           !addClient.physicalAddress||
           !addClient.paymentMode||
-          !addClient.clientType||
-          !addClient.reason
+          !addClient.clientType
           ">ADD CLIENT
         </button>
       </form>

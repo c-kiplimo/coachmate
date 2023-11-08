@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row m-2">
   <div class="col mt-4 d-flex justify-content-between" style="margin-left: 5px">
     <h2 class="fw-semi-bold f-weight fs-5">Calender</h2>
     <button class="google-calendar-connect-button"
@@ -17,37 +17,39 @@
 
 <br />
 
-<div class="row">
+<div class="row m-2">
   <div class="col calender">
     <div class="row text-center">
       <div class="col-md-4">
         <div class="btn-group">
-          <div class="btn btn-success" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+          <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
             (viewDateChange)="closeOpenMonthViewDay()">
             Previous
           </div>
-          <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+          <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
             Today
           </div>
-          <div class="btn btn-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+          <div class="btn btn-outline-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
             (viewDateChange)="closeOpenMonthViewDay()">
             Next
           </div>
         </div>
       </div>
+      
       <div class="col-md-4">
-        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        <br>
+        <h3 class="fs-5">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
       </div>
       <div class="col-md-4">
         <div class="btn-group">
-          <div class="btn btn-success" (click)="setView(CalendarView.Month)"
+          <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
             [class.active]="view === CalendarView.Month">
             Month
           </div>
-          <div class="btn btn-success" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
+          <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
             Week
           </div>
-          <div class="btn btn-success" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
+          <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
             Day
           </div>
         </div>

@@ -1,0 +1,111 @@
+.login-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+
+  .logo {
+    height: 120px;
+    margin-bottom: 20px;
+  }
+
+  .logo-word-mark {
+    display: block;
+    margin-bottom: 10px;
+
+    span {
+      display: inline-block;
+      font-size: 20px;
+
+      &:first-child {
+        color: #EF4813;
+        margin-right: 5px;
+      }
+
+      &:last-child {
+        color: #EF4813;
+      }
+    }
+  }
+
+  h3 {
+    font-weight: 600;
+    color: #5f6063;
+    letter-spacing: 2px;
+  }
+
+  a {
+    color: #EF4813;
+    text-decoration: none;
+  }
+}
+
+.password-icon {
+  border: 2px solid #e1e1e1;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  color: #5f6063;
+}
+
+.to-forgot-password {
+  display: inline-block;
+  font-size: 14px;
+
+  &:hover {
+    text-decoration: underline!important;
+  }
+}
+
+.to-register {
+  color: #5f6063;
+
+  &:hover a {
+    text-decoration: underline!important;
+  }
+}
+
+.back-link {
+  cursor: pointer;
+  transition: all ease;
+  text-decoration: none;
+  color: #5f6063;
+  display: block;
+
+  fa-icon {
+    font-size: 0.9rem;
+    margin-right: 15px;
+  }
+
+  &:hover {
+    color: #0d7d9a;
+    text-decoration: underline;
+  }
+}
+@media (max-width:760px) {
+  .login-page {
+    min-height: calc(100vh);
+    background-color: #fff;
+    position: relative;
+    padding: 0 30px !important;
+
+    .login-back-link {
+      position: absolute;
+      top: 20px;
+    }
+
+    .col-md-6,
+    .col-md-8 {
+      width: 100%!important;
+    }
+
+    .card-table {
+      border: none!important;
+      width: 100%!important;
+    }
+  }
+}
+

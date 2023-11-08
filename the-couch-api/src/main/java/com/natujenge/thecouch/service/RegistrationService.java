@@ -667,6 +667,7 @@ public class RegistrationService {
         user.setPassword(encodedPassword);
 
         // save the User in the database
+        user.setEnabled(true);
         userRepository.save(user);
         log.info("User Updated Successfully");
 
