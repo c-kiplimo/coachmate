@@ -348,23 +348,39 @@ export class AddSessionComponent implements OnInit {
     document.body.classList.remove('modal-open');
   }
 
-  getClients(page: number) {
+  getClients(page: number){
     this.loading = true;
-    const options = {
-      page: 1,
-      per_page: this.itemsPerPage,
-      status: this.filters?.status,
-      search: this.filters?.searchItem,
+    this.page = page;
+    //if page is 0, don't subtract 1
+    if (page === 0 || page < 0) {
+      page = 0;
+    } else {
+      page = page - 1;
+    }
+    const options: any = {
+      page: page,
+      size: this.pageSize,
+      status: this.filters.status,
+      search: this.filters.searchItem,
+      sort: 'id,desc',
     };
 
+    if(this.userRole == 'COACH'){
+      options.coachId = this.coachId;
+    }else if(this.userRole == 'CLIENT'){
+      options.clientId = this.clientId;
+    }else if(this.userRole == 'ORGANIZATION'){
+      options.orgId = this.orgId;
+    }
+
     this.clientService.getClients(options).subscribe(
-      (response: any) => {
-        this.clients = response.body.data;
-        this.numberOfClients = this.clients.length;
+      (response) => {
         this.loading = false;
-      }, (error: any) => {
-        console.error('Error getting clients', error); 
+        this.clients = response.body;
+        this.totalElements = +response.headers.get('X-Total-Count');        
+      }, (error) => {
         this.loading = false;
+        this.toastrService.error('Error getting clients', error.message);
       }
     )
   }
