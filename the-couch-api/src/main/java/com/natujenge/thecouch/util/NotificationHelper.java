@@ -79,5 +79,26 @@ public class NotificationHelper {
         NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
         notificationServiceHTTPClient.sendSMS(sourceAddress,msisdn,smsContent,referenceId);
     }
+
+    public static void sendSessionCreatedNotificationToClient(Session createdSession) {
+        String smsContent;
+
+        smsContent = "Hello " + createdSession.getClient().getFirstName()+",\n You have a new session" + createdSession.getName()+"with " +
+                " coach: " + createdSession.getCoach().getFullName() + "\n The session will be " + createdSession.getSessionVenue()+ " at "
+                + createdSession.getSessionSchedules().getStartTime() + "to " + createdSession.getSessionSchedules().getEndTime() + "\n See you there!";
+        // SHORTCODE
+        String sourceAddress = Constants.DEFAULT_SMS_SOURCE_ADDRESS;
+        String referenceId = createdSession.getId().toString();
+        String msisdn = createdSession.getClient().getMsisdn();
+        String email = createdSession.getClient().getEmail();
+        log.info("About to send message to Client content: {}, from: {}, to: {}, ref id {}",
+                smsContent, sourceAddress, msisdn, referenceId);
+        //send sms
+        log.info("Sending sms notification to client");
+        NotificationServiceHTTPClient notificationServiceHTTPClient = new NotificationServiceHTTPClient();
+        notificationServiceHTTPClient.sendSMS(sourceAddress,msisdn,smsContent,referenceId);
+//        send email
+        notificationServiceHTTPClient.sendEmail(email,"New Session Created",smsContent, true);
+    }
 }
 
