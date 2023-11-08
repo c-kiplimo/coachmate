@@ -159,10 +159,13 @@ export class ProfileComponent implements OnInit {
       this.apiService.editCoachProfile(this.user).subscribe(
         (res: any) => {
           console.log('saveProfileSettings (COACH)', res);
-          sessionStorage.setItem('user',JSON.stringify(res));
+          sessionStorage.setItem('user',JSON.stringify(this.user));
+          this.isSaving=true;
+          window.location.reload();
         },
         (error: any) => {
           console.log(error);
+          this.isSaving=false;
 
         }
       );
@@ -170,20 +173,26 @@ export class ProfileComponent implements OnInit {
       this.apiService.editOrganizationProfile(this.user).subscribe(
         (res: any) => {
           console.log('saveProfileSettings (ORGANIZATION)', res);
-          sessionStorage.setItem('user',JSON.stringify(res));
+          sessionStorage.setItem('user',JSON.stringify(this.user));
+          this.isSaving=true;
+          window.location.reload();
         },
         (error: any) => {
           console.log(error);
+          this.isSaving=false;
         }
       );
     } else if (this.userRole === 'CLIENT') {
       this.apiService.editClientProfile(this.user).subscribe(
         (res: any) => {
           console.log('saveProfileSettings (CLIENT)', res);
-          sessionStorage.setItem('user',JSON.stringify(res));
+          sessionStorage.setItem('user',JSON.stringify(this.user));
+          this.isSaving=true;
+          window.location.reload();
         },
         (error: any) => {
           console.log(error);
+          this.isSaving=false;
         }
       );
     } else {
